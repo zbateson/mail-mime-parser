@@ -1,0 +1,10 @@
+Line-Endings: LF Only
+BadLine-
+Empty-Header: 
+Followed-by-a-long-header-line: And text
+	on multiple
+			     lines that should
+							only be single-spaced
+									when parsed
+
+Body comes here...

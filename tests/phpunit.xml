@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./bootstrap.php">
+    <php>
+        <const name="TEST_DATA_DIR" value="_data"/>
+    </php>
+    <logging>
+        <log type="testdox-html" target="_output/testdox.html"/>
+        <log type="testdox-text" target="_output/testdox.txt"/>
+    </logging>
+    <testsuites>
+        <testsuite name="MailMimeParser">
+            <directory suffix="Test.php">MailMimeParser</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

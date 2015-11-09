@@ -1,0 +1,39 @@
+<?php
+
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Part\PartFactory;
+
+/**
+ * Description of AddressGroupConsumerTest
+ *
+ * @group Consumers
+ * @group AddressGroupConsumer
+ * @author Zaahid Bateson
+ */
+class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
+{
+    private $addressGroupConsumer;
+    
+    public function setUp()
+    {
+        $pf = new PartFactory();
+        $cs = new ConsumerService($pf);
+        $this->addressGroupConsumer = $cs->getAddressGroupConsumer();
+    }
+    
+    public function tearDown()
+    {
+        unset($this->addressGroupConsumer);
+    }
+    
+    public function testConsumeGroup()
+    {
+        $group = 'Wilfred, Emma';
+        $ret = $this->addressGroupConsumer->__invoke($group);
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroup', $ret[0]);
+        $this->assertEquals('Wilfred', $ret[0]->getAddress(0)->getEmail());
+        $this->assertEquals('Emma', $ret[0]->getAddress(1)->getEmail());
+    }
+}

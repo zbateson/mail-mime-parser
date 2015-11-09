@@ -1,0 +1,25 @@
+{
+    "name": "zbateson/mailmimeparser",
+    "description": "PSR-2 compliant mime mail parser",
+    "keywords": ["mail", "mime", "parser"],
+    "homepage": "https://github.com/zbateson/MailMimeParser",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Zaahid Bateson",
+            "email": "zbateson@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=4.1"
+    },
+    "autoload": {
+        "psr-4": {"ZBateson\\MailMimeParser\\": "src/"}
+    },
+    "autoload-dev": {
+        "classmap": ["tests/MailMimeParser/"]
+    }
+}
