@@ -4,7 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use DateTime;
 
 /**
- * Parses a mime-header into a DateTime object.
+ * Parses a header into a DateTime object.
  *
  * @author Zaahid Bateson
  */
