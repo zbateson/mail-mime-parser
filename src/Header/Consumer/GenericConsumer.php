@@ -1,6 +1,8 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\Token;
+
 /**
  * A minimal implementation of AbstractConsumer defining a CommentConsumer and
  * QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.
@@ -72,13 +74,50 @@ class GenericConsumer extends AbstractConsumer
      */
     protected function getPartForToken($token, $isLiteral)
     {
-        if (preg_match('/^\s+$/', $token)) {
-            return $this->partFactory->newLiteral(' ');
+        if (preg_match('/^\s+$/', $token) && !$isLiteral) {
+            return $this->partFactory->newToken(' ');
         } elseif ($isLiteral) {
             return $this->partFactory->newLiteral($token);
         } else {
             return $this->partFactory->newMimeLiteral($token);
         }
+    }
+    
+    /**
+     * Filters out ignorable spaces between parts in the passed array.
+     * 
+     * Spaces with parts on either side of it that specify they can be ignored
+     * are filtered out.  filterIgnoredSpaces is called from within
+     * processParts, and if needed by an implementing class that overrides
+     * processParts, must be specifically called.
+     * 
+     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     */
+    protected function filterIgnoredSpaces(array $parts)
+    {
+        $retParts = [];
+        $spacePart = null;
+        foreach ($parts as $part) {
+            if ($part instanceof Token && $part->getValue() === ' ') {
+                $spacePart = $part;
+                continue;
+            } elseif ($spacePart !== null) {
+                // never add the space if it's the first part, otherwise only add it if either part
+                // isn't set to ignore the space
+                $lastPart = end($retParts);
+                if (($lastPart !== null) && (!$lastPart->ignoreSpacesAfter() || !$part->ignoreSpacesBefore())) {
+                    $retParts[] = $spacePart;
+                }
+                $spacePart = null;
+            }
+            $retParts[] = $part;
+        }
+        $lastPart = end($retParts);
+        if ($spacePart !== null && $lastPart !== null && !$lastPart->ignoreSpacesAfter()) {
+            $retParts[] = $spacePart;
+        }
+        return $retParts;
     }
     
     /**
@@ -91,7 +130,8 @@ class GenericConsumer extends AbstractConsumer
     protected function processParts(array $parts)
     {
         $strValue = '';
-        foreach ($parts as $part) {
+        $filtered = $this->filterIgnoredSpaces($parts);
+        foreach ($filtered as $part) {
             $strValue .= $part->getValue();
         }
         return [$this->partFactory->newLiteral($strValue)];

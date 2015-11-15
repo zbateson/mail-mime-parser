@@ -32,4 +32,26 @@ abstract class Part
     {
         return $this->value;
     }
+    
+    /**
+     * Returns true if spaces before this part should be ignored.  True is only
+     * returned for MimeLiterals if the part begins with a mime-encoded string.
+     * 
+     * @return bool
+     */
+    public function ignoreSpacesBefore()
+    {
+        return false;
+    }
+    
+    /**
+     * Returns true if spaces after this part should be ignored.  True is only
+     * returned for MimeLiterals if the part ends with a mime-encoded string.
+     * 
+     * @return bool
+     */
+    public function ignoreSpacesAfter()
+    {
+        return false;
+    }
 }

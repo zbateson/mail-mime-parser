@@ -29,11 +29,20 @@ class GenericConsumerTest extends PHPUnit_Framework_TestCase
     public function testConsumeTokens()
     {
         $value = "Je\ \t suis\nici";
-        $parts = ['Je', ' ', "\t ", 'suis', "\n", 'ici'];
-
+        
         $ret = $this->genericConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
         $this->assertEquals('Je  suis ici', $ret[0]);
+    }
+    
+    public function testFilterSpacesBetweenMimeParts()
+    {
+        $value = "=?US-ASCII?Q?Je?=    =?US-ASCII?Q?suis?=\n=?US-ASCII?Q?ici?=";
+        
+        $ret = $this->genericConsumer->__invoke($value);
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertEquals('Jesuisici', $ret[0]);
     }
 }

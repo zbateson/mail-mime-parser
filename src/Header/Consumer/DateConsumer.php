@@ -1,8 +1,6 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\Token;
-
 /**
  * Parses a date header into a Part\Date taking care of comment and quoted parts
  * as necessary.

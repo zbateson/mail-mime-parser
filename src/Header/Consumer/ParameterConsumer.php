@@ -62,7 +62,7 @@ class ParameterConsumer extends GenericConsumer
             if ($part instanceof Token) {
                 if ($p === ';') {
                     if (empty($strName)) {
-                        $combined[] = $this->partFactory->newLiteral($strCat);
+                        $combined[] = $this->partFactory->newMimeLiteral($strCat);
                     } else {
                         $combined[] = $this->partFactory->newParameter($strName, $strCat);
                     }
@@ -77,6 +77,6 @@ class ParameterConsumer extends GenericConsumer
             }
             $strCat .= $p;
         }
-        return $combined;
+        return $this->filterIgnoredSpaces($combined);
     }
 }

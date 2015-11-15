@@ -12,7 +12,23 @@ namespace ZBateson\MailMimeParser\Header\Part;
 class MimeLiteral extends Literal
 {
     /**
-     * Constructs a MimeLiteral, decoding the value if it's mime-encoded.
+     * @var string regex pattern matching a mime-encoded part
+     */
+    protected $mimePartPattern = '=\?[A-Za-z\-0-9]+\?[QBqb]\?[^\?]+\?=';
+    
+    /**
+     * @var bool set to true to ignore spaces before this part
+     */
+    protected $canIgnoreSpacesBefore = false;
+    
+    /**
+     * @var bool set to true to ignore spaces after this part
+     */
+    protected $canIgnoreSpacesAfter = false;
+    
+    /**
+     * Constructs a MimeLiteral, decoding the value if it's mime-encoded.  Sets
+     * canIgnoreSpacesBefore and canIgnoreSpacesAfter.
      * 
      * @param string $token
      */
@@ -20,6 +36,9 @@ class MimeLiteral extends Literal
     {
         parent::__construct($token);
         $this->value = $this->decodeMime($this->value);
+        // preg_match returns int
+        $this->canIgnoreSpacesBefore = boolval(preg_match("/^\s*{$this->mimePartPattern}/u", $token));
+        $this->canIgnoreSpacesAfter = boolval(preg_match("/{$this->mimePartPattern}\s*\$/u", $token));
     }
     
     /**
@@ -35,7 +54,7 @@ class MimeLiteral extends Literal
      */
     protected function decodeMime($value)
     {
-        $pattern = '=\?[A-Za-z\-0-9]+\?[QBqb]\?[^\?]+\?=';
+        $pattern = $this->mimePartPattern;
         $value = preg_replace("/($pattern)\\s+(?=$pattern)/u", '$1', $value);
         return preg_replace_callback(
             "/$pattern/u",
@@ -44,5 +63,31 @@ class MimeLiteral extends Literal
             },
             $value
         );
+    }
+    
+    /**
+     * Returns true if spaces before this part should be ignored.
+     * 
+     * Overridden to return $this->canIgnoreSpacesBefore which is setup in the
+     * constructor.
+     * 
+     * @return bool
+     */
+    public function ignoreSpacesBefore()
+    {
+        return $this->canIgnoreSpacesBefore;
+    }
+    
+    /**
+     * Returns true if spaces before this part should be ignored.
+     * 
+     * Overridden to return $this->canIgnoreSpacesAfter which is setup in the
+     * constructor.
+     * 
+     * @return bool
+     */
+    public function ignoreSpacesAfter()
+    {
+        return $this->canIgnoreSpacesAfter;
     }
 }
