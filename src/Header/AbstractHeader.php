@@ -25,10 +25,10 @@ abstract class AbstractHeader
     protected $name;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Consumer\Part\Part the header's
-     * part value (as returned from the consumer)
+     * @var \ZBateson\MailMimeParser\Header\Consumer\Part\Part[] the header's
+     * parts (as returned from the consumer)
      */
-    protected $part;
+    protected $parts;
     
     /**
      * @var string the raw value
@@ -68,17 +68,17 @@ abstract class AbstractHeader
      */
     protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
-        $this->part = $consumer($this->rawValue);
+        $this->parts = $consumer($this->rawValue);
     }
 
     /**
-     * Returns the Part object associated with this header.
+     * Returns an array of Part objects associated with this header.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Part\Part
+     * @return \ZBateson\MailMimeParser\Header\Part\Part[]
      */
-    public function getPart()
+    public function getParts()
     {
-        return $this->part;
+        return $this->parts;
     }
     
     /**
@@ -88,7 +88,10 @@ abstract class AbstractHeader
      */
     public function getValue()
     {
-        return $this->part->getValue();
+        if (!empty($this->parts)) {
+            return $this->parts[0]->getValue();
+        }
+        return null;
     }
     
     /**

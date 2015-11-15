@@ -14,12 +14,12 @@ class HeaderFactory
     protected $consumerService;
     protected $partFactory;
     protected $types = [
-        'ZBateson\MailMimeParser\Header\StructuredHeader' => [
+        /*'ZBateson\MailMimeParser\Header\StructuredHeader' => [
             'message-id',
             'resent-message-id',
             'content-id',
             'in-reply-to'
-        ],
+        ],*/
         'ZBateson\MailMimeParser\Header\AddressHeader' => [
             'from',
             'to',
@@ -46,7 +46,7 @@ class HeaderFactory
             'content-disposition',
         ]
     ];
-    protected $genericType = 'ZBateson\MailMimeParser\Header\Header';
+    protected $genericType = 'ZBateson\MailMimeParser\Header\GenericHeader';
     
     public function __construct(ConsumerService $consumerService, PartFactory $partFactory)
     {
