@@ -1,5 +1,8 @@
 <?php
-use ZBateson\MailMimeParser\SimpleDi as SimpleDi;
+
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\DateHeader;
 
 /**
  * Description of DateHeaderTest
@@ -8,17 +11,17 @@ use ZBateson\MailMimeParser\SimpleDi as SimpleDi;
  * @group DateHeader
  * @author Zaahid Bateson
  */
-class DateHeaderTest extends \PHPUnit_Framework_TestCase
+class DateHeaderTest extends PHPUnit_Framework_TestCase
 {
-    protected $headerFactory;
+    protected $consumerService;
     
     public function setup()
     {
-        $di = SimpleDi::singleton();
-        $this->headerFactory = $di->getHeaderFactory();
+        $pf = new PartFactory();
+        $this->consumerService = new ConsumerService($pf);
     }
     
-    public function testInstance()
+    /*public function testInstance()
     {
         $aValid = ['Date', 'ExpIRY-Date', 'EXPIRES'];
         $aNot = ['MESSAGE-ID', 'bcc', 'Subject'];
@@ -32,21 +35,19 @@ class DateHeaderTest extends \PHPUnit_Framework_TestCase
             $this->assertNotNull($header);
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\DateHeader', get_class($header));
         }
+    }*/
+    
+    public function testSimpleDate()
+    {
+        $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
+        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->getValue());
+        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->getDateTime()->format(\DateTime::RFC2822));
     }
     
-    public function testParsingDate()
+    public function testInvalidDate()
     {
-        $header = $this->headerFactory->newInstance('Date', 'Wed, 17 May 2000 19:08:29 -0400');
-        $this->assertNotNull($header);
-        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->value);
-        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->date->format(\DateTime::RFC2822));
-    }
-    
-    public function testParsingNonDate()
-    {
-        $header = $this->headerFactory->newInstance('DATE', 'This is not a date');
-        $this->assertNotNull($header);
-        $this->assertFalse($header->date);
-        $this->assertEquals('This is not a date', $header->value);
+        $header = new DateHeader($this->consumerService, 'DATE', 'This is not a date');
+        $this->assertFalse($header->getDateTime());
+        $this->assertEquals('This is not a date', $header->getValue());
     }
 }
