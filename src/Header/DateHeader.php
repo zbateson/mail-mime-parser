@@ -5,8 +5,8 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\Date;
 
 /**
- * Description of DateHeader
- *
+ * Reads a Date value header in eithe RFC 2822 or RFC 822 format.
+ * 
  * @author Zaahid Bateson
  */
 class DateHeader extends AbstractHeader
