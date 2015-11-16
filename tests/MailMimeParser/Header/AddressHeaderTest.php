@@ -1,5 +1,8 @@
 <?php
-use ZBateson\MailMimeParser\SimpleDi as SimpleDi;
+
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\AddressHeader;
 
 /**
  * Description of AddressHeaderTest
@@ -8,17 +11,17 @@ use ZBateson\MailMimeParser\SimpleDi as SimpleDi;
  * @group AddressHeader
  * @author Zaahid Bateson
  */
-class AddressHeaderTest extends \PHPUnit_Framework_TestCase
+class AddressHeaderTest extends PHPUnit_Framework_TestCase
 {
-    protected $headerFactory;
+    protected $consumerService;
     
     public function setup()
     {
-        $di = SimpleDi::singleton();
-        $this->headerFactory = $di->getHeaderFactory();
+        $pf = new PartFactory();
+        $this->consumerService = new ConsumerService($pf);
     }
     
-    public function testInstance()
+    /*public function testInstance()
     {
         $aValid = ['BCC', 'to', 'FrOM'];
         $aNot = ['MESSAGE-ID', 'date', 'Subject'];
@@ -32,108 +35,143 @@ class AddressHeaderTest extends \PHPUnit_Framework_TestCase
             $this->assertNotNull($header);
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\AddressHeader', get_class($header));
         }
-    }
+    }*/
     
     public function testSingleAddress()
     {
-        $header = $this->headerFactory->newInstance('From', 'koolaid@dontdrinkit.com');
-        $this->assertNotNull($header);
-        $address = $header->addresses[0];
-        $this->assertNotNull($address);
-        $this->assertEquals('koolaid@dontdrinkit.com', $address->email);
-        $this->assertNull($address->name);
+        $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
+        $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $this->assertEquals('From', $header->getName());
     }
     
     public function testSingleAddressWithName()
     {
-        $header = $this->headerFactory->newInstance('From', 'Kool Aid <koolaid@dontdrinkit.com>');
-        $this->assertNotNull($header);
-        $address = $header->addresses[0];
-        $this->assertNotNull($address);
-        $this->assertEquals('Kool Aid', $address->name);
-        $this->assertEquals('koolaid@dontdrinkit.com', $address->email);
+        $header = new AddressHeader($this->consumerService, 'From', 'Kool Aid <koolaid@dontdrinkit.com>');
+        $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $addresses = $header->getParts();
+        $this->assertCount(1, $addresses);
+        $this->assertEquals('Kool Aid', $addresses[0]->getName());
+        $this->assertEquals('koolaid@dontdrinkit.com', $addresses[0]->getValue());
     }
     
     public function testSingleAddressWithQuotedName()
     {
-        $header = $this->headerFactory->newInstance('To', '"Jürgen Schmürgen" <schmuergen@example.com>');
-        $this->assertNotNull($header);
-        $address = $header->addresses[0];
-        $this->assertNotNull($address);
-        $this->assertEquals('Jürgen Schmürgen', $address->name);
-        $this->assertEquals('schmuergen@example.com', $address->email);
+        $header = new AddressHeader($this->consumerService, 'To', '"Jürgen Schmürgen" <schmuergen@example.com>');
+        $addresses = $header->getParts();
+        $this->assertCount(1, $addresses);
+        $this->assertEquals('Jürgen Schmürgen', $addresses[0]->getName());
+        $this->assertEquals('schmuergen@example.com', $addresses[0]->getEmail());
     }
     
     public function testComplexSingleAddress()
     {
-        $header = $this->headerFactory->newInstance(
+        $header = new AddressHeader(
+            $this->consumerService,
             'From',
             '=?US-ASCII?Q?Kilgore?= "Trout" <kilgore (writer) trout@"ilium" .ny. us>'
         );
-        $this->assertNotNull($header);
-        $address = $header->addresses[0];
-        $this->assertNotNull($address);
-        $this->assertEquals('Kilgore Trout', $address->name);
-        $this->assertEquals('kilgoretrout@ilium.ny.us', $address->email);
+        $addresses = $header->getParts();
+        $this->assertCount(1, $addresses);
+        $this->assertEquals('Kilgore Trout', $addresses[0]->getName());
+        $this->assertEquals('kilgoretrout@ilium.ny.us', $addresses[0]->getEmail());
     }
     
     public function testMultipleAddresses()
     {
-        $header = $this->headerFactory->newInstance(
+        $header = new AddressHeader(
+            $this->consumerService,
             'To',
             'thepilot@earth.com, The Little   Prince <theprince@ihatebaobabs.com> , '
             . '"The Fox"    <thefox@ilovetheprince.com>   ,    therose@pureawesome.com'
         );
-        $this->assertNotNull($header);
-        $addresses = $header->addresses;
+        $addresses = $header->getParts();
         $this->assertCount(4, $addresses);
-        $this->assertEquals('thepilot@earth.com', $addresses[0]->email);
-        $this->assertEquals('theprince@ihatebaobabs.com', $addresses[1]->email);
-        $this->assertEquals('The Little Prince', $addresses[1]->name);
-        $this->assertEquals('thefox@ilovetheprince.com', $addresses[2]->email);
-        $this->assertEquals('The Fox', $addresses[2]->name);
-        $this->assertEquals('therose@pureawesome.com', $addresses[3]->email);
+        $this->assertEquals('thepilot@earth.com', $addresses[0]->getEmail());
+        $this->assertEquals('theprince@ihatebaobabs.com', $addresses[1]->getEmail());
+        $this->assertEquals('The Little Prince', $addresses[1]->getName());
+        $this->assertEquals('thefox@ilovetheprince.com', $addresses[2]->getEmail());
+        $this->assertEquals('The Fox', $addresses[2]->getName());
+        $this->assertEquals('therose@pureawesome.com', $addresses[3]->getEmail());
     }
     
     public function testAddressGroups()
     {
-        $header = $this->headerFactory->newInstance(
+        $header = new AddressHeader(
+            $this->consumerService,
             'Cc',
             '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
             . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
             . '"Jaime Lannister" <jaime@lannister.com>, tyrion@lannister.com, Cersei Lannister <"cersei & cersei"@lannister.com>'
         );
-        $this->assertNotNull($header);
-        $addresses = $header->addresses;
-        $groups = $header->groups;
-        $this->assertCount(7, $addresses);
+        $parts = $header->getParts();
+        $this->assertCount(2, $parts);
+        
+        $starks = $parts[0];
+        $lannisters = $parts[1];
+        $this->assertEquals('House Stark', $starks->getName());
+        $this->assertEquals('House Lannister', $lannisters->getName());
+        
+        $this->assertCount(3, $starks->getAddresses());
+        $this->assertCount(4, $lannisters->getAddresses());
+    }
+    
+    public function testHasAddress()
+    {
+        $header = new AddressHeader(
+            $this->consumerService,
+            'Cc',
+            '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
+            . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
+            . '"Jaime Lannister" <jaime@lannister.com>, tyrion@lannister.com, Cersei Lannister <"cersei & cersei"@lannister.com>;'
+            . 'maxpayne@addressunknown.com'
+        );
+        $this->assertTrue($header->hasAddress('arya@winterfell.com'));
+        $this->assertTrue($header->hasAddress('jsnow@nightswatch.com'));
+        // is this correct? Shouldn't it be cersei & cersei@lannister.com
+        $this->assertTrue($header->hasAddress('cersei&cersei@lannister.com'));
+        $this->assertTrue($header->hasAddress('maxpayne@addressunknown.com'));
+        $this->assertFalse($header->hasAddress('nonexistent@example.com'));
+    }
+    
+    public function testGetAddresses()
+    {
+        $header = new AddressHeader(
+            $this->consumerService,
+            'Cc',
+            '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
+            . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
+            . '"Jaime Lannister" <jaime@lannister.com>, tyrion@lannister.com, Cersei Lannister <"cersei & cersei"@lannister.com>;'
+            . 'maxpayne@addressunknown.com'
+        );
+        $addresses = $header->getAddresses();
+        $this->assertCount(8, $addresses);
+        $parts = $header->getParts();
+        
+        foreach ($parts[0]->getAddresses() as $addr) {
+            $this->assertSame($addr, current($addresses));
+            next($addresses);
+        }
+        foreach ($parts[1]->getAddresses() as $addr) {
+            $this->assertSame($addr, current($addresses));
+            next($addresses);
+        }
+        $this->assertEquals('maxpayne@addressunknown.com', current($addresses)->getEmail());
+    }
+    
+    public function testGetGroups()
+    {
+        $header = new AddressHeader(
+            $this->consumerService,
+            'Cc',
+            '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
+            . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
+            . '"Jaime Lannister" <jaime@lannister.com>, tyrion@lannister.com, Cersei Lannister <"cersei & cersei"@lannister.com>;'
+            . 'maxpayne@addressunknown.com'
+        );
+        $groups = $header->getGroups();
+        $parts = $header->getParts();
         $this->assertCount(2, $groups);
-        
-        $starks = $header->groups[0];
-        $lannisters = $header->groups[1];
-        $this->assertEquals('House Stark', $starks->name);
-        $this->assertEquals('House Lannister', $lannisters->name);
-        
-        $this->assertEquals('Arya Stark', $addresses[0]->name);
-        $this->assertEquals('arya@winterfell.com', $addresses[0]->email);
-        $this->assertNull($addresses[1]->name);
-        $this->assertEquals('robb@winterfell.com', $addresses[1]->email);
-        $this->assertEquals('Jon Snow', $addresses[2]->name);
-        $this->assertEquals('jsnow@nightswatch.com', $addresses[2]->email);
-        for ($i = 0; $i < 3; ++$i) {
-            $this->assertSame($addresses[$i], $starks->addresses[$i]);
-        }
-        
-        $this->assertNull($addresses[3]->name);
-        $this->assertEquals('tywin@lannister.com', $addresses[3]->email);
-        $this->assertEquals('Jaime Lannister', $addresses[4]->name);
-        $this->assertEquals('jaime@lannister.com', $addresses[4]->email);
-        $this->assertNull($addresses[5]->name);
-        $this->assertEquals('tyrion@lannister.com', $addresses[5]->email);
-        $this->assertEquals('Cersei Lannister', $addresses[6]->name);
-        $this->assertEquals('cersei & cersei@lannister.com', $addresses[6]->email);
-        for ($i = 0, $j = 3; $i < 4; ++$i, ++$j) {
-            $this->assertSame($addresses[$j], $lannisters->addresses[$i]);
-        }
+        $this->assertSame($parts[0], $groups[0]);
+        $this->assertSame($parts[1], $groups[1]);
     }
 }

@@ -46,13 +46,14 @@ class AddressConsumer extends AbstractConsumer
     
     /**
      * Overridden to return patterns matching the beginning part of an address
-     * in a name/address part ("<" and ">" chars), and end tokens ("," and ";").
+     * in a name/address part ("<" and ">" chars), end tokens ("," and ";"), and
+     * whitespace.
      * 
      * @return string[] the patterns
      */
     public function getTokenSeparators()
     {
-        return ['<', '>', ',', ';'];
+        return ['<', '>', ',', ';', '\s+'];
     }
     
     /**
@@ -96,6 +97,8 @@ class AddressConsumer extends AbstractConsumer
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteral($token);
+        } elseif (preg_match('/^\s+$/', $token)) {
+            return $this->partFactory->newToken(' ');
         }
         return $this->partFactory->newToken($token);
     }

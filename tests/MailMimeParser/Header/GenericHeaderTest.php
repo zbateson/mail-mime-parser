@@ -43,6 +43,7 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
         $this->assertEquals('Hunter S. Thompson', $header->getRawValue());
         $this->assertCount(1, $header->getParts());
+        $this->assertEquals('Hunted-By', $header->getName());
     }
     
     public function testMultilineMimeParts()

@@ -1,55 +1,99 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\Address;
 use ZBateson\MailMimeParser\Header\Part\AddressGroup;
 
 /**
- * Description of Header
+ * Reads an address list header using the AddressBaseConsumer.
+ * 
+ * An address list may consist of one or more addresses and address groups.
+ * Each address separated by a comma, and each group separated by a semi-colon.
+ * 
+ * For full specifications, see https://www.ietf.org/rfc/rfc2822.txt
  *
  * @author Zaahid Bateson
  */
-class AddressHeader extends StructuredHeader
+class AddressHeader extends AbstractHeader
 {
-    protected $addresses;
-    protected $groups;
-    protected $partGlue = ',';
+    /**
+     * @var \ZBateson\MailMimeParser\Header\Part\Address[] array of addresses 
+     */
+    protected $addresses = [];
     
-    protected function setupConsumer()
+    /**
+     * @var \ZBateson\MailMimeParser\Header\Part\AddressGroup[] array of
+     * address groups
+     */
+    protected $groups = [];
+    
+    /**
+     * Returns an AddressBaseConsumer.
+     * 
+     * @param ConsumerService $consumerService
+     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     */
+    protected function getConsumer(ConsumerService $consumerService)
     {
-        $this->consumer = $this->consumerService->getAddressConsumer();
-        $this->consumers = [
-            $this->consumerService->getQuotedStringConsumer(),
-            $this->consumerService->getCommentConsumer(),
-            $this->consumerService->getAddressEmailConsumer(),
-            $this->consumerService->getAddressConsumer(),
-        ];
+        return $consumerService->getAddressBaseConsumer();
     }
     
-    protected function parseValue()
+    /**
+     * Overridden to extract all addresses into addresses array.
+     * 
+     * @param AbstractConsumer $consumer
+     */
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
-        parent::parseValue();
-        if (empty($this->parts)) {
-            return;
-        }
-        
-        $this->addresses = [];
-        $this->groups = [];
+        parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
             if ($part instanceof Address) {
                 $this->addresses[] = $part;
             } elseif ($part instanceof AddressGroup) {
-                $this->addresses = array_merge(
-                    $this->addresses,
-                    $part->getAddresses()
-                );
+                $this->addresses = array_merge($this->addresses, $part->getAddresses());
                 $this->groups[] = $part;
             }
         }
     }
     
-    public function getIteratory()
+    /**
+     * Returns all address parts in the header including all addresses that are
+     * in groups.
+     * 
+     * @return ZBateson\MailMimeParser\Header\Part\Address[]
+     */
+    public function getAddresses()
     {
-        return new \ArrayIterator($this->addresses);
+        return $this->addresses;
+    }
+    
+    /**
+     * Returns all group parts in the header.
+     * 
+     * @return @return ZBateson\MailMimeParser\Header\Part\AddressGroup[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+    
+    /**
+     * Returns true if an address exists with the passed email address.
+     * 
+     * Comparison is done case insensitively.
+     * 
+     * @param string $email
+     * @return boolean
+     */
+    public function hasAddress($email)
+    {
+        foreach ($this->addresses as $addr) {
+            if (strcasecmp($addr->getEmail(), $email) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

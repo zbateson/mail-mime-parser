@@ -27,7 +27,7 @@ class AddressGroup extends MimeLiteral
      */
     public function __construct(array $addresses, $name = '')
     {
-        parent::__construct($name);
+        parent::__construct(trim($name));
         $this->addresses = $addresses;
     }
     

@@ -111,7 +111,7 @@ abstract class AbstractHeader
      */
     public function getName()
     {
-        return $this->getName();
+        return $this->name;
     }
     
     /**
