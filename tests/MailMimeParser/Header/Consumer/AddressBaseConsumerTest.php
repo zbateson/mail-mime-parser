@@ -35,7 +35,7 @@ class AddressBaseConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $address);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
         $this->assertEquals('', $address->getName());
         $this->assertEquals($email, $address->getEmail());
     }
@@ -62,7 +62,7 @@ class AddressBaseConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($ret);
         $this->assertCount(3, $ret);
         
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $ret[0]);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $ret[0]);
         $this->assertEquals('Tyrion Lannister', $ret[0]->getName());
         $this->assertEquals('tyrion@houselannister.com', $ret[0]->getEmail());
         
@@ -72,7 +72,7 @@ class AddressBaseConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $ret[1]->getAddress(1)->getName());
         $this->assertEquals('robb@winterfell.com', $ret[1]->getAddress(1)->getEmail());
         
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $ret[2]);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $ret[2]);
         $this->assertEquals('jaime@houselannister.com', $ret[2]->getEmail());
     }
 }

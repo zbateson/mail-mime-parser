@@ -57,11 +57,11 @@ class PartFactory
      * 
      * @param string $name
      * @param string $email
-     * @return \ZBateson\MailMimeParser\Header\Part\Address
+     * @return \ZBateson\MailMimeParser\Header\Part\AddressPart
      */
-    public function newAddress($name, $email)
+    public function newAddressPart($name, $email)
     {
-        return new Address($name, $email);
+        return new AddressPart($name, $email);
     }
     
     /**

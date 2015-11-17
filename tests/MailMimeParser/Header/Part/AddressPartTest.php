@@ -1,21 +1,21 @@
 <?php
 
-use ZBateson\MailMimeParser\Header\Part\Address;
+use ZBateson\MailMimeParser\Header\Part\AddressPart;
 
 /**
- * Description of AddressTest
+ * Description of AddressPartTest
  *
  * @group HeaderParts
  * @group Address
  * @author Zaahid Bateson
  */
-class AddressTest extends PHPUnit_Framework_TestCase
+class AddressPartTest extends PHPUnit_Framework_TestCase
 {
     public function testNameEmail()
     {
         $name = 'Julius Caeser';
         $email = 'gaius@altavista.com';
-        $part = new Address($name, $email);
+        $part = new AddressPart($name, $email);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
     }
@@ -23,7 +23,7 @@ class AddressTest extends PHPUnit_Framework_TestCase
     public function testEmailSpacesStripped()
     {
         $email = "gaius julius\t\n caesar@altavista.com";
-        $part = new Address('', $email);
+        $part = new AddressPart('', $email);
         $this->assertEquals('gaiusjuliuscaesar@altavista.com', $part->getEmail());
     }
 }

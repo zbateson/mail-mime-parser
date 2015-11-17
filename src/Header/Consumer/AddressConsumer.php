@@ -141,6 +141,6 @@ class AddressConsumer extends AbstractConsumer
             }
             $strValue .= $part->getValue();
         }
-        return [$this->partFactory->newAddress($strName, $strValue)];
+        return [$this->partFactory->newAddressPart($strName, $strValue)];
     }
 }

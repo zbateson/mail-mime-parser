@@ -13,7 +13,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  * 
  * @author Zaahid Bateson
  */
-class Address extends Parameter
+class AddressPart extends Parameter
 {
     /**
      * Constructs an Address part.

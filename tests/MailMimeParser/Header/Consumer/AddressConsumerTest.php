@@ -35,7 +35,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $address);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
         $this->assertEquals('', $address->getName());
         $this->assertEquals($email, $address->getEmail());
     }
@@ -48,7 +48,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $address);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
         $this->assertEquals('Max.Payne@AddressUnknown.com', $address->getEmail());
         $this->assertEquals('Max Payne', $address->getName());
     }
@@ -61,7 +61,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $address);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
         $this->assertEquals('Kilgore.Trout@Iliyum.ny', $address->getEmail());
         $this->assertEquals('Kilgore Trout', $address->getName());
     }
@@ -76,7 +76,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $address);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
         $this->assertEquals('Max.Payne@AddressUnknown.com', $address->getEmail());
     }
     
@@ -90,7 +90,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Address', $address);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
         $this->assertEquals('Max(imum).Payne(comment)@AddressUnknown.com', $address->getEmail());
     }
     
