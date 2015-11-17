@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
  * Represents a single part of a multi-part mime message.
@@ -10,11 +11,11 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
  * with its own parent or parents.
  * 
  * The content of the part can be read from its PartStream resource handle,
- * accessible via Part::getContentResourceHanlde.
+ * accessible via MimePart::getContentResourceHanlde.
  *
  * @author Zaahid Bateson
  */
-class Part
+class MimePart
 {
     /**
      * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
@@ -23,12 +24,13 @@ class Part
     protected $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Header[] array of header objects
+     * @var \ZBateson\MailMimeParser\Header\AbstractHeader[] array of header
+     * objects
      */
     protected $headers;
     
     /**
-     * @var \ZBateson\MailMimeParser\Part parent part
+     * @var \ZBateson\MailMimeParser\MimePart parent part
      */
     protected $parent;
     
@@ -38,7 +40,7 @@ class Part
     protected $handle;
     
     /**
-     * Constructs a Part instance.
+     * Sets up class dependencies.
      * 
      * @param HeaderFactory $headerFactory
      */
@@ -72,7 +74,7 @@ class Part
     
     /**
      * Attaches the resource handle for the part's content.  The attached handle
-     * is closed when the Part object is destroyed.
+     * is closed when the MimePart object is destroyed.
      * 
      * @param resource $contentHandle
      */
@@ -84,8 +86,8 @@ class Part
     /**
      * Returns the resource stream handle for the part's content.
      * 
-     * The resource is automatically closed by Part's destructor and should not
-     * be closed otherwise.
+     * The resource is automatically closed by MimePart's destructor and should
+     * not be closed otherwise.
      * 
      * @return resource
      */
@@ -97,8 +99,8 @@ class Part
     /**
      * Adds a header with the given $name and $value.
      * 
-     * Creates a new \ZBateson\MailMimeParser\Header\Header object and adds it
-     * to Part::headers.
+     * Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
+     * registers it as a header.
      * 
      * @param string $name
      * @param string $value
@@ -109,7 +111,7 @@ class Part
     }
     
     /**
-     * Returns the Header object for the header with the given $name
+     * Returns the AbstractHeader object for the header with the given $name
      * 
      * Note that mime headers aren't case sensitive.
      * 
@@ -125,7 +127,7 @@ class Part
     }
     
     /**
-     * Returns the string value of the header with the given $name.
+     * Returns the string value for the header with the given $name.
      * 
      * Note that mime headers aren't case sensitive.
      * 
@@ -136,7 +138,7 @@ class Part
     {
         $header = $this->getHeader($name);
         if (!empty($header)) {
-            return $header->value;
+            return $header->getValue();
         }
         return null;
     }
@@ -144,7 +146,7 @@ class Part
     /**
      * Returns the full array of headers for this part.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Header[]
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
      */
     public function getHeaders()
     {
@@ -156,28 +158,30 @@ class Part
      * $param.
      * 
      * Only headers of type
-     * \ZBateson\MailMimeParser\Header\ValueParametersHeader have parameters.
-     * Content-Type and Content-Disposition are headers with parameters.
+     * \ZBateson\MailMimeParser\Header\ParameterHeader have parameters.
+     * Content-Type and Content-Disposition are examples of headers with
+     * parameters. "Charset" is a common parameter of Content-Type.
      * 
      * @param string $header
      * @param string $param
+     * @param string $defaultValue
      * @return string
      */
-    public function getHeaderParameter($header, $param)
+    public function getHeaderParameter($header, $param, $defaultValue = null)
     {
         $obj = $this->getHeader($header);
-        if (isset($obj->params[$param])) {
-            return $obj->params[$param];
+        if ($obj && $obj instanceof ParameterHeader) {
+            return $obj->getValueFor($param, $defaultValue);
         }
-        return null;
+        return $defaultValue;
     }
     
     /**
      * Sets the parent part.
      * 
-     * @param \ZBateson\MailMimeParser\Part $part
+     * @param \ZBateson\MailMimeParser\MimePart $part
      */
-    public function setParent(Part $part)
+    public function setParent(MimePart $part)
     {
         $this->parent = $part;
     }
@@ -185,7 +189,7 @@ class Part
     /**
      * Returns this part's parent.
      * 
-     * @return \ZBateson\MailMimeParser\Part
+     * @return \ZBateson\MailMimeParser\MimePart
      */
     public function getParent()
     {
