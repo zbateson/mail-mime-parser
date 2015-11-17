@@ -53,7 +53,7 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new Address.
+     * Initializes and returns a new AddressPart.
      * 
      * @param string $name
      * @param string $email

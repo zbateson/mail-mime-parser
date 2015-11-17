@@ -16,7 +16,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 class AddressPart extends Parameter
 {
     /**
-     * Constructs an Address part.
+     * Performs mime-decoding and initializes the address' name and email.
      * 
      * The passed $name may be mime-encoded.  $email is stripped of any
      * whitespace.

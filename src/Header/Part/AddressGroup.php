@@ -14,15 +14,15 @@ namespace ZBateson\MailMimeParser\Header\Part;
 class AddressGroup extends MimeLiteral
 {
     /**
-     * @var Address[] an array of Address parts 
+     * @var AddressPart[] an array of AddressParts 
      */
     protected $addresses;
     
     /**
-     * Creates an AddressGroup out of the passed array of Address parts and an
+     * Creates an AddressGroup out of the passed array of AddressParts and an
      * optional name (which may be mime-encoded).
      * 
-     * @param Address[] $addresses
+     * @param AddressPart[] $addresses
      * @param string $name
      */
     public function __construct(array $addresses, $name = '')
@@ -34,7 +34,7 @@ class AddressGroup extends MimeLiteral
     /**
      * Return the AddressGroup's array of addresses.
      * 
-     * @return Address[]
+     * @return AddressPart[]
      */
     public function getAddresses()
     {
@@ -42,7 +42,7 @@ class AddressGroup extends MimeLiteral
     }
     
     /**
-     * Returns the Address at the passed index or null.
+     * Returns the AddressPart at the passed index or null.
      * 
      * @param int $index
      * @return Address

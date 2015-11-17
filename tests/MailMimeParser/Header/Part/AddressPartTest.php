@@ -6,7 +6,7 @@ use ZBateson\MailMimeParser\Header\Part\AddressPart;
  * Description of AddressPartTest
  *
  * @group HeaderParts
- * @group Address
+ * @group AddressPart
  * @author Zaahid Bateson
  */
 class AddressPartTest extends PHPUnit_Framework_TestCase

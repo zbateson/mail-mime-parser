@@ -107,12 +107,12 @@ class AddressConsumer extends AbstractConsumer
      * Performs final processing on parsed parts.
      * 
      * AddressConsumer's implementation looks for tokens representing the
-     * beginning of an address part, to create a Part\Address out of a
+     * beginning of an address part, to create a Part\AddressPart out of a
      * name/address pair, or assign the name part to a parsed Part\AddressGroup
      * returned from its AddressGroupConsumer sub-consumer.
      * 
-     * The returned array consists of a single element - either a Part\Address
-     * or a Part\AddressGroup.
+     * The returned array consists of a single element - either a
+     * Part\AddressPart or a Part\AddressGroup.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
      * @return ZBateson\MailMimeParser\Header\Part\Part[]

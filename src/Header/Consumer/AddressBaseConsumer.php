@@ -8,8 +8,8 @@ use Iterator;
  * From and To).
  * 
  * AddressBaseConsumer passes on token processing to its sub-consumer, an
- * AddressConsumer, and collects Part\Address objects processed and returned by
- * AddressConsumer.
+ * AddressConsumer, and collects Part\AddressPart objects processed and returned
+ * by AddressConsumer.
  *
  * @author Zaahid Bateson
  */
@@ -41,7 +41,7 @@ class AddressBaseConsumer extends AbstractConsumer
     /**
      * Disables advancing for start tokens.
      * 
-     * The start token for AddressBaseConsumer is part of an Address (or a
+     * The start token for AddressBaseConsumer is part of an AddressPart (or a
      * sub-consumer) and so must be passed on.
      * 
      * @param Iterator $tokens
