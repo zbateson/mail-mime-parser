@@ -5,13 +5,13 @@ namespace ZBateson\MailMimeParser\Header\Part;
  * Holds a group of addresses, and an optional group name.
  * 
  * Because AddressGroupConsumer is only called once a colon (":") character is
- * found, an AddressGroup is initially constructed without a $name.  Once it is
- * returned to AddressConsumer, a new AddressGroup is created out of
- * AddressGroupConsumer's AddressGroup.
+ * found, an AddressGroupPart is initially constructed without a $name.  Once it is
+ * returned to AddressConsumer, a new AddressGroupPart is created out of
+ * AddressGroupConsumer's AddressGroupPart.
  *
  * @author Zaahid Bateson
  */
-class AddressGroup extends MimeLiteral
+class AddressGroupPart extends MimeLiteral
 {
     /**
      * @var AddressPart[] an array of AddressParts 
@@ -19,7 +19,7 @@ class AddressGroup extends MimeLiteral
     protected $addresses;
     
     /**
-     * Creates an AddressGroup out of the passed array of AddressParts and an
+     * Creates an AddressGroupPart out of the passed array of AddressParts and an
      * optional name (which may be mime-encoded).
      * 
      * @param AddressPart[] $addresses
@@ -32,7 +32,7 @@ class AddressGroup extends MimeLiteral
     }
     
     /**
-     * Return the AddressGroup's array of addresses.
+     * Return the AddressGroupPart's array of addresses.
      * 
      * @return AddressPart[]
      */

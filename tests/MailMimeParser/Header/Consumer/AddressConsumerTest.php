@@ -102,7 +102,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $ret);
         
         $addressGroup = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroup', $addressGroup);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroupPart', $addressGroup);
         $this->assertEquals('Senate', $addressGroup->getName());
     }
 }

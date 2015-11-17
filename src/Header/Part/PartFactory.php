@@ -65,15 +65,15 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new AddressGroup
+     * Initializes and returns a new AddressGroupPart
      * 
      * @param array $addresses
      * @param string $name
-     * @return \ZBateson\MailMimeParser\Header\Part\AddressGroup
+     * @return \ZBateson\MailMimeParser\Header\Part\AddressGroupPart
      */
-    public function newAddressGroup(array $addresses, $name = '')
+    public function newAddressGroupPart(array $addresses, $name = '')
     {
-        return new AddressGroup($addresses, $name);
+        return new AddressGroupPart($addresses, $name);
     }
     
     /**

@@ -66,7 +66,7 @@ class AddressBaseConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Tyrion Lannister', $ret[0]->getName());
         $this->assertEquals('tyrion@houselannister.com', $ret[0]->getEmail());
         
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroup', $ret[1]);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroupPart', $ret[1]);
         $this->assertEquals('Arya Stark', $ret[1]->getAddress(0)->getName());
         $this->assertEquals('arya@winterfell.com', $ret[1]->getAddress(0)->getEmail());
         $this->assertEquals('', $ret[1]->getAddress(1)->getName());

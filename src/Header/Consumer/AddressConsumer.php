@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\Token;
-use ZBateson\MailMimeParser\Header\Part\AddressGroup;
+use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 
 /**
  * Parses a single part of an address header.
@@ -108,11 +108,11 @@ class AddressConsumer extends AbstractConsumer
      * 
      * AddressConsumer's implementation looks for tokens representing the
      * beginning of an address part, to create a Part\AddressPart out of a
-     * name/address pair, or assign the name part to a parsed Part\AddressGroup
+     * name/address pair, or assign the name part to a parsed Part\AddressGroupPart
      * returned from its AddressGroupConsumer sub-consumer.
      * 
      * The returned array consists of a single element - either a
-     * Part\AddressPart or a Part\AddressGroup.
+     * Part\AddressPart or a Part\AddressGroupPart.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
      * @return ZBateson\MailMimeParser\Header\Part\Part[]
@@ -123,9 +123,9 @@ class AddressConsumer extends AbstractConsumer
         $strValue = '';
         foreach ($parts as $part) {
             $p = $part->getValue();
-            if ($part instanceof AddressGroup) {
+            if ($part instanceof AddressGroupPart) {
                 return [
-                    $this->partFactory->newAddressGroup(
+                    $this->partFactory->newAddressGroupPart(
                         $part->getAddresses(),
                         $strValue
                     )

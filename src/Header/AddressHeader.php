@@ -4,7 +4,7 @@ namespace ZBateson\MailMimeParser\Header;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
-use ZBateson\MailMimeParser\Header\Part\AddressGroup;
+use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 
 /**
  * Reads an address list header using the AddressBaseConsumer.
@@ -25,7 +25,7 @@ class AddressHeader extends AbstractHeader
     protected $addresses = [];
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\AddressGroup[] array of
+     * @var \ZBateson\MailMimeParser\Header\Part\AddressGroupPart[] array of
      * address groups
      */
     protected $groups = [];
@@ -52,7 +52,7 @@ class AddressHeader extends AbstractHeader
         foreach ($this->parts as $part) {
             if ($part instanceof AddressPart) {
                 $this->addresses[] = $part;
-            } elseif ($part instanceof AddressGroup) {
+            } elseif ($part instanceof AddressGroupPart) {
                 $this->addresses = array_merge($this->addresses, $part->getAddresses());
                 $this->groups[] = $part;
             }
@@ -73,7 +73,7 @@ class AddressHeader extends AbstractHeader
     /**
      * Returns all group parts in the header.
      * 
-     * @return @return ZBateson\MailMimeParser\Header\Part\AddressGroup[]
+     * @return @return ZBateson\MailMimeParser\Header\Part\AddressGroupPart[]
      */
     public function getGroups()
     {

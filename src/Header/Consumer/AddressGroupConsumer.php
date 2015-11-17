@@ -9,11 +9,11 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
  * and ends processing once a semi-colon is found.
  * 
  * Prior to returning to its calling client, AddressGroupConsumer constructs a
- * single Part\AddressGroup object filling it with all located addresses, and
+ * single Part\AddressGroupPart object filling it with all located addresses, and
  * returns it.
  * 
  * The AddressGroupConsumer extends AddressBaseConsumer to define start/end
- * tokens, token separators, and construct a Part\AddressGroup for returning to
+ * tokens, token separators, and construct a Part\AddressGroupPart for returning to
  * clients.
  * 
  * @author Zaahid Bateson
@@ -56,7 +56,7 @@ class AddressGroupConsumer extends AddressBaseConsumer
     /**
      * Performs post-processing on parsed parts.
      * 
-     * AddressGroupConsumer returns an array with a single Part\AddressGroup
+     * AddressGroupConsumer returns an array with a single Part\AddressGroupPart
      * element with all email addresses from this and any sub-groups.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
@@ -66,13 +66,13 @@ class AddressGroupConsumer extends AddressBaseConsumer
     {
         $emails = [];
         foreach ($parts as $part) {
-            if ($part instanceof AddressGroup) {
+            if ($part instanceof AddressGroupPart) {
                 $emails = array_merge($emails, $part->getEmails());
                 continue;
             }
             $emails[] = $part;
         }
-        $group = $this->partFactory->newAddressGroup($emails);
+        $group = $this->partFactory->newAddressGroupPart($emails);
         return [$group];
     }
 }

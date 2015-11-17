@@ -33,7 +33,7 @@ class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
         $ret = $this->addressGroupConsumer->__invoke($group);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroup', $ret[0]);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroupPart', $ret[0]);
         $this->assertEquals('Wilfred', $ret[0]->getAddress(0)->getEmail());
         $this->assertEquals('Emma', $ret[0]->getAddress(1)->getEmail());
     }
