@@ -1,6 +1,8 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
+use php_user_filter;
+
 /**
  * Implements a filter converting the stream's character encoding while reading
  * from it, so the charset of strings returned by read operations are guaranteed
@@ -12,7 +14,7 @@ namespace ZBateson\MailMimeParser;
  *
  * @author Zaahid Bateson
  */
-class CharsetStreamFilter extends \php_user_filter
+class CharsetStreamFilter extends php_user_filter
 {
     /**
      * Name used when registering with stream_filter_register.
