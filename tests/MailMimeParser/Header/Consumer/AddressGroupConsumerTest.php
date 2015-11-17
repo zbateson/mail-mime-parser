@@ -2,6 +2,7 @@
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer;
 
 /**
  * Description of AddressGroupConsumerTest
@@ -18,7 +19,7 @@ class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
     {
         $pf = new PartFactory();
         $cs = new ConsumerService($pf);
-        $this->addressGroupConsumer = $cs->getAddressGroupConsumer();
+        $this->addressGroupConsumer = AddressGroupConsumer::getInstance($cs, $pf);
     }
     
     public function tearDown()

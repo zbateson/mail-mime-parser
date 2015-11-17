@@ -2,6 +2,7 @@
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer;
 
 /**
  * Description of ParameterConsumerTest
@@ -18,7 +19,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
     {
         $pf = new PartFactory();
         $cs = new ConsumerService($pf);
-        $this->parameterConsumer = $cs->getParameterConsumer();
+        $this->parameterConsumer = ParameterConsumer::getInstance($cs, $pf);
     }
     
     public function tearDown()

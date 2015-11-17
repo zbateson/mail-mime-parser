@@ -2,6 +2,7 @@
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\GenericConsumer;
 
 /**
  * Description of GenericConsumerTest
@@ -18,7 +19,7 @@ class GenericConsumerTest extends PHPUnit_Framework_TestCase
     {
         $pf = new PartFactory();
         $cs = new ConsumerService($pf);
-        $this->genericConsumer = $cs->getGenericConsumer();
+        $this->genericConsumer = GenericConsumer::getInstance($cs, $pf);
     }
     
     public function tearDown()

@@ -2,6 +2,7 @@
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumer;
 
 /**
  * Description of CommentConsumerTest
@@ -18,7 +19,7 @@ class CommentConsumerTest extends PHPUnit_Framework_TestCase
     {
         $pf = new PartFactory();
         $cs = new ConsumerService($pf);
-        $this->commentConsumer = $cs->getCommentConsumer();
+        $this->commentConsumer = CommentConsumer::getInstance($cs, $pf);
     }
     
     public function tearDown()

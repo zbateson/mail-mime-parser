@@ -2,6 +2,7 @@
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\AddressConsumer;
 
 /**
  * Description of AddressEmailConsumerTest
@@ -18,7 +19,7 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
     {
         $pf = new PartFactory();
         $cs = new ConsumerService($pf);
-        $this->addressConsumer = $cs->getAddressConsumer();
+        $this->addressConsumer = AddressConsumer::getInstance($cs, $pf);
     }
     
     public function tearDown()
