@@ -31,14 +31,14 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new MimeLiteral.
+     * Initializes and returns a new MimeLiteralPart.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteral
+     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
      */
-    public function newMimeLiteral($value)
+    public function newMimeLiteralPart($value)
     {
-        return new MimeLiteral($value);
+        return new MimeLiteralPart($value);
     }
     
     /**

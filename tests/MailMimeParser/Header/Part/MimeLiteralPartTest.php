@@ -1,19 +1,19 @@
 <?php
 
-use ZBateson\MailMimeParser\Header\Part\MimeLiteral;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 
 /**
  * Description of MimeLiteralTest
  *
  * @group HeaderParts
- * @group MimeLiteral
+ * @group MimeLiteralPart
  * @author Zaahid Bateson
  */
-class MimeLiteralTest extends \PHPUnit_Framework_TestCase
+class MimeLiteralPartTest extends \PHPUnit_Framework_TestCase
 {
     protected function assertDecoded($expected, $encodedActual)
     {
-        $part = new MimeLiteral($encodedActual);
+        $part = new MimeLiteralPart($encodedActual);
         $this->assertEquals($expected, $part->getValue());
     }
     
@@ -96,21 +96,21 @@ class MimeLiteralTest extends \PHPUnit_Framework_TestCase
     
     public function testIgnoreSpacesBefore()
     {
-        $part = new MimeLiteral('=?US-ASCII?Q?Kilgore_Trout?=Blah');
+        $part = new MimeLiteralPart('=?US-ASCII?Q?Kilgore_Trout?=Blah');
         $this->assertTrue($part->ignoreSpacesBefore(), 'ignore spaces before');
         $this->assertFalse($part->ignoreSpacesAfter(), 'ignore spaces after');
     }
     
     public function testIgnoreSpacesAfter()
     {
-        $part = new MimeLiteral('Blah=?US-ASCII?Q?Kilgore_Trout?=');
+        $part = new MimeLiteralPart('Blah=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertFalse($part->ignoreSpacesBefore(), 'ignore spaces before');
         $this->assertTrue($part->ignoreSpacesAfter(), 'ignore spaces after');
     }
     
     public function testIgnoreSpacesBeforeAndAfter()
     {
-        $part = new MimeLiteral('=?US-ASCII?Q?Kilgore_Trout?=');
+        $part = new MimeLiteralPart('=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertTrue($part->ignoreSpacesBefore(), 'ignore spaces before');
         $this->assertTrue($part->ignoreSpacesAfter(), 'ignore spaces after');
     }

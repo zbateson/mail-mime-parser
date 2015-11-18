@@ -5,11 +5,11 @@ namespace ZBateson\MailMimeParser\Header\Part;
  * Represents a single mime header part token, with the possibility of it being
  * MIME-Encoded as per RFC-2047.
  * 
- * MimeLiteral automatically decodes the value if it's encoded.
+ * MimeLiteralPart automatically decodes the value if it's encoded.
  *
  * @author Zaahid Bateson
  */
-class MimeLiteral extends LiteralPart
+class MimeLiteralPart extends LiteralPart
 {
     /**
      * @var string regex pattern matching a mime-encoded part
@@ -27,8 +27,9 @@ class MimeLiteral extends LiteralPart
     protected $canIgnoreSpacesAfter = false;
     
     /**
-     * Constructs a MimeLiteral, decoding the value if it's mime-encoded.  Sets
-     * canIgnoreSpacesBefore and canIgnoreSpacesAfter.
+     * Decoding the passed token value if it's mime-encoded and assigns the
+     * decoded value to a member variable. Sets canIgnoreSpacesBefore and
+     * canIgnoreSpacesAfter.
      * 
      * @param string $token
      */

@@ -62,7 +62,7 @@ class ParameterConsumer extends GenericConsumer
             if ($part instanceof Token) {
                 if ($p === ';') {
                     if (empty($strName)) {
-                        $combined[] = $this->partFactory->newMimeLiteral($strCat);
+                        $combined[] = $this->partFactory->newMimeLiteralPart($strCat);
                     } else {
                         $combined[] = $this->partFactory->newParameter($strName, $strCat);
                     }

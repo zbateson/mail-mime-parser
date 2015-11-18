@@ -6,7 +6,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  * 
  * @author Zaahid Bateson
  */
-class Parameter extends MimeLiteral
+class Parameter extends MimeLiteralPart
 {
     /**
      * @var string the name of the parameter

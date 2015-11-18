@@ -11,7 +11,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  *
  * @author Zaahid Bateson
  */
-class AddressGroupPart extends MimeLiteral
+class AddressGroupPart extends MimeLiteralPart
 {
     /**
      * @var AddressPart[] an array of AddressParts 

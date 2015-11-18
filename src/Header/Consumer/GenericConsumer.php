@@ -65,12 +65,13 @@ class GenericConsumer extends AbstractConsumer
     }
     
     /**
-     * Creates and returns a \ZBateson\MailMimeParser\Header\Part\MimeLiteral
-     * out of the passed string token and returns it.
+     * Creates and returns a
+     * \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart out of the passed
+     * string token and returns it.
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteral
+     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -79,7 +80,7 @@ class GenericConsumer extends AbstractConsumer
         } elseif ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
         } else {
-            return $this->partFactory->newMimeLiteral($token);
+            return $this->partFactory->newMimeLiteralPart($token);
         }
     }
     

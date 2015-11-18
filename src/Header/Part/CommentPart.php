@@ -7,7 +7,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  *
  * @author Zaahid Bateson
  */
-class CommentPart extends MimeLiteral
+class CommentPart extends MimeLiteralPart
 {
     /**
      * @var string the contents of the comment
@@ -15,7 +15,7 @@ class CommentPart extends MimeLiteral
     protected $comment;
     
     /**
-     * Constructs a MimeLiteral, decoding the value if it's mime-encoded.
+     * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
      * 
      * @param string $token
      */
