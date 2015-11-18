@@ -7,8 +7,8 @@ use ZBateson\MailMimeParser\Header\ParameterHeader;
 /**
  * Represents a single part of a multi-part mime message.
  * 
- * A Part object may have any number of child parts, or may be a child itself
- * with its own parent or parents.
+ * A MimePart object may have any number of child parts, or may be a child
+ * itself with its own parent or parents.
  * 
  * The content of the part can be read from its PartStream resource handle,
  * accessible via MimePart::getContentResourceHanlde.

@@ -64,14 +64,14 @@ class PartStreamRegistry
 
     /**
      * Creates a part stream handle for the start and end position of the
-     *  message stream, and attaches it to the passed Part.
+     * message stream, and attaches it to the passed MimePart.
      * 
-     * @param Part $part
+     * @param MimePart $part
      * @param Message $message
      * @param int $start
      * @param int $end
      */
-    public function attachPartStreamHandle(Part $part, Message $message, $start, $end)
+    public function attachPartStreamHandle(MimePart $part, Message $message, $start, $end)
     {
         $id = $message->getObjectId();
         if (empty($this->registeredHandles[$id])) {

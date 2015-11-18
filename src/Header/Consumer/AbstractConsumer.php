@@ -25,7 +25,7 @@ abstract class AbstractConsumer
     
     /**
      * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory used to construct
-     *      Part objects
+     * HeaderPart objects
      */
     protected $partFactory;
     

@@ -12,7 +12,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 {
     protected function getMockedPart()
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Part')
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\MimePart')
             ->disableOriginalConstructor()
             ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter'])
             ->getMock();

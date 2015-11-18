@@ -15,7 +15,7 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 class SimpleDi
 {
     /**
-     * @var \ZBateson\MailMimeParser\PartFactory singleton 'service' instance
+     * @var \ZBateson\MailMimeParser\MimePartFactory singleton 'service' instance
      */
     protected $partFactory;
     
@@ -109,12 +109,12 @@ class SimpleDi
     /**
      * Returns the part factory service instance.
      * 
-     * @return \ZBateson\MailMimeParser\PartFactory
+     * @return \ZBateson\MailMimeParser\MimePartFactory
      */
     public function getPartFactory()
     {
         if ($this->partFactory === null) {
-            $this->partFactory = new PartFactory(
+            $this->partFactory = new MimePartFactory(
                 $this->getHeaderFactory()
             );
         }

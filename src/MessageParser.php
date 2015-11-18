@@ -16,8 +16,8 @@ class MessageParser
     protected $message;
     
     /**
-     * @var \ZBateson\MailMimeParser\PartFactory the PartFactory object used to
-     * create parts.
+     * @var \ZBateson\MailMimeParser\MimePartFactory the MimePartFactory object
+     * used to create parts.
      */
     protected $partFactory;
     
@@ -36,10 +36,10 @@ class MessageParser
      * Sets up the parser with its dependencies.
      * 
      * @param \ZBateson\MailMimeParser\Message $m
-     * @param \ZBateson\MailMimeParser\PartFactory $pf
+     * @param \ZBateson\MailMimeParser\MimePartFactory $pf
      * @param \ZBateson\MailMimeParser\PartStreamRegistry $psr
      */
-    public function __construct(Message $m, PartFactory $pf, PartStreamRegistry $psr)
+    public function __construct(Message $m, MimePartFactory $pf, PartStreamRegistry $psr)
     {
         $this->message = $m;
         $this->partFactory = $pf;
@@ -65,10 +65,10 @@ class MessageParser
      * Reads header lines up to an empty line, adding them to the passed $part.
      * 
      * @param resource $handle the resource handle to read from
-     * @param \ZBateson\MailMimeParser\Part $part the current part to add
+     * @param \ZBateson\MailMimeParser\MimePart $part the current part to add
      *        headers to
      */
-    protected function readHeaders($handle, Part $part)
+    protected function readHeaders($handle, MimePart $part)
     {
         $header = '';
         do {
@@ -98,14 +98,14 @@ class MessageParser
      * @param resource $handle the input stream resource
      * @param \ZBateson\MailMimeParser\Message $message the current Message
      *        object
-     * @param \ZBateson\MailMimeParser\Part $part the current Part object to
-     *        load the content into.
+     * @param \ZBateson\MailMimeParser\MimePart $part the current MimePart
+     *        object to load the content into.
      * @param string $boundary the MIME boundary
      * @param boolean $skipPart pass true if the intention is to read up to the
      *        beginning MIME boundary's headers
      * @return boolean if the end boundary is found
      */
-    protected function readPartContent($handle, Message $message, Part $part, $boundary, $skipPart)
+    protected function readPartContent($handle, Message $message, MimePart $part, $boundary, $skipPart)
     {
         $start = ftell($handle);
         $boundaryLength = 0;
@@ -168,7 +168,7 @@ class MessageParser
                 }
                 $skipPart = true;
             }
-            $part = $this->partFactory->newPart();
+            $part = $this->partFactory->newMimePart();
             if ($parent === null) {
                 $parent = $message;
             }

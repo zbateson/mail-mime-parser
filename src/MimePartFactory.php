@@ -4,11 +4,11 @@ namespace ZBateson\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
- * Description of PartFactory
+ * Description of MimePartFactory
  *
  * @author Zaahid Bateson
  */
-class PartFactory
+class MimePartFactory
 {
     /**
      * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
@@ -17,7 +17,7 @@ class PartFactory
     protected $headerFactory;
     
     /**
-     * Creates a PartFactory instance with its dependencies.
+     * Creates a MimePartFactory instance with its dependencies.
      * 
      * @param HeaderFactory $headerFactory
      */
@@ -27,12 +27,12 @@ class PartFactory
     }
     
     /**
-     * Constructs a new Part object and returns it
+     * Constructs a new MimePart object and returns it
      * 
-     * @return \ZBateson\MailMimeParser\Part
+     * @return \ZBateson\MailMimeParser\MimePart
      */
-    public function newPart()
+    public function newMimePart()
     {
-        return new Part($this->headerFactory);
+        return new MimePart($this->headerFactory);
     }
 }

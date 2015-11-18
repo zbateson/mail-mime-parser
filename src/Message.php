@@ -16,7 +16,7 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
  *
  * @author Zaahid Bateson
  */
-class Message extends Part
+class Message extends MimePart
 {
     /**
      * @var string unique ID used to identify the object to
@@ -39,7 +39,7 @@ class Message extends Part
     protected $htmlPart;
     
     /**
-     * @var \ZBateson\MailMimeParser\Part[] array of parts in this message 
+     * @var \ZBateson\MailMimeParser\MimePart[] array of parts in this message 
      */
     protected $parts = [];
     
@@ -70,9 +70,9 @@ class Message extends Part
      * text/plain, to $this->htmlPart if it's text/html, or adds the part to the
      * parts array otherwise.
      * 
-     * @param \ZBateson\MailMimeParser\Part $part
+     * @param \ZBateson\MailMimeParser\MimePart $part
      */
-    public function addPart(Part $part)
+    public function addPart(MimePart $part)
     {
         $type = $part->getHeaderValue('Content-Type');
         if ((empty($type) || $type === 'text/plain') && empty($this->textPart)) {
@@ -87,7 +87,7 @@ class Message extends Part
     /**
      * Returns the text part (or null if none is set.)
      * 
-     * @return \ZBateson\MailMimeParser\Part
+     * @return \ZBateson\MailMimeParser\MimePart
      */
     public function getTextPart()
     {
@@ -97,7 +97,7 @@ class Message extends Part
     /**
      * Returns the HTML part (or null if none is set.)
      * 
-     * @return \ZBateson\MailMimeParser\Part
+     * @return \ZBateson\MailMimeParser\MimePart
      */
     public function getHtmlPart()
     {
@@ -109,7 +109,7 @@ class Message extends Part
      * if none is set.
      * 
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Part
+     * @return \ZBateson\MailMimeParser\MimePart
      */
     public function getAttachmentPart($index)
     {
