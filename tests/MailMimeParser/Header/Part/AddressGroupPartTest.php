@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
  * @group AddressGroupPart
  * @author Zaahid Bateson
  */
-class AddressGroupTest extends PHPUnit_Framework_TestCase
+class AddressGroupPartTest extends PHPUnit_Framework_TestCase
 {
     public function testNameGroup()
     {
@@ -18,5 +18,9 @@ class AddressGroupTest extends PHPUnit_Framework_TestCase
         $part = new AddressGroupPart($members, $name);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($members, $part->getAddresses());
+        $this->assertEquals($members[0], $part->getAddress(0));
+        $this->assertEquals($members[1], $part->getAddress(1));
+        $this->assertEquals($members[2], $part->getAddress(2));
+        $this->assertNull($part->getAddress(3));
     }
 }
