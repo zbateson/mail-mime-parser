@@ -92,8 +92,8 @@ class GenericConsumer extends AbstractConsumer
      * processParts, and if needed by an implementing class that overrides
      * processParts, must be specifically called.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function filterIgnoredSpaces(array $parts)
     {
@@ -125,8 +125,8 @@ class GenericConsumer extends AbstractConsumer
      * Overridden to combine all part values into a single string and return it
      * as an array with a single element.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

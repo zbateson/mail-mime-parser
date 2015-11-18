@@ -34,7 +34,7 @@ class ParameterConsumer extends GenericConsumer
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\Part
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -48,8 +48,8 @@ class ParameterConsumer extends GenericConsumer
      * Post processing involves creating Part\LiteralPart or Part\ParameterPart
      * objects out of created Token and LiteralParts.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

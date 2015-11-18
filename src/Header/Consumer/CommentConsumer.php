@@ -94,8 +94,8 @@ class CommentConsumer extends GenericConsumer
      * generated parts from tokens.  The Part\CommentPart is returned in an
      * array.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

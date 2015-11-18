@@ -59,8 +59,8 @@ class AddressGroupConsumer extends AddressBaseConsumer
      * AddressGroupConsumer returns an array with a single Part\AddressGroupPart
      * element with all email addresses from this and any sub-groups.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

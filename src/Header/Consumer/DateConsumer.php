@@ -14,7 +14,7 @@ class DateConsumer extends GenericConsumer
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\Part
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -25,8 +25,8 @@ class DateConsumer extends GenericConsumer
      * Concatenates the passed parts and constructs a single Part\DatePart,
      * returning it in an array with a single element.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

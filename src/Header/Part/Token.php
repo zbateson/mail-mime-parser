@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\Part;
+use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 
 /**
  * Holds a string value token that will require additional processing by a
@@ -14,7 +14,7 @@ use ZBateson\MailMimeParser\Header\Part\Part;
  *
  * @author Zaahid Bateson
  */
-class Token extends Part
+class Token extends HeaderPart
 {
     /**
      * Initializes a token.

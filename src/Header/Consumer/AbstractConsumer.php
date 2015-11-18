@@ -61,7 +61,7 @@ abstract class AbstractConsumer
      * Invokes parsing of a header's value into header parts.
      * 
      * @param string $value the raw header value
-     * @return \ZBateson\MailMimeParser\Header\Part\Part[] the array of parsed
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the array of parsed
      *         parts
      */
     public function __invoke($value)
@@ -126,7 +126,7 @@ abstract class AbstractConsumer
      * parseParts to parse the returned array.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\Part[] the array of parsed
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the array of parsed
      *         parts
      */
     private function parseRawValue($value)
@@ -222,7 +222,7 @@ abstract class AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\Part the constructed header
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed header
      *         part or null if the token should be ignored
      */
     abstract protected function getPartForToken($token, $isLiteral);
@@ -235,7 +235,7 @@ abstract class AbstractConsumer
      * consumer's parseTokensIntoParts method is called.
      * 
      * @param Iterator $tokens
-     * @return ZBateson\MailMimeParser\Header\Part\Part[] parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[] parts
      */
     protected function getTokenParts(Iterator $tokens)
     {
@@ -287,7 +287,7 @@ abstract class AbstractConsumer
      * processing.
      * 
      * @param Iterator $tokens an iterator over a string of tokens
-     * @return \ZBateson\MailMimeParser\Header\Part\Part[] an array of parsed
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] an array of parsed
      *         parts
      */
     protected function parseTokensIntoParts(Iterator $tokens)
@@ -306,8 +306,8 @@ abstract class AbstractConsumer
      * 
      * The default implementation simply returns the passed array.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

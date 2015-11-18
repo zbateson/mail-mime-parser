@@ -74,7 +74,7 @@ abstract class AbstractHeader
     /**
      * Returns an array of Part objects associated with this header.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Part\Part[]
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     public function getParts()
     {

@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\Part;
+use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 
 /**
  * A literal header string part.  The value of the part is not transformed or
@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\Header\Part\Part;
  *
  * @author Zaahid Bateson
  */
-class LiteralPart extends Part
+class LiteralPart extends HeaderPart
 {
     /**
      * Creates a LiteralPart out of the passed string token

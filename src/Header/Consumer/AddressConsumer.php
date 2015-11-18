@@ -91,7 +91,7 @@ class AddressConsumer extends AbstractConsumer
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\Part
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -114,8 +114,8 @@ class AddressConsumer extends AbstractConsumer
      * The returned array consists of a single element - either a
      * Part\AddressPart or a Part\AddressGroupPart.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\Part[]
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {

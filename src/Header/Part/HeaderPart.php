@@ -6,7 +6,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  *
  * @author Zaahid Bateson
  */
-abstract class Part
+abstract class HeaderPart
 {
     /**
      * @var string the value of the part
