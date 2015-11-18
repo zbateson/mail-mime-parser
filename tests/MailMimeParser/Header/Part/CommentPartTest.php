@@ -1,27 +1,27 @@
 <?php
 
-use ZBateson\MailMimeParser\Header\Part\Comment;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Description of CommentTest
  *
  * @group HeaderParts
- * @group Comment
+ * @group CommentPart
  * @author Zaahid Bateson
  */
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentPartTest extends \PHPUnit_Framework_TestCase
 {
     public function testBasicComment()
     {
         $comment = 'Some silly comment made about my moustache';
-        $part = new Comment($comment);
+        $part = new CommentPart($comment);
         $this->assertEquals('', $part->getValue());
         $this->assertEquals($comment, $part->getComment());
     }
     
     public function testMimeEncoding()
     {
-        $part = new Comment('=?US-ASCII?Q?Kilgore_Trout?=');
+        $part = new CommentPart('=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('', $part->getValue());
         $this->assertEquals('Kilgore Trout', $part->getComment());
     }

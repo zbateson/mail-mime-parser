@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\Literal;
-use ZBateson\MailMimeParser\Header\Part\Comment;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use Iterator;
 
 /**
@@ -63,7 +63,7 @@ class CommentConsumer extends GenericConsumer
     
     /**
      * Instantiates and returns Part\Token objects.  Tokens from this
-     * and sub-consumers are combined into a Part\Comment in
+     * and sub-consumers are combined into a Part\CommentPart in
      * combineParts.
      * 
      * @param string $token
@@ -90,8 +90,8 @@ class CommentConsumer extends GenericConsumer
     }
     
     /**
-     * Post processing involves creating a single Part\Comment out of
-     * generated parts from tokens.  The Part\Comment is returned in an
+     * Post processing involves creating a single Part\CommentPart out of
+     * generated parts from tokens.  The Part\CommentPart is returned in an
      * array.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
@@ -101,8 +101,8 @@ class CommentConsumer extends GenericConsumer
     {
         $comment = '';
         foreach ($parts as $part) {
-            // order is important here - Comment extends Literal
-            if ($part instanceof Comment) {
+            // order is important here - CommentPart extends Literal
+            if ($part instanceof CommentPart) {
                 $comment .= '(' . $part->getComment() . ')';
             } elseif ($part instanceof Literal) {
                 $comment .= '"' . $part->getValue() . '"';
@@ -110,6 +110,6 @@ class CommentConsumer extends GenericConsumer
                 $comment .= $part->getValue();
             }
         }
-        return [$this->partFactory->newComment($comment)];
+        return [$this->partFactory->newCommentPart($comment)];
     }
 }

@@ -32,7 +32,7 @@ class CommentConsumerTest extends PHPUnit_Framework_TestCase
         $ret = $this->commentConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Comment', $ret[0]);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\CommentPart', $ret[0]);
         $this->assertEquals('', $ret[0]->getValue());
         $this->assertEquals($expected, $ret[0]->getComment());
     }

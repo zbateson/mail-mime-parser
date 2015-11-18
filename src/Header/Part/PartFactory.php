@@ -42,14 +42,14 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new Comment.
+     * Initializes and returns a new CommentPart.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\Comment
+     * @return \ZBateson\MailMimeParser\Header\Part\CommentPart
      */
-    public function newComment($value)
+    public function newCommentPart($value)
     {
-        return new Comment($value);
+        return new CommentPart($value);
     }
     
     /**

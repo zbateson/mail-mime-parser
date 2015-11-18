@@ -7,7 +7,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  *
  * @author Zaahid Bateson
  */
-class Comment extends MimeLiteral
+class CommentPart extends MimeLiteral
 {
     /**
      * @var string the contents of the comment
