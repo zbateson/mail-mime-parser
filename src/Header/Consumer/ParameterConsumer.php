@@ -45,7 +45,7 @@ class ParameterConsumer extends GenericConsumer
     }
     
     /**
-     * Post processing involves creating Part\LiteralPart or Part\Parameter
+     * Post processing involves creating Part\LiteralPart or Part\ParameterPart
      * objects out of created Token and LiteralParts.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
@@ -64,7 +64,7 @@ class ParameterConsumer extends GenericConsumer
                     if (empty($strName)) {
                         $combined[] = $this->partFactory->newMimeLiteralPart($strCat);
                     } else {
-                        $combined[] = $this->partFactory->newParameter($strName, $strCat);
+                        $combined[] = $this->partFactory->newParameterPart($strName, $strCat);
                     }
                     $strName = '';
                     $strCat = '';

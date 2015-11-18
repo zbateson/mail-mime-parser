@@ -13,7 +13,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  * 
  * @author Zaahid Bateson
  */
-class AddressPart extends Parameter
+class AddressPart extends ParameterPart
 {
     /**
      * Performs mime-decoding and initializes the address' name and email.

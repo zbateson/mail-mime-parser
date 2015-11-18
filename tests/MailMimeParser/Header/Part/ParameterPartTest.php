@@ -1,33 +1,33 @@
 <?php
 
-use ZBateson\MailMimeParser\Header\Part\Parameter;
+use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
  * Description of ParameterTest
  *
  * @group HeaderParts
- * @group Parameter
+ * @group ParameterPart
  * @author Zaahid Bateson
  */
-class ParameterTest extends \PHPUnit_Framework_TestCase
+class ParameterPartTest extends \PHPUnit_Framework_TestCase
 {
     public function testBasicNameValuePair()
     {
-        $part = new Parameter('Name', 'Value');
+        $part = new ParameterPart('Name', 'Value');
         $this->assertEquals('Name', $part->getName());
         $this->assertEquals('Value', $part->getValue());
     }
     
     public function testMimeValue()
     {
-        $part = new Parameter('name', '=?US-ASCII?Q?Kilgore_Trout?=');
+        $part = new ParameterPart('name', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore Trout', $part->getValue());
     }
     
     public function testMimeName()
     {
-        $part = new Parameter('=?US-ASCII?Q?name?=', 'Kilgore');
+        $part = new ParameterPart('=?US-ASCII?Q?name?=', 'Kilgore');
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore', $part->getValue());
     }

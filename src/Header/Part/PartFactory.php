@@ -88,14 +88,14 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new Parameter.
+     * Initializes and returns a new ParameterPart.
      * 
      * @param string $name
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\Parameter
+     * @return \ZBateson\MailMimeParser\Header\Part\ParameterPart
      */
-    public function newParameter($name, $value)
+    public function newParameterPart($name, $value)
     {
-        return new Parameter($name, $value);
+        return new ParameterPart($name, $value);
     }
 }

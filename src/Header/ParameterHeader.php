@@ -3,7 +3,7 @@ namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
-use ZBateson\MailMimeParser\Header\Part\Parameter;
+use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
  * Represents a header containing a primary value part and subsequent name/value
@@ -14,8 +14,8 @@ use ZBateson\MailMimeParser\Header\Part\Parameter;
 class ParameterHeader extends AbstractHeader
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\Parameter[] key map of
-     * lower-case parameter names and associated Parameter parts.
+     * @var \ZBateson\MailMimeParser\Header\Part\ParameterPart[] key map of
+     * lower-case parameter names and associated ParameterParts.
      */
     protected $parameters = [];
     
@@ -31,8 +31,8 @@ class ParameterHeader extends AbstractHeader
     }
     
     /**
-     * Overridden to assign Parameter parts to a map of lower-case parameter
-     * names to Parameter parts.
+     * Overridden to assign ParameterParts to a map of lower-case parameter
+     * names to ParameterParts.
      * 
      * @param AbstractConsumer $consumer
      */
@@ -40,7 +40,7 @@ class ParameterHeader extends AbstractHeader
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
-            if ($part instanceof Parameter) {
+            if ($part instanceof ParameterPart) {
                 $this->parameters[strtolower($part->getName())] = $part;
             }
         }
