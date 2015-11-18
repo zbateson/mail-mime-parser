@@ -86,8 +86,8 @@ class AddressConsumer extends AbstractConsumer
     /**
      * Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
      * the passed string token and returns it, unless the token is an escaped
-     * literal, in which case a Literal is returned to avoid it being processed
-     * as a separator in processParts.
+     * literal, in which case a LiteralPart is returned to avoid it being
+     * processed as a separator in processParts.
      * 
      * @param string $token
      * @param bool $isLiteral
@@ -96,7 +96,7 @@ class AddressConsumer extends AbstractConsumer
     protected function getPartForToken($token, $isLiteral)
     {
         if ($isLiteral) {
-            return $this->partFactory->newLiteral($token);
+            return $this->partFactory->newLiteralPart($token);
         } elseif (preg_match('/^\s+$/', $token)) {
             return $this->partFactory->newToken(' ');
         }

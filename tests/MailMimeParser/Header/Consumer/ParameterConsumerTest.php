@@ -32,7 +32,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $ret = $this->parameterConsumer->__invoke('text/html; charset=utf8');
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Literal', $ret[0]);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\LiteralPart', $ret[0]);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Parameter', $ret[1]);
         $this->assertEquals('text/html', $ret[0]->getValue());
         $this->assertEquals('charset', $ret[1]->getName());

@@ -9,12 +9,12 @@ use ZBateson\MailMimeParser\Header\Part\Part;
  *
  * @author Zaahid Bateson
  */
-class Literal extends Part
+class LiteralPart extends Part
 {
     /**
-     * Constructs a Literal out of the passed Part.
+     * Creates a LiteralPart out of the passed string token
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\Part $part
+     * @param string $token
      */
     public function __construct($token)
     {

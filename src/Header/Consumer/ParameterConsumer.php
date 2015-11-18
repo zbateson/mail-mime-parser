@@ -30,7 +30,7 @@ class ParameterConsumer extends GenericConsumer
     /**
      * Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
      * the passed string token and returns it, unless the token is an escaped
-     * literal, in which case a Literal is returned.
+     * literal, in which case a LiteralPart is returned.
      * 
      * @param string $token
      * @param bool $isLiteral
@@ -39,14 +39,14 @@ class ParameterConsumer extends GenericConsumer
     protected function getPartForToken($token, $isLiteral)
     {
         if ($isLiteral) {
-            return $this->partFactory->newLiteral($token);
+            return $this->partFactory->newLiteralPart($token);
         }
         return $this->partFactory->newToken($token);
     }
     
     /**
-     * Post processing involves creating Part\Literal or Part\Parameter
-     * objects out of created Token and Literals.
+     * Post processing involves creating Part\LiteralPart or Part\Parameter
+     * objects out of created Token and LiteralParts.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
      * @return ZBateson\MailMimeParser\Header\Part\Part[]

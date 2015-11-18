@@ -8,7 +8,7 @@ use DateTime;
  *
  * @author Zaahid Bateson
  */
-class DatePart extends Literal
+class DatePart extends LiteralPart
 {
     /**
      * @var DateTime

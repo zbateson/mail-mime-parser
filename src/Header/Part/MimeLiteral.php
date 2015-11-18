@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  *
  * @author Zaahid Bateson
  */
-class MimeLiteral extends Literal
+class MimeLiteral extends LiteralPart
 {
     /**
      * @var string regex pattern matching a mime-encoded part

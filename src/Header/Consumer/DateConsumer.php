@@ -10,7 +10,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 class DateConsumer extends GenericConsumer
 {
     /**
-     * Returns a Part\Literal for the current token
+     * Returns a Part\LiteralPart for the current token
      * 
      * @param string $token
      * @param bool $isLiteral
@@ -18,7 +18,7 @@ class DateConsumer extends GenericConsumer
      */
     protected function getPartForToken($token, $isLiteral)
     {
-        return $this->partFactory->newLiteral($token);
+        return $this->partFactory->newLiteralPart($token);
     }
     
     /**

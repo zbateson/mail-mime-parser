@@ -77,7 +77,7 @@ class GenericConsumer extends AbstractConsumer
         if (preg_match('/^\s+$/', $token) && !$isLiteral) {
             return $this->partFactory->newToken(' ');
         } elseif ($isLiteral) {
-            return $this->partFactory->newLiteral($token);
+            return $this->partFactory->newLiteralPart($token);
         } else {
             return $this->partFactory->newMimeLiteral($token);
         }
@@ -134,6 +134,6 @@ class GenericConsumer extends AbstractConsumer
         foreach ($filtered as $part) {
             $strValue .= $part->getValue();
         }
-        return [$this->partFactory->newLiteral($strValue)];
+        return [$this->partFactory->newLiteralPart($strValue)];
     }
 }

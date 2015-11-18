@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\Literal;
+use ZBateson\MailMimeParser\Header\Part\LiteralPart;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use Iterator;
 
@@ -101,10 +101,10 @@ class CommentConsumer extends GenericConsumer
     {
         $comment = '';
         foreach ($parts as $part) {
-            // order is important here - CommentPart extends Literal
+            // order is important here - CommentPart extends LiteralPart
             if ($part instanceof CommentPart) {
                 $comment .= '(' . $part->getComment() . ')';
-            } elseif ($part instanceof Literal) {
+            } elseif ($part instanceof LiteralPart) {
                 $comment .= '"' . $part->getValue() . '"';
             } else {
                 $comment .= $part->getValue();

@@ -20,14 +20,14 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new Literal.
+     * Initializes and returns a new LiteralPart.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\Literal
+     * @return \ZBateson\MailMimeParser\Header\Part\LiteralPart
      */
-    public function newLiteral($value)
+    public function newLiteralPart($value)
     {
-        return new Literal($value);
+        return new LiteralPart($value);
     }
     
     /**
