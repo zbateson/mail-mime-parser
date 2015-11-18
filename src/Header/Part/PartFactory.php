@@ -77,14 +77,14 @@ class PartFactory
     }
     
     /**
-     * Initializes and returns a new Date
+     * Initializes and returns a new DatePart
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\Date
+     * @return \ZBateson\MailMimeParser\Header\Part\DatePart
      */
-    public function newDate($value)
+    public function newDatePart($value)
     {
-        return new Date($value);
+        return new DatePart($value);
     }
     
     /**

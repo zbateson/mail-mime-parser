@@ -2,8 +2,8 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 /**
- * Parses a date header into a Part\Date taking care of comment and quoted parts
- * as necessary.
+ * Parses a date header into a Part\DatePart taking care of comment and quoted
+ * parts as necessary.
  *
  * @author Zaahid Bateson
  */
@@ -22,7 +22,7 @@ class DateConsumer extends GenericConsumer
     }
     
     /**
-     * Concatenates the passed parts and constructs a single Part\Date,
+     * Concatenates the passed parts and constructs a single Part\DatePart,
      * returning it in an array with a single element.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\Part[] $parts
@@ -34,6 +34,6 @@ class DateConsumer extends GenericConsumer
         foreach ($parts as $part) {
             $strValue .= $part->getValue();
         }
-        return [$this->partFactory->newDate($strValue)];
+        return [$this->partFactory->newDatePart($strValue)];
     }
 }
