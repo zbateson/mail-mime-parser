@@ -1,7 +1,7 @@
 <?php
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\AddressHeader;
 
 /**
@@ -17,7 +17,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
     
     public function setup()
     {
-        $pf = new PartFactory();
+        $pf = new HeaderPartFactory();
         $this->consumerService = new ConsumerService($pf);
     }
     

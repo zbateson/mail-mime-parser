@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Simple service provider for consumer singletons.
@@ -11,16 +11,16 @@ use ZBateson\MailMimeParser\Header\Part\PartFactory;
 class ConsumerService
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\PartFactory 
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory 
      */
     protected $partFactory;
     
     /**
-     * Sets up the PartFactory member variable.
+     * Sets up the HeaderPartFactory member variable.
      * 
-     * @param PartFactory $partFactory
+     * @param HeaderPartFactory $partFactory
      */
-    public function __construct(PartFactory $partFactory)
+    public function __construct(HeaderPartFactory $partFactory)
     {
         $this->partFactory = $partFactory;
     }

@@ -2,11 +2,11 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 /**
- * Constructs and returns Part objects.
+ * Constructs and returns HeaderPart objects.
  *
  * @author Zaahid Bateson
  */
-class PartFactory
+class HeaderPartFactory
 {
     /**
      * Initializes and returns a new Token.

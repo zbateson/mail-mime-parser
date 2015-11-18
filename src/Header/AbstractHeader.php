@@ -25,8 +25,8 @@ abstract class AbstractHeader
     protected $name;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Consumer\Part\Part[] the header's
-     * parts (as returned from the consumer)
+     * @var \ZBateson\MailMimeParser\Header\Consumer\Part\HeaderPart[] the
+     * header's parts (as returned from the consumer)
      */
     protected $parts;
     
@@ -72,7 +72,7 @@ abstract class AbstractHeader
     }
 
     /**
-     * Returns an array of Part objects associated with this header.
+     * Returns an array of HeaderPart objects associated with this header.
      * 
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */

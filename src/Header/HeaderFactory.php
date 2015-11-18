@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Description of HeaderFactory
@@ -48,7 +48,7 @@ class HeaderFactory
     ];
     protected $genericType = 'ZBateson\MailMimeParser\Header\GenericHeader';
     
-    public function __construct(ConsumerService $consumerService, PartFactory $partFactory)
+    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
     {
         $this->consumerService = $consumerService;
         $this->partFactory = $partFactory;

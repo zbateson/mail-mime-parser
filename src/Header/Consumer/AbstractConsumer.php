@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\PartFactory;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use SplFixedArray;
 use Iterator;
 use NoRewindIterator;
@@ -24,7 +24,7 @@ abstract class AbstractConsumer
     protected $consumerService;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\PartFactory used to construct
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory used to construct
      *      Part objects
      */
     protected $partFactory;
@@ -33,9 +33,9 @@ abstract class AbstractConsumer
      * Initializes the instance.
      * 
      * @param ConsumerService $consumerService
-     * @param PartFactory $partFactory
+     * @param HeaderPartFactory $partFactory
      */
-    protected function __construct(ConsumerService $consumerService, PartFactory $partFactory)
+    protected function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
     {
         $this->consumerService = $consumerService;
         $this->partFactory = $partFactory;
@@ -45,9 +45,9 @@ abstract class AbstractConsumer
      * Returns the singleton instance for the class.
      * 
      * @param ConsumerService $consumerService
-     * @param PartFactory $partFactory
+     * @param HeaderPartFactory $partFactory
      */
-    public static function getInstance(ConsumerService $consumerService, PartFactory $partFactory)
+    public static function getInstance(ConsumerService $consumerService, HeaderPartFactory $partFactory)
     {
         static $instances = [];
         $class = get_called_class();
@@ -215,9 +215,9 @@ abstract class AbstractConsumer
     abstract protected function isEndToken($token);
     
     /**
-     * Constructs and returns a ZBateson\MailMimeParser\Header\Part\Part for
-     * the passed string token.  If the token should be ignored, the function
-     * must return null.
+     * Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
+     * for the passed string token.  If the token should be ignored, the
+     * function must return null.
      * 
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
@@ -228,8 +228,8 @@ abstract class AbstractConsumer
     abstract protected function getPartForToken($token, $isLiteral);
     
     /**
-     * Returns an array of ZBateson\MailMimeParser\Header\Part\Part for the
-     * current token on the iterator.
+     * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
+     * the current token on the iterator.
      * 
      * If the current token is a start token from a sub-consumer, the sub-
      * consumer's parseTokensIntoParts method is called.
@@ -273,7 +273,7 @@ abstract class AbstractConsumer
     
     /**
      * Iterates over the passed token Iterator and returns an array of parsed
-     * \ZBateson\MailMimeParser\Header\Part\Part objects.
+     * \ZBateson\MailMimeParser\Header\Part\HeaderPart objects.
      * 
      * The method checks each token to see if the token matches a sub-consumer's
      * start token, or if it matches the current consumer's end token to stop

@@ -32,7 +32,7 @@ class SimpleDi
     protected $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\PartFactory singleton 'service'
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory singleton 'service'
      * instance
      */
     protected $headerPartFactory;
@@ -154,11 +154,11 @@ class SimpleDi
     /**
      * Returns the part factory service
      * 
-     * @return \ZBateson\MailMimeParser\Header\Part\PartFactory
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory
      */
     public function getHeaderPartFactory()
     {
-        return $this->getInstance('headerPartFactory', __NAMESPACE__ . '\Header\Part\PartFactory');
+        return $this->getInstance('headerPartFactory', __NAMESPACE__ . '\Header\Part\HeaderPartFactory');
     }
     
     /**

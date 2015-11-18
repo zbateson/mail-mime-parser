@@ -11,25 +11,25 @@ class MessageParser
 {
     /**
      * @var \ZBateson\MailMimeParser\Message the Message object that the read
-     *      mail mime message will be parsed into
+     * mail mime message will be parsed into
      */
     protected $message;
     
     /**
      * @var \ZBateson\MailMimeParser\PartFactory the PartFactory object used to
-     *      create parts.
+     * create parts.
      */
     protected $partFactory;
     
     /**
      * @var \ZBateson\MailMimeParser\PartStreamRegistry the PartStreamRegistry 
-     *      object
+     * object
      */
     protected $partStreamRegistry;
     
     /**
      * @var \ZBateson\MailMimeParser\PartStreamRegistry the PartStreamRegistry
-     *      object used to register stream parts.
+     * object used to register stream parts.
      */
     
     /**
