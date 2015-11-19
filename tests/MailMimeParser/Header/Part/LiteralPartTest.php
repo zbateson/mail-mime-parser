@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\Header\Part\Token;
  * @group LiteralPart
  * @author Zaahid Bateson
  */
-class LiteralPartTest extends \PHPUnit_Framework_TestCase
+class LiteralPartTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {

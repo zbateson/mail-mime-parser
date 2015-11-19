@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\Header\Part\ParameterPart;
  * @group ParameterPart
  * @author Zaahid Bateson
  */
-class ParameterPartTest extends \PHPUnit_Framework_TestCase
+class ParameterPartTest extends PHPUnit_Framework_TestCase
 {
     public function testBasicNameValuePair()
     {

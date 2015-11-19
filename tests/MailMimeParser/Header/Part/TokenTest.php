@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\Header\Part\Token;
  * @group Token
  * @author Zaahid Bateson
  */
-class TokenTest extends \PHPUnit_Framework_TestCase
+class TokenTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {

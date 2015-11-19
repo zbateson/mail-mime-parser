@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\Header\Part\CommentPart;
  * @group CommentPart
  * @author Zaahid Bateson
  */
-class CommentPartTest extends \PHPUnit_Framework_TestCase
+class CommentPartTest extends PHPUnit_Framework_TestCase
 {
     public function testBasicComment()
     {

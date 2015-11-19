@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
  * @group MimeLiteralPart
  * @author Zaahid Bateson
  */
-class MimeLiteralPartTest extends \PHPUnit_Framework_TestCase
+class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
 {
     protected function assertDecoded($expected, $encodedActual)
     {
