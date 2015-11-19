@@ -25,29 +25,37 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         unset($this->mockHeaderFactory);
     }
     
-    protected function getMockedParameterHeader($name, $value)
+    protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
         $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getName', 'hasParameter'])
+            ->setMethods(['getValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
         $header->method('getName')->willReturn($name);
         $header->method('getValue')->willReturn($value);
+        $header->method('getValueFor')->willReturn($parameterValue);
         $header->method('hasParameter')->willReturn(true);
         return $header;
     }
-
+    
     public function testAttachContentResourceHandle()
+    {
+        $hf = $this->mockHeaderFactory;
+        $part = new MimePart($hf);
+        $res = fopen('php://memory', 'rw');
+        $part->attachContentResourceHandle($res);
+        $this->assertSame($res, $part->getContentResourceHandle());
+    }
+    
+    public function testHasContent()
     {
         $hf = $this->mockHeaderFactory;
         $part = new MimePart($hf);
 
         $this->assertFalse($part->hasContent());
         $res = fopen('php://memory', 'rw');
-
         $part->attachContentResourceHandle($res);
         $this->assertTrue($part->hasContent());
-        $this->assertSame($res, $part->getContentResourceHandle());
     }
 
     public function testSetRawHeader()
@@ -72,6 +80,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($firstHeader->getValue(), $part->getHeaderValue($firstHeader->getName()));
         $this->assertEquals($secondHeader->getValue(), $part->getHeaderValue($secondHeader->getName()));
         $this->assertCount(2, $part->getHeaders());
+        $this->assertEquals(['first-header' => $firstHeader, 'second-header' => $secondHeader], $part->getHeaders());
     }
     
     public function testHeaderCaseInsensitive()
@@ -95,9 +104,8 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part->setRawHeader($secondHeader->getName(), $secondHeader->getValue());
         $part->setRawHeader($thirdHeader->getName(), $thirdHeader->getValue());
         
-        $this->assertSame($thirdHeader, $part->getHeader($firstHeader->getName()));
-        $this->assertSame($secondHeader, $part->getHeader($secondHeader->getName()));
-        $this->assertCount(2, $part->getHeaders());
+        $this->assertSame($thirdHeader, $part->getHeader('first-header'));
+        $this->assertSame($secondHeader, $part->getHeader('second-header'));
     }
     
     public function testParent()
@@ -107,5 +115,21 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $parent = new MimePart($hf);
         $part->setParent($parent);
         $this->assertSame($parent, $part->getParent());
+    }
+    
+    public function testGetHeaderParameter()
+    {
+        $hf = $this->mockHeaderFactory;
+        $header = $this->getMockedParameterHeader('First-Header', 'Value', 'param-value');
+        $hf->expects($this->exactly(1))
+            ->method('newInstance')
+            ->withConsecutive(
+                [$header->getName(), $header->getValue()]
+            )
+            ->willReturnOnConsecutiveCalls($header);
+        $part = new MimePart($hf);
+        $part->setRawHeader($header->getName(), $header->getValue());
+        
+        $this->assertEquals('param-value', $part->getHeaderParameter('first-header', 'param'));
     }
 }
