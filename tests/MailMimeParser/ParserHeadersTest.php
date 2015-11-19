@@ -7,7 +7,7 @@ use ZBateson\MailMimeParser\Parser;
  *
  * @author Zaahid Bateson
  */
-class ParserHeadersTest extends \PHPUnit_Framework_TestCase
+class ParserHeadersTest extends PHPUnit_Framework_TestCase
 {
     public function testParsingBasicHeaders()
     {

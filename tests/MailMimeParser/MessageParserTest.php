@@ -8,7 +8,7 @@ use ZBateson\MailMimeParser\MessageParser;
  * @group MessageParser
  * @author Zaahid Bateson
  */
-class MessageParserTest extends \PHPUnit_Framework_TestCase
+class MessageParserTest extends PHPUnit_Framework_TestCase
 {
     protected function getMockedMessage()
     {

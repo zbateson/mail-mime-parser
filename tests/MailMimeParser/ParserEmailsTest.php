@@ -8,7 +8,7 @@ use ZBateson\MailMimeParser\Parser;
  * @group ParserEmails
  * @author Zaahid Bateson
  */
-class ParserEmailsTest extends \PHPUnit_Framework_TestCase
+class ParserEmailsTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;

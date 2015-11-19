@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\SimpleDi as SimpleDi;
  * @group PartStream
  * @author Zaahid Bateson
  */
-class PartStreamTest extends \PHPUnit_Framework_TestCase
+class PartStreamTest extends PHPUnit_Framework_TestCase
 {
     private $di;
     private $registry;
