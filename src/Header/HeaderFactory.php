@@ -41,7 +41,7 @@ class HeaderFactory
             'expiry-date',
             'reply-by',
         ],
-        'ZBateson\MailMimeParser\Header\ValueParametersHeader' => [
+        'ZBateson\MailMimeParser\Header\ParameterHeader' => [
             'content-type',
             'content-disposition',
         ]
@@ -70,6 +70,6 @@ class HeaderFactory
     public function newInstance($name, $value)
     {
         $class = $this->getClassFor($name);
-        return new $class($this->consumerService, $this->partFactory, $name, $value);
+        return new $class($this->consumerService, $name, $value);
     }
 }

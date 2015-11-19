@@ -89,7 +89,8 @@ class SimpleDi
     {
         return new MessageParser(
             $this->newMessage(),
-            $this->getPartFactory()
+            $this->getPartFactory(),
+            $this->getPartStreamRegistry()
         );
     }
     
@@ -101,8 +102,7 @@ class SimpleDi
     public function newMessage()
     {
         return new Message(
-            $this->getHeaderFactory(),
-            $this->getPartStreamRegistry()
+            $this->getHeaderFactory()
         );
     }
     

@@ -1,17 +1,18 @@
 <?php
 
-use ZBateson\MailMimeParser\Parser;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
- * Description of ParserTest
+ * Description of MailMimeParserTest
  *
+ * @group MailMimeParserHeaders
  * @author Zaahid Bateson
  */
-class ParserHeadersTest extends PHPUnit_Framework_TestCase
+class MailMimeParserHeadersTest extends PHPUnit_Framework_TestCase
 {
     public function testParsingBasicHeaders()
     {
-        $parser = new Parser();
+        $parser = new MailMimeParser();
         $message = $parser->parse(fopen(dirname(__DIR__) . '/' . TEST_DATA_DIR . '/headers/basic', 'r'));
         $this->assertEquals('Line endings in this file are: CRLF', $message->getHeaderValue('test'));
         $this->assertEquals('More text', $message->getHeaderValue('Second'));
@@ -23,7 +24,7 @@ class ParserHeadersTest extends PHPUnit_Framework_TestCase
     
     public function testParsingHeadersWithLFOnlyAndNoBody()
     {
-        $parser = new Parser();
+        $parser = new MailMimeParser();
         $message = $parser->parse(fopen(dirname(__DIR__) . '/' . TEST_DATA_DIR . '/headers/basic-2', 'r'));
         $this->assertEquals('LF Only', $message->getHeaderValue('Line-Endings'));
         $this->assertEquals('text\html', $message->getHeaderValue('Content-Type'));
@@ -33,7 +34,7 @@ class ParserHeadersTest extends PHPUnit_Framework_TestCase
     
     public function testParsingHeadersWithLFOnlyAndInvalidHeaders()
     {
-        $parser = new Parser();
+        $parser = new MailMimeParser();
         $message = $parser->parse(fopen(dirname(__DIR__) . '/' . TEST_DATA_DIR . '/headers/basic-3', 'r'));
         $this->assertEquals('LF Only', $message->getHeaderValue('Line-Endings'));
         $this->assertEquals('', $message->getHeaderValue('Empty-Header'));
@@ -45,16 +46,20 @@ class ParserHeadersTest extends PHPUnit_Framework_TestCase
     
     public function testParsingHeadersWithEncoding()
     {
-        $parser = new Parser();
+        $parser = new MailMimeParser();
         $message = $parser->parse(fopen(dirname(__DIR__) . '/' . TEST_DATA_DIR . '/headers/encoded-headers', 'r'));
         $this->assertEquals('¡Hola, señor!', $message->getHeaderValue('Subject'));
-        $this->assertEquals('Müller Müzner <muzner@example.com>', $message->getHeaderValue('To'));
+        $this->assertEquals('muzner@example.com', $message->getHeaderValue('To'));
+        $this->assertEquals('Müller Müzner', $message->getHeader('To')->getPersonName());
         $this->assertEquals('في إيه يا باشا', $message->getHeaderValue('Other'));
-        $this->assertEquals(
-            '"Jon Snow" <jsnow@example.com>, Müller Müzner <muzner@example.com>',
-            $message->getHeaderValue('From')
-        );
-        $this->assertEquals('Andreas Müzner <andreas.muzner@example.com>', $message->getHeaderValue('Cc'));
-        $this->assertEquals('Andreas Müzner <andreas.muzner@example.com>', $message->getHeaderValue('Bcc'));
+        
+        $parts = $message->getHeader('From')->getParts();
+        $this->assertEquals('jsnow@example.com', $parts[0]->getEmail());
+        $this->assertEquals('Jon Snow', $parts[0]->getName());
+        $this->assertEquals('muzner@example.com', $parts[1]->getEmail());
+        $this->assertEquals('Müller Müzner', $parts[1]->getName());
+        
+        $this->assertEquals('Andreas Müzner', $message->getHeader('Cc')->getPersonName());
+        $this->assertEquals('Andreas Müzner', $message->getHeader('Bcc')->getPersonName());
     }
 }

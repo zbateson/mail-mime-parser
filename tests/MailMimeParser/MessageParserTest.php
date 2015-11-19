@@ -85,7 +85,10 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
 
         $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newPart')->will($this->returnCallback([$this, 'getMockedPart']));
+        $self = $this;
+        $partFactory->method('newMimePart')->will($this->returnCallback(function () use ($self) {
+            return $self->getMockedPart();
+        }));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->once())
             ->method('attachPartStreamHandle')
@@ -146,7 +149,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
         
         $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newPart')->will($this->onConsecutiveCalls($firstPart, $secondPart, $this->getMockedPart()));
+        $partFactory->method('newMimePart')->will($this->onConsecutiveCalls($firstPart, $secondPart, $this->getMockedPart()));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->exactly(2))
             ->method('attachPartStreamHandle')
@@ -256,7 +259,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
         
         $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newPart')->will($this->onConsecutiveCalls(
+        $partFactory->method('newMimePart')->will($this->onConsecutiveCalls(
             $firstPart,
             $secondPart,
             $thirdPart,

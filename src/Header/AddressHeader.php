@@ -97,4 +97,17 @@ class AddressHeader extends AbstractHeader
         }
         return false;
     }
+    
+    /**
+     * Returns the parsed value of the header -- calls getValue on $this->part
+     * 
+     * @return string
+     */
+    public function getPersonName()
+    {
+        if (!empty($this->parts)) {
+            return $this->parts[0]->getName();
+        }
+        return null;
+    }
 }
