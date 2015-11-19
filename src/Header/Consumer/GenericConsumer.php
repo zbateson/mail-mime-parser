@@ -114,10 +114,7 @@ class GenericConsumer extends AbstractConsumer
             }
             $retParts[] = $part;
         }
-        $lastPart = end($retParts);
-        if ($spacePart !== null && $lastPart !== null && !$lastPart->ignoreSpacesAfter()) {
-            $retParts[] = $spacePart;
-        }
+        // ignore trailing spaces
         return $retParts;
     }
     
@@ -135,6 +132,6 @@ class GenericConsumer extends AbstractConsumer
         foreach ($filtered as $part) {
             $strValue .= $part->getValue();
         }
-        return [$this->partFactory->newLiteralPart($strValue)];
+        return [$this->partFactory->newLiteralPart(trim($strValue))];
     }
 }

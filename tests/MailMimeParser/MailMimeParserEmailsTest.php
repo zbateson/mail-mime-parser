@@ -1,21 +1,21 @@
 <?php
 
-use ZBateson\MailMimeParser\Parser;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
- * Description of ParserTestEmails
+ * Description of MailMimeParserEmails
  *
- * @group ParserEmails
+ * @group MailMimeParserEmails
  * @author Zaahid Bateson
  */
-class ParserEmailsTest extends PHPUnit_Framework_TestCase
+class MailMimeParserEmailsTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;
     
     public function setup()
     {
-        $this->parser = new Parser();
+        $this->parser = new MailMimeParser();
         $this->messageDir = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails';
     }
     
@@ -45,16 +45,13 @@ class ParserEmailsTest extends PHPUnit_Framework_TestCase
             $this->assertNotNull($f, $key);
             
             $to = $message->getHeader('to');
-            echo "\n", $to->getAddress(0)->email, "\n";
-            var_dump($to->getAddresses());
-            exit;
-            $this->assertEquals('Jürgen Schmürgen', $to->getAddress(0)->name, $key);
-            $this->assertEquals('schmuergen@example.com', $to->getAddress(0)->email, $key);
+            $this->assertEquals('Jürgen Schmürgen', $to->getPersonName(), $key);
+            $this->assertEquals('schmuergen@example.com', $to->getValue(), $key);
             
             $from = $message->getHeader('From');
             $this->assertNotNull($from, $key);
-            $this->assertEquals('Doug Sauder', $from->getAddress(0)->name, $key);
-            $this->assertEquals('doug@example.com', $from->getAddress(0)->email, $key);
+            $this->assertEquals('Doug Sauder', $from->getPersonName(), $key);
+            $this->assertEquals('doug@example.com', $from->getValue(), $key);
             $this->assertEquals('Die Hasen und die Frösche', $message->getHeaderValue('subject'), $key);
             
             $str = stream_get_contents($f);

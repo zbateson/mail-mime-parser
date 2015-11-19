@@ -114,7 +114,7 @@ abstract class AbstractConsumer
     {
         if (!mb_check_encoding($value, 'UTF-8')) {
             // TODO: second parameter used to be "ISO-8859-1", why?
-            $value = mb_convert_encoding($value, 'UTF-8', mb_check_encoding($value, 'UTF-8'));
+            $value = mb_convert_encoding($value, 'UTF-8');
         }
         return $value;
     }
