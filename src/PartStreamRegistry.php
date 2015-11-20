@@ -86,10 +86,14 @@ class PartStreamRegistry
         } elseif (strtolower($encoding) === 'base64') {
             stream_filter_append($handle, 'convert.base64-decode', STREAM_FILTER_READ);
         }
-        stream_filter_append(
-            $handle,
-            'mailmimeparser-encode.' . $part->getHeaderParameter('Content-Type', 'charset')
-        );
+        
+        $contentType = $part->getHeaderValue('Content-Type');
+        if (empty($contentType) || strpos($contentType, 'text/') === 0) {
+            stream_filter_append(
+                $handle,
+                'mailmimeparser-encode.' . $part->getHeaderParameter('Content-Type', 'charset')
+            );
+        }
         
         $this->registeredPartStreamHandles[$id] = $handle;
         $part->attachContentResourceHandle($handle);

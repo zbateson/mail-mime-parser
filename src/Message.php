@@ -120,6 +120,26 @@ class Message extends MimePart
     }
     
     /**
+     * Returns all attachment parts.
+     * 
+     * @return \ZBateson\MailMimeParser\MimePart[]
+     */
+    public function getAllAttachmentParts()
+    {
+        return $this->parts;
+    }
+    
+    /**
+     * Returns the number of attachments available.
+     * 
+     * @return int
+     */
+    public function getAttachmentCount()
+    {
+        return count($this->parts);
+    }
+    
+    /**
      * Returns a resource handle where the text content can be read.
      * 
      * @return resource

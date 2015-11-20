@@ -54,5 +54,8 @@ class CharsetStreamFilter extends php_user_filter
     public function onCreate()
     {
         $this->charset = substr($this->filtername, strrpos($this->filtername, '.') + 1);
+        if (empty($this->charset)) {
+            $this->charset = 'iso-8859-1';
+        }
     }
 }

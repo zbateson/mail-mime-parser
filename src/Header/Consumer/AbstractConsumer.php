@@ -113,8 +113,7 @@ abstract class AbstractConsumer
     private function convertEncoding($value)
     {
         if (!mb_check_encoding($value, 'UTF-8')) {
-            // TODO: second parameter used to be "ISO-8859-1", why?
-            $value = mb_convert_encoding($value, 'UTF-8');
+            $value = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
         }
         return $value;
     }

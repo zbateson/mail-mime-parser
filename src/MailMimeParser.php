@@ -51,7 +51,6 @@ class MailMimeParser
         $this->copyToTmpFile($tempHandle, $handle, $isSmtp);
         $parser = $this->di->newMessageParser();
         $message = $parser->parse($tempHandle);
-        $message->attachContentResourceHandle($handle);
         return $message;
     }
 
