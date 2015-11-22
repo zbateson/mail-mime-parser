@@ -56,14 +56,14 @@ class MimeLiteralPart extends LiteralPart
     protected function decodeMime($value)
     {
         $pattern = $this->mimePartPattern;
-        $value = preg_replace("/($pattern)\\s+(?=$pattern)/u", '$1', $value);
-        return preg_replace_callback(
-            "/$pattern/u",
+        $value = preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
+        return $this->convertEncoding(preg_replace_callback(
+            "/$pattern/",
             function ($matches) {
-                return iconv_mime_decode($matches[0], 0, 'UTF-8');
+                return iconv_mime_decode($matches[0], 0, 'ISO-8859-1');
             },
             $value
-        );
+        ));
     }
     
     /**

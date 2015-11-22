@@ -6,7 +6,7 @@ use php_user_filter;
 /**
  * Implements a filter converting the stream's character encoding while reading
  * from it, so the charset of strings returned by read operations are guaranteed
- * to be encoded with mb_internal_encoding().
+ * to be encoded to UTF-8.
  * 
  * The underlying charset is set on the filtername used when creating the
  * stream with stream_filter_append - it is assumed the charset is after a '.'
@@ -38,7 +38,7 @@ class CharsetStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $bucket->data = mb_convert_encoding($bucket->data, mb_internal_encoding(), $this->charset);
+            $bucket->data = mb_convert_encoding($bucket->data, 'UTF-8', $this->charset);
             $consumed += $bucket->datalen;
             stream_bucket_append($out, $bucket);
         }

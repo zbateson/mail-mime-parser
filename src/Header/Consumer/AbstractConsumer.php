@@ -102,23 +102,6 @@ abstract class AbstractConsumer
     }
     
     /**
-     * Ensures the encoding is set to UTF-8.
-     * 
-     * TODO: Is this desirable? Is there ever a situation where this could cause
-     * problems? What was the RFC that introduced UTF-8 header values?
-     * 
-     * @param string $value
-     * @return string utf-8 string
-     */
-    private function convertEncoding($value)
-    {
-        if (!mb_check_encoding($value, 'UTF-8')) {
-            $value = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
-        }
-        return $value;
-    }
-    
-    /**
      * Called by __invoke to parse the raw header value into header parts.
      * 
      * Calls splitTokens to split the value into token part strings, then calls
@@ -130,9 +113,7 @@ abstract class AbstractConsumer
      */
     private function parseRawValue($value)
     {
-        $tokens = $this->splitRawValue(
-            $this->convertEncoding($value)
-        );
+        $tokens = $this->splitRawValue($value);
         return $this->parseTokensIntoParts(new NoRewindIterator(SplFixedArray::fromArray($tokens)));
     }
     
@@ -175,7 +156,7 @@ abstract class AbstractConsumer
     protected function getTokenSplitPattern()
     {
         $sChars = implode('|', $this->getAllTokenSeparators());
-        return '~(\\\\.|' . $sChars . ')~u';
+        return '~(\\\\.|' . $sChars . ')~';
     }
     
     /**

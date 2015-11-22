@@ -18,6 +18,6 @@ class LiteralPart extends HeaderPart
      */
     public function __construct($token)
     {
-        $this->value = $token;
+        $this->value = $this->convertEncoding($token);
     }
 }

@@ -31,7 +31,7 @@ class AddressPart extends ParameterPart
             ''
         );
         // can't be mime-encoded
-        $this->value = preg_replace('/\s+/', '', $email);
+        $this->value = $this->convertEncoding(preg_replace('/\s+/', '', $email));
     }
     
     /**

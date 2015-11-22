@@ -54,4 +54,18 @@ abstract class HeaderPart
     {
         return false;
     }
+    
+    /**
+     * Ensures the encoding of the passed string is set to UTF-8.
+     * 
+     * @param string $str
+     * @return string utf-8 string
+     */
+    protected function convertEncoding($str)
+    {
+        if (!mb_check_encoding($str, 'UTF-8')) {
+            return mb_convert_encoding($str, 'UTF-8', 'ISO-8859-1');
+        }
+        return $str;
+    }
 }
