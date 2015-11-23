@@ -75,9 +75,9 @@ class Message extends MimePart
     public function addPart(MimePart $part)
     {
         $type = $part->getHeaderValue('Content-Type');
-        if ((empty($type) || $type === 'text/plain') && empty($this->textPart)) {
+        if ((empty($type) || strtolower($type) === 'text/plain') && empty($this->textPart)) {
             $this->textPart = $part;
-        } elseif ($type === 'text/html' && empty($this->htmlPart)) {
+        } elseif (strtolower($type) === 'text/html' && empty($this->htmlPart)) {
             $this->htmlPart = $part;
         } else {
             $this->parts[] = $part;

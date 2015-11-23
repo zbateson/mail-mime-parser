@@ -824,7 +824,7 @@ class MailMimeParserEmailsTest extends PHPUnit_Framework_TestCase
                 'email' => 'dwsauder@example.com'
             ],
             'To' => [
-                //'name' => 'Heinz Müller',
+                'name' => 'Heinz Müller',
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
@@ -850,13 +850,76 @@ class MailMimeParserEmailsTest extends PHPUnit_Framework_TestCase
         ]);
     }
     
-    /*
-     * m1011.txt looks like it's badly encoded.  Was it really sent like that?
-     */
-    /*
-    public function testParseEmailm1011()
+    public function testParseEmailm2011()
     {
-        $this->runEmailTest('m1011', [
+        $this->runEmailTest('m2011', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'jschmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            //'attachments' => 2, - attachments are "binhex" encoded
+        ]);
+    }
+    
+    public function testParseEmailm2012()
+    {
+        $this->runEmailTest('m2012', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'jschmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            'attachments' => 3,
+        ]);
+    }
+    
+    public function testParseEmailm2013()
+    {
+        $this->runEmailTest('m2013', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            // attachments => 2 - one attachment is uuencoded
+        ]);
+    }
+    
+    public function testParseEmailm2014()
+    {
+        $this->runEmailTest('m2014', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'jschmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt'
+        ]);
+    }
+    
+    public function testParseEmailm2015()
+    {
+        $this->runEmailTest('m2015', [
             'From' => [
                 'name' => 'Doug Sauder',
                 'email' => 'dwsauder@example.com'
@@ -870,12 +933,44 @@ class MailMimeParserEmailsTest extends PHPUnit_Framework_TestCase
         ]);
     }
     
-    public function testParseEmailm1012()
+    public function testParseEmailm2016()
     {
-        $this->runEmailTest('m1012', [
+        $this->runEmailTest('m2016', [
             'From' => [
                 'name' => 'Doug Sauder',
                 'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'blow@example.com'
+            ],
+            'Subject' => 'The Hare and the Tortoise',
+            'text' => 'hareandtortoise.txt',
+        ]);
+    }
+    
+    public function testParseEmailm3001()
+    {
+        $this->runEmailTest('m3001', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@penguin.example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'blow@example.com'
+            ],
+            'Subject' => 'Test message from PINE',
+            'attachments' => 2,
+        ]);
+    }
+    
+    public function testParseEmailm3002()
+    {
+        $this->runEmailTest('m3002', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@penguin.example.com'
             ],
             'To' => [
                 'name' => 'Jürgen Schmürgen',
@@ -886,69 +981,35 @@ class MailMimeParserEmailsTest extends PHPUnit_Framework_TestCase
         ]);
     }
     
-    public function testParseEmailm1013()
+    public function testParseEmailm3003()
     {
-        $this->runEmailTest('m1013', [
+        $this->runEmailTest('m3003', [
             'From' => [
                 'name' => 'Doug Sauder',
-                'email' => 'dwsauder@example.com'
+                'email' => 'doug@penguin.example.com'
             ],
             'To' => [
-                'name' => 'Joe Blow',
-                'email' => 'blow@example.com'
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
             ],
-            'Subject' => 'Test message from Netscape Communicator 4.7',
-            'attachments' => 1
-        ]);
-    }
-    
-    public function testParseEmailm1014()
-    {
-        $this->runEmailTest('m1014', [
-            'From' => [
-                'name' => 'Doug Sauder',
-                'email' => 'dwsauder@example.com'
-            ],
-            'To' => [
-                'name' => 'Joe Blow',
-                'email' => 'blow@example.com'
-            ],
-            'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'hareandtortoise.txt'
-        ]);
-    }
-    
-    public function testParseEmailm1015()
-    {
-        $this->runEmailTest('m1015', [
-            'From' => [
-                'name' => 'Doug Sauder',
-                'email' => 'dwsauder@example.com'
-            ],
-            'To' => [
-                'name' => 'Joe Blow',
-                'email' => 'blow@example.com'
-            ],
-            'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'hareandtortoise.txt',
+            'Subject' => 'PNG graphic',
             'attachments' => 1,
         ]);
     }
     
-    public function testParseEmailm1016()
+    public function testParseEmailm3004()
     {
-        $this->runEmailTest('m1016', [
+        $this->runEmailTest('m3004', [
             'From' => [
                 'name' => 'Doug Sauder',
-                'email' => 'dwsauder@example.com'
+                'email' => 'doug@penguin.example.com'
             ],
             'To' => [
                 'name' => 'Joe Blow',
                 'email' => 'blow@example.com'
             ],
-            'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'hareandtortoise.txt',
-            'attachments' => 1,
+            'Subject' => 'Die Hasen und die Frösche',
+            // 'attachments' => 1, filename part is weird
         ]);
-    }*/
+    }
 }

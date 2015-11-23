@@ -80,14 +80,14 @@ class PartStreamRegistry
         $handle = fopen('mmp-mime-message://' . $id . '?start=' .
             $start . '&end=' . $end, 'r');
         
-        $encoding = $part->getHeaderValue('Content-Transfer-Encoding');
-        if (strtolower($encoding) === 'quoted-printable') {
+        $encoding = strtolower($part->getHeaderValue('Content-Transfer-Encoding'));
+        if ($encoding === 'quoted-printable') {
             stream_filter_append($handle, 'convert.quoted-printable-decode', STREAM_FILTER_READ);
-        } elseif (strtolower($encoding) === 'base64') {
+        } elseif ($encoding === 'base64') {
             stream_filter_append($handle, 'convert.base64-decode', STREAM_FILTER_READ);
         }
         
-        $contentType = $part->getHeaderValue('Content-Type');
+        $contentType = strtolower($part->getHeaderValue('Content-Type'));
         if (empty($contentType) || strpos($contentType, 'text/') === 0) {
             stream_filter_append(
                 $handle,

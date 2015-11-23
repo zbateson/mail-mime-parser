@@ -150,7 +150,7 @@ class MessageParser
             $skipPart = true;
             $parent = $part;
             
-            if (empty($boundary) || !preg_match('~multipart/\w+~', $part->getHeaderValue('Content-Type'))) {
+            if (empty($boundary) || !preg_match('~multipart/\w+~i', $part->getHeaderValue('Content-Type'))) {
                 // either there is no boundary (possibly no parent boundary either) and message is read
                 // till the end, or we're in a boundary already and content should be read till the parent
                 // boundary is reached
