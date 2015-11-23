@@ -99,18 +99,23 @@ class GenericConsumer extends AbstractConsumer
     {
         $retParts = [];
         $spacePart = null;
-        foreach ($parts as $part) {
-            if ($part instanceof Token && $part->getValue() === ' ') {
+        for ($i = 0; $i < count($parts); ++$i) {
+            $part = $parts[$i];
+            if ($part instanceof Token && $part->isSpace()) {
                 $spacePart = $part;
                 continue;
-            } elseif ($spacePart !== null) {
+            } elseif ($spacePart !== null && $part->getValue() !== '') {
                 // never add the space if it's the first part, otherwise only add it if either part
                 // isn't set to ignore the space
                 $lastPart = end($retParts);
-                if (($lastPart !== null) && (!$lastPart->ignoreSpacesAfter() || !$part->ignoreSpacesBefore())) {
-                    $retParts[] = $spacePart;
+                for ($j = $i; $j < count($parts); ++$j) {
+                    $next = $parts[$i];
+                    if ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore())) {
+                        $retParts[] = $spacePart;
+                        $spacePart = null;
+                        break;
+                    }
                 }
-                $spacePart = null;
             }
             $retParts[] = $part;
         }
@@ -132,6 +137,6 @@ class GenericConsumer extends AbstractConsumer
         foreach ($filtered as $part) {
             $strValue .= $part->getValue();
         }
-        return [$this->partFactory->newLiteralPart(trim($strValue))];
+        return [$this->partFactory->newLiteralPart($strValue)];
     }
 }

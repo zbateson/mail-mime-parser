@@ -48,8 +48,8 @@ class MimeLiteralPart extends LiteralPart
      * either replacing a mime part with its value by calling iconv_mime_decode
      * or converts the encoding on the text part by calling convertEncoding.
      * 
-     * @param type $value
-     * @return type
+     * @param string $value
+     * @return string
      */
     protected function decodeMime($value)
     {

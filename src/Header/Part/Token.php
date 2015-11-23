@@ -25,4 +25,34 @@ class Token extends HeaderPart
     {
         $this->value = $value;
     }
+    
+    /**
+     * Returns true if the value of the token is equal to a single space.
+     * 
+     * @return bool
+     */
+    public function isSpace()
+    {
+        return ($this->value === ' ');
+    }
+    
+    /**
+     * Returns true if the value is a space.
+     * 
+     * @return bool
+     */
+    public function ignoreSpacesBefore()
+    {
+        return $this->isSpace();
+    }
+    
+    /**
+     * Returns true if the value is a space.
+     * 
+     * @return bool
+     */
+    public function ignoreSpacesAfter()
+    {
+        return $this->isSpace();
+    }
 }

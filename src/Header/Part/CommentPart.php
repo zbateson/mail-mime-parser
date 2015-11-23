@@ -24,6 +24,8 @@ class CommentPart extends MimeLiteralPart
         parent::__construct($token);
         $this->comment = $this->value;
         $this->value = '';
+        $this->canIgnoreSpacesBefore = true;
+        $this->canIgnoreSpacesAfter = true;
     }
     
     /**
@@ -35,4 +37,6 @@ class CommentPart extends MimeLiteralPart
     {
         return $this->comment;
     }
+    
+    
 }

@@ -61,6 +61,16 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
             'Actor',
             '"Dwayne \"The Rock\"" =?US-ASCII?Q?Jackson?= (main actor)'
         );
-        $this->assertEquals('Dwayne "The Rock" Jackson ', $header->getValue());
+        $this->assertEquals('Dwayne "The Rock" Jackson', $header->getValue());
+    }
+    
+    public function testCommentBetweenParts()
+    {
+        $header = new GenericHeader(
+            $this->consumerService,
+            'Actor',
+            'Dwayne (The Rock) Jackson'
+        );
+        $this->assertEquals('Dwayne Jackson', $header->getValue());
     }
 }
