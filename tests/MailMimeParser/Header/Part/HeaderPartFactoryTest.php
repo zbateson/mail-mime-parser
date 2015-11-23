@@ -7,7 +7,7 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
  *
  * @group HeaderParts
  * @group HeaderPartFactory
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
 {

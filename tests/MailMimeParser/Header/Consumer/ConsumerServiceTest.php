@@ -8,7 +8,7 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
  *
  * @group Consumers
  * @group ConsumerService
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class ConsumerServiceTest extends PHPUnit_Framework_TestCase
 {

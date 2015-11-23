@@ -11,7 +11,7 @@ namespace ZBateson\MailMimeParser;
  * $parser->parse($handle);
  * fclose($handle);
  * 
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class MailMimeParser
 {
