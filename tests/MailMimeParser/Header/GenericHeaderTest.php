@@ -21,22 +21,6 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf);
     }
     
-    /*public function testInstance()
-    {
-        $aValid = ['Content-Id', 'content-ID', 'IN-REPLY-TO'];
-        $aNot = ['Subject', 'BCC', 'ExPirY-daTE'];
-        foreach ($aValid as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertEquals('ZBateson\MailMimeParser\Header\StructuredHeader', get_class($header));
-        }
-        foreach ($aNot as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertNotEquals('ZBateson\MailMimeParser\Header\StructuredHeader', get_class($header));
-        }
-    }*/
-    
     public function testParsing()
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');

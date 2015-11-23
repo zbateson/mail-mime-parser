@@ -21,22 +21,6 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf);
     }
     
-    /*public function testInstance()
-    {
-        $aValid = ['Date', 'ExpIRY-Date', 'EXPIRES'];
-        $aNot = ['MESSAGE-ID', 'bcc', 'Subject'];
-        foreach ($aValid as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Wed, 17 May 2000 19:08:29 -0400');
-            $this->assertNotNull($header);
-            $this->assertEquals('ZBateson\MailMimeParser\Header\DateHeader', get_class($header));
-        }
-        foreach ($aNot as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertNotEquals('ZBateson\MailMimeParser\Header\DateHeader', get_class($header));
-        }
-    }*/
-    
     public function testSimpleDate()
     {
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');

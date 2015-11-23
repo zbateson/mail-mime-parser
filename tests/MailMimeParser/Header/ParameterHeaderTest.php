@@ -21,22 +21,6 @@ class ParameterHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf);
     }
     
-    /*public function testInstance()
-    {
-        $aValid = ['Content-Type', 'CONTENT-Disposition'];
-        $aNot = ['MESSAGE-ID', 'bcc', 'Subject', 'X-Header-Test'];
-        foreach ($aValid as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertEquals('ZBateson\MailMimeParser\Header\ValueParametersHeader', get_class($header));
-        }
-        foreach ($aNot as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertNotEquals('ZBateson\MailMimeParser\Header\ValueParametersHeader', get_class($header));
-        }
-    }*/
-    
     public function testParsingContentType()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');

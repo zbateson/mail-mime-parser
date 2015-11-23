@@ -21,22 +21,6 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf);
     }
     
-    /*public function testInstance()
-    {
-        $aValid = ['BCC', 'to', 'FrOM'];
-        $aNot = ['MESSAGE-ID', 'date', 'Subject'];
-        foreach ($aValid as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertEquals('ZBateson\MailMimeParser\Header\AddressHeader', get_class($header));
-        }
-        foreach ($aNot as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertNotEquals('ZBateson\MailMimeParser\Header\AddressHeader', get_class($header));
-        }
-    }*/
-    
     public function testSingleAddress()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
