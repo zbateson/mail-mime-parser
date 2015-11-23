@@ -14,7 +14,7 @@ class PartStreamTest extends PHPUnit_Framework_TestCase
     private $di;
     private $registry;
     
-    public function setup()
+    public function setUp()
     {
         $this->di = SimpleDi::singleton();
         $this->registry = $this->di->getPartStreamRegistry();

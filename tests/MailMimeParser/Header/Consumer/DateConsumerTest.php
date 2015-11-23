@@ -22,11 +22,6 @@ class DateConsumerTest extends PHPUnit_Framework_TestCase
         $this->dateConsumer = DateConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->dateConsumer);
-    }
-    
     public function testConsumeDates()
     {
         $date = 'Wed, 17 May 2000 19:08:29 -0400';

@@ -22,11 +22,6 @@ class QuotedStringConsumerTest extends PHPUnit_Framework_TestCase
         $this->quotedStringConsumer = QuotedStringConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->quotedStringConsumer);
-    }
-    
     public function testConsumeTokens()
     {
         $value = 'Will end at " quote';

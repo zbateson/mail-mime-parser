@@ -22,11 +22,6 @@ class GenericConsumerTest extends PHPUnit_Framework_TestCase
         $this->genericConsumer = GenericConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->genericConsumer);
-    }
-    
     public function testConsumeTokens()
     {
         $value = "Je\ \t suis\nici";

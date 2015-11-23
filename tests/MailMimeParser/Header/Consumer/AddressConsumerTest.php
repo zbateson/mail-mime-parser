@@ -22,11 +22,6 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
         $this->addressConsumer = AddressConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->addressConsumer);
-    }
-    
     public function testConsumeEmail()
     {
         $email = 'Max.Payne@AddressUnknown.com';

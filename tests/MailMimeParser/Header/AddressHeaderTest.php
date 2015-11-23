@@ -15,7 +15,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
 {
     protected $consumerService;
     
-    public function setup()
+    public function setUp()
     {
         $pf = new HeaderPartFactory();
         $this->consumerService = new ConsumerService($pf);

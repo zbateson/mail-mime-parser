@@ -20,11 +20,6 @@ class ConsumerServiceTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->consumerService);
-    }
-    
     public function testGetAddressBaseConsumer()
     {
         $consumer = $this->consumerService->getAddressBaseConsumer();

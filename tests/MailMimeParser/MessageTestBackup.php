@@ -12,7 +12,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 {
     protected $di;
     
-    public function setup()
+    public function setUp()
     {
         $this->di = SimpleDi::singleton();
     }

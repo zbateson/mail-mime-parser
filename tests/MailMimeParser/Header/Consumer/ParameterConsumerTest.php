@@ -22,11 +22,6 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->parameterConsumer = ParameterConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->parameterConsumer);
-    }
-    
     public function testConsumeTokens()
     {
         $ret = $this->parameterConsumer->__invoke('text/html; charset=utf8');

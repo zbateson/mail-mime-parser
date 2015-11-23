@@ -22,11 +22,6 @@ class CommentConsumerTest extends PHPUnit_Framework_TestCase
         $this->commentConsumer = CommentConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->commentConsumer);
-    }
-    
     protected function assertCommentConsumed($expected, $value)
     {
         $ret = $this->commentConsumer->__invoke($value);

@@ -20,11 +20,6 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             ->getMock();
     }
     
-    public function tearDown()
-    {
-        unset($this->mockHeaderFactory);
-    }
-    
     protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
         $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')

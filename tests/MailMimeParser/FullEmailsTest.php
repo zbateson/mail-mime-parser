@@ -13,7 +13,7 @@ class FullEmailsTest extends PHPUnit_Framework_TestCase
     private $parser;
     private $messageDir;
     
-    public function setup()
+    public function setUp()
     {
         $this->parser = new MailMimeParser();
         $this->messageDir = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails';

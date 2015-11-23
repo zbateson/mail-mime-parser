@@ -22,11 +22,6 @@ class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
         $this->addressGroupConsumer = AddressGroupConsumer::getInstance($cs, $pf);
     }
     
-    public function tearDown()
-    {
-        unset($this->addressGroupConsumer);
-    }
-    
     public function testConsumeGroup()
     {
         $group = 'Wilfred, Emma';
