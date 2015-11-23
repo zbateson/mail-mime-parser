@@ -35,20 +35,18 @@ class MimeLiteralPart extends LiteralPart
      */
     public function __construct($token)
     {
-        parent::__construct($token);
-        $this->value = $this->decodeMime($this->value);
+        $this->value = $this->decodeMime($token);
         // preg_match returns int
-        $this->canIgnoreSpacesBefore = boolval(preg_match("/^\s*{$this->mimePartPattern}/u", $token));
-        $this->canIgnoreSpacesAfter = boolval(preg_match("/{$this->mimePartPattern}\s*\$/u", $token));
+        $this->canIgnoreSpacesBefore = boolval(preg_match("/^\s*{$this->mimePartPattern}/", $token));
+        $this->canIgnoreSpacesAfter = boolval(preg_match("/{$this->mimePartPattern}\s*\$/", $token));
     }
     
     /**
      * Finds and replaces mime parts with their values.
      * 
-     * The method performs a regular expression match for mime-encoded parts,
-     * replacing any parts it finds in the string by calling iconv_mime_decode
-     * which allows the remainder of the string to contain non-ascii characters
-     * which would otherwise be filtered out by iconv_mime_decode.
+     * The method splits the token value into an array on mime-part-patterns,
+     * either replacing a mime part with its value by calling iconv_mime_decode
+     * or converts the encoding on the text part by calling convertEncoding.
      * 
      * @param type $value
      * @return type
@@ -57,13 +55,16 @@ class MimeLiteralPart extends LiteralPart
     {
         $pattern = $this->mimePartPattern;
         $value = preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
-        return $this->convertEncoding(preg_replace_callback(
-            "/$pattern/",
-            function ($matches) {
-                return iconv_mime_decode($matches[0], 0, 'ISO-8859-1');
-            },
-            $value
-        ));
+        $aMimeParts = preg_split("/($pattern)/", $value, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $ret = '';
+        foreach ($aMimeParts as $part) {
+            if (preg_match("/^$pattern$/", $part)) {
+                $ret .= iconv_mime_decode($part, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            } else {
+                $ret .= $this->convertEncoding($part);
+            }
+        }
+        return $ret;
     }
     
     /**

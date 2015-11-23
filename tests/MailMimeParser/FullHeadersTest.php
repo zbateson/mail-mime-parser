@@ -3,12 +3,12 @@
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
- * Description of MailMimeParserTest
+ * Description of FullHeadersTest
  *
- * @group MailMimeParserHeaders
+ * @group FullHeadersTest
  * @author Zaahid Bateson
  */
-class MailMimeParserHeadersTest extends PHPUnit_Framework_TestCase
+class FullHeadersTest extends PHPUnit_Framework_TestCase
 {
     public function testParsingBasicHeaders()
     {

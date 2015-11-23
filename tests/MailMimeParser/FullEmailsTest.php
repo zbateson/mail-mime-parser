@@ -3,12 +3,12 @@
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
- * Description of MailMimeParserEmails
+ * Description of FullEmailsTest
  *
- * @group MailMimeParserEmails
+ * @group FullEmailsTest
  * @author Zaahid Bateson
  */
-class MailMimeParserEmailsTest extends PHPUnit_Framework_TestCase
+class FullEmailsTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;
