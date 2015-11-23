@@ -1,5 +1,5 @@
 {
-    "name": "zbateson/mailmimeparser",
+    "name": "zbateson/mail-mime-parser",
     "description": "PSR-2 compliant mime mail parser",
     "keywords": ["mail", "mime", "parser"],
     "homepage": "https://github.com/zbateson/MailMimeParser",
