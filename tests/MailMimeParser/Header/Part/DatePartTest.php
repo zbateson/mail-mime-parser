@@ -1,6 +1,8 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\DatePart;
+use PHPUnit_Framework_TestCase;
+use DateTime;
 
 /**
  * Description of DateTest

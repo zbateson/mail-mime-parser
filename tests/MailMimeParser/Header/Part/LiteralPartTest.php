@@ -1,7 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\LiteralPart;
-use ZBateson\MailMimeParser\Header\Part\Token;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of LiteralTest

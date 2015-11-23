@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
@@ -14,7 +15,7 @@ class ConsumerServiceTest extends PHPUnit_Framework_TestCase
 {
     private $consumerService;
     
-    public function setUp()
+    protected function setUp()
     {
         $pf = new HeaderPartFactory();
         $this->consumerService = new ConsumerService($pf);

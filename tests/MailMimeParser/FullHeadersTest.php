@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\MailMimeParser;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of FullHeadersTest

@@ -1,8 +1,9 @@
 <?php
+namespace ZBateson\MailMimeParser\Header;
 
+use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\GenericHeader;
 
 /**
  * Description of StructuredHeaderTest
@@ -15,7 +16,7 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
 {
     protected $consumerService;
     
-    public function setUp()
+    protected function setUp()
     {
         $pf = new HeaderPartFactory();
         $this->consumerService = new ConsumerService($pf);

@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of MessageTest

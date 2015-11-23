@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of HeaderPartFactoryTest
@@ -13,7 +14,7 @@ class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
 {
     protected $headerPartFactory;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->headerPartFactory = new HeaderPartFactory();
     }

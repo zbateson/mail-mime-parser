@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\AddressPart;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of AddressPartTest

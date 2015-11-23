@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of CommentTest

@@ -1,8 +1,8 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer;
 
 /**
  * Description of AddressGroupConsumerTest
@@ -15,7 +15,7 @@ class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
 {
     private $addressGroupConsumer;
     
-    public function setUp()
+    protected function setUp()
     {
         $pf = new HeaderPartFactory();
         $cs = new ConsumerService($pf);

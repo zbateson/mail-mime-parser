@@ -1,8 +1,8 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer;
 
 /**
  * Description of QuotedStringConsumerTest
@@ -15,7 +15,7 @@ class QuotedStringConsumerTest extends PHPUnit_Framework_TestCase
 {
     private $quotedStringConsumer;
     
-    public function setUp()
+    protected function setUp()
     {
         $pf = new HeaderPartFactory();
         $cs = new ConsumerService($pf);

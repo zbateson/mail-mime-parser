@@ -24,7 +24,7 @@ class CharsetStreamFilter extends php_user_filter
     /**
      * @var string the character set the stream is using
      */
-    protected $charset;
+    protected $charset = 'iso-8859-1';
     
     /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
@@ -53,9 +53,9 @@ class CharsetStreamFilter extends php_user_filter
      */
     public function onCreate()
     {
-        $this->charset = substr($this->filtername, strrpos($this->filtername, '.') + 1);
-        if (empty($this->charset)) {
-            $this->charset = 'iso-8859-1';
+        $charset = substr($this->filtername, strrpos($this->filtername, '.') + 1);
+        if (!empty($charset)) {
+            $this->charset = $charset;
         }
     }
 }

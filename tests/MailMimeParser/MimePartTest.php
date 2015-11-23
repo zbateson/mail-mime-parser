@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\MimePart;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of MimePartTest
@@ -12,7 +13,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
 {
     private $mockHeaderFactory;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()

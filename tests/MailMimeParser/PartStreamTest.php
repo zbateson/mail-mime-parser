@@ -1,7 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\PartStream as PartStream;
-use ZBateson\MailMimeParser\SimpleDi as SimpleDi;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of PartStreamTest
@@ -14,7 +14,7 @@ class PartStreamTest extends PHPUnit_Framework_TestCase
     private $di;
     private $registry;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->di = SimpleDi::singleton();
         $this->registry = $this->di->getPartStreamRegistry();

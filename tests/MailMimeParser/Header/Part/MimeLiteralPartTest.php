@@ -1,6 +1,7 @@
 <?php
+namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Description of MimeLiteralTest
