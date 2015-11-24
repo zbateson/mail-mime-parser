@@ -11,10 +11,10 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0"
+        "php": ">=5.3.3"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.1"
+        "phpunit/phpunit": "~4.1"
     },
     "autoload": {
         "psr-4": {"ZBateson\\MailMimeParser\\": "src/"}
