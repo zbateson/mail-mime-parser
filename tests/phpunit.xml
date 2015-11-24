@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./bootstrap.php">
+<phpunit
+    bootstrap="./bootstrap.php"
+    colors="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    stopOnError="false"
+    stopOnFailure="false"
+    stopOnIncomplete="false"
+    stopOnSkipped="false">
     <php>
         <const name="TEST_DATA_DIR" value="_data"/>
     </php>
-    <logging>
-        <log type="testdox-html" target="_output/testdox.html"/>
-        <log type="testdox-text" target="_output/testdox.txt"/>
-    </logging>
     <testsuites>
         <testsuite name="MailMimeParser">
             <directory suffix="Test.php">MailMimeParser</directory>
