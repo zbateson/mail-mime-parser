@@ -83,8 +83,9 @@ class CommentConsumer extends GenericConsumer
      * nested, its implementation must advance past its own 'end' token.
      * 
      * @param Iterator $tokens
+     * @param bool $isStartToken
      */
-    protected function advanceToNextToken(Iterator $tokens)
+    protected function advanceToNextToken(Iterator $tokens, $isStartToken)
     {
         $tokens->next();
     }
