@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zbateson/MailMimeParser.svg?branch=master)](https://travis-ci.org/zbateson/MailMimeParser)
+
 # zbateson/mail-mime-parser
 
 Standalone, testable and PSR-compliant mail mime parser alternative to PHP's
