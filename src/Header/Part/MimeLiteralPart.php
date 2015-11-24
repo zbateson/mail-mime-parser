@@ -37,8 +37,8 @@ class MimeLiteralPart extends LiteralPart
     {
         $this->value = $this->decodeMime($token);
         // preg_match returns int
-        $this->canIgnoreSpacesBefore = boolval(preg_match("/^\s*{$this->mimePartPattern}/", $token));
-        $this->canIgnoreSpacesAfter = boolval(preg_match("/{$this->mimePartPattern}\s*\$/", $token));
+        $this->canIgnoreSpacesBefore = (bool) preg_match("/^\s*{$this->mimePartPattern}/", $token);
+        $this->canIgnoreSpacesAfter = (bool) preg_match("/{$this->mimePartPattern}\s*\$/", $token);
     }
     
     /**
