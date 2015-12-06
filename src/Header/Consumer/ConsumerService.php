@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file is part of the ZBateson\MailMimeParser project.
+ *
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
@@ -11,7 +16,8 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 class ConsumerService
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory 
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory the
+     * HeaderPartFactory instance used to create HeaderParts.
      */
     protected $partFactory;
     
