@@ -34,12 +34,14 @@ class Message extends MimePart
     protected $objectId;
     
     /**
-     * @var resource The plain text part stream (if any)
+     * @var \ZBateson\MailMimeParser\MimePart The plain text part or null if
+     *      there isn't one
      */
     protected $textPart;
     
     /**
-     * @var resource The HTML part stream (if any)
+     * @var \ZBateson\MailMimeParser\MimePart The HTML part stream or null if
+     *      there isn't one
      */
     protected $htmlPart;
     

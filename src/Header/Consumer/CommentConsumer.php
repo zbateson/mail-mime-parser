@@ -73,7 +73,7 @@ class CommentConsumer extends GenericConsumer
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
      */
     protected function getPartForToken($token, $isLiteral)
     {

@@ -76,7 +76,7 @@ class GenericConsumer extends AbstractConsumer
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -104,7 +104,8 @@ class GenericConsumer extends AbstractConsumer
     {
         $retParts = [];
         $spacePart = null;
-        for ($i = 0; $i < count($parts); ++$i) {
+        $count = count($parts);
+        for ($i = 0; $i < $count; ++$i) {
             $part = $parts[$i];
             if ($part instanceof Token && $part->isSpace()) {
                 $spacePart = $part;
@@ -113,7 +114,7 @@ class GenericConsumer extends AbstractConsumer
                 // never add the space if it's the first part, otherwise only add it if either part
                 // isn't set to ignore the space
                 $lastPart = end($retParts);
-                for ($j = $i; $j < count($parts); ++$j) {
+                for ($j = $i; $j < $count; ++$j) {
                     $next = $parts[$i];
                     if ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore())) {
                         $retParts[] = $spacePart;

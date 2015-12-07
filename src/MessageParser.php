@@ -143,7 +143,7 @@ class MessageParser
      * The method will loop to read headers and find and parse multipart-mime
      * message parts, adding them to the $message.
      * 
-     * @param type $handle
+     * @param resource $handle
      * @param \ZBateson\MailMimeParser\Message $message
      */
     protected function read($handle, Message $message)

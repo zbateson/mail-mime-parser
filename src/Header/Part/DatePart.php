@@ -16,7 +16,7 @@ use DateTime;
 class DatePart extends LiteralPart
 {
     /**
-     * @var DateTime the parsed date
+     * @var DateTime the parsed date, or null if the date could not be parsed
      */
     protected $date;
     
@@ -28,10 +28,11 @@ class DatePart extends LiteralPart
      */
     public function __construct($token) {
         parent::__construct(trim($token));
-        $this->date = DateTime::createFromFormat(DateTime::RFC2822, $this->value);
-        if ($this->date === false) {
-            $this->date = DateTime::createFromFormat(DateTime::RFC822, $this->value);
+        $date = DateTime::createFromFormat(DateTime::RFC2822, $this->value);
+        if ($date === false) {
+            $date = DateTime::createFromFormat(DateTime::RFC822, $this->value);
         }
+        $this->date = ($date === false) ? null : $date;
     }
     
     /**

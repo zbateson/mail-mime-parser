@@ -207,8 +207,8 @@ abstract class AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed header
-     *         part or null if the token should be ignored
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
+     *         header part or null if the token should be ignored
      */
     abstract protected function getPartForToken($token, $isLiteral);
     

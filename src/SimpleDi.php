@@ -134,10 +134,7 @@ class SimpleDi
     public function getHeaderFactory()
     {
         if ($this->headerFactory === null) {
-            $this->headerFactory = new HeaderFactory(
-                $this->getConsumerService(),
-                $this->getHeaderPartFactory()
-            );
+            $this->headerFactory = new HeaderFactory($this->getConsumerService());
         }
         return $this->headerFactory;
     }

@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
+
 /**
  * Parses a single group of addresses (as a named-group part of an address
  * header).

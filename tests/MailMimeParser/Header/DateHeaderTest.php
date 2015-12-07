@@ -32,7 +32,7 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
     public function testInvalidDate()
     {
         $header = new DateHeader($this->consumerService, 'DATE', 'This is not a date');
-        $this->assertFalse($header->getDateTime());
+        $this->assertNull($header->getDateTime());
         $this->assertEquals('This is not a date', $header->getValue());
     }
 }
