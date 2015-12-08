@@ -50,6 +50,7 @@ echo stream_get_contents(
 
 ## Documentation
 
+* [Wiki Introduction](https://github.com/zbateson/MailMimeParser/wiki)
 * [Usage Guide](https://github.com/zbateson/MailMimeParser/wiki/Usage-Guide)
 * [API Reference](https://github.com/zbateson/MailMimeParser/wiki/ApiIndex)
 
