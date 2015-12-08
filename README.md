@@ -50,7 +50,7 @@ echo stream_get_contents(
 
 ## Documentation
 
-For usage guides, more code samples and api reference, check out the [wiki](wiki).
+For usage guides, more code samples and api reference, check out the [wiki](https://github.com/zbateson/MailMimeParser/wiki).
 
 ## License
 
