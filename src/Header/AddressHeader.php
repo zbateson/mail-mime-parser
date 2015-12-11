@@ -104,7 +104,8 @@ class AddressHeader extends AbstractHeader
     }
     
     /**
-     * Returns the parsed value of the header -- calls getValue on $this->part
+     * Returns the name associated with the first email address (or group) to
+     * complement getValue()
      * 
      * @return string
      */
