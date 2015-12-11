@@ -14,8 +14,10 @@
         "php": ">=5.4"
     },
     "require-dev": {
-        "symfony/yaml": "~2.1",
-        "phpunit/phpunit": "~4.1"
+        "phpunit/phpunit": "~4.8",
+        "phing/phing": "2.*",
+        "evert/phpdoc-md": "~0.1.1",
+        "phpdocumentor/phpdocumentor": "2.*"
     },
     "autoload": {
         "psr-4": {"ZBateson\\MailMimeParser\\": "src/"}
