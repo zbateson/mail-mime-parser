@@ -184,6 +184,7 @@ class SimpleDi
      */
     protected function registerStreamExtensions()
     {
+        stream_filter_register(UUEncodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\UUEncodeStreamFilter');
         stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\CharsetStreamFilter');
         stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\PartStream');
     }

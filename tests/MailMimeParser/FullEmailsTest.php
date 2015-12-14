@@ -386,11 +386,6 @@ class FullEmailsTest extends PHPUnit_Framework_TestCase
         ]);
     }
     
-    /*
-     * This one has a non-multipart content type and attachments... not sure
-     * what this is or if it's something that should be implemented.
-     */
-    /*
     public function testParseEmailm0018()
     {
         $this->runEmailTest('m0018', [
@@ -404,10 +399,9 @@ class FullEmailsTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'Test message from Microsoft Outlook 00',
             'text' => 'hareandtortoise.txt',
-            'html' => 'hareandtortoise.txt',
             'attachments' => 3,
         ]);
-    }*/
+    }
     
     public function testParseEmailm1001()
     {
@@ -847,7 +841,7 @@ class FullEmailsTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'The Hare and the Tortoise',
             'text' => 'hareandtortoise.txt',
-            //'attachments' => 2, attachments are uuencoded
+            'attachments' => 2,
         ]);
     }
     
@@ -898,7 +892,7 @@ class FullEmailsTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'Die Hasen und die Frösche',
             'text' => 'HasenundFrФsche.txt',
-            // attachments => 2 - one attachment is uuencoded
+            'attachments' => 2
         ]);
     }
     
@@ -1011,6 +1005,23 @@ class FullEmailsTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'Die Hasen und die Frösche',
             // 'attachments' => 1, filename part is weird
+        ]);
+    }
+    
+    public function testParseEmailm3005()
+    {
+        $this->runEmailTest('m3005', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'jschmuergen@example.com'
+            ],
+            'Subject' => 'The Hare and the Tortoise',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 1
         ]);
     }
 }

@@ -90,6 +90,8 @@ class PartStreamRegistry
             stream_filter_append($handle, 'convert.quoted-printable-decode', STREAM_FILTER_READ);
         } elseif ($encoding === 'base64') {
             stream_filter_append($handle, 'convert.base64-decode', STREAM_FILTER_READ);
+        } elseif ($encoding === 'x-uuencode') {
+            stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_READ);
         }
         
         $contentType = strtolower($part->getHeaderValue('Content-Type'));
