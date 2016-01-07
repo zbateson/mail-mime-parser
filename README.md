@@ -44,7 +44,7 @@ echo $att->getHeaderParameter(                  // value of "charset" part
     'charset'
 );
 echo stream_get_contents(
-    $att->getContentRersourceHandle()
+    $att->getContentResourceHandle()
 );
 ```
 
