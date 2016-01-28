@@ -132,6 +132,15 @@ class MessageParser
         return $endBoundaryFound;
     }
     
+    /**
+     * Finds the boundaries for the current MimePart, reads its content and
+     * creates and returns the next part, setting its parent part accordingly.
+     * 
+     * @param resource $handle The handle to read from
+     * @param \ZBateson\MailMimeParser\Message $message The current Message
+     * @param \ZBateson\MailMimeParser\MimePart $part 
+     * @return type
+     */
     protected function readMimeMessagePart($handle, Message $message, MimePart $part)
     {
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
@@ -164,7 +173,17 @@ class MessageParser
         return $nextPart;
     }
     
-    private function getUUEncodedPartEndPosition($handle, &$nextFilename)
+    /**
+     * Extracts the filename and end position of a UUEncoded part.
+     * 
+     * The filename is set to the passed $nextFilename parameter.  The end
+     * position is returned.
+     * 
+     * @param resource $handle
+     * @param string &$nextFilename
+     * @return int
+     */
+    private function getUUEncodedPartFilenameAndEndPosition($handle, &$nextFilename)
     {
         $end = ftell($handle);
         do {
@@ -179,6 +198,16 @@ class MessageParser
         return $end;
     }
     
+    /**
+     * Creates a MimePart for a single UUEncoded part or a plain text, non-mime
+     * part and adds it to the Message.
+     * 
+     * @param string $partFileName The file name of the UUEncoded part as
+     *        included in the 'begin' section
+     * @param \ZBateson\MailMimeParser\Message $message The current message
+     * @param int $start The start position of the uuencoded message
+     * @param int $end The end position of the uuencoded message
+     */
     private function createUUEncodedPart($partFileName, Message $message, $start, $end)
     {
         $part = $this->partFactory->newMimePart();
@@ -201,8 +230,8 @@ class MessageParser
     }
     
     /**
-     * Reads one part of a UUEncoded message and adds it to the past Message as
-     * a MimePart.
+     * Reads one part of a UUEncoded message and adds it to the passed Message
+     * as a MimePart.
      * 
      * The method reads up to the first 'begin' part of the message, or to the
      * end of the message if no 'begin' exists.
@@ -216,7 +245,7 @@ class MessageParser
     {
         $start = ftell($handle);
         $nextFilename = 'Unknown';
-        $end = $this->getUUEncodedPartEndPosition($handle, $nextFilename);
+        $end = $this->getUUEncodedPartFilenameAndEndPosition($handle, $nextFilename);
         $this->createUUEncodedPart($partFileName, $message, $start, $end);
         return $nextFilename;
     }

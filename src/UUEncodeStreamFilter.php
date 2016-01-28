@@ -27,8 +27,8 @@ class UUEncodeStreamFilter extends php_user_filter
     private $leftover = '';
     
     /**
-     * Returns an array of complete lines (including line endings) parsed from
-     * extracted from the passed $bucket object.
+     * Returns an array of complete lines (including line endings) from the 
+     * passed $bucket object.
      * 
      * If the last line on $bucket is incomplete, it's assigned to
      * $this->leftover and prepended to the first element of the first line in
