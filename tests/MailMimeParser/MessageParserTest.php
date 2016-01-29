@@ -279,4 +279,39 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
         $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
     }
+    
+    public function testParseUUEncodedMessage()
+    {
+        $email =
+            "Subject: The Diamonds\r\n"
+            . "To: Cousin Avi\r\n"
+            . "\r\n";
+        $startPos = strlen($email);
+        $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
+        $email .= "begin 664 message.txt\r\n"
+            . convert_uuencode($messageText)
+            . "\r\nend\r\n";
+        $endPos = strlen($email);
+        
+        $message = $this->getMockedMessage();
+        $message->method('getHeaderValue')->willReturn('text/plain');
+        $message->expects($this->exactly(2))
+            ->method('setRawHeader')
+            ->withConsecutive(
+                ['Subject', 'The Diamonds'],
+                ['To', 'Cousin Avi']
+            );
+
+        $partFactory = $this->getMockedPartFactory();
+        $self = $this;
+        $partFactory->method('newMimePart')->will($this->returnCallback(function () use ($self) {
+            return $self->getMockedPart();
+        }));
+        $partStreamRegistry = $this->getMockedPartStreamRegistry();
+        $partStreamRegistry->expects($this->once())
+            ->method('attachPartStreamHandle')
+            ->with($this->anything(), $this->anything(), $startPos, $endPos);
+        
+        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+    }
 }
