@@ -22,6 +22,8 @@ class NonMimePart extends MimePart
 {
     /**
      * Sets up a default Content-Type header of text/plain.
+     * 
+     * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory)
     {

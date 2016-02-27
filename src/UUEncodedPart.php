@@ -38,6 +38,7 @@ class UUEncodedPart extends NonMimePart
     /**
      * Initiates the UUEncodedPart with the passed mode and filename.
      * 
+     * @param HeaderFactory $headerFactory
      * @param int $mode the unix file mode
      * @param string $filename the filename
      */

@@ -210,7 +210,6 @@ class MessageParser
      * end of the message if no 'begin' exists.
      * 
      * @param resource $handle
-     * @param string $partFileName
      * @param \ZBateson\MailMimeParser\Message $message
      * @return string
      */
