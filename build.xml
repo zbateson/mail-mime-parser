@@ -4,7 +4,7 @@
     
     <property name="version-file" value="version.txt"/>
     <loadfile property="version" file="version.txt"/>
-    <property name="release-type" value="bugfix"/>
+    <property name="release-type" value="Bugfix"/>
     <property name="docs-dir" value="docs"/>
     <property name="phpdocs-dir" value="${docs-dir}/phpdocs"/>
     <property name="mdapi-dir" value="${docs-dir}/md-api"/>
@@ -71,7 +71,7 @@
         <delete dir="${docs-dir}" quiet="true"/>
     </target>
     
-    <target name="release" description="Bumps the version number, then calls update-docs to update documentation.">
+    <target name="release" description="Bumps the version number, then calls update-docs to update documentation. Set release-type to Bugfix, Minor or Major.">
         <version releasetype="${release-type}" file="version.txt" property="version"/>
         <phingcall target="cleanup-docs"/>
         <phingcall target="clone-docs"/>
