@@ -179,54 +179,27 @@ class MessageParser
      * The filename is set to the passed $nextFilename parameter.  The end
      * position is returned.
      * 
-     * @param resource $handle
-     * @param string &$nextFilename
-     * @return int
+     * @param resource $handle the current file handle
+     * @param int &$nextMode is assigned the value of the next file mode or null
+     *        if not found
+     * @param string &$nextFilename is assigned the value of the next filename
+     *        or null if not found
+     * @param int &$end assigned the offset position within the passed resource
+     *        $handle of the end of the uuencoded part
      */
-    private function getUUEncodedPartFilenameAndEndPosition($handle, &$nextFilename)
+    private function findNextUUEncodedPartPosition($handle)
     {
         $end = ftell($handle);
         do {
             $line = trim(fgets($handle));
             $matches = null;
-            if (preg_match('/^begin \d{3} (.*)$/', $line, $matches)) {
-                $nextFilename = $matches[1];
+            if (preg_match('/^begin [0-7]{3} .*$/', $line, $matches)) {
+                fseek($handle, $end);
                 break;
             }
             $end = ftell($handle);
         } while (!feof($handle));
         return $end;
-    }
-    
-    /**
-     * Creates a MimePart for a single UUEncoded part or a plain text, non-mime
-     * part and adds it to the Message.
-     * 
-     * @param string $partFileName The file name of the UUEncoded part as
-     *        included in the 'begin' section
-     * @param \ZBateson\MailMimeParser\Message $message The current message
-     * @param int $start The start position of the uuencoded message
-     * @param int $end The end position of the uuencoded message
-     */
-    private function createUUEncodedPart($partFileName, Message $message, $start, $end)
-    {
-        $part = $this->partFactory->newMimePart();
-        if ($partFileName === null) {
-            $part->setRawHeader('Content-Type', 'text/plain');
-            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
-        } else {
-            $part->setRawHeader(
-                'Content-Type',
-                'application/octet-stream; name="' . addcslashes($partFileName, '"') . '"'
-            );
-            $part->setRawHeader(
-                'Content-Disposition',
-                'attachment; filename="' . addcslashes($partFileName, '"') . '"'
-            );
-            $part->setRawHeader('Content-Transfer-Encoding', 'x-uuencode');
-            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
-        }
-        $message->addPart($part);
     }
     
     /**
@@ -241,13 +214,23 @@ class MessageParser
      * @param \ZBateson\MailMimeParser\Message $message
      * @return string
      */
-    protected function readUUEncodedPart($handle, $partFileName, Message $message)
+    protected function readUUEncodedOrPlainTextPart($handle, Message $message)
     {
         $start = ftell($handle);
-        $nextFilename = 'Unknown';
-        $end = $this->getUUEncodedPartFilenameAndEndPosition($handle, $nextFilename);
-        $this->createUUEncodedPart($partFileName, $message, $start, $end);
-        return $nextFilename;
+        $line = trim(fgets($handle));
+        $end = $this->findNextUUEncodedPartPosition($handle);
+        
+        $part = null;
+        if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
+            $mode = $matches[1];
+            $filename = $matches[2];
+            $part = $this->partFactory->newUUEncodedPart($mode, $filename);
+            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
+        } else {
+            $part = $this->partFactory->newNonMimePart();
+            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
+        }
+        $message->addPart($part);
     }
     
     /**
@@ -263,13 +246,12 @@ class MessageParser
     protected function read($handle, Message $message)
     {
         $part = $message;
-        $uuFilename = null;
         $this->readHeaders($handle, $message);
         $contentType = $part->getHeaderValue('Content-Type');
         $mimeVersion = $part->getHeaderValue('Mime-Version');
         do {
             if ($part === $message && $contentType === null && $mimeVersion === null) {
-                $uuFilename = $this->readUUEncodedPart($handle, $uuFilename, $message);
+                $this->readUUEncodedOrPlainTextPart($handle, $message);
             } else {
                 $part = $this->readMimeMessagePart($handle, $message, $part);
                 $this->readHeaders($handle, $part);

@@ -40,4 +40,25 @@ class MimePartFactory
     {
         return new MimePart($this->headerFactory);
     }
+    
+    /**
+     * Constructs a new NonMimePart object and returns it
+     * 
+     * @return \ZBateson\MailMimeParser\NonMimePart
+     */
+    public function newNonMimePart()
+    {
+        return new NonMimePart($this->headerFactory);
+    }
+    
+    /**
+     * Constructs a new UUEncodedPart object and returns it
+     * 
+     * @param int $mode
+     * @param string $filename
+     */
+    public function newUUEncodedPart($mode, $filename)
+    {
+        return new UUEncodedPart($this->headerFactory, $mode, $filename);
+    }
 }
