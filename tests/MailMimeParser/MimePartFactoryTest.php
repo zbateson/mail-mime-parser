@@ -4,7 +4,7 @@ namespace ZBateson\MailMimeParser;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Description of HeaderPartFactoryTest
+ * Description of MimePartFactoryTest
  *
  * @group MimePartFactory
  * @author Zaahid Bateson
