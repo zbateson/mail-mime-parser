@@ -157,6 +157,22 @@ class PartStream
     }
     
     /**
+     * Checks if the position is valid and seeks to it by setting
+     * $this->position
+     * 
+     * @param int $pos
+     * @return boolean true if set
+     */
+    private function streamSeekSet($pos)
+    {
+        if ($pos + $this->start < $this->end && $pos >= 0) {
+            $this->position = $pos;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Moves the pointer to the given offset, in accordance to $whence.
      * 
      * @param int $offset
@@ -165,11 +181,8 @@ class PartStream
      */
     public function stream_seek($offset, $whence = SEEK_SET)
     {
-        $pos = -1;
+        $pos = $offset;
         switch ($whence) {
-            case SEEK_SET:
-                $pos = $offset;
-                break;
             case SEEK_CUR:
                 $pos = $this->position + $offset;
                 break;
@@ -179,11 +192,7 @@ class PartStream
             default:
                 break;
         }
-        if ($pos + $this->start < $this->end && $pos >= 0) {
-            $this->position = $pos;
-            return true;
-        }
-        return false;
+        return $this->streamSeekSet($pos);
     }
     
     /**
