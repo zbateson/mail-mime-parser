@@ -68,7 +68,7 @@ class AddressHeader extends AbstractHeader
      * Returns all address parts in the header including all addresses that are
      * in groups.
      * 
-     * @return ZBateson\MailMimeParser\Header\Part\AddressPart[]
+     * @return \ZBateson\MailMimeParser\Header\Part\AddressPart[]
      */
     public function getAddresses()
     {
@@ -78,7 +78,7 @@ class AddressHeader extends AbstractHeader
     /**
      * Returns all group parts in the header.
      * 
-     * @return ZBateson\MailMimeParser\Header\Part\AddressGroupPart[]
+     * @return \ZBateson\MailMimeParser\Header\Part\AddressGroupPart[]
      */
     public function getGroups()
     {

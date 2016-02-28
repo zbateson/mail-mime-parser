@@ -66,7 +66,7 @@ class QuotedStringConsumer extends GenericConsumer
      * @param string $token
      * @param bool $isLiteral not used - everything in a quoted string is a
      *        literal
-     * @return ZBateson\MailMimeParser\Header\Part\LiteralPart
+     * @return \ZBateson\MailMimeParser\Header\Part\LiteralPart
      */
     protected function getPartForToken($token, $isLiteral)
     {

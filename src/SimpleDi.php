@@ -182,7 +182,7 @@ class SimpleDi
     /**
      * Returns the header consumer service
      * 
-     * @return ZBateson\MailMimeParser\Header\Consumer\ConsumerService
+     * @return \ZBateson\MailMimeParser\Header\Consumer\ConsumerService
      */
     public function getConsumerService()
     {

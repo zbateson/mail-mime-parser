@@ -20,7 +20,7 @@ class HeaderPartFactory
      * The default implementation returns a new Token.
      * 
      * @param string $value
-     * @return Token
+     * @return HeaderPart|Token
      */
     public function newInstance($value)
     {

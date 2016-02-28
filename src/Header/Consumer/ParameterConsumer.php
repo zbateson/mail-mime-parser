@@ -53,8 +53,8 @@ class ParameterConsumer extends GenericConsumer
      * Post processing involves creating Part\LiteralPart or Part\ParameterPart
      * objects out of created Token and LiteralParts.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
      */
     protected function processParts(array $parts)
     {

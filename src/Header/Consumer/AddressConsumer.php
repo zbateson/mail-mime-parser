@@ -99,8 +99,8 @@ class AddressConsumer extends AbstractConsumer
      * The returned array consists of a single element - either a
      * Part\AddressPart or a Part\AddressGroupPart.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
      */
     protected function processParts(array $parts)
     {

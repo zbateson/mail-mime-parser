@@ -30,8 +30,8 @@ class DateConsumer extends GenericConsumer
      * Concatenates the passed parts and constructs a single Part\DatePart,
      * returning it in an array with a single element.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
      */
     protected function processParts(array $parts)
     {

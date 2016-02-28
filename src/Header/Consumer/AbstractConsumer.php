@@ -231,7 +231,7 @@ abstract class AbstractConsumer
      * consumer's parseTokensIntoParts method is called.
      * 
      * @param Iterator $tokens
-     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[] parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
      */
     protected function getTokenParts(Iterator $tokens)
     {
@@ -302,8 +302,8 @@ abstract class AbstractConsumer
      * 
      * The default implementation simply returns the passed array.
      * 
-     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {
