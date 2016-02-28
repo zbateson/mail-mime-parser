@@ -87,6 +87,32 @@ class MessageParser
     }
     
     /**
+     * Finds the end of the Mime part at the current read position in $handle
+     * and sets $boundaryLength to the number of bytes in the part, and
+     * $endBoundaryFound to true if it's an 'end' boundary, meaning there are no
+     * further parts for the current mime part (ends with --).
+     * 
+     * @param resource $handle
+     * @param string $boundary
+     * @param int $boundaryLength
+     * @param boolean $endBoundaryFound
+     */
+    private function findPartBoundaries($handle, $boundary, &$boundaryLength, &$endBoundaryFound)
+    {
+        do {
+            $line = fgets($handle);
+            $boundaryLength = strlen($line);
+            $test = rtrim($line);
+            if ($test === "--$boundary") {
+                break;
+            } elseif ($test === "--$boundary--") {
+                $endBoundaryFound = true;
+                break;
+            }
+        } while (!feof($handle));
+    }
+    
+    /**
      * Reads the content of a mime part up to a boundary, or the entire message
      * if no boundary is specified.
      * 
@@ -110,26 +136,53 @@ class MessageParser
         $start = ftell($handle);
         $boundaryLength = 0;
         $endBoundaryFound = false;
-        do {
-            $line = fgets($handle);
-            if (!empty($boundary)) {
-                $boundaryLength = strlen($line);
-                $test = rtrim($line);
-                if ($test === "--$boundary") {
-                    break;
-                } elseif ($test === "--$boundary--") {
-                    $endBoundaryFound = true;
-                    break;
-                }
-            }
-        } while (!feof($handle));
-        
+        if (!empty($boundary)) {
+            $this->findPartBoundaries($handle, $boundary, $boundaryLength, $endBoundaryFound);
+        } else {
+            fseek($handle, 0, SEEK_END);
+        }
         if (!$skipPart) {
             $end = ftell($handle) - $boundaryLength;
             $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
             $message->addPart($part);
         }
         return $endBoundaryFound;
+    }
+    
+    /**
+     * Keeps reading if an end boundary is found, to find the parent's boundary
+     * and the part's content.
+     * 
+     * @param resource $handle
+     * @param \ZBateson\MailMimeParser\Message $message
+     * @param \ZBateson\MailMimeParser\MimePart $parent
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param string $boundary
+     * @param bool $skipFirst
+     * @return \ZBateson\MailMimeParser\MimePart
+     */
+    private function readMimeMessageBoundaryParts(
+        $handle,
+        Message $message,
+        MimePart $parent,
+        MimePart $part,
+        $boundary,
+        $skipFirst
+    ) {
+        $skipPart = $skipFirst;
+        while ($this->readPartContent($handle, $message, $part, $boundary, $skipPart) && $parent !== null) {
+            $parent = $parent->getParent();
+            if ($parent !== null) {
+                $boundary = $parent->getHeaderParameter('Content-Type', 'boundary');
+            }
+            $skipPart = true;
+        }
+        $nextPart = $this->partFactory->newMimePart();
+        if ($parent === null) {
+            $parent = $message;
+        }
+        $nextPart->setParent($parent);
+        return $nextPart;
     }
     
     /**
@@ -144,7 +197,7 @@ class MessageParser
     protected function readMimeMessagePart($handle, Message $message, MimePart $part)
     {
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
-        $skipPart = true;
+        $skipFirst = true;
         $parent = $part;
 
         if (empty($boundary) || !preg_match('~multipart/\w+~i', $part->getHeaderValue('Content-Type'))) {
@@ -155,22 +208,9 @@ class MessageParser
                 $parent = $part->getParent();
                 $boundary = $parent->getHeaderParameter('Content-Type', 'boundary');
             }
-            $skipPart = false;
+            $skipFirst = false;
         }
-        // keep reading if an end boundary is found, to find the parent's boundary
-        while ($this->readPartContent($handle, $message, $part, $boundary, $skipPart) && $parent !== null) {
-            $parent = $parent->getParent();
-            if ($parent !== null) {
-                $boundary = $parent->getHeaderParameter('Content-Type', 'boundary');
-            }
-            $skipPart = true;
-        }
-        $nextPart = $this->partFactory->newMimePart();
-        if ($parent === null) {
-            $parent = $message;
-        }
-        $nextPart->setParent($parent);
-        return $nextPart;
+        return $this->readMimeMessageBoundaryParts($handle, $message, $parent, $part, $boundary, $skipFirst);
     }
     
     /**
