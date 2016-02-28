@@ -174,14 +174,14 @@ class PartStream
                 return false;
             case SEEK_CUR:
                 if ($offset >= 0) {
-                     $this->position += $offset;
-                     return true;
+                    $this->position += $offset;
+                    return true;
                 }
                 return false;
             case SEEK_END:
                 if ($this->end + $offset >= $this->start) {
-                     $this->position = ($this->end - $this->start) + $offset;
-                     return true;
+                    $this->position = ($this->end - $this->start) + $offset;
+                    return true;
                 }
                 return false;
             default:

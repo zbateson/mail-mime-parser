@@ -134,7 +134,7 @@ class GenericConsumer extends AbstractConsumer
      * as an array with a single element.
      * 
      * @param ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @return ZBateson\MailMimeParser\Header\Part\LiteralPart[]
      */
     protected function processParts(array $parts)
     {

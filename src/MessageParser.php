@@ -139,7 +139,7 @@ class MessageParser
      * @param resource $handle The handle to read from
      * @param \ZBateson\MailMimeParser\Message $message The current Message
      * @param \ZBateson\MailMimeParser\MimePart $part 
-     * @return type
+     * @return MimePart
      */
     protected function readMimeMessagePart($handle, Message $message, MimePart $part)
     {
