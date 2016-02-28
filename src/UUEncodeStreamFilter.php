@@ -57,6 +57,46 @@ class UUEncodeStreamFilter extends php_user_filter
     }
     
     /**
+     * Filters a single line of encoded input.  Returns NULL if the end has been
+     * reached.
+     * 
+     * @param string $line
+     * @return string the decoded line
+     */
+    private function filterLine($line)
+    {
+        $cur = trim($line);
+        if (empty($cur) || preg_match('/^begin \d{3} .*$/', $cur)) {
+            return '';
+        } elseif ($cur === '`' || $cur === 'end') {
+            return null;
+        }
+        return convert_uudecode($cur);
+    }
+    
+    /**
+     * Filters the lines in the passed $lines array, returning a concatenated
+     * string of decoded lines.
+     * 
+     * @param array $lines
+     * @param int $consumed
+     * @return string
+     */
+    private function filterBucketLines(array $lines, &$consumed)
+    {
+        $data = '';
+        foreach ($lines as $line) {
+            $consumed += strlen($line);
+            $filtered = $this->filterLine($line);
+            if ($filtered === null) {
+                break;
+            }
+            $data .= $filtered;
+        }
+        return $data;
+    }
+    
+    /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
      * 
      * @param resource $in
@@ -69,21 +109,7 @@ class UUEncodeStreamFilter extends php_user_filter
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
             $lines = $this->getLines($bucket);
-            $data = '';
-            foreach ($lines as $line) {
-                $bytes = strlen($line);
-                $cur = trim($line);
-                if (empty($cur) || preg_match('/^begin \d{3} .*$/', $cur)) {
-                    $consumed += $bytes;
-                    continue;
-                } elseif ($cur === '`' || $cur === 'end') {
-                    $consumed += $bytes;
-                    break;
-                }
-                $consumed += $bytes;
-                $data .= convert_uudecode($cur);
-            }
-            $bucket->data = $data;
+            $bucket->data = $this->filterBucketLines($lines, $consumed);
             stream_bucket_append($out, $bucket);
         }
         return PSFS_PASS_ON;
