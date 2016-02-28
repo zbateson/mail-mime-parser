@@ -74,7 +74,7 @@ class AddressGroupConsumer extends AddressBaseConsumer
         $emails = [];
         foreach ($parts as $part) {
             if ($part instanceof AddressGroupPart) {
-                $emails = array_merge($emails, $part->getEmails());
+                $emails = array_merge($emails, $part->getAddresses());
                 continue;
             }
             $emails[] = $part;
