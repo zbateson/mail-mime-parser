@@ -18,7 +18,7 @@ class MimeLiteralPartFactory extends HeaderPartFactory
      * Creates and returns a MimeLiteralPart.
      * 
      * @param string $value
-     * @return MimeLiteralPart
+     * @return HeaderPart
      */
     public function newInstance($value)
     {
