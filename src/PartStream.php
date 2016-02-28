@@ -165,28 +165,25 @@ class PartStream
      */
     public function stream_seek($offset, $whence = SEEK_SET)
     {
+        $pos = -1;
         switch ($whence) {
             case SEEK_SET:
-                if ($offset + $this->start < $this->end && $offset >= 0) {
-                    $this->position = $offset;
-                    return true;
-                }
-                return false;
+                $pos = $offset;
+                break;
             case SEEK_CUR:
-                if ($offset >= 0) {
-                    $this->position += $offset;
-                    return true;
-                }
-                return false;
+                $pos = $this->position + $offset;
+                break;
             case SEEK_END:
-                if ($this->end + $offset >= $this->start) {
-                    $this->position = ($this->end - $this->start) + $offset;
-                    return true;
-                }
-                return false;
+                $pos = ($this->end - $this->start) + $offset;
+                break;
             default:
-                return false;
+                break;
         }
+        if ($pos + $this->start < $this->end && $pos >= 0) {
+            $this->position = $pos;
+            return true;
+        }
+        return false;
     }
     
     /**
