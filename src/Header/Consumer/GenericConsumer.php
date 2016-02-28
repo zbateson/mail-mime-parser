@@ -90,6 +90,34 @@ class GenericConsumer extends AbstractConsumer
     }
     
     /**
+     * Checks if the passed space part should be added to the returned parts and
+     * adds it.
+     * 
+     * Never adds a space if it's the first part, otherwise only add it if
+     * either part isn't set to ignore the space
+     * 
+     * @param array $parts
+     * @param array $retParts
+     * @param ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart
+     * @param int $curIndex
+     * @return boolean true if the part was added
+     */
+    private function checkAddFilteredSpace(array $parts, array &$retParts, &$spacePart, $curIndex)
+    {
+        $lastPart = end($retParts);
+        $count = count($parts);
+        for ($j = $curIndex; $j < $count; ++$j) {
+            $next = $parts[$j];
+            if ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore())) {
+                $retParts[] = $spacePart;
+                $spacePart = null;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
      * Filters out ignorable spaces between parts in the passed array.
      * 
      * Spaces with parts on either side of it that specify they can be ignored
@@ -111,17 +139,7 @@ class GenericConsumer extends AbstractConsumer
                 $spacePart = $part;
                 continue;
             } elseif ($spacePart !== null && $part->getValue() !== '') {
-                // never add the space if it's the first part, otherwise only add it if either part
-                // isn't set to ignore the space
-                $lastPart = end($retParts);
-                for ($j = $i; $j < $count; ++$j) {
-                    $next = $parts[$i];
-                    if ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore())) {
-                        $retParts[] = $spacePart;
-                        $spacePart = null;
-                        break;
-                    }
-                }
+                $this->checkAddFilteredSpace($parts, $retParts, $spacePart, $i);
             }
             $retParts[] = $part;
         }
