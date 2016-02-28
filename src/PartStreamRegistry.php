@@ -66,6 +66,49 @@ class PartStreamRegistry
         }
         return $this->registeredHandles[$id];
     }
+    
+    /**
+     * Attaches a stream filter on the passed resource $handle for the part's
+     * encoding.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param resource $handle
+     */
+    private function attachEncodingFilterToStream(MimePart $part, $handle)
+    {
+        $encoding = strtolower($part->getHeaderValue('Content-Transfer-Encoding'));
+        switch ($encoding) {
+            case 'quoted-printable':
+                stream_filter_append($handle, 'convert.quoted-printable-decode', STREAM_FILTER_READ);
+                break;
+            case 'base64':
+                stream_filter_append($handle, 'convert.base64-decode', STREAM_FILTER_READ);
+                break;
+            case 'x-uuencode':
+                stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_READ);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    /**
+     * Attaches a mailmimeparser-encode stream filter based on the part's
+     * defined charset.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param resource $handle
+     */
+    private function attachCharsetFilterToStream(MimePart $part, $handle)
+    {
+        $contentType = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+        if (strpos($contentType, 'text/') === 0) {
+            stream_filter_append(
+                $handle,
+                'mailmimeparser-encode.' . $part->getHeaderParameter('Content-Type', 'charset')
+            );
+        }
+    }
 
     /**
      * Creates a part stream handle for the start and end position of the
@@ -85,23 +128,8 @@ class PartStreamRegistry
         $handle = fopen('mmp-mime-message://' . $id . '?start=' .
             $start . '&end=' . $end, 'r');
         
-        $encoding = strtolower($part->getHeaderValue('Content-Transfer-Encoding'));
-        if ($encoding === 'quoted-printable') {
-            stream_filter_append($handle, 'convert.quoted-printable-decode', STREAM_FILTER_READ);
-        } elseif ($encoding === 'base64') {
-            stream_filter_append($handle, 'convert.base64-decode', STREAM_FILTER_READ);
-        } elseif ($encoding === 'x-uuencode') {
-            stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_READ);
-        }
-        
-        $contentType = strtolower($part->getHeaderValue('Content-Type'));
-        if (empty($contentType) || strpos($contentType, 'text/') === 0) {
-            stream_filter_append(
-                $handle,
-                'mailmimeparser-encode.' . $part->getHeaderParameter('Content-Type', 'charset')
-            );
-        }
-        
+        $this->attachEncodingFilterToStream($part, $handle);
+        $this->attachCharsetFilterToStream($part, $handle);
         $this->registeredPartStreamHandles[$id] = $handle;
         $part->attachContentResourceHandle($handle);
     }

@@ -137,15 +137,16 @@ class MimePart
      * Note that mime headers aren't case sensitive.
      * 
      * @param string $name
+     * @param string $defaultValue
      * @return string
      */
-    public function getHeaderValue($name)
+    public function getHeaderValue($name, $defaultValue = null)
     {
         $header = $this->getHeader($name);
         if (!empty($header)) {
             return $header->getValue();
         }
-        return null;
+        return $defaultValue;
     }
     
     /**
