@@ -4,13 +4,13 @@
     
     <property name="version-file" value="version.txt"/>
     <loadfile property="version" file="version.txt"/>
-    <property name="release-type" value="Bugfix"/>
+    <property name="release-type" value=""/>
     <property name="docs-dir" value="docs"/>
     <property name="phpdocs-dir" value="${docs-dir}/phpdocs"/>
     <property name="mdapi-dir" value="${docs-dir}/md-api"/>
     <property name="wiki-git" value="git@github.com:zbateson/MailMimeParser.wiki.git"/>
     
-    <target name="nothing">
+    <target name="nothing" hidden="true">
         <echo>
             Used for creating a release.  Default target does nothing.
             Call phing with "-l" to see available targets.
@@ -71,7 +71,37 @@
         <delete dir="${docs-dir}" quiet="true"/>
     </target>
     
-    <target name="release" description="Bumps the version number, then calls update-docs to update documentation. Set release-type to Bugfix, Minor or Major.">
+    <target name="release" description="Bumps the version number, then calls update-docs to update documentation.">
+        <!--
+            The following IfTask must be kept inside 'release'. Using phingcall and setting a property
+            inside a different target sets the property within that target's scope only.
+        -->
+        <if>
+            <equals arg1="${release-type}" arg2=""/>
+            <then>
+                <property name="release-type" value="Bugfix" override="true"/>
+                <echo>Enter a release type (1 to 3) or default to 3.</echo>
+                <echo>1. Major</echo>
+                <echo>2. Minor</echo>
+                <echo>3. Bugfix</echo>
+                <input propertyname="release-type-index" defaultValue="3" promptChar=":">     Enter</input>
+                <if>
+                    <equals arg1="${release-type-index}" arg2="1"/>
+                    <then>
+                        <echo>Setting from ${release-type} to Major, no?</echo>
+                        <property name="release-type" value="Major" override="true"/>
+                        <echo>Now it is ${release-type}</echo>
+                    </then>
+                    <elseif>
+                        <equals arg1="${release-type-index}" arg2="2"/>
+                        <then>
+                            <property name="release-type" value="Minor" override="true"/>
+                        </then>
+                    </elseif>
+                </if>
+            </then>
+        </if>
+        <echo>${release-type} Release - incrememting version number</echo>
         <version releasetype="${release-type}" file="version.txt" property="version"/>
         <phingcall target="cleanup-docs"/>
         <phingcall target="clone-docs"/>
