@@ -14,6 +14,20 @@ namespace ZBateson\MailMimeParser\Header\Part;
 class HeaderPartFactory
 {
     /**
+     * Creates and returns a default HeaderPart for this factory, allowing
+     * subclass factories for specialized HeaderParts.
+     * 
+     * The default implementation returns a new Token.
+     * 
+     * @param string $value
+     * @return Token
+     */
+    public function newInstance($value)
+    {
+        return $this->newToken($value);
+    }
+    
+    /**
      * Initializes and returns a new Token.
      * 
      * @param string $value

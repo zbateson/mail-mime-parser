@@ -5,6 +5,7 @@ use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of UUEncodedPartTest
@@ -17,7 +18,8 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
     public function testUUEncodedPartHeadersAndMembers()
     {
         $pf = new HeaderPartFactory();
-        $cs = new ConsumerService($pf);
+        $mlpf = new MimeLiteralPartFactory();
+        $cs = new ConsumerService($pf, $mlpf);
         $hf = new HeaderFactory($cs, $pf);
         
         $part = new UUEncodedPart($hf, 0754, 'test-file.ext');

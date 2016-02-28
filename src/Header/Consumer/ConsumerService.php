@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Simple service provider for consumer singletons.
@@ -22,13 +23,20 @@ class ConsumerService
     protected $partFactory;
     
     /**
+     * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory used for
+     * GenericConsumer instances.
+     */
+    protected $mimeLiteralPartFactory;
+    
+    /**
      * Sets up the HeaderPartFactory member variable.
      * 
      * @param HeaderPartFactory $partFactory
      */
-    public function __construct(HeaderPartFactory $partFactory)
+    public function __construct(HeaderPartFactory $partFactory, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {
         $this->partFactory = $partFactory;
+        $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
     }
     
     /**
@@ -78,7 +86,7 @@ class ConsumerService
      */
     public function getGenericConsumer()
     {
-        return GenericConsumer::getInstance($this, $this->partFactory);
+        return GenericConsumer::getInstance($this, $this->mimeLiteralPartFactory);
     }
     
     /**

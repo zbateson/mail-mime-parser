@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use PHPUnit_Framework_TestCase;
 use DateTime;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of DateConsumerTest
@@ -19,7 +20,8 @@ class DateConsumerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $pf = new HeaderPartFactory();
-        $cs = new ConsumerService($pf);
+        $mlpf = new MimeLiteralPartFactory();
+        $cs = new ConsumerService($pf, $mlpf);
         $this->dateConsumer = DateConsumer::getInstance($cs, $pf);
     }
     

@@ -3,6 +3,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of CommentConsumerTest
@@ -18,7 +19,8 @@ class CommentConsumerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $pf = new HeaderPartFactory();
-        $cs = new ConsumerService($pf);
+        $mlpf = new MimeLiteralPartFactory();
+        $cs = new ConsumerService($pf, $mlpf);
         $this->commentConsumer = CommentConsumer::getInstance($cs, $pf);
     }
     

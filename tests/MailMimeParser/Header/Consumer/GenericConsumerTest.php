@@ -3,6 +3,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of GenericConsumerTest
@@ -18,8 +19,9 @@ class GenericConsumerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $pf = new HeaderPartFactory();
-        $cs = new ConsumerService($pf);
-        $this->genericConsumer = GenericConsumer::getInstance($cs, $pf);
+        $mlpf = new MimeLiteralPartFactory();
+        $cs = new ConsumerService($pf, $mlpf);
+        $this->genericConsumer = GenericConsumer::getInstance($cs, $mlpf);
     }
     
     public function testConsumeTokens()

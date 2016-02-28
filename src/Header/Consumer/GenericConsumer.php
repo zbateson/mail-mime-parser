@@ -12,6 +12,10 @@ use ZBateson\MailMimeParser\Header\Part\Token;
  * A minimal implementation of AbstractConsumer defining a CommentConsumer and
  * QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.
  *
+ * Note that GenericConsumer should be instantiated with a
+ * MimeLiteralPartFactory instead of a HeaderPartFactory.  Sub-classes may not
+ * need MimeLiteralPartFactory instances though.
+ * 
  * @author Zaahid Bateson
  */
 class GenericConsumer extends AbstractConsumer
@@ -67,26 +71,6 @@ class GenericConsumer extends AbstractConsumer
     protected function isStartToken($token)
     {
         return false;
-    }
-    
-    /**
-     * Creates and returns a
-     * \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart out of the passed
-     * string token and returns it.
-     * 
-     * @param string $token
-     * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
-     */
-    protected function getPartForToken($token, $isLiteral)
-    {
-        if (preg_match('/^\s+$/', $token) && !$isLiteral) {
-            return $this->partFactory->newToken(' ');
-        } elseif ($isLiteral) {
-            return $this->partFactory->newLiteralPart($token);
-        } else {
-            return $this->partFactory->newMimeLiteralPart($token);
-        }
     }
     
     /**

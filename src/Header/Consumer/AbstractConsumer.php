@@ -204,13 +204,24 @@ abstract class AbstractConsumer
      * for the passed string token.  If the token should be ignored, the
      * function must return null.
      * 
+     * The default created part uses the instance's partFactory->newInstance
+     * method.
+     * 
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
      *         header part or null if the token should be ignored
      */
-    abstract protected function getPartForToken($token, $isLiteral);
+    protected function getPartForToken($token, $isLiteral)
+    {
+        if ($isLiteral) {
+            return $this->partFactory->newLiteralPart($token);
+        } elseif (preg_match('/^\s+$/', $token)) {
+            return $this->partFactory->newToken(' ');
+        }
+        return $this->partFactory->newInstance($token);
+    }
     
     /**
      * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for

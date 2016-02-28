@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header;
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of HeaderFactoryTest
@@ -19,7 +20,8 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $pf = new HeaderPartFactory();
-        $cs = new ConsumerService($pf);
+        $mlpf = new MimeLiteralPartFactory();
+        $cs = new ConsumerService($pf, $mlpf);
         $this->headerFactory = new HeaderFactory($cs, $pf);
     }
     

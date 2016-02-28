@@ -5,6 +5,7 @@ use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of NonMimePartTest
@@ -17,7 +18,8 @@ class NonMimePartTest extends PHPUnit_Framework_TestCase
     public function testNonMimePartContentType()
     {
         $pf = new HeaderPartFactory();
-        $cs = new ConsumerService($pf);
+        $mlpf = new MimeLiteralPartFactory();
+        $cs = new ConsumerService($pf, $mlpf);
         $hf = new HeaderFactory($cs, $pf);
         
         $part = new NonMimePart($hf);

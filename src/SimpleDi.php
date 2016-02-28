@@ -37,10 +37,16 @@ class SimpleDi
     protected $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory singleton 'service'
-     * instance
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory singleton
+     * 'service' instance
      */
     protected $headerPartFactory;
+    
+    /**
+     * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory
+     * singleton 'service' instance
+     */
+    protected $mimeLiteralPartFactory;
     
     /**
      * @var \ZBateson\MailMimeParser\Header\Consumer\ConsumerService singleton
@@ -164,6 +170,16 @@ class SimpleDi
     }
     
     /**
+     * Returns the MimeLiteralPartFactory service
+     * 
+     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory
+     */
+    public function getMimeLiteralPartFactory()
+    {
+        return $this->getInstance('mimeLiteralPartFactory', __NAMESPACE__ . '\Header\Part\MimeLiteralPartFactory');
+    }
+    
+    /**
      * Returns the header consumer service
      * 
      * @return ZBateson\MailMimeParser\Header\Consumer\ConsumerService
@@ -171,7 +187,10 @@ class SimpleDi
     public function getConsumerService()
     {
         if ($this->consumerService === null) {
-            $this->consumerService = new ConsumerService($this->getHeaderPartFactory());
+            $this->consumerService = new ConsumerService(
+                $this->getHeaderPartFactory(),
+                $this->getMimeLiteralPartFactory()
+            );
         }
         return $this->consumerService;
     }
