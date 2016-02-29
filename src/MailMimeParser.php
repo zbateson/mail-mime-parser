@@ -60,6 +60,24 @@ class MailMimeParser
     }
 
     /**
+     * Replaces lines starting with '..' with a single dot.  Returns false if a
+     * line containing a single '.' character is found signifying the last line
+     * of the input stream.
+     * 
+     * @param string $line
+     * @return boolean
+     */
+    private function filterSmtpLines(&$line)
+    {
+        if (rtrim($line, "\r\n") === '.') {
+            return false;
+        } elseif (strpos($line, '..') === 0) {
+            $line = substr($line, 1);
+        }
+        return true;
+    }
+    
+    /**
      * Copies the input stream $inHandle into the $tmpHandle resource.
      * Optionally treats the input as an SMTP input message with $isSmtp,
      * considering end of input to be the first ".\r\n" it encounters.
@@ -72,12 +90,8 @@ class MailMimeParser
     {
         do {
             $line = fgets($inHandle);
-            if ($isSmtp) {
-                if (rtrim($line, "\r\n") === '.') {
-                    break;
-                } elseif (strpos($line, '..') === 0) {
-                    $line = substr($line, 1);
-                }
+            if ($isSmtp && !$this->filterSmtpLines($line)) {
+                break;
             }
             fwrite($tmpHandle, $line);
         } while (!feof($inHandle));
