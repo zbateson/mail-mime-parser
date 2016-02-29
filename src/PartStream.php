@@ -66,6 +66,28 @@ class PartStream
     }
     
     /**
+     * Extracts the PartStreamRegistry resource id, start, and end positions for
+     * the passed path and assigns them to the passed-by-reference parameters
+     * $id, $start and $end respectively.
+     * 
+     * @param string $path
+     * @param string $id
+     * @param int $start
+     * @param int $end
+     */
+    private function parseOpenPath($path, &$id, &$start, &$end)
+    {
+        $vars = [];
+        $parts = parse_url($path);
+        if (!empty($parts['host']) && !empty($parts['query'])) {
+            parse_str($parts['query'], $vars);
+            $id = $parts['host'];
+            $start = isset($vars['start']) ? intval($vars['start']) : $start;
+            $end = isset($vars['end']) ? intval($vars['end']) : $end;
+        }
+    }
+    
+    /**
      * Called in response to fopen, file_get_contents, etc... with a
      * PartStream::STREAM_WRAPPER_PROTOCOL, e.g.,
      * fopen('mmp-mime-message://...');
@@ -91,25 +113,13 @@ class PartStream
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
-        $parts = parse_url($path);
-        if (empty($parts['host']) || empty($parts['query'])) {
-            return false;
-        }
-        
-        $vars = [];
-        parse_str($parts['query'], $vars);
-        
-        $id = $parts['host'];
-        $handle = $this->registry->get($id);
-        if ($handle === null || !isset($vars['start']) || !isset($vars['end'])) {
-            return false;
-        }
-        
+        $id = '';
+        $this->start = null;
+        $this->end = null;
         $this->position = 0;
-        $this->handle = $handle;
-        $this->start = $vars['start'];
-        $this->end = $vars['end'];
-        return true;
+        $this->parseOpenPath($path, $id, $this->start, $this->end);
+        $this->handle = $this->registry->get($id);
+        return ($this->handle !== null && $this->start !== null && $this->end !== null);
     }
     
     /**
