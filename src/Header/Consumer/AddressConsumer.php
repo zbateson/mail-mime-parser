@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 
@@ -89,6 +90,30 @@ class AddressConsumer extends AbstractConsumer
     }
     
     /**
+     * Checks if the passed part represents the beginning or end of an address
+     * part (less than/greater than characters) and either appends the value of
+     * the part to the passed $strValue, or sets up $strName
+     * 
+     * @param HeaderPart $part
+     * @param string $strName
+     * @param string $strValue
+     */
+    private function processSinglePart(HeaderPart $part, &$strName, &$strValue)
+    {
+        $pValue = $part->getValue();
+        if ($part instanceof Token) {
+            if ($pValue === '<') {
+                $strName = $strValue;
+                $strValue = '';
+                return;
+            } elseif ($pValue === '>') {
+                return;
+            }
+        }
+        $strValue .= $pValue;
+    }
+    
+    /**
      * Performs final processing on parsed parts.
      * 
      * AddressConsumer's implementation looks for tokens representing the
@@ -107,7 +132,6 @@ class AddressConsumer extends AbstractConsumer
         $strName = '';
         $strValue = '';
         foreach ($parts as $part) {
-            $p = $part->getValue();
             if ($part instanceof AddressGroupPart) {
                 return [
                     $this->partFactory->newAddressGroupPart(
@@ -115,16 +139,8 @@ class AddressConsumer extends AbstractConsumer
                         $strValue
                     )
                 ];
-            } elseif ($part instanceof Token) {
-                if ($p === '<') {
-                    $strName = $strValue;
-                    $strValue = '';
-                    continue;
-                } elseif ($p === '>') {
-                    continue;
-                }
             }
-            $strValue .= $part->getValue();
+            $this->processSinglePart($part, $strName, $strValue);
         }
         return [$this->partFactory->newAddressPart($strName, $strValue)];
     }
