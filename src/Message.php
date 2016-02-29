@@ -196,4 +196,17 @@ class Message extends MimePart
         }
         return null;
     }
+    
+    /**
+     * Returns true if either a Content-Type or Mime-Version header are defined
+     * in this Message.
+     * 
+     * @return bool
+     */
+    public function isMime()
+    {
+        $contentType = $this->getHeaderValue('Content-Type');
+        $mimeVersion = $this->getHeaderValue('Mime-Version');
+        return ($contentType !== null || $mimeVersion !== null);
+    }
 }

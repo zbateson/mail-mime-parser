@@ -309,20 +309,6 @@ class MessageParser
     }
     
     /**
-     * Returns true if the passed Message doesn't define either a Content-Type
-     * or a Mime-Version header.
-     * 
-     * @param \ZBateson\MailMimeParser\Message $message
-     * @return bool
-     */
-    private function isNotMime(Message $message)
-    {
-        $contentType = $message->getHeaderValue('Content-Type');
-        $mimeVersion = $message->getHeaderValue('Mime-Version');
-        return ($contentType === null && $mimeVersion === null);
-    }
-    
-    /**
      * Reads the message from the input stream $handle into $message.
      * 
      * The method will loop to read headers and find and parse multipart-mime
@@ -336,9 +322,8 @@ class MessageParser
     {
         $part = $message;
         $this->readHeaders($handle, $message);
-        $isNotMime = $this->isNotMime($message);
         do {
-            if ($isNotMime) {
+            if (!$message->isMime()) {
                 $this->readUUEncodedOrPlainTextPart($handle, $message);
             } else {
                 $part = $this->readMimeMessagePart($handle, $message, $part);
