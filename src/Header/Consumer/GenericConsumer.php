@@ -88,22 +88,31 @@ class GenericConsumer extends AbstractConsumer
     }
     
     /**
-     * Adds the passed $spacePart to the $retParts array if it should be added.
+     * Loops over the $parts array from the current position, checks if the
+     * space should be added, then adds it to $retParts and returns.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $retParts
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $nextPart
+     * @param int $curIndex
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
-     * @return bool
      */
-    private function addSpaceToRetParts(HeaderPart &$spacePart, array &$retParts, HeaderPart $nextPart, HeaderPart $lastPart)
-    {
-        if ($this->shouldAddSpace($nextPart, $lastPart)) {
-            $retParts[] = $spacePart;
-            $spacePart = null;
-            return true;
+    private function addSpaceToRetParts(
+        array $parts,
+        array &$retParts,
+        $curIndex,
+        HeaderPart &$spacePart,
+        HeaderPart $lastPart
+    ) {
+        $count = count($parts);
+        for ($j = $curIndex; $j < $count; ++$j) {
+            $nextPart = $parts[$j];
+            if ($this->shouldAddSpace($nextPart, $lastPart)) {
+                $retParts[] = $spacePart;
+                $spacePart = null;
+                break;
+            }
         }
-        return false;
     }
     
     /**
@@ -120,16 +129,9 @@ class GenericConsumer extends AbstractConsumer
      */
     private function addSpaces(array $parts, array &$retParts, $curIndex, HeaderPart &$spacePart = null)
     {
-        if ($spacePart === null || $parts[$curIndex]->getValue() === '') {
-            return;
-        }
         $lastPart = end($retParts);
-        $count = count($parts);
-        for ($j = $curIndex; $j < $count; ++$j) {
-            $nextPart = $parts[$j];
-            if ($lastPart !== false && $this->addSpaceToRetParts($spacePart, $retParts, $nextPart, $lastPart)) {
-                break;
-            }
+        if ($spacePart !== null && $parts[$curIndex]->getValue() !== '' && $lastPart !== false) {
+            $this->addSpaceToRetParts($parts, $retParts, $curIndex, $spacePart, $lastPart);
         }
     }
     
