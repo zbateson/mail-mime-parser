@@ -78,13 +78,13 @@ class GenericConsumer extends AbstractConsumer
      * Returns true if a space should be added based on the passed last and next
      * parts.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $nextPart
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
      * @return bool
      */
-    private function shouldAddSpace(HeaderPart $nextPart, HeaderPart $lastPart = null)
+    private function shouldAddSpace(HeaderPart $nextPart, HeaderPart $lastPart)
     {
-        return ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$nextPart->ignoreSpacesBefore()));
+        return (!$lastPart->ignoreSpacesAfter() || !$nextPart->ignoreSpacesBefore());
     }
     
     /**
@@ -96,7 +96,7 @@ class GenericConsumer extends AbstractConsumer
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
      * @return bool
      */
-    private function addSpaceToRetParts(HeaderPart &$spacePart, array &$retParts, HeaderPart $nextPart, HeaderPart $lastPart = null)
+    private function addSpaceToRetParts(HeaderPart &$spacePart, array &$retParts, HeaderPart $nextPart, HeaderPart $lastPart)
     {
         if ($this->shouldAddSpace($nextPart, $lastPart)) {
             $retParts[] = $spacePart;
@@ -127,7 +127,7 @@ class GenericConsumer extends AbstractConsumer
         $count = count($parts);
         for ($j = $curIndex; $j < $count; ++$j) {
             $nextPart = $parts[$j];
-            if ($this->addSpaceToRetParts($spacePart, $retParts, $nextPart, $lastPart)) {
+            if ($lastPart !== false && $this->addSpaceToRetParts($spacePart, $retParts, $nextPart, $lastPart)) {
                 break;
             }
         }
