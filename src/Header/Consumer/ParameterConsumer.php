@@ -50,6 +50,53 @@ class ParameterConsumer extends GenericConsumer
     }
     
     /**
+     * Instanciates and returns either a MimeLiteralPart if $strName is empty,
+     * or a ParameterPart otherwise.
+     * 
+     * @param string $strName
+     * @param string $strValue
+     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart|
+     *         \ZBateson\MailMimeParser\Header\Part\ParameterPart
+     */
+    private function getPartFor($strName, $strValue)
+    {
+        if (empty($strName)) {
+            return $this->partFactory->newMimeLiteralPart($strValue);
+        }
+        return $this->partFactory->newParameterPart($strName, $strValue);
+    }
+    
+    /**
+     * Handles parameter separator tokens during final processing.
+     * 
+     * If the end token is found, a new HeaderPart is assigned to the passed
+     * $combined array.  If an '=' character is found, $strCat is assigned to
+     * $strName and emptied.
+     * 
+     * Returns true if the token was processed, and false otherwise.
+     * 
+     * @param string $tokenValue
+     * @param array $combined
+     * @param string $strName
+     * @param string $strCat
+     * @return boolean
+     */
+    private function processTokenPart($tokenValue, array &$combined, &$strName, &$strCat)
+    {
+        if ($tokenValue === ';') {
+            $combined[] = $this->getPartFor($strName, $strCat);
+            $strName = '';
+            $strCat = '';
+            return true;
+        } elseif ($tokenValue === '=') {
+            $strName = $strCat;
+            $strCat = '';
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Post processing involves creating Part\LiteralPart or Part\ParameterPart
      * objects out of created Token and LiteralParts.
      * 
@@ -63,24 +110,11 @@ class ParameterConsumer extends GenericConsumer
         $strName = '';
         $parts[] = $this->partFactory->newToken(';');
         foreach ($parts as $part) {
-            $p = $part->getValue();
-            if ($part instanceof Token) {
-                if ($p === ';') {
-                    if (empty($strName)) {
-                        $combined[] = $this->partFactory->newMimeLiteralPart($strCat);
-                    } else {
-                        $combined[] = $this->partFactory->newParameterPart($strName, $strCat);
-                    }
-                    $strName = '';
-                    $strCat = '';
-                    continue;
-                } elseif ($p === '=') {
-                    $strName = $strCat;
-                    $strCat = '';
-                    continue;
-                }
+            $pValue = $part->getValue();
+            if ($part instanceof Token && $this->processTokenPart($pValue, $combined, $strName, $strCat)) {
+                continue;
             }
-            $strCat .= $p;
+            $strCat .= $pValue;
         }
         return $this->filterIgnoredSpaces($combined);
     }
