@@ -29,7 +29,7 @@ class Message extends MimePart
      *      used for opening stream parts with the mmp-mime-message "protocol".
      * 
      * @see \ZBateson\MailMimeParser\SimpleDi::registerStreamExtensions
-     * @see \ZBateson\MailMimeParser\PartStream::stream_open
+     * @see \ZBateson\MailMimeParser\Stream\PartStream::stream_open
      */
     protected $objectId;
     

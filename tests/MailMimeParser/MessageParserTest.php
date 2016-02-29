@@ -47,7 +47,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
     
     protected function getMockedPartStreamRegistry()
     {
-        $partStreamRegistry = $this->getMockBuilder('ZBateson\MailMimeParser\PartStreamRegistry')
+        $partStreamRegistry = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\PartStreamRegistry')
             ->getMock();
         return $partStreamRegistry;
     }

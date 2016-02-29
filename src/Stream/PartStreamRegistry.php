@@ -4,7 +4,10 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Stream;
+
+use ZBateson\MailMimeParser\MimePart;
+use ZBateson\MailMimeParser\Message;
 
 /**
  * Factory class for PartStream objects and registration class for Message

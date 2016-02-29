@@ -8,6 +8,9 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Stream\PartStream;
+use ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter;
+use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -25,8 +28,8 @@ class SimpleDi
     protected $partFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\PartStreamRegistry singleton 'service'
-     * instance
+     * @var \ZBateson\MailMimeParser\Stream\PartStreamRegistry singleton
+     * 'service' instance
      */
     protected $partStreamRegistry;
     
@@ -149,14 +152,14 @@ class SimpleDi
      * Returns the part stream registry service instance.  The method also
      * registers the stream extension by calling registerStreamExtensions.
      * 
-     * @return \ZBateson\MailMimeParser\PartStreamRegistry
+     * @return \ZBateson\MailMimeParser\Stream\PartStreamRegistry
      */
     public function getPartStreamRegistry()
     {
         if ($this->partStreamRegistry === null) {
             $this->registerStreamExtensions();
         }
-        return $this->getInstance('partStreamRegistry', __NAMESPACE__ . '\PartStreamRegistry');
+        return $this->getInstance('partStreamRegistry', __NAMESPACE__ . '\Stream\PartStreamRegistry');
     }
     
     /**
@@ -203,8 +206,8 @@ class SimpleDi
      */
     protected function registerStreamExtensions()
     {
-        stream_filter_register(UUEncodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\UUEncodeStreamFilter');
-        stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\CharsetStreamFilter');
-        stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\PartStream');
+        stream_filter_register(UUEncodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUEncodeStreamFilter');
+        stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\CharsetStreamFilter');
+        stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\Stream\PartStream');
     }
 }

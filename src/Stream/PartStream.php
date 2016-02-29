@@ -4,7 +4,9 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Stream;
+
+use ZBateson\MailMimeParser\SimpleDi;
 
 /**
  * Implementation of a stream wrapper representing content for a specific MIME
@@ -46,8 +48,7 @@ class PartStream
     protected $end;
     
     /**
-     * @var \ZBateson\MailMimeParser\PartStreamRegistry The registry service
-     *      object. 
+     * @var PartStreamRegistry The registry service object. 
      */
     protected $registry;
     

@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Stream;
 
 use php_user_filter;
 

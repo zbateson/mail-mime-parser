@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
+
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
  * MailMimeParser::parse.
@@ -27,7 +29,8 @@ class MessageParser
     protected $partFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\PartStreamRegistry the PartStreamRegistry 
+     * @var \ZBateson\MailMimeParser\Stream\PartStreamRegistry the
+     *      PartStreamRegistry 
      * object used to register stream parts.
      */
     protected $partStreamRegistry;
@@ -37,7 +40,7 @@ class MessageParser
      * 
      * @param \ZBateson\MailMimeParser\Message $m
      * @param \ZBateson\MailMimeParser\MimePartFactory $pf
-     * @param \ZBateson\MailMimeParser\PartStreamRegistry $psr
+     * @param \ZBateson\MailMimeParser\Stream\PartStreamRegistry $psr
      */
     public function __construct(Message $m, MimePartFactory $pf, PartStreamRegistry $psr)
     {
