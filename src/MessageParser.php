@@ -162,6 +162,36 @@ class MessageParser
     }
     
     /**
+     * Returns the boundary from the parent MimePart, or the current boundary if
+     * $parent is null
+     * 
+     * @param string $curBoundary
+     * @param \ZBateson\MailMimeParser\MimePart $parent
+     * @return string
+     */
+    private function getParentBoundary($curBoundary, MimePart $parent = null)
+    {
+        return $parent !== null ?
+            $parent->getHeaderParameter('Content-Type', 'boundary') :
+            $curBoundary;
+    }
+    
+    /**
+     * Instantiates and returns a new MimePart setting the part's parent to
+     * either the passed $parent, or $message if $parent is null.
+     * 
+     * @param \ZBateson\MailMimeParser\Message $message
+     * @param \ZBateson\MailMimeParser\MimePart $parent
+     * @return \ZBateson\MailMimeParser\MimePart
+     */
+    private function newMimePartForMessage(Message $message, MimePart $parent = null)
+    {
+        $nextPart = $this->partFactory->newMimePart();
+        $nextPart->setParent($parent === null ? $message : $parent);
+        return $nextPart;
+    }
+    
+    /**
      * Keeps reading if an end boundary is found, to find the parent's boundary
      * and the part's content.
      * 
@@ -185,14 +215,10 @@ class MessageParser
         while ($this->readPartContent($handle, $message, $part, $boundary, $skipPart) && $parent !== null) {
             $parent = $parent->getParent();
             // $boundary used by next call to readPartContent
-            $boundary = $parent !== null ?
-                $parent->getHeaderParameter('Content-Type', 'boundary') :
-                $boundary;
+            $boundary = $this->getParentBoundary($boundary, $parent);
             $skipPart = true;
         }
-        $nextPart = $this->partFactory->newMimePart();
-        $nextPart->setParent($parent === null ? $message : $parent);
-        return $nextPart;
+        return $this->newMimePartForMessage($message, $parent);
     }
     
     /**
@@ -283,6 +309,20 @@ class MessageParser
     }
     
     /**
+     * Returns true if the passed Message doesn't define either a Content-Type
+     * or a Mime-Version header.
+     * 
+     * @param \ZBateson\MailMimeParser\Message $message
+     * @return bool
+     */
+    private function isNotMime(Message $message)
+    {
+        $contentType = $message->getHeaderValue('Content-Type');
+        $mimeVersion = $message->getHeaderValue('Mime-Version');
+        return ($contentType === null && $mimeVersion === null);
+    }
+    
+    /**
      * Reads the message from the input stream $handle into $message.
      * 
      * The method will loop to read headers and find and parse multipart-mime
@@ -296,11 +336,9 @@ class MessageParser
     {
         $part = $message;
         $this->readHeaders($handle, $message);
-        $contentType = $part->getHeaderValue('Content-Type');
-        $mimeVersion = $part->getHeaderValue('Mime-Version');
-        $isMimeNotDefined = ($part === $message && $contentType === null && $mimeVersion === null);
+        $isNotMime = $this->isNotMime($message);
         do {
-            if ($isMimeNotDefined) {
+            if ($isNotMime) {
                 $this->readUUEncodedOrPlainTextPart($handle, $message);
             } else {
                 $part = $this->readMimeMessagePart($handle, $message, $part);

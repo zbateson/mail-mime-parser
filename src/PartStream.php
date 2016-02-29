@@ -82,8 +82,8 @@ class PartStream
         if (!empty($parts['host']) && !empty($parts['query'])) {
             parse_str($parts['query'], $vars);
             $id = $parts['host'];
-            $start = isset($vars['start']) ? intval($vars['start']) : $start;
-            $end = isset($vars['end']) ? intval($vars['end']) : $end;
+            $start = intval($vars['start']);
+            $end = intval($vars['end']);
         }
     }
     

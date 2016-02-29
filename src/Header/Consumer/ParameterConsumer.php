@@ -50,7 +50,7 @@ class ParameterConsumer extends GenericConsumer
     }
     
     /**
-     * Instanciates and returns either a MimeLiteralPart if $strName is empty,
+     * Instantiates and returns either a MimeLiteralPart if $strName is empty,
      * or a ParameterPart otherwise.
      * 
      * @param string $strName

@@ -57,6 +57,30 @@ class UUEncodeStreamFilter extends php_user_filter
     }
     
     /**
+     * Returns true if the passed $line is empty or matches the beginning header
+     * pattern for a uuencoded message.
+     * 
+     * @param string $line
+     * @return bool
+     */
+    private function isEmptyOrStartLine($line)
+    {
+        return (empty($line) || preg_match('/^begin \d{3} .*$/', $line));
+    }
+    
+    /**
+     * Returns true if the passed $line is either a backtick character '`' or
+     * the string 'end' signifying the end of the uuencoded message.
+     * 
+     * @param string $line
+     * @return bool
+     */
+    private function isEndLine($line)
+    {
+        return ($line === '`' || $line === 'end');
+    }
+    
+    /**
      * Filters a single line of encoded input.  Returns NULL if the end has been
      * reached.
      * 
@@ -66,9 +90,9 @@ class UUEncodeStreamFilter extends php_user_filter
     private function filterLine($line)
     {
         $cur = trim($line);
-        if (empty($cur) || preg_match('/^begin \d{3} .*$/', $cur)) {
+        if ($this->isEmptyOrStartLine($cur)) {
             return '';
-        } elseif ($cur === '`' || $cur === 'end') {
+        } elseif ($this->isEndLine($cur)) {
             return null;
         }
         return convert_uudecode($cur);

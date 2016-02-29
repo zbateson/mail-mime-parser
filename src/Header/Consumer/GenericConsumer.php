@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
@@ -74,6 +75,19 @@ class GenericConsumer extends AbstractConsumer
     }
     
     /**
+     * Returns true if a space should be added based on the passed last and next
+     * parts.
+     * 
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $nextPart
+     * @return bool
+     */
+    private function shouldAddSpace(HeaderPart $lastPart, HeaderPart $nextPart)
+    {
+        return ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$nextPart->ignoreSpacesBefore()));
+    }
+    
+    /**
      * Checks if the passed space part should be added to the returned parts and
      * adds it.
      * 
@@ -84,22 +98,32 @@ class GenericConsumer extends AbstractConsumer
      * @param array $retParts
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart
      * @param int $curIndex
-     * @return boolean true if the part was added
      */
-    private function checkAddFilteredSpace(array $parts, array &$retParts, &$spacePart, $curIndex)
+    private function addSpaces(array $parts, array &$retParts, &$spacePart, $curIndex)
     {
+        if ($spacePart === null || $parts[$curIndex]->getValue() === '') {
+            return;
+        }
         $lastPart = end($retParts);
         $count = count($parts);
         for ($j = $curIndex; $j < $count; ++$j) {
-            $next = $parts[$j];
-            $canAddSpace = ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore()));
-            if ($canAddSpace) {
+            $nextPart = $parts[$j];
+            if ($this->shouldAddSpace($lastPart, $nextPart)) {
                 $retParts[] = $spacePart;
                 $spacePart = null;
-                return true;
+                break;
             }
         }
-        return false;
+    }
+    
+    /**
+     * 
+     * @param HeaderPart $part
+     * @return type
+     */
+    private function isSpaceToken(HeaderPart $part)
+    {
+        return ($part instanceof Token && $part->isSpace());
     }
     
     /**
@@ -120,14 +144,11 @@ class GenericConsumer extends AbstractConsumer
         $count = count($parts);
         for ($i = 0; $i < $count; ++$i) {
             $part = $parts[$i];
-            $isSpace = ($part instanceof Token && $part->isSpace());
-            $addSpace = ($spacePart !== null && $part->getValue() !== '');
-            if ($isSpace) {
+            if ($this->isSpaceToken($part)) {
                 $spacePart = $part;
                 continue;
-            } elseif ($addSpace) {
-                $this->checkAddFilteredSpace($parts, $retParts, $spacePart, $i);
             }
+            $this->addSpaces($parts, $retParts, $spacePart, $i);
             $retParts[] = $part;
         }
         // ignore trailing spaces

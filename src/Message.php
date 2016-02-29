@@ -71,6 +71,32 @@ class Message extends MimePart
     {
         return $this->objectId;
     }
+    
+    /**
+     * Returns true if the $part should be assigned as this message's main
+     * text part content.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @return bool
+     */
+    private function isMessageTextPart(MimePart $part)
+    {
+        $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+        return ($type === 'text/plain' && empty($this->textPart));
+    }
+    
+    /**
+     * Returns true if the $part should be assigned as this message's main
+     * html part content.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @return bool
+     */
+    private function isMessageHtmlPart(MimePart $part)
+    {
+        $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+        return ($type === 'text/html' && empty($this->htmlPart));
+    }
 
     /**
      * Either adds the passed part to $this->textPart if its content type is
@@ -81,15 +107,13 @@ class Message extends MimePart
      */
     public function addPart(MimePart $part)
     {
-        $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        if ($type === 'text/plain' && empty($this->textPart)) {
+        if ($this->isMessageTextPart($part)) {
             $this->textPart = $part;
-            return;
-        } elseif ($type === 'text/html' && empty($this->htmlPart)) {
+        } elseif ($this->isMessageHtmlPart($part)) {
             $this->htmlPart = $part;
-            return;
+        } else {
+            $this->parts[] = $part;
         }
-        $this->parts[] = $part;
     }
     
     /**
