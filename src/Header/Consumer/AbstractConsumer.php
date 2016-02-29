@@ -224,6 +224,28 @@ abstract class AbstractConsumer
     }
     
     /**
+     * Iterates through this consumer's sub-consumers checking if the current
+     * token triggers a sub-consumer's start token and passes control onto that
+     * sub-consumer's parseTokenIntoParts.  If no sub-consumer is responsible
+     * for the current token, calls getPartForToken and returns it in an array.
+     * 
+     * @param Iterator $tokens
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     */
+    private function getConsumerTokenParts(Iterator $tokens)
+    {
+        $token = $tokens->current();
+        $subConsumers = $this->getSubConsumers();
+        foreach ($subConsumers as $consumer) {
+            if ($consumer->isStartToken($token)) {
+                $this->advanceToNextToken($tokens, true);
+                return $consumer->parseTokensIntoParts($tokens);
+            }
+        }
+        return [$this->getPartForToken($token, false)];
+    }
+    
+    /**
      * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
      * the current token on the iterator.
      * 
@@ -239,14 +261,7 @@ abstract class AbstractConsumer
         if (strlen($token) === 2 && $token[0] === '\\') {
             return [$this->getPartForToken(substr($token, 1), true)];
         }
-        $subConsumers = $this->getSubConsumers();
-        foreach ($subConsumers as $consumer) {
-            if ($consumer->isStartToken($token)) {
-                $this->advanceToNextToken($tokens, true);
-                return $consumer->parseTokensIntoParts($tokens);
-            }
-        }
-        return [$this->getPartForToken($token, false)];
+        return $this->getConsumerTokenParts($tokens);
     }
     
     /**
