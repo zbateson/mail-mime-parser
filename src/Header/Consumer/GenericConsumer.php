@@ -92,7 +92,8 @@ class GenericConsumer extends AbstractConsumer
         $count = count($parts);
         for ($j = $curIndex; $j < $count; ++$j) {
             $next = $parts[$j];
-            if ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore())) {
+            $canAddSpace = ($lastPart !== null && (!$lastPart->ignoreSpacesAfter() || !$next->ignoreSpacesBefore()));
+            if ($canAddSpace) {
                 $retParts[] = $spacePart;
                 $spacePart = null;
                 return true;
