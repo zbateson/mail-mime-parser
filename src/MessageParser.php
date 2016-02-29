@@ -298,8 +298,9 @@ class MessageParser
         $this->readHeaders($handle, $message);
         $contentType = $part->getHeaderValue('Content-Type');
         $mimeVersion = $part->getHeaderValue('Mime-Version');
+        $isMimeNotDefined = ($part === $message && $contentType === null && $mimeVersion === null);
         do {
-            if ($part === $message && $contentType === null && $mimeVersion === null) {
+            if ($isMimeNotDefined) {
                 $this->readUUEncodedOrPlainTextPart($handle, $message);
             } else {
                 $part = $this->readMimeMessagePart($handle, $message, $part);
