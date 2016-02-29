@@ -62,6 +62,21 @@ class MessageParser
     }
     
     /**
+     * Ensures the header isn't empty, and contains a colon character, then
+     * splits it and assigns it to $part
+     * 
+     * @param string $header
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     */
+    private function addRawHeaderToPart($header, MimePart $part)
+    {
+        if (!empty($header) && strpos($header, ':') !== false) {
+            $a = explode(':', $header, 2);
+            $part->setRawHeader($a[0], trim($a[1]));
+        }
+    }
+    
+    /**
      * Reads header lines up to an empty line, adding them to the passed $part.
      * 
      * @param resource $handle the resource handle to read from
@@ -74,10 +89,7 @@ class MessageParser
         do {
             $line = fgets($handle, 1000);
             if ($line[0] !== "\t" && $line[0] !== ' ') {
-                if (!empty($header) && strpos($header, ':') !== false) {
-                    $a = explode(':', $header, 2);
-                    $part->setRawHeader($a[0], trim($a[1]));
-                }
+                $this->addRawHeaderToPart($header, $part);
                 $header = '';
             } else {
                 $line = ' ' . ltrim($line);
