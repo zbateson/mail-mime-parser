@@ -172,16 +172,14 @@ class MessageParser
         $skipPart = $skipFirst;
         while ($this->readPartContent($handle, $message, $part, $boundary, $skipPart) && $parent !== null) {
             $parent = $parent->getParent();
-            if ($parent !== null) {
-                $boundary = $parent->getHeaderParameter('Content-Type', 'boundary');
-            }
+            // $boundary used by next call to readPartContent
+            $boundary = $parent !== null ?
+                $parent->getHeaderParameter('Content-Type', 'boundary') :
+                $boundary;
             $skipPart = true;
         }
         $nextPart = $this->partFactory->newMimePart();
-        if ($parent === null) {
-            $parent = $message;
-        }
-        $nextPart->setParent($parent);
+        $nextPart->setParent($parent === null ? $message : $parent);
         return $nextPart;
     }
     
