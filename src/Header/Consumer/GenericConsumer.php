@@ -120,10 +120,12 @@ class GenericConsumer extends AbstractConsumer
         $count = count($parts);
         for ($i = 0; $i < $count; ++$i) {
             $part = $parts[$i];
-            if ($part instanceof Token && $part->isSpace()) {
+            $isSpace = ($part instanceof Token && $part->isSpace());
+            $addSpace = ($spacePart !== null && $part->getValue() !== '');
+            if ($isSpace) {
                 $spacePart = $part;
                 continue;
-            } elseif ($spacePart !== null && $part->getValue() !== '') {
+            } elseif ($addSpace) {
                 $this->checkAddFilteredSpace($parts, $retParts, $spacePart, $i);
             }
             $retParts[] = $part;
