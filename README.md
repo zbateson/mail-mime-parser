@@ -24,7 +24,7 @@ MailMimeParser requires PHP 5.4 or newer or HHVM.  Tested on PHP 5.4, 5.5, 5.6 a
 ## Usage
 
 ```php
-$mailParser = new ZBateson\MailMimeParser();
+$mailParser = new ZBateson\MailMimeParser\MailMimeParser();
 
 $handle = fopen('file.mime', 'r');
 $message = $mailParser->parse($handle);         // returns a ZBateson\MailMimeParser\Message
