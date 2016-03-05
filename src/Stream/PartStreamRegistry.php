@@ -138,7 +138,9 @@ class PartStreamRegistry
         if (strpos($contentType, 'text/') === 0) {
             stream_filter_append(
                 $handle,
-                'mailmimeparser-encode.' . $part->getHeaderParameter('Content-Type', 'charset')
+                'mailmimeparser-encode',
+                STREAM_FILTER_READ,
+                [ 'charset' => $part->getHeaderParameter('Content-Type', 'charset') ]
             );
         }
     }

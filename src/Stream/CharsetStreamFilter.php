@@ -24,7 +24,7 @@ class CharsetStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mailmimeparser-encode.*';
+    const STREAM_FILTER_NAME = 'mailmimeparser-encode';
     
     /**
      * @var string the character set the stream is using
@@ -57,16 +57,12 @@ class CharsetStreamFilter extends php_user_filter
     }
     
     /**
-     * Overridden to extract the charset from the filtername.  An example of a
-     * filter name sent to stream_filter_append with a charset would be:
-     * 
-     * stream_filter_append(resource, 'mailmimeparser-encode.utf-8');
+     * Overridden to extract the charset from the params array.
      */
     public function onCreate()
     {
-        $charset = substr($this->filtername, strrpos($this->filtername, '.') + 1);
-        if (!empty($charset)) {
-            $this->charset = $charset;
+        if (!empty($this->params['charset'])) {
+            $this->charset = $this->params['charset'];
         }
     }
 }
