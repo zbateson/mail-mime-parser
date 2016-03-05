@@ -11,8 +11,3 @@ before_script:
     - composer install --no-dev
 
 script: phpunit -c tests/phpunit.xml
-
-matrix:
-    allow_failures:
-        - php: hhvm
-
