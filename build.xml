@@ -71,7 +71,7 @@
         <delete dir="${docs-dir}" quiet="true"/>
     </target>
     
-    <target name="release" description="Bumps the version number, then calls update-docs to update documentation.">
+    <target name="release" description="Bumps the version number, then updates documentation">
         <!--
             The following IfTask must be kept inside 'release'. Using phingcall and setting a property
             inside a different target sets the property within that target's scope only.

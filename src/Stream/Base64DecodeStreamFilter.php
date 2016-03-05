@@ -9,16 +9,14 @@ namespace ZBateson\MailMimeParser\Stream;
 use php_user_filter;
 
 /**
- * Stream filter converts uuencoded text to its raw binary.
- *
  * @author Zaahid Bateson
  */
-class UUEncodeStreamFilter extends php_user_filter
+class Base64DecodeStreamFilter extends php_user_filter
 {
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mailmimeparser-uudecode';
+    const STREAM_FILTER_NAME = 'convert.base64-decode';
     
     /**
      * @var string Leftovers from the last incomplete line that was parsed, to
@@ -37,49 +35,20 @@ class UUEncodeStreamFilter extends php_user_filter
      * @param object $bucket
      * @return string[]
      */
-    private function getLines($bucket)
+    private function getRawBytes($bucket)
     {
-        $lines = preg_split(
-            '/([^\r\n]+[\r\n]+)/',
-            $bucket->data,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
-        );
+        $raw = preg_replace('/\s+/', '', $bucket->data);
         if (!empty($this->leftover)) {
-            $lines[0] = $this->leftover . $lines[0];
+            $raw = $this->leftover . $raw;
             $this->leftover = '';
         }
-        $last = end($lines);
-        if ($last[strlen($last) - 1] !== "\n") {
-            $this->leftover = array_pop($lines);
+        $nLeftover = strlen($raw) % 3;
+        if ($nLeftover !== 0) {
+            $this->leftover = substr($nLeftover, -$nLeftover);
         }
-        return $lines;
+        return $raw;
     }
-    
-    /**
-     * Returns true if the passed $line is empty or matches the beginning header
-     * pattern for a uuencoded message.
-     * 
-     * @param string $line
-     * @return bool
-     */
-    private function isEmptyOrStartLine($line)
-    {
-        return (empty($line) || preg_match('/^begin \d{3} .*$/', $line));
-    }
-    
-    /**
-     * Returns true if the passed $line is either a backtick character '`' or
-     * the string 'end' signifying the end of the uuencoded message.
-     * 
-     * @param string $line
-     * @return bool
-     */
-    private function isEndLine($line)
-    {
-        return ($line === '`' || $line === 'end');
-    }
-    
+
     /**
      * Filters a single line of encoded input.  Returns NULL if the end has been
      * reached.
@@ -106,7 +75,7 @@ class UUEncodeStreamFilter extends php_user_filter
      * @param int $consumed
      * @return string
      */
-    private function filterBucketLines(array $lines, &$consumed)
+    private function filterBucketBytes(array $lines, &$consumed)
     {
         $data = '';
         foreach ($lines as $line) {
@@ -132,8 +101,14 @@ class UUEncodeStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $lines = $this->getLines($bucket);
-            $converted = $this->filterBucketLines($lines, $consumed);
+            $bytes = $this->getRawBytes($bucket);
+            $nConsumed = strlen($bucket->data);
+            if ($this->leftover !== '') {
+                $nConsumed -= $nConsumed - strlen(rtrim($bucket->data));
+                $nConsumed -= strlen($this->leftover);
+            }
+            $consumed += $nConsumed;
+            $converted = base64_decode($bytes);
             stream_bucket_append($out, stream_bucket_new($this->stream, $converted));
         }
         return PSFS_PASS_ON;

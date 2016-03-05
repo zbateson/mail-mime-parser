@@ -11,6 +11,8 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\PartStream;
 use ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
+use ZBateson\MailMimeParser\Stream\QuotedPrintableDecodeStreamFilter;
+use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -209,5 +211,19 @@ class SimpleDi
         stream_filter_register(UUEncodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUEncodeStreamFilter');
         stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\CharsetStreamFilter');
         stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\Stream\PartStream');
+        
+        // hhvm compatibility -- at time of writing, no convert.* filters 
+        // should return false if already registered
+        $filters = stream_get_filters();
+        if (!in_array('convert.*', $filters)) {
+            stream_filter_register(
+                QuotedPrintableDecodeStreamFilter::STREAM_FILTER_NAME,
+                __NAMESPACE__ . '\Stream\QuotedPrintableDecodeStreamFilter'
+            );
+            stream_filter_register(
+                Base64DecodeStreamFilter::STREAM_FILTER_NAME,
+                __NAMESPACE__ . '\Stream\Base64DecodeStreamFilter'
+            );
+        }
     }
 }

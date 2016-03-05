@@ -30,6 +30,11 @@ class PartStream
     const STREAM_WRAPPER_PROTOCOL = 'mmp-mime-message';
     
     /**
+     * @var int the message ID this PartStream belongs to
+     */
+    protected $id;
+    
+    /**
      * @var resource The resource handle for the opened part.  Essentially the
      *      MIME message's stream handle.
      */
@@ -114,13 +119,20 @@ class PartStream
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
-        $id = '';
-        $this->start = null;
-        $this->end = null;
         $this->position = 0;
-        $this->parseOpenPath($path, $id, $this->start, $this->end);
-        $this->handle = $this->registry->get($id);
+        $this->parseOpenPath($path, $this->id, $this->start, $this->end);
+        $this->handle = $this->registry->get($this->id);
+        $this->registry->increaseHandleRefCount($this->id);
         return ($this->handle !== null && $this->start !== null && $this->end !== null);
+    }
+    
+    /**
+     * Decreases the ref count for the underlying resource handle, which allows
+     * the PartStreamRegistry to close it once no more references to it exist.
+     */
+    public function stream_close()
+    {
+        $this->registry->decreaseHandleRefCount($this->id);
     }
     
     /**
@@ -161,7 +173,7 @@ class PartStream
      */
     public function stream_eof()
     {
-        if (feof($this->handle) || $this->position + $this->start >= $this->end) {
+        if ($this->position + $this->start >= $this->end) {
             return true;
         }
         return false;

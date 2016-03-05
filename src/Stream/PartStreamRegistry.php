@@ -29,9 +29,10 @@ class PartStreamRegistry
     private $registeredHandles;
 
     /**
-     * @var array Array of PartStream handles with message IDs as keys.
+     * @var int[] number of registered part stream handles with message IDs as
+     * keys
      */
-    private $registeredPartStreamHandles;
+    private $numRefCountsForHandles;
 
     /**
      * Registers an ID for the passed resource handle.
@@ -43,17 +44,46 @@ class PartStreamRegistry
     {
         if (!isset($this->registeredHandles[$id])) {
             $this->registeredHandles[$id] = $handle;
+            $this->numRefCountsForHandles[$id] = 0;
         }
     }
 
     /**
-     * Unregisters the given message ID.
+     * Unregisters the given message ID and closes the associated resource
+     * handle.
      * 
      * @param string $id
      */
-    public function unregister($id)
+    protected function unregister($id)
     {
-        unset($this->registeredHandles[$id], $this->registeredPartStreamHandles);
+        fclose($this->registeredHandles[$id]);
+        unset($this->registeredHandles[$id], $this->registeredPartStreamHandles[$id]);
+    }
+    
+    /**
+     * Increases the reference count for streams using the resource handle
+     * associated with the message id.
+     * 
+     * @param int $messageId
+     */
+    public function increaseHandleRefCount($messageId)
+    {
+        $this->numRefCountsForHandles[$messageId] += 1;
+    }
+    
+    /**
+     * Decreases the reference count for streams using the resource handle
+     * associated with the message id.  Once the reference count hits 0,
+     * unregister is called.
+     * 
+     * @param int $messageId
+     */
+    public function decreaseHandleRefCount($messageId)
+    {
+        $this->numRefCountsForHandles[$messageId] -= 1;
+        if ($this->numRefCountsForHandles[$messageId] === 0) {
+            $this->unregister($messageId);
+        }
     }
 
     /**
@@ -133,7 +163,6 @@ class PartStreamRegistry
         
         $this->attachEncodingFilterToStream($part, $handle);
         $this->attachCharsetFilterToStream($part, $handle);
-        $this->registeredPartStreamHandles[$id] = $handle;
         $part->attachContentResourceHandle($handle);
     }
 }

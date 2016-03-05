@@ -71,7 +71,10 @@ abstract class AbstractConsumer
      */
     public function __invoke($value)
     {
-        return $this->parseRawValue($value);
+        if ($value !== '') {
+            return $this->parseRawValue($value);
+        }
+        return [];
     }
     
     /**

@@ -9,16 +9,14 @@ namespace ZBateson\MailMimeParser\Stream;
 use php_user_filter;
 
 /**
- * Stream filter converts uuencoded text to its raw binary.
- *
  * @author Zaahid Bateson
  */
-class UUEncodeStreamFilter extends php_user_filter
+class QuotedPrintableDecodeStreamFilter extends php_user_filter
 {
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mailmimeparser-uudecode';
+    const STREAM_FILTER_NAME = 'convert.quoted-printable-decode';
     
     /**
      * @var string Leftovers from the last incomplete line that was parsed, to
@@ -40,7 +38,7 @@ class UUEncodeStreamFilter extends php_user_filter
     private function getLines($bucket)
     {
         $lines = preg_split(
-            '/([^\r\n]+[\r\n]+)/',
+            '/([\r\n]+)/',
             $bucket->data,
             -1,
             PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
@@ -57,48 +55,6 @@ class UUEncodeStreamFilter extends php_user_filter
     }
     
     /**
-     * Returns true if the passed $line is empty or matches the beginning header
-     * pattern for a uuencoded message.
-     * 
-     * @param string $line
-     * @return bool
-     */
-    private function isEmptyOrStartLine($line)
-    {
-        return (empty($line) || preg_match('/^begin \d{3} .*$/', $line));
-    }
-    
-    /**
-     * Returns true if the passed $line is either a backtick character '`' or
-     * the string 'end' signifying the end of the uuencoded message.
-     * 
-     * @param string $line
-     * @return bool
-     */
-    private function isEndLine($line)
-    {
-        return ($line === '`' || $line === 'end');
-    }
-    
-    /**
-     * Filters a single line of encoded input.  Returns NULL if the end has been
-     * reached.
-     * 
-     * @param string $line
-     * @return string the decoded line
-     */
-    private function filterLine($line)
-    {
-        $cur = trim($line);
-        if ($this->isEmptyOrStartLine($cur)) {
-            return '';
-        } elseif ($this->isEndLine($cur)) {
-            return null;
-        }
-        return convert_uudecode($cur);
-    }
-    
-    /**
      * Filters the lines in the passed $lines array, returning a concatenated
      * string of decoded lines.
      * 
@@ -111,13 +67,10 @@ class UUEncodeStreamFilter extends php_user_filter
         $data = '';
         foreach ($lines as $line) {
             $consumed += strlen($line);
-            $filtered = $this->filterLine($line);
-            if ($filtered === null) {
-                break;
-            }
-            $data .= $filtered;
+            $data .= $line;
         }
-        return $data;
+        $decoded = quoted_printable_decode($data);
+        return $decoded;
     }
     
     /**

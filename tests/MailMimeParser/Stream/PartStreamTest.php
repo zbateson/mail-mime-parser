@@ -1,7 +1,8 @@
 <?php
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Stream;
 
 use PHPUnit_Framework_TestCase;
+use ZBateson\MailMimeParser\SimpleDi;
 
 /**
  * Description of PartStreamTest
@@ -45,21 +46,14 @@ class PartStreamTest extends PHPUnit_Framework_TestCase
         fclose($ps2);
         fclose($ps3);
         
-        $this->registry->unregister(2);
         $ps2 = @fopen('mmp-mime-message://2?start=1&end=4', 'r');
         $this->assertFalse($ps2);
         
-        $this->registry->unregister(1);
         $ps = @fopen('mmp-mime-message://1?start=1&end=4', 'r');
         $this->assertFalse($ps);
         
-        $this->registry->unregister(3);
         $ps3 = @fopen('mmp-mime-message://3?start=1&end=4', 'r');
         $this->assertFalse($ps3);
-        
-        fclose($mem);
-        fclose($mem2);
-        fclose($mem3);
     }
     
     public function testReadLimits()
@@ -73,9 +67,7 @@ class PartStreamTest extends PHPUnit_Framework_TestCase
         $str = stream_get_contents($res);
         $this->assertEquals('his', $str);
         
-        $this->registry->unregister('testReadLimits');
         fclose($res);
-        fclose($mem);
     }
     
     public function testReadLimitsToEnd()
@@ -89,8 +81,6 @@ class PartStreamTest extends PHPUnit_Framework_TestCase
         $str = stream_get_contents($res);
         $this->assertEquals('test', $str);
         
-        $this->registry->unregister('testReadLimits');
         fclose($res);
-        fclose($mem);
     }
 }

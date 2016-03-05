@@ -52,7 +52,7 @@ class MailMimeParser
     public function parse($handle, $isSmtp = false)
     {
         // $tempHandle is attached to $message, and closed in its destructor
-        $tempHandle = fopen('php://temp', 'rw');
+        $tempHandle = fopen('php://temp', 'w+');
         $this->copyToTmpFile($tempHandle, $handle, $isSmtp);
         $parser = $this->di->newMessageParser();
         $message = $parser->parse($tempHandle);
