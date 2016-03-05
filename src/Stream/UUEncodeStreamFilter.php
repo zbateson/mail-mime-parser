@@ -134,6 +134,12 @@ class UUEncodeStreamFilter extends php_user_filter
         while ($bucket = stream_bucket_make_writeable($in)) {
             $lines = $this->getLines($bucket);
             $converted = $this->filterBucketLines($lines, $consumed);
+            
+            // $this->stream is undocumented.  It was found looking at HHVM's source code
+            // for its convert.iconv.* implementation in ConvertIconFilter and explained
+            // somewhat in this StackOverflow page: http://stackoverflow.com/a/31132646/335059
+            // declaring a member variable called 'stream' breaks the PHP implementation (5.5.9
+            // at least).
             stream_bucket_append($out, stream_bucket_new($this->stream, $converted));
         }
         return PSFS_PASS_ON;

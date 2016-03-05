@@ -50,46 +50,6 @@ class Base64DecodeStreamFilter extends php_user_filter
     }
 
     /**
-     * Filters a single line of encoded input.  Returns NULL if the end has been
-     * reached.
-     * 
-     * @param string $line
-     * @return string the decoded line
-     */
-    private function filterLine($line)
-    {
-        $cur = trim($line);
-        if ($this->isEmptyOrStartLine($cur)) {
-            return '';
-        } elseif ($this->isEndLine($cur)) {
-            return null;
-        }
-        return convert_uudecode($cur);
-    }
-    
-    /**
-     * Filters the lines in the passed $lines array, returning a concatenated
-     * string of decoded lines.
-     * 
-     * @param array $lines
-     * @param int $consumed
-     * @return string
-     */
-    private function filterBucketBytes(array $lines, &$consumed)
-    {
-        $data = '';
-        foreach ($lines as $line) {
-            $consumed += strlen($line);
-            $filtered = $this->filterLine($line);
-            if ($filtered === null) {
-                break;
-            }
-            $data .= $filtered;
-        }
-        return $data;
-    }
-    
-    /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
      * 
      * @param resource $in
@@ -109,6 +69,12 @@ class Base64DecodeStreamFilter extends php_user_filter
             }
             $consumed += $nConsumed;
             $converted = base64_decode($bytes);
+            
+            // $this->stream is undocumented.  It was found looking at HHVM's source code
+            // for its convert.iconv.* implementation in ConvertIconFilter and explained
+            // somewhat in this StackOverflow page: http://stackoverflow.com/a/31132646/335059
+            // declaring a member variable called 'stream' breaks the PHP implementation (5.5.9
+            // at least).
             stream_bucket_append($out, stream_bucket_new($this->stream, $converted));
         }
         return PSFS_PASS_ON;
