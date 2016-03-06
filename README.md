@@ -2,7 +2,7 @@
 
 Standalone, testable and PSR-compliant mail mime parser alternative to PHP's imap* functions and pear libraries for reading messages in _Internet Message Format_ (RFC-5322, RFC-2822 and RFC-822).
 
-[![Build Status](https://travis-ci.org/zbateson/MailMimeParser.svg?branch=master)](https://travis-ci.org/zbateson/MailMimeParser) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/?branch=master)
+[![Build Status](https://travis-ci.org/zbateson/MailMimeParser.svg?branch=master)](https://travis-ci.org/zbateson/MailMimeParser) [![Code Coverage](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/?branch=master)
 
 The goals of this project are to be:
 
