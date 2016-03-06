@@ -4,12 +4,14 @@ namespace ZBateson\MailMimeParser;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Description of FullEmailsTest
+ * Description of EmailFunctionalTest
  *
- * @group FullEmailsTest
+ * @group Functional
+ * @group EmailFunctionalTest
+ * @coversNothing
  * @author Zaahid Bateson
  */
-class FullEmailsTest extends PHPUnit_Framework_TestCase
+class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;

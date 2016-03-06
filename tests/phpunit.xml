@@ -11,6 +11,11 @@
     <php>
         <const name="TEST_DATA_DIR" value="_data"/>
     </php>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../src/</directory>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="MailMimeParser">
             <directory suffix="Test.php">MailMimeParser</directory>

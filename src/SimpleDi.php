@@ -215,6 +215,7 @@ class SimpleDi
         // hhvm compatibility -- at time of writing, no convert.* filters 
         // should return false if already registered
         $filters = stream_get_filters();
+        // @codeCoverageIgnoreStart
         if (!in_array('convert.*', $filters)) {
             stream_filter_register(
                 QuotedPrintableDecodeStreamFilter::STREAM_FILTER_NAME,
@@ -225,5 +226,6 @@ class SimpleDi
                 __NAMESPACE__ . '\Stream\Base64DecodeStreamFilter'
             );
         }
+        // @codeCoverageIgnoreEnd
     }
 }

@@ -4,12 +4,13 @@ namespace ZBateson\MailMimeParser;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Description of FullHeadersTest
+ * Description of ParserHeadersIntegrationTest
  *
- * @group FullHeadersTest
+ * @group ParserHeadersIntegrationTest
+ * @coversNothing
  * @author Zaahid Bateson
  */
-class FullHeadersTest extends PHPUnit_Framework_TestCase
+class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
 {
     public function testParsingBasicHeaders()
     {
