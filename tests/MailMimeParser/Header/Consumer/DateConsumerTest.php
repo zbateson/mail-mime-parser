@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Consumers
  * @group DateConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\DateConsumer
  * @author Zaahid Bateson
  */
 class DateConsumerTest extends PHPUnit_Framework_TestCase

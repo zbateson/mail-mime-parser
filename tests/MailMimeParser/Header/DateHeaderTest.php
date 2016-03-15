@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Headers
  * @group DateHeader
+ * @covers ZBateson\MailMimeParser\Header\DateHeader
  * @author Zaahid Bateson
  */
 class DateHeaderTest extends PHPUnit_Framework_TestCase

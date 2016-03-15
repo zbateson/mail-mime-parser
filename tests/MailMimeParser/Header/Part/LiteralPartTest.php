@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group LiteralPart
+ * @covers ZBateson\MailMimeParser\Header\Part\LiteralPart
  * @author Zaahid Bateson
  */
 class LiteralPartTest extends PHPUnit_Framework_TestCase

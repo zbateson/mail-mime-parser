@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group Consumers
  * @group AbstractConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
 class AbstractConsumerTest extends PHPUnit_Framework_TestCase

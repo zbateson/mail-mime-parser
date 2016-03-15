@@ -7,6 +7,8 @@ use PHPUnit_Framework_TestCase;
  * Description of MessageTest
  *
  * @group Message
+ * @group Base
+ * @covers ZBateson\MailMimeParser\Message
  * @author Zaahid Bateson
  */
 class MessageTest extends PHPUnit_Framework_TestCase

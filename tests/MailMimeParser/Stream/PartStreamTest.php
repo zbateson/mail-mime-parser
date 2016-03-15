@@ -8,6 +8,7 @@ use ZBateson\MailMimeParser\SimpleDi;
  * Description of PartStreamTest
  *
  * @group PartStream
+ * @covers ZBateson\MailMimeParser\Stream\PartStream
  * @author Zaahid Bateson
  */
 class PartStreamTest extends PHPUnit_Framework_TestCase

@@ -10,6 +10,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Consumers
  * @group CommentConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
  * @author Zaahid Bateson
  */
 class CommentConsumerTest extends PHPUnit_Framework_TestCase

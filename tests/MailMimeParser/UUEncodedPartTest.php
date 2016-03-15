@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * Description of UUEncodedPartTest
  *
  * @group UUEncodedPart
+ * @group Base
  * @author Zaahid Bateson
  */
 class UUEncodedPartTest extends PHPUnit_Framework_TestCase

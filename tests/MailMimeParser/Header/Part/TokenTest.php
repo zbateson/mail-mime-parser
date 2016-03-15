@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group Token
+ * @covers ZBateson\MailMimeParser\Header\Part\Token
  * @author Zaahid Bateson
  */
 class TokenTest extends PHPUnit_Framework_TestCase

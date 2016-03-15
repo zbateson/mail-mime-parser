@@ -7,6 +7,7 @@ use PHPUnit_Framework_TestCase;
  * Description of MimePartTest
  *
  * @group MimePart
+ * @group Base
  * @author Zaahid Bateson
  */
 class MimePartTest extends PHPUnit_Framework_TestCase

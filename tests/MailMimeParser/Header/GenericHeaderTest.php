@@ -7,10 +7,11 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
- * Description of StructuredHeaderTest
+ * Description of GenericHeaderTest
  *
  * @group Headers
  * @group GenericHeader
+ * @covers ZBateson\MailMimeParser\Header\GenericHeader
  * @author Zaahid Bateson
  */
 class GenericHeaderTest extends PHPUnit_Framework_TestCase

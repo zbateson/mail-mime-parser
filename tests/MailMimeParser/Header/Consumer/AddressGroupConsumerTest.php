@@ -10,6 +10,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Consumers
  * @group AddressGroupConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer
  * @author Zaahid Bateson
  */
 class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase

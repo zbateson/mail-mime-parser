@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group ParameterPart
+ * @covers ZBateson\MailMimeParser\Header\Part\ParameterPart
  * @author Zaahid Bateson
  */
 class ParameterPartTest extends PHPUnit_Framework_TestCase

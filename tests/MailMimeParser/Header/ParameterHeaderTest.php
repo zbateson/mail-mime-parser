@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Headers
  * @group ParameterHeader
+ * @covers ZBateson\MailMimeParser\Header\ParameterHeader
  * @author Zaahid Bateson
  */
 class ParameterHeaderTest extends PHPUnit_Framework_TestCase
