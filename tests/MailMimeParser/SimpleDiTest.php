@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group SimpleDiTest
  * @group Base
+ * @covers ZBateson\MailMimeParser\SimpleDi
  * @author Zaahid Bateson
  */
 class SimpleDiTest extends PHPUnit_Framework_TestCase

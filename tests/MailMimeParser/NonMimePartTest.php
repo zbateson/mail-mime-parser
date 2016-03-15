@@ -12,6 +12,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group NonMimePart
  * @group Base
+ * @covers ZBateson\MailMimeParser\NonMimePart
  * @author Zaahid Bateson
  */
 class NonMimePartTest extends PHPUnit_Framework_TestCase

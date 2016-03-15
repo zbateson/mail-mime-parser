@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group MimePart
  * @group Base
+ * @covers ZBateson\MailMimeParser\MimePart
  * @author Zaahid Bateson
  */
 class MimePartTest extends PHPUnit_Framework_TestCase
