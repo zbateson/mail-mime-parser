@@ -44,16 +44,22 @@ class MailMimeParser
      * 
      * @param resource $handle the resource handle to the input stream of the
      *        mime message
-     * @param bool $isSmtp if set to true, treats the message as a raw message
-     *        from SMTP, ending input on the first ".\r\n" it finds and
-     *        replacing ".." at the beginning of a line with a single ".".
+     * @param bool $isSmtp Deprecated and will be removed in 0.3.0 -- if set to
+     *        true, treats the message as a raw message from SMTP, ending input
+     *        on the first ".\r\n" it finds and replacing ".." at the beginning
+     *        of a line with a single ".".
      * @return \ZBateson\MailMimeParser\Message
      */
     public function parse($handle, $isSmtp = false)
     {
         // $tempHandle is attached to $message, and closed in its destructor
         $tempHandle = fopen('php://temp', 'w+');
-        $this->copyToTmpFile($tempHandle, $handle, $isSmtp);
+        if ($isSmtp) {
+            $this->copyToTmpFile($tempHandle, $handle);
+        } else {
+            stream_copy_to_stream($handle, $tempHandle);
+            rewind($tempHandle);
+        }
         $parser = $this->di->newMessageParser();
         $message = $parser->parse($tempHandle);
         return $message;
@@ -63,7 +69,8 @@ class MailMimeParser
      * Replaces lines starting with '..' with a single dot.  Returns false if a
      * line containing a single '.' character is found signifying the last line
      * of the input stream.
-     * 
+     *
+     * @deprecated removed in 0.3.0
      * @param string $line
      * @return boolean
      */
@@ -81,16 +88,16 @@ class MailMimeParser
      * Copies the input stream $inHandle into the $tmpHandle resource.
      * Optionally treats the input as an SMTP input message with $isSmtp,
      * considering end of input to be the first ".\r\n" it encounters.
-     * 
+     *
+     * @deprecated removed in 0.3.0
      * @param resource $tmpHandle the temporary resource handle
      * @param resource $inHandle the input stream resource handle
-     * @param bool $isSmtp set to true if $inHandle is an SMTP input stream
      */
-    protected function copyToTmpFile($tmpHandle, $inHandle, $isSmtp)
+    protected function copyToTmpFile($tmpHandle, $inHandle)
     {
         do {
             $line = fgets($inHandle);
-            if ($isSmtp && !$this->filterSmtpLines($line)) {
+            if (!$this->filterSmtpLines($line)) {
                 break;
             }
             fwrite($tmpHandle, $line);
