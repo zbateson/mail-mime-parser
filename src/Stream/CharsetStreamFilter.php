@@ -43,7 +43,7 @@ class CharsetStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $converted = mb_convert_encoding($bucket->data, 'UTF-8', $this->charset);
+            $converted = mb_convert_encoding($bucket->data, 'UTF-8');
             $consumed += strlen($bucket->data);
             
             // $this->stream is undocumented.  It was found looking at HHVM's source code
