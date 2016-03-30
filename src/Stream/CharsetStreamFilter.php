@@ -45,6 +45,7 @@ class CharsetStreamFilter extends php_user_filter
     private $translatedCharsets = [
         'US-ASCII' => 'ASCII',
         'ISO-8859-8-I' => 'ISO-8859-8',
+        'WINDOWS-1255' => 'ISO-8859-8',
     ];
     
     /**
