@@ -29,7 +29,24 @@ class CharsetStreamFilter extends php_user_filter
     /**
      * @var string the character set the stream is using
      */
-    protected $charset = 'iso-8859-1';
+    protected $charset = 'ISO-8859-1';
+    
+    /**
+     * @var array an array of additional charsets supported but not documented
+     */
+    private $additionalCharsets = [
+        'CP850',
+        'GB2312'
+    ];
+    
+    /**
+     * @var array an array of translated charsets (must be upper-case)
+     */
+    private $translatedCharsets = [
+        'US-ASCII' => 'ASCII',
+        'ISO-8859-8-I' => 'ISO-8859-8',
+        'WINDOWS-1255' => 'ISO-8859-8',
+    ];
     
     /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
@@ -57,12 +74,27 @@ class CharsetStreamFilter extends php_user_filter
     }
     
     /**
-     * Overridden to extract the charset from the params array.
+     * Overridden to extract the charset from the params array and check if the
+     * passed charset is supported or listed in the translation table in
+     * CharsetStreamFilter::translatedCharsets.
+     * 
+     * Unfortunately __construct doesn't seem to be called for this class, so
+     * setting up 'availableCharsets' in the constructor doesn't work out.
      */
     public function onCreate()
     {
         if (!empty($this->params['charset'])) {
-            $this->charset = $this->params['charset'];
+            $this->charset = strtoupper($this->params['charset']);
+        }
+        $availableCharsets = array_merge(
+            $this->additionalCharsets,
+            array_map('strtoupper', mb_list_encodings())
+        );
+        if (array_key_exists($this->charset, $this->translatedCharsets)) {
+            $this->charset = $this->translatedCharsets[$this->charset];
+        }
+        if (!in_array($this->charset, $availableCharsets)) {
+            $this->charset = 'pass';
         }
     }
 }
