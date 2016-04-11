@@ -17,9 +17,30 @@
             <directory suffix=".php">../src/</directory>
         </whitelist>
     </filter>
+    <!--
+    Files specified in order for code coverage reporting - for example, SimpleDi
+    as a singleton instance only gets constructed once, and for coverage to be
+    reported correctly, needs to be the first class tested.
+    -->
     <testsuites>
-        <testsuite name="MailMimeParser">
-            <directory suffix="Test.php">MailMimeParser</directory>
+        <testsuite name="Base">
+            <file>MailMimeParser/SimpleDiTest.php</file>
+            <file>MailMimeParser/MailMimeParserTest.php</file>
+            <file>MailMimeParser/MessageParserTest.php</file>
+            <file>MailMimeParser/MessageTest.php</file>
+            <file>MailMimeParser/MimePartFactoryTest.php</file>
+            <file>MailMimeParser/MimePartTest.php</file>
+            <file>MailMimeParser/NonMimePartTest.php</file>
+            <file>MailMimeParser/UUEncodedPartTest.php</file>
+        </testsuite>
+        <testsuite name="Header">
+            <directory suffix="Test.php">MailMimeParser/Header</directory>
+        </testsuite>
+        <testsuite name="Stream">
+            <directory suffix="Test.php">MailMimeParser/Stream</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

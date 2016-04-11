@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\ZIntegration;
+namespace ZBateson\MailMimeParser\IntegrationTests;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
