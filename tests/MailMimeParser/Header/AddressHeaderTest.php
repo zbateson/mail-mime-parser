@@ -25,10 +25,18 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf, $mlpf);
     }
     
+    public function testEmptyHeader()
+    {
+        $header = new AddressHeader($this->consumerService, 'TO', '');
+        $this->assertEquals('', $header->getValue());
+        $this->assertNull($header->getPersonName());
+    }
+    
     public function testSingleAddress()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $this->assertEmpty($header->getPersonName());
         $this->assertEquals('From', $header->getName());
     }
     
@@ -36,6 +44,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
     {
         $header = new AddressHeader($this->consumerService, 'From', 'Kool Aid <koolaid@dontdrinkit.com>');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $this->assertEquals('Kool Aid', $header->getPersonName());
         $addresses = $header->getParts();
         $this->assertCount(1, $addresses);
         $this->assertEquals('Kool Aid', $addresses[0]->getName());
