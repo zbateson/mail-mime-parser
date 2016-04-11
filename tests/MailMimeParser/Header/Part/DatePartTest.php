@@ -23,4 +23,13 @@ class DatePartTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($date);
         $this->assertEquals($value, $date->format(DateTime::RFC2822));
     }
+    
+    public function testInvalidDate()
+    {
+        $value = 'Invalid Date';
+        $part = new DatePart($value);
+        $this->assertEquals($value, $part->getValue());
+        $date = $part->getDateTime();
+        $this->assertNull($date);
+    }
 }
