@@ -76,6 +76,7 @@ class AddressBaseConsumer extends AbstractConsumer
      * AddressBaseConsumer doesn't have start/end tokens, and so always returns
      * false.
      * 
+     * @codeCoverageIgnore
      * @param string $token
      * @return boolean false
      */
@@ -88,6 +89,7 @@ class AddressBaseConsumer extends AbstractConsumer
      * Never reached by AddressBaseConsumer. Overridden to satisfy
      * AbstractConsumer.
      * 
+     * @codeCoverageIgnore
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token

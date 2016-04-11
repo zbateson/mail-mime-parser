@@ -66,4 +66,12 @@ class AbstractConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($ret);
         $this->assertCount(6, $ret);
     }
+    
+    public function testInvokeWithEmptyValue()
+    {
+        $stub = $this->abstractConsumerStub;
+        $ret = $stub('');
+        $this->assertEmpty($ret);
+        $this->assertEquals([], $ret);
+    }
 }

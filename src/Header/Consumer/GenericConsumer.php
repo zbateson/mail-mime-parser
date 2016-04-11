@@ -66,6 +66,7 @@ class GenericConsumer extends AbstractConsumer
      * GenericConsumer doesn't have start/end tokens, and so always returns
      * false.
      * 
+     * @codeCoverageIgnore
      * @param string $token
      * @return boolean false
      */

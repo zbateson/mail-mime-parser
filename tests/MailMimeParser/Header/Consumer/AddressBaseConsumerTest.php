@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @group Consumers
  * @group AddressBaseConsumer
  * @covers ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
 class AddressBaseConsumerTest extends PHPUnit_Framework_TestCase

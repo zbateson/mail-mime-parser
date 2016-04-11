@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @group Consumers
  * @group ParameterConsumer
  * @covers ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
 class ParameterConsumerTest extends PHPUnit_Framework_TestCase

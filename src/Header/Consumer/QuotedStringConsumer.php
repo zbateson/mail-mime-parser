@@ -34,7 +34,7 @@ class QuotedStringConsumer extends GenericConsumer
      * @param string $token
      * @return bool
      */
-    public function isStartToken($token)
+    protected function isStartToken($token)
     {
         return ($token === '"');
     }

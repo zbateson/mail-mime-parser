@@ -43,6 +43,11 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
     
+    /**
+     * 
+     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
+     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
+     */
     public function testQuotesMimeAndComments()
     {
         $header = new GenericHeader(
