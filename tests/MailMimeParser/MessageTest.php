@@ -17,7 +17,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $part = $this->getMockBuilder('ZBateson\MailMimeParser\MimePart')
             ->disableOriginalConstructor()
-            ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter'])
+            ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter', 'getContentResourceHandle'])
             ->getMock();
         return $part;
     }
@@ -46,12 +46,15 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $hf = $this->getMockedHeaderFactory();
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->willReturn('text/html');
+        $part->method('getContentResourceHandle')->willReturn('handle');
 
         $message = new Message($hf);
         $message->addPart($part);
         $this->assertNull($message->getTextPart());
         $this->assertNull($message->getAttachmentPart(0));
         $this->assertSame($part, $message->getHtmlPart());
+        $this->assertEquals('handle', $message->getHtmlStream());
+        $this->assertNull($message->getTextStream());
     }
 
     public function testAddTextPart()
@@ -59,12 +62,15 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $hf = $this->getMockedHeaderFactory();
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->willReturn('text/plain');
+        $part->method('getContentResourceHandle')->willReturn('handle');
 
         $message = new Message($hf);
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getAttachmentPart(0));
         $this->assertSame($part, $message->getTextPart());
+        $this->assertEquals('handle', $message->getTextStream());
+        $this->assertNull($message->getHtmlStream());
     }
 
     public function testAddAttachmentPart()
@@ -77,6 +83,15 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getTextPart());
+        $this->assertEquals(1, $message->getAttachmentCount());
         $this->assertSame($part, $message->getAttachmentPart(0));
+        $this->assertEquals([$part], $message->getAllAttachmentParts());
+    }
+    
+    public function testMessageIsMime()
+    {
+        $hf = $this->getMockedHeaderFactory();
+        $message = new Message($hf);
+        $this->assertFalse($message->isMime());
     }
 }
