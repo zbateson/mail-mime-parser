@@ -207,8 +207,11 @@ class PartStream
         $pos = $offset;
         switch ($whence) {
             case SEEK_CUR:
+                // @codeCoverageIgnoreStart
+                // this seems to be calculated for me in my version of PHP (5.5.9)
                 $pos = $this->position + $offset;
                 break;
+                // @codeCoverageIgnoreEnd
             case SEEK_END:
                 $pos = ($this->end - $this->start) + $offset;
                 break;
