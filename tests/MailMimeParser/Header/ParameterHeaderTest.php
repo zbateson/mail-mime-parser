@@ -12,6 +12,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @group Headers
  * @group ParameterHeader
  * @covers ZBateson\MailMimeParser\Header\ParameterHeader
+ * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
 class ParameterHeaderTest extends PHPUnit_Framework_TestCase
@@ -46,5 +47,11 @@ class ParameterHeaderTest extends PHPUnit_Framework_TestCase
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
         $this->assertEquals(null, $header->getValueFor('boundary'));
         $this->assertEquals('default', $header->getValueFor('test', 'default'));
+    }
+    
+    public function testParameterHeaderToString()
+    {
+        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
+        $this->assertEquals('Content-Type: text/html; CHARSET="utf-8"', $header);
     }
 }

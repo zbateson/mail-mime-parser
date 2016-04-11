@@ -12,6 +12,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @group Headers
  * @group DateHeader
  * @covers ZBateson\MailMimeParser\Header\DateHeader
+ * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
 class DateHeaderTest extends PHPUnit_Framework_TestCase
@@ -45,5 +46,11 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
     {
         $header = new DateHeader($this->consumerService, 'DATE', '');
         $this->assertNull($header->getDateTime());
+    }
+    
+    public function testDateHeaderToString()
+    {
+        $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
+        $this->assertEquals('Date: Wed, 17 May 2000 19:08:29 -0400', $header);
     }
 }

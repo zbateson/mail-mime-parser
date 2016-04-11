@@ -12,6 +12,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @group Headers
  * @group AddressHeader
  * @covers ZBateson\MailMimeParser\Header\AddressHeader
+ * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
 class AddressHeaderTest extends PHPUnit_Framework_TestCase
@@ -38,6 +39,12 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
         $this->assertEmpty($header->getPersonName());
         $this->assertEquals('From', $header->getName());
+    }
+    
+    public function testAddressHeaderToString()
+    {
+        $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
+        $this->assertEquals('From: koolaid@dontdrinkit.com', $header);
     }
     
     public function testSingleAddressWithName()
