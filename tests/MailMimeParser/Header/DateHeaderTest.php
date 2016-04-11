@@ -29,7 +29,9 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
     {
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->getValue());
-        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->getDateTime()->format(\DateTime::RFC2822));
+        $dt = $header->getDateTime();
+        $this->assertNotNull($dt);
+        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $dt->format(\DateTime::RFC2822));
     }
     
     public function testInvalidDate()
@@ -37,5 +39,11 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
         $header = new DateHeader($this->consumerService, 'DATE', 'This is not a date');
         $this->assertNull($header->getDateTime());
         $this->assertEquals('This is not a date', $header->getValue());
+    }
+    
+    public function testDateWithEmptyPart()
+    {
+        $header = new DateHeader($this->consumerService, 'DATE', '');
+        $this->assertNull($header->getDateTime());
     }
 }
