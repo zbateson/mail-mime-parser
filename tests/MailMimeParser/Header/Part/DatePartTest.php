@@ -10,6 +10,7 @@ use DateTime;
  * @group HeaderParts
  * @group DatePart
  * @covers ZBateson\MailMimeParser\Header\Part\DatePart
+ * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
 class DatePartTest extends PHPUnit_Framework_TestCase
