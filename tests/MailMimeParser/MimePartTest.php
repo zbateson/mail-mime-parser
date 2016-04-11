@@ -130,4 +130,21 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('param-value', $part->getHeaderParameter('first-header', 'param'));
     }
+    
+    public function testGetUnsetHeader()
+    {
+        $hf = $this->mockHeaderFactory;
+        $part = new MimePart($hf);
+        $this->assertNull($part->getHeader('Nothing'));
+        $this->assertNull($part->getHeaderValue('Nothing'));
+        $this->assertEquals('Default', $part->getHeaderValue('Nothing', 'Default'));
+    }
+    
+    public function testGetUnsetHeaderParameter()
+    {
+        $hf = $this->mockHeaderFactory;
+        $part = new MimePart($hf);
+        $this->assertNull($part->getHeaderParameter('Nothing', 'Non-Existent'));
+        $this->assertEquals('Default', $part->getHeaderParameter('Nothing', 'Non-Existent', 'Default'));
+    }
 }
