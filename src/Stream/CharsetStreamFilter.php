@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
+use ZBateson\MailMimeParser\SimpleDi;
 use php_user_filter;
 
 /**
@@ -27,27 +28,11 @@ class CharsetStreamFilter extends php_user_filter
     const STREAM_FILTER_NAME = 'mailmimeparser-encode';
     
     /**
-     * @var string the character set the stream is using
+     * @var ZBateson\MailMimeParser\Stream\Helper\CharsetConverter the charset
+     *      converter
      */
-    protected $charset = 'ISO-8859-1';
-    
-    /**
-     * @var array an array of additional charsets supported but not documented
-     */
-    private $additionalCharsets = [
-        'CP850',
-        'GB2312'
-    ];
-    
-    /**
-     * @var array an array of translated charsets (must be upper-case)
-     */
-    private $translatedCharsets = [
-        'US-ASCII' => 'ASCII',
-        'ISO-8859-8-I' => 'ISO-8859-8',
-        'WINDOWS-1255' => 'ISO-8859-8',
-    ];
-    
+    protected $converter = null;
+
     /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
      * 
@@ -60,7 +45,7 @@ class CharsetStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $converted = mb_convert_encoding($bucket->data, 'UTF-8', $this->charset);
+            $converted = $this->converter->convert($bucket->data);
             $consumed += strlen($bucket->data);
             
             // $this->stream is undocumented.  It was found looking at HHVM's source code
@@ -83,18 +68,12 @@ class CharsetStreamFilter extends php_user_filter
      */
     public function onCreate()
     {
+        $charset = 'ISO-8859-1';
         if (!empty($this->params['charset'])) {
-            $this->charset = strtoupper($this->params['charset']);
+            $charset = $this->params['charset'];
         }
-        $availableCharsets = array_merge(
-            $this->additionalCharsets,
-            array_map('strtoupper', mb_list_encodings())
-        );
-        if (array_key_exists($this->charset, $this->translatedCharsets)) {
-            $this->charset = $this->translatedCharsets[$this->charset];
-        }
-        if (!in_array($this->charset, $availableCharsets)) {
-            $this->charset = 'pass';
-        }
+        
+        $di = SimpleDi::singleton();
+        $this->converter = $di->newCharsetConverter($charset, 'UTF-8');
     }
 }
