@@ -285,7 +285,15 @@ class CharsetConverter
      */
     protected $toCharset;
     
+    /**
+     * @var boolean indicates if $fromCharset is supported by
+     * mb_convert_encoding
+     */
     protected $fromCharsetMbSupported = true;
+    
+    /**
+     * @var boolean indicates if $toCharset is supported by mb_convert_encoding
+     */
     protected $toCharsetMbSupported = true;
     
     /**
