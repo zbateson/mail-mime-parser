@@ -51,6 +51,7 @@ class CharsetConverter
         '1252' => 'WINDOWS-1252',
         'CP1252' => 'WINDOWS-1252',
         'WINDOWS1252' => 'WINDOWS-1252',
+        'WE8MSWIN1252' => 'WINDOWS-1252',
         '1254' => 'WINDOWS-1254',
         'CP1254' => 'WINDOWS-1254',
         'WINDOWS1254' => 'WINDOWS-1254',
