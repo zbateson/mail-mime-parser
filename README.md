@@ -33,11 +33,12 @@ $message = $mailParser->parse($handle);         // returns a ZBateson\MailMimePa
 fclose($handle);
 
 echo $message->getHeaderValue('from');          // user@example.com
-echo $message->getHeader('from')->getPersonName();    // Person Name
+echo $message
+    ->getHeader('from')
+    ->getPersonName();                          // Person Name
 echo $message->getHeaderValue('subject');       // The email's subject
 
-$res = $message->getTextStream();               // or getHtmlStream
-echo stream_get_contents($res);
+echo $message->getTextContent();                // or getHtmlContent
 
 $att = $message->getAttachmentPart(0);          // first attachment
 echo $att->getHeaderValue('Content-Type');      // text/plain for instance

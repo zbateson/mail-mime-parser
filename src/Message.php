@@ -185,6 +185,23 @@ class Message extends MimePart
     }
     
     /**
+     * Returns the text content as a string.
+     * 
+     * Reads the entire stream content into a string and returns it.  Returns
+     * null if the message doesn't have a text part.
+     * 
+     * @return string
+     */
+    public function getTextContent()
+    {
+        $stream = $this->getTextStream();
+        if ($stream === null) {
+            return null;
+        }
+        return stream_get_contents($stream);
+    }
+    
+    /**
      * Returns a resource handle where the HTML content can be read.
      * 
      * @return resource
@@ -195,6 +212,23 @@ class Message extends MimePart
             return $this->htmlPart->getContentResourceHandle();
         }
         return null;
+    }
+    
+    /**
+     * Returns the HTML content as a string.
+     * 
+     * Reads the entire stream content into a string and returns it.  Returns
+     * null if the message doesn't have an HTML part.
+     * 
+     * @return string
+     */
+    public function getHtmlContent()
+    {
+        $stream = $this->getHtmlStream();
+        if ($stream === null) {
+            return null;
+        }
+        return stream_get_contents($stream);
     }
     
     /**
