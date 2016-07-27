@@ -69,11 +69,15 @@ class CharsetStreamFilter extends php_user_filter
     public function onCreate()
     {
         $charset = 'ISO-8859-1';
+        $to = 'UTF-8';
         if (!empty($this->params['charset'])) {
             $charset = $this->params['charset'];
         }
+        if (!empty($this->params['to'])) {
+            $to = $this->params['to'];
+        }
         
         $di = SimpleDi::singleton();
-        $this->converter = $di->newCharsetConverter($charset, 'UTF-8');
+        $this->converter = $di->newCharsetConverter($charset, $to);
     }
 }

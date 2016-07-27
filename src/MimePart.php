@@ -201,4 +201,60 @@ class MimePart
     {
         return $this->parent;
     }
+    
+    protected function saveHeaders($handle)
+    {
+        foreach ($this->headers as $header) {
+            fwrite($handle, "$header\r\n");
+        }
+        fwrite($handle, "\r\n");
+    }
+    
+    protected function saveContent($handle)
+    {
+        if (!empty($this->handle)) {
+            $pos = ftell($handle);
+            rewind($this->handle);
+            $contentType = strtolower($this->getHeaderValue('Content-Type', 'text/plain'));
+            if (strpos($contentType, 'text/') === 0) {
+                $filter = stream_filter_append(
+                    $this->handle,
+                    'mailmimeparser-encode',
+                    STREAM_FILTER_READ,
+                    [
+                        'charset' => 'UTF-8',
+                        'to' => $this->getHeaderParameter('Content-Type', 'charset')
+                    ]
+                );
+                
+                $encodingFilter = null;
+                $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
+                switch ($encoding) {
+                    case 'quoted-printable':
+                        $encodingFilter = stream_filter_append($handle, 'convert.quoted-printable-encode', STREAM_FILTER_WRITE);
+                        break;
+                    case 'base64':
+                        $encodingFilter = stream_filter_append($handle, 'convert.base64-encode', STREAM_FILTER_WRITE);
+                        break;
+                    case 'x-uuencode':
+                        $encodingFilter = stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_WRITE);
+                        break;
+                    default:
+                        break;
+                }
+                
+                stream_copy_to_stream($this->handle, $handle);
+                stream_filter_remove($filter);
+            } else {
+                stream_copy_to_stream($this->handle, $handle);
+            }
+            
+            fseek($handle, $pos);
+        }
+    }
+    
+    protected function save($handle)
+    {
+        $this->saveHeaders($handle);
+    }
 }

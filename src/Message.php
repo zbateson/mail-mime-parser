@@ -7,6 +7,8 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ArrayIterator;
+use Iterator;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -242,5 +244,47 @@ class Message extends MimePart
         $contentType = $this->getHeaderValue('Content-Type');
         $mimeVersion = $this->getHeaderValue('Mime-Version');
         return ($contentType !== null || $mimeVersion !== null);
+    }
+    
+    protected function saveParts($handle, Iterator $partsIter, $curParent)
+    {
+        while ($partsIter->valid()) {
+            $part = $partsIter->current();
+            $parent = $part->getParent();
+            if ($parent !== $curParent && $curParent !== $part) {
+                if ($curParent !== null && $parent === $curParent->getParent()) {
+                    fwrite($handle, "\r\n--");
+                    fwrite($handle, $curParent->getHeaderParameter('Content-Type', 'boundary'));
+                    fwrite($handle, "--\r\n\r\n");
+                } else {
+                    $this->saveParts($handle, $partsIter, $parent);
+                }
+                return;
+            }
+            if ($curParent !== null && $curParent->getHeaderParameter('Content-Type', 'boundary') != null) {
+                fwrite($handle, "\r\n--");
+                fwrite($handle, $curParent->getHeaderParameter('Content-Type', 'boundary'));
+                fwrite($handle, "\r\n");
+            }
+            if ($part !== $this) {
+                $part->save($handle);
+            } else {
+                $part->saveContent($handle);
+            }
+            $partsIter->next();
+        }
+    }
+    
+    public function save($handle)
+    {
+        $this->saveHeaders($handle);
+        $parts = $this->parts;
+        if (!empty($this->textPart)) {
+            array_unshift($parts, $this->textPart);
+        }
+        if (!empty($this->htmlPart)) {
+            array_unshift($parts, $this->htmlPart);
+        }
+        $this->saveParts($handle, new ArrayIterator($parts), $this);
     }
 }

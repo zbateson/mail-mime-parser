@@ -46,13 +46,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
     
-    private function runEmailTest($key, array $props) {
-        $handle = fopen($this->messageDir . '/' . $key . '.txt', 'r');
-        $message = $this->parser->parse($handle);
-        fclose($handle);
-
-        $failMessage = 'Failed while parsing ' . $key;
-
+    private function runEmailTestForMessage($message, array $props, $failMessage)
+    {
         if (isset($props['text'])) {
             $f = $message->getTextStream();
             $this->assertNotNull($f, $failMessage);
@@ -107,6 +102,24 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 }
             }
         }
+    }
+    
+    private function runEmailTest($key, array $props) {
+        $handle = fopen($this->messageDir . '/' . $key . '.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $failMessage = 'Failed while parsing ' . $key;
+        $this->runEmailTestForMessage($message, $props, $failMessage);
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for ' . $key;
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
     
     public function testParseEmailm0001()
