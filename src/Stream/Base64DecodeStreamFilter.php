@@ -42,7 +42,7 @@ class Base64DecodeStreamFilter extends php_user_filter
             $raw = $this->leftover . $raw;
             $this->leftover = '';
         }
-        $nLeftover = strlen($raw) % 3;
+        $nLeftover = strlen($raw) % 4;
         if ($nLeftover !== 0) {
             $this->leftover = substr($nLeftover, -$nLeftover);
         }
