@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Stream;
 use php_user_filter;
 
 /**
- * Stream filter converts uuencoded text to its raw binary.
+ * Stream filter converts binary streams to uuencoded text.
  *
  * @author Zaahid Bateson
  */
@@ -18,106 +18,72 @@ class UUEncodeStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mailmimeparser-uudecode';
+    const STREAM_FILTER_NAME = 'mailmimeparser-uuencode';
     
     /**
-     * @var string Leftovers from the last incomplete line that was parsed, to
-     *      be prepended to the next line read.
-     */
-    private $leftover = '';
-    
-    /**
-     * Returns an array of complete lines (including line endings) from the 
-     * passed $bucket object.
+     * UUEncodes the passed $data string and appends it to $out.
      * 
-     * If the last line on $bucket is incomplete, it's assigned to
-     * $this->leftover and prepended to the first element of the first line in
-     * the next call to getLines.
-     * 
-     * @param object $bucket
-     * @return string[]
+     * @param string $data data to convert
+     * @param resource $out output bucket stream
      */
-    private function getLines($bucket)
+    private function convertAndAppend($data, $out)
     {
-        $lines = preg_split(
-            '/([^\r\n]+[\r\n]+)/',
-            $bucket->data,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
-        );
-        if (!empty($this->leftover)) {
-            $lines[0] = $this->leftover . $lines[0];
-            $this->leftover = '';
-        }
-        $last = end($lines);
-        if ($last[strlen($last) - 1] !== "\n") {
-            $this->leftover = array_pop($lines);
-        }
-        return $lines;
+        $converted = convert_uuencode($data);
+        $cleaned = "\r\n" . rtrim(substr(rtrim($converted), 0, -1));      // remove end line ` character
+        stream_bucket_append($out, stream_bucket_new($this->stream, $cleaned));
     }
     
     /**
-     * Returns true if the passed $line is empty or matches the beginning header
-     * pattern for a uuencoded message.
+     * Appends the 'begin' header part of a uuencoded stream as:
+     * begin 666 $filename
      * 
-     * @param string $line
-     * @return bool
+     * @param resource $out output bucket stream
      */
-    private function isEmptyOrStartLine($line)
+    private function appendHeader($out)
     {
-        return (empty($line) || preg_match('/^begin \d{3} .*$/', $line));
-    }
-    
-    /**
-     * Returns true if the passed $line is either a backtick character '`' or
-     * the string 'end' signifying the end of the uuencoded message.
-     * 
-     * @param string $line
-     * @return bool
-     */
-    private function isEndLine($line)
-    {
-        return ($line === '`' || $line === 'end');
-    }
-    
-    /**
-     * Filters a single line of encoded input.  Returns NULL if the end has been
-     * reached.
-     * 
-     * @param string $line
-     * @return string the decoded line
-     */
-    private function filterLine($line)
-    {
-        $cur = trim($line);
-        if ($this->isEmptyOrStartLine($cur)) {
-            return '';
-        } elseif ($this->isEndLine($cur)) {
-            return null;
+        $filename = $this->params['file-name'];
+        if (!empty($filename)) {
+            $begin = "begin 666 $filename";
+            stream_bucket_append($out, stream_bucket_new($this->stream, $begin));
         }
-        return convert_uudecode($cur);
     }
     
     /**
-     * Filters the lines in the passed $lines array, returning a concatenated
-     * string of decoded lines.
+     * Reads from the input bucket stream, converts, and writes the uuencoded
+     * stream to $out.
      * 
-     * @param array $lines
-     * @param int $consumed
-     * @return string
+     * @param resource $in input bucket stream
+     * @param resource $out output bucket stream
+     * @param int $consumed incremented by number of bytes read from $in
      */
-    private function filterBucketLines(array $lines, &$consumed)
+    private function readAndConvert($in, $out, &$consumed)
     {
-        $data = '';
-        foreach ($lines as $line) {
-            $consumed += strlen($line);
-            $filtered = $this->filterLine($line);
-            if ($filtered === null) {
-                break;
-            }
-            $data .= $filtered;
+        $leftovers = '';
+        while ($bucket = stream_bucket_make_writeable($in)) {
+            $data = $leftovers . $bucket->data;
+            $consumed += $bucket->datalen;
+            $nRemain = strlen($data) % 45;
+            $leftovers = substr($data, -$nRemain);
+            $this->convertAndAppend(substr($data, 0, -$nRemain), $out, $consumed);
         }
-        return $data;
+        if (!empty($leftovers)) {
+            $this->convertAndAppend($leftovers, $out, $consumed);
+        }
+    }
+    
+    /**
+     * Appends the backtick and 'end' lines signifying the end of the uuencoded
+     * stream.
+     * 
+     * @param resouce $out output bucket stream
+     */
+    private function appendFooter($out)
+    {
+        $end = "\r\n`\r\n";
+        if (!empty($this->params['file-name'])) {
+            $end .= "end\r\n\r\n";
+        }
+        stream_bucket_append($out, stream_bucket_new($this->stream, $end));
     }
     
     /**
@@ -131,17 +97,9 @@ class UUEncodeStreamFilter extends php_user_filter
      */
     public function filter($in, $out, &$consumed, $closing)
     {
-        while ($bucket = stream_bucket_make_writeable($in)) {
-            $lines = $this->getLines($bucket);
-            $converted = $this->filterBucketLines($lines, $consumed);
-            
-            // $this->stream is undocumented.  It was found looking at HHVM's source code
-            // for its convert.iconv.* implementation in ConvertIconFilter and explained
-            // somewhat in this StackOverflow page: http://stackoverflow.com/a/31132646/335059
-            // declaring a member variable called 'stream' breaks the PHP implementation (5.5.9
-            // at least).
-            stream_bucket_append($out, stream_bucket_new($this->stream, $converted));
-        }
+        $this->appendHeader($out);
+        $this->readAndConvert($in, $out, $consumed);
+        $this->appendFooter($out);
         return PSFS_PASS_ON;
     }
 }
