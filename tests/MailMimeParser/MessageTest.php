@@ -58,6 +58,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         
         $this->assertNull($message->getTextPart());
         $this->assertNull($message->getAttachmentPart(0));
+        $this->assertSame($part, $message->getPartByMimeType('text/html'));
         $this->assertSame($part, $message->getHtmlPart());
         $this->assertEquals('handle', $message->getHtmlStream());
         $this->assertNull($message->getTextStream());
@@ -79,6 +80,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getAttachmentPart(0));
+        $this->assertSame($part, $message->getPartByMimeType('text/plain'));
         $this->assertSame($part, $message->getTextPart());
         $this->assertEquals('handle', $message->getTextStream());
         $this->assertNull($message->getHtmlStream());
@@ -97,6 +99,31 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $message->getAttachmentCount());
         $this->assertSame($part, $message->getAttachmentPart(0));
         $this->assertEquals([$part], $message->getAllAttachmentParts());
+    }
+    
+    public function testGetParts()
+    {
+        $hf = $this->getMockedHeaderFactory();
+        $part = $this->getMockedPart();
+        $part->method('getHeaderValue')->willReturn('image/png');
+        
+        $part2 = $this->getMockedPart();
+        $part2->method('getHeaderValue')->will($this->returnCallback(function($param) {
+            if ($param === 'Content-Type') {
+                return 'text/html';
+            }
+            return null;
+        }));
+
+        $message = new Message($hf);
+        $message->addPart($part);
+        $message->addPart($part2);
+        $this->assertNull($message->getTextPart());
+        $this->assertSame($part2, $message->getHtmlPart());
+        $this->assertEquals(2, $message->getPartCount());
+        $this->assertSame($part, $message->getPart(0));
+        $this->assertSame($part2, $message->getPart(1));
+        $this->assertEquals([$part, $part2], $message->getAllParts());
     }
     
     public function testMessageIsMime()
