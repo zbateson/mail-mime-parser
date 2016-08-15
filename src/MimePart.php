@@ -45,6 +45,17 @@ class MimePart
     protected $handle;
     
     /**
+     * @var \ZBateson\MailMimeParser\MimePart[] array of parts in this message 
+     */
+    protected $parts = [];
+    
+    /**
+     * @var \ZBateson\MailMimeParser\MimePart[] Maps mime types to parts for
+     * looking up in getPartByMimeType
+     */
+    protected $mimeToPart = [];
+    
+    /**
      * Sets up class dependencies.
      * 
      * @param HeaderFactory $headerFactory
@@ -64,6 +75,70 @@ class MimePart
         }
     }
 
+    /**
+     * Either adds the passed part to $this->textPart if its content type is
+     * text/plain, to $this->htmlPart if it's text/html, or adds the part to the
+     * parts array otherwise.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     */
+    public function addPart(MimePart $part)
+    {
+        $this->parts[] = $part;
+        $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+        $this->mimeToPart[$key] = $part;
+    }
+    
+    /**
+     * Returns the non-text, non-HTML part at the given 0-based index, or null
+     * if none is set.
+     * 
+     * @param int $index
+     * @return \ZBateson\MailMimeParser\MimePart
+     */
+    public function getPart($index)
+    {
+        if (!isset($this->parts[$index])) {
+            return null;
+        }
+        return $this->parts[$index];
+    }
+    
+    /**
+     * Returns all attachment parts.
+     * 
+     * @return \ZBateson\MailMimeParser\MimePart[]
+     */
+    public function getAllParts()
+    {
+        return $this->parts;
+    }
+    
+    /**
+     * Returns the number of attachments available.
+     * 
+     * @return int
+     */
+    public function getPartCount()
+    {
+        return count($this->parts);
+    }
+    
+    /**
+     * Returns the part associated with the passed mime type if it exists.
+     * 
+     * @param string $mimeType
+     * @return \ZBateson\MailMimeParser\MimePart or null
+     */
+    public function getPartByMimeType($mimeType)
+    {
+        $key = strtolower($mimeType);
+        if (isset($this->mimeToPart[$key])) {
+            return $this->mimeToPart[$key];
+        }
+        return null;
+    }
+    
     /**
      * Returns true if there's a content stream associated with the part.
      * 
@@ -202,7 +277,150 @@ class MimePart
         return $this->parent;
     }
     
-    protected function saveHeaders($handle)
+    /**
+     * Sets up a mailmimeparser-encode stream filter on the passed stream
+     * resource handle if applicable and returns a reference to the filter.
+     * 
+     * @param resource $handle
+     * @return resource a reference to the appended stream filter or null
+     */
+    private function setCharsetStreamFilterOnStream($handle)
+    {
+        $contentType = strtolower($this->getHeaderValue('Content-Type', 'text/plain'));
+        if (strpos($contentType, 'text/') === 0) {
+            return stream_filter_append(
+                $this->handle,
+                'mailmimeparser-encode',
+                STREAM_FILTER_READ,
+                [
+                    'charset' => 'UTF-8',
+                    'to' => $this->getHeaderParameter('Content-Type', 'charset', 'ISO-8859-1')
+                ]
+            );
+        }
+        return null;
+    }
+    
+    /**
+     * Appends a stream filter the passed resource handle based on the type of
+     * encoding for the current mime part.
+     * 
+     * @param resource $handle
+     * @return resource the stream filter
+     */
+    private function setTransferEncodingFilterOnStream($handle)
+    {
+        $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
+        $params = [
+            'line-length' => 76,
+            'line-break-chars' => "\r\n",
+        ];
+        $typeToEncoding = [
+            'quoted-printable' => 'convert.quoted-printable-encode',
+            'base64' => 'convert.base64-encode',
+        ];
+        if (isset($typeToEncoding[$encoding])) {
+            return $encodingFilter = stream_filter_append(
+                $handle,
+                $typeToEncoding[$encoding],
+                STREAM_FILTER_WRITE,
+                $params
+            );
+        }
+        return null;
+    }
+    
+    /**
+     * Returns true if the content-transfer-encoding header of the current part
+     * is set to 'x-uuencode'.
+     * 
+     * @return bool
+     */
+    private function isUUEncoded()
+    {
+        $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
+        return ($encoding === 'x-uuencode');
+    }
+    
+    /**
+     * Creates and appends a reading stream filter on to the passed resource
+     * handle.
+     * 
+     * for whatever reason this only works with STREAM_FITLER_READ setting it as
+     * write filter on $handle causes an out of memory error to be thrown.
+     * 
+     * @param resource $handle
+     * @return resource the appended stream filter
+     */
+    private function addUUEncodeReadFilter($handle)
+    {
+        return stream_filter_append(
+            $handle,
+            'mailmimeparser-uuencode',
+            STREAM_FILTER_READ
+        );
+    }
+    
+    /**
+     * Writes out the header for a uuencoded part to the passed stream resource
+     * handle.
+     * 
+     * @param resource $handle
+     */
+    private function writeUUEncodingHeader($handle)
+    {
+        fwrite($handle, 'begin 666 ' . $this->getHeaderParameter(
+            'Content-Disposition',
+            'filename',
+            $this->getHeaderParameter(
+                'Content-Type',
+                'name',
+                'null'
+            )
+        ));
+    }
+    
+    /**
+     * Writes out the footer for a uuencoded part to the passed stream resource
+     * handle.
+     * 
+     * @param resource $handle
+     */
+    private function writeUUEncodingFooter($handle)
+    {
+        fwrite($handle, "\r\n`\r\nend\r\n\r\n");
+    }
+    
+    /**
+     * Copies the content of the $fromHandle stream into the $toHandle stream,
+     * maintaining the current read position in $fromHandle and writing
+     * uuencode headers.
+     * 
+     * @param resource $fromHandle
+     * @param resource $toHandle
+     * @param bool $isUUEncoded
+     */
+    private function copyContentStream($fromHandle, $toHandle, $isUUEncoded)
+    {
+        $pos = ftell($fromHandle);
+        rewind($fromHandle);
+
+        if ($isUUEncoded) {
+            $this->writeUUEncodingHeader($toHandle);
+            stream_copy_to_stream($fromHandle, $toHandle);
+            $this->writeUUEncodingFooter($toHandle);
+        } else {
+            stream_copy_to_stream($fromHandle, $toHandle);
+        }
+        fseek($fromHandle, $pos);
+    }
+    
+    /**
+     * Writes out headers and follows them with an empty line.
+     * 
+     * @param resource $handle
+     */
+    protected function writeHeadersTo($handle)
     {
         foreach ($this->headers as $header) {
             fwrite($handle, "$header\r\n");
@@ -210,51 +428,42 @@ class MimePart
         fwrite($handle, "\r\n");
     }
     
-    protected function saveContent($handle)
+    /**
+     * Writes out the content portion of the mime part based on the headers that
+     * are set on the part, taking care of character/content-transfer encoding.
+     * 
+     * @param resource $handle
+     */
+    protected function writeContentTo($handle)
     {
         if (!empty($this->handle)) {
-            $pos = ftell($handle);
-            rewind($this->handle);
-            $contentType = strtolower($this->getHeaderValue('Content-Type', 'text/plain'));
-            if (strpos($contentType, 'text/') === 0) {
-                $filter = stream_filter_append(
-                    $this->handle,
-                    'mailmimeparser-encode',
-                    STREAM_FILTER_READ,
-                    [
-                        'charset' => 'UTF-8',
-                        'to' => $this->getHeaderParameter('Content-Type', 'charset')
-                    ]
-                );
-                
-                $encodingFilter = null;
-                $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
-                switch ($encoding) {
-                    case 'quoted-printable':
-                        $encodingFilter = stream_filter_append($handle, 'convert.quoted-printable-encode', STREAM_FILTER_WRITE);
-                        break;
-                    case 'base64':
-                        $encodingFilter = stream_filter_append($handle, 'convert.base64-encode', STREAM_FILTER_WRITE);
-                        break;
-                    case 'x-uuencode':
-                        $encodingFilter = stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_WRITE);
-                        break;
-                    default:
-                        break;
-                }
-                
-                stream_copy_to_stream($this->handle, $handle);
-                stream_filter_remove($filter);
-            } else {
-                stream_copy_to_stream($this->handle, $handle);
+            $filter = $this->setCharsetStreamFilterOnStream($handle);
+            $encodingFilter = $this->setTransferEncodingFilterOnStream($handle);
+            $isUUEncoded = $this->isUUEncoded();
+            if ($isUUEncoded) {
+                $encodingFilter = $this->addUUEncodeReadFilter($this->handle);
             }
-            
-            fseek($handle, $pos);
+            $this->copyContentStream($this->handle, $handle, $isUUEncoded);
+            if ($encodingFilter !== null) {
+                stream_filter_remove($encodingFilter);
+            }
+            if ($filter !== null) {
+                stream_filter_remove($filter);
+            }
         }
     }
     
-    protected function save($handle)
+    /**
+     * Writes out the MimePart to the passed resource.
+     * 
+     * Takes care of character and content transfer encoding on the output based
+     * on what headers are set.
+     * 
+     * @param resource $handle
+     */
+    protected function writeTo($handle)
     {
-        $this->saveHeaders($handle);
+        $this->writeHeadersTo($handle);
+        $this->writeContentTo($handle);
     }
 }

@@ -115,7 +115,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
         $message->save($tmpSaved);
         rewind($tmpSaved);
-        
+
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for ' . $key;

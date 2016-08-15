@@ -45,11 +45,17 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $hf = $this->getMockedHeaderFactory();
         $part = $this->getMockedPart();
-        $part->method('getHeaderValue')->willReturn('text/html');
+        $part->method('getHeaderValue')->will($this->returnCallback(function($param) {
+            if ($param === 'Content-Type') {
+                return 'text/html';
+            }
+            return null;
+        }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
         $message = new Message($hf);
         $message->addPart($part);
+        
         $this->assertNull($message->getTextPart());
         $this->assertNull($message->getAttachmentPart(0));
         $this->assertSame($part, $message->getHtmlPart());
@@ -61,7 +67,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $hf = $this->getMockedHeaderFactory();
         $part = $this->getMockedPart();
-        $part->method('getHeaderValue')->willReturn('text/plain');
+        $part->method('getHeaderValue')->will($this->returnCallback(function($param) {
+            if ($param === 'Content-Type') {
+                return 'text/plain';
+            }
+            return null;
+        }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
         $message = new Message($hf);

@@ -95,7 +95,7 @@ class MessageParser
                 $this->addRawHeaderToPart($header, $part);
                 $header = '';
             } else {
-                $line = ' ' . ltrim($line);
+                $line = "\r\n" . $line;
             }
             $header .= rtrim($line, "\r\n");
         } while (!empty($header));
@@ -159,6 +159,8 @@ class MessageParser
         if (!$skipPart) {
             $end = ftell($handle) - $boundaryLength;
             $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
+            $message->addPart($part);
+        } elseif ($part->getHeaderValue('Content-Type') === 'multipart/alternative') {
             $message->addPart($part);
         }
         return $endBoundaryFound;
