@@ -9,6 +9,8 @@ use DateTime;
  *
  * @group HeaderParts
  * @group DatePart
+ * @covers ZBateson\MailMimeParser\Header\Part\DatePart
+ * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
 class DatePartTest extends PHPUnit_Framework_TestCase
@@ -21,5 +23,14 @@ class DatePartTest extends PHPUnit_Framework_TestCase
         $date = $part->getDateTime();
         $this->assertNotEmpty($date);
         $this->assertEquals($value, $date->format(DateTime::RFC2822));
+    }
+    
+    public function testInvalidDate()
+    {
+        $value = 'Invalid Date';
+        $part = new DatePart($value);
+        $this->assertEquals($value, $part->getValue());
+        $date = $part->getDateTime();
+        $this->assertNull($date);
     }
 }

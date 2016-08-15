@@ -7,10 +7,12 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
- * Description of StructuredHeaderTest
+ * Description of GenericHeaderTest
  *
  * @group Headers
  * @group GenericHeader
+ * @covers ZBateson\MailMimeParser\Header\GenericHeader
+ * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
 class GenericHeaderTest extends PHPUnit_Framework_TestCase
@@ -41,6 +43,11 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
     
+    /**
+     * 
+     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
+     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
+     */
     public function testQuotesMimeAndComments()
     {
         $header = new GenericHeader(
@@ -59,5 +66,11 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
             'Dwayne (The Rock) Jackson'
         );
         $this->assertEquals('Dwayne Jackson', $header->getValue());
+    }
+    
+    public function testGenericHeaderToString()
+    {
+        $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
+        $this->assertEquals('Hunted-By: Hunter S. Thompson', $header);
     }
 }

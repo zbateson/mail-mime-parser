@@ -10,6 +10,8 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Consumers
  * @group ConsumerService
+ * @covers ZBateson\MailMimeParser\Header\Consumer\ConsumerService
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
 class ConsumerServiceTest extends PHPUnit_Framework_TestCase

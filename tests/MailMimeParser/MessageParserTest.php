@@ -7,6 +7,8 @@ use PHPUnit_Framework_TestCase;
  * Description of ParserTest
  *
  * @group MessageParser
+ * @group Base
+ * @covers ZBateson\MailMimeParser\MessageParser
  * @author Zaahid Bateson
  */
 class MessageParserTest extends PHPUnit_Framework_TestCase
@@ -31,6 +33,24 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
     protected function getMockedPart()
     {
         $part = $this->getMockBuilder('ZBateson\MailMimeParser\MimePart')
+            ->disableOriginalConstructor()
+            ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter'])
+            ->getMock();
+        return $part;
+    }
+    
+    protected function getMockedUUEncodedPart()
+    {
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\UUEncodedPart')
+            ->disableOriginalConstructor()
+            ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter'])
+            ->getMock();
+        return $part;
+    }
+    
+    protected function getMockedNonMimePart()
+    {
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\NonMimePart')
             ->disableOriginalConstructor()
             ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter'])
             ->getMock();
@@ -101,7 +121,8 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
     public function testParseMultipartAlternativeMessage()
     {
         $email =
-            "Content-Type: multipart/alternative; boundary=balderdash\r\n"
+            "Content-Type: multipart/alternative;\r\n"
+            . " boundary=balderdash\r\n"
             . "Subject: I'm a tiny little wee teapot\r\n"
             . "\r\n"
             . "--balderdash\r\n"
@@ -290,11 +311,15 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
         $email .= "begin 664 message.txt\r\n"
             . convert_uuencode($messageText)
-            . "\r\nend\r\n";
+            . "\r\nend\r\n\r\n";
         $endPos = strlen($email);
+        $startPos2 = $endPos;
+        $email .= "begin 664 message2.txt\r\n"
+            . convert_uuencode('No, Tommy. ... It\'s tiptop. It\'s just I\'m not sure about the colour.')
+            . "\r\nend\r\n";
+        $endPos2 = strlen($email);
         
         $message = $this->getMockedMessage();
-        $message->method('getHeaderValue')->willReturn('text/plain');
         $message->expects($this->exactly(2))
             ->method('setRawHeader')
             ->withConsecutive(
@@ -304,8 +329,42 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
 
         $partFactory = $this->getMockedPartFactory();
         $self = $this;
-        $partFactory->method('newMimePart')->will($this->returnCallback(function () use ($self) {
-            return $self->getMockedPart();
+        $partFactory->method('newUUEncodedPart')->will($this->returnCallback(function () use ($self) {
+            return $self->getMockedUUEncodedPart();
+        }));
+        $partStreamRegistry = $this->getMockedPartStreamRegistry();
+        $partStreamRegistry->method('attachPartStreamHandle')
+            ->withConsecutive(
+                [$this->anything(), $this->anything(), $startPos, $endPos],
+                [$this->anything(), $this->anything(), $startPos2, $endPos2]
+            );
+        
+        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+    }
+    
+    public function testParseNonMimeMessage()
+    {
+        $email =
+            "Subject: The Diamonds\r\n"
+            . "To: Cousin Avi\r\n"
+            . "\r\n";
+        $startPos = strlen($email);
+        $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
+        $email .= $messageText . "\r\n";
+        $endPos = strlen($email);
+        
+        $message = $this->getMockedMessage();
+        $message->expects($this->exactly(2))
+            ->method('setRawHeader')
+            ->withConsecutive(
+                ['Subject', 'The Diamonds'],
+                ['To', 'Cousin Avi']
+            );
+
+        $partFactory = $this->getMockedPartFactory();
+        $self = $this;
+        $partFactory->method('newNonMimePart')->will($this->returnCallback(function () use ($self) {
+            return $self->getMockedNonMimePart();
         }));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->once())

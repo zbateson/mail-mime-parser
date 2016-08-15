@@ -10,6 +10,8 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Consumers
  * @group QuotedStringConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
 class QuotedStringConsumerTest extends PHPUnit_Framework_TestCase

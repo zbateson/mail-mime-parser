@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
+use ZBateson\MailMimeParser\SimpleDi;
 use php_user_filter;
 
 /**
@@ -27,10 +28,11 @@ class CharsetStreamFilter extends php_user_filter
     const STREAM_FILTER_NAME = 'mailmimeparser-encode';
     
     /**
-     * @var string the character set the stream is using
+     * @var \ZBateson\MailMimeParser\Stream\Helper\CharsetConverter the charset
+     *      converter
      */
-    protected $charset = 'iso-8859-1';
-    
+    protected $converter = null;
+
     /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
      * 
@@ -43,7 +45,7 @@ class CharsetStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $converted = mb_convert_encoding($bucket->data, 'UTF-8', $this->charset);
+            $converted = $this->converter->convert($bucket->data);
             $consumed += strlen($bucket->data);
             
             // $this->stream is undocumented.  It was found looking at HHVM's source code
@@ -57,12 +59,21 @@ class CharsetStreamFilter extends php_user_filter
     }
     
     /**
-     * Overridden to extract the charset from the params array.
+     * Overridden to extract the charset from the params array and check if the
+     * passed charset is supported or listed in the translation table in
+     * CharsetStreamFilter::translatedCharsets.
+     * 
+     * Unfortunately __construct doesn't seem to be called for this class, so
+     * setting up 'availableCharsets' in the constructor doesn't work out.
      */
     public function onCreate()
     {
+        $charset = 'ISO-8859-1';
         if (!empty($this->params['charset'])) {
-            $this->charset = $this->params['charset'];
+            $charset = $this->params['charset'];
         }
+        
+        $di = SimpleDi::singleton();
+        $this->converter = $di->newCharsetConverter($charset, 'UTF-8');
     }
 }

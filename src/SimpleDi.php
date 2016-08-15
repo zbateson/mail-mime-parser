@@ -13,6 +13,7 @@ use ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
 use ZBateson\MailMimeParser\Stream\QuotedPrintableDecodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
+use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -119,6 +120,21 @@ class SimpleDi
     {
         return new Message(
             $this->getHeaderFactory()
+        );
+    }
+    
+    /**
+     * Constructs and returns a new CharsetConverter object.
+     * 
+     * @param string $fromCharset source charset
+     * @param string $toCharset destination charset
+     * @return \ZBateson\MailMimeParser\Stream\Helper\CharsetConverter
+     */
+    public function newCharsetConverter($fromCharset, $toCharset)
+    {
+        return new CharsetConverter(
+            $fromCharset,
+            $toCharset
         );
     }
     

@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group HeaderPartFactory
+ * @covers ZBateson\MailMimeParser\Header\Part\HeaderPartFactory
  * @author Zaahid Bateson
  */
 class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
@@ -17,6 +18,13 @@ class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->headerPartFactory = new HeaderPartFactory();
+    }
+    
+    public function testNewInstance()
+    {
+        $token = $this->headerPartFactory->newInstance('Test');
+        $this->assertNotNull($token);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Token', $token);
     }
     
     public function testNewToken()

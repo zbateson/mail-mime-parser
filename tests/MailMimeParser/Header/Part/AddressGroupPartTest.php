@@ -8,6 +8,8 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group AddressGroupPart
+ * @covers ZBateson\MailMimeParser\Header\Part\AddressGroupPart
+ * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
 class AddressGroupPartTest extends PHPUnit_Framework_TestCase

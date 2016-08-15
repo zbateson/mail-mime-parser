@@ -1,7 +1,8 @@
 <?php
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\IntegrationTests;
 
 use PHPUnit_Framework_TestCase;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Description of EmailFunctionalTest
@@ -19,7 +20,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->parser = new MailMimeParser();
-        $this->messageDir = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails';
+        $this->messageDir = dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/emails';
     }
     
     protected function assertStringEqualsIgnoreWhiteSpace($test, $str, $message = null)

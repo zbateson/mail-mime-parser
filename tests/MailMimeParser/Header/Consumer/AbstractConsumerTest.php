@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group Consumers
  * @group AbstractConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
 class AbstractConsumerTest extends PHPUnit_Framework_TestCase
@@ -64,5 +65,13 @@ class AbstractConsumerTest extends PHPUnit_Framework_TestCase
         $ret = $stub($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(6, $ret);
+    }
+    
+    public function testInvokeWithEmptyValue()
+    {
+        $stub = $this->abstractConsumerStub;
+        $ret = $stub('');
+        $this->assertEmpty($ret);
+        $this->assertEquals([], $ret);
     }
 }

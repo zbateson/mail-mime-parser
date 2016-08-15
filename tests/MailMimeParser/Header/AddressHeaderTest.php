@@ -11,6 +11,8 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @group Headers
  * @group AddressHeader
+ * @covers ZBateson\MailMimeParser\Header\AddressHeader
+ * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
 class AddressHeaderTest extends PHPUnit_Framework_TestCase
@@ -24,17 +26,32 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf, $mlpf);
     }
     
+    public function testEmptyHeader()
+    {
+        $header = new AddressHeader($this->consumerService, 'TO', '');
+        $this->assertEquals('', $header->getValue());
+        $this->assertNull($header->getPersonName());
+    }
+    
     public function testSingleAddress()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $this->assertEmpty($header->getPersonName());
         $this->assertEquals('From', $header->getName());
+    }
+    
+    public function testAddressHeaderToString()
+    {
+        $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
+        $this->assertEquals('From: koolaid@dontdrinkit.com', $header);
     }
     
     public function testSingleAddressWithName()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'Kool Aid <koolaid@dontdrinkit.com>');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $this->assertEquals('Kool Aid', $header->getPersonName());
         $addresses = $header->getParts();
         $this->assertCount(1, $addresses);
         $this->assertEquals('Kool Aid', $addresses[0]->getName());

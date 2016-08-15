@@ -8,6 +8,8 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group CommentPart
+ * @covers ZBateson\MailMimeParser\Header\Part\CommentPart
+ * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
 class CommentPartTest extends PHPUnit_Framework_TestCase
