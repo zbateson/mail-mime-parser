@@ -11,6 +11,7 @@
     forceCoversAnnotation="true">
     <php>
         <const name="TEST_DATA_DIR" value="_data"/>
+        <const name="TEST_OUTPUT_DIR" value="_output"/>
     </php>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

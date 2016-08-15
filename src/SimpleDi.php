@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\PartStream;
+use ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
 use ZBateson\MailMimeParser\Stream\QuotedPrintableDecodeStreamFilter;
@@ -224,24 +225,23 @@ class SimpleDi
      */
     protected function registerStreamExtensions()
     {
+        stream_filter_register(UUDecodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUDecodeStreamFilter');
         stream_filter_register(UUEncodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUEncodeStreamFilter');
         stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\CharsetStreamFilter');
         stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\Stream\PartStream');
         
-        // hhvm compatibility -- at time of writing, no convert.* filters 
-        // should return false if already registered
-        $filters = stream_get_filters();
-        // @codeCoverageIgnoreStart
-        if (!in_array('convert.*', $filters)) {
-            stream_filter_register(
-                QuotedPrintableDecodeStreamFilter::STREAM_FILTER_NAME,
-                __NAMESPACE__ . '\Stream\QuotedPrintableDecodeStreamFilter'
-            );
-            stream_filter_register(
-                Base64DecodeStreamFilter::STREAM_FILTER_NAME,
-                __NAMESPACE__ . '\Stream\Base64DecodeStreamFilter'
-            );
-        }
-        // @codeCoverageIgnoreEnd
+        // originally created for HHVM compatibility, but decided to use them
+        // instead of built-in stream filters for reliability -- it seems the
+        // built-in base64-decode stream filter errors out when seeking back...
+        // possibly because it doesn't ignore whitespace completely?  Using
+        // line-break-chars didn't seem to help.
+        stream_filter_register(
+            QuotedPrintableDecodeStreamFilter::STREAM_FILTER_NAME,
+            __NAMESPACE__ . '\Stream\QuotedPrintableDecodeStreamFilter'
+        );
+        stream_filter_register(
+            Base64DecodeStreamFilter::STREAM_FILTER_NAME,
+            __NAMESPACE__ . '\Stream\Base64DecodeStreamFilter'
+        );
     }
 }
