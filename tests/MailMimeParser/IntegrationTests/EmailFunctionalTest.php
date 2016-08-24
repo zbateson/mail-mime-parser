@@ -3,6 +3,7 @@ namespace ZBateson\MailMimeParser\IntegrationTests;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Message;
 
 /**
  * Description of EmailFunctionalTest
@@ -1133,5 +1134,23 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             file_get_contents($this->messageDir . '/files/greenball.png'),
             $a2->getContent()
         );
+    }
+    
+    public function testParseFromStringm0001()
+    {
+        $str = file_get_contents($this->messageDir . '/m0001.txt');
+        $message = Message::from($str);
+        $this->runEmailTestForMessage($message, [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt'
+        ], 'Failed to parse m0001 from a string');
     }
 }

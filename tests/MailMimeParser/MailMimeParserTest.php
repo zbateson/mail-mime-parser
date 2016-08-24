@@ -32,15 +32,11 @@ class MailMimeParserTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $ret);
     }
     
-    public function testParseFromSmtpHandle()
+    public function testParseFromString()
     {
         $mmp = new MailMimeParser();
         
-        $handle = fopen('php://memory', 'rw');
-        fwrite($handle, "This is a test\r\n..\r\nblah\r\n.\r\n");
-        rewind($handle);
-        
-        $ret = $mmp->parse($handle, true);
+        $ret = $mmp->parse('This is a test');
         $this->assertNotNull($ret);
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $ret);
     }

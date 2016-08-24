@@ -49,6 +49,19 @@ class Message extends MimePart
     protected $attachmentParts = [];
     
     /**
+     * Convenience method to parse a handle or string into a Message without
+     * requiring including MailMimeParser, instantiating it, and calling parse.
+     * 
+     * @param resource|string $handleOrString the resource handle to the input
+     *        stream of the mime message, or a string containing a mime message
+     */
+    public static function from($handleOrString)
+    {
+        $mmp = new MailMimeParser();
+        return $mmp->parse($handleOrString);
+    }
+    
+    /**
      * Constructs a Message.
      * 
      * @param HeaderFactory $headerFactory

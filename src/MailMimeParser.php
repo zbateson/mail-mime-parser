@@ -42,15 +42,19 @@ class MailMimeParser
      * That way if the message is too large to hold in memory it can be written
      * to a temporary file if need be.
      * 
-     * @param resource $handle the resource handle to the input stream of the
-     *        mime message
+     * @param resource|string $handleOrString the resource handle to the input
+     *        stream of the mime message, or a string containing a mime message
      * @return \ZBateson\MailMimeParser\Message
      */
-    public function parse($handle)
+    public function parse($handleOrString)
     {
         // $tempHandle is attached to $message, and closed in its destructor
-        $tempHandle = fopen('php://temp', 'w+');
-        stream_copy_to_stream($handle, $tempHandle);
+        $tempHandle = fopen('php://temp', 'r+');
+        if (is_string($handleOrString)) {
+            fwrite($tempHandle, $handleOrString);
+        } else {
+            stream_copy_to_stream($handleOrString, $tempHandle);
+        }
         rewind($tempHandle);
         $parser = $this->di->newMessageParser();
         $message = $parser->parse($tempHandle);
