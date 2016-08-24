@@ -160,7 +160,25 @@ class MimePart
      */
     public function attachContentResourceHandle($contentHandle)
     {
+        if ($this->handle !== null && $this->handle !== $contentHandle) {
+            fclose($this->handle);
+        }
         $this->handle = $contentHandle;
+    }
+    
+    /**
+     * Sets the content of the part to the passed string (effectively creates
+     * a php://temp stream with the passed content and calls
+     * attachContentResourceHandle with the opened stream).
+     * 
+     * @param string $string
+     */
+    public function setContent($string)
+    {
+        $handle = fopen('php://temp', 'r+');
+        fwrite($handle, $string);
+        rewind($handle);
+        $this->attachContentResourceHandle($handle);
     }
     
     /**
@@ -174,6 +192,20 @@ class MimePart
     public function getContentResourceHandle()
     {
         return $this->handle;
+    }
+    
+    /**
+     * Shortcut to reading stream content and assigning it to a string.  Returns
+     * null if the part doesn't have a content stream.
+     * 
+     * @return string
+     */
+    public function getContent()
+    {
+        if ($this->hasContent()) {
+            return stream_get_contents($this->handle);
+        }
+        return null;
     }
     
     /**

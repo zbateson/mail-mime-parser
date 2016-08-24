@@ -1085,4 +1085,53 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'attachments' => 1
         ]);
     }
+    
+    public function testRewriteEmailContentm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $content = $message->getTextPart();
+        $content->setRawHeader('Content-Type', "text/html;\r\n\tcharset=\"iso-8859-1\"");
+        $test = '<span>This is my simple test</span>';
+        $content->setContent($test);
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $c2 = $messageWritten->getHtmlPart();
+        $this->assertEquals($test, $c2->getContent());
+    }
+    
+    public function testRewriteEmailAttachmentm2004()
+    {
+        $handle = fopen($this->messageDir . '/m2004.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $att = $message->getAttachmentPart(0);
+        $att->setRawHeader(
+            'Content-Disposition',
+            $att->getHeaderValue('Content-Disposition') . '; filename="greenball.png"'
+        );
+        $green = fopen($this->messageDir . '/files/greenball.png', 'r');
+        $att->attachContentResourceHandle($green);
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m2004", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $a2 = $messageWritten->getAttachmentPart(0);
+        $this->assertEquals($a2->getHeaderParameter('Content-Disposition', 'filename'), 'greenball.png');
+        $this->assertEquals(
+            file_get_contents($this->messageDir . '/files/greenball.png'),
+            $a2->getContent()
+        );
+    }
 }

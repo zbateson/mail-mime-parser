@@ -426,14 +426,14 @@ class Message extends MimePart
     }
     
     /**
-     * Shortcut to call Message::save with a php://memory stream and return the
+     * Shortcut to call Message::save with a php://temp stream and return the
      * written email message as a string.
      * 
      * @return string
      */
     public function __toString()
     {
-        $handle = fopen('php://memory', 'r+');
+        $handle = fopen('php://temp', 'r+');
         $this->save($handle);
         rewind($handle);
         $str = stream_get_contents($handle);
