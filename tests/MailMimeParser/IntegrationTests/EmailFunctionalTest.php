@@ -9,7 +9,14 @@ use ZBateson\MailMimeParser\MailMimeParser;
  *
  * @group Functional
  * @group EmailFunctionalTest
- * @coversNothing
+ * @covers ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter
+ * @covers ZBateson\MailMimeParser\Stream\Base64EncodeStreamFilter
+ * @covers ZBateson\MailMimeParser\Stream\CharsetStreamFilter
+ * @covers ZBateson\MailMimeParser\Stream\ConvertStreamFilter
+ * @covers ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter
+ * @covers ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter
+ * @covers ZBateson\MailMimeParser\Message
+ * @covers ZBateson\MailMimeParser\MimePart
  * @author Zaahid Bateson
  */
 class EmailFunctionalTest extends PHPUnit_Framework_TestCase
@@ -25,10 +32,14 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     
     protected function assertStringEqualsIgnoreWhiteSpace($test, $str, $message = null)
     {
-        $this->assertEquals(
-            trim(preg_replace('/\s+/', ' ', $test)),
-            trim(preg_replace('/\s+/', ' ', $str)),
-            $message
+        $equal = (trim(preg_replace('/\s+/', ' ', $test)) === trim(preg_replace('/\s+/', ' ', $str)));
+        if (!$equal) {
+            file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/fail_org", $test);
+            file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/fail_parsed", $str);
+        }
+        $this->assertTrue(
+            $equal,
+            $message . ' -- output written to _output/fail_org and _output/fail_parsed'
         );
     }
     
@@ -92,12 +103,29 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 if (!empty($name) && file_exists($this->messageDir . '/files/' . $name)) {
                     
                     if ($attachment->getHeaderValue('Content-Type') === 'text/html') {
-                        $this->assertHtmlContentTypeEquals($name, $attachment->getContentResourceHandle());
+                        $this->assertHtmlContentTypeEquals(
+                            $name,
+                            $attachment->getContentResourceHandle(),
+                            'HTML content is not equal'
+                        );
                     } elseif (stripos($attachment->getHeaderValue('Content-Type'), 'text/') === 0) {
-                        $this->assertTextContentTypeEquals($name, $attachment->getContentResourceHandle());
+                        $this->assertTextContentTypeEquals(
+                            $name,
+                            $attachment->getContentResourceHandle(),
+                            'Text content is not equal'
+                        );
                     } else {
                         $file = file_get_contents($this->messageDir . '/files/' . $name);
-                        $this->assertEquals($file, stream_get_contents($attachment->getContentResourceHandle()), $failMessage);
+                        $att = stream_get_contents($attachment->getContentResourceHandle());
+                        $equal = ($file === $att);
+                        if (!$equal) {
+                            file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_org", $file);
+                            file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_parsed", $att);
+                        }
+                        $this->assertTrue(
+                            $equal,
+                            $failMessage . " -- output written to _output/{$name}_fail_org and _output/{$name}_fail_parsed"
+                        );
                     }
                 }
             }
@@ -1027,6 +1055,23 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     public function testParseEmailm3005()
     {
         $this->runEmailTest('m3005', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'jschmuergen@example.com'
+            ],
+            'Subject' => 'The Hare and the Tortoise',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 1
+        ]);
+    }
+    
+    public function testParseEmailm3006()
+    {
+        $this->runEmailTest('m3006', [
             'From' => [
                 'name' => 'Doug Sauder',
                 'email' => 'dwsauder@example.com'

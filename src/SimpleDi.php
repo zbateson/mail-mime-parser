@@ -12,8 +12,9 @@ use ZBateson\MailMimeParser\Stream\PartStream;
 use ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
-use ZBateson\MailMimeParser\Stream\QuotedPrintableDecodeStreamFilter;
+use ZBateson\MailMimeParser\Stream\ConvertStreamFilter;
 use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
+use ZBateson\MailMimeParser\Stream\Base64EncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
 
 /**
@@ -232,12 +233,25 @@ class SimpleDi
         
         // originally created for HHVM compatibility, but decided to use them
         // instead of built-in stream filters for reliability -- it seems the
-        // built-in base64-decode stream filter errors out when seeking back...
-        // possibly because it doesn't ignore whitespace completely?  Using
-        // line-break-chars didn't seem to help.
+        // built-in base64-decode and encode stream filter does pretty much the
+        // same thing as HHVM's -- it only works on smaller streams where the
+        // entire stream comes in a single buffer.
+        $filters = stream_get_filters();
+        // @codeCoverageIgnoreStart
+        if (!in_array('convert.*', $filters)) {
+            stream_filter_register(
+                'convert.quoted-printable-decode',
+                __NAMESPACE__ . '\Stream\ConvertStreamFilter'
+            );
+            stream_filter_register(
+                'convert.quoted-printable-encode',
+                __NAMESPACE__ . '\Stream\ConvertStreamFilter'
+            );
+        }
+        // @codeCoverageIgnoreEnd
         stream_filter_register(
-            QuotedPrintableDecodeStreamFilter::STREAM_FILTER_NAME,
-            __NAMESPACE__ . '\Stream\QuotedPrintableDecodeStreamFilter'
+            Base64EncodeStreamFilter::STREAM_FILTER_NAME,
+            __NAMESPACE__ . '\Stream\Base64EncodeStreamFilter'
         );
         stream_filter_register(
             Base64DecodeStreamFilter::STREAM_FILTER_NAME,

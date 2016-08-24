@@ -318,12 +318,13 @@ class MimePart
         $typeToEncoding = [
             'quoted-printable' => 'convert.quoted-printable-encode',
             'base64' => 'convert.base64-encode',
+            'x-uuencode' => 'mailmimeparser-uuencode',
         ];
         if (isset($typeToEncoding[$encoding])) {
             return $encodingFilter = stream_filter_append(
                 $handle,
                 $typeToEncoding[$encoding],
-                STREAM_FILTER_WRITE,
+                STREAM_FILTER_READ,
                 $params
             );
         }
@@ -340,25 +341,6 @@ class MimePart
     {
         $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
         return ($encoding === 'x-uuencode');
-    }
-    
-    /**
-     * Creates and appends a reading stream filter on to the passed resource
-     * handle.
-     * 
-     * for whatever reason this only works with STREAM_FITLER_READ setting it as
-     * write filter on $handle causes an out of memory error to be thrown.
-     * 
-     * @param resource $handle
-     * @return resource the appended stream filter
-     */
-    private function addUUEncodeReadFilter($handle)
-    {
-        return stream_filter_append(
-            $handle,
-            'mailmimeparser-uuencode',
-            STREAM_FILTER_READ
-        );
     }
     
     /**
@@ -438,12 +420,8 @@ class MimePart
     {
         if (!empty($this->handle)) {
             $filter = $this->setCharsetStreamFilterOnStream($handle);
-            $encodingFilter = $this->setTransferEncodingFilterOnStream($handle);
-            $isUUEncoded = $this->isUUEncoded();
-            if ($isUUEncoded) {
-                $encodingFilter = $this->addUUEncodeReadFilter($this->handle);
-            }
-            $this->copyContentStream($this->handle, $handle, $isUUEncoded);
+            $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle);
+            $this->copyContentStream($this->handle, $handle, $this->isUUEncoded());
             if ($encodingFilter !== null) {
                 stream_filter_remove($encodingFilter);
             }
