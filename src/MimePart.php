@@ -76,9 +76,8 @@ class MimePart
     }
 
     /**
-     * Either adds the passed part to $this->textPart if its content type is
-     * text/plain, to $this->htmlPart if it's text/html, or adds the part to the
-     * parts array otherwise.
+     * Adds the passed part to the parts array, and registers non-attachment/
+     * non-multipart parts by their content type.
      * 
      * @param \ZBateson\MailMimeParser\MimePart $part
      */
@@ -86,7 +85,27 @@ class MimePart
     {
         $this->parts[] = $part;
         $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        $this->mimeToPart[$key] = $part;
+        $isMultipart = preg_match('~multipart/\w+~i', $key);
+        if ($part->getHeaderValue('Content-Disposition') === null && !$isMultipart) {
+            $this->mimeToPart[$key] = $part;
+        }
+    }
+    
+    /**
+     * Unregisters the child part from this part.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     */
+    public function removePart(MimePart $part)
+    {
+        $partsArray = [];
+        foreach ($this->parts as $apart) {
+            if ($apart !== $part) {
+                $partsArray[] = $apart;
+            }
+        }
+        unset($this->mimeToPart[$part->getHeaderValue('Content-Type', 'text/plain')]);
+        $this->parts = $partsArray;
     }
     
     /**
@@ -164,6 +183,14 @@ class MimePart
             fclose($this->handle);
         }
         $this->handle = $contentHandle;
+    }
+    
+    /**
+     * 
+     */
+    protected function detachContentResourceHandle()
+    {
+        $this->handle = null;
     }
     
     /**

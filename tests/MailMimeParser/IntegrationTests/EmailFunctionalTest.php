@@ -1153,4 +1153,106 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'text' => 'HasenundFrФsche.txt'
         ], 'Failed to parse m0001 from a string');
     }
+    
+    public function testRemoveAttachmentPartm0013()
+    {
+        $handle = fopen($this->messageDir . '/m0013.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'attachments' => 2
+        ];
+        
+        $message->removeAttachmentPart(0);
+        
+        $test1 = $props;
+        $test1['attachments'] = 1;
+        
+        $this->assertEquals(1, $message->getAttachmentCount());
+        $att = $message->getAttachmentPart(0);
+        $this->assertEquals('redball.png', $att->getHeaderParameter('Content-Disposition', 'filename'));
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0013');
+    }
+    
+    public function testRemoveContentPartsm0014()
+    {
+        $handle = fopen($this->messageDir . '/m0014.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->removeTextPart();
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+        ];
+        
+        $test1 = $props;
+        unset($test1['text']);
+        $this->assertNull($message->getTextPart());
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0014');
+    }
+    
+    public function testRemoveContentAndAttachmentPartsm0015()
+    {
+        $handle = fopen($this->messageDir . '/m0015.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->removeHtmlPart();
+        $message->removeAttachmentPart(0);
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+        ];
+        
+        $test1 = $props;
+        unset($test1['html']);
+        $test1['attachments'] = 1;
+        $this->assertNull($message->getHtmlPart());
+        $this->assertEquals(1, $message->getAttachmentCount());
+        $att = $message->getAttachmentPart(0);
+        $this->assertEquals('redball.png', $att->getHeaderParameter('Content-Disposition', 'filename'));
+        
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0015');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rm_m0015", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m0015';
+        $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+    }
 }

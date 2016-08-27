@@ -90,12 +90,12 @@ class Message extends MimePart
      * @param \ZBateson\MailMimeParser\MimePart $part
      * @return boolean true if its been added
      */
-    private function addToAlternativeContentPart(MimePart $part)
+    private function addToAlternativeContentPartFromParsed(MimePart $part)
     {
         $partType = $this->contentPart->getHeaderValue('Content-Type');
         if ($partType === 'multipart/alternative') {
             if ($this->contentPart === $this) {
-                parent::addPart($part);
+                // already added in addPart
                 return true;
             }
             $parent = $part->getParent();
@@ -117,12 +117,12 @@ class Message extends MimePart
      * @param \ZBateson\MailMimeParser\MimePart $part
      * @return bool
      */
-    private function addContentPart(MimePart $part)
+    private function addContentPartFromParsed(MimePart $part)
     {
         $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         // separate if statements for clarity
         if (!empty($this->contentPart)) {
-            return $this->addToAlternativeContentPart($part);
+            return $this->addToAlternativeContentPartFromParsed($part);
         }
         if ($type === 'multipart/alternative'
             || $type === 'text/plain'
@@ -146,7 +146,7 @@ class Message extends MimePart
         $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         $disposition = $part->getHeaderValue('Content-Disposition');
         $isMultipart = preg_match('~multipart/\w+~i', $type);
-        if ((!empty($disposition) || !$this->addContentPart($part)) && !$isMultipart) {
+        if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$isMultipart) {
             $this->attachmentParts[] = $part;
         }
     }
@@ -174,6 +174,104 @@ class Message extends MimePart
     }
     
     /**
+     * Sets the content of the message to the content of the passed part, for a
+     * message with a multipart/alternative content type where the other part
+     * has been removed, and this is the only remaining part.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     */
+    private function overrideAlternativeMessageContentFromContentPart(MimePart $part)
+    {
+        $contentType = $part->getHeaderValue('Content-Type');
+        if ($contentType === null) {
+            $contentType = 'text/plain; charset="us-ascii"';
+        }
+        $this->setRawHeader(
+            'Content-Type',
+            $contentType
+        );
+        $this->setRawHeader(
+            'Content-Transfer-Encoding',
+            'quoted-printable'
+        );
+        $this->attachContentResourceHandle($part->getContentResourceHandle());
+        $part->detachContentResourceHandle();
+        $this->removePart($part);
+        $this->removePart($this);
+        $this->addPart($this);
+    }
+    
+    /**
+     * Removes the passed MimePart as a content part.  If there's a remaining
+     * part, either sets the content on this message if the message itself is a
+     * multipart/alternative message, or overrides the contentPart with the
+     * remaining part.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     */
+    private function removePartFromAlternativeContentPart(MimePart $part)
+    {
+        $this->removePart($part);
+        $this->contentPart->removePart($part);
+        if ($this->contentPart === $this) {
+            $this->overrideAlternativeMessageContentFromContentPart($this->getPart(1));
+        } elseif ($this->contentPart->getPartCount() === 1) {
+            $this->removePart($this->contentPart);
+            $this->contentPart = $this->contentPart->getPart(0);
+            $this->contentPart->setParent($this);
+        }
+    }
+    
+    /**
+     * Loops over children of the content part looking for a part with the
+     * passed mime type, then proceeds to remove it by calling
+     * removePartFromAlternativeContentPart.
+     * 
+     * @param string $contentType
+     * @return boolean true on success
+     */
+    private function removeContentPartFromAlternative($contentType)
+    {
+        $parts = $this->contentPart->getAllParts();
+        foreach ($parts as $part) {
+            $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+            if ($type === $contentType) {
+                $this->removePartFromAlternativeContentPart($part);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Removes the content part of the message with the passed mime type.  If
+     * there is a remaining content part and it is an alternative part of the
+     * main message, the content part is moved to the message part.
+     * 
+     * If the content part is part of an alternative part beneath the message,
+     * the alternative part is replaced by the remaining content part.
+     * 
+     * @param string $contentType
+     * @return boolean true on success
+     */
+    protected function removeContentPart($contentType)
+    {
+        if (!isset($this->contentPart)) {
+            return false;
+        }
+        $type = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
+        if ($type === $contentType) {
+            if ($this->contentPart === $this) {
+                return false;
+            }
+            $this->removePart($this->contentPart);
+            $this->contentPart = null;
+            return true;
+        }
+        return $this->removeContentPartFromAlternative($contentType);
+    }
+    
+    /**
      * Returns the text part (or null if none is set.)
      * 
      * @return \ZBateson\MailMimeParser\MimePart
@@ -191,6 +289,28 @@ class Message extends MimePart
     public function getHtmlPart()
     {
         return $this->getContentPartByMimeType('text/html');
+    }
+    
+    /**
+     * Removes the text part of the message if one exists.  Returns true on
+     * success.
+     * 
+     * @return bool true on success
+     */
+    public function removeTextPart()
+    {
+        return $this->removeContentPart('text/plain');
+    }
+    
+    /**
+     * Removes the html part of the message if one exists.  Returns true on
+     * success.
+     * 
+     * @return bool true on success
+     */
+    public function removeHtmlPart()
+    {
+        return $this->removeContentPart('text/html');
     }
     
     /**
@@ -226,6 +346,18 @@ class Message extends MimePart
     public function getAttachmentCount()
     {
         return count($this->attachmentParts);
+    }
+    
+    /**
+     * Removes the attachment with the given index
+     * 
+     * @param int $index
+     */
+    public function removeAttachmentPart($index)
+    {
+        $part = $this->attachmentParts[$index];
+        $this->removePart($part);
+        array_splice($this->attachmentParts, $index, 1);
     }
     
     /**
