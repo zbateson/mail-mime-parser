@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Stream\StreamLeftover;
 
 /**
  * Represents a single part of a multi-part mime message.
@@ -377,14 +378,21 @@ class MimePart
      * encoding for the current mime part.
      * 
      * @param resource $handle
+     * @param \ZBateson\MailMimeParser\StreamLeftover $leftovers
      * @return resource the stream filter
      */
-    private function setTransferEncodingFilterOnStream($handle)
+    private function setTransferEncodingFilterOnStream($handle, StreamLeftover $leftovers)
     {
         $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
         $params = [
             'line-length' => 76,
             'line-break-chars' => "\r\n",
+            'leftovers' => $leftovers,
+            'filename' => $this->getHeaderParameter(
+                'Content-Type',
+                'name',
+                'null'
+            )
         ];
         $typeToEncoding = [
             'quoted-printable' => 'convert.quoted-printable-encode',
@@ -415,36 +423,6 @@ class MimePart
     }
     
     /**
-     * Writes out the header for a uuencoded part to the passed stream resource
-     * handle.
-     * 
-     * @param resource $handle
-     */
-    private function writeUUEncodingHeader($handle)
-    {
-        fwrite($handle, 'begin 666 ' . $this->getHeaderParameter(
-            'Content-Disposition',
-            'filename',
-            $this->getHeaderParameter(
-                'Content-Type',
-                'name',
-                'null'
-            )
-        ));
-    }
-    
-    /**
-     * Writes out the footer for a uuencoded part to the passed stream resource
-     * handle.
-     * 
-     * @param resource $handle
-     */
-    private function writeUUEncodingFooter($handle)
-    {
-        fwrite($handle, "\r\n`\r\nend\r\n\r\n");
-    }
-    
-    /**
      * Copies the content of the $fromHandle stream into the $toHandle stream,
      * maintaining the current read position in $fromHandle and writing
      * uuencode headers.
@@ -457,14 +435,7 @@ class MimePart
     {
         $pos = ftell($fromHandle);
         rewind($fromHandle);
-
-        if ($isUUEncoded) {
-            $this->writeUUEncodingHeader($toHandle);
-            stream_copy_to_stream($fromHandle, $toHandle);
-            $this->writeUUEncodingFooter($toHandle);
-        } else {
-            stream_copy_to_stream($fromHandle, $toHandle);
-        }
+        stream_copy_to_stream($fromHandle, $toHandle);
         fseek($fromHandle, $pos);
     }
     
@@ -491,10 +462,14 @@ class MimePart
     {
         if (!empty($this->handle)) {
             $filter = $this->setCharsetStreamFilterOnStream($handle);
-            $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle);
+            $leftovers = new StreamLeftover();
+            $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle, $leftovers);
             $this->copyContentStream($this->handle, $handle, $this->isUUEncoded());
             if ($encodingFilter !== null) {
                 stream_filter_remove($encodingFilter);
+                if (!empty($leftovers->encodedValue)) {
+                    fwrite($handle, $leftovers->encodedValue);
+                }
             }
             if ($filter !== null) {
                 stream_filter_remove($filter);

@@ -21,6 +21,16 @@ class UUEncodeStreamFilter extends php_user_filter
     const STREAM_FILTER_NAME = 'mailmimeparser-uuencode';
     
     /**
+     * @var StreamLeftover
+     */
+    private $leftovers;
+    
+    /**
+     * @var bool
+     */
+    private $headerWritten = false;
+    
+    /**
      * UUEncodes the passed $data string and appends it to $out.
      * 
      * @param string $data data to convert
@@ -38,6 +48,33 @@ class UUEncodeStreamFilter extends php_user_filter
     }
     
     /**
+     * Writes out the header for a uuencoded part to the passed stream resource
+     * handle.
+     * 
+     * @param resource $out
+     */
+    private function writeUUEncodingHeader($out)
+    {
+        $data = 'begin 666 ';
+        if (isset($this->params['filename'])) {
+            $data .= $this->params['filename'];
+        } else {
+            $data .= 'null';
+        }
+        stream_bucket_append($out, stream_bucket_new($this->stream, $data));
+    }
+    
+    /**
+     * Returns the footer for a uuencoded part.
+     * 
+     * @return string
+     */
+    private function getUUEncodingFooter()
+    {
+        return "\r\n`\r\nend\r\n\r\n";
+    }
+    
+    /**
      * Reads from the input bucket stream, converts, and writes the uuencoded
      * stream to $out.
      * 
@@ -47,23 +84,26 @@ class UUEncodeStreamFilter extends php_user_filter
      */
     private function readAndConvert($in, $out, &$consumed)
     {
-        $leftovers = '';
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $data = $leftovers . $bucket->data;
+            $data = $this->leftovers->value . $bucket->data;
+            if (!$this->headerWritten) {
+                $this->writeUUEncodingHeader($out);
+                $this->headerWritten = true;
+            }
             $consumed += $bucket->datalen;
             $nRemain = strlen($data) % 45;
             $toConvert = $data;
             if ($nRemain === 0) {
-                $leftovers = '';
+                $this->leftovers->value = '';
+                $this->leftovers->encodedValue = $this->getUUEncodingFooter();
             } else {
-                $leftovers = substr($data, -$nRemain);
+                $this->leftovers->value = substr($data, -$nRemain);
+                $this->leftovers->encodedValue = "\r\n" .
+                    rtrim(substr(rtrim(convert_uuencode($this->leftovers->value)), 0, -1))
+                    . $this->getUUEncodingFooter();
                 $toConvert = substr($data, 0, -$nRemain);
             }
             $this->convertAndAppend($toConvert, $out);
-        }
-        if (!empty($leftovers)) {
-            $this->convertAndAppend($leftovers, $out);
-            $leftovers = '';
         }
     }
     
@@ -80,5 +120,15 @@ class UUEncodeStreamFilter extends php_user_filter
     {
         $this->readAndConvert($in, $out, $consumed);
         return PSFS_PASS_ON;
+    }
+    
+    /**
+     * Sets up the leftovers object
+     */
+    public function onCreate()
+    {
+        if (isset($this->params['leftovers'])) {
+            $this->leftovers = $this->params['leftovers'];
+        }
     }
 }

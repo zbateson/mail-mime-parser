@@ -25,6 +25,25 @@ class Base64EncodeStreamFilter extends php_user_filter
     const STREAM_FILTER_NAME = 'convert.base64-encode';
     
     /**
+     * @var int number of bytes written for chunk-splitting
+     */
+    private $numBytesWritten = 0;
+    
+    /**
+     * @var StreamLeftover
+     */
+    private $leftovers;
+    
+    /**
+     * Constructs a StreamLeftover for $this->leftovers (just in case it wasn't
+     * set by the options param)
+     */
+    public function __construct()
+    {
+        $this->leftovers = new StreamLeftover();
+    }
+    
+    /**
      * Base64-encodes the passed $data string and appends it to $out.
      * 
      * @param string $data data to convert
@@ -32,7 +51,15 @@ class Base64EncodeStreamFilter extends php_user_filter
      */
     private function convertAndAppend($data, $out)
     {
-        $converted = chunk_split(base64_encode($data));
+        $converted = base64_encode($data);
+        $numBytes = strlen($converted);
+        if ($this->numBytesWritten != 0) {
+            $next = 76 - ($this->numBytesWritten % 76);
+            $converted = substr($converted, 0, $next) . "\r\n" . rtrim(chunk_split(substr($converted, $next)));
+        } else {
+            $converted = rtrim(chunk_split($converted));
+        }
+        $this->numBytesWritten += $numBytes;
         stream_bucket_append($out, stream_bucket_new($this->stream, $converted));
     }
     
@@ -46,24 +73,20 @@ class Base64EncodeStreamFilter extends php_user_filter
      */
     private function readAndConvert($in, $out, &$consumed)
     {
-        $leftovers = '';
-        $i = 0;
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $data = $leftovers . $bucket->data;
+            $data = $this->leftovers->value . $bucket->data;
             $consumed += $bucket->datalen;
             $nRemain = strlen($data) % 3;
             $toConvert = $data;
             if ($nRemain === 0) {
-                $leftovers = '';
+                $this->leftovers->value = '';
+                $this->leftovers->encodedValue = '';
             } else {
-                $leftovers = substr($data, -$nRemain);
+                $this->leftovers->value = substr($data, -$nRemain);
+                $this->leftovers->encodedValue = base64_encode($this->leftovers->value) . "\r\n";
                 $toConvert = substr($data, 0, -$nRemain);
             }
             $this->convertAndAppend($toConvert, $out);
-        }
-        if (!empty($leftovers)) {
-            $this->convertAndAppend($leftovers, $out);
-            $leftovers = '';
         }
     }
     
@@ -80,5 +103,15 @@ class Base64EncodeStreamFilter extends php_user_filter
     {
         $this->readAndConvert($in, $out, $consumed);
         return PSFS_PASS_ON;
+    }
+    
+    /**
+     * Sets up the leftovers object
+     */
+    public function onCreate()
+    {
+        if (isset($this->params['leftovers'])) {
+            $this->leftovers = $this->params['leftovers'];
+        }
     }
 }

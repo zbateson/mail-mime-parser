@@ -47,6 +47,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     protected function assertTextContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null)
     {
         $str = stream_get_contents($actualInputStream);
+        rewind($actualInputStream);
         $text = mb_convert_encoding(file_get_contents($this->messageDir . '/files/' . $expectedInputFileName), 'UTF-8', 'ISO-8859-1');
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
@@ -54,6 +55,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     protected function assertHtmlContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null)
     {
         $str = html_entity_decode(str_replace('&nbsp;', ' ', strip_tags(stream_get_contents($actualInputStream))));
+        rewind($actualInputStream);
         $text = mb_convert_encoding(file_get_contents($this->messageDir . '/files/' . $expectedInputFileName), 'UTF-8', 'ISO-8859-1');
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
@@ -117,7 +119,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                         );
                     } else {
                         $file = file_get_contents($this->messageDir . '/files/' . $name);
-                        $att = stream_get_contents($attachment->getContentResourceHandle());
+                        $handle = $attachment->getContentResourceHandle();
+                        $att = stream_get_contents($handle);
+                        rewind($handle);
                         $equal = ($file === $att);
                         if (!$equal) {
                             file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_org", $file);
@@ -1356,7 +1360,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         ];
         
         $this->assertNotNull($message->getHtmlPart());
-        //$this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0018');
+        $this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0018');
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0018", 'w+');
         $message->save($tmpSaved);
@@ -1365,6 +1369,97 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testAddAttachmentPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPart(
+            file_get_contents($this->messageDir . '/files/blueball.png'),
+            'image/png',
+            'blueball.png'
+        );
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            'attachments' => 1,
+        ];
+        
+        $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0001');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+        
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/redball.png',
+            'image/png'
+        );
+        $props['attachments'] = 2;
+        
+        $this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att2_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for second added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testAddLargeAttachmentPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/bin-bashy.jpg',
+            'image/jpeg'
+        );
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            'attachments' => 1,
+        ];
+        
+        $this->runEmailTestForMessage($message, $props, 'failed adding large attachment part to m0001');
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/attl_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for adding a large attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 }

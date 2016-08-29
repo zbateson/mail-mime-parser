@@ -586,6 +586,77 @@ class Message extends MimePart
     }
     
     /**
+     * Creates and returns a MimePart for use with a new attachment part being
+     * created.
+     * 
+     * @return \ZBateson\MailMimeParser\MimePart
+     */
+    protected function createPartForAttachment()
+    {
+        $part = null;
+        if ($this->isMime()) {
+            $part = $this->mimePartFactory->newMimePart();
+            $part->setRawHeader('Content-Transfer-Encoding', 'base64');
+            if ($this->getHeaderValue('Content-Type') !== 'multipart/mixed') {
+                $this->setMessageAsMixed();
+            }
+        } else {
+            $part = $this->mimePartFactory->newUUEncodedPart();
+        }
+        return $part;
+    }
+    
+    /**
+     * Adds an attachment part for the passed raw data string or handle and
+     * given parameters.
+     * 
+     * @param string|handle $stringOrHandle
+     * @param strubg $mimeType
+     * @param string $filename
+     * @param string $disposition
+     */
+    public function addAttachmentPart($stringOrHandle, $mimeType, $filename = null, $disposition = 'attachment')
+    {
+        if ($filename === null) {
+            $filename = 'file' . uniqid();
+        }
+        $filename = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
+        $part = $this->createPartForAttachment();
+        $part->setRawHeader('Content-Type', "$mimeType;\r\n\tname=\"$filename\"");
+        $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
+        $part->setParent($this);
+        $part->attachContentResourceHandle($this->getHandleForStringOrHandle($stringOrHandle));
+        $this->parts[] = $part;
+        $this->attachmentParts[] = $part;
+    }
+    
+    /**
+     * Adds an attachment part using the passed file.
+     * 
+     * Essentially creates a file stream and uses it.
+     * 
+     * @param string $file
+     * @param string $mimeType
+     * @param string $filename
+     * @param string $disposition
+     */
+    public function addAttachmentPartFromFile($file, $mimeType, $filename = null, $disposition = 'attachment')
+    {
+        $handle = fopen($file, 'r');
+        if ($filename === null) {
+            $filename = basename($file);
+        }
+        $filename = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
+        $part = $this->createPartForAttachment();
+        $part->setRawHeader('Content-Type', "$mimeType;\r\n\tname=\"$filename\"");
+        $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
+        $part->setParent($this);
+        $part->attachContentResourceHandle($handle);
+        $this->parts[] = $part;
+        $this->attachmentParts[] = $part;
+    }
+    
+    /**
      * Returns a resource handle where the text content can be read or null if
      * unavailable.
      * 
