@@ -121,7 +121,8 @@ class SimpleDi
     public function newMessage()
     {
         return new Message(
-            $this->getHeaderFactory()
+            $this->getHeaderFactory(),
+            $this->getPartFactory()
         );
     }
     

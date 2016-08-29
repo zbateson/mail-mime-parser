@@ -1255,4 +1255,116 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $failMessage = 'Failed while parsing saved message for m0015';
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
+    
+    public function testAddHtmlContentPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            'html' => 'hareandtortoise.txt',
+        ];
+        
+        $this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0001');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testAddTextAndHtmlContentPartm0013()
+    {
+        $handle = fopen($this->messageDir . '/m0013.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $this->assertNull($message->getTextPart());
+        $message->setTextPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2
+        ];
+        
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNotNull($message->getTextPart());
+        $this->runEmailTestForMessage($message, $props, 'failed adding HTML and Text parts to m0013');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0013", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0013';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testAddTextAndHtmlContentPartm0018()
+    {
+        $handle = fopen($this->messageDir . '/m0018.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 3,
+        ];
+        
+        $this->assertNotNull($message->getHtmlPart());
+        //$this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0018');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0018", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
 }

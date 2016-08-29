@@ -49,6 +49,12 @@ class Message extends MimePart
     protected $attachmentParts = [];
     
     /**
+     * @var \ZBateson\MailMimeParser\MimePartFactory a MimePartFactory to create
+     *      parts for attachments/content
+     */
+    protected $mimePartFactory;
+    
+    /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
      * 
@@ -65,10 +71,12 @@ class Message extends MimePart
      * Constructs a Message.
      * 
      * @param HeaderFactory $headerFactory
+     * @param MimePartFactory $mimePartFactory
      */
-    public function __construct(HeaderFactory $headerFactory)
+    public function __construct(HeaderFactory $headerFactory, MimePartFactory $mimePartFactory)
     {
         parent::__construct($headerFactory);
+        $this->mimePartFactory = $mimePartFactory;
         $this->objectId = uniqid();
     }
     
@@ -143,10 +151,8 @@ class Message extends MimePart
     public function addPart(MimePart $part)
     {
         parent::addPart($part);
-        $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         $disposition = $part->getHeaderValue('Content-Disposition');
-        $isMultipart = preg_match('~multipart/\w+~i', $type);
-        if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$isMultipart) {
+        if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
             $this->attachmentParts[] = $part;
         }
     }
@@ -289,6 +295,225 @@ class Message extends MimePart
     public function getHtmlPart()
     {
         return $this->getContentPartByMimeType('text/html');
+    }
+    
+    /**
+     * Returns an open resource handle for the passed string or resource handle.
+     * 
+     * For a string, creates a php://temp stream and returns it.
+     * 
+     * @param resource|string $stringOrHandle
+     * @return resource
+     */
+    private function getHandleForStringOrHandle($stringOrHandle)
+    {
+        $tempHandle = fopen('php://temp', 'r+');
+        if (is_string($stringOrHandle)) {
+            fwrite($tempHandle, $stringOrHandle);
+        } else {
+            stream_copy_to_stream($stringOrHandle, $tempHandle);
+        }
+        rewind($tempHandle);
+        return $tempHandle;
+    }
+    
+    /**
+     * Creates a unique mime boundary and assigns it to the passed part's
+     * Content-Type header with the passed mime type.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param string $mimeType
+     */
+    private function setMimeHeaderBoundaryOnPart(MimePart $part, $mimeType)
+    {
+        $part->setRawHeader(
+            'Content-Type',
+            "$mimeType;\r\n\tboundary=\"" 
+                . uniqid('----=MMP-' . $this->objectId . '.', true) . "\""
+        );
+    }
+    
+    /**
+     * Sets this message to be a multipart/alternative message, making space for
+     * another alternative content part.
+     * 
+     * Creates a content part and assigns the content stream from the message to
+     * that newly created part.
+     */
+    private function setMessageAsAlternative()
+    {
+        $contentPart = $this->mimePartFactory->newMimePart();
+        $contentPart->attachContentResourceHandle($this->handle);
+        $this->detachContentResourceHandle();
+        $contentType = 'text/plain; charset="us-ascii"';
+        $contentHeader = $this->getHeader('Content-Type');
+        if ($contentHeader !== null) {
+            $contentType = $contentHeader->getRawValue();
+        }
+        $contentPart->setRawHeader('Content-Type', $contentType);
+        $contentPart->setParent($this);
+        $this->setMimeHeaderBoundaryOnPart($this, 'multipart/alternative');
+        parent::addPart($contentPart);
+    }
+    
+    /**
+     * Creates a new mime part as a multipart/alternative, assigning it to
+     * $this->contentPart.  Adds the current contentPart below the newly created
+     * alternative part.
+     */
+    private function createAlternativeContentPart()
+    {
+        $altPart = $this->mimePartFactory->newMimePart();
+        $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
+        $this->contentPart->setParent($altPart);
+        $altPart->addPart($this->contentPart);
+        $this->contentPart = $altPart;
+        $altPart->setParent($this);
+        parent::addPart($altPart);
+    }
+    
+    /**
+     * Creates a new content part from the passed part, allowing the part to be
+     * used for something else (e.g. changing a non-mime message to a multipart
+     * mime message).
+     */
+    private function createNewContentPartFromPart(MimePart $part)
+    {
+        $contPart = $this->mimePartFactory->newMimePart();
+        $contPart->setRawHeader(
+            'Content-Type',
+            $part->getHeaderValue('Content-Type', 'text/plain') . ';charset="'
+            . $part->getHeaderParameter('Content-Type', 'charset', 'us-ascii')
+            . '"'
+        );
+        $contPart->setRawHeader(
+            'Content-Transfer-Encoding',
+            $part->getHeaderValue('Content-Transfer-Encoding', 'quoted-printable')
+        );
+        $contPart->attachContentResourceHandle($part->handle);
+        $part->detachContentResourceHandle();
+        return $contPart;
+    }
+    
+    /**
+     * Creates a new part out of the current contentPart and sets the message's
+     * type to be multipart/mixed.
+     */
+    private function setMessageAsMixed()
+    {
+        $part = $this->createNewContentPartFromPart($this->contentPart);
+        $this->removePart($this->contentPart);
+        parent::addPart($part);
+        $this->contentPart = $part;
+        $this->setMimeHeaderBoundaryOnPart($this, 'multipart/mixed');
+    }
+    
+    /**
+     * Enforces the message to be a mime message for a non-mime (e.g. uuencoded
+     * or unspecified) message.  If the message has uuencoded attachments, sets
+     * up the message as a multipart/mixed message and creates a content part.
+     */
+    private function enforceMime()
+    {
+        if (!$this->isMime()) {
+            if ($this->getAttachmentCount()) {
+                $this->setMessageAsMixed();
+            } else {
+                $this->setRawHeader('Content-Type', "text/plain;\r\n\tcharset=\"us-ascii\"");
+            }
+            $this->setRawHeader('Mime-Version', '1.0');
+        }
+    }
+    
+    /**
+     * Creates a new content part for the passed mimeType and charset, making
+     * space by creating a multipart/alternative if needed
+     * 
+     * @param string $mimeType
+     * @param string $charset
+     * @return \ZBateson\MailMimeParser\MimePart
+     */
+    private function createContentPartForMimeType($mimeType, $charset)
+    {
+        // wouldn't come here unless there's only one 'content part' anyway
+        // if this->contentPart === $this, then $this is not a multipart/alternative
+        // message
+        $mimePart = $this->mimePartFactory->newMimePart();
+        $cset = ($charset === null) ? 'UTF-8' : $charset;
+        $mimePart->setRawHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$cset\"");
+        $mimePart->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+        $this->enforceMime();
+        if ($this->contentPart === $this) {
+            $this->setMessageAsAlternative();
+            $mimePart->setParent($this->contentPart);
+            parent::addPart($mimePart);
+        } elseif ($this->contentPart !== null) {
+            $this->createAlternativeContentPart();
+            $mimePart->setParent($this->contentPart);
+            $this->contentPart->addPart($mimePart);
+        } else {
+            $this->contentPart = $mimePart;
+            $mimePart->setParent($this);
+            parent::addPart($mimePart);
+        }
+        return $mimePart;
+    }
+    
+    /**
+     * Either creates a mime part or sets the existing mime part with the passed
+     * mimeType to $strongOrHandle.
+     * 
+     * @param string $mimeType
+     * @param string|resource $stringOrHandle
+     * @param string $charset
+     */
+    protected function setContentPartForMimeType($mimeType, $stringOrHandle, $charset)
+    {
+        $part = $this->getTextPart();
+        if ($mimeType === 'text/html') {
+            $part = $this->getHtmlPart();
+        }
+        $handle = $this->getHandleForStringOrHandle($stringOrHandle);
+        if ($part === null) {
+            $part = $this->createContentPartForMimeType($mimeType, $charset);
+        } elseif ($charset !== null) {
+            $cset = ($charset === null) ? 'UTF-8' : $charset;
+            $contentType = $part->getHeaderValue('Content-Type', 'text/plain');
+            $part->setRawHeader('Content-Type', "$contentType;\r\n\tcharset=\"$cset\"");
+        }
+        $part->attachContentResourceHandle($handle);
+    }
+    
+    /**
+     * Sets the text/plain part of the message to the passed $stringOrHandle,
+     * either creating a new part if one doesn't exist for text/plain, or
+     * assigning the value of $stringOrHandle to an existing text/plain part.
+     * 
+     * The optional $charset parameter is the charset for saving to.
+     * $stringOrHandle is expected to be in UTF-8.
+     * 
+     * @param string|resource $stringOrHandle
+     * @param string $charset
+     */
+    public function setTextPart($stringOrHandle, $charset = null)
+    {
+        $this->setContentPartForMimeType('text/plain', $stringOrHandle, $charset);
+    }
+    
+    /**
+     * Sets the text/html part of the message to the passed $stringOrHandle,
+     * either creating a new part if one doesn't exist for text/html, or
+     * assigning the value of $stringOrHandle to an existing text/html part.
+     * 
+     * The optional $charset parameter is the charset for saving to.
+     * $stringOrHandle is expected to be in UTF-8.
+     * 
+     * @param string|resource $stringOrHandle
+     * @param string $charset
+     */
+    public function setHtmlPart($stringOrHandle, $charset = null)
+    {
+        $this->setContentPartForMimeType('text/html', $stringOrHandle, $charset);
     }
     
     /**
@@ -469,13 +694,13 @@ class Message extends MimePart
     private function writePartBoundaries($handle, MimePart $part, MimePart $parent, MimePart &$boundaryParent, $boundary)
     {
         if ($boundaryParent !== $parent && $boundaryParent !== $part) {
-            if ($boundaryParent !== null) {
+            if ($boundaryParent !== null && $parent->getParent() !== $boundaryParent) {
                 $this->writeBoundary($handle, $boundary, true);
             }
             $boundaryParent = $parent;
             $boundary = $boundaryParent->getHeaderParameter('Content-Type', 'boundary');
         }
-        if ($boundaryParent !== null) {
+        if ($boundaryParent !== null && $boundaryParent !== $part) {
             $this->writeBoundary($handle, $boundary);
         }
     }
@@ -567,7 +792,23 @@ class Message extends MimePart
     public function save($handle)
     {
         $this->writeHeadersTo($handle);
-        $this->writePartsTo($handle, new ArrayIterator($this->parts), $this);
+        $parts = [];
+        if ($this->contentPart !== null) {
+            if ($this->contentPart->isMultiPart()) {
+                $parts[] = $this->contentPart;
+                $parts = array_merge($parts, $this->contentPart->getAllParts());
+            } else {
+                $parts[] = $this->contentPart;
+            }
+        }
+        if (!empty($this->attachmentParts)) {
+            $parts = array_merge($parts, $this->attachmentParts);
+        }
+        $this->writePartsTo(
+            $handle,
+            new ArrayIterator($parts),
+            $this
+        );
     }
     
     /**

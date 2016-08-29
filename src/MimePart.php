@@ -85,8 +85,7 @@ class MimePart
     {
         $this->parts[] = $part;
         $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        $isMultipart = preg_match('~multipart/\w+~i', $key);
-        if ($part->getHeaderValue('Content-Disposition') === null && !$isMultipart) {
+        if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
             $this->mimeToPart[$key] = $part;
         }
     }
@@ -170,7 +169,20 @@ class MimePart
         }
         return false;
     }
-    
+
+    /**
+     * Returns true if this part's mime type is multipart/*
+     * 
+     * @return bool
+     */
+    public function isMultiPart()
+    {
+        return preg_match(
+            '~multipart/\w+~i',
+            $this->getHeaderValue('Content-Type', 'text/plain')
+        );
+    }
+
     /**
      * Attaches the resource handle for the part's content.  The attached handle
      * is closed when the MimePart object is destroyed.
