@@ -400,7 +400,7 @@ class MimePart
             'x-uuencode' => 'mailmimeparser-uuencode',
         ];
         if (isset($typeToEncoding[$encoding])) {
-            return $encodingFilter = stream_filter_append(
+            return stream_filter_append(
                 $handle,
                 $typeToEncoding[$encoding],
                 STREAM_FILTER_READ,

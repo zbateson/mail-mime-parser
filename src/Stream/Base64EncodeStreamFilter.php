@@ -35,15 +35,6 @@ class Base64EncodeStreamFilter extends php_user_filter
     private $leftovers;
     
     /**
-     * Constructs a StreamLeftover for $this->leftovers (just in case it wasn't
-     * set by the options param)
-     */
-    public function __construct()
-    {
-        $this->leftovers = new StreamLeftover();
-    }
-    
-    /**
      * Base64-encodes the passed $data string and appends it to $out.
      * 
      * @param string $data data to convert
@@ -112,6 +103,8 @@ class Base64EncodeStreamFilter extends php_user_filter
     {
         if (isset($this->params['leftovers'])) {
             $this->leftovers = $this->params['leftovers'];
+        } else {
+            $this->leftovers = new StreamLeftover();
         }
     }
 }
