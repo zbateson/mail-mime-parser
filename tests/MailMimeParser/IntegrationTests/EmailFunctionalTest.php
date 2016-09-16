@@ -94,6 +94,17 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         if (isset($props['Subject'])) {
             $this->assertEquals($props['Subject'], $message->getHeaderValue('subject'), $failMessage);
         }
+        
+        if (!empty($props['signed'])) {
+            $this->assertEquals('multipart/signed', $message->getHeaderValue('Content-Type'), $failMessage);
+            $protocol = $message->getHeaderParameter('Content-Type', 'protocol');
+            $micalg = $message->getHeaderParameter('Content-Type', 'micalg');
+            $signedPart = $message->getSignedPart();
+            $this->assertEquals($props['signed']['protocol'], $protocol, $failMessage);
+            $this->assertEquals($props['signed']['micalg'], $micalg, $failMessage);
+            $this->assertNotNull($signedPart, $failMessage);
+            $this->assertEquals($protocol, $signedPart->getHeaderValue('Content-Type'), $failMessage);
+        }
 
         if (!empty($props['attachments'])) {
             $this->assertEquals($props['attachments'], $message->getAttachmentCount(), $failMessage);
@@ -1465,5 +1476,244 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for adding a large attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testSetSignedPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ]
+        ];
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testSetSignedPartm0015()
+    {
+        $handle = fopen($this->messageDir . '/m0015.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0015", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0015';
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ]
+        ];
+        
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testSetSignedPartm0018()
+    {
+        $handle = fopen($this->messageDir . '/m0018.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0018", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ]
+        ];
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testSetSignedPartm1005()
+    {
+        $handle = fopen($this->messageDir . '/m1005.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m1005", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m1005';
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'html' => 'HasenundFrФsche.txt',
+            'attachments' => 4,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ]
+        ];
+        
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testParseEmailm4001()
+    {
+        $this->runEmailTest('m4001', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'text' => 'HasenundFrФsche.txt',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ],
+        ]);
+    }
+    
+    public function testParseEmailm4002()
+    {
+        $this->runEmailTest('m4002', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ],
+        ]);
+    }
+    
+    public function testParseEmailm4003()
+    {
+        $this->runEmailTest('m4003', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ],
+        ]);
+    }
+    
+    public function testParseEmailm4004()
+    {
+        $this->runEmailTest('m4004', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'html' => 'HasenundFrФsche.txt',
+            'attachments' => 4,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ],
+        ]);
     }
 }

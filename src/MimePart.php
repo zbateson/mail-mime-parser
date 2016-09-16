@@ -263,6 +263,16 @@ class MimePart
     }
     
     /**
+     * Removes the header with the given name
+     * 
+     * @param string $name
+     */
+    public function removeHeader($name)
+    {
+        unset($this->headers[strtolower($name)]);
+    }
+    
+    /**
      * Returns the AbstractHeader object for the header with the given $name
      * 
      * Note that mime headers aren't case sensitive.

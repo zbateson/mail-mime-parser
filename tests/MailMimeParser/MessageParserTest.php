@@ -273,7 +273,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $message->method('getHeaderParameter')
             ->willReturn('balderdash');
         
-        $message->expects($this->exactly(5))
+        $message->expects($this->exactly(6))
             ->method('addPart');
         
         $partFactory = $this->getMockedPartFactory();

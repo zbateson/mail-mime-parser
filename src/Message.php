@@ -43,6 +43,12 @@ class Message extends MimePart
     protected $contentPart;
     
     /**
+     * @var \ZBateson\MailMimeParser\MimePart contains the body of the signature
+     *      for a multipart/signed message.
+     */
+    protected $signedSignaturePart;
+    
+    /**
      * @var \ZBateson\MailMimeParser\MimePart[] array of non-content parts in
      *      this message 
      */
@@ -152,7 +158,12 @@ class Message extends MimePart
     {
         parent::addPart($part);
         $disposition = $part->getHeaderValue('Content-Disposition');
-        if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
+        $mtype = $this->getHeaderValue('Content-Type');
+        $protocol = $this->getHeaderParameter('Content-Type', 'protocol');
+        $type = $part->getHeaderValue('Content-Type');
+        if ($mtype === 'multipart/signed' && $protocol !== null && $part->getParent() === $this && strcasecmp($protocol, $type) === 0) {
+            $this->signedSignaturePart = $part;
+        } else if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
             $this->attachmentParts[] = $part;
         }
     }
@@ -318,6 +329,16 @@ class Message extends MimePart
     }
     
     /**
+     * Creates and returns a unique boundary.
+     * 
+     * @return string
+     */
+    private function getUniqueBoundary()
+    {
+        return uniqid('----=MMP-' . $this->objectId . '.', true);
+    }
+    
+    /**
      * Creates a unique mime boundary and assigns it to the passed part's
      * Content-Type header with the passed mime type.
      * 
@@ -329,7 +350,7 @@ class Message extends MimePart
         $part->setRawHeader(
             'Content-Type',
             "$mimeType;\r\n\tboundary=\"" 
-                . uniqid('----=MMP-' . $this->objectId . '.', true) . "\""
+                . $this->getUniqueBoundary() . "\""
         );
     }
     
@@ -373,6 +394,29 @@ class Message extends MimePart
     }
     
     /**
+     * Copies Content-Type and Content-Transfer-Encoding headers from the $from
+     * header into the $to header. If the Content-Type header isn't defined in
+     * $from, defaults to text/plain and quoted-printable.
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $from
+     * @param \ZBateson\MailMimeParser\MimePart $to
+     */
+    private function copyTypeHeadersFromPartToPart(MimePart $from, MimePart $to)
+    {
+        $typeHeader = $from->getHeader('Content-Type');
+        if (!empty($typeHeader)) {
+            $to->setRawHeader('Content-Type', $typeHeader->getRawValue());
+            $encodingHeader = $from->getHeader('Content-Transfer-Encoding');
+            if (!empty($encodingHeader)) {
+                $to->setRawHeader('Content-Transfer-Encoding', $encodingHeader->getRawValue());
+            }
+        } else {
+            $to->setRawHeader('Content-Type', 'text/plain;charset=us-ascii');
+            $to->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+        }
+    }
+    
+    /**
      * Creates a new content part from the passed part, allowing the part to be
      * used for something else (e.g. changing a non-mime message to a multipart
      * mime message).
@@ -380,16 +424,7 @@ class Message extends MimePart
     private function createNewContentPartFromPart(MimePart $part)
     {
         $contPart = $this->mimePartFactory->newMimePart();
-        $contPart->setRawHeader(
-            'Content-Type',
-            $part->getHeaderValue('Content-Type', 'text/plain') . ';charset="'
-            . $part->getHeaderParameter('Content-Type', 'charset', 'us-ascii')
-            . '"'
-        );
-        $contPart->setRawHeader(
-            'Content-Transfer-Encoding',
-            $part->getHeaderValue('Content-Transfer-Encoding', 'quoted-printable')
-        );
+        $this->copyTypeHeadersFromPartToPart($part, $contPart);
         $contPart->attachContentResourceHandle($part->handle);
         $part->detachContentResourceHandle();
         return $contPart;
@@ -406,6 +441,89 @@ class Message extends MimePart
         parent::addPart($part);
         $this->contentPart = $part;
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/mixed');
+    }
+    
+    /**
+     * This function makes space by moving the main message part down one level.
+     * 
+     * The content-type and content-transfer-encoding headers are copied from
+     * this message to the newly created part, the resource handle is moved and
+     * detached, any attachments and content parts with parents set to this
+     * message get their parents set to the newly created part.
+     */
+    private function makeSpaceForMultipartSignedMessage()
+    {
+        $this->enforceMime();
+        $messagePart = $this->mimePartFactory->newMimePart();
+        $this->copyTypeHeadersFromPartToPart($this, $messagePart);
+        $messagePart->attachContentResourceHandle($this->handle);
+        $this->detachContentResourceHandle();
+        $messagePart->setParent($this);
+        foreach ($this->attachmentParts as $part) {
+            if ($part->getParent() === $this) {
+                $part->setParent($messagePart);
+            }
+        }
+        array_unshift($this->parts, $messagePart);
+        if ($this->contentPart === $this) {
+            $this->contentPart = $messagePart;
+        } elseif ($this->contentPart->getParent() === $this) {
+            $this->contentPart->setParent($messagePart);
+        }
+    }
+    
+    /**
+     * Creates and returns a new MimePart for the signature part of a
+     * multipart/signed message and assigns it to $this->signedSignaturePart.
+     * 
+     * @param string $protocol
+     * @param string $body
+     */
+    private function createSignaturePart($protocol, $body)
+    {
+        $signedPart = $this->mimePartFactory->newMimePart();
+        $signedPart->setRawHeader('Content-Type', $protocol);
+        $signedPart->setContent($body);
+        $this->parts[] = $signedPart;
+        $signedPart->setParent($this);
+        $this->signedSignaturePart = $signedPart;
+    }
+    
+    /**
+     * Turns the message into a multipart/signed message, moving the actual
+     * message into a child part, sets the content-type of the main message to
+     * multipart/signed and adds a signature part as well.
+     * 
+     * @param string $micalg The Message Integrity Check algorithm being used
+     * @param string $protocol The mime-type of the signature body
+     * @param string $body The signature signed according to the value of
+     *        $protocol
+     */
+    public function setSignature($micalg, $protocol, $body)
+    {
+        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
+        if (strtolower($contentType) !== 'multipart/signed' && $contentType !== 'multipart/mixed') {
+            $this->makeSpaceForMultipartSignedMessage();
+        }
+        $boundary = $this->getUniqueBoundary();
+        $this->setRawHeader(
+            'Content-Type',
+            "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
+        );
+        $this->removeHeader('Content-Transfer-Encoding');
+        if (empty($this->signedSignaturePart)) {
+            $this->createSignaturePart($protocol, $body);
+        }
+    }
+    
+    /**
+     * Returns the signed part or null if not set.
+     * 
+     * @return \ZBateson\MailMimeParser\MimePart
+     */
+    public function getSignedPart()
+    {
+        return $this->signedSignaturePart;
     }
     
     /**
@@ -814,8 +932,10 @@ class Message extends MimePart
     {
         $type = $part->getHeaderValue('Content-Type');
         $disposition = $part->getHeaderValue('Content-Disposition');
-        if (empty($disposition) && $this->contentPart != $part && ($type === 'text/html' || $type === 'text/plain')) {
+        if (empty($disposition) && $this->contentPart !== $part && ($type === 'text/html' || $type === 'text/plain')) {
             return $this->contentPart;
+        } elseif ($this->signedSignaturePart !== null && $part !== $this->signedSignaturePart) {
+            return $part->getParent();
         }
         return $this;
     }
@@ -849,6 +969,30 @@ class Message extends MimePart
     }
     
     /**
+     * Creates a multipart/mixed MimePart and adds it to $parts if there's a
+     * signature part defined for this message, and there are attachments.
+     * 
+     * @param array $parts
+     */
+    private function addMultipartMixedForSignedMessageToWriteArray(&$parts)
+    {
+        if (empty($this->signedSignaturePart) || count($this->attachmentParts) === 0) {
+            return;
+        }
+        $mixed = $this->mimePartFactory->newMimePart();
+        $mixed->setParent($this);
+        $boundary = $this->getUniqueBoundary();
+        $mixed->setRawHeader('Content-Type', "multipart/mixed;\r\n\tboundary=\"$boundary\"");
+        foreach ($this->attachmentParts as $part) {
+            $part->setParent($mixed);
+        }
+        if (!empty($this->contentPart)) {
+            $this->contentPart->setParent($mixed);
+        }
+        $parts[] = $mixed;
+    }
+    
+    /**
      * Saves the message as a MIME message to the passed resource handle.
      * 
      * The saved message is not guaranteed to be the same as the parsed message.
@@ -864,6 +1008,7 @@ class Message extends MimePart
     {
         $this->writeHeadersTo($handle);
         $parts = [];
+        $this->addMultipartMixedForSignedMessageToWriteArray($parts);
         if ($this->contentPart !== null) {
             if ($this->contentPart->isMultiPart()) {
                 $parts[] = $this->contentPart;
@@ -874,6 +1019,9 @@ class Message extends MimePart
         }
         if (!empty($this->attachmentParts)) {
             $parts = array_merge($parts, $this->attachmentParts);
+        }
+        if (!empty($this->signedSignaturePart)) {
+            $parts[] = $this->signedSignaturePart;
         }
         $this->writePartsTo(
             $handle,

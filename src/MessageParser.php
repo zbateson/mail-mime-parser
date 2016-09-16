@@ -156,11 +156,12 @@ class MessageParser
         } else {
             fseek($handle, 0, SEEK_END);
         }
+        $type = $part->getHeaderValue('Content-Type');
         if (!$skipPart) {
             $end = ftell($handle) - $boundaryLength;
             $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
             $message->addPart($part);
-        } elseif ($part->getHeaderValue('Content-Type') === 'multipart/alternative') {
+        } elseif (preg_match('~multipart/\w+~i', $type) && $type !== 'multipart/related') {
             $message->addPart($part);
         }
         return $endBoundaryFound;
