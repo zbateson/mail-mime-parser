@@ -1515,6 +1515,44 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
     
+    public function testSetSignedPartm0014()
+    {
+        $handle = fopen($this->messageDir . '/m0014.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0014", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0014';
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => 'Testing testing testing'
+            ]
+        ];
+        
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
     public function testSetSignedPartm0015()
     {
         $handle = fopen($this->messageDir . '/m0015.txt', 'r');

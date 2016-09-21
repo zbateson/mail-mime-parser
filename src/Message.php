@@ -444,6 +444,29 @@ class Message extends MimePart
     }
     
     /**
+     * Updates parents of the contentPart and any children, and sets
+     * $this->contentPart to the passed $messagePart if the $this->contentPart
+     * is set to $this
+     * 
+     * @param \ZBateson\MailMimeParser\MimePart $messagePart
+     */
+    private function updateContentPartForSignedMessage(MimePart $messagePart)
+    {
+        if ($this->contentPart === $this) {
+            $this->contentPart = $messagePart;
+            foreach ($this->getAllParts() as $child) {
+                if ($child === $this) {
+                    continue;
+                }
+                $child->setParent($messagePart);
+                array_unshift($this->contentPart->parts, $child);
+            }
+        } elseif ($this->contentPart->getParent() === $this) {
+            $this->contentPart->setParent($messagePart);
+        }
+    }
+    
+    /**
      * This function makes space by moving the main message part down one level.
      * 
      * The content-type and content-transfer-encoding headers are copied from
@@ -455,6 +478,7 @@ class Message extends MimePart
     {
         $this->enforceMime();
         $messagePart = $this->mimePartFactory->newMimePart();
+        $this->updateContentPartForSignedMessage($messagePart);
         $this->copyTypeHeadersFromPartToPart($this, $messagePart);
         $messagePart->attachContentResourceHandle($this->handle);
         $this->detachContentResourceHandle();
@@ -465,11 +489,6 @@ class Message extends MimePart
             }
         }
         array_unshift($this->parts, $messagePart);
-        if ($this->contentPart === $this) {
-            $this->contentPart = $messagePart;
-        } elseif ($this->contentPart->getParent() === $this) {
-            $this->contentPart->setParent($messagePart);
-        }
     }
     
     /**
@@ -934,7 +953,7 @@ class Message extends MimePart
         $disposition = $part->getHeaderValue('Content-Disposition');
         if (empty($disposition) && $this->contentPart !== $part && ($type === 'text/html' || $type === 'text/plain')) {
             return $this->contentPart;
-        } elseif ($this->signedSignaturePart !== null && $part !== $this->signedSignaturePart) {
+        } elseif ($this->signedSignaturePart !== null) {
             return $part->getParent();
         }
         return $this;
