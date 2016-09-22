@@ -540,7 +540,7 @@ class Message extends MimePart
      * 
      * @return \ZBateson\MailMimeParser\MimePart
      */
-    public function getSignedPart()
+    public function getSignaturePart()
     {
         return $this->signedSignaturePart;
     }
