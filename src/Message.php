@@ -564,6 +564,26 @@ class Message extends MimePart
     }
     
     /**
+     * Ensures a non-text part comes first in a signed multipart/alternative
+     * message as some clients seem to prefer the first content part if the
+     * client doesn't understand multipart/signed.
+     */
+    private function ensureHtmlPartFirstForSignedMessage()
+    {
+        if (empty($this->contentPart)) {
+            return;
+        }
+        $type = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
+        if ($type === 'multipart/alternative' && count($this->contentPart->parts) > 1) {
+            if (strtolower($this->contentPart->parts[0]->getHeaderValue('Content-Type', 'text/plain')) === 'text/plain') {
+                $tmp = $this->contentPart->parts[0];
+                $this->contentPart->parts[0] = $this->contentPart->parts[1];
+                $this->contentPart->parts[1] = $tmp;
+            }
+        }
+    }
+    
+    /**
      * Turns the message into a multipart/signed message, moving the actual
      * message into a child part, sets the content-type of the main message to
      * multipart/signed and adds a signature part as well.
@@ -587,6 +607,7 @@ class Message extends MimePart
         $this->removeHeader('Content-Transfer-Encoding');
         $this->createMultipartMixedForSignedMessage();
         $this->overwrite8bitContentEncoding();
+        $this->ensureHtmlPartFirstForSignedMessage();
     }
     
     /**

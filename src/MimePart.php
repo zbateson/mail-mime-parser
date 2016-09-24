@@ -388,7 +388,7 @@ class MimePart
      * encoding for the current mime part.
      * 
      * @param resource $handle
-     * @param \ZBateson\MailMimeParser\StreamLeftover $leftovers
+     * @param \ZBateson\MailMimeParser\Stream\StreamLeftover $leftovers
      * @return resource the stream filter
      */
     private function setTransferEncodingFilterOnStream($handle, StreamLeftover $leftovers)
