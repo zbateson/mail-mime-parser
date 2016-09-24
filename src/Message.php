@@ -49,6 +49,12 @@ class Message extends MimePart
     protected $signedSignaturePart;
     
     /**
+     * @var \ZBateson\MailMimeParser\MimePart The mixed part for a
+     *      multipart/signed message if the message contains attachments
+     */
+    protected $signedMixedPart;
+    
+    /**
      * @var \ZBateson\MailMimeParser\MimePart[] array of non-content parts in
      *      this message 
      */
@@ -163,6 +169,7 @@ class Message extends MimePart
         $type = $part->getHeaderValue('Content-Type');
         if ($mtype === 'multipart/signed' && $protocol !== null && $part->getParent() === $this && strcasecmp($protocol, $type) === 0) {
             $this->signedSignaturePart = $part;
+            $this->createMultipartMixedForSignedMessage();
         } else if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
             $this->attachmentParts[] = $part;
         }
@@ -498,14 +505,62 @@ class Message extends MimePart
      * @param string $protocol
      * @param string $body
      */
-    private function createSignaturePart($protocol, $body)
+    public function createSignaturePart($body)
     {
         $signedPart = $this->mimePartFactory->newMimePart();
-        $signedPart->setRawHeader('Content-Type', $protocol);
+        $signedPart->setRawHeader(
+            'Content-Type',
+            $this->getHeaderParameter('Content-Type', 'protocol')
+        );
         $signedPart->setContent($body);
         $this->parts[] = $signedPart;
         $signedPart->setParent($this);
         $this->signedSignaturePart = $signedPart;
+    }
+    
+    /**
+     * Creates a multipart/mixed MimePart assigns it to $this->signedMixedPart
+     * if the message contains attachments.
+     * 
+     * @param array $parts
+     */
+    private function createMultipartMixedForSignedMessage()
+    {
+        if (count($this->attachmentParts) === 0 || $this->signedMixedPart !== null) {
+            return;
+        }
+        $mixed = $this->mimePartFactory->newMimePart();
+        $mixed->setParent($this);
+        $boundary = $this->getUniqueBoundary();
+        $mixed->setRawHeader('Content-Type', "multipart/mixed;\r\n\tboundary=\"$boundary\"");
+        foreach ($this->attachmentParts as $part) {
+            $part->setParent($mixed);
+        }
+        if (!empty($this->contentPart)) {
+            $this->contentPart->setParent($mixed);
+        }
+        $this->signedMixedPart = $mixed;
+    }
+    
+    /**
+     * Loops over parts of this message and sets the content-transfer-encoding
+     * header to quoted-printable for text/* mime parts, and to base64
+     * otherwise for parts that are '8bit' encoded.
+     * 
+     * Used for multipart/signed messages which doesn't support 8bit transfer
+     * encodings.
+     */
+    private function overwrite8bitContentEncoding()
+    {
+        foreach ($this->parts as $part) {
+            if ($part->getHeaderValue('Content-Transfer-Encoding') === '8bit') {
+                if (preg_match('/text\/.*/', $part->getHeaderValue('Content-Type'))) {
+                    $part->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+                } else {
+                    $part->setRawHeader('Content-Transfer-Encoding', 'base64');
+                }
+            }
+        }
     }
     
     /**
@@ -518,7 +573,7 @@ class Message extends MimePart
      * @param string $body The signature signed according to the value of
      *        $protocol
      */
-    public function setSignature($micalg, $protocol, $body)
+    public function setAsMultipartSigned($micalg, $protocol)
     {
         $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
         if (strtolower($contentType) !== 'multipart/signed' && $contentType !== 'multipart/mixed') {
@@ -530,9 +585,8 @@ class Message extends MimePart
             "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
         );
         $this->removeHeader('Content-Transfer-Encoding');
-        if (empty($this->signedSignaturePart)) {
-            $this->createSignaturePart($protocol, $body);
-        }
+        $this->createMultipartMixedForSignedMessage();
+        $this->overwrite8bitContentEncoding();
     }
     
     /**
@@ -988,30 +1042,6 @@ class Message extends MimePart
     }
     
     /**
-     * Creates a multipart/mixed MimePart and adds it to $parts if there's a
-     * signature part defined for this message, and there are attachments.
-     * 
-     * @param array $parts
-     */
-    private function addMultipartMixedForSignedMessageToWriteArray(&$parts)
-    {
-        if (empty($this->signedSignaturePart) || count($this->attachmentParts) === 0) {
-            return;
-        }
-        $mixed = $this->mimePartFactory->newMimePart();
-        $mixed->setParent($this);
-        $boundary = $this->getUniqueBoundary();
-        $mixed->setRawHeader('Content-Type', "multipart/mixed;\r\n\tboundary=\"$boundary\"");
-        foreach ($this->attachmentParts as $part) {
-            $part->setParent($mixed);
-        }
-        if (!empty($this->contentPart)) {
-            $this->contentPart->setParent($mixed);
-        }
-        $parts[] = $mixed;
-    }
-    
-    /**
      * Saves the message as a MIME message to the passed resource handle.
      * 
      * The saved message is not guaranteed to be the same as the parsed message.
@@ -1027,7 +1057,9 @@ class Message extends MimePart
     {
         $this->writeHeadersTo($handle);
         $parts = [];
-        $this->addMultipartMixedForSignedMessageToWriteArray($parts);
+        if (!empty($this->signedMixedPart)) {
+            $parts[] = $this->signedMixedPart;
+        }
         if ($this->contentPart !== null) {
             if ($this->contentPart->isMultiPart()) {
                 $parts[] = $this->contentPart;
@@ -1047,6 +1079,56 @@ class Message extends MimePart
             new ArrayIterator($parts),
             $this
         );
+    }
+    
+    /**
+     * Writes out the content of the message into a string and returns it.
+     * 
+     * @return string
+     */
+    private function getSignableBodyFromParts(array $parts)
+    {
+        $handle = fopen('php://temp', 'r+');
+        $firstPart = array_shift($parts);
+        $firstPart->writeHeadersTo($handle);
+        $firstPart->writeContentTo($handle);
+        if (!empty($parts)) {
+            $this->writePartsTo(
+                $handle,
+                new ArrayIterator($parts),
+                $parts[0]->getParent()
+            );
+        }
+        rewind($handle);
+        $str = trim(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($handle)));
+        fclose($handle);
+        return $str;
+    }
+    
+    /**
+     * Returns the content part of a signed message for a signature to be
+     * calculated on the message.
+     * 
+     * @return string
+     */
+    public function getSignableBody()
+    {
+        $parts = [];
+        if (!empty($this->signedMixedPart)) {
+            $parts[] = $this->signedMixedPart;
+        }
+        if ($this->contentPart !== null) {
+            if ($this->contentPart->isMultiPart()) {
+                $parts[] = $this->contentPart;
+                $parts = array_merge($parts, $this->contentPart->getAllParts());
+            } else {
+                $parts[] = $this->contentPart;
+            }
+        }
+        if (!empty($this->attachmentParts)) {
+            $parts = array_merge($parts, $this->attachmentParts);
+        }
+        return $this->getSignableBodyFromParts($parts);
     }
     
     /**

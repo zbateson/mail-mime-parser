@@ -99,7 +99,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('multipart/signed', $message->getHeaderValue('Content-Type'), $failMessage);
             $protocol = $message->getHeaderParameter('Content-Type', 'protocol');
             $micalg = $message->getHeaderParameter('Content-Type', 'micalg');
-            $signedPart = $message->getSignedPart();
+            $signedPart = $message->getSignaturePart();
             $this->assertEquals($props['signed']['protocol'], $protocol, $failMessage);
             $this->assertEquals($props['signed']['micalg'], $micalg, $failMessage);
             $this->assertNotNull($signedPart, $failMessage);
@@ -1478,17 +1478,23 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
     
-    public function testSetSignedPartm0001()
+    public function testCreateSignedPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
 
         $this->assertNull($message->getHtmlPart());
-        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $message->createSignaturePart('Testing testing testing');
+        
+        $signableContent = $message->getSignableBody();
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0001", 'w+');
         $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -1515,16 +1521,22 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
     
-    public function testSetSignedPartm0014()
+    public function testCreateSignedPartm0014()
     {
         $handle = fopen($this->messageDir . '/m0014.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
 
-        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $message->createSignaturePart('Testing testing testing');
+        
+        $signableContent = $message->getSignableBody();
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0014", 'w+');
         $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -1553,16 +1565,22 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testSetSignedPartm0015()
+    public function testCreateSignedPartm0015()
     {
         $handle = fopen($this->messageDir . '/m0015.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
 
-        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $message->createSignaturePart('Testing testing testing');
+        
+        $signableContent = $message->getSignableBody();
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0015", 'w+');
         $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -1592,17 +1610,23 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
     
-    public function testSetSignedPartm0018()
+    public function testCreateSignedPartm0018()
     {
         $handle = fopen($this->messageDir . '/m0018.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
 
         $this->assertNull($message->getHtmlPart());
-        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $message->createSignaturePart('Testing testing testing');
+        
+        $signableContent = $message->getSignableBody();
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0018", 'w+');
         $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -1630,16 +1654,22 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
     
-    public function testSetSignedPartm1005()
+    public function testCreateSignedPartm1005()
     {
         $handle = fopen($this->messageDir . '/m1005.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
 
-        $message->setSignature('pgp-sha256', 'application/pgp-signature', 'Testing testing testing');
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $message->createSignaturePart('Testing testing testing');
+        
+        $signableContent = $message->getSignableBody();
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m1005", 'w+');
         $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
