@@ -387,11 +387,19 @@ class MimePart
      * Appends a stream filter the passed resource handle based on the type of
      * encoding for the current mime part.
      * 
-     * @param resource $handle
+     * Unfortunately PHP seems to error out allocating memory for
+     * stream_filter_make_writable in Base64EncodeStreamFilter using
+     * STREAM_FILTER_WRITE, and HHVM doesn't seem to remove the filter properly
+     * for STREAM_FILTER_READ, so the function appends a read filter on
+     * $fromHandle if running through 'php', and a write filter on $toHandle if
+     * using HHVM.
+     * 
+     * @param resource $fromHandle
+     * @param resource $toHandle
      * @param \ZBateson\MailMimeParser\Stream\StreamLeftover $leftovers
      * @return resource the stream filter
      */
-    private function setTransferEncodingFilterOnStream($handle, StreamLeftover $leftovers)
+    private function setTransferEncodingFilterOnStream($fromHandle, $toHandle, StreamLeftover $leftovers)
     {
         $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
         $params = [
@@ -410,12 +418,21 @@ class MimePart
             'x-uuencode' => 'mailmimeparser-uuencode',
         ];
         if (isset($typeToEncoding[$encoding])) {
-            return stream_filter_append(
-                $handle,
-                $typeToEncoding[$encoding],
-                STREAM_FILTER_READ,
-                $params
-            );
+            if (defined('HHVM_VERSION')) {
+                return stream_filter_append(
+                    $toHandle,
+                    $typeToEncoding[$encoding],
+                    STREAM_FILTER_WRITE,
+                    $params
+                );
+            } else {
+                return stream_filter_append(
+                    $fromHandle,
+                    $typeToEncoding[$encoding],
+                    STREAM_FILTER_READ,
+                    $params
+                );
+            }
         }
         return null;
     }
@@ -445,7 +462,11 @@ class MimePart
     {
         $pos = ftell($fromHandle);
         rewind($fromHandle);
-        stream_copy_to_stream($fromHandle, $toHandle);
+        // changed from stream_copy_to_stream because hhvm seems to stop before
+        // end of file for some reason
+        while (($read = fread($fromHandle, 1024)) != false) {
+            fwrite($toHandle, $read);
+        }
         fseek($fromHandle, $pos);
     }
     
@@ -473,9 +494,10 @@ class MimePart
         if (!empty($this->handle)) {
             $filter = $this->setCharsetStreamFilterOnStream($handle);
             $leftovers = new StreamLeftover();
-            $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle, $leftovers);
+            $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle, $handle, $leftovers);
             $this->copyContentStream($this->handle, $handle, $this->isUUEncoded());
             if ($encodingFilter !== null) {
+                fflush($handle);
                 stream_filter_remove($encodingFilter);
                 if (!empty($leftovers->encodedValue)) {
                     fwrite($handle, $leftovers->encodedValue);
