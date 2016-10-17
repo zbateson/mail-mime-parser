@@ -1121,7 +1121,7 @@ class Message extends MimePart
             );
         }
         rewind($handle);
-        $str = trim(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($handle)));
+        $str = trim(stream_get_contents($handle));
         fclose($handle);
         return $str;
     }
