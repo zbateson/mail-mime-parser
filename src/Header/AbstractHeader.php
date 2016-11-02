@@ -11,13 +11,13 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
  * Abstract base class representing a mime email's header.
- * 
+ *
  * The base class sets up the header's consumer, sets the name of the header and
  * calls the consumer to parse the header's value.
- * 
+ *
  * AbstractHeader::getConsumer is an abstract method that must be overridden to
  * return an appropriate Consumer\AbstractConsumer type.
- * 
+ *
  * AbstractHeader::parseHeaderValue shou
  *
  * @author Zaahid Bateson
@@ -28,22 +28,22 @@ abstract class AbstractHeader
      * @var string the name of the header
      */
     protected $name;
-    
+
     /**
-     * @var \ZBateson\MailMimeParser\Header\Consumer\Part\HeaderPart[] the
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the
      * header's parts (as returned from the consumer)
      */
     protected $parts;
-    
+
     /**
      * @var string the raw value
      */
     protected $rawValue;
-    
+
     /**
      * Assigns the header's name and raw value, then calls getConsumer and
      * parseHeaderValue to extract a parsed value.
-     * 
+     *
      * @param ConsumerService $consumerService
      * @param string $name
      * @param string $value
@@ -52,24 +52,24 @@ abstract class AbstractHeader
     {
         $this->name = $name;
         $this->rawValue = $value;
-        
+
         $consumer = $this->getConsumer($consumerService);
         $this->setParseHeaderValue($consumer);
     }
-    
+
     /**
      * Returns the header's Consumer
-     * 
+     *
      * @param ConsumerService $consumerService
      * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
      */
     abstract protected function getConsumer(ConsumerService $consumerService);
-    
+
     /**
      * Calls the consumer and assigns the parsed parts to member variables.
-     * 
+     *
      * The default implementation assigns the returned value to $this->part.
-     * 
+     *
      * @param AbstractConsumer $consumer
      */
     protected function setParseHeaderValue(AbstractConsumer $consumer)
@@ -79,17 +79,17 @@ abstract class AbstractHeader
 
     /**
      * Returns an array of HeaderPart objects associated with this header.
-     * 
+     *
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     public function getParts()
     {
         return $this->parts;
     }
-    
+
     /**
      * Returns the parsed value of the header -- calls getValue on $this->part
-     * 
+     *
      * @return string
      */
     public function getValue()
@@ -99,35 +99,35 @@ abstract class AbstractHeader
         }
         return null;
     }
-    
+
     /**
      * Returns the raw value of the header prior to any processing.
-     * 
+     *
      * @return string
      */
     public function getRawValue()
     {
         return $this->rawValue;
     }
-    
+
     /**
      * Returns the name of the header.
-     * 
+     *
      * @return string
      */
     public function getName()
     {
         return $this->name;
     }
-    
+
     /**
      * Returns the string representation of the header.  At the moment this is
      * just in the form of:
-     * 
+     *
      * <HeaderName>: <RawValue>
-     * 
+     *
      * No additional processing is performed (for instance to wrap long lines.)
-     * 
+     *
      * @return string
      */
     public function __toString()
