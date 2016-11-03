@@ -12,10 +12,10 @@ use ZBateson\MailMimeParser\Stream\StreamLeftover;
 
 /**
  * Represents a single part of a multi-part mime message.
- * 
+ *
  * A MimePart object may have any number of child parts, or may be a child
  * itself with its own parent or parents.
- * 
+ *
  * The content of the part can be read from its PartStream resource handle,
  * accessible via MimePart::getContentResourceHanlde.
  *
@@ -28,44 +28,44 @@ class MimePart
      *      object used for created headers
      */
     protected $headerFactory;
-    
+
     /**
      * @var \ZBateson\MailMimeParser\Header\AbstractHeader[] array of header
      * objects
      */
     protected $headers;
-    
+
     /**
      * @var \ZBateson\MailMimeParser\MimePart parent part
      */
     protected $parent;
-    
+
     /**
-     * @var resource the content's resource handle 
+     * @var resource the content's resource handle
      */
     protected $handle;
-    
+
     /**
-     * @var \ZBateson\MailMimeParser\MimePart[] array of parts in this message 
+     * @var \ZBateson\MailMimeParser\MimePart[] array of parts in this message
      */
     protected $parts = [];
-    
+
     /**
      * @var \ZBateson\MailMimeParser\MimePart[] Maps mime types to parts for
      * looking up in getPartByMimeType
      */
     protected $mimeToPart = [];
-    
+
     /**
      * Sets up class dependencies.
-     * 
+     *
      * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory)
     {
         $this->headerFactory = $headerFactory;
     }
-    
+
     /**
      * Closes the attached resource handle.
      */
@@ -79,7 +79,7 @@ class MimePart
     /**
      * Adds the passed part to the parts array, and registers non-attachment/
      * non-multipart parts by their content type.
-     * 
+     *
      * @param \ZBateson\MailMimeParser\MimePart $part
      */
     public function addPart(MimePart $part)
@@ -90,10 +90,10 @@ class MimePart
             $this->mimeToPart[$key] = $part;
         }
     }
-    
+
     /**
      * Unregisters the child part from this part.
-     * 
+     *
      * @param \ZBateson\MailMimeParser\MimePart $part
      */
     public function removePart(MimePart $part)
@@ -107,11 +107,11 @@ class MimePart
         unset($this->mimeToPart[$part->getHeaderValue('Content-Type', 'text/plain')]);
         $this->parts = $partsArray;
     }
-    
+
     /**
      * Returns the non-text, non-HTML part at the given 0-based index, or null
      * if none is set.
-     * 
+     *
      * @param int $index
      * @return \ZBateson\MailMimeParser\MimePart
      */
@@ -122,30 +122,30 @@ class MimePart
         }
         return $this->parts[$index];
     }
-    
+
     /**
      * Returns all attachment parts.
-     * 
+     *
      * @return \ZBateson\MailMimeParser\MimePart[]
      */
     public function getAllParts()
     {
         return $this->parts;
     }
-    
+
     /**
      * Returns the number of attachments available.
-     * 
+     *
      * @return int
      */
     public function getPartCount()
     {
         return count($this->parts);
     }
-    
+
     /**
      * Returns the part associated with the passed mime type if it exists.
-     * 
+     *
      * @param string $mimeType
      * @return \ZBateson\MailMimeParser\MimePart or null
      */
@@ -157,10 +157,10 @@ class MimePart
         }
         return null;
     }
-    
+
     /**
      * Returns true if there's a content stream associated with the part.
-     * 
+     *
      * @return boolean
      */
     public function hasContent()
@@ -173,7 +173,7 @@ class MimePart
 
     /**
      * Returns true if this part's mime type is multipart/*
-     * 
+     *
      * @return bool
      */
     public function isMultiPart()
@@ -187,7 +187,7 @@ class MimePart
     /**
      * Attaches the resource handle for the part's content.  The attached handle
      * is closed when the MimePart object is destroyed.
-     * 
+     *
      * @param resource $contentHandle
      */
     public function attachContentResourceHandle($contentHandle)
@@ -197,20 +197,20 @@ class MimePart
         }
         $this->handle = $contentHandle;
     }
-    
+
     /**
-     * 
+     *
      */
     protected function detachContentResourceHandle()
     {
         $this->handle = null;
     }
-    
+
     /**
      * Sets the content of the part to the passed string (effectively creates
      * a php://temp stream with the passed content and calls
      * attachContentResourceHandle with the opened stream).
-     * 
+     *
      * @param string $string
      */
     public function setContent($string)
@@ -220,24 +220,24 @@ class MimePart
         rewind($handle);
         $this->attachContentResourceHandle($handle);
     }
-    
+
     /**
      * Returns the resource stream handle for the part's content.
-     * 
+     *
      * The resource is automatically closed by MimePart's destructor and should
      * not be closed otherwise.
-     * 
+     *
      * @return resource
      */
     public function getContentResourceHandle()
     {
         return $this->handle;
     }
-    
+
     /**
      * Shortcut to reading stream content and assigning it to a string.  Returns
      * null if the part doesn't have a content stream.
-     * 
+     *
      * @return string
      */
     public function getContent()
@@ -247,13 +247,13 @@ class MimePart
         }
         return null;
     }
-    
+
     /**
      * Adds a header with the given $name and $value.
-     * 
+     *
      * Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
      * registers it as a header.
-     * 
+     *
      * @param string $name
      * @param string $value
      */
@@ -261,24 +261,24 @@ class MimePart
     {
         $this->headers[strtolower($name)] = $this->headerFactory->newInstance($name, $value);
     }
-    
+
     /**
      * Removes the header with the given name
-     * 
+     *
      * @param string $name
      */
     public function removeHeader($name)
     {
         unset($this->headers[strtolower($name)]);
     }
-    
+
     /**
      * Returns the AbstractHeader object for the header with the given $name
-     * 
+     *
      * Note that mime headers aren't case sensitive.
-     * 
+     *
      * @param string $name
-     * @return \ZBateson\MailMimeParser\Header\Header
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
      */
     public function getHeader($name)
     {
@@ -287,12 +287,12 @@ class MimePart
         }
         return null;
     }
-    
+
     /**
      * Returns the string value for the header with the given $name.
-     * 
+     *
      * Note that mime headers aren't case sensitive.
-     * 
+     *
      * @param string $name
      * @param string $defaultValue
      * @return string
@@ -305,26 +305,26 @@ class MimePart
         }
         return $defaultValue;
     }
-    
+
     /**
      * Returns the full array of headers for this part.
-     * 
+     *
      * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
      */
     public function getHeaders()
     {
         return $this->headers;
     }
-    
+
     /**
      * Returns a parameter of the header $header, given the parameter named
      * $param.
-     * 
+     *
      * Only headers of type
      * \ZBateson\MailMimeParser\Header\ParameterHeader have parameters.
      * Content-Type and Content-Disposition are examples of headers with
      * parameters. "Charset" is a common parameter of Content-Type.
-     * 
+     *
      * @param string $header
      * @param string $param
      * @param string $defaultValue
@@ -338,31 +338,31 @@ class MimePart
         }
         return $defaultValue;
     }
-    
+
     /**
      * Sets the parent part.
-     * 
+     *
      * @param \ZBateson\MailMimeParser\MimePart $part
      */
     public function setParent(MimePart $part)
     {
         $this->parent = $part;
     }
-    
+
     /**
      * Returns this part's parent.
-     * 
+     *
      * @return \ZBateson\MailMimeParser\MimePart
      */
     public function getParent()
     {
         return $this->parent;
     }
-    
+
     /**
      * Sets up a mailmimeparser-encode stream filter on the passed stream
      * resource handle if applicable and returns a reference to the filter.
-     * 
+     *
      * @param resource $handle
      * @return resource a reference to the appended stream filter or null
      */
@@ -382,18 +382,18 @@ class MimePart
         }
         return null;
     }
-    
+
     /**
      * Appends a stream filter the passed resource handle based on the type of
      * encoding for the current mime part.
-     * 
+     *
      * Unfortunately PHP seems to error out allocating memory for
      * stream_filter_make_writable in Base64EncodeStreamFilter using
      * STREAM_FILTER_WRITE, and HHVM doesn't seem to remove the filter properly
      * for STREAM_FILTER_READ, so the function appends a read filter on
      * $fromHandle if running through 'php', and a write filter on $toHandle if
      * using HHVM.
-     * 
+     *
      * @param resource $fromHandle
      * @param resource $toHandle
      * @param \ZBateson\MailMimeParser\Stream\StreamLeftover $leftovers
@@ -436,11 +436,11 @@ class MimePart
         }
         return null;
     }
-    
+
     /**
      * Returns true if the content-transfer-encoding header of the current part
      * is set to 'x-uuencode'.
-     * 
+     *
      * @return bool
      */
     private function isUUEncoded()
@@ -448,12 +448,12 @@ class MimePart
         $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
         return ($encoding === 'x-uuencode');
     }
-    
+
     /**
      * Copies the content of the $fromHandle stream into the $toHandle stream,
      * maintaining the current read position in $fromHandle and writing
      * uuencode headers.
-     * 
+     *
      * @param resource $fromHandle
      * @param resource $toHandle
      * @param bool $isUUEncoded
@@ -469,10 +469,10 @@ class MimePart
         }
         fseek($fromHandle, $pos);
     }
-    
+
     /**
      * Writes out headers and follows them with an empty line.
-     * 
+     *
      * @param resource $handle
      */
     protected function writeHeadersTo($handle)
@@ -482,11 +482,11 @@ class MimePart
         }
         fwrite($handle, "\r\n");
     }
-    
+
     /**
      * Writes out the content portion of the mime part based on the headers that
      * are set on the part, taking care of character/content-transfer encoding.
-     * 
+     *
      * @param resource $handle
      */
     protected function writeContentTo($handle)
@@ -508,13 +508,13 @@ class MimePart
             }
         }
     }
-    
+
     /**
      * Writes out the MimePart to the passed resource.
-     * 
+     *
      * Takes care of character and content transfer encoding on the output based
      * on what headers are set.
-     * 
+     *
      * @param resource $handle
      */
     protected function writeTo($handle)
