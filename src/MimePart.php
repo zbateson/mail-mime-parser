@@ -464,7 +464,7 @@ class MimePart
         rewind($fromHandle);
         // changed from stream_copy_to_stream because hhvm seems to stop before
         // end of file for some reason
-        while (($read = fread($fromHandle, 1024)) !== false) {
+        while (($read = fread($fromHandle, 1024)) != false) {
             fwrite($toHandle, $read);
         }
         fseek($fromHandle, $pos);
