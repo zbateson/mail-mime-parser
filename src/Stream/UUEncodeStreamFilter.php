@@ -38,7 +38,7 @@ class UUEncodeStreamFilter extends php_user_filter
      */
     private function convertAndAppend($data, $out)
     {
-        $converted = convert_uuencode($data);
+        $converted = preg_replace('/\r\n|\r|\n/', "\r\n", convert_uuencode($data));
         $cleaned = rtrim(substr(rtrim($converted), 0, -1));      // remove end line ` character
         if (empty($cleaned)) {
             return;
@@ -71,7 +71,7 @@ class UUEncodeStreamFilter extends php_user_filter
      */
     private function getUUEncodingFooter()
     {
-        return "\r\n`\r\nend\r\n\r\n";
+        return "\r\n`\r\nend\r\n";
     }
     
     /**

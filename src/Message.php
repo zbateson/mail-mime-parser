@@ -67,6 +67,12 @@ class Message extends MimePart
     protected $mimePartFactory;
     
     /**
+     * @var bool set to true if a newline should be inserted before the next
+     *      boundary (signed messages are finicky)
+     */
+    private $insertNewLineBeforeBoundary = false;
+    
+    /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
      * 
@@ -608,6 +614,7 @@ class Message extends MimePart
         $this->createMultipartMixedForSignedMessage();
         $this->overwrite8bitContentEncoding();
         $this->ensureHtmlPartFirstForSignedMessage();
+        $this->createSignaturePart('Not set');
     }
     
     /**
@@ -954,12 +961,17 @@ class Message extends MimePart
      */
     private function writeBoundary($handle, $boundary, $isEnd = false)
     {
-        fwrite($handle, "\r\n--");
+        if ($this->insertNewLineBeforeBoundary) {
+            fwrite($handle, "\r\n");
+        }
+        fwrite($handle, '--');
         fwrite($handle, $boundary);
         if ($isEnd) {
             fwrite($handle, "--\r\n");
+        } else {
+            fwrite($handle, "\r\n");
         }
-        fwrite($handle, "\r\n");
+        $this->insertNewLineBeforeBoundary = $isEnd;
     }
     
     /**
@@ -1007,9 +1019,13 @@ class Message extends MimePart
             } else {
                 $part->writeContentTo($handle);
             }
+        } elseif ($part instanceof NonMimePart) {
+            fwrite($handle, "\r\n\r\n");
+            $part->writeContentTo($handle);
         } else {
             $part->writeContentTo($handle);
         }
+        $this->insertNewLineBeforeBoundary = $part->hasContent();
     }
     
     /**
@@ -1050,6 +1066,7 @@ class Message extends MimePart
      */
     protected function writePartsTo($handle, Iterator $partsIter, MimePart $curParent)
     {
+        $this->insertNewLineBeforeBoundary = false;
         $boundary = $curParent->getHeaderParameter('Content-Type', 'boundary');
         while ($partsIter->valid()) {
             $part = $partsIter->current();
@@ -1117,11 +1134,11 @@ class Message extends MimePart
             $this->writePartsTo(
                 $handle,
                 new ArrayIterator($parts),
-                $parts[0]->getParent()
+                $firstPart
             );
         }
         rewind($handle);
-        $str = trim(stream_get_contents($handle));
+        $str = stream_get_contents($handle);
         fclose($handle);
         return $str;
     }
