@@ -183,6 +183,19 @@ class MimePart
             $this->getHeaderValue('Content-Type', 'text/plain')
         );
     }
+    
+    /**
+     * Returns true if this part's mime type is text/*
+     * 
+     * @return bool
+     */
+    public function isTextPart()
+    {
+        return preg_match(
+            '~text/\w+~i',
+            $this->getHeaderValue('Content-Type', 'text/plain')
+        );
+    }
 
     /**
      * Attaches the resource handle for the part's content.  The attached handle
@@ -450,21 +463,54 @@ class MimePart
     }
 
     /**
+     * Filters out single line feed (CR or LF) characters from text input and
+     * replaces them with CRLF, assigning the result to $read.  Also trims out
+     * any starting and ending CRLF characters in the stream.
+     *
+     * @param string $read the read string, and where the result will be written
+     *        to
+     * @param bool $first set to true if this is the first set of read
+     *        characters from the stream (ltrims CRLF)
+     * @param string $lastChars contains any CRLF characters from the last $read
+     *        line if it ended with a CRLF (because they're trimmed from the
+     *        end, and get prepended to $read).
+     */
+    private function filterTextBeforeCopying(&$read, &$first, &$lastChars)
+    {
+        if ($first) {
+            $first = false;
+            $read = ltrim($read, "\r\n");
+        }
+        $read = $lastChars . $read;
+        $read = preg_replace('/\r\n|\r|\n/', "\r\n", $read);
+        $lastChars = '';
+        $matches = null;
+        if (preg_match('/[\r\n]+$/', $read, $matches)) {
+            $lastChars = $matches[0];
+            $read = rtrim($read, "\r\n");
+        }
+    }
+
+    /**
      * Copies the content of the $fromHandle stream into the $toHandle stream,
      * maintaining the current read position in $fromHandle and writing
      * uuencode headers.
      *
      * @param resource $fromHandle
      * @param resource $toHandle
-     * @param bool $isUUEncoded
      */
-    private function copyContentStream($fromHandle, $toHandle, $isUUEncoded)
+    private function copyContentStream($fromHandle, $toHandle)
     {
         $pos = ftell($fromHandle);
         rewind($fromHandle);
         // changed from stream_copy_to_stream because hhvm seems to stop before
         // end of file for some reason
+        $lastChars = '';
+        $first = true;
         while (($read = fread($fromHandle, 1024)) != false) {
+            if ($this->isTextPart()) {
+                $this->filterTextBeforeCopying($read, $first, $lastChars);
+            }
             fwrite($toHandle, $read);
         }
         fseek($fromHandle, $pos);
@@ -495,13 +541,11 @@ class MimePart
             $filter = $this->setCharsetStreamFilterOnStream($handle);
             $leftovers = new StreamLeftover();
             $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle, $handle, $leftovers);
-            $this->copyContentStream($this->handle, $handle, $this->isUUEncoded());
+            $this->copyContentStream($this->handle, $handle);
             if ($encodingFilter !== null) {
                 fflush($handle);
                 stream_filter_remove($encodingFilter);
-                if (!empty($leftovers->encodedValue)) {
-                    fwrite($handle, $leftovers->encodedValue);
-                }
+                fwrite($handle, $leftovers->encodedValue);
             }
             if ($filter !== null) {
                 stream_filter_remove($filter);
