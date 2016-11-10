@@ -118,7 +118,7 @@ class Message extends MimePart
      */
     private function addToAlternativeContentPartFromParsed(MimePart $part)
     {
-        $partType = $this->contentPart->getHeaderValue('Content-Type');
+        $partType = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
         if ($partType === 'multipart/alternative') {
             if ($this->contentPart === $this) {
                 // already added in addPart
@@ -173,7 +173,7 @@ class Message extends MimePart
         $mtype = $this->getHeaderValue('Content-Type');
         $protocol = $this->getHeaderParameter('Content-Type', 'protocol');
         $type = $part->getHeaderValue('Content-Type');
-        if ($mtype === 'multipart/signed' && $protocol !== null && $part->getParent() === $this && strcasecmp($protocol, $type) === 0) {
+        if (strcasecmp($mtype, 'multipart/signed') === 0 && $protocol !== null && $part->getParent() === $this && strcasecmp($protocol, $type) === 0) {
             $this->signedSignaturePart = $part;
             $this->createMultipartMixedForSignedMessage();
         } else if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
@@ -264,8 +264,8 @@ class Message extends MimePart
     {
         $parts = $this->contentPart->getAllParts();
         foreach ($parts as $part) {
-            $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-            if ($type === $contentType) {
+            $type = $part->getHeaderValue('Content-Type', 'text/plain');
+            if (strcasecmp($type, $contentType) === 0) {
                 $this->removePartFromAlternativeContentPart($part);
                 return true;
             }
@@ -289,8 +289,8 @@ class Message extends MimePart
         if (!isset($this->contentPart)) {
             return false;
         }
-        $type = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
-        if ($type === $contentType) {
+        $type = $this->contentPart->getHeaderValue('Content-Type', 'text/plain');
+        if (strcasecmp($type, $contentType) === 0) {
             if ($this->contentPart === $this) {
                 return false;
             }
@@ -602,7 +602,7 @@ class Message extends MimePart
     public function setAsMultipartSigned($micalg, $protocol)
     {
         $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
-        if (strtolower($contentType) !== 'multipart/signed' && $contentType !== 'multipart/mixed') {
+        if (strcasecmp($contentType, 'multipart/signed') !== 0 && strcasecmp($contentType,'multipart/mixed') !== 0) {
             $this->makeSpaceForMultipartSignedMessage();
         }
         $boundary = $this->getUniqueBoundary();
@@ -1040,7 +1040,7 @@ class Message extends MimePart
      */
     private function getWriteParentForPart(MimePart $part)
     {
-        $type = $part->getHeaderValue('Content-Type');
+        $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         $disposition = $part->getHeaderValue('Content-Disposition');
         if (empty($disposition) && $this->contentPart !== $part && ($type === 'text/html' || $type === 'text/plain')) {
             return $this->contentPart;

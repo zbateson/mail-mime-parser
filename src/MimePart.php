@@ -85,8 +85,8 @@ class MimePart
     public function addPart(MimePart $part)
     {
         $this->parts[] = $part;
-        $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
+            $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
             $this->mimeToPart[$key] = $part;
         }
     }
@@ -104,7 +104,8 @@ class MimePart
                 $partsArray[] = $apart;
             }
         }
-        unset($this->mimeToPart[$part->getHeaderValue('Content-Type', 'text/plain')]);
+        $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+        unset($this->mimeToPart[$key]);
         $this->parts = $partsArray;
     }
 
