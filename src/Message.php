@@ -405,9 +405,10 @@ class Message extends MimePart
     }
     
     /**
-     * Copies Content-Type and Content-Transfer-Encoding headers from the $from
-     * header into the $to header. If the Content-Type header isn't defined in
-     * $from, defaults to text/plain and quoted-printable.
+     * Copies Content-Type, Content-Disposition and Content-Transfer-Encoding
+     * headers from the $from header into the $to header. If the Content-Type
+     * header isn't defined in $from, defaults to text/plain and
+     * quoted-printable.
      * 
      * @param \ZBateson\MailMimeParser\MimePart $from
      * @param \ZBateson\MailMimeParser\MimePart $to
@@ -420,6 +421,10 @@ class Message extends MimePart
             $encodingHeader = $from->getHeader('Content-Transfer-Encoding');
             if (!empty($encodingHeader)) {
                 $to->setRawHeader('Content-Transfer-Encoding', $encodingHeader->getRawValue());
+            }
+            $dispositionHeader = $from->getHeader('Content-Disposition');
+            if (!empty($dispositionHeader)) {
+                $to->setRawHeader('Content-Disposition', $dispositionHeader->getRawValue());
             }
         } else {
             $to->setRawHeader('Content-Type', 'text/plain;charset=us-ascii');
@@ -463,7 +468,14 @@ class Message extends MimePart
      */
     private function updateContentPartForSignedMessage(MimePart $messagePart)
     {
-        if ($this->contentPart === $this) {
+        if ($this->contentPart === null) {
+            foreach ($this->getAllParts() as $child) {
+                if ($child === $this) {
+                    continue;
+                }
+                $child->setParent($messagePart);
+            }
+        } elseif ($this->contentPart === $this) {
             $this->contentPart = $messagePart;
             foreach ($this->getAllParts() as $child) {
                 if ($child === $this) {
@@ -480,10 +492,11 @@ class Message extends MimePart
     /**
      * This function makes space by moving the main message part down one level.
      * 
-     * The content-type and content-transfer-encoding headers are copied from
-     * this message to the newly created part, the resource handle is moved and
-     * detached, any attachments and content parts with parents set to this
-     * message get their parents set to the newly created part.
+     * The content-type, content-disposition and content-transfer-encoding
+     * headers are copied from this message to the newly created part, the 
+     * resource handle is moved and detached, any attachments and content parts
+     * with parents set to this message get their parents set to the newly
+     * created part.
      */
     private function makeSpaceForMultipartSignedMessage()
     {
@@ -494,7 +507,10 @@ class Message extends MimePart
         $messagePart->attachContentResourceHandle($this->handle);
         $this->detachContentResourceHandle();
         $messagePart->setParent($this);
-        foreach ($this->attachmentParts as $part) {
+        foreach ($this->attachmentParts as $key => $part) {
+            if ($part === $this) {
+                $this->attachmentParts[$key] = $messagePart;
+            }
             if ($part->getParent() === $this) {
                 $part->setParent($messagePart);
             }
