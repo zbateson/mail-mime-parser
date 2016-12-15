@@ -1227,6 +1227,43 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0014');
     }
     
+    public function testAddHtmlPartRemoveTextPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $str = $message->getTextContent();
+        $message->setHtmlPart($str, 'utf8');
+        $message->removeTextPart();
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche',
+            'html' => 'HasenundFrФsche.txt'
+        ];
+        
+        $this->assertNull($message->getTextPart());
+        $this->runEmailTestForMessage($message, $props, 'failed adding html part and removing text part from m0001');
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/apr_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    
     public function testRemoveContentAndAttachmentPartsm0015()
     {
         $handle = fopen($this->messageDir . '/m0015.txt', 'r');

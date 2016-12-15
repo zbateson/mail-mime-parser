@@ -227,8 +227,6 @@ class Message extends MimePart
         $this->attachContentResourceHandle($part->getContentResourceHandle());
         $part->detachContentResourceHandle();
         $this->removePart($part);
-        $this->removePart($this);
-        $this->addPart($this);
     }
     
     /**
