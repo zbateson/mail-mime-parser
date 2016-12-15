@@ -1821,4 +1821,43 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             ],
         ]);
     }
+    
+    public function testParseEmailm4005()
+    {
+        $handle = fopen($this->messageDir . '/m4005.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+        
+        $str = file_get_contents($this->messageDir . '/files/blueball.png');
+        $this->assertEquals(1, $message->getAttachmentCount());
+        $this->assertEquals('text/rtf', $message->getAttachmentPart(0)->getHeaderValue('Content-Type'));
+        $this->assertTrue($str === $message->getAttachmentPart(0)->getContent(), 'text/rtf stream doesn\'t match binary stream');
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt'
+        ];
+        
+        $this->runEmailTestForMessage($message, $props, 'failed adding large attachment part to m0001');
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/m4005", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for adding a large attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+        
+        $this->assertEquals(1, $messageWritten->getAttachmentCount());
+        $this->assertEquals('text/rtf', $messageWritten->getAttachmentPart(0)->getHeaderValue('Content-Type'));
+        $this->assertTrue($str === $messageWritten->getAttachmentPart(0)->getContent(), 'text/rtf stream doesn\'t match binary stream');
+    }
 }

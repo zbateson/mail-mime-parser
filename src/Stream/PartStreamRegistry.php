@@ -134,8 +134,7 @@ class PartStreamRegistry
      */
     private function attachCharsetFilterToStream(MimePart $part, $handle)
     {
-        $contentType = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        if (strpos($contentType, 'text/') === 0) {
+        if ($part->isTextPart()) {
             stream_filter_append(
                 $handle,
                 'mailmimeparser-encode',

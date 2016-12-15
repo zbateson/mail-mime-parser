@@ -186,16 +186,22 @@ class MimePart
     }
     
     /**
-     * Returns true if this part's mime type is text/*
+     * Returns true if this part's mime type is text/plain, text/html or has a
+     * text/* and has a defined 'charset' attribute.
      * 
      * @return bool
      */
     public function isTextPart()
     {
-        return preg_match(
+        $type = $this->getHeaderValue('Content-Type', 'text/plain');
+        if ($type === 'text/html' || $type === 'text/plain') {
+            return true;
+        }
+        $charset = $this->getHeaderParameter('Content-Type', 'charset');
+        return ($charset !== null && preg_match(
             '~text/\w+~i',
             $this->getHeaderValue('Content-Type', 'text/plain')
-        );
+        ));
     }
 
     /**
@@ -382,8 +388,7 @@ class MimePart
      */
     private function setCharsetStreamFilterOnStream($handle)
     {
-        $contentType = strtolower($this->getHeaderValue('Content-Type', 'text/plain'));
-        if (strpos($contentType, 'text/') === 0) {
+        if ($this->isTextPart()) {
             return stream_filter_append(
                 $this->handle,
                 'mailmimeparser-encode',
