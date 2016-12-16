@@ -60,7 +60,7 @@ class ParameterConsumer extends GenericConsumer
      */
     private function getPartFor($strName, $strValue)
     {
-        if (empty($strName)) {
+        if ($strName === '') {
             return $this->partFactory->newMimeLiteralPart($strValue);
         }
         return $this->partFactory->newParameterPart($strName, $strValue);

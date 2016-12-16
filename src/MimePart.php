@@ -166,7 +166,7 @@ class MimePart
      */
     public function hasContent()
     {
-        if (!empty($this->handle)) {
+        if ($this->handle !== null) {
             return true;
         }
         return false;
@@ -320,7 +320,7 @@ class MimePart
     public function getHeaderValue($name, $defaultValue = null)
     {
         $header = $this->getHeader($name);
-        if (!empty($header)) {
+        if ($header !== null) {
             return $header->getValue();
         }
         return $defaultValue;
@@ -543,7 +543,7 @@ class MimePart
      */
     protected function writeContentTo($handle)
     {
-        if (!empty($this->handle)) {
+        if ($this->handle !== null) {
             $filter = $this->setCharsetStreamFilterOnStream($handle);
             $leftovers = new StreamLeftover();
             $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle, $handle, $leftovers);

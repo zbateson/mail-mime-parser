@@ -45,7 +45,7 @@ class UUDecodeStreamFilter extends php_user_filter
             -1,
             PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
         );
-        if (!empty($this->leftover)) {
+        if ($this->leftover !== '') {
             $lines[0] = $this->leftover . $lines[0];
             $this->leftover = '';
         }
@@ -65,7 +65,7 @@ class UUDecodeStreamFilter extends php_user_filter
      */
     private function isEmptyOrStartLine($line)
     {
-        return (empty($line) || preg_match('/^begin \d{3} .*$/', $line));
+        return ($line === '' || preg_match('/^begin \d{3} .*$/', $line));
     }
     
     /**

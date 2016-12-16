@@ -77,7 +77,7 @@ class SimpleDi
     public static function singleton()
     {
         static $singleton = null;
-        if (empty($singleton)) {
+        if ($singleton === null) {
             $singleton = new SimpleDi();
         }
         return $singleton;

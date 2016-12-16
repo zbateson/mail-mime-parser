@@ -147,7 +147,7 @@ class Message extends MimePart
     {
         $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         // separate if statements for clarity
-        if (!empty($this->contentPart)) {
+        if ($this->contentPart !== null) {
             return $this->addToAlternativeContentPartFromParsed($part);
         }
         if ($type === 'multipart/alternative'
@@ -176,7 +176,7 @@ class Message extends MimePart
         if (strcasecmp($mtype, 'multipart/signed') === 0 && $protocol !== null && $part->getParent() === $this && strcasecmp($protocol, $type) === 0) {
             $this->signedSignaturePart = $part;
             $this->createMultipartMixedForSignedMessage();
-        } else if ((!empty($disposition) || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
+        } else if (($disposition !== null || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
             $this->attachmentParts[] = $part;
         }
     }
@@ -416,14 +416,14 @@ class Message extends MimePart
     private function copyTypeHeadersFromPartToPart(MimePart $from, MimePart $to)
     {
         $typeHeader = $from->getHeader('Content-Type');
-        if (!empty($typeHeader)) {
+        if ($typeHeader !== null) {
             $to->setRawHeader('Content-Type', $typeHeader->getRawValue());
             $encodingHeader = $from->getHeader('Content-Transfer-Encoding');
-            if (!empty($encodingHeader)) {
+            if ($encodingHeader !== null) {
                 $to->setRawHeader('Content-Transfer-Encoding', $encodingHeader->getRawValue());
             }
             $dispositionHeader = $from->getHeader('Content-Disposition');
-            if (!empty($dispositionHeader)) {
+            if ($dispositionHeader !== null) {
                 $to->setRawHeader('Content-Disposition', $dispositionHeader->getRawValue());
             }
         } else {
@@ -556,7 +556,7 @@ class Message extends MimePart
         foreach ($this->attachmentParts as $part) {
             $part->setParent($mixed);
         }
-        if (!empty($this->contentPart)) {
+        if ($this->contentPart !== null) {
             $this->contentPart->setParent($mixed);
         }
         $this->signedMixedPart = $mixed;
@@ -590,7 +590,7 @@ class Message extends MimePart
      */
     private function ensureHtmlPartFirstForSignedMessage()
     {
-        if (empty($this->contentPart)) {
+        if ($this->contentPart === null) {
             return;
         }
         $type = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
@@ -898,7 +898,7 @@ class Message extends MimePart
     public function getTextStream()
     {
         $textPart = $this->getTextPart();
-        if (!empty($textPart)) {
+        if ($textPart !== null) {
             return $textPart->getContentResourceHandle();
         }
         return null;
@@ -930,7 +930,7 @@ class Message extends MimePart
     public function getHtmlStream()
     {
         $htmlPart = $this->getHtmlPart();
-        if (!empty($htmlPart)) {
+        if ($htmlPart !== null) {
             return $htmlPart->getContentResourceHandle();
         }
         return null;
@@ -1026,7 +1026,7 @@ class Message extends MimePart
     private function writePartTo($handle, MimePart $part, MimePart $parent, MimePart &$boundaryParent)
     {
         $boundary = $boundaryParent->getHeaderParameter('Content-Type', 'boundary');
-        if (!empty($boundary)) {
+        if ($boundary !== null) {
             $this->writePartBoundaries($handle, $part, $parent, $boundaryParent, $boundary);
             if ($part !== $this) {
                 $part->writeTo($handle);
@@ -1056,7 +1056,7 @@ class Message extends MimePart
     {
         $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         $disposition = $part->getHeaderValue('Content-Disposition');
-        if (empty($disposition) && $this->contentPart !== $part && ($type === 'text/html' || $type === 'text/plain')) {
+        if ($disposition === null && $this->contentPart !== $part && ($type === 'text/html' || $type === 'text/plain')) {
             return $this->contentPart;
         } elseif ($this->signedSignaturePart !== null) {
             return $part->getParent();
@@ -1088,7 +1088,7 @@ class Message extends MimePart
             $this->writePartTo($handle, $part, $parent, $curParent);
             $partsIter->next();
         }
-        if (!empty($boundary)) {
+        if ($boundary !== null) {
             $this->writeBoundary($handle, $boundary, true);
         }
     }
@@ -1109,7 +1109,7 @@ class Message extends MimePart
     {
         $this->writeHeadersTo($handle);
         $parts = [];
-        if (!empty($this->signedMixedPart)) {
+        if ($this->signedMixedPart !== null) {
             $parts[] = $this->signedMixedPart;
         }
         if ($this->contentPart !== null) {
@@ -1123,7 +1123,7 @@ class Message extends MimePart
         if (!empty($this->attachmentParts)) {
             $parts = array_merge($parts, $this->attachmentParts);
         }
-        if (!empty($this->signedSignaturePart)) {
+        if ($this->signedSignaturePart !== null) {
             $parts[] = $this->signedSignaturePart;
         }
         $this->writePartsTo(
@@ -1166,7 +1166,7 @@ class Message extends MimePart
     public function getSignableBody()
     {
         $parts = [];
-        if (!empty($this->signedMixedPart)) {
+        if ($this->signedMixedPart !== null) {
             $parts[] = $this->signedMixedPart;
         }
         if ($this->contentPart !== null) {

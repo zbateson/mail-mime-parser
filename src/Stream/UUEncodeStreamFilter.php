@@ -40,7 +40,7 @@ class UUEncodeStreamFilter extends php_user_filter
     {
         $converted = preg_replace('/\r\n|\r|\n/', "\r\n", convert_uuencode($data));
         $cleaned = rtrim(substr(rtrim($converted), 0, -1));      // remove end line ` character
-        if (empty($cleaned)) {
+        if ($cleaned === '') {
             return;
         }
         $cleaned = "\r\n" . $cleaned;

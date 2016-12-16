@@ -73,7 +73,7 @@ class MessageParser
      */
     private function addRawHeaderToPart($header, MimePart $part)
     {
-        if (!empty($header) && strpos($header, ':') !== false) {
+        if ($header !== '' && strpos($header, ':') !== false) {
             $a = explode(':', $header, 2);
             $part->setRawHeader($a[0], trim($a[1]));
         }
@@ -98,7 +98,7 @@ class MessageParser
                 $line = "\r\n" . $line;
             }
             $header .= rtrim($line, "\r\n");
-        } while (!empty($header));
+        } while ($header !== '');
     }
     
     /**
@@ -151,7 +151,7 @@ class MessageParser
         $start = ftell($handle);
         $boundaryLength = 0;
         $endBoundaryFound = false;
-        if (!empty($boundary)) {
+        if ($boundary !== null) {
             $this->findPartBoundaries($handle, $boundary, $boundaryLength, $endBoundaryFound);
         } else {
             fseek($handle, 0, SEEK_END);
@@ -242,7 +242,7 @@ class MessageParser
         $skipFirst = true;
         $parent = $part;
 
-        if (empty($boundary) || !$part->isMultiPart()) {
+        if ($boundary === null || !$part->isMultiPart()) {
             // either there is no boundary (possibly no parent boundary either) and message is read
             // till the end, or we're in a boundary already and content should be read till the parent
             // boundary is reached

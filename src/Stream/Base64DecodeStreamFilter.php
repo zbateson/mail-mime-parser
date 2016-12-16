@@ -46,7 +46,7 @@ class Base64DecodeStreamFilter extends php_user_filter
     private function getRawBytes($bucket)
     {
         $raw = preg_replace('/\s+/', '', $bucket->data);
-        if (!empty($this->leftover)) {
+        if ($this->leftover !== '') {
             $raw = $this->leftover . $raw;
             $this->leftover = '';
         }
