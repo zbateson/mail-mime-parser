@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit_Framework_TestCase;
 
@@ -7,8 +7,8 @@ use PHPUnit_Framework_TestCase;
  * Description of MimePartFactoryTest
  *
  * @group MimePartFactory
- * @group Base
- * @covers ZBateson\MailMimeParser\MimePartFactory
+ * @group Message
+ * @covers ZBateson\MailMimeParser\Message\MimePartFactory
  * @author Zaahid Bateson
  */
 class MimePartFactoryTest extends PHPUnit_Framework_TestCase
@@ -27,20 +27,20 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
     {
         $part = $this->mimePartFactory->newMimePart();
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\MimePart', $part);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\MimePart', $part);
     }
     
     public function testNewNonMimePart()
     {
         $part = $this->mimePartFactory->newNonMimePart();
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\NonMimePart', $part);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\NonMimePart', $part);
     }
     
     public function testNewUUEncodedPart()
     {
         $part = $this->mimePartFactory->newUUEncodedPart(066, 'test');
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\UUEncodedPart', $part);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\UUEncodedPart', $part);
     }
 }

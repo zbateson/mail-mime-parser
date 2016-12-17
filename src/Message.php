@@ -7,6 +7,9 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\MimePart;
+use ZBateson\MailMimeParser\Message\MimePartFactory;
+use ZBateson\MailMimeParser\Message\NonMimePart;
 use ArrayIterator;
 use Iterator;
 
@@ -36,32 +39,32 @@ class Message extends MimePart
     protected $objectId;
     
     /**
-     * @var \ZBateson\MailMimeParser\MimePart represents the content portion of
+     * @var \ZBateson\MailMimeParser\Message\MimePart represents the content portion of
      *      the email message.  It is assigned either a text or HTML part, or a
      *      MultipartAlternativePart
      */
     protected $contentPart;
     
     /**
-     * @var \ZBateson\MailMimeParser\MimePart contains the body of the signature
+     * @var \ZBateson\MailMimeParser\Message\MimePart contains the body of the signature
      *      for a multipart/signed message.
      */
     protected $signedSignaturePart;
     
     /**
-     * @var \ZBateson\MailMimeParser\MimePart The mixed part for a
+     * @var \ZBateson\MailMimeParser\Message\MimePart The mixed part for a
      *      multipart/signed message if the message contains attachments
      */
     protected $signedMixedPart;
     
     /**
-     * @var \ZBateson\MailMimeParser\MimePart[] array of non-content parts in
+     * @var \ZBateson\MailMimeParser\Message\MimePart[] array of non-content parts in
      *      this message 
      */
     protected $attachmentParts = [];
     
     /**
-     * @var \ZBateson\MailMimeParser\MimePartFactory a MimePartFactory to create
+     * @var \ZBateson\MailMimeParser\Message\MimePartFactory a MimePartFactory to create
      *      parts for attachments/content
      */
     protected $mimePartFactory;
@@ -113,7 +116,7 @@ class Message extends MimePart
      * Loops through the parts parents to find if it's an alternative part or
      * an attachment.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @return boolean true if its been added
      */
     private function addToAlternativeContentPartFromParsed(MimePart $part)
@@ -140,7 +143,7 @@ class Message extends MimePart
      * Returns true if the $part should be assigned as this message's main
      * content part.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @return bool
      */
     private function addContentPartFromParsed(MimePart $part)
@@ -164,7 +167,7 @@ class Message extends MimePart
      * text/plain, to $this->htmlPart if it's text/html, or adds the part to the
      * parts array otherwise.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
     public function addPart(MimePart $part)
     {
@@ -187,7 +190,7 @@ class Message extends MimePart
      * looking to find an alternative part of the passed mime type.
      * 
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\MimePart or null if not available
+     * @return \ZBateson\MailMimeParser\Message\MimePart or null if not available
      */
     protected function getContentPartByMimeType($mimeType)
     {
@@ -208,7 +211,7 @@ class Message extends MimePart
      * message with a multipart/alternative content type where the other part
      * has been removed, and this is the only remaining part.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
     private function overrideAlternativeMessageContentFromContentPart(MimePart $part)
     {
@@ -235,7 +238,7 @@ class Message extends MimePart
      * multipart/alternative message, or overrides the contentPart with the
      * remaining part.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
     private function removePartFromAlternativeContentPart(MimePart $part)
     {
@@ -302,7 +305,7 @@ class Message extends MimePart
     /**
      * Returns the text part (or null if none is set.)
      * 
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getTextPart()
     {
@@ -312,7 +315,7 @@ class Message extends MimePart
     /**
      * Returns the HTML part (or null if none is set.)
      * 
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getHtmlPart()
     {
@@ -353,7 +356,7 @@ class Message extends MimePart
      * Creates a unique mime boundary and assigns it to the passed part's
      * Content-Type header with the passed mime type.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @param string $mimeType
      */
     private function setMimeHeaderBoundaryOnPart(MimePart $part, $mimeType)
@@ -410,8 +413,8 @@ class Message extends MimePart
      * header isn't defined in $from, defaults to text/plain and
      * quoted-printable.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $from
-     * @param \ZBateson\MailMimeParser\MimePart $to
+     * @param \ZBateson\MailMimeParser\Message\MimePart $from
+     * @param \ZBateson\MailMimeParser\Message\MimePart $to
      */
     private function copyTypeHeadersFromPartToPart(MimePart $from, MimePart $to)
     {
@@ -464,7 +467,7 @@ class Message extends MimePart
      * $this->contentPart to the passed $messagePart if the $this->contentPart
      * is set to $this
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $messagePart
+     * @param \ZBateson\MailMimeParser\Message\MimePart $messagePart
      */
     private function updateContentPartForSignedMessage(MimePart $messagePart)
     {
@@ -634,7 +637,7 @@ class Message extends MimePart
     /**
      * Returns the signed part or null if not set.
      * 
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getSignaturePart()
     {
@@ -664,7 +667,7 @@ class Message extends MimePart
      * 
      * @param string $mimeType
      * @param string $charset
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     private function createContentPartForMimeType($mimeType, $charset)
     {
@@ -776,7 +779,7 @@ class Message extends MimePart
      * is set.
      * 
      * @param int $index
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getAttachmentPart($index)
     {
@@ -789,7 +792,7 @@ class Message extends MimePart
     /**
      * Returns all attachment parts.
      * 
-     * @return \ZBateson\MailMimeParser\MimePart[]
+     * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
     public function getAllAttachmentParts()
     {
@@ -822,7 +825,7 @@ class Message extends MimePart
      * Creates and returns a MimePart for use with a new attachment part being
      * created.
      * 
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     protected function createPartForAttachment()
     {
@@ -995,9 +998,9 @@ class Message extends MimePart
      * Also writes out end boundaries for the previous part if applicable.
      * 
      * @param resource $handle
-     * @param \ZBateson\MailMimeParser\MimePart $part
-     * @param \ZBateson\MailMimeParser\MimePart $parent
-     * @param \ZBateson\MailMimeParser\MimePart $boundaryParent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $boundaryParent
      * @param string $boundary
      */
     private function writePartBoundaries($handle, MimePart $part, MimePart $parent, MimePart &$boundaryParent, $boundary)
@@ -1019,9 +1022,9 @@ class Message extends MimePart
      * boundaries.
      * 
      * @param resource $handle
-     * @param \ZBateson\MailMimeParser\MimePart $part
-     * @param \ZBateson\MailMimeParser\MimePart $parent
-     * @param \ZBateson\MailMimeParser\MimePart $boundaryParent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $boundaryParent
      */
     private function writePartTo($handle, MimePart $part, MimePart $parent, MimePart &$boundaryParent)
     {
@@ -1049,8 +1052,8 @@ class Message extends MimePart
      * Note that if Content-Disposition is set on the passed part, $this is
      * always returned.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     private function getWriteParentForPart(MimePart $part)
     {
@@ -1076,7 +1079,7 @@ class Message extends MimePart
      * 
      * @param resource $handle the handle to write out to
      * @param Iterator $partsIter an Iterator for parts to save
-     * @param \ZBateson\MailMimeParser\MimePart $curParent the current parent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $curParent the current parent
      */
     protected function writePartsTo($handle, Iterator $partsIter, MimePart $curParent)
     {

@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
@@ -34,7 +34,7 @@ class MimePartFactory
     /**
      * Constructs a new MimePart object and returns it
      * 
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function newMimePart()
     {
@@ -44,7 +44,7 @@ class MimePartFactory
     /**
      * Constructs a new NonMimePart object and returns it
      * 
-     * @return \ZBateson\MailMimeParser\NonMimePart
+     * @return \ZBateson\MailMimeParser\Message\NonMimePart
      */
     public function newNonMimePart()
     {

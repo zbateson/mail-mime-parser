@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -11,8 +11,8 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * Description of NonMimePartTest
  *
  * @group NonMimePart
- * @group Base
- * @covers ZBateson\MailMimeParser\NonMimePart
+ * @group Message
+ * @covers ZBateson\MailMimeParser\Message\NonMimePart
  * @author Zaahid Bateson
  */
 class NonMimePartTest extends PHPUnit_Framework_TestCase

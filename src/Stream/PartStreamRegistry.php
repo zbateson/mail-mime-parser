@@ -6,14 +6,14 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use ZBateson\MailMimeParser\MimePart;
+use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message;
 
 /**
  * Factory class for PartStream objects and registration class for Message
  * handles.
  * 
- * PartStreamRegistry is used for \ZBateson\MailMimeParser\MessageParser to
+ * PartStreamRegistry is used for \ZBateson\MailMimeParser\Message\MessageParser to
  * register Message stream handles for opening with PartStreams, and to open
  * file handles for specific mime parts of a message.  The PartStreamRegistry
  * maintains a list of opened resources, closing them either when unregistering
@@ -104,7 +104,7 @@ class PartStreamRegistry
      * Attaches a stream filter on the passed resource $handle for the part's
      * encoding.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @param resource $handle
      */
     private function attachEncodingFilterToStream(MimePart $part, $handle)
@@ -129,7 +129,7 @@ class PartStreamRegistry
      * Attaches a mailmimeparser-encode stream filter based on the part's
      * defined charset.
      * 
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @param resource $handle
      */
     private function attachCharsetFilterToStream(MimePart $part, $handle)

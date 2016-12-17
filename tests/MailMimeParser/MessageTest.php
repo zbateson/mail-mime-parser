@@ -15,7 +15,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
 {
     protected function getMockedPart()
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\MimePart')
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter', 'getContentResourceHandle'])
             ->getMock();
@@ -32,7 +32,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     
     protected function getMockedPartFactory()
     {
-        $partFactory = $this->getMockBuilder('ZBateson\MailMimeParser\MimePartFactory')
+        $partFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
         return $partFactory;

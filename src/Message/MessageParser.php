@@ -4,8 +4,9 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
 
 /**
@@ -23,7 +24,7 @@ class MessageParser
     protected $message;
     
     /**
-     * @var \ZBateson\MailMimeParser\MimePartFactory the MimePartFactory object
+     * @var \ZBateson\MailMimeParser\Message\MimePartFactory the MimePartFactory object
      * used to create parts.
      */
     protected $partFactory;
@@ -39,7 +40,7 @@ class MessageParser
      * Sets up the parser with its dependencies.
      * 
      * @param \ZBateson\MailMimeParser\Message $m
-     * @param \ZBateson\MailMimeParser\MimePartFactory $pf
+     * @param \ZBateson\MailMimeParser\Message\MimePartFactory $pf
      * @param \ZBateson\MailMimeParser\Stream\PartStreamRegistry $psr
      */
     public function __construct(Message $m, MimePartFactory $pf, PartStreamRegistry $psr)
@@ -69,7 +70,7 @@ class MessageParser
      * splits it and assigns it to $part
      * 
      * @param string $header
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
     private function addRawHeaderToPart($header, MimePart $part)
     {
@@ -83,7 +84,7 @@ class MessageParser
      * Reads header lines up to an empty line, adding them to the passed $part.
      * 
      * @param resource $handle the resource handle to read from
-     * @param \ZBateson\MailMimeParser\MimePart $part the current part to add
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part the current part to add
      *        headers to
      */
     protected function readHeaders($handle, MimePart $part)
@@ -139,7 +140,7 @@ class MessageParser
      * @param resource $handle the input stream resource
      * @param \ZBateson\MailMimeParser\Message $message the current Message
      *        object
-     * @param \ZBateson\MailMimeParser\MimePart $part the current MimePart
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part the current MimePart
      *        object to load the content into.
      * @param string $boundary the MIME boundary
      * @param boolean $skipPart pass true if the intention is to read up to the
@@ -172,7 +173,7 @@ class MessageParser
      * $parent is null
      * 
      * @param string $curBoundary
-     * @param \ZBateson\MailMimeParser\MimePart $parent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
      * @return string
      */
     private function getParentBoundary($curBoundary, MimePart $parent = null)
@@ -187,8 +188,8 @@ class MessageParser
      * either the passed $parent, or $message if $parent is null.
      * 
      * @param \ZBateson\MailMimeParser\Message $message
-     * @param \ZBateson\MailMimeParser\MimePart $parent
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     private function newMimePartForMessage(Message $message, MimePart $parent = null)
     {
@@ -203,11 +204,11 @@ class MessageParser
      * 
      * @param resource $handle
      * @param \ZBateson\MailMimeParser\Message $message
-     * @param \ZBateson\MailMimeParser\MimePart $parent
-     * @param \ZBateson\MailMimeParser\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @param string $boundary
      * @param bool $skipFirst
-     * @return \ZBateson\MailMimeParser\MimePart
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     private function readMimeMessageBoundaryParts(
         $handle,
@@ -233,7 +234,7 @@ class MessageParser
      * 
      * @param resource $handle The handle to read from
      * @param \ZBateson\MailMimeParser\Message $message The current Message
-     * @param \ZBateson\MailMimeParser\MimePart $part 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part 
      * @return MimePart
      */
     protected function readMimeMessagePart($handle, Message $message, MimePart $part)

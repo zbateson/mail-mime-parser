@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit_Framework_TestCase;
 
@@ -7,8 +7,8 @@ use PHPUnit_Framework_TestCase;
  * Description of MimePartTest
  *
  * @group MimePart
- * @group Base
- * @covers ZBateson\MailMimeParser\MimePart
+ * @group Message
+ * @covers ZBateson\MailMimeParser\Message\MimePart
  * @author Zaahid Bateson
  */
 class MimePartTest extends PHPUnit_Framework_TestCase

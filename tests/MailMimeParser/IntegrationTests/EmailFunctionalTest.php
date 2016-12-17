@@ -17,7 +17,7 @@ use ZBateson\MailMimeParser\Message;
  * @covers ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter
  * @covers ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter
  * @covers ZBateson\MailMimeParser\Message
- * @covers ZBateson\MailMimeParser\MimePart
+ * @covers ZBateson\MailMimeParser\Message\MimePart
  * @author Zaahid Bateson
  */
 class EmailFunctionalTest extends PHPUnit_Framework_TestCase

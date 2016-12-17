@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -11,8 +11,8 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * Description of UUEncodedPartTest
  *
  * @group UUEncodedPart
- * @group Base
- * @covers ZBateson\MailMimeParser\UUEncodedPart
+ * @group Message
+ * @covers ZBateson\MailMimeParser\Message\UUEncodedPart
  * @author Zaahid Bateson
  */
 class UUEncodedPartTest extends PHPUnit_Framework_TestCase
