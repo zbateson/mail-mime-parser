@@ -71,7 +71,7 @@ class MimePart
      */
     public function __destruct()
     {
-        if ($this->handle !== null) {
+        if (is_resource($this->handle)) {
             fclose($this->handle);
         }
     }
