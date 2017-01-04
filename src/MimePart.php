@@ -242,7 +242,8 @@ class MimePart
     }
 
     /**
-     * Returns the resource stream handle for the part's content.
+     * Returns the resource stream handle for the part's content or null if not
+     * set.  rewind() is called on the stream before returning it.
      *
      * The resource is automatically closed by MimePart's destructor and should
      * not be closed otherwise.
@@ -251,6 +252,9 @@ class MimePart
      */
     public function getContentResourceHandle()
     {
+        if (is_resource($this->handle)) {
+            rewind($this->handle);
+        }
         return $this->handle;
     }
 
