@@ -22,6 +22,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
         return $part;
     }
     
+    protected function getMockedMessageWriter()
+    {
+        $mw = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Writer\MessageWriter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        return $mw;
+    }
+    
     protected function getMockedHeaderFactory()
     {
         $headerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
@@ -37,13 +45,19 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->getMock();
         return $partFactory;
     }
+    
+    protected function createNewMessage()
+    {
+        $hf = $this->getMockedHeaderFactory();
+        $mw = $this->getMockedMessageWriter();
+        $pf = $this->getMockedPartFactory();
+        return new Message($hf, $mw, $pf);
+    }
 
     public function testObjectId()
     {
-        $hf = $this->getMockedHeaderFactory();
-        $pf = $this->getMockedPartFactory();
-        $message = new Message($hf, $pf);
-        $message2 = new Message($hf, $pf);
+        $message = $this->createNewMessage();
+        $message2 = $this->createNewMessage();
         $this->assertNotEmpty($message->getObjectId());
         $this->assertSame($message->getObjectId(), $message->getObjectId());
         $this->assertSame($message2->getObjectId(), $message2->getObjectId());
@@ -52,8 +66,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
     
     public function testAddHtmlPart()
     {
-        $hf = $this->getMockedHeaderFactory();
-        $pf = $this->getMockedPartFactory();
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->will($this->returnCallback(function($param) {
             if ($param === 'Content-Type') {
@@ -63,7 +75,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
-        $message = new Message($hf, $pf);
+        $message = $this->createNewMessage();
         $message->addPart($part);
         
         $this->assertNull($message->getTextPart());
@@ -76,8 +88,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
 
     public function testAddTextPart()
     {
-        $hf = $this->getMockedHeaderFactory();
-        $pf = $this->getMockedPartFactory();
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->will($this->returnCallback(function($param) {
             if ($param === 'Content-Type') {
@@ -87,7 +97,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
-        $message = new Message($hf, $pf);
+        $message = $this->createNewMessage();
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getAttachmentPart(0));
@@ -99,12 +109,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
 
     public function testAddAttachmentPart()
     {
-        $hf = $this->getMockedHeaderFactory();
-        $pf = $this->getMockedPartFactory();
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->willReturn('image/png');
 
-        $message = new Message($hf, $pf);
+        $message = $this->createNewMessage();
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getTextPart());
@@ -115,8 +123,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
     
     public function testGetParts()
     {
-        $hf = $this->getMockedHeaderFactory();
-        $pf = $this->getMockedPartFactory();
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->willReturn('image/png');
         
@@ -128,7 +134,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             return null;
         }));
 
-        $message = new Message($hf, $pf);
+        $message = $this->createNewMessage();
         $message->addPart($part);
         $message->addPart($part2);
         $this->assertNull($message->getTextPart());
@@ -141,9 +147,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     
     public function testMessageIsMime()
     {
-        $hf = $this->getMockedHeaderFactory();
-        $pf = $this->getMockedPartFactory();
-        $message = new Message($hf, $pf);
+        $message = $this->createNewMessage();
         $this->assertFalse($message->isMime());
     }
 }

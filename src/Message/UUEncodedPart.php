@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
 
 /**
  * A specialized NonMimePart representing a uuencoded part.
@@ -39,12 +40,17 @@ class UUEncodedPart extends NonMimePart
      * Initiates the UUEncodedPart with the passed mode and filename.
      * 
      * @param HeaderFactory $headerFactory
+     * @param MimePartWriter $partWriter
      * @param int $mode the unix file mode
      * @param string $filename the filename
      */
-    public function __construct(HeaderFactory $headerFactory, $mode, $filename)
-    {
-        parent::__construct($headerFactory);
+    public function __construct(
+        HeaderFactory $headerFactory,
+        MimePartWriter $partWriter,
+        $mode,
+        $filename
+    ) {
+        parent::__construct($headerFactory, $partWriter);
         $this->mode = $mode;
         $this->filename = $filename;
         

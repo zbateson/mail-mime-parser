@@ -23,8 +23,11 @@ class NonMimePartTest extends PHPUnit_Framework_TestCase
         $mlpf = new MimeLiteralPartFactory();
         $cs = new ConsumerService($pf, $mlpf);
         $hf = new HeaderFactory($cs, $pf);
+        $pw = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Writer\MimePartWriter')
+            ->disableOriginalConstructor()
+            ->getMock();
         
-        $part = new NonMimePart($hf);
+        $part = new NonMimePart($hf, $pw);
         $this->assertNotNull($part);
         $this->assertEquals('text/plain', $part->getHeaderValue('Content-Type'));
     }

@@ -24,7 +24,11 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
         $cs = new ConsumerService($pf, $mlpf);
         $hf = new HeaderFactory($cs, $pf);
         
-        $part = new UUEncodedPart($hf, 0754, 'test-file.ext');
+        $pw = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Writer\MimePartWriter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $part = new UUEncodedPart($hf, $pw, 0754, 'test-file.ext');
         $this->assertNotNull($part);
         
         $this->assertEquals('application/octet-stream', $part->getHeaderValue('Content-Type'));

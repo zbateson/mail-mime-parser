@@ -9,9 +9,7 @@ namespace ZBateson\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MimePartFactory;
-use ZBateson\MailMimeParser\Message\NonMimePart;
-use ArrayIterator;
-use Iterator;
+use ZBateson\MailMimeParser\Message\Writer\MessageWriter;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -70,6 +68,14 @@ class Message extends MimePart
     protected $mimePartFactory;
     
     /**
+     * @var \ZBateson\MailMimeParser\Message\Writer\MessageWriter the part
+     *      writer for this Message.  The same object is assigned to $partWriter
+     *      but as an AbstractWriter -- not really needed in PHP but helps with
+     *      auto-complete and code analyzers.
+     */
+    protected $messageWriter = null;
+    
+    /**
      * @var bool set to true if a newline should be inserted before the next
      *      boundary (signed messages are finicky)
      */
@@ -92,11 +98,16 @@ class Message extends MimePart
      * Constructs a Message.
      * 
      * @param HeaderFactory $headerFactory
+     * @param MessageWriter $messageWriter
      * @param MimePartFactory $mimePartFactory
      */
-    public function __construct(HeaderFactory $headerFactory, MimePartFactory $mimePartFactory)
-    {
-        parent::__construct($headerFactory);
+    public function __construct(
+        HeaderFactory $headerFactory,   
+        MessageWriter $messageWriter,
+        MimePartFactory $mimePartFactory
+    ) {
+        parent::__construct($headerFactory, $messageWriter);
+        $this->messageWriter = $messageWriter;
         $this->mimePartFactory = $mimePartFactory;
         $this->objectId = uniqid();
     }
@@ -320,6 +331,17 @@ class Message extends MimePart
     public function getHtmlPart()
     {
         return $this->getContentPartByMimeType('text/html');
+    }
+    
+    /**
+     * Returns the content MimePart, which could be a text/plain, text/html or
+     * multipart/alternative part or null if none is set.
+     * 
+     * @return \ZBateson\MailMimeParser\Message\MimePart
+     */
+    public function getContentPart()
+    {
+        return $this->contentPart;
     }
     
     /**
@@ -970,133 +992,6 @@ class Message extends MimePart
     }
     
     /**
-     * Writes out a mime boundary to the passed $handle
-     * 
-     * @param resource $handle
-     * @param string $boundary
-     * @param bool $isEnd
-     */
-    private function writeBoundary($handle, $boundary, $isEnd = false)
-    {
-        if ($this->insertNewLineBeforeBoundary) {
-            fwrite($handle, "\r\n");
-        }
-        fwrite($handle, '--');
-        fwrite($handle, $boundary);
-        if ($isEnd) {
-            fwrite($handle, "--\r\n");
-        } else {
-            fwrite($handle, "\r\n");
-        }
-        $this->insertNewLineBeforeBoundary = $isEnd;
-    }
-    
-    /**
-     * Writes out any necessary boundaries for the given $part if required based
-     * on its $parent and $boundaryParent.
-     * 
-     * Also writes out end boundaries for the previous part if applicable.
-     * 
-     * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
-     * @param \ZBateson\MailMimeParser\Message\MimePart $boundaryParent
-     * @param string $boundary
-     */
-    private function writePartBoundaries($handle, MimePart $part, MimePart $parent, MimePart &$boundaryParent, $boundary)
-    {
-        if ($boundaryParent !== $parent && $boundaryParent !== $part) {
-            if ($boundaryParent !== null && $parent->getParent() !== $boundaryParent) {
-                $this->writeBoundary($handle, $boundary, true);
-            }
-            $boundaryParent = $parent;
-            $boundary = $boundaryParent->getHeaderParameter('Content-Type', 'boundary');
-        }
-        if ($boundaryParent !== null && $boundaryParent !== $part) {
-            $this->writeBoundary($handle, $boundary);
-        }
-    }
-    
-    /**
-     * Writes out the passed mime part, writing out any necessary mime
-     * boundaries.
-     * 
-     * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
-     * @param \ZBateson\MailMimeParser\Message\MimePart $boundaryParent
-     */
-    private function writePartTo($handle, MimePart $part, MimePart $parent, MimePart &$boundaryParent)
-    {
-        $boundary = $boundaryParent->getHeaderParameter('Content-Type', 'boundary');
-        if ($boundary !== null) {
-            $this->writePartBoundaries($handle, $part, $parent, $boundaryParent, $boundary);
-            if ($part !== $this) {
-                $part->writeTo($handle);
-            } else {
-                $part->writeContentTo($handle);
-            }
-        } elseif ($part instanceof NonMimePart) {
-            fwrite($handle, "\r\n\r\n");
-            $part->writeContentTo($handle);
-        } else {
-            $part->writeContentTo($handle);
-        }
-        $this->insertNewLineBeforeBoundary = $part->hasContent();
-    }
-    
-    /**
-     * Either returns $this for a non-text, non-html part, or returns
-     * $this->contentPart.
-     * 
-     * Note that if Content-Disposition is set on the passed part, $this is
-     * always returned.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @return \ZBateson\MailMimeParser\Message\MimePart
-     */
-    private function getWriteParentForPart(MimePart $part)
-    {
-        $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        $disposition = $part->getHeaderValue('Content-Disposition');
-        if ($disposition === null && $this->contentPart !== $part && ($type === 'text/html' || $type === 'text/plain')) {
-            return $this->contentPart;
-        } elseif ($this->signedSignaturePart !== null) {
-            return $part->getParent();
-        }
-        return $this;
-    }
-    
-    /**
-     * Loops over parts of the message and writes them as an email to the
-     * provided $handle.
-     * 
-     * The function rewrites mime parts in a multipart-mime message to be either
-     * alternatives of text/plain and text/html, or attachments because
-     * MailMimeParser doesn't currently maintain the structure of the original
-     * message.  This means other alternative parts would be dropped to
-     * attachments, and multipart/related parts are completely ignored.
-     * 
-     * @param resource $handle the handle to write out to
-     * @param Iterator $partsIter an Iterator for parts to save
-     * @param \ZBateson\MailMimeParser\Message\MimePart $curParent the current parent
-     */
-    protected function writePartsTo($handle, Iterator $partsIter, MimePart $curParent)
-    {
-        $this->insertNewLineBeforeBoundary = false;
-        $boundary = $curParent->getHeaderParameter('Content-Type', 'boundary');
-        while ($partsIter->valid()) {
-            $part = $partsIter->current();
-            $parent = $this->getWriteParentForPart($part);
-            $this->writePartTo($handle, $part, $parent, $curParent);
-            $partsIter->next();
-        }
-        if ($boundary !== null) {
-            $this->writeBoundary($handle, $boundary, true);
-        }
-    }
-    
-    /**
      * Saves the message as a MIME message to the passed resource handle.
      * 
      * The saved message is not guaranteed to be the same as the parsed message.
@@ -1110,54 +1005,17 @@ class Message extends MimePart
      */
     public function save($handle)
     {
-        $this->writeHeadersTo($handle);
-        $parts = [];
-        if ($this->signedMixedPart !== null) {
-            $parts[] = $this->signedMixedPart;
-        }
-        if ($this->contentPart !== null) {
-            if ($this->contentPart->isMultiPart()) {
-                $parts[] = $this->contentPart;
-                $parts = array_merge($parts, $this->contentPart->getAllParts());
-            } else {
-                $parts[] = $this->contentPart;
-            }
-        }
-        if (!empty($this->attachmentParts)) {
-            $parts = array_merge($parts, $this->attachmentParts);
-        }
-        if ($this->signedSignaturePart !== null) {
-            $parts[] = $this->signedSignaturePart;
-        }
-        $this->writePartsTo(
-            $handle,
-            new ArrayIterator($parts),
-            $this
-        );
+        $this->messageWriter->writeMessageTo($this, $handle);
     }
     
     /**
-     * Writes out the content of the message into a string and returns it.
+     * Returns the 'multipart/mixed' part of a signed message.
      * 
-     * @return string
+     * @return MimeType
      */
-    private function getSignableBodyFromParts(array $parts)
+    public function getSignedMixedPart()
     {
-        $handle = fopen('php://temp', 'r+');
-        $firstPart = array_shift($parts);
-        $firstPart->writeHeadersTo($handle);
-        $firstPart->writeContentTo($handle);
-        if (!empty($parts)) {
-            $this->writePartsTo(
-                $handle,
-                new ArrayIterator($parts),
-                $firstPart
-            );
-        }
-        rewind($handle);
-        $str = stream_get_contents($handle);
-        fclose($handle);
-        return $str;
+        return $this->signedMixedPart;
     }
     
     /**
@@ -1168,22 +1026,7 @@ class Message extends MimePart
      */
     public function getSignableBody()
     {
-        $parts = [];
-        if ($this->signedMixedPart !== null) {
-            $parts[] = $this->signedMixedPart;
-        }
-        if ($this->contentPart !== null) {
-            if ($this->contentPart->isMultiPart()) {
-                $parts[] = $this->contentPart;
-                $parts = array_merge($parts, $this->contentPart->getAllParts());
-            } else {
-                $parts[] = $this->contentPart;
-            }
-        }
-        if (!empty($this->attachmentParts)) {
-            $parts = array_merge($parts, $this->attachmentParts);
-        }
-        return $this->getSignableBodyFromParts($parts);
+        return $this->messageWriter->getSignableBody($this);
     }
     
     /**

@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 
 /**
  * Description of MimePartFactory
@@ -22,13 +23,21 @@ class MimePartFactory
     protected $headerFactory;
     
     /**
+     * @var \ZBateson\MailMimeParser\Message\Writer\MessageWriterService the
+     * MessageWriterService responsible for returning writers
+     */
+    protected $messageWriterService;
+    
+    /**
      * Creates a MimePartFactory instance with its dependencies.
      * 
      * @param HeaderFactory $headerFactory
+     * @param MessageWriterService $messageWriterService
      */
-    public function __construct(HeaderFactory $headerFactory)
+    public function __construct(HeaderFactory $headerFactory, MessageWriterService $messageWriterService)
     {
         $this->headerFactory = $headerFactory;
+        $this->messageWriterService = $messageWriterService;
     }
     
     /**
@@ -38,7 +47,7 @@ class MimePartFactory
      */
     public function newMimePart()
     {
-        return new MimePart($this->headerFactory);
+        return new MimePart($this->headerFactory, $this->messageWriterService->getMimePartWriter());
     }
     
     /**
@@ -48,7 +57,7 @@ class MimePartFactory
      */
     public function newNonMimePart()
     {
-        return new NonMimePart($this->headerFactory);
+        return new NonMimePart($this->headerFactory, $this->messageWriterService->getMimePartWriter());
     }
     
     /**
@@ -59,6 +68,6 @@ class MimePartFactory
      */
     public function newUUEncodedPart($mode, $filename)
     {
-        return new UUEncodedPart($this->headerFactory, $mode, $filename);
+        return new UUEncodedPart($this->headerFactory, $this->messageWriterService->getMimePartWriter(), $mode, $filename);
     }
 }

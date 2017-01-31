@@ -8,7 +8,7 @@ namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
-use ZBateson\MailMimeParser\Stream\StreamLeftover;
+use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
 
 /**
  * Represents a single part of a multi-part mime message.
@@ -46,24 +46,33 @@ class MimePart
     protected $handle;
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart[] array of parts in this message
+     * @var \ZBateson\MailMimeParser\Message\MimePart[] array of parts in this
+     *      message
      */
     protected $parts = [];
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart[] Maps mime types to parts for
-     * looking up in getPartByMimeType
+     * @var \ZBateson\MailMimeParser\Message\MimePart[] Maps mime types to parts
+     * for looking up in getPartByMimeType
      */
     protected $mimeToPart = [];
+    
+    /**
+     * @var \ZBateson\MailMimeParser\Message\Writer\MimePartWriter the part
+     *      writer for this MimePart
+     */
+    protected $partWriter = null;
 
     /**
      * Sets up class dependencies.
      *
      * @param HeaderFactory $headerFactory
+     * @param MimePartWriter $partWriter
      */
-    public function __construct(HeaderFactory $headerFactory)
+    public function __construct(HeaderFactory $headerFactory, MimePartWriter $partWriter)
     {
         $this->headerFactory = $headerFactory;
+        $this->partWriter = $partWriter;
     }
 
     /**
@@ -381,199 +390,5 @@ class MimePart
     public function getParent()
     {
         return $this->parent;
-    }
-
-    /**
-     * Sets up a mailmimeparser-encode stream filter on the passed stream
-     * resource handle if applicable and returns a reference to the filter.
-     *
-     * @param resource $handle
-     * @return resource a reference to the appended stream filter or null
-     */
-    private function setCharsetStreamFilterOnStream($handle)
-    {
-        if ($this->isTextPart()) {
-            return stream_filter_append(
-                $this->handle,
-                'mailmimeparser-encode',
-                STREAM_FILTER_READ,
-                [
-                    'charset' => 'UTF-8',
-                    'to' => $this->getHeaderParameter('Content-Type', 'charset', 'ISO-8859-1')
-                ]
-            );
-        }
-        return null;
-    }
-
-    /**
-     * Appends a stream filter the passed resource handle based on the type of
-     * encoding for the current mime part.
-     *
-     * Unfortunately PHP seems to error out allocating memory for
-     * stream_filter_make_writable in Base64EncodeStreamFilter using
-     * STREAM_FILTER_WRITE, and HHVM doesn't seem to remove the filter properly
-     * for STREAM_FILTER_READ, so the function appends a read filter on
-     * $fromHandle if running through 'php', and a write filter on $toHandle if
-     * using HHVM.
-     *
-     * @param resource $fromHandle
-     * @param resource $toHandle
-     * @param \ZBateson\MailMimeParser\Stream\StreamLeftover $leftovers
-     * @return resource the stream filter
-     */
-    private function setTransferEncodingFilterOnStream($fromHandle, $toHandle, StreamLeftover $leftovers)
-    {
-        $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
-        $params = [
-            'line-length' => 76,
-            'line-break-chars' => "\r\n",
-            'leftovers' => $leftovers,
-            'filename' => $this->getHeaderParameter(
-                'Content-Type',
-                'name',
-                'null'
-            )
-        ];
-        $typeToEncoding = [
-            'quoted-printable' => 'convert.quoted-printable-encode',
-            'base64' => 'convert.base64-encode',
-            'x-uuencode' => 'mailmimeparser-uuencode',
-        ];
-        if (isset($typeToEncoding[$encoding])) {
-            if (defined('HHVM_VERSION')) {
-                return stream_filter_append(
-                    $toHandle,
-                    $typeToEncoding[$encoding],
-                    STREAM_FILTER_WRITE,
-                    $params
-                );
-            } else {
-                return stream_filter_append(
-                    $fromHandle,
-                    $typeToEncoding[$encoding],
-                    STREAM_FILTER_READ,
-                    $params
-                );
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns true if the content-transfer-encoding header of the current part
-     * is set to 'x-uuencode'.
-     *
-     * @return bool
-     */
-    private function isUUEncoded()
-    {
-        $encoding = strtolower($this->getHeaderValue('Content-Transfer-Encoding'));
-        return ($encoding === 'x-uuencode');
-    }
-
-    /**
-     * Filters out single line feed (CR or LF) characters from text input and
-     * replaces them with CRLF, assigning the result to $read.  Also trims out
-     * any starting and ending CRLF characters in the stream.
-     *
-     * @param string $read the read string, and where the result will be written
-     *        to
-     * @param bool $first set to true if this is the first set of read
-     *        characters from the stream (ltrims CRLF)
-     * @param string $lastChars contains any CRLF characters from the last $read
-     *        line if it ended with a CRLF (because they're trimmed from the
-     *        end, and get prepended to $read).
-     */
-    private function filterTextBeforeCopying(&$read, &$first, &$lastChars)
-    {
-        if ($first) {
-            $first = false;
-            $read = ltrim($read, "\r\n");
-        }
-        $read = $lastChars . $read;
-        $read = preg_replace('/\r\n|\r|\n/', "\r\n", $read);
-        $lastChars = '';
-        $matches = null;
-        if (preg_match('/[\r\n]+$/', $read, $matches)) {
-            $lastChars = $matches[0];
-            $read = rtrim($read, "\r\n");
-        }
-    }
-
-    /**
-     * Copies the content of the $fromHandle stream into the $toHandle stream,
-     * maintaining the current read position in $fromHandle and writing
-     * uuencode headers.
-     *
-     * @param resource $fromHandle
-     * @param resource $toHandle
-     */
-    private function copyContentStream($fromHandle, $toHandle)
-    {
-        $pos = ftell($fromHandle);
-        rewind($fromHandle);
-        // changed from stream_copy_to_stream because hhvm seems to stop before
-        // end of file for some reason
-        $lastChars = '';
-        $first = true;
-        while (($read = fread($fromHandle, 1024)) != false) {
-            if ($this->isTextPart()) {
-                $this->filterTextBeforeCopying($read, $first, $lastChars);
-            }
-            fwrite($toHandle, $read);
-        }
-        fseek($fromHandle, $pos);
-    }
-
-    /**
-     * Writes out headers and follows them with an empty line.
-     *
-     * @param resource $handle
-     */
-    protected function writeHeadersTo($handle)
-    {
-        foreach ($this->headers as $header) {
-            fwrite($handle, "$header\r\n");
-        }
-        fwrite($handle, "\r\n");
-    }
-
-    /**
-     * Writes out the content portion of the mime part based on the headers that
-     * are set on the part, taking care of character/content-transfer encoding.
-     *
-     * @param resource $handle
-     */
-    protected function writeContentTo($handle)
-    {
-        if ($this->handle !== null) {
-            $filter = $this->setCharsetStreamFilterOnStream($handle);
-            $leftovers = new StreamLeftover();
-            $encodingFilter = $this->setTransferEncodingFilterOnStream($this->handle, $handle, $leftovers);
-            $this->copyContentStream($this->handle, $handle);
-            if ($encodingFilter !== null) {
-                fflush($handle);
-                stream_filter_remove($encodingFilter);
-                fwrite($handle, $leftovers->encodedValue);
-            }
-            if ($filter !== null) {
-                stream_filter_remove($filter);
-            }
-        }
-    }
-
-    /**
-     * Writes out the MimePart to the passed resource.
-     *
-     * Takes care of character and content transfer encoding on the output based
-     * on what headers are set.
-     *
-     * @param resource $handle
-     */
-    protected function writeTo($handle)
-    {
-        $this->writeHeadersTo($handle);
-        $this->writeContentTo($handle);
     }
 }
