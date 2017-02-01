@@ -57,7 +57,7 @@ class MessageWriter extends MimePartWriter
         $this->writePartContentTo($part, $handle);
         $ended = false;
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
-        foreach ($part->getAllParts() as $i => $child) {
+        foreach ($part->getChildParts() as $i => $child) {
             if ($boundary !== null) {
                 $numLines = ($i !== 0 && !$ended) ? 2 : (int) $ended;
                 $this->writeBoundary($handle, $boundary, $numLines, false);
@@ -83,7 +83,7 @@ class MessageWriter extends MimePartWriter
             $this->recursiveWriteParts($message, $handle);
         } else {
             $this->writePartHeadersTo($message, $handle);
-            foreach ($message->getAllParts() as $i => $child) {
+            foreach ($message->getChildParts() as $i => $child) {
                 if ($i !== 0) {
                     fwrite($handle, "\r\n\r\n");
                 }

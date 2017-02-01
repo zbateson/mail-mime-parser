@@ -154,23 +154,52 @@ class MimePart
     }
 
     /**
-     * Returns all attachment parts.
-     *
+     * Returns all child parts, and child parts of all children.
+     * 
      * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
     public function getAllParts()
     {
-        return $this->parts;
+        $aParts = [];
+        foreach ($this->parts as $part) {
+            $aParts = array_merge($aParts, [ $part ], $part->getAllParts());
+        }
+        return $aParts;
     }
 
     /**
-     * Returns the number of attachments available.
+     * Returns the total number of parts in this and all children.
      *
      * @return int
      */
     public function getPartCount()
     {
-        return count($this->parts);
+        return count($this->parts) + array_sum(
+            array_map(function ($part) {
+                return $part->getPartCount();
+            },
+            $this->parts)
+        );
+    }
+    
+    /**
+     * Returns all direct child parts.
+     * 
+     * @return \ZBateson\MailMimeParser\Message\MimePart[]
+     */
+    public function getChildParts()
+    {
+        return $this->parts;
+    }
+    
+    /**
+     * Returns the number of direct children under this part.
+     * 
+     * @return \ZBateson\MailMimeParser\Message\MimePart[]
+     */
+    public function getChildCount()
+    {
+        return $this->parts;
     }
 
     /**

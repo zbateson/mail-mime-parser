@@ -469,18 +469,12 @@ class Message extends MimePart
     private function updateContentPartForSignedMessage(MimePart $messagePart)
     {
         if ($this->contentPart === null) {
-            foreach ($this->getAllParts() as $child) {
-                if ($child === $this) {
-                    continue;
-                }
+            foreach ($this->getChildParts() as $child) {
                 $child->setParent($messagePart);
             }
         } elseif ($this->contentPart === $this) {
             $this->contentPart = $messagePart;
-            foreach ($this->getAllParts() as $child) {
-                if ($child === $this) {
-                    continue;
-                }
+            foreach ($this->getChildParts() as $child) {
                 $child->setParent($messagePart);
                 array_unshift($this->contentPart->parts, $child);
             }
