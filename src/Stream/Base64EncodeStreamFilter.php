@@ -45,8 +45,8 @@ class Base64EncodeStreamFilter extends php_user_filter
         $converted = base64_encode($data);
         $numBytes = strlen($converted);
         if ($this->numBytesWritten != 0) {
-            $next = 76 - ($this->numBytesWritten % 76);
-            $converted = substr($converted, 0, $next) . "\r\n" . rtrim(chunk_split(substr($converted, $next)));
+            $next = (76 - ($this->numBytesWritten % 76)) % 76;
+            $converted = substr($converted, 0, $next) . "\r\n" . rtrim(chunk_split(substr($converted, $next), 76));
         } else {
             $converted = rtrim(chunk_split($converted));
         }
@@ -74,7 +74,7 @@ class Base64EncodeStreamFilter extends php_user_filter
                 $this->leftovers->encodedValue = '';
             } else {
                 $this->leftovers->value = substr($data, -$nRemain);
-                $this->leftovers->encodedValue = base64_encode($this->leftovers->value) . "\r\n";
+                $this->leftovers->encodedValue = base64_encode($this->leftovers->value);
                 $toConvert = substr($data, 0, -$nRemain);
             }
             $this->convertAndAppend($toConvert, $out);

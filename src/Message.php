@@ -122,34 +122,7 @@ class Message extends MimePart
     {
         return $this->objectId;
     }
-    
-    /**
-     * Loops through the parts parents to find if it's an alternative part or
-     * an attachment.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @return boolean true if its been added
-     */
-    private function addToAlternativeContentPartFromParsed(MimePart $part)
-    {
-        $partType = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
-        if ($partType === 'multipart/alternative') {
-            if ($this->contentPart === $this) {
-                // already added in addPart
-                return true;
-            }
-            $parent = $part->getParent();
-            while ($parent !== null) {
-                if ($parent === $this->contentPart) {
-                    $parent->addPart($part);
-                    return true;
-                }
-                $parent = $parent->getParent();
-            }
-        }
-        return false;
-    }
-    
+
     /**
      * Returns true if the $part should be assigned as this message's main
      * content part.
@@ -161,13 +134,12 @@ class Message extends MimePart
     {
         $type = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
         // separate if statements for clarity
-        if ($this->contentPart !== null) {
-            return $this->addToAlternativeContentPartFromParsed($part);
-        }
         if ($type === 'multipart/alternative'
             || $type === 'text/plain'
             || $type === 'text/html') {
-            $this->contentPart = $part;
+            if ($this->contentPart === null) {
+                $this->contentPart = $part;
+            }
             return true;
         }
         return false;
@@ -180,16 +152,15 @@ class Message extends MimePart
      * 
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
-    public function addPart(MimePart $part)
+    public function addPart(MimePart $part, $position = null)
     {
-        parent::addPart($part);
+        parent::addPart($part, $position);
         $disposition = $part->getHeaderValue('Content-Disposition');
         $mtype = $this->getHeaderValue('Content-Type');
         $protocol = $this->getHeaderParameter('Content-Type', 'protocol');
         $type = $part->getHeaderValue('Content-Type');
         if (strcasecmp($mtype, 'multipart/signed') === 0 && $protocol !== null && $part->getParent() === $this && strcasecmp($protocol, $type) === 0) {
             $this->signedSignaturePart = $part;
-            $this->createMultipartMixedForSignedMessage();
         } else if (($disposition !== null || !$this->addContentPartFromParsed($part)) && !$part->isMultiPart()) {
             $this->attachmentParts[] = $part;
         }
@@ -210,7 +181,7 @@ class Message extends MimePart
         }
         $type = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
         if ($type === 'multipart/alternative') {
-            return $this->contentPart->getPartByMimeType($mimeType);
+            return $this->getPartByMimeType($mimeType);
         } elseif ($type === $mimeType) {
             return $this->contentPart;
         }
@@ -478,8 +449,7 @@ class Message extends MimePart
     private function setMessageAsMixed()
     {
         $part = $this->createNewContentPartFromPart($this->contentPart);
-        $this->removePart($this->contentPart);
-        parent::addPart($part);
+        $this->removePart($this->contentPart, $part);
         $this->contentPart = $part;
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/mixed');
     }

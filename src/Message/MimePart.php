@@ -91,26 +91,33 @@ class MimePart
      *
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
-    public function addPart(MimePart $part)
+    public function addPart(MimePart $part, $position = null)
     {
-        $this->parts[] = $part;
+        if ($part->getParent() !== null && $this !== $part->getParent()) {
+            $part->getParent()->addPart($part, $position);
+        } elseif ($part !== $this) {
+            $this->parts[] = $part;
+            //$this->parts = array_splice($this->parts, ($position === null) ? count($this->parts) : $position, 0, $part);
+        }
         if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
             $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
             $this->mimeToPart[$key] = $part;
         }
     }
-
+    
     /**
      * Unregisters the child part from this part.
      *
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
-    public function removePart(MimePart $part)
+    public function removePart(MimePart $part, MimePart $replacement = null)
     {
         $partsArray = [];
         foreach ($this->parts as $apart) {
             if ($apart !== $part) {
                 $partsArray[] = $apart;
+            } elseif ($replacement !== null) {
+                $partsArray[] = $replacement;
             }
         }
         $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));

@@ -71,7 +71,7 @@ class UUEncodeStreamFilter extends php_user_filter
      */
     private function getUUEncodingFooter()
     {
-        return "\r\n`\r\nend\r\n";
+        return "\r\n`\r\nend";
     }
     
     /**
