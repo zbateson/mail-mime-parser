@@ -96,12 +96,24 @@ class MimePart
         if ($part->getParent() !== null && $this !== $part->getParent()) {
             $part->getParent()->addPart($part, $position);
         } elseif ($part !== $this) {
-            $this->parts[] = $part;
-            //$this->parts = array_splice($this->parts, ($position === null) ? count($this->parts) : $position, 0, $part);
+            array_splice($this->parts, ($position === null) ? count($this->parts) : $position, 0, [ $part ]);
         }
+        $this->registerPart($part);
+    }
+    
+    protected function registerPart(MimePart $part)
+    {
         if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
             $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
             $this->mimeToPart[$key] = $part;
+        }
+    }
+    
+    protected function unregisterPart(MimePart $part)
+    {
+        $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+        if (isset($this->mimeToPart[$key]) && $this->mimeToPart[$key] === $part) {
+            unset($this->mimeToPart[$key]);
         }
     }
     
@@ -110,19 +122,20 @@ class MimePart
      *
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
-    public function removePart(MimePart $part, MimePart $replacement = null)
+    public function removePart(MimePart $part)
     {
-        $partsArray = [];
-        foreach ($this->parts as $apart) {
-            if ($apart !== $part) {
-                $partsArray[] = $apart;
-            } elseif ($replacement !== null) {
-                $partsArray[] = $replacement;
+        $parent = $part->getParent();
+        $this->unregisterPart($part);
+        if ($this !== $parent && $parent !== null) {
+            return $parent->removePart($part);
+        } else {
+            $position = array_search($part, $this->parts, true);
+            if ($position !== false) {
+                array_splice($this->parts, $position, 1);
+                return $position;
             }
         }
-        $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        unset($this->mimeToPart[$key]);
-        $this->parts = $partsArray;
+        return null;
     }
 
     /**

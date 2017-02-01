@@ -1253,7 +1253,12 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $str = $message->getTextContent();
         $message->setHtmlPart($str, 'utf8');
+        $this->assertNotNull($message->getTextPart());
+        $this->assertNotNull($message->getHtmlPart());
+        
         $message->removeTextPart();
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNull($message->getTextPart());
         
         $props = [
             'From' => [
@@ -1268,7 +1273,6 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'html' => 'HasenundFrФsche.txt'
         ];
         
-        $this->assertNull($message->getTextPart());
         $this->runEmailTestForMessage($message, $props, 'failed adding html part and removing text part from m0001');
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/apr_m0001", 'w+');
@@ -1289,7 +1293,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $message->removeHtmlPart();
+        $this->assertNull($message->getHtmlPart());
+        $this->assertEquals(2, $message->getAttachmentCount());
         $message->removeAttachmentPart(0);
+        $this->assertEquals(1, $message->getAttachmentCount());
         
         $props = [
             'From' => [
@@ -1309,8 +1316,6 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $test1 = $props;
         unset($test1['html']);
         $test1['attachments'] = 1;
-        $this->assertNull($message->getHtmlPart());
-        $this->assertEquals(1, $message->getAttachmentCount());
         $att = $message->getAttachmentPart(0);
         $this->assertEquals('redball.png', $att->getHeaderParameter('Content-Disposition', 'filename'));
         
@@ -1323,6 +1328,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for m0015';
+        $this->assertNull($messageWritten->getHtmlPart());
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
     
@@ -1409,6 +1415,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($message->getHtmlPart());
         $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        $this->assertTrue($message->isMime());
+        $this->assertNotNull($message->getTextPart());
+        $this->assertNotNull($message->getHtmlPart());
         
         $props = [
             'From' => [

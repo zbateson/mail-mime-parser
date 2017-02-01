@@ -225,13 +225,14 @@ class Message extends MimePart
     private function removePartFromAlternativeContentPart(MimePart $part)
     {
         $this->removePart($part);
-        $this->contentPart->removePart($part);
         if ($this->contentPart === $this) {
-            $this->overrideAlternativeMessageContentFromContentPart($this->getPart(1));
+            $this->overrideAlternativeMessageContentFromContentPart($this->getPart(0));
         } elseif ($this->contentPart->getPartCount() === 1) {
             $this->removePart($this->contentPart);
-            $this->contentPart = $this->contentPart->getPart(0);
-            $this->contentPart->setParent($this);
+            $contentPart = $this->contentPart->getPart(0);
+            $contentPart->setParent($this);
+            $this->contentPart = null;
+            $this->addPart($contentPart, 0);
         }
     }
     
@@ -381,7 +382,8 @@ class Message extends MimePart
         $contentPart->setRawHeader('Content-Type', $contentType);
         $contentPart->setParent($this);
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/alternative');
-        parent::addPart($contentPart);
+        $this->contentPart = $this;
+        $this->addPart($contentPart, 0);
     }
     
     /**
@@ -392,12 +394,14 @@ class Message extends MimePart
     private function createAlternativeContentPart()
     {
         $altPart = $this->mimePartFactory->newMimePart();
+        $contentPart = $this->contentPart;
         $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
-        $this->contentPart->setParent($altPart);
-        $altPart->addPart($this->contentPart);
-        $this->contentPart = $altPart;
+        $this->removePart($contentPart);
+        $contentPart->setParent($altPart);
+        $this->contentPart = null;
         $altPart->setParent($this);
-        parent::addPart($altPart);
+        $this->addPart($altPart, 0);
+        $this->addPart($contentPart, 0);
     }
     
     /**
@@ -449,8 +453,9 @@ class Message extends MimePart
     private function setMessageAsMixed()
     {
         $part = $this->createNewContentPartFromPart($this->contentPart);
-        $this->removePart($this->contentPart, $part);
-        $this->contentPart = $part;
+        $this->removePart($this->contentPart);
+        $this->contentPart = null;
+        $this->addPart($part);
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/mixed');
     }
     
@@ -510,7 +515,8 @@ class Message extends MimePart
                 $part->setParent($messagePart);
             }
         }
-        array_unshift($this->parts, $messagePart);
+        $firstPart = array_shift($this->parts);
+        array_unshift($this->parts, $firstPart, $messagePart);
     }
     
     /**
@@ -522,15 +528,18 @@ class Message extends MimePart
      */
     public function createSignaturePart($body)
     {
-        $signedPart = $this->mimePartFactory->newMimePart();
+        $signedPart = $this->signedSignaturePart;
+        if ($signedPart === null) {
+            $signedPart = $this->mimePartFactory->newMimePart();
+            $this->parts[] = $signedPart;
+            $signedPart->setParent($this);
+            $this->signedSignaturePart = $signedPart;
+        }
         $signedPart->setRawHeader(
             'Content-Type',
             $this->getHeaderParameter('Content-Type', 'protocol')
         );
         $signedPart->setContent($body);
-        $this->parts[] = $signedPart;
-        $signedPart->setParent($this);
-        $this->signedSignaturePart = $signedPart;
     }
     
     /**
@@ -674,15 +683,14 @@ class Message extends MimePart
         if ($this->contentPart === $this) {
             $this->setMessageAsAlternative();
             $mimePart->setParent($this->contentPart);
-            parent::addPart($mimePart);
+            $this->addPart($mimePart, 0);
         } elseif ($this->contentPart !== null) {
             $this->createAlternativeContentPart();
             $mimePart->setParent($this->contentPart);
-            $this->contentPart->addPart($mimePart);
+            $this->addPart($mimePart, 0);
         } else {
-            $this->contentPart = $mimePart;
             $mimePart->setParent($this);
-            parent::addPart($mimePart);
+            $this->addPart($mimePart, 0);
         }
         return $mimePart;
     }
@@ -697,10 +705,7 @@ class Message extends MimePart
      */
     protected function setContentPartForMimeType($mimeType, $stringOrHandle, $charset)
     {
-        $part = $this->getTextPart();
-        if ($mimeType === 'text/html') {
-            $part = $this->getHtmlPart();
-        }
+        $part = ($mimeType === 'text/html') ? $this->getHtmlPart() : $this->getTextPart();
         $handle = $this->getHandleForStringOrHandle($stringOrHandle);
         if ($part === null) {
             $part = $this->createContentPartForMimeType($mimeType, $charset);
@@ -854,8 +859,7 @@ class Message extends MimePart
         $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
         $part->setParent($this);
         $part->attachContentResourceHandle($this->getHandleForStringOrHandle($stringOrHandle));
-        $this->parts[] = $part;
-        $this->attachmentParts[] = $part;
+        $this->addPart($part);
     }
     
     /**
@@ -880,8 +884,7 @@ class Message extends MimePart
         $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
         $part->setParent($this);
         $part->attachContentResourceHandle($handle);
-        $this->parts[] = $part;
-        $this->attachmentParts[] = $part;
+        $this->addPart($part);
     }
     
     /**
