@@ -376,6 +376,7 @@ class Message extends MimePart
         $contentPart = $this->mimePartFactory->newMimePart();
         $contentPart->attachContentResourceHandle($this->handle);
         $this->detachContentResourceHandle();
+        $this->removePart($this);
         $contentType = 'text/plain; charset="us-ascii"';
         $contentHeader = $this->getHeader('Content-Type');
         if ($contentHeader !== null) {
@@ -384,7 +385,8 @@ class Message extends MimePart
         $contentPart->setRawHeader('Content-Type', $contentType);
         $contentPart->setParent($this);
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/alternative');
-        $this->contentPart = $this;
+        $this->contentPart = null;
+        $this->addPart($this);
         $this->addPart($contentPart, 0);
     }
     

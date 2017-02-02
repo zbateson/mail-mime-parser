@@ -52,8 +52,8 @@ class MimePart
     protected $parts = [];
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart[] Maps mime types to parts
-     * for looking up in getPartByMimeType
+     * @var \ZBateson\MailMimeParser\Message\MimePart[][] Maps mime types to
+     * parts for looking up in getPartByMimeType
      */
     protected $mimeToPart = [];
     
@@ -106,8 +106,7 @@ class MimePart
     }
     
     /**
-     * Registers the part in the mime-type registry if it's a non-multipart
-     * part.
+     * Registers non-attachment parts in the mime type registry
      * 
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
      */
@@ -115,7 +114,10 @@ class MimePart
     {
         if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
             $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-            $this->mimeToPart[$key] = $part;
+            if (!isset($this->mimeToPart[$key])) {
+                $this->mimeToPart[$key] = [];
+            }
+            $this->mimeToPart[$key][] = $part;
         }
     }
     
@@ -127,8 +129,13 @@ class MimePart
     protected function unregisterPart(MimePart $part)
     {
         $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        if (isset($this->mimeToPart[$key]) && $this->mimeToPart[$key] === $part) {
-            unset($this->mimeToPart[$key]);
+        if (isset($this->mimeToPart[$key])) {
+            foreach ($this->mimeToPart[$key] as $index => $p) {
+                if ($p === $part) {
+                    array_splice($this->mimeToPart[$key], $index, 1);
+                    break;
+                }
+            }
         }
     }
     
@@ -241,6 +248,22 @@ class MimePart
      * @return \ZBateson\MailMimeParser\Message\MimePart or null
      */
     public function getPartByMimeType($mimeType)
+    {
+        $key = strtolower($mimeType);
+        if (isset($this->mimeToPart[$key])) {
+            return $this->mimeToPart[$key][0];
+        }
+        return null;
+    }
+    
+    /**
+     * Returns an array of all parts associated with the passed mime type if any
+     * exist or null otherwise.
+     *
+     * @param string $mimeType
+     * @return \ZBateson\MailMimeParser\Message\MimePart[] or null
+     */
+    public function getAllPartsByMimeType($mimeType)
     {
         $key = strtolower($mimeType);
         if (isset($this->mimeToPart[$key])) {
