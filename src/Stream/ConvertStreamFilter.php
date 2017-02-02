@@ -38,7 +38,6 @@ class ConvertStreamFilter extends php_user_filter
     {
         // strip off 'convert.'
         $name = substr($this->filtername, 8);
-        $this->isEncode = false;
         $aFilters = [
             'quoted-printable-encode' => true,
             'quoted-printable-decode' => true,
