@@ -224,14 +224,16 @@ class Message extends MimePart
     private function removePartFromAlternativeContentPart(MimePart $part)
     {
         $this->removePart($part);
-        if ($this->contentPart === $this) {
-            $this->overrideAlternativeMessageContentFromContentPart($this->getPart(0));
-        } elseif ($this->contentPart->getPartCount() === 1) {
-            $this->removePart($this->contentPart);
-            $contentPart = $this->contentPart->getChild(0);
-            $contentPart->setParent($this);
-            $this->contentPart = null;
-            $this->addPart($contentPart, 0);
+        $contentPart = $this->contentPart->getPart(0);
+        if ($contentPart !== null) {
+            if ($this->contentPart === $this) {
+                $this->overrideAlternativeMessageContentFromContentPart($contentPart);
+            } elseif ($this->contentPart->getPartCount() === 1) {
+                $this->removePart($this->contentPart);
+                $contentPart->setParent($this);
+                $this->contentPart = null;
+                $this->addPart($contentPart, 0);
+            }
         }
     }
     

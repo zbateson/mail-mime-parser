@@ -66,7 +66,7 @@ class MimePartFactory
      * @param int $mode
      * @param string $filename
      */
-    public function newUUEncodedPart($mode, $filename)
+    public function newUUEncodedPart($mode = 0666, $filename = 'bin')
     {
         return new UUEncodedPart($this->headerFactory, $this->messageWriterService->getMimePartWriter(), $mode, $filename);
     }
