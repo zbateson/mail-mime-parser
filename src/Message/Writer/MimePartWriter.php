@@ -192,7 +192,8 @@ class MimePartWriter
         // end of file for some reason
         $lastChars = '';
         $first = true;
-        while (($read = fread($fromHandle, 1024)) != false) {
+        while (!feof($fromHandle)) {
+            $read = fread($fromHandle, 1024);
             if ($part->isTextPart()) {
                 $this->filterTextBeforeCopying($read, $first, $lastChars);
             }
