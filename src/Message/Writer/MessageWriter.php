@@ -18,7 +18,7 @@ use ZBateson\MailMimeParser\Message\MimePart;
  * @author Zaahid Bateson
  */
 class MessageWriter extends MimePartWriter
-{    
+{
     /**
      * Writes out a mime boundary to the passed $handle optionally writing out a
      * number of empty lines before it.
