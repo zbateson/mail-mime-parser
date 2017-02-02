@@ -24,6 +24,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;
+    const USE_GPG_KEYGEN = true;
     
     protected function setUp()
     {
@@ -104,6 +105,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($props['signed']['micalg'], $micalg, $failMessage);
             $this->assertNotNull($signedPart, $failMessage);
             $this->assertEquals($protocol, $signedPart->getHeaderValue('Content-Type'), $failMessage);
+            $this->assertEquals(trim($props['signed']['body']), trim($signedPart->getContent()));
         }
 
         if (!empty($props['attachments'])) {
@@ -164,6 +166,29 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for ' . $key;
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    private function getSignatureForContent($signableContent)
+    {
+        if (static::USE_GPG_KEYGEN) {
+            $command = 'gpg --sign --detach-sign --armor --cipher-algo AES256 --digest-algo SHA256 --textmode --lock-never';
+            $descriptorspec = [
+                0 => ["pipe", "r"],
+                1 => ["pipe", "w"],
+                2 => ["pipe", "r"]
+            ];
+            $cwd = sys_get_temp_dir();
+            $proc = proc_open($command, $descriptorspec, $pipes, $cwd);
+            fwrite($pipes[0], $signableContent);
+            fclose($pipes[0]);
+            $signature = trim(stream_get_contents($pipes[1]));
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            proc_close($proc);
+            return $signature;
+        } else {
+            return md5($signableContent);
+        }
     }
     
     public function testParseEmailm0001()
@@ -1550,15 +1575,24 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($message->getHtmlPart());
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
         
         $signableContent = $message->getSignableBody();
+        //$signature = md5($signableContent);
+        
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0001", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0001", 'w+');
         $message->save($tmpSaved);
         rewind($tmpSaved);
         
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertNotEmpty($signableContent);
+        $this->assertTrue(strpos(
+            preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)),
+            $signableContent
+        ) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -1579,7 +1613,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
             ]
         ];
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
@@ -1592,9 +1626,14 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
         
+        $this->assertEquals('text/html', $message->getContentPart()->getPart(0)->getHeaderValue('Content-Type'));
         $signableContent = $message->getSignableBody();
+        
+        //$signature = md5($signableContent);
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0014", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0014", 'w+');
         $message->save($tmpSaved);
@@ -1622,7 +1661,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
             ]
         ];
         
@@ -1636,9 +1675,14 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
+        
+        $this->assertEquals(2, $message->getChildCount());
+        $this->assertEquals('multipart/mixed', strtolower($message->getPart(0)->getHeaderValue('Content-Type')));
         
         $signableContent = $message->getSignableBody();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0015", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0015", 'w+');
         $message->save($tmpSaved);
@@ -1667,7 +1711,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
             ]
         ];
         
@@ -1682,9 +1726,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($message->getHtmlPart());
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
-        
         $signableContent = $message->getSignableBody();
+        
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0018", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0018", 'w+');
         $message->save($tmpSaved);
@@ -1712,7 +1758,54 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
+            ]
+        ];
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+    
+    public function testCreateSignedPartm0019()
+    {
+        $handle = fopen($this->messageDir . '/m0019.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNotNull($message->getHtmlPart());
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $signableContent = $message->getSignableBody();
+        
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0019", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
+        
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0019", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+        
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
             ]
         ];
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
@@ -1725,9 +1818,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
-        
         $signableContent = $message->getSignableBody();
+        
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m1005", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m1005", 'w+');
         $message->save($tmpSaved);
@@ -1755,7 +1850,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
             ]
         ];
         
@@ -1911,9 +2006,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
         
         $signableContent = $message->getSignableBody();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m4006", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m4006", 'w+');
         $message->save($tmpSaved);
@@ -1940,7 +2037,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
             ]
         ];
         
@@ -1970,9 +2067,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
-        $message->createSignaturePart('Testing testing testing');
         
         $signableContent = $message->getSignableBody();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m4007", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
         
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m4007", 'w+');
         $message->save($tmpSaved);
@@ -1999,7 +2098,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => $signature
             ]
         ];
         

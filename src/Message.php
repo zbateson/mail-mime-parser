@@ -341,9 +341,10 @@ class Message extends MimePart
      * 
      * @return string
      */
-    private function getUniqueBoundary()
+    private function getUniqueBoundary($mimeType)
     {
-        return uniqid('----=MMP-' . $this->objectId . '.', true);
+        $type = ltrim(strtoupper(preg_replace('/^(multipart\/(.{3}).*|.*)$/i', '$2-', $mimeType)), '-');
+        return uniqid('----=MMP-' . $type . $this->objectId . '.', true);
     }
     
     /**
@@ -358,7 +359,7 @@ class Message extends MimePart
         $part->setRawHeader(
             'Content-Type',
             "$mimeType;\r\n\tboundary=\"" 
-                . $this->getUniqueBoundary() . "\""
+                . $this->getUniqueBoundary($mimeType) . "\""
         );
     }
     
@@ -455,32 +456,8 @@ class Message extends MimePart
         $part = $this->createNewContentPartFromPart($this->contentPart);
         $this->removePart($this->contentPart);
         $this->contentPart = null;
-        $this->addPart($part);
+        $this->addPart($part, 0);
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/mixed');
-    }
-    
-    /**
-     * Updates parents of the contentPart and any children, and sets
-     * $this->contentPart to the passed $messagePart if the $this->contentPart
-     * is set to $this
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $messagePart
-     */
-    private function updateContentPartForSignedMessage(MimePart $messagePart)
-    {
-        if ($this->contentPart === null) {
-            foreach ($this->getChildParts() as $child) {
-                $child->setParent($messagePart);
-            }
-        } elseif ($this->contentPart === $this) {
-            $this->contentPart = $messagePart;
-            foreach ($this->getChildParts() as $child) {
-                $child->setParent($messagePart);
-                array_unshift($this->contentPart->parts, $child);
-            }
-        } elseif ($this->contentPart->getParent() === $this) {
-            $this->contentPart->setParent($messagePart);
-        }
     }
     
     /**
@@ -496,21 +473,22 @@ class Message extends MimePart
     {
         $this->enforceMime();
         $messagePart = $this->mimePartFactory->newMimePart();
-        $this->updateContentPartForSignedMessage($messagePart);
+        $messagePart->setParent($this);
+        
         $this->copyTypeHeadersFromPartToPart($this, $messagePart);
         $messagePart->attachContentResourceHandle($this->handle);
         $this->detachContentResourceHandle();
-        $messagePart->setParent($this);
-        foreach ($this->attachmentParts as $key => $part) {
-            if ($part === $this) {
-                $this->attachmentParts[$key] = $messagePart;
+        
+        $this->contentPart = null;
+        $this->addPart($messagePart, 0);
+        foreach ($this->getChildParts() as $part) {
+            if ($part === $messagePart) {
+                continue;
             }
-            if ($part->getParent() === $this) {
-                $part->setParent($messagePart);
-            }
+            $this->removePart($part);
+            $part->setParent($messagePart);
+            $this->addPart($part);
         }
-        $firstPart = array_shift($this->parts);
-        array_unshift($this->parts, $firstPart, $messagePart);
     }
     
     /**
@@ -525,8 +503,8 @@ class Message extends MimePart
         $signedPart = $this->signedSignaturePart;
         if ($signedPart === null) {
             $signedPart = $this->mimePartFactory->newMimePart();
-            $this->parts[] = $signedPart;
             $signedPart->setParent($this);
+            $this->addPart($signedPart);
             $this->signedSignaturePart = $signedPart;
         }
         $signedPart->setRawHeader(
@@ -535,31 +513,7 @@ class Message extends MimePart
         );
         $signedPart->setContent($body);
     }
-    
-    /**
-     * Creates a multipart/mixed MimePart assigns it to $this->signedMixedPart
-     * if the message contains attachments.
-     * 
-     * @param array $parts
-     */
-    private function createMultipartMixedForSignedMessage()
-    {
-        if (count($this->attachmentParts) === 0 || $this->signedMixedPart !== null) {
-            return;
-        }
-        $mixed = $this->mimePartFactory->newMimePart();
-        $mixed->setParent($this);
-        $boundary = $this->getUniqueBoundary();
-        $mixed->setRawHeader('Content-Type', "multipart/mixed;\r\n\tboundary=\"$boundary\"");
-        foreach ($this->attachmentParts as $part) {
-            $part->setParent($mixed);
-        }
-        if ($this->contentPart !== null) {
-            $this->contentPart->setParent($mixed);
-        }
-        $this->signedMixedPart = $mixed;
-    }
-    
+
     /**
      * Loops over parts of this message and sets the content-transfer-encoding
      * header to quoted-printable for text/* mime parts, and to base64
@@ -570,7 +524,8 @@ class Message extends MimePart
      */
     private function overwrite8bitContentEncoding()
     {
-        foreach ($this->parts as $part) {
+        $parts = array_merge([ $this ], $this->getAllParts());
+        foreach ($parts as $part) {
             if ($part->getHeaderValue('Content-Transfer-Encoding') === '8bit') {
                 if (preg_match('/text\/.*/', $part->getHeaderValue('Content-Type'))) {
                     $part->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
@@ -601,6 +556,15 @@ class Message extends MimePart
         }
     }
     
+    private function detachChildMultipartContentStreams()
+    {
+        foreach ($this->getAllParts() as $part) {
+            if ($part->isMultiPart()) {
+                $part->detachContentResourceHandle();
+            }
+        }
+    }
+    
     /**
      * Turns the message into a multipart/signed message, moving the actual
      * message into a child part, sets the content-type of the main message to
@@ -614,16 +578,16 @@ class Message extends MimePart
     public function setAsMultipartSigned($micalg, $protocol)
     {
         $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
-        if (strcasecmp($contentType, 'multipart/signed') !== 0 && strcasecmp($contentType,'multipart/mixed') !== 0) {
+        if (strcasecmp($contentType, 'multipart/signed') !== 0) {
             $this->makeSpaceForMultipartSignedMessage();
         }
-        $boundary = $this->getUniqueBoundary();
+        $boundary = $this->getUniqueBoundary('multipart/signed');
         $this->setRawHeader(
             'Content-Type',
             "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
         );
         $this->removeHeader('Content-Transfer-Encoding');
-        $this->createMultipartMixedForSignedMessage();
+        $this->detachChildMultipartContentStreams();
         $this->overwrite8bitContentEncoding();
         $this->ensureHtmlPartFirstForSignedMessage();
         $this->createSignaturePart('Not set');

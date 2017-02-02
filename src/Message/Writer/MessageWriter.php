@@ -101,14 +101,17 @@ class MessageWriter extends MimePartWriter
      */
     public function getSignableBody(Message $message)
     {
-        if (!$message->isMime() || $message->getSignedMixedPart() === null) {
+        if (!$message->isMime()) {
             return null;
         }
         $handle = fopen('php://temp', 'r+');
-        $this->recursiveWriteParts($message->getSignedMixedPart(), $handle);
+        $ended = $this->recursiveWriteParts($message->getPart(0), $handle);
         rewind($handle);
         $str = stream_get_contents($handle);
         fclose($handle);
+        if (!$ended) {
+            $str .= "\r\n";
+        }
         return $str;
     }
 }

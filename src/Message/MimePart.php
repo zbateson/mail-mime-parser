@@ -199,7 +199,7 @@ class MimePart
      */
     public function getChildCount()
     {
-        return $this->parts;
+        return count($this->parts);
     }
 
     /**
