@@ -24,7 +24,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;
-    const USE_GPG_KEYGEN = true;
+    const USE_GPG_KEYGEN = false;
     
     protected function setUp()
     {
