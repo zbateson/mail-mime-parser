@@ -142,6 +142,8 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $message->getPartCount());
         $this->assertSame($part, $message->getPart(0));
         $this->assertSame($part2, $message->getPart(1));
+        $this->assertSame($part, $message->getChild(0));
+        $this->assertSame($part2, $message->getChild(1));
         $this->assertEquals([$part, $part2], $message->getAllParts());
     }
     

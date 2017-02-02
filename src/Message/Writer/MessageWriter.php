@@ -105,7 +105,7 @@ class MessageWriter extends MimePartWriter
             return null;
         }
         $handle = fopen('php://temp', 'r+');
-        $ended = $this->recursiveWriteParts($message->getPart(0), $handle);
+        $ended = $this->recursiveWriteParts($message->getChild(0), $handle);
         rewind($handle);
         $str = stream_get_contents($handle);
         fclose($handle);

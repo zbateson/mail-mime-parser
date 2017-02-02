@@ -1627,7 +1627,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         
-        $this->assertEquals('text/html', $message->getContentPart()->getPart(0)->getHeaderValue('Content-Type'));
+        $this->assertEquals('text/html', $message->getContentPart()->getChild(0)->getHeaderValue('Content-Type'));
         $signableContent = $message->getSignableBody();
         
         //$signature = md5($signableContent);
@@ -1677,7 +1677,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         
         $this->assertEquals(2, $message->getChildCount());
-        $this->assertEquals('multipart/mixed', strtolower($message->getPart(0)->getHeaderValue('Content-Type')));
+        $this->assertEquals('multipart/mixed', strtolower($message->getChild(0)->getHeaderValue('Content-Type')));
         
         $signableContent = $message->getSignableBody();
         file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0015", $signableContent);

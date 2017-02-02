@@ -50,12 +50,6 @@ class Message extends MimePart
     protected $signedSignaturePart;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart The mixed part for a
-     *      multipart/signed message if the message contains attachments
-     */
-    protected $signedMixedPart;
-    
-    /**
      * @var \ZBateson\MailMimeParser\Message\MimePart[] array of non-content parts in
      *      this message 
      */
@@ -146,11 +140,15 @@ class Message extends MimePart
     }
     
     /**
-     * Either adds the passed part to $this->textPart if its content type is
-     * text/plain, to $this->htmlPart if it's text/html, or adds the part to the
-     * parts array otherwise.
+     * Adds the passed part to the message with the passed position, or at the
+     * end if not passed.
+     * 
+     * This should not be used by a user directly and will be set 'protected' in
+     * the future.  Instead setTextPart, setHtmlPart and addAttachment should be
+     * used.
      * 
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param int $position
      */
     public function addPart(MimePart $part, $position = null)
     {
@@ -172,7 +170,8 @@ class Message extends MimePart
      * looking to find an alternative part of the passed mime type.
      * 
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\MimePart or null if not available
+     * @return \ZBateson\MailMimeParser\Message\MimePart or null if not
+     *         available
      */
     protected function getContentPartByMimeType($mimeType)
     {
@@ -229,7 +228,7 @@ class Message extends MimePart
             $this->overrideAlternativeMessageContentFromContentPart($this->getPart(0));
         } elseif ($this->contentPart->getPartCount() === 1) {
             $this->removePart($this->contentPart);
-            $contentPart = $this->contentPart->getPart(0);
+            $contentPart = $this->contentPart->getChild(0);
             $contentPart->setParent($this);
             $this->contentPart = null;
             $this->addPart($contentPart, 0);
@@ -339,6 +338,8 @@ class Message extends MimePart
     /**
      * Creates and returns a unique boundary.
      * 
+     * @param string $mimeType first 3 characters of a multipart type are used,
+     *      e.g. REL for relative or ALT for alternative
      * @return string
      */
     private function getUniqueBoundary($mimeType)
@@ -495,7 +496,6 @@ class Message extends MimePart
      * Creates and returns a new MimePart for the signature part of a
      * multipart/signed message and assigns it to $this->signedSignaturePart.
      * 
-     * @param string $protocol
      * @param string $body
      */
     public function createSignaturePart($body)
@@ -556,15 +556,6 @@ class Message extends MimePart
         }
     }
     
-    private function detachChildMultipartContentStreams()
-    {
-        foreach ($this->getAllParts() as $part) {
-            if ($part->isMultiPart()) {
-                $part->detachContentResourceHandle();
-            }
-        }
-    }
-    
     /**
      * Turns the message into a multipart/signed message, moving the actual
      * message into a child part, sets the content-type of the main message to
@@ -572,8 +563,6 @@ class Message extends MimePart
      * 
      * @param string $micalg The Message Integrity Check algorithm being used
      * @param string $protocol The mime-type of the signature body
-     * @param string $body The signature signed according to the value of
-     *        $protocol
      */
     public function setAsMultipartSigned($micalg, $protocol)
     {
@@ -587,7 +576,6 @@ class Message extends MimePart
             "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
         );
         $this->removeHeader('Content-Transfer-Encoding');
-        $this->detachChildMultipartContentStreams();
         $this->overwrite8bitContentEncoding();
         $this->ensureHtmlPartFirstForSignedMessage();
         $this->createSignaturePart('Not set');
@@ -925,28 +913,11 @@ class Message extends MimePart
     /**
      * Saves the message as a MIME message to the passed resource handle.
      * 
-     * The saved message is not guaranteed to be the same as the parsed message.
-     * Namely, for mime messages anything that is not text/html or text/plain
-     * will be moved into parts under the main 'message' as attachments, other
-     * alternative parts are dropped, and multipart/related parts are ignored
-     * (their contents are either moved under a multipart/alternative part or as
-     * attachments below the main multipart/mixed message).
-     * 
      * @param resource $handle
      */
     public function save($handle)
     {
         $this->messageWriter->writeMessageTo($this, $handle);
-    }
-    
-    /**
-     * Returns the 'multipart/mixed' part of a signed message.
-     * 
-     * @return MimeType
-     */
-    public function getSignedMixedPart()
-    {
-        return $this->signedMixedPart;
     }
     
     /**

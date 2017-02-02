@@ -88,8 +88,12 @@ class MimePart
     /**
      * Adds the passed part to the parts array, and registers non-attachment/
      * non-multipart parts by their content type.
+     * 
+     * If the $position parameter is non-null, adds the part at the passed
+     * position index.
      *
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param int $position
      */
     public function addPart(MimePart $part, $position = null)
     {
@@ -101,6 +105,12 @@ class MimePart
         $this->registerPart($part);
     }
     
+    /**
+     * Registers the part in the mime-type registry if it's a non-multipart
+     * part.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     */
     protected function registerPart(MimePart $part)
     {
         if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
@@ -109,6 +119,11 @@ class MimePart
         }
     }
     
+    /**
+     * Removes the part from the mime-type registry.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     */
     protected function unregisterPart(MimePart $part)
     {
         $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
@@ -118,9 +133,11 @@ class MimePart
     }
     
     /**
-     * Unregisters the child part from this part.
+     * Unregisters the child part from this part and returns its position or
+     * null if it wasn't found.
      *
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return int or null if not found
      */
     public function removePart(MimePart $part)
     {
@@ -139,18 +156,18 @@ class MimePart
     }
 
     /**
-     * Returns the non-text, non-HTML part at the given 0-based index, or null
-     * if none is set.
+     * Returns the part at the given 0-based index, or null if none is set.
      *
      * @param int $index
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getPart($index)
     {
-        if (!isset($this->parts[$index])) {
+        $parts = $this->getAllParts();
+        if (!isset($parts[$index])) {
             return null;
         }
-        return $this->parts[$index];
+        return $parts[$index];
     }
 
     /**
@@ -180,6 +197,21 @@ class MimePart
             },
             $this->parts)
         );
+    }
+    
+    /**
+     * Returns the direct child at the given 0-based index, or null if none is
+     * set.
+     *
+     * @param int $index
+     * @return \ZBateson\MailMimeParser\Message\MimePart
+     */
+    public function getChild($index)
+    {
+        if (!isset($this->parts[$index])) {
+            return null;
+        }
+        return $this->parts[$index];
     }
     
     /**
@@ -277,7 +309,8 @@ class MimePart
     }
 
     /**
-     *
+     * Detaches the content resource handle from this part but does not close
+     * it.
      */
     protected function detachContentResourceHandle()
     {
