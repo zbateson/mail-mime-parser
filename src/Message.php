@@ -362,7 +362,7 @@ class Message extends MimePart
         $part->setRawHeader(
             'Content-Type',
             "$mimeType;\r\n\tboundary=\"" 
-                . $this->getUniqueBoundary($mimeType) . "\""
+                . $this->getUniqueBoundary($mimeType) . '"'
         );
     }
     
