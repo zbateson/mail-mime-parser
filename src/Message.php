@@ -70,12 +70,6 @@ class Message extends MimePart
     protected $messageWriter = null;
     
     /**
-     * @var bool set to true if a newline should be inserted before the next
-     *      boundary (signed messages are finicky)
-     */
-    private $insertNewLineBeforeBoundary = false;
-    
-    /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
      * 
