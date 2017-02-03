@@ -776,17 +776,15 @@ class Message extends MimePart
      */
     protected function createPartForAttachment()
     {
-        $part = null;
         if ($this->isMime()) {
             $part = $this->mimePartFactory->newMimePart();
             $part->setRawHeader('Content-Transfer-Encoding', 'base64');
             if ($this->getHeaderValue('Content-Type') !== 'multipart/mixed') {
                 $this->setMessageAsMixed();
             }
-        } else {
-            $part = $this->mimePartFactory->newUUEncodedPart();
+            return $part;
         }
-        return $part;
+        return $this->mimePartFactory->newUUEncodedPart();
     }
     
     /**
