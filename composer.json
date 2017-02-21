@@ -1,7 +1,7 @@
 {
     "name": "zbateson/mail-mime-parser",
-    "description": "PSR-2 compliant mime mail parser",
-    "keywords": ["mail", "mime", "parser"],
+    "description": "MIME email message parser",
+    "keywords": ["email", "mail", "mime", "parser", "php-imap"],
     "homepage": "https://github.com/zbateson/MailMimeParser",
     "license": "BSD-2-Clause",
     "authors": [
