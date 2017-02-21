@@ -59,6 +59,9 @@ class HeaderFactory
         'ZBateson\MailMimeParser\Header\ParameterHeader' => [
             'content-type',
             'content-disposition',
+        ],
+        'ZBateson\MailMimeParser\Header\SubjectHeader' => [
+            'subject',
         ]
     ];
     

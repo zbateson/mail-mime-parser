@@ -202,7 +202,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt'
         ]);
     }
@@ -218,7 +218,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt'
         ]);
     }
@@ -234,7 +234,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt'
         ]);
     }
@@ -330,7 +330,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Heinz Müller',
                 'email' => 'mueller@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt'
         ]);
     }
@@ -535,7 +535,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Netscape Communicator 4.7)',
             'text' => 'HasenundFrФsche.txt',
         ]);
     }
@@ -551,7 +551,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Heinz Müller',
                 'email' => 'mueller@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Netscape Communicator 4.7)',
             'text' => 'HasenundFrФsche.txt',
             'html' => 'HasenundFrФsche.txt',
         ]);
@@ -603,7 +603,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Heinz Müller',
                 'email' => 'mueller@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
             'html' => 'HasenundFrФsche.txt',
             'attachments' => 4,
         ]);
@@ -1225,7 +1225,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt'
         ], 'Failed to parse m0001 from a string');
     }
@@ -1312,7 +1312,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'html' => 'HasenundFrФsche.txt'
         ];
         
@@ -1396,7 +1396,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt',
             'html' => 'hareandtortoise.txt',
         ];
@@ -1514,7 +1514,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt',
             'attachments' => 1,
         ];
@@ -1572,7 +1572,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt',
             'attachments' => 1,
         ];
@@ -1629,7 +1629,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt',
             'signed' => [
                 'protocol' => 'application/pgp-signature',
@@ -1865,7 +1865,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Heinz Müller',
                 'email' => 'mueller@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
             'html' => 'HasenundFrФsche.txt',
             'attachments' => 4,
             'signed' => [
@@ -1889,7 +1889,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
             'text' => 'HasenundFrФsche.txt',
             'signed' => [
                 'protocol' => 'application/pgp-signature',
@@ -1954,7 +1954,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'name' => 'Heinz Müller',
                 'email' => 'mueller@example.com'
             ],
-            'Subject' => 'Die Hasen und die Frösche',
+            'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
             'html' => 'HasenundFrФsche.txt',
             'attachments' => 4,
             'signed' => [

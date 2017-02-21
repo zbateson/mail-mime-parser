@@ -88,6 +88,16 @@ class ConsumerService
     {
         return GenericConsumer::getInstance($this, $this->mimeLiteralPartFactory);
     }
+
+    /**
+     * Returns the SubjectConsumer singleton instance.
+     * 
+     * @return \ZBateson\MailMimeParser\Header\Consumer\SubjectConsumer
+     */
+    public function getSubjectConsumer()
+    {
+        return SubjectConsumer::getInstance($this, $this->mimeLiteralPartFactory);
+    }
     
     /**
      * Returns the QuotedStringConsumer singleton instance.

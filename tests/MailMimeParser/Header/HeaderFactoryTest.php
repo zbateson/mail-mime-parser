@@ -60,8 +60,8 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
     
     public function testGenericHeaderInstance()
     {
-        $aValid = ['Subject', 'Content-Id', 'content-ID', 'IN-REPLY-TO'];
-        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION'];
+        $aValid = ['Content-Id', 'content-ID', 'IN-REPLY-TO'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
@@ -71,6 +71,22 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\GenericHeader', get_class($header));
+        }
+    }
+
+    public function testSubjectHeaderInstance()
+    {
+        $aValid = ['Subject'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Content-Id', 'content-ID', 'IN-REPLY-TO'];
+        foreach ($aValid as $name) {
+            $header = $this->headerFactory->newInstance($name, 'Test');
+            $this->assertNotNull($header);
+            $this->assertEquals('ZBateson\MailMimeParser\Header\SubjectHeader', get_class($header));
+        }
+        foreach ($aNot as $name) {
+            $header = $this->headerFactory->newInstance($name, 'Test');
+            $this->assertNotNull($header);
+            $this->assertNotEquals('ZBateson\MailMimeParser\Header\SubjectHeader', get_class($header));
         }
     }
     
