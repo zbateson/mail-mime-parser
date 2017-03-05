@@ -173,12 +173,10 @@ class Message extends MimePart
             return null;
         }
         $type = strtolower($this->contentPart->getHeaderValue('Content-Type', 'text/plain'));
-        if ($type === 'multipart/alternative') {
-            return $this->getPartByMimeType($mimeType);
-        } elseif ($type === $mimeType) {
+        if ($type === $mimeType) {
             return $this->contentPart;
         }
-        return null;
+        return $this->getPartByMimeType($mimeType);
     }
     
     /**
@@ -190,7 +188,7 @@ class Message extends MimePart
      */
     private function overrideAlternativeMessageContentFromContentPart(MimePart $part)
     {
-        $contentType = $part->getHeaderValue('Content-Type');
+        $contentType = $part->getHeader('Content-Type')->getRawValue();
         if ($contentType === null) {
             $contentType = 'text/plain; charset="us-ascii"';
         }
@@ -204,6 +202,10 @@ class Message extends MimePart
         );
         $this->attachContentResourceHandle($part->getContentResourceHandle());
         $part->detachContentResourceHandle();
+        foreach ($part->getChildParts() as $child) {
+            $child->setParent($this);
+            parent::addPart($child);
+        }
         $this->removePart($part);
     }
     
@@ -217,12 +219,15 @@ class Message extends MimePart
      */
     private function removePartFromAlternativeContentPart(MimePart $part)
     {
+        foreach ($part->getAllParts() as $cpart) {
+            $this->removePart($cpart);
+        }
         $this->removePart($part);
         $contentPart = $this->contentPart->getPart(0);
         if ($contentPart !== null) {
             if ($this->contentPart === $this) {
                 $this->overrideAlternativeMessageContentFromContentPart($contentPart);
-            } elseif ($this->contentPart->getPartCount() === 1) {
+            } elseif ($this->contentPart->getChildCount() === 1) {
                 $this->removePart($this->contentPart);
                 $contentPart->setParent($this);
                 $this->contentPart = null;
@@ -241,11 +246,14 @@ class Message extends MimePart
      */
     private function removeContentPartFromAlternative($contentType)
     {
-        $parts = $this->contentPart->getAllParts();
-        foreach ($parts as $part) {
-            $type = $part->getHeaderValue('Content-Type', 'text/plain');
+        $parts = $this->contentPart->getChildParts();
+        foreach ($parts as $child) {
+            $type = $child->getHeaderValue('Content-Type', 'text/plain');
             if (strcasecmp($type, $contentType) === 0) {
-                $this->removePartFromAlternativeContentPart($part);
+                $this->removePartFromAlternativeContentPart($child);
+                return true;
+            } elseif ($child->isMultiPart() && $child->getPartByMimeType($contentType)) {
+                $this->removePartFromAlternativeContentPart($child);
                 return true;
             }
         }

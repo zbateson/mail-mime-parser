@@ -250,7 +250,7 @@ class MimePart
     public function getPartByMimeType($mimeType)
     {
         $key = strtolower($mimeType);
-        if (isset($this->mimeToPart[$key])) {
+        if (!empty($this->mimeToPart[$key])) {
             return $this->mimeToPart[$key][0];
         }
         return null;
