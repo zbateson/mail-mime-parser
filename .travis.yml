@@ -7,7 +7,19 @@ php:
     - 7
     - hhvm
 
-before_script:
-    - composer install
+env:
+  - TEST_SCRIPT=./vendor/bin/phpunit
 
-script: ./vendor/bin/phpunit -c tests/phpunit.xml
+matrix:
+  include:
+  - php: 5.4
+    env: NO_DEV=--no-dev
+    env: TEST_SCRIPT=phpunit
+  - php: 5.5
+    env: NO_DEV=--no-dev
+    env: TEST_SCRIPT=phpunit
+
+before_script:
+    - composer install $NO_DEV
+
+script: $TEST_SCRIPT -c tests/phpunit.xml
