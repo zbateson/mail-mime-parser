@@ -8,6 +8,6 @@ php:
     - hhvm
 
 before_script:
-    - composer install --no-dev
+    - composer install
 
-script: phpunit -c tests/phpunit.xml
+script: ./vendor/bin/phpunit -c tests/phpunit.xml
