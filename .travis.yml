@@ -1,25 +1,20 @@
 language: php
 
+env:
+    - TEST_SCRIPT=./vendor/bin/phpunit
+
 php:
-    - 5.4
-    - 5.5
     - 5.6
     - 7
     - hhvm
 
-env:
-  - TEST_SCRIPT=./vendor/bin/phpunit
-
 matrix:
-  include:
-  - php: 5.4
-    env: NO_DEV=--no-dev
-    env: TEST_SCRIPT=phpunit
-  - php: 5.5
-    env: NO_DEV=--no-dev
-    env: TEST_SCRIPT=phpunit
+    include:
+        - php: 5.4
+            - env: NO_DEV=--no-dev
+            - env: TEST_SCRIPT=phpunit
+        - php: 5.5
+            - env: NO_DEV=--no-dev
+            - env: TEST_SCRIPT=phpunit
 
-before_script:
-    - composer install $NO_DEV
-
-script: $TEST_SCRIPT -c tests/phpunit.xml
+script: composer install $NO_DEV && $TEST_SCRIPT -c tests/phpunit.xml
