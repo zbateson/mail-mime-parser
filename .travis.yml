@@ -4,16 +4,11 @@ php:
     - 5.4
     - 5.5
     - 5.6
-    - 7.0
+    - 7
     - 7.1
     - hhvm
 
-matrix:
-    allow_failures:
-        - php: 7.0
-        - php: 7.1
-
 before_script:
-    - composer install --no-dev
+    - composer update
 
-script: phpunit -c tests/phpunit.xml
+script: ./vendor/bin/phpunit -c tests/phpunit.xml
