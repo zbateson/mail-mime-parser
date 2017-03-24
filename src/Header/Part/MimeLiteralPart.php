@@ -19,7 +19,7 @@ class MimeLiteralPart extends LiteralPart
     /**
      * @var string regex pattern matching a mime-encoded part
      */
-    protected $mimePartPattern = '=\?[A-Za-z\-0-9]+\?[QBqb]\?[^\?]+\?=';
+    protected $mimePartPattern = '=\?[A-Za-z\-_0-9]+\?[QBqb]\?[^\?]+\?=';
     
     /**
      * @var bool set to true to ignore spaces before this part

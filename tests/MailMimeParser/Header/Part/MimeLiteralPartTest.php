@@ -94,6 +94,10 @@ class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
             '这也不会,那也不会',
             '=?UTF-32?B?//4AANmPAABfTgAADU4AABpPAAAsAAAAo5AAAF9OAAANTgAAGk8AAA==?='
         );
+        $this->assertDecoded(
+            'セミオーダー感覚で選ぶ、ジャケット',
+            '=?shift_jis?B?g1qDfoNJgVuDX4FbirSKb4LFkUmC1IFBg1eDg4NQg2KDZw==?='
+        );
         $this->assertDecoded('el pingüino', 'el pingüino');
     }
     
