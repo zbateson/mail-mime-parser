@@ -102,41 +102,6 @@ class MimePart
         } elseif ($part !== $this) {
             array_splice($this->parts, ($position === null) ? count($this->parts) : $position, 0, [ $part ]);
         }
-        $this->registerPart($part);
-    }
-    
-    /**
-     * Registers non-attachment parts in the mime type registry
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     */
-    protected function registerPart(MimePart $part)
-    {
-        if ($part->getHeaderValue('Content-Disposition') === null && !$part->isMultiPart()) {
-            $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-            if (!isset($this->mimeToPart[$key])) {
-                $this->mimeToPart[$key] = [];
-            }
-            $this->mimeToPart[$key][] = $part;
-        }
-    }
-    
-    /**
-     * Removes the part from the mime-type registry.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     */
-    protected function unregisterPart(MimePart $part)
-    {
-        $key = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
-        if (isset($this->mimeToPart[$key])) {
-            foreach ($this->mimeToPart[$key] as $index => $p) {
-                if ($p === $part) {
-                    array_splice($this->mimeToPart[$key], $index, 1);
-                    break;
-                }
-            }
-        }
     }
     
     /**
@@ -149,7 +114,6 @@ class MimePart
     public function removePart(MimePart $part)
     {
         $parent = $part->getParent();
-        $this->unregisterPart($part);
         if ($this !== $parent && $parent !== null) {
             return $parent->removePart($part);
         } else {
@@ -161,6 +125,13 @@ class MimePart
         }
         return null;
     }
+    
+    public function removeAllParts(PartFilter $filter = null)
+    {
+        foreach ($this->getAllParts($filter) as $part) {
+            $this->removePart($part);
+        }
+    }
 
     /**
      * Returns the part at the given 0-based index, or null if none is set.
@@ -168,9 +139,9 @@ class MimePart
      * @param int $index
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
-    public function getPart($index)
+    public function getPart($index, PartFilter $filter = null)
     {
-        $parts = $this->getAllParts();
+        $parts = $this->getAllParts($filter);
         if (!isset($parts[$index])) {
             return null;
         }
@@ -182,11 +153,17 @@ class MimePart
      * 
      * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
-    public function getAllParts()
+    public function getAllParts(PartFilter $filter = null)
     {
-        $aParts = [];
+        $aParts = [ $this ];
         foreach ($this->parts as $part) {
-            $aParts = array_merge($aParts, [ $part ], $part->getAllParts());
+            $aParts = array_merge($aParts, $part->getAllParts());
+        }
+        if (!empty($filter)) {
+            return array_values(array_filter(
+                $aParts,
+                [ $filter, 'filter' ]
+            ));
         }
         return $aParts;
     }
@@ -196,14 +173,9 @@ class MimePart
      *
      * @return int
      */
-    public function getPartCount()
+    public function getPartCount(PartFilter $filter = null)
     {
-        return count($this->parts) + array_sum(
-            array_map(function ($part) {
-                return $part->getPartCount();
-            },
-            $this->parts)
-        );
+        return count($this->getAllParts($filter));
     }
     
     /**
@@ -213,12 +185,13 @@ class MimePart
      * @param int $index
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
-    public function getChild($index)
+    public function getChild($index, PartFilter $filter = null)
     {
-        if (!isset($this->parts[$index])) {
+        $parts = $this->getChildParts($filter);
+        if (!isset($parts[$index])) {
             return null;
         }
-        return $this->parts[$index];
+        return $parts[$index];
     }
     
     /**
@@ -226,8 +199,11 @@ class MimePart
      * 
      * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
-    public function getChildParts()
+    public function getChildParts(PartFilter $filter = null)
     {
+        if ($filter !== null) {
+            return array_values(array_filter($this->parts, [ $filter, 'filter' ]));
+        }
         return $this->parts;
     }
     
@@ -236,9 +212,9 @@ class MimePart
      * 
      * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
-    public function getChildCount()
+    public function getChildCount(PartFilter $filter = null)
     {
-        return count($this->parts);
+        return count($this->getChildParts($filter));
     }
 
     /**
@@ -247,13 +223,18 @@ class MimePart
      * @param string $mimeType
      * @return \ZBateson\MailMimeParser\Message\MimePart or null
      */
-    public function getPartByMimeType($mimeType)
+    public function getPartByMimeType($mimeType, $index = 0)
     {
-        $key = strtolower($mimeType);
-        if (!empty($this->mimeToPart[$key])) {
-            return $this->mimeToPart[$key][0];
-        }
-        return null;
+        return $this->getPart(
+            0,
+            new PartFilter([ 'headers' => 
+                [ 
+                    PartFilter::FILTER_INCLUDE => [
+                        'Content-Type' => $mimeType
+                    ]
+                ]
+            ])
+        );
     }
     
     /**
@@ -265,11 +246,34 @@ class MimePart
      */
     public function getAllPartsByMimeType($mimeType)
     {
-        $key = strtolower($mimeType);
-        if (isset($this->mimeToPart[$key])) {
-            return $this->mimeToPart[$key];
-        }
-        return null;
+        return $this->getAllParts(
+            new PartFilter([ 'headers' => 
+                [ 
+                    PartFilter::FILTER_INCLUDE => [
+                        'Content-Type' => $mimeType
+                    ]
+                ]
+            ])
+        );
+    }
+    
+    /**
+     * 
+     * @param type $mimeType
+     * @param type $disposition
+     * @return type
+     */
+    public function getCountOfPartsByMimeType($mimeType)
+    {
+        return $this->getPartCount(
+            new PartFilter([ 'headers' => 
+                [ 
+                    PartFilter::FILTER_INCLUDE => [
+                        'Content-Type' => $mimeType
+                    ]
+                ]
+            ])
+        );
     }
 
     /**
@@ -381,7 +385,9 @@ class MimePart
     public function getContent()
     {
         if ($this->hasContent()) {
-            return stream_get_contents($this->handle);
+            $text = stream_get_contents($this->handle);
+            rewind($this->handle);
+            return $text;
         }
         return null;
     }

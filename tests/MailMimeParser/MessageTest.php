@@ -67,11 +67,11 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function testAddHtmlPart()
     {
         $part = $this->getMockedPart();
-        $part->method('getHeaderValue')->will($this->returnCallback(function($param) {
+        $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) {
             if ($param === 'Content-Type') {
                 return 'text/html';
             }
-            return null;
+            return $defaultValue;
         }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
@@ -89,11 +89,11 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function testAddTextPart()
     {
         $part = $this->getMockedPart();
-        $part->method('getHeaderValue')->will($this->returnCallback(function($param) {
+        $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) {
             if ($param === 'Content-Type') {
                 return 'text/plain';
             }
-            return null;
+            return $defaultValue;
         }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
@@ -110,7 +110,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function testAddAttachmentPart()
     {
         $part = $this->getMockedPart();
-        $part->method('getHeaderValue')->willReturn('image/png');
+        $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) {
+            if ($param === 'Content-Type') {
+                return 'image/png';
+            } elseif ($param === 'Content-Disposition') {
+                return 'attachment';
+            }
+            return $defaultValue;
+        }));
 
         $message = $this->createNewMessage();
         $message->addPart($part);
@@ -124,14 +131,21 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function testGetParts()
     {
         $part = $this->getMockedPart();
-        $part->method('getHeaderValue')->willReturn('image/png');
+        $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) {
+            if ($param === 'Content-Type') {
+                return 'image/png';
+            } else if ($param === 'Content-Disposition') {
+                return 'attachment';
+            }
+            return $defaultValue;
+        }));
         
         $part2 = $this->getMockedPart();
-        $part2->method('getHeaderValue')->will($this->returnCallback(function($param) {
+        $part2->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) {
             if ($param === 'Content-Type') {
                 return 'text/html';
             }
-            return null;
+            return $defaultValue;
         }));
 
         $message = $this->createNewMessage();
@@ -139,12 +153,13 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message->addPart($part2);
         $this->assertNull($message->getTextPart());
         $this->assertSame($part2, $message->getHtmlPart());
-        $this->assertEquals(2, $message->getPartCount());
-        $this->assertSame($part, $message->getPart(0));
-        $this->assertSame($part2, $message->getPart(1));
+        $this->assertEquals(3, $message->getPartCount());
+        $this->assertSame($message, $message->getPart(0));
+        $this->assertSame($part, $message->getPart(1));
+        $this->assertSame($part2, $message->getPart(2));
         $this->assertSame($part, $message->getChild(0));
         $this->assertSame($part2, $message->getChild(1));
-        $this->assertEquals([$part, $part2], $message->getAllParts());
+        $this->assertEquals([$message, $part, $part2], $message->getAllParts());
     }
     
     public function testMessageIsMime()

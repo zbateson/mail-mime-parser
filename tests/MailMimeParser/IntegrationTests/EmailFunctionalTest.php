@@ -671,7 +671,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
             'text' => 'hareandtortoise.txt',
-            'attachments' => 3,
+            'attachments' => 2,
         ]);
     }
 
@@ -775,9 +775,14 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'blow@example.com'
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'hareandtortoise.txt',
-            'attachments' => 1,
+            'text' => 'hareandtortoise.txt'
         ]);
+        $handle = fopen($this->messageDir . '/m1015.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $stream = $message->getTextStream(1);
+        $this->assertTextContentTypeEquals('HasenundFrФsche.txt', $stream);
     }
 
     public function testParseEmailm1016()
@@ -793,8 +798,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
             'text' => 'hareandtortoise.txt',
-            'attachments' => 1,
         ]);
+        $handle = fopen($this->messageDir . '/m1016.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $stream = $message->getTextStream(1);
+        $str = $this->assertTextContentTypeEquals('farmerandstork.txt', $stream);
     }
 
     public function testParseEmailm2001()
@@ -1351,7 +1361,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         unset($test1['html']);
         unset($test1['attachments']);
 
-        $message->removeHtmlPart();
+        $message->removeAllHtmlParts();
         $this->assertNull($message->getHtmlPart());
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0020');
 
@@ -1362,6 +1372,53 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for rmh_m0020';
+        $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+    }
+    
+    public function testRemoveHtmlPartm0020()
+    {
+        $handle = fopen($this->messageDir . '/m0020.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'inlineparts' => 4,
+        ];
+
+        $test1 = $props;
+        unset($test1['html']);
+
+        $firstHtmlPart = $message->getHtmlPart();
+        $secondHtmlPart = $message->getHtmlPart(1);
+        $thirdHtmlPart = $message->getHtmlPart(2);
+        $message->removeHtmlPart();
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNotEquals($firstHtmlPart, $message->getHtmlPart());
+        $this->assertEquals($secondHtmlPart, $message->getHtmlPart());
+        $this->assertEquals($thirdHtmlPart, $message->getHtmlPart(1));
+        $message->removeHtmlPart(1);
+        $this->assertEquals($secondHtmlPart, $message->getHtmlPart());
+        $this->assertNull($message->getHtmlPart(1));
+        $this->runEmailTestForMessage($message, $test1, 'failed removing html content parts from m0020');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rmho_m0020", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for rmho_m0020';
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
 
@@ -1728,7 +1785,6 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('text/html', $message->getContentPart()->getChild(0)->getHeaderValue('Content-Type'));
         $signableContent = $message->getSignableBody();
 
-        //$signature = md5($signableContent);
         file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0014", $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->createSignaturePart($signature);
@@ -1885,7 +1941,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
-        $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        $failMessage = 'Failed while parsing saved message for added HTML content to signed part sig_m0019';
 
         $props = [
             'From' => [
