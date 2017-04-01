@@ -97,19 +97,14 @@ class Message extends MimePart
             $this->attachContentResourceHandle($replacement->getContentResourceHandle());
             $replacement->detachContentResourceHandle();
             foreach ($replacement->getChildParts() as $child) {
-                $this->removePart($child);
-                $child->setParent($part);
-                $this->addPart($child);
+                $part->addPart($child);
             }
-            $this->addPart($part, 0);
             $this->removePart($replacement);
         } else {
             $parent = $part->getParent();
-            $index = array_search($part, $parent->parts, true);
-            $this->removePart($part);
+            $position = $parent->removePart($part);
             $this->removePart($replacement);
-            $replacement->setParent($parent);
-            $this->addPart($replacement, $index);
+            $parent->addPart($replacement, $position);
         }
     }
     
@@ -337,9 +332,7 @@ class Message extends MimePart
             $contentType = $contentHeader->getRawValue();
         }
         $contentPart->setRawHeader('Content-Type', $contentType);
-        $contentPart->setParent($this);
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/alternative');
-        $this->addPart($this);
         $this->addPart($contentPart, 0);
     }
     
@@ -353,10 +346,8 @@ class Message extends MimePart
         $altPart = $this->mimePartFactory->newMimePart();
         $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
         $this->removePart($contentPart);
-        $contentPart->setParent($altPart);
-        $altPart->setParent($this);
         $this->addPart($altPart, 0);
-        $this->addPart($contentPart, 0);
+        $altPart->addPart($contentPart, 0);
         return $altPart;
     }
     
@@ -412,11 +403,9 @@ class Message extends MimePart
             $part = $this->createNewContentPartFromPart($this);
             $this->addPart($part, 0);
         }
-        $this->removePart($this);
         $this->setMimeHeaderBoundaryOnPart($this, 'multipart/mixed');
         $this->removeHeader('Content-Transfer-Encoding');
         $this->removeHeader('Content-Disposition');
-        $this->addPart($this, 0);
     }
     
     /**
@@ -432,21 +421,16 @@ class Message extends MimePart
     {
         $this->enforceMime();
         $messagePart = $this->mimePartFactory->newMimePart();
-        $messagePart->setParent($this);
-        
+
         $this->copyTypeHeadersFromPartToPart($this, $messagePart);
         $messagePart->attachContentResourceHandle($this->handle);
         $this->detachContentResourceHandle();
         
-        $this->addPart($messagePart, 0);
         foreach ($this->getChildParts() as $part) {
-            if ($part === $messagePart) {
-                continue;
-            }
             $this->removePart($part);
-            $part->setParent($messagePart);
-            $this->addPart($part);
+            $messagePart->addPart($part);
         }
+        $this->addPart($messagePart, 0);
     }
     
     /**
@@ -460,7 +444,6 @@ class Message extends MimePart
         $signedPart = $this->getSignaturePart();
         if ($signedPart === null) {
             $signedPart = $this->mimePartFactory->newMimePart();
-            $signedPart->setParent($this);
             $this->addPart($signedPart);
         }
         $signedPart->setRawHeader(
@@ -530,7 +513,6 @@ class Message extends MimePart
         $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
         if (strcasecmp($contentType, 'multipart/signed') !== 0) {
             $this->makeSpaceForMultipartSignedMessage();
-            $this->removePart($this);
             $boundary = $this->getUniqueBoundary('multipart/signed');
             $this->setRawHeader(
                 'Content-Type',
@@ -538,7 +520,6 @@ class Message extends MimePart
             );
             $this->removeHeader('Content-Disposition');
             $this->removeHeader('Content-Transfer-Encoding');
-            $this->addPart($this);
         }
         $this->overwrite8bitContentEncoding();
         $this->ensureHtmlPartFirstForSignedMessage();
@@ -602,11 +583,10 @@ class Message extends MimePart
                 $newAltPart = $this->mimePartFactory->newMimePart();
                 $newAltPart->setRawHeader('Content-Type', 'multipart/related');
                 $newAltPart->setParent($altParent);
-                $this->addPart($newAltPart, 0);
+                $altParent->addPart($newAltPart, 0);
                 foreach ($altParent->getAllParts(PartFilter::fromDisposition('inline')) as $part) {
                     $this->removePart($part);
-                    $part->setParent($newAltPart);
-                    $this->addPart($part);
+                    $newAltPart->addPart($part);
                 }
                 $altPart = $newAltPart;
             } else {
@@ -616,14 +596,11 @@ class Message extends MimePart
         
         if ($altPart === $this) {
             $this->setMessageAsAlternative();
-            $mimePart->setParent($this);
             $this->addPart($mimePart);
         } elseif ($altPart !== null) {
             $mimeAltPart = $this->createAlternativeContentPart($altPart);
-            $mimePart->setParent($mimeAltPart);
-            $this->addPart($mimePart, 1);
+            $mimeAltPart->addPart($mimePart, 1);
         } else {
-            $mimePart->setParent($this);
             $this->addPart($mimePart, 0);
         }
         
@@ -814,7 +791,6 @@ class Message extends MimePart
         $part = $this->createPartForAttachment();
         $part->setRawHeader('Content-Type', "$mimeType;\r\n\tname=\"$filename\"");
         $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
-        $part->setParent($this);
         $part->attachContentResourceHandle($this->getHandleForStringOrHandle($stringOrHandle));
         $this->addPart($part);
     }
@@ -839,7 +815,6 @@ class Message extends MimePart
         $part = $this->createPartForAttachment();
         $part->setRawHeader('Content-Type', "$mimeType;\r\n\tname=\"$filename\"");
         $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
-        $part->setParent($this);
         $part->attachContentResourceHandle($handle);
         $this->addPart($part);
     }

@@ -52,12 +52,6 @@ class MimePart
     protected $parts = [];
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart[][] Maps mime types to
-     * parts for looking up in getPartByMimeType
-     */
-    protected $mimeToPart = [];
-    
-    /**
      * @var \ZBateson\MailMimeParser\Message\Writer\MimePartWriter the part
      *      writer for this MimePart
      */
@@ -86,8 +80,7 @@ class MimePart
     }
 
     /**
-     * Adds the passed part to the parts array, and registers non-attachment/
-     * non-multipart parts by their content type.
+     * Registers the passed part as a child of the current part.
      * 
      * If the $position parameter is non-null, adds the part at the passed
      * position index.
@@ -97,16 +90,19 @@ class MimePart
      */
     public function addPart(MimePart $part, $position = null)
     {
-        if ($part->getParent() !== null && $this !== $part->getParent()) {
-            $part->getParent()->addPart($part, $position);
-        } elseif ($part !== $this) {
+        if ($part !== $this) {
+            $part->setParent($this);
             array_splice($this->parts, ($position === null) ? count($this->parts) : $position, 0, [ $part ]);
         }
     }
     
     /**
-     * Unregisters the child part from this part and returns its position or
+     * Removes the child part from this part and returns its position or
      * null if it wasn't found.
+     * 
+     * Note that if the part is not a direct child of this part, the returned
+     * position is its index within its parent (calls removePart on its direct
+     * parent).
      *
      * @param \ZBateson\MailMimeParser\Message\MimePart $part
      * @return int or null if not found
@@ -126,6 +122,11 @@ class MimePart
         return null;
     }
     
+    /**
+     * Removes all parts that are matched by the passed PartFilter.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\PartFilter $filter
+     */
     public function removeAllParts(PartFilter $filter = null)
     {
         foreach ($this->getAllParts($filter) as $part) {

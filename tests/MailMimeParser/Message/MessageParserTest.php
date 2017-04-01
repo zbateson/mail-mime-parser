@@ -166,10 +166,9 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->willReturn('multipart/alternative');
         $message->method('getHeaderParameter')
             ->willReturn('balderdash');
-        $message->expects($this->exactly(3))
+        $message->expects($this->exactly(2))
             ->method('addPart')
             ->withConsecutive(
-                [$message],
                 [$firstPart],
                 [$secondPart]
             );
@@ -287,7 +286,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $message->method('getHeaderParameter')
             ->willReturn('balderdash');
         
-        $message->expects($this->exactly(6))
+        $message->expects($this->exactly(3))
             ->method('addPart');
         
         $partFactory = $this->getMockedPartFactory();

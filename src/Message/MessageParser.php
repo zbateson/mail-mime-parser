@@ -129,6 +129,18 @@ class MessageParser
     }
     
     /**
+     * Adds the part to its parent.
+     * 
+     * @param MimePart $part
+     */
+    private function addToParent(MimePart $part)
+    {
+        if ($part->getParent() !== null) {
+            $part->getParent()->addPart($part);
+        }
+    }
+    
+    /**
      * Reads the content of a mime part up to a boundary, or the entire message
      * if no boundary is specified.
      * 
@@ -161,7 +173,7 @@ class MessageParser
         if (!$skipPart || preg_match('~multipart/\w+~i', $type)) {
             $end = ftell($handle) - $boundaryLength;
             $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
-            $message->addPart($part);
+            $this->addToParent($part);
         }
         return $endBoundaryFound;
     }
