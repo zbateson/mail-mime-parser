@@ -91,6 +91,7 @@ class Message extends MimePart
     /**
      * Returns the text/plain part at the given index (or null if not found.)
      * 
+     * @param int $index
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getTextPart($index = 0)
@@ -114,6 +115,7 @@ class Message extends MimePart
     /**
      * Returns the text/html part at the given index (or null if not found.)
      * 
+     * @param $index
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getHtmlPart($index = 0)
@@ -288,8 +290,8 @@ class Message extends MimePart
      * 
      * @param string $mimeType
      * @param MimePart $alternativePart
-     * @param boolean $keepOtherContent
-     * @return boolean
+     * @param bool $keepOtherContent
+     * @return bool
      */
     private function removeAllContentPartsFromAlternative($mimeType, $alternativePart, $keepOtherContent)
     {
@@ -318,6 +320,7 @@ class Message extends MimePart
      * optionally keeping other parts if $keepOtherContent is set to true.
      * 
      * @param string $mimeType
+     * @param bool $keepOtherContent
      * @return boolean true on success
      */
     protected function removeAllContentPartsByMimeType($mimeType, $keepOtherContent = false)
@@ -335,6 +338,7 @@ class Message extends MimePart
      * defaulting to the first 
      * 
      * @param string $contentType
+     * @param int $index
      * @return boolean true on success
      */
     protected function removePartByMimeType($mimeType, $index = 0)
@@ -370,6 +374,10 @@ class Message extends MimePart
     }
 
     /**
+     * Copies type headers (Content-Type, Content-Disposition,
+     * Content-Transfer-Encoding) from the $from MimePart to $to.  Attaches the
+     * content resource handle of $from to $to, and loops over child parts,
+     * removing them from $from and adding them to $to.
      * 
      * @param MimePart $from
      * @param MimePart $to
@@ -380,15 +388,21 @@ class Message extends MimePart
         $to->attachContentResourceHandle($from->getContentResourceHandle());
         $from->detachContentResourceHandle();
         foreach ($from->getChildParts() as $child) {
+            $from->removePart($child);
             $to->addPart($child);
         }
     }
 
     /**
+     * Replaces the $part MimePart with $replacement.
+     * 
+     * Essentially removes $part from its parent, and adds $replacement in its
+     * same position.  If $part is this Message, its type headers are moved from
+     * this message to $replacement, the content resource is moved, and children
+     * are assigned to $replacement.
      * 
      * @param MimePart $part
      * @param MimePart $replacement
-     * @return type
      */
     private function replacePart(MimePart $part, MimePart $replacement)
     {
@@ -434,7 +448,10 @@ class Message extends MimePart
      * Creates a new content part from the passed part, allowing the part to be
      * used for something else (e.g. changing a non-mime message to a multipart
      * mime message).
-     */
+     * 
+     * @param MimePart $part
+     * @return MimePart the newly-created MimePart   
+    */
     private function createNewContentPartFromPart(MimePart $part)
     {
         $contPart = $this->mimePartFactory->newMimePart();
@@ -908,9 +925,10 @@ class Message extends MimePart
     }
     
     /**
-     * Returns a resource handle where the text content can be read or null if
-     * unavailable.
+     * Returns a resource handle where the 'inline' text/plain content at the
+     * passed $index can be read or null if unavailable.
      * 
+     * @param int $index
      * @return resource
      */
     public function getTextStream($index = 0)
@@ -923,11 +941,12 @@ class Message extends MimePart
     }
     
     /**
-     * Returns the text content as a string.
+     * Returns the content of the inline text/plain part at the given index.
      * 
      * Reads the entire stream content into a string and returns it.  Returns
-     * null if the message doesn't have a text part.
+     * null if the message doesn't have an inline text part.
      * 
+     * @param int $index
      * @return string
      */
     public function getTextContent($index = 0)
@@ -940,8 +959,8 @@ class Message extends MimePart
     }
     
     /**
-     * Returns a resource handle where the HTML content can be read or null if
-     * unavailable.
+     * Returns a resource handle where the 'inline' text/html content at the
+     * passed $index can be read or null if unavailable.
      * 
      * @return resource
      */
@@ -955,11 +974,12 @@ class Message extends MimePart
     }
     
     /**
-     * Returns the HTML content as a string.
+     * Returns the content of the inline text/html part at the given index.
      * 
      * Reads the entire stream content into a string and returns it.  Returns
-     * null if the message doesn't have an HTML part.
+     * null if the message doesn't have an inline html part.
      * 
+     * @param int $index
      * @return string
      */
     public function getHtmlContent($index = 0)
