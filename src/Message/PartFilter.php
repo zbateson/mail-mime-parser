@@ -9,41 +9,114 @@ namespace ZBateson\MailMimeParser\Message;
 use InvalidArgumentException;
 
 /**
- * Description of PartFilter
+ * Provides a way to define a filter of MimeParts for use in various calls to
+ * add/remove MimeParts.
+ * 
+ * A PartFilter is defined as a set of properties in the class, set to either be
+ * 'included' or 'excluded'.  The filter is simplistic in that a property
+ * defined as included must be set on a part for it to be passed, and an
+ * excluded filter must not be set for the part to be passed.  There is no
+ * provision for creating logical conditions.
+ * 
+ * The only property set by default is $signedpart, which defaults to
+ * FILTER_EXCLUDE.
+ * 
+ * A PartFilter can be instantiated with an array of keys matching class
+ * properties, and values to set them for convenience.
+ * 
+ * ```php
+ * $inlineParts = $message->getAllParts(new PartFilter([
+ *     'multipart' => PartFilter::FILTER_INCLUDE,
+ *     'headers' => [ 
+ *         FILTER_EXCLUDE => [
+ *             'Content-Disposition': 'attachment'
+ *         ]
+ *     ]
+ * ]));
+ * 
+ * $inlineTextPart = $message->getAllParts(PartFilter::fromInlineContentType('text/plain'));
+ * ```
  *
  * @author Zaahid Bateson
  */
 class PartFilter
 {
-    const FILTER_OFF = 1;
-    const FILTER_EXCLUDE = 2;
-    const FILTER_INCLUDE = 3;
+    /**
+     * @var int indicates a filter is not in use
+     */
+    const FILTER_OFF = 0;
     
+    /**
+     * @var int an excluded filter must not be included in a part
+     */
+    const FILTER_EXCLUDE = 1;
+    
+    /**
+     * @var int an included filter must be included in a part
+     */
+    const FILTER_INCLUDE = 2;
+    
+    /**
+     * @var int filters based on whether MimePart::isMultiPart is set
+     */
     private $multipart = PartFilter::FILTER_OFF;
     
+    /**
+     * @var int filters based on whether MimePart::isTextPart is set
+     */
     private $textpart = PartFilter::FILTER_OFF;
     
+    /**
+     * @var int filters based on whether the parent of a part is a
+     *      multipart/signed part and this part has a content-type equal to its
+     *      parent's 'protocol' parameter in its content-type header
+     */
     private $signedpart = PartFilter::FILTER_EXCLUDE;
     
+    /**
+     * @var string[][] array of header rules.  The top-level contains keys of
+     * FILTER_INCLUDE and/or FILTER_EXCLUDE, which contain key => value mapping
+     * of header names => values to search for.  Note that when searching
+     * MimePart::getHeaderValue is used (so additional parameters need not be
+     * matched) and strcasecmp is used.
+     * 
+     * ```php
+     * $filter = new PartFilter();
+     * $filter->headers = [ PartFilter::FILTER_INCLUDE => [ 'Content-Type' => 'text/plain' ] ];
+     * ```
+     */
     private $headers = [];
     
-    public static function fromContentType($contentType)
+    /**
+     * Convenience method to filter for a specific mime type.
+     * 
+     * @param string $mimeType
+     * @return PartFilter
+     */
+    public static function fromContentType($mimeType)
     {
         return new static([
             'headers' => [
                 static::FILTER_INCLUDE => [
-                    'Content-Type' => $contentType
+                    'Content-Type' => $mimeType
                 ]
             ]
         ]);
     }
     
-    public static function fromInlineContentType($contentType)
+    /**
+     * Convenience method to look for parts of a specific mime-type, and that
+     * do not specifically have a Content-Disposition equal to 'attachment'.
+     * 
+     * @param string $mimeType
+     * @return PartFilter
+     */
+    public static function fromInlineContentType($mimeType)
     {
         return new static([
             'headers' => [
                 static::FILTER_INCLUDE => [
-                    'Content-Type' => $contentType
+                    'Content-Type' => $mimeType
                 ],
                 static::FILTER_EXCLUDE => [
                     'Content-Disposition' => 'attachment'
@@ -52,6 +125,14 @@ class PartFilter
         ]);
     }
     
+    /**
+     * Convenience method to search for parts with a specific
+     * Content-Disposition, optionally including multipart parts.
+     * 
+     * @param string $disposition
+     * @param int $multipart
+     * @return PartFilter
+     */
     public static function fromDisposition($disposition, $multipart = PartFilter::FILTER_OFF)
     {
         return new static([
@@ -64,6 +145,15 @@ class PartFilter
         ]);
     }
     
+    /**
+     * Constructs a PartFilter, optionally instantiating member variables with
+     * values in the passed array.
+     * 
+     * The passed array must use keys equal to member variable names, e.g.
+     * 'multipart', 'textpart', 'signedpart' and 'headers'.
+     * 
+     * @param array $filter
+     */
     public function __construct(array $filter = [])
     {
         $params = [ 'multipart', 'textpart', 'signedpart', 'headers' ];
@@ -74,6 +164,15 @@ class PartFilter
         }
     }
     
+    /**
+     * Validates an argument passed to __set to insure it's set to a value in
+     * $valid.
+     * 
+     * @param string $name Name of the member variable
+     * @param string $value The value to test
+     * @param array $valid an array of valid values
+     * @throws InvalidArgumentException
+     */
     private function validateArgument($name, $value, array $valid)
     {
         if (!in_array($value, $valid)) {
@@ -86,6 +185,40 @@ class PartFilter
         }
     }
     
+    /**
+     * Sets the PartFilter's headers filter to the passed array after validating
+     * it.
+     * 
+     * @param array $headers
+     * @throws InvalidArgumentException
+     */
+    public function setHeaders(array $headers)
+    {
+        array_walk($headers, function ($v, $k) {
+            $this->validateArgument(
+                'headers',
+                $k,
+                [ static::FILTER_EXCLUDE, static::FILTER_INCLUDE ]
+            );
+            if (!is_array($v)) {
+                throw new InvalidArgumentException(
+                    '$value must be an array with keys set to FILTER_EXCLUDE, '
+                    . 'FILTER_INCLUDE and values set to an array of header '
+                    . 'name => values'
+                );
+            }
+        });
+        $this->headers = $headers;
+    }
+    
+    /**
+     * Sets the member variable denoted by $name to the passed $value after
+     * validating it.
+     * 
+     * @param string $name
+     * @param int|array $value
+     * @throws InvalidArgumentException
+     */
     public function __set($name, $value)
     {
         if ($name === 'multipart' || $name === 'textpart' || $name === 'signedpart') {
@@ -99,59 +232,116 @@ class PartFilter
             if (!is_array($value)) {
                 throw new InvalidArgumentException('$value must be an array');
             }
-            array_walk($value, function ($v, $k) {
-                $this->validateArgument(
-                    'headers',
-                    $k,
-                    [ static::FILTER_EXCLUDE, static::FILTER_INCLUDE ]
-                );
-                if (!is_array($v)) {
-                    throw new InvalidArgumentException(
-                        '$value must be an array with keys set to FILTER_EXCLUDE, '
-                        . 'FILTER_INCLUDE and values set to an array of header '
-                        . 'name => values'
-                    );
-                }
-            });
-            $this->$name = $value;
+            $this->setHeaders($value);
         }
     }
     
+    /**
+     * Returns true if the variable denoted by $name is a member variable of
+     * PartFilter.
+     * 
+     * @param string $name
+     * @return bool
+     */
     public function __isset($name)
     {
         return isset($this->$name);
     }
     
+    /**
+     * Returns the value of the member variable denoted by $name
+     * 
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         return $this->$name;
     }
     
-    public function filter(MimePart $part)
+    /**
+     * Returns true if the passed MimePart fails the filter's multipart filter
+     * settings.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return bool
+     */
+    private function failsMultiPartFilter(MimePart $part)
     {
-        if (($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
-            || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart())) {
+        return ($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
+            || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart());
+    }
+    
+    /**
+     * Returns true if the passed MimePart fails the filter's textpart filter
+     * settings.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return bool
+     */
+    private function failsTextPartFilter(MimePart $part)
+    {
+        return ($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
+            || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart());
+    }
+    
+    /**
+     * Returns true if the passed MimePart fails the filter's signedpart filter
+     * settings.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return boolean
+     */
+    private function failsSignedPartFilter(MimePart $part)
+    {
+        if ($this->signedpart === static::FILTER_OFF) {
             return false;
-        } elseif (($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
-            || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart())) {
-            return false;
-        } elseif ($part->getParent() !== null
-            && strcasecmp($part->getParent()->getHeaderValue('Content-Type'), 'multipart/signed') === 0
-            && strcasecmp($part->getHeaderValue('Content-Type'), $part->getParent()->getHeaderParameter('Content-Type', 'protocol')) === 0) {
-            if ($this->signedpart === static::FILTER_EXCLUDE) {
-                return false;
-            }
-        } elseif ($this->signedpart === static::FILTER_INCLUDE) {
-            return false;
+        } elseif ($part->getParent() === null) {
+            return ($this->signedpart === static::FILTER_INCLUDE);
         }
+        $partMimeType = $part->getHeaderValue('Content-Type');
+        $parentMimeType = $part->getParent()->getHeaderValue('Content-Type');
+        $parentProtocol = $part->getParent()->getHeaderParameter('Content-Type', 'protocol');
+        if (strcasecmp($parentMimeType, 'multipart/signed') === 0 && strcasecmp($partMimeType, $parentProtocol) === 0) {
+            return ($this->signedpart === static::FILTER_EXCLUDE);
+        }
+        return ($this->signedpart === static::FILTER_INCLUDE);
+    }
+    
+    /**
+     * Returns true if the passed MimePart fails the filter's header filter
+     * settings.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return boolean
+     */
+    public function failsHeaderPartFilter(MimePart $part)
+    {
         foreach ($this->headers as $type => $values) {
             foreach ($values as $name => $header) {
-                if (($type === static::FILTER_EXCLUDE && strcasecmp($part->getHeaderValue($name), $header) === 0)
-                    || ($type === static::FILTER_INCLUDE && strcasecmp($part->getHeaderValue($name), $header) !== 0)) {
-                    return false;
+                $headerValue = $part->getHeaderValue($name);
+                if (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
+                    || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0)) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
+    }
+    
+    /**
+     * Determines if the passed MimePart should be filtered out or not.  If the
+     * MimePart passes all filter tests, true is returned.  Otherwise false is
+     * returned.
+     * 
+     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @return boolean
+     */
+    public function filter(MimePart $part)
+    {
+        return !($this->failsMultiPartFilter($part)
+            || $this->failsTextPartFilter($part)
+            || $this->failsSignedPartFilter($part)
+            || $this->failsHeaderPartFilter($part));
     }
 }
