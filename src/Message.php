@@ -146,7 +146,7 @@ class Message extends MimePart
      */
     public function getContentPart()
     {
-        $alternative = $this->getPart(0, PartFilter::fromContentType('multipart/alternative'));
+        $alternative = $this->getPartByMimeType('multipart/alternative');
         if ($alternative !== null) {
             return $alternative;
         }
@@ -536,10 +536,7 @@ class Message extends MimePart
      */
     private function ensureHtmlPartFirstForSignedMessage()
     {
-        $alt = $this->getPart(
-            0,
-            PartFilter::fromContentType('multipart/alternative')
-        );
+        $alt = $this->getPartByMimeType('multipart/alternative');
         if ($alt !== null) {
             $cont = $this->getContentPartContainerFromAlternative('text/html', $alt);
             $pos = array_search($cont, $alt->parts, true);

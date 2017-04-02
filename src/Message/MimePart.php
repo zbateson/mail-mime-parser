@@ -136,8 +136,14 @@ class MimePart
 
     /**
      * Returns the part at the given 0-based index, or null if none is set.
+     * 
+     * Note that the first part returned is the current part itself.  This is
+     * often desirable for queries with a PartFilter, e.g. looking for a
+     * MimePart with a specific Content-Type that may be satisfied by the
+     * current part.
      *
      * @param int $index
+     * @param PartFilter $filter
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getPart($index, PartFilter $filter = null)
@@ -150,15 +156,20 @@ class MimePart
     }
 
     /**
-     * Returns all child parts, and child parts of all children.
+     * Returns the current part, all child parts, and child parts of all
+     * children optionally filtering them with the provided PartFilter.
      * 
+     * The first part returned is always the current MimePart.  This is often
+     * desirable as it may be a valid MimePart for the provided PartFilter.
+     * 
+     * @param PartFilter $filter an optional filter
      * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
     public function getAllParts(PartFilter $filter = null)
     {
         $aParts = [ $this ];
         foreach ($this->parts as $part) {
-            $aParts = array_merge($aParts, $part->getAllParts());
+            $aParts = array_merge($aParts, $part->getAllParts(null, true));
         }
         if (!empty($filter)) {
             return array_values(array_filter(
@@ -171,7 +182,11 @@ class MimePart
 
     /**
      * Returns the total number of parts in this and all children.
+     * 
+     * Note that the current part is considered, so the minimum getPartCount is
+     * 1 without a filter.
      *
+     * @param PartFilter $filter
      * @return int
      */
     public function getPartCount(PartFilter $filter = null)
@@ -184,6 +199,7 @@ class MimePart
      * set.
      *
      * @param int $index
+     * @param PartFilter $filter
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function getChild($index, PartFilter $filter = null)
@@ -198,6 +214,9 @@ class MimePart
     /**
      * Returns all direct child parts.
      * 
+     * If a PartFilter is provided, the PartFilter is applied before returning.
+     * 
+     * @param PartFilter $filter
      * @return \ZBateson\MailMimeParser\Message\MimePart[]
      */
     public function getChildParts(PartFilter $filter = null)
@@ -211,7 +230,8 @@ class MimePart
     /**
      * Returns the number of direct children under this part.
      * 
-     * @return \ZBateson\MailMimeParser\Message\MimePart[]
+     * @param PartFilter $filter
+     * @return int
      */
     public function getChildCount(PartFilter $filter = null)
     {
@@ -226,16 +246,7 @@ class MimePart
      */
     public function getPartByMimeType($mimeType, $index = 0)
     {
-        return $this->getPart(
-            0,
-            new PartFilter([ 'headers' => 
-                [ 
-                    PartFilter::FILTER_INCLUDE => [
-                        'Content-Type' => $mimeType
-                    ]
-                ]
-            ])
-        );
+        return $this->getPart($index, PartFilter::fromContentType($mimeType));
     }
     
     /**
@@ -247,34 +258,18 @@ class MimePart
      */
     public function getAllPartsByMimeType($mimeType)
     {
-        return $this->getAllParts(
-            new PartFilter([ 'headers' => 
-                [ 
-                    PartFilter::FILTER_INCLUDE => [
-                        'Content-Type' => $mimeType
-                    ]
-                ]
-            ])
-        );
+        return $this->getAllParts(PartFilter::fromContentType($mimeType));
     }
     
     /**
+     * Returns the number of parts matching the passed $mimeType
      * 
-     * @param type $mimeType
-     * @param type $disposition
-     * @return type
+     * @param string $mimeType
+     * @return int
      */
     public function getCountOfPartsByMimeType($mimeType)
     {
-        return $this->getPartCount(
-            new PartFilter([ 'headers' => 
-                [ 
-                    PartFilter::FILTER_INCLUDE => [
-                        'Content-Type' => $mimeType
-                    ]
-                ]
-            ])
-        );
+        return $this->getPartCount(PartFilter::fromContentType($mimeType));
     }
 
     /**
@@ -297,10 +292,11 @@ class MimePart
      */
     public function isMultiPart()
     {
-        return preg_match(
+        // casting to bool, preg_match returns 1 for true
+        return (bool) (preg_match(
             '~multipart/\w+~i',
             $this->getHeaderValue('Content-Type', 'text/plain')
-        );
+        ));
     }
     
     /**
