@@ -46,12 +46,22 @@ class MessageTest extends PHPUnit_Framework_TestCase
         return $partFactory;
     }
     
-    protected function createNewMessage()
+    protected function createNewMessage($contentType = null)
     {
         $hf = $this->getMockedHeaderFactory();
         $mw = $this->getMockedMessageWriter();
         $pf = $this->getMockedPartFactory();
-        return new Message($hf, $mw, $pf);
+        $message = $this->getMockBuilder('ZBateson\MailMimeParser\Message')
+            ->setConstructorArgs([$hf, $mw, $pf])
+            ->setMethods(['getHeaderValue'])
+            ->getMock();
+        $message->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) use ($contentType) {
+            if (strcasecmp($param, 'Content-Type') === 0 && $contentType !== null) {
+                return $contentType;
+            }
+            return $defaultValue;
+        }));
+        return $message;
     }
 
     public function testObjectId()
@@ -68,14 +78,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $part = $this->getMockedPart();
         $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) {
-            if ($param === 'Content-Type') {
+            if (strcasecmp($param, 'Content-Type') === 0) {
                 return 'text/html';
             }
             return $defaultValue;
         }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
-        $message = $this->createNewMessage();
+        $message = $this->createNewMessage('multipart/alternative');
         $message->addPart($part);
         
         $this->assertNull($message->getTextPart());
@@ -97,7 +107,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         }));
         $part->method('getContentResourceHandle')->willReturn('handle');
 
-        $message = $this->createNewMessage();
+        $message = $this->createNewMessage('multipart/alternative');
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getAttachmentPart(0));
@@ -119,7 +129,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             return $defaultValue;
         }));
 
-        $message = $this->createNewMessage();
+        $message = $this->createNewMessage('multipart/mixed');
         $message->addPart($part);
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getTextPart());
@@ -148,7 +158,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             return $defaultValue;
         }));
 
-        $message = $this->createNewMessage();
+        $message = $this->createNewMessage('multipart/mixed');
         $message->addPart($part);
         $message->addPart($part2);
         $this->assertNull($message->getTextPart());
@@ -166,5 +176,15 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $message = $this->createNewMessage();
         $this->assertFalse($message->isMime());
+    }
+
+    public function testGetTextPartFromMessageWithoutContentType()
+    {
+        $message = $this->createNewMessage();
+        $message->setContent('Test');
+
+        $textPart = $message->getTextPart();
+        $this->assertNotNull($textPart);
+        $this->assertSame($message, $textPart);
     }
 }

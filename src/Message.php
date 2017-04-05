@@ -276,6 +276,7 @@ class Message extends MimePart
             $this->setMessageAsMixed();
         }
         foreach ($parts as $part) {
+            $from->removePart($part);
             $this->addPart($part);
         }
     }
@@ -300,12 +301,21 @@ class Message extends MimePart
             return false;
         }
         if ($keepOtherContent) {
-            $this->moveAllPartsAsAttachmentsExcept($alternativePart, $mimeType);
+            $this->moveAllPartsAsAttachmentsExcept($rmPart, $mimeType);
+            $alternativePart = $this->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
+        } else {
+            $rmPart->removeAllParts();
         }
-        $rmPart->removeAllParts();
         $this->removePart($rmPart);
-        if ($alternativePart->getChildCount() === 1) {
-            $this->replacePart($alternativePart, $alternativePart->getChild(0));
+        if ($alternativePart !== null) {
+            if ($alternativePart->getChildCount() === 1) {
+                $this->replacePart($alternativePart, $alternativePart->getChild(0));
+            } elseif ($alternativePart->getChildCount() === 0) {
+                $this->removePart($alternativePart);
+            }
+        }
+        while ($this->getChildCount() === 1) {
+            $this->replacePart($this, $this->getChild(0));
         }
         return true;
     }
@@ -347,6 +357,8 @@ class Message extends MimePart
         $alt = $this->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         if ($parts === null || !isset($parts[$index])) {
             return false;
+        } elseif (count($parts) === 1) {
+            return $this->removeAllContentPartsByMimeType($mimeType, true);
         }
         $part = $parts[$index];
         $this->removePart($part);
@@ -628,12 +640,12 @@ class Message extends MimePart
     private function createMultipartRelatedPartForInlineChildrenOf(MimePart $parent)
     {
         $relatedPart = $this->mimePartFactory->newMimePart();
-        $relatedPart->setRawHeader('Content-Type', 'multipart/related');
-        $parent->addPart($relatedPart, 0);
-        foreach ($parent->getAllParts(PartFilter::fromDisposition('inline')) as $part) {
+        $this->setMimeHeaderBoundaryOnPart($relatedPart, 'multipart/related');
+        foreach ($parent->getChildParts(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) as $part) {
             $this->removePart($part);
             $relatedPart->addPart($part);
         }
+        $parent->addPart($relatedPart, 0);
         return $relatedPart;
     }
 
@@ -654,9 +666,9 @@ class Message extends MimePart
             PartFilter::fromInlineContentType(($mimeType === 'text/plain') ? 'text/html' : 'text/plain')
         );
         if ($altPart !== null && $altPart->getParent() !== null && $altPart->getParent()->isMultiPart()) {
-            $altPart = $altPart->getParent();
-            if ($altPart->getPartCount(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) !== $altPart->getChildCount()) {
-                $altPart = $this->createMultipartRelatedPartForInlineChildrenOf($altPart);
+            $altPartParent = $altPart->getParent();
+            if ($altPartParent->getPartCount(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) !== 1) {
+                $altPart = $this->createMultipartRelatedPartForInlineChildrenOf($altPartParent);
             }
         }
         return $altPart;

@@ -83,10 +83,9 @@ class MessageWriter extends MimePartWriter
             $this->recursiveWriteParts($message, $handle);
         } else {
             $this->writePartHeadersTo($message, $handle);
+            $this->writePartContentTo($message, $handle);
             foreach ($message->getChildParts() as $i => $child) {
-                if ($i !== 0) {
-                    fwrite($handle, "\r\n\r\n");
-                }
+                fwrite($handle, "\r\n\r\n");
                 $this->writePartContentTo($child, $handle);
             }
         }

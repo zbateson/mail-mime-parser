@@ -86,6 +86,16 @@ class PartFilter
      * ```
      */
     private $headers = [];
+
+    /**
+     * @var string[] map of headers and default values if the header isn't set.
+     *      This allows text/plain to match a Content-Type header that hasn't
+     *      been set for instance.
+     */
+    private $defaultHeaderValues = [
+        'Content-Type' => 'text/plain',
+        'Content-Disposition' => 'inline',
+    ];
     
     /**
      * Convenience method to filter for a specific mime type.
@@ -319,7 +329,8 @@ class PartFilter
     {
         foreach ($this->headers as $type => $values) {
             foreach ($values as $name => $header) {
-                $headerValue = $part->getHeaderValue($name);
+                $default = (isset($this->defaultHeaderValues[$name])) ? $this->defaultHeaderValues[$name] : null;
+                $headerValue = $part->getHeaderValue($name, $default);
                 if (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
                     || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0)) {
                     return true;

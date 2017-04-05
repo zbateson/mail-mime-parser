@@ -312,17 +312,15 @@ class MessageParser
         $line = trim(fgets($handle));
         $end = $this->findNextUUEncodedPartPosition($handle);
         
-        $part = null;
         if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
             $mode = $matches[1];
             $filename = $matches[2];
             $part = $this->partFactory->newUUEncodedPart($mode, $filename);
             $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
+            $message->addPart($part);
         } else {
-            $part = $this->partFactory->newNonMimePart();
-            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
+            $this->partStreamRegistry->attachPartStreamHandle($message, $message, $start, $end);
         }
-        $message->addPart($part);
     }
     
     /**

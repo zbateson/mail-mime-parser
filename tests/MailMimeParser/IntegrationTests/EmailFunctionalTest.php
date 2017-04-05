@@ -1336,7 +1336,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
 
-    public function testRemoveHtmlPartsm0020()
+    public function testRemoveAllHtmlPartsm0020()
     {
         $handle = fopen($this->messageDir . '/m0020.txt', 'r');
         $message = $this->parser->parse($handle);
@@ -1359,7 +1359,6 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $test1 = $props;
         unset($test1['html']);
-        unset($test1['attachments']);
 
         $message->removeAllHtmlParts();
         $this->assertNull($message->getHtmlPart());
@@ -1393,7 +1392,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'Subject' => 'Test message from Microsoft Outlook 00',
             'text' => 'hareandtortoise.txt',
             'html' => 'hareandtortoise.txt',
-            'inlineparts' => 4,
+            'attachments' => 2,
         ];
 
         $test1 = $props;
@@ -1402,6 +1401,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $firstHtmlPart = $message->getHtmlPart();
         $secondHtmlPart = $message->getHtmlPart(1);
         $thirdHtmlPart = $message->getHtmlPart(2);
+
+        $secondContent = $secondHtmlPart->getContent();
+        
         $message->removeHtmlPart();
         $this->assertNotNull($message->getHtmlPart());
         $this->assertNotEquals($firstHtmlPart, $message->getHtmlPart());
@@ -1420,6 +1422,25 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for rmho_m0020';
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+
+        $this->assertNotNull($messageWritten->getHtmlPart());
+        $this->assertEquals($secondContent, $messageWritten->getHtmlContent());
+
+        $this->assertNotNull($message->getPartByMimeType('multipart/alternative'));
+        $message->removeHtmlPart();
+        $this->assertNull($message->getHtmlPart());
+        $this->assertNull($message->getPartByMimeType('multipart/alternative'));
+        $tmpSaved2 = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rmha_m0020", 'w+');
+        $message->save($tmpSaved2);
+        rewind($tmpSaved2);
+
+        $messageWritten2 = $this->parser->parse($tmpSaved2);
+        fclose($tmpSaved2);
+        $failMessage = 'Failed while parsing saved message for rmha_m0020';
+        $this->runEmailTestForMessage($messageWritten2, $test1, $failMessage);
+
+        $this->assertNotNull($messageWritten->getHtmlPart());
+        $this->assertEquals($secondContent, $messageWritten->getHtmlContent());
     }
 
     public function testAddHtmlPartRemoveTextPartm0001()
