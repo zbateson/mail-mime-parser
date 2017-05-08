@@ -48,8 +48,8 @@ echo $att->getHeaderParameter(                  // value of "charset" part
     'content-type',
     'charset'
 );
-echo stream_get_contents(
-    $att->getContentResourceHandle()
+echo stream_get_contents(                       // get the attached file
+    $att->getContentResourceHandle()            // the file is decoded automatically
 );
 ```
 
