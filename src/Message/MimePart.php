@@ -363,6 +363,23 @@ class MimePart
      * The resource is automatically closed by MimePart's destructor and should
      * not be closed otherwise.
      *
+     * The returned resource handle is a stream with decoding filters appended
+     * to it.  The attached filters are determined by looking at the part's
+     * Content-Encoding header.  The following encodings are currently
+     * supported:
+     *
+     * - Quoted-Printable
+     * - Base64
+     * - X-UUEncode
+     *
+     * UUEncode may be automatically attached for a message without a defined
+     * Content-Encoding and Content-Type if it has a UUEncoded part to support
+     * older non-mime message attachments.
+     *
+     * In addition, character encoding for text streams is converted to UTF-8
+     * if {@link \ZBateson\MailMimeParser\Message\MimePart::isTextPart
+     * MimePart::isTextPart} returns true.
+     *
      * @return resource
      */
     public function getContentResourceHandle()
