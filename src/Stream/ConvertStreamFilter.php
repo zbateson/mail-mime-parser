@@ -22,7 +22,7 @@ class ConvertStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'convert.*';
+    const STREAM_FILTER_NAME = 'mmp-convert.*';
     
     /**
      * @var string function to call for encoding/decoding
@@ -36,8 +36,8 @@ class ConvertStreamFilter extends php_user_filter
      */
     public function onCreate()
     {
-        // strip off 'convert.'
-        $name = substr($this->filtername, 8);
+        // strip off 'mmp-convert.'
+        $name = substr($this->filtername, 12);
         $aFilters = [
             'quoted-printable-encode' => true,
             'quoted-printable-decode' => true,

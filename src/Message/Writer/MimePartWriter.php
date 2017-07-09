@@ -33,8 +33,8 @@ class MimePartWriter
      *      names used in setTransferEncodingFilterOnStream
      */
     private static $typeToEncodingMap = [
-        'quoted-printable' => 'convert.quoted-printable-encode',
-        'base64' => 'convert.base64-encode',
+        'quoted-printable' => 'mmp-convert.quoted-printable-encode',
+        'base64' => 'mmp-convert.base64-encode',
         'x-uuencode' => 'mailmimeparser-uuencode',
     ];
     
@@ -101,13 +101,6 @@ class MimePartWriter
      * Appends a stream filter on the passed MimePart's content resource handle
      * based on the type of encoding for the passed part.
      *
-     * Unfortunately PHP seems to error out allocating memory for
-     * stream_filter_make_writable in Base64EncodeStreamFilter using
-     * STREAM_FILTER_WRITE, and HHVM doesn't seem to remove the filter properly
-     * for STREAM_FILTER_READ, so the function appends a read filter on
-     * $fromHandle if running through 'php', and a write filter on $toHandle if
-     * using HHVM.
-     *
      * @param MimePart $part
      * @param resource $handle
      * @param StreamLeftover $leftovers
@@ -126,7 +119,7 @@ class MimePartWriter
             )
         ]);
         if (isset(self::$typeToEncodingMap[$encoding])) {
-            if (defined('HHVM_VERSION')) {
+            if (defined('HHVM_VERSION') && HHVM_VERSION < '3.18.0') {
                 return stream_filter_append(
                     $handle,
                     self::$typeToEncodingMap[$encoding],

@@ -262,19 +262,20 @@ class SimpleDi
         // built-in base64-decode and encode stream filter does pretty much the
         // same thing as HHVM's -- it only works on smaller streams where the
         // entire stream comes in a single buffer.
+        // In addition, in HHVM 3.15 there seems to be a problem registering
+        // 'convert.quoted-printable-decode/encode -- so to make things simple
+        // decided to use my version instead and name them mmp-convert.*
+        // In 3.18-3.20, it seems we're not able to overwrite 'convert.*'
+        // filters, so now they're all named mmp-convert.*
         $filters = stream_get_filters();
-        // @codeCoverageIgnoreStart
-        if (!in_array('convert.*', $filters)) {
-            stream_filter_register(
-                'convert.quoted-printable-decode',
-                __NAMESPACE__ . '\Stream\ConvertStreamFilter'
-            );
-            stream_filter_register(
-                'convert.quoted-printable-encode',
-                __NAMESPACE__ . '\Stream\ConvertStreamFilter'
-            );
-        }
-        // @codeCoverageIgnoreEnd
+        stream_filter_register(
+            'mmp-convert.quoted-printable-decode',
+            __NAMESPACE__ . '\Stream\ConvertStreamFilter'
+        );
+        stream_filter_register(
+            'mmp-convert.quoted-printable-encode',
+            __NAMESPACE__ . '\Stream\ConvertStreamFilter'
+        );
         stream_filter_register(
             Base64EncodeStreamFilter::STREAM_FILTER_NAME,
             __NAMESPACE__ . '\Stream\Base64EncodeStreamFilter'

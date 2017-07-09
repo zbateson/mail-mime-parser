@@ -22,7 +22,7 @@ class Base64EncodeStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'convert.base64-encode';
+    const STREAM_FILTER_NAME = 'mmp-convert.base64-encode';
     
     /**
      * @var int number of bytes written for chunk-splitting
