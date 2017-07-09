@@ -65,5 +65,7 @@ class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Andreas Müzner', $message->getHeader('Cc')->getPersonName());
         $this->assertEquals('Andreas Müzner', $message->getHeader('Bcc')->getPersonName());
+        
+        $this->assertEquals('Технические работы (ERP Галактика и Отчеты ТД)', $message->getHeaderValue('Test'));
     }
 }

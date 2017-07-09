@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use SplFixedArray;
 use Iterator;
 use NoRewindIterator;
@@ -164,7 +165,8 @@ abstract class AbstractConsumer
     protected function getTokenSplitPattern()
     {
         $sChars = implode('|', $this->getAllTokenSeparators());
-        return '~(\\\\.|' . $sChars . ')~';
+        $mimePartPattern = MimeLiteralPart::MIME_PART_PATTERN;
+        return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
     }
     
     /**

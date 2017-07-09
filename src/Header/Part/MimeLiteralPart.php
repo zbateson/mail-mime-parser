@@ -19,7 +19,7 @@ class MimeLiteralPart extends LiteralPart
     /**
      * @var string regex pattern matching a mime-encoded part
      */
-    protected $mimePartPattern = '=\?[A-Za-z\-_0-9]+\?[QBqb]\?[^\?]+\?=';
+    const MIME_PART_PATTERN = '=\?[A-Za-z\-_0-9]+\?[QBqb]\?[^\?]+\?=';
     
     /**
      * @var bool set to true to ignore spaces before this part
@@ -42,8 +42,9 @@ class MimeLiteralPart extends LiteralPart
     {
         $this->value = $this->decodeMime($token);
         // preg_match returns int
-        $this->canIgnoreSpacesBefore = (bool) preg_match("/^\s*{$this->mimePartPattern}/", $token);
-        $this->canIgnoreSpacesAfter = (bool) preg_match("/{$this->mimePartPattern}\s*\$/", $token);
+        $pattern = self::MIME_PART_PATTERN;
+        $this->canIgnoreSpacesBefore = (bool) preg_match("/^\s*{$pattern}/", $token);
+        $this->canIgnoreSpacesAfter = (bool) preg_match("/{$pattern}\s*\$/", $token);
     }
     
     /**
@@ -58,7 +59,7 @@ class MimeLiteralPart extends LiteralPart
      */
     protected function decodeMime($value)
     {
-        $pattern = $this->mimePartPattern;
+        $pattern = self::MIME_PART_PATTERN;
         $value = preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
         $aMimeParts = preg_split("/($pattern)/", $value, -1, PREG_SPLIT_DELIM_CAPTURE);
         $ret = '';

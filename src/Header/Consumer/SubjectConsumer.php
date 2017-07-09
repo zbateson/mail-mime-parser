@@ -14,14 +14,14 @@ use Iterator;
  * Extends GenericConsumer to remove its sub consumers.
  *
  * Prior to this, subject headers were parsed using the GenericConsumer which
- * meant if the subject contained text within parantheses, it would not be
+ * meant if the subject contained text within parentheses, it would not be
  * included as part of the returned value in a getHeaderValue.  Mime-encoded
  * parts within quotes would be ignored, and backslash characters denoted an
  * escaped character.
  *
  * From testing in ThunderBird and Outlook web mail it seems quoting parts
  * doesn't have an effect (e.g. quoting a "mime-literal" encoded part still
- * comes out decoded), and parts in parantheses (comments) are displayed
+ * comes out decoded), and parts in parentheses (comments) are displayed
  * normally.
  * 
  * @author Zaahid Bateson

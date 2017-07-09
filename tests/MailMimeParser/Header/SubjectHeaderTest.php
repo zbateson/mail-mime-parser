@@ -43,6 +43,13 @@ class SubjectHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
     
+    public function testMultilineMimePartWithParentheses()
+    {
+        $header = new SubjectHeader($this->consumerService, 'Hunted-By', ' =?koi8-r?B?9MXIzsnexdPLycUg0sHCz9TZIChFUlAg58HMwcvUycvBIMkg79TexdTZIPTk?=
+            =?koi8-r?Q?)?=');
+        $this->assertEquals('Технические работы (ERP Галактика и Отчеты ТД)', $header->getValue());
+    }
+    
     /**
      * 
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
