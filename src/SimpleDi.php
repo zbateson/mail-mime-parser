@@ -267,7 +267,6 @@ class SimpleDi
         // decided to use my version instead and name them mmp-convert.*
         // In 3.18-3.20, it seems we're not able to overwrite 'convert.*'
         // filters, so now they're all named mmp-convert.*
-        $filters = stream_get_filters();
         stream_filter_register(
             'mmp-convert.quoted-printable-decode',
             __NAMESPACE__ . '\Stream\ConvertStreamFilter'
