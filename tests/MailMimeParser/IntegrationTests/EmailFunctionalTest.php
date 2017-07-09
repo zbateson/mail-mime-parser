@@ -148,6 +148,38 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 }
             }
         }
+        if (!empty($props['parts'])) {
+            $this->runPartsTests($message, $props['parts'], $failMessage);
+        }
+    }
+    
+    private function runPartsTests($part, array $types, $failMessage)
+    {
+        $this->assertNotNull($part, $failMessage);
+        $this->assertNotNull($types);
+        foreach ($types as $key => $type) {
+            if (is_array($type)) {
+                $this->assertEquals(
+                    strtolower($key),
+                    strtolower($part->getHeaderValue('Content-Type', 'text/plain')),
+                    $failMessage
+                );
+                $cparts = $part->getChildParts();
+                $curPart = current($cparts);
+                $this->assertCount(count($type), $cparts, $failMessage);
+                foreach ($type as $key => $ctype) {
+                    $this->runPartsTests($curPart, [ $key => $ctype ], $failMessage);
+                    $curPart = next($cparts);
+                }
+            } else {
+                $this->assertEmpty($part->getChildParts(), $failMessage);
+                $this->assertEquals(
+                    strtolower($type),
+                    strtolower($part->getHeaderValue('Content-Type', 'text/plain')),
+                    $failMessage
+                );
+            }
+        }
     }
 
     private function runEmailTest($key, array $props) {
@@ -203,7 +235,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -219,7 +254,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -235,7 +273,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -251,7 +292,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -267,7 +311,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -283,7 +330,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jblow@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -299,7 +349,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -315,7 +368,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -331,7 +387,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -347,7 +406,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrФsche.txt',
+            'parts' => [
+                'text/plain'
+            ],
         ]);
     }
 
@@ -364,7 +426,15 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             ],
             'Subject' => 'Test message from Microsoft Outlook 00',
             'text' => 'hareandtortoise.txt',
-            'attachments' => 3
+            'attachments' => 3,
+            'parts' => [
+                'multipart/mixed' => [
+                    'text/plain',
+                    'image/png',
+                    'image/png',
+                    'image/png'
+                ]
+            ],
         ]);
     }
 
@@ -380,7 +450,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jblow@example.com'
             ],
             'Subject' => 'Test message from Microsoft Outlook 00',
-            'attachments' => 1
+            'attachments' => 1,
+            'parts' => [
+                'image/png',
+            ],
         ]);
     }
 
@@ -396,7 +469,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jblow@example.com'
             ],
             'Subject' => 'Test message from Microsoft Outlook 00',
-            'attachments' => 2
+            'attachments' => 2,
+            'parts' => [
+                'multipart/mixed' => [
+                    'image/png',
+                    'image/png',
+                ]
+            ],
         ]);
     }
 
@@ -414,6 +493,12 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'Subject' => 'Test message from Microsoft Outlook 00',
             'text' => 'hareandtortoise.txt',
             'html' => 'hareandtortoise.txt',
+            'parts' => [
+                'multipart/alternative' => [
+                    'text/plain',
+                    'text/html'
+                ]
+            ]
         ]);
     }
 
@@ -432,6 +517,16 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'text' => 'hareandtortoise.txt',
             'html' => 'hareandtortoise.txt',
             'attachments' => 2,
+            'parts' => [
+                'multipart/mixed' => [
+                    'multipart/alternative' => [
+                        'text/plain',
+                        'text/html'
+                    ],
+                    'image/png',
+                    'image/png'
+                ]
+            ]
         ]);
     }
 
@@ -450,6 +545,16 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'text' => 'hareandtortoise.txt',
             'html' => 'hareandtortoise.txt',
             'attachments' => 2,
+            'parts' => [
+                'multipart/related' => [
+                    'multipart/alternative' => [
+                        'text/plain',
+                        'text/html'
+                    ],
+                    'image/png',
+                    'image/png'
+                ]
+            ]
         ]);
     }
 
@@ -468,6 +573,19 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'text' => 'hareandtortoise.txt',
             'html' => 'hareandtortoise.txt',
             'attachments' => 3,
+            'parts' => [
+                'multipart/mixed' => [
+                    'multipart/related' => [
+                        'multipart/alternative' => [
+                            'text/plain',
+                            'text/html'
+                        ],
+                        'image/png'
+                    ],
+                    'image/png',
+                    'image/png'
+                ]
+            ]
         ]);
     }
 
@@ -485,6 +603,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'Subject' => 'Test message from Microsoft Outlook 00',
             'text' => 'hareandtortoise.txt',
             'attachments' => 3,
+            'parts' => [
+                'text/plain' => [
+                    'application/octet-stream',
+                    'application/octet-stream',
+                    'application/octet-stream'
+                ]
+            ]
         ]);
     }
 
