@@ -119,21 +119,12 @@ class MimePartWriter
             )
         ]);
         if (isset(self::$typeToEncodingMap[$encoding])) {
-            if (defined('HHVM_VERSION') && HHVM_VERSION < '3.18.0') {
-                return stream_filter_append(
-                    $handle,
-                    self::$typeToEncodingMap[$encoding],
-                    STREAM_FILTER_WRITE,
-                    $params
-                );
-            } else {
-                return stream_filter_append(
-                    $contentHandle,
-                    self::$typeToEncodingMap[$encoding],
-                    STREAM_FILTER_READ,
-                    $params
-                );
-            }
+            return stream_filter_append(
+                $contentHandle,
+                self::$typeToEncodingMap[$encoding],
+                STREAM_FILTER_READ,
+                $params
+            );
         }
         return null;
     }
