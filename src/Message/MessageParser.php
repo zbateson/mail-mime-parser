@@ -141,6 +141,35 @@ class MessageParser
     }
     
     /**
+     * 
+     * 
+     * @param type $handle
+     * @param MimePart $part
+     * @param Message $message
+     * @param type $contentStartPos
+     * @param type $boundaryLength
+     */
+    protected function attachStreamHandles($handle, MimePart $part, Message $message, $contentStartPos, $boundaryLength)
+    {
+        $end = ftell($handle) - $boundaryLength;
+        $this->partStreamRegistry->attachContentPartStreamHandle($part, $message, $contentStartPos, $end);
+        $this->partStreamRegistry->attachOriginalPartStreamHandle($part, $message, $part->startHandlePosition, $end);
+        
+        if ($part->getParent() !== null) {
+            do {
+                $end = ftell($handle);
+            } while (!feof($handle) && rtrim(fgets($handle)) === '');
+            fseek($handle, $end, SEEK_SET);
+            $this->partStreamRegistry->attachOriginalPartStreamHandle(
+                $part->getParent(),
+                $message,
+                $part->getParent()->startHandlePosition,
+                $end
+            );
+        }
+    }
+    
+    /**
      * Reads the content of a mime part up to a boundary, or the entire message
      * if no boundary is specified.
      * 
@@ -171,8 +200,7 @@ class MessageParser
         }
         $type = $part->getHeaderValue('Content-Type', 'text/plain');
         if (!$skipPart || preg_match('~multipart/\w+~i', $type)) {
-            $end = ftell($handle) - $boundaryLength;
-            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
+            $this->attachStreamHandles($handle, $part, $message, $start, $boundaryLength);
             $this->addToParent($part);
         }
         return $endBoundaryFound;
@@ -311,16 +339,14 @@ class MessageParser
         $start = ftell($handle);
         $line = trim(fgets($handle));
         $end = $this->findNextUUEncodedPartPosition($handle);
-        
+        $part = $message;
         if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
             $mode = $matches[1];
             $filename = $matches[2];
             $part = $this->partFactory->newUUEncodedPart($mode, $filename);
-            $this->partStreamRegistry->attachPartStreamHandle($part, $message, $start, $end);
             $message->addPart($part);
-        } else {
-            $this->partStreamRegistry->attachPartStreamHandle($message, $message, $start, $end);
         }
+        $this->partStreamRegistry->attachContentPartStreamHandle($part, $message, $start, $end);
     }
     
     /**
@@ -336,12 +362,14 @@ class MessageParser
     protected function read($handle, Message $message)
     {
         $part = $message;
+        $part->startHandlePosition = 0;
         $this->readHeaders($handle, $message);
         do {
             if (!$message->isMime()) {
                 $this->readUUEncodedOrPlainTextPart($handle, $message);
             } else {
                 $part = $this->readMimeMessagePart($handle, $message, $part);
+                $part->startHandlePosition = ftell($handle);
                 $this->readHeaders($handle, $part);
             }
         } while (!feof($handle));

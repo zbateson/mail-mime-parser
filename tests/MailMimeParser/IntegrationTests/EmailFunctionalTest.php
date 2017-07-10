@@ -24,6 +24,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;
+    
+    // useful for testing an actual signed message with external tools -- the
+    // tests may actually fail with this set to true though, as it always
+    // tries to sign rather than verify a signature
     const USE_GPG_KEYGEN = false;
 
     protected function setUp()
@@ -217,7 +221,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             fclose($pipes[1]);
             fclose($pipes[2]);
             proc_close($proc);
-            return $signature;
+            return preg_replace('/\r|\n/', '', $signature);
         } else {
             return md5($signableContent);
         }
@@ -1900,6 +1904,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
 
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($signableContent, $testString);
+        
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+        
         $props = [
             'From' => [
                 'name' => 'Doug Sauder',
@@ -1945,6 +1954,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0014';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [
@@ -1994,6 +2006,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0015';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [
@@ -2042,6 +2057,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [
@@ -2088,6 +2106,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to signed part sig_m0019';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [
@@ -2134,6 +2155,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for added HTML content to m1005';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [
@@ -2156,6 +2180,16 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
+    
+    public function testVerifySignedEmailm4001()
+    {
+        $handle = fopen($this->messageDir . '/m4001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+        
+        $testString = $message->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
+    }
 
     public function testParseEmailm4001()
     {
@@ -2173,9 +2207,19 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => '9825cba003a7ac85b9a3f3dc9f8423fd'
             ],
         ]);
+    }
+
+    public function testVerifySignedEmailm4002()
+    {
+        $handle = fopen($this->messageDir . '/m4002.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+        
+        $testString = $message->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 
     public function testParseEmailm4002()
@@ -2194,10 +2238,20 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'attachments' => 3,
             'signed' => [
                 'protocol' => 'application/pgp-signature',
-                'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'micalg' => 'md5',
+                'body' => 'f691886408cbeedc753548d2d198bf92'
             ],
         ]);
+    }
+    
+    public function testVerifySignedEmailm4003()
+    {
+        $handle = fopen($this->messageDir . '/m4003.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+        
+        $testString = $message->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 
     public function testParseEmailm4003()
@@ -2217,9 +2271,19 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => 'ba0ce5fac600d1a2e1f297d0040b858c'
             ],
         ]);
+    }
+    
+    public function testVerifySignedEmailm4004()
+    {
+        $handle = fopen($this->messageDir . '/m4004.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+        
+        $testString = $message->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 
     public function testParseEmailm4004()
@@ -2239,7 +2303,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
-                'body' => 'Testing testing testing'
+                'body' => 'eb4c0347d13a2bf71a3f9673c4b5e3db'
             ],
         ]);
     }
@@ -2322,6 +2386,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for m4006';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [
@@ -2383,6 +2450,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $messageWritten = $this->parser->parse($tmpSaved);
         fclose($tmpSaved);
         $failMessage = 'Failed while parsing saved message for m4007';
+        
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($testString, $signableContent);
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
 
         $props = [
             'From' => [

@@ -139,9 +139,7 @@ class MimePartWriter
     }
 
     /**
-     * Filters out single line feed (CR or LF) characters from text input and
-     * replaces them with CRLF, assigning the result to $read.  Also trims out
-     * any starting and ending CRLF characters in the stream.
+     * Trims out any starting and ending CRLF characters in the stream.
      *
      * @param string $read the read string, and where the result will be written
      *        to
@@ -151,14 +149,13 @@ class MimePartWriter
      *        line if it ended with a CRLF (because they're trimmed from the
      *        end, and get prepended to $read).
      */
-    private function filterTextBeforeCopying(&$read, &$first, &$lastChars)
+    private function trimTextBeforeCopying(&$read, &$first, &$lastChars)
     {
         if ($first) {
             $first = false;
             $read = ltrim($read, "\r\n");
         }
         $read = $lastChars . $read;
-        $read = preg_replace('/\r\n|\r|\n/', "\r\n", $read);
         $lastChars = '';
         $matches = null;
         if (preg_match('/[\r\n]+$/', $read, $matches)) {
@@ -187,8 +184,11 @@ class MimePartWriter
         $first = true;
         while (!feof($fromHandle)) {
             $read = fread($fromHandle, 1024);
+            if (strcasecmp($part->getHeaderValue('Content-Encoding'), '8bit') !== 0) {
+                $read = preg_replace('/\r\n|\r|\n/', "\r\n", $read);
+            }
             if ($part->isTextPart()) {
-                $this->filterTextBeforeCopying($read, $first, $lastChars);
+                $this->trimTextBeforeCopying($read, $first, $lastChars);
             }
             fwrite($toHandle, $read);
         }

@@ -5,8 +5,8 @@ Date: Wed, 17 May 2000 19:32:47 -0400
 Message-ID: <NDBBIAKOPKHFGPLCODIGGEKECHAA.doug@example.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed;
-	boundary="----=MMP-57d495ede8684.57d495edeb0d04.56408213";
-	micalg="pgp-sha256"; protocol="application/pgp-signature"
+    boundary="----=MMP-57d495ede8684.57d495edeb0d04.56408213";
+    micalg="md5"; protocol="application/pgp-signature"
 X-Priority: 3 (Normal)
 X-MSMail-Priority: Normal
 X-Mailer: Microsoft Outlook IMO, Build 9.0.2416 (9.0.2910.0)
@@ -15,13 +15,13 @@ X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2314.1300
 
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0002_01BFC036.AE309650"
+    boundary="----=_NextPart_000_0002_01BFC036.AE309650"
 
 This is a multi-part message in MIME format.
 
 ------=_NextPart_000_0002_01BFC036.AE309650
 Content-Type: text/plain;
-	charset="iso-8859-1"
+    charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
 
@@ -42,10 +42,10 @@ Slow but steady wins the race. =20
 
 ------=_NextPart_000_0002_01BFC036.AE309650
 Content-Type: image/png;
-	name="blueball.png"
+    name="blueball.png"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
-	filename="blueball.png"
+    filename="blueball.png"
 
 iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAMAAAC6CgRnAAADAFBMVEX///8AAAgAABAAABgAAAAA
 CCkAEEIAEEoACDEAEFIIIXMIKXsIKYQIIWsAGFoACDkIIWMQOZwYQqUYQq0YQrUQOaUQMZQAGFIQ
@@ -74,10 +74,10 @@ O7wAAAAASUVORK5CYII=
 
 ------=_NextPart_000_0002_01BFC036.AE309650
 Content-Type: image/png;
-	name="greenball.png"
+    name="greenball.png"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
-	filename="greenball.png"
+    filename="greenball.png"
 
 iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAMAAAC6CgRnAAADAFBMVEX///8AAAAAEAAAGAAAIQAA
 CAAAMQAAQgAAUgAAWgAASgAIYwAIcwAIewAQjAAIawAAOQAAYwAQlAAQnAAhpQAQpQAhrQBCvRhj
@@ -105,10 +105,10 @@ bGlwMmdpZiB2LjAuNiBieSBZdmVzIFBpZ3VldDZzO7wAAAAASUVORK5CYII=
 
 ------=_NextPart_000_0002_01BFC036.AE309650
 Content-Type: image/png;
-	name="redball.png"
+    name="redball.png"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
-	filename="redball.png"
+    filename="redball.png"
 
 iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAMAAAC6CgRnAAADAFBMVEX///8AAAABAAALAAAVAAAa
 AAAXAAARAAAKAAADAAAcAAAyAABEAABNAABIAAA9AAAjAAAWAAAmAABhAAB7AACGAACHAAB9AAB0
@@ -142,6 +142,6 @@ IFl2ZXMgUGlndWV0NnM7vAAAAABJRU5ErkJggg==
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213
 Content-Type: application/pgp-signature
 
-Testing testing testing
+f691886408cbeedc753548d2d198bf92
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213--
 

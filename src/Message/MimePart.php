@@ -44,6 +44,11 @@ class MimePart
      * @var resource the content's resource handle
      */
     protected $handle;
+    
+    /**
+     * 
+     */
+    protected $originalStreamHandle;
 
     /**
      * @var \ZBateson\MailMimeParser\Message\MimePart[] array of parts in this
@@ -76,6 +81,9 @@ class MimePart
     {
         if (is_resource($this->handle)) {
             fclose($this->handle);
+        }
+        if (is_resource($this->originalStreamHandle)) {
+            fclose($this->originalStreamHandle);
         }
     }
 
@@ -330,6 +338,45 @@ class MimePart
             fclose($this->handle);
         }
         $this->handle = $contentHandle;
+    }
+    
+    /**
+     * Attaches the resource handle representing the original stream that
+     * created this part (including any sub-parts).  The attached handle is
+     * closed when the MimePart object is destroyed.
+     * 
+     * This stream is not modified or changed as the part is changed and is only
+     * set during parsing in MessageParser.
+     *
+     * @param resource $handle
+     */
+    public function attachOriginalStreamHandle($handle)
+    {
+        if ($this->originalStreamHandle !== null && $this->originalStreamHandle !== $handle) {
+            fclose($this->originalStreamHandle);
+        }
+        $this->originalStreamHandle = $handle;
+    }
+    
+    /**
+     * Returns a resource stream handle allowing a user to read the original
+     * stream (including headers and child parts) that was used to create the
+     * current part.
+     * 
+     * The part contains an original stream handle only if it was explicitly set
+     * by a call to MimePart::attachOriginalStreamHandle.  MailMimeParser only
+     * sets this during the parsing phase in MessageParser, and is not otherwise
+     * changed or updated.  New parts added below this part, changed headers,
+     * etc... would not be reflected in the returned stream handle.
+     * 
+     * @return resource the resource handle or null if not set
+     */
+    public function getOriginalStreamHandle()
+    {
+        if (is_resource($this->originalStreamHandle)) {
+            rewind($this->originalStreamHandle);
+        }
+        return $this->originalStreamHandle;
     }
 
     /**

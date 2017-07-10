@@ -27,7 +27,7 @@ class PartStreamRegistry
      * @var array Array of handles, with message IDs as keys.
      */
     private $registeredHandles;
-
+    
     /**
      * @var int[] number of registered part stream handles with message IDs as
      * keys
@@ -153,7 +153,7 @@ class PartStreamRegistry
      * @param int $start
      * @param int $end
      */
-    public function attachPartStreamHandle(MimePart $part, Message $message, $start, $end)
+    public function attachContentPartStreamHandle(MimePart $part, Message $message, $start, $end)
     {
         $id = $message->getObjectId();
         if (empty($this->registeredHandles[$id])) {
@@ -165,5 +165,26 @@ class PartStreamRegistry
         $this->attachEncodingFilterToStream($part, $handle);
         $this->attachCharsetFilterToStream($part, $handle);
         $part->attachContentResourceHandle($handle);
+    }
+    
+    /**
+     * Creates a part stream handle for the start and end position of the
+     * message stream, and attaches it to the passed MimePart.
+     * 
+     * @param MimePart $part
+     * @param Message $message
+     * @param int $start
+     * @param int $end
+     */
+    public function attachOriginalPartStreamHandle(MimePart $part, Message $message, $start, $end)
+    {
+        $id = $message->getObjectId();
+        if (empty($this->registeredHandles[$id])) {
+            return null;
+        }
+        $handle = fopen('mmp-mime-message://' . $id . '?start=' .
+            $start . '&end=' . $end, 'r');
+        
+        $part->attachOriginalStreamHandle($handle);
     }
 }

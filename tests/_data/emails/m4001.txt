@@ -5,8 +5,8 @@ Date: Wed, 17 May 2000 19:08:29 -0400
 Message-ID: <NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed;
-	boundary="----=MMP-57d495ede8684.57d495edeb0d04.56408213";
-	micalg="pgp-sha256"; protocol="application/pgp-signature"
+    boundary="----=MMP-57d495ede8684.57d495edeb0d04.56408213";
+    micalg="pgp-sha256"; protocol="application/pgp-signature"
 X-Priority: 3 (Normal)
 X-MSMail-Priority: Normal
 X-Mailer: Microsoft Outlook IMO, Build 9.0.2416 (9.0.2910.0)
@@ -16,7 +16,7 @@ X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2314.1300
 
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213
 Content-Type: text/plain;
-	charset="iso-8859-1"
+    charset="iso-8859-1"
 Content-Transfer-Encoding: 8bit
 
 Die Hasen und die Frösche
@@ -39,6 +39,6 @@ welche also wohl noch unglücklicher sein müssen als wir."
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213
 Content-Type: application/pgp-signature
 
-Testing testing testing
+9825cba003a7ac85b9a3f3dc9f8423fd
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213--
 

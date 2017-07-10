@@ -112,7 +112,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         }));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->once())
-            ->method('attachPartStreamHandle')
+            ->method('attachContentPartStreamHandle')
             ->with($this->anything(), $this->anything(), $startPos, $endPos);
         
         $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
@@ -177,7 +177,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $partFactory->method('newMimePart')->will($this->onConsecutiveCalls($firstPart, $secondPart, $this->getMockedPart()));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->exactly(3))
-            ->method('attachPartStreamHandle')
+            ->method('attachContentPartStreamHandle')
             ->withConsecutive(
                 [$message, $message, $messagePartStart, $messagePartStart],
                 [$firstPart, $message, $partOneStart, $partOneEnd],
@@ -300,7 +300,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         ));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->exactly(6))
-            ->method('attachPartStreamHandle')
+            ->method('attachContentPartStreamHandle')
             ->withConsecutive(
                 [$message, $message, $messagePartStart, $messagePartEnd],
                 [$this->anything(), $message, $altPartStart, $altPartEnd],
@@ -344,7 +344,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             return $self->getMockedUUEncodedPart();
         }));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->method('attachPartStreamHandle')
+        $partStreamRegistry->method('attachContentPartStreamHandle')
             ->withConsecutive(
                 [$this->anything(), $this->anything(), $startPos, $endPos],
                 [$this->anything(), $this->anything(), $startPos2, $endPos2]
@@ -379,7 +379,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         }));
         $partStreamRegistry = $this->getMockedPartStreamRegistry();
         $partStreamRegistry->expects($this->once())
-            ->method('attachPartStreamHandle')
+            ->method('attachContentPartStreamHandle')
             ->with($this->anything(), $this->anything(), $startPos, $endPos);
         
         $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);

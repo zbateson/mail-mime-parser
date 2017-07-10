@@ -7,8 +7,8 @@ MIME-Version: 1.0
 To: Heinz =?iso-8859-1?Q?M=FCller?= <mueller@example.com>
 Subject: Die Hasen und die =?iso-8859-1?Q?Fr=F6sche?= (Netscape Messenger 4.7)
 Content-Type: multipart/signed;
-	boundary="----=MMP-57d495ede8684.57d495edeb0d04.56408213";
-	micalg="pgp-sha256"; protocol="application/pgp-signature"
+    boundary="----=MMP-57d495ede8684.57d495edeb0d04.56408213";
+    micalg="pgp-sha256"; protocol="application/pgp-signature"
 
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213
 Content-Type: multipart/mixed;
@@ -218,7 +218,7 @@ YII=
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213
 Content-Type: application/pgp-signature
 
-Testing testing testing
+eb4c0347d13a2bf71a3f9673c4b5e3db
 
 ------=MMP-57d495ede8684.57d495edeb0d04.56408213--
 
