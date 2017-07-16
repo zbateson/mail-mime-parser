@@ -69,12 +69,16 @@ class Message extends MimePart
     public function __construct(
         HeaderFactory $headerFactory,   
         MessageWriter $messageWriter,
-        MimePartFactory $mimePartFactory
+        MimePartFactory $mimePartFactory,
+        array $headers = null,
+        array $parts = null
     ) {
         parent::__construct($headerFactory, $messageWriter);
         $this->messageWriter = $messageWriter;
         $this->mimePartFactory = $mimePartFactory;
         $this->objectId = uniqid();
+        $this->headers = $headers;
+        $this->parts = $parts;
     }
     
     /**

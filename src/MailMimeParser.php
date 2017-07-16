@@ -57,7 +57,6 @@ class MailMimeParser
         }
         rewind($tempHandle);
         $parser = $this->di->newMessageParser();
-        $message = $parser->parse($tempHandle);
-        return $message;
+        return $parser->parse($tempHandle);
     }
 }

@@ -292,6 +292,19 @@ class MimePart
         }
         return false;
     }
+    
+    /**
+     * Returns true if either a Content-Type or Mime-Version header are defined
+     * in this part.
+     * 
+     * @return bool
+     */
+    public function isMime()
+    {
+        $contentType = $this->getHeaderValue('Content-Type');
+        $mimeVersion = $this->getHeaderValue('Mime-Version');
+        return ($contentType !== null || $mimeVersion !== null);
+    }
 
     /**
      * Returns true if this part's mime type is multipart/*

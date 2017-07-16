@@ -6,8 +6,10 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use ZBateson\MailMimeParser\Message\MessageFactory;
 use ZBateson\MailMimeParser\Message\MessageParser;
 use ZBateson\MailMimeParser\Message\MimePartFactory;
+use ZBateson\MailMimeParser\Message\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -30,6 +32,9 @@ use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
  */
 class SimpleDi
 {
+    protected $messageFactory;
+    protected $partBuilderFactory;
+    
     /**
      * @var \ZBateson\MailMimeParser\Message\MimePartFactory singleton 'service' instance
      */
@@ -117,8 +122,9 @@ class SimpleDi
     public function newMessageParser()
     {
         return new MessageParser(
-            $this->newMessage(),
+            $this->getMessageFactory(),
             $this->getPartFactory(),
+            $this->getPartBuilderFactory(),
             $this->getPartStreamRegistry()
         );
     }
@@ -165,6 +171,19 @@ class SimpleDi
         );
     }
     
+    public function getMessageFactory()
+    {
+        if ($this->messageFactory === null) {
+            $this->messageFactory = new MessageFactory(
+                $this->getHeaderFactory(),
+                $this->getMessageWriterService(),
+                $this->getPartFactory(),
+                $this->getPartStreamRegistry()
+            );
+        }
+        return $this->messageFactory;
+    }
+    
     /**
      * Returns the part factory service instance.
      * 
@@ -179,6 +198,17 @@ class SimpleDi
             );
         }
         return $this->partFactory;
+    }
+    
+    public function getPartBuilderFactory()
+    {
+        if ($this->partBuilderFactory === null) {
+            $this->partBuilderFactory = new PartBuilderFactory(
+                $this->getHeaderFactory(),
+                $this->getMessageWriterService()
+            );
+        }
+        return $this->partBuilderFactory;
     }
     
     /**
