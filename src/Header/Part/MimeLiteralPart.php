@@ -74,31 +74,27 @@ class MimeLiteralPart extends LiteralPart
     /**
      * Decodes a single mime-encoded entity.
      * 
-     * Attempts to detect mb/iconv charset support, normalize the charset name,
-     * and decode the body before returning it, by calling either
-     * mb_decode_mimeheader for an mb-supported charset, or iconv_mime_decode
-     * otherwise.
+     * Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
+     * PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
+     * support all charsets.
+     * 
+     * Parsing out the charset and body of the encoded entity seems to be the
+     * way to go to support the most charsets.
      * 
      * @param string $entity
      * @return string
      */
     private function decodeMatchedEntity($entity)
     {
-        if (preg_match("/^=\?([A-Za-z\-_0-9]+)\?([QBqb])\?([^\?]+\?=)$/", $entity, $matches)) {
+        if (preg_match("/^=\?([A-Za-z\-_0-9]+)\?([QBqb])\?([^\?]+)\?=$/", $entity, $matches)) {
             $body = $matches[3];
             if (strtoupper($matches[2]) === 'Q') {
-                $body = preg_replace_callback('/=[0-9a-f]{2}/i', function($val) {
-                    return strtoupper($val[0]);
-                }, $body);
+                $body = quoted_printable_decode(str_replace('_', '=20', $body));
+            } else {
+                $body = base64_decode($body);
             }
-            $mbSupported = false;
-            $charset = CharsetConverter::findSupportedCharset($matches[1], $mbSupported);
-            $normalized = '=?' . $charset . '?' . $matches[2] . '?'
-                . str_replace('_', '=20', $body);
-            if ($mbSupported) {
-                return mb_decode_mimeheader($normalized);
-            }
-            return iconv_mime_decode($normalized, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            $converter = new CharsetConverter($matches[1], 'UTF-8');
+            return $converter->convert($body);
         }
         return $this->convertEncoding($entity);
     }
