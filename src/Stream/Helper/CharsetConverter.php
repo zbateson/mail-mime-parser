@@ -305,8 +305,8 @@ class CharsetConverter
      */
     public function __construct($fromCharset, $toCharset)
     {
-        $this->fromCharset = $this->findSupportedCharset($fromCharset, $this->fromCharsetMbSupported);
-        $this->toCharset = $this->findSupportedCharset($toCharset, $this->toCharsetMbSupported);
+        $this->fromCharset = static::findSupportedCharset($fromCharset, $this->fromCharsetMbSupported);
+        $this->toCharset = static::findSupportedCharset($toCharset, $this->toCharsetMbSupported);
     }
     
     /**
@@ -349,7 +349,7 @@ class CharsetConverter
      * @param boolean $mbSupported
      * @return string the final charset name to use
      */
-    private function findSupportedCharset($cs, &$mbSupported)
+    public static function findSupportedCharset($cs, &$mbSupported)
     {
         $mbSupported = true;
         $comp = strtoupper($cs);
@@ -361,7 +361,7 @@ class CharsetConverter
         if (in_array($stripped, $available)) {
             return $stripped;
         }
-        return $this->findAliasedCharset($comp, $stripped, $mbSupported);
+        return static::findAliasedCharset($comp, $stripped, $mbSupported);
     }
     
     /**
@@ -377,7 +377,7 @@ class CharsetConverter
      * @param boolean $mbSupported
      * @return string the mapped charset
      */
-    private function findAliasedCharset($comp, $stripped, &$mbSupported)
+    private static function findAliasedCharset($comp, $stripped, &$mbSupported)
     {
         if (array_key_exists($comp, self::$mbAliases)) {
             return self::$mbAliases[$comp];
@@ -385,7 +385,7 @@ class CharsetConverter
             return self::$mbAliases[$stripped];
         }
         $mbSupported = false;
-        return $this->findAliasedIconvCharset($comp, $stripped);
+        return static::findAliasedIconvCharset($comp, $stripped);
     }
     
     /**
@@ -396,12 +396,12 @@ class CharsetConverter
      * @param string $stripped
      * @return string the mapped charset (if mapped) or $comp otherwise
      */
-    private function findAliasedIconvCharset($comp, $stripped)
+    private static function findAliasedIconvCharset($comp, $stripped)
     {
         if (array_key_exists($comp, self::$iconvAliases)) {
-            return self::$iconvAliases[$comp];
+            return static::$iconvAliases[$comp];
         } elseif (array_key_exists($stripped, self::$iconvAliases)) {
-            return self::$iconvAliases[$stripped];
+            return static::$iconvAliases[$stripped];
         }
         return $comp;
     }

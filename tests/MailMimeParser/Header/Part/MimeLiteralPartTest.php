@@ -91,7 +91,7 @@ class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
             '=?ISO-2022-JP?B?GyRCOnkbKEI=?='
         );
         $this->assertDecoded(
-            '这也不会,那也不会',
+            '﻿这也不会,那也不会',
             '=?UTF-32?B?//4AANmPAABfTgAADU4AABpPAAAsAAAAo5AAAF9OAAANTgAAGk8AAA==?='
         );
         $this->assertDecoded(
@@ -99,6 +99,8 @@ class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
             '=?shift_jis?B?g1qDfoNJgVuDX4FbirSKb4LFkUmC1IFBg1eDg4NQg2KDZw==?='
         );
         $this->assertDecoded('el pingüino', 'el pingüino');
+        $this->assertDecoded('外為ｵﾝﾗｲﾝﾃﾞﾓ(25)(デモ)決済約定のお知らせ', '=?iso-2022-jp?Q?=1B$B300Y=1B(I5]W2]C^S=1B(B(25?=
+            =?iso-2022-jp?Q?)(=1B$B%G%b=1B(B)=1B$B7h:QLsDj$N$*CN$i$;=1B(B?=');
     }
     
     public function testIgnoreSpacesBefore()
