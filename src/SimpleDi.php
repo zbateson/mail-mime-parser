@@ -204,8 +204,7 @@ class SimpleDi
     {
         if ($this->partBuilderFactory === null) {
             $this->partBuilderFactory = new PartBuilderFactory(
-                $this->getHeaderFactory(),
-                $this->getMessageWriterService()
+                $this->getHeaderFactory()
             );
         }
         return $this->partBuilderFactory;

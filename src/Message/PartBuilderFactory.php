@@ -7,7 +7,6 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 
 /**
  * Description of MimePartFactory
@@ -23,21 +22,13 @@ class PartBuilderFactory
     protected $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\Writer\MessageWriterService the
-     * MessageWriterService responsible for returning writers
-     */
-    protected $messageWriterService;
-    
-    /**
      * Creates a MimePartFactory instance with its dependencies.
      * 
      * @param HeaderFactory $headerFactory
-     * @param MessageWriterService $messageWriterService
      */
-    public function __construct(HeaderFactory $headerFactory, MessageWriterService $messageWriterService)
+    public function __construct(HeaderFactory $headerFactory)
     {
         $this->headerFactory = $headerFactory;
-        $this->messageWriterService = $messageWriterService;
     }
     
     /**
@@ -48,8 +39,7 @@ class PartBuilderFactory
     public function newPartBuilder()
     {
         return new PartBuilder(
-            $this->headerFactory,
-            $this->messageWriterService->getMimePartWriter()
+            $this->headerFactory
         );
     }
 }
