@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Writer;
 
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\MimePart;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
 
 /**
  * Writes out a message in a mail-compliant format.

@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Message\MimePartFactory;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriter;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
@@ -33,7 +33,7 @@ class Message extends MimePart
     protected $objectId;
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePartFactory a MimePartFactory to create
+     * @var \ZBateson\MailMimeParser\Message\Part\MimePartFactory a MimePartFactory to create
      *      parts for attachments/content
      */
     protected $mimePartFactory;
@@ -96,7 +96,7 @@ class Message extends MimePart
      * Returns the text/plain part at the given index (or null if not found.)
      * 
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getTextPart($index = 0)
     {
@@ -120,7 +120,7 @@ class Message extends MimePart
      * Returns the text/html part at the given index (or null if not found.)
      * 
      * @param $index
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getHtmlPart($index = 0)
     {
@@ -148,7 +148,7 @@ class Message extends MimePart
      * getPartByMimeType.
      * 
      * @deprecated since version 0.4.2
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getContentPart()
     {
@@ -197,7 +197,7 @@ class Message extends MimePart
      * Creates a unique mime boundary and assigns it to the passed part's
      * Content-Type header with the passed mime type.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @param string $mimeType
      */
     private function setMimeHeaderBoundaryOnPart(MimePart $part, $mimeType)
@@ -438,8 +438,8 @@ class Message extends MimePart
      * header isn't defined in $from, defaults to text/plain and
      * quoted-printable.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $from
-     * @param \ZBateson\MailMimeParser\Message\MimePart $to
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $from
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $to
      */
     private function copyTypeHeadersFromPartToPart(MimePart $from, MimePart $to)
     {
@@ -610,7 +610,7 @@ class Message extends MimePart
     /**
      * Returns the signed part or null if not set.
      * 
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getSignaturePart()
     {
@@ -727,7 +727,7 @@ class Message extends MimePart
      * 
      * @param string $mimeType
      * @param string $charset
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     private function createContentPartForMimeType($mimeType, $charset)
     {
@@ -859,7 +859,7 @@ class Message extends MimePart
      * is set.
      * 
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getAttachmentPart($index)
     {
@@ -877,7 +877,7 @@ class Message extends MimePart
      * html part (a text or html part with a Content-Disposition set to 
      * 'attachment' is considered an attachment).
      * 
-     * @return \ZBateson\MailMimeParser\Message\MimePart[]
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[]
      */
     public function getAllAttachmentParts()
     {
@@ -922,7 +922,7 @@ class Message extends MimePart
      * Creates and returns a MimePart for use with a new attachment part being
      * created.
      * 
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     protected function createPartForAttachment()
     {

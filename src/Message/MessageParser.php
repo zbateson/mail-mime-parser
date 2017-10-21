@@ -7,6 +7,9 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\PartFactories;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -17,13 +20,13 @@ use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
 class MessageParser
 {
     /**
-     * @var \ZBateson\MailMimeParser\Message\PartFactories PartFactories
+     * @var \ZBateson\MailMimeParser\Message\Part\PartFactories PartFactories
      * instance used to get MimePartFactory objects.
      */
     protected $partFactories;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\PartBuilderFactory used to create
+     * @var \ZBateson\MailMimeParser\Message\Part\PartBuilderFactory used to create
      * PartBuilders
      */
     protected $partBuilderFactory;
@@ -38,8 +41,8 @@ class MessageParser
     /**
      * Sets up the parser with its dependencies.
      * 
-     * @param \ZBateson\MailMimeParser\Message\PartFactories $pf
-     * @param \ZBateson\MailMimeParser\Message\PartBuilderFactory $pbf
+     * @param \ZBateson\MailMimeParser\Message\Part\PartFactories $pf
+     * @param \ZBateson\MailMimeParser\Message\Part\PartBuilderFactory $pbf
      * @param PartStreamRegistry $psr
      */
     public function __construct(PartFactories $pf, PartBuilderFactory $pbf, PartStreamRegistry $psr)

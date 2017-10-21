@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\Message\Part\MimePart;
 use InvalidArgumentException;
 
 /**
@@ -273,7 +274,7 @@ class PartFilter
      * Returns true if the passed MimePart fails the filter's multipart filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return bool
      */
     private function failsMultiPartFilter(MimePart $part)
@@ -286,7 +287,7 @@ class PartFilter
      * Returns true if the passed MimePart fails the filter's textpart filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return bool
      */
     private function failsTextPartFilter(MimePart $part)
@@ -299,7 +300,7 @@ class PartFilter
      * Returns true if the passed MimePart fails the filter's signedpart filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
     private function failsSignedPartFilter(MimePart $part)
@@ -322,7 +323,7 @@ class PartFilter
      * Returns true if the passed MimePart fails the filter's header filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
     public function failsHeaderPartFilter(MimePart $part)
@@ -345,7 +346,7 @@ class PartFilter
      * MimePart passes all filter tests, true is returned.  Otherwise false is
      * returned.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
     public function filter(MimePart $part)

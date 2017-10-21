@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;

@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Writer;
 
-use ZBateson\MailMimeParser\Message\MimePart;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Stream\StreamLeftover;
 
 /**

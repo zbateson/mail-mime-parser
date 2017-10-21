@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
@@ -36,7 +36,7 @@ class MimePart
     protected $headers;
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart parent part
+     * @var \ZBateson\MailMimeParser\Message\Part\MimePart parent part
      */
     protected $parent;
 
@@ -51,7 +51,7 @@ class MimePart
     protected $originalStreamHandle;
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePart[] array of parts in this
+     * @var \ZBateson\MailMimeParser\Message\Part\MimePart[] array of parts in this
      *      message
      */
     protected $parts = [];
@@ -103,7 +103,7 @@ class MimePart
      * If the $position parameter is non-null, adds the part at the passed
      * position index.
      *
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @param int $position
      */
     public function addPart(MimePart $part, $position = null)
@@ -122,7 +122,7 @@ class MimePart
      * position is its index within its parent (calls removePart on its direct
      * parent).
      *
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return int or null if not found
      */
     public function removePart(MimePart $part)
@@ -162,7 +162,7 @@ class MimePart
      *
      * @param int $index
      * @param PartFilter $filter
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getPart($index, PartFilter $filter = null)
     {
@@ -181,7 +181,7 @@ class MimePart
      * desirable as it may be a valid MimePart for the provided PartFilter.
      * 
      * @param PartFilter $filter an optional filter
-     * @return \ZBateson\MailMimeParser\Message\MimePart[]
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[]
      */
     public function getAllParts(PartFilter $filter = null)
     {
@@ -218,7 +218,7 @@ class MimePart
      *
      * @param int $index
      * @param PartFilter $filter
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getChild($index, PartFilter $filter = null)
     {
@@ -235,7 +235,7 @@ class MimePart
      * If a PartFilter is provided, the PartFilter is applied before returning.
      * 
      * @param PartFilter $filter
-     * @return \ZBateson\MailMimeParser\Message\MimePart[]
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[]
      */
     public function getChildParts(PartFilter $filter = null)
     {
@@ -260,7 +260,7 @@ class MimePart
      * Returns the part associated with the passed mime type if it exists.
      *
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\MimePart or null
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart or null
      */
     public function getPartByMimeType($mimeType, $index = 0)
     {
@@ -272,7 +272,7 @@ class MimePart
      * exist or null otherwise.
      *
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\MimePart[] or null
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[] or null
      */
     public function getAllPartsByMimeType($mimeType)
     {
@@ -450,7 +450,7 @@ class MimePart
      * older non-mime message attachments.
      *
      * In addition, character encoding for text streams is converted to UTF-8
-     * if {@link \ZBateson\MailMimeParser\Message\MimePart::isTextPart
+     * if {@link \ZBateson\MailMimeParser\Message\Part\MimePart::isTextPart
      * MimePart::isTextPart} returns true.
      *
      * @return resource
@@ -573,7 +573,7 @@ class MimePart
     /**
      * Sets the parent part.
      *
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      */
     public function setParent(MimePart $part)
     {
@@ -583,7 +583,7 @@ class MimePart
     /**
      * Returns this part's parent.
      *
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getParent()
     {

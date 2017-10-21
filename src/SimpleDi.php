@@ -8,8 +8,8 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\MessageFactory;
 use ZBateson\MailMimeParser\Message\MessageParser;
-use ZBateson\MailMimeParser\Message\MimePartFactory;
-use ZBateson\MailMimeParser\Message\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
+use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -36,7 +36,7 @@ class SimpleDi
     protected $partBuilderFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePartFactory singleton 'service' instance
+     * @var \ZBateson\MailMimeParser\Message\Part\MimePartFactory singleton 'service' instance
      */
     protected $partFactory;
     
@@ -187,7 +187,7 @@ class SimpleDi
     /**
      * Returns the part factory service instance.
      * 
-     * @return \ZBateson\MailMimeParser\Message\MimePartFactory
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePartFactory
      */
     public function getPartFactory()
     {

@@ -1,10 +1,11 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
 
 /**
  * Description of MessageFactory
@@ -30,7 +31,7 @@ class MessageFactory extends MimePartFactory
     protected $partStreamRegistry;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePartFactory a MimePartFactory to create
+     * @var \ZBateson\MailMimeParser\Message\Part\MimePartFactory a MimePartFactory to create
      *      parts for attachments/content
      */
     protected $mimePartFactory;

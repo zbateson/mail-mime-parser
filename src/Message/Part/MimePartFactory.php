@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
@@ -43,7 +43,7 @@ class MimePartFactory
     /**
      * Constructs a new MimePart object and returns it
      * 
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function newInstance(
         $handle,
