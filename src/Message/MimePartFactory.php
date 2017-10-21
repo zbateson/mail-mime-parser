@@ -45,29 +45,20 @@ class MimePartFactory
      * 
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
-    public function newMimePart()
-    {
-        return new MimePart($this->headerFactory, $this->messageWriterService->getMimePartWriter());
-    }
-    
-    /**
-     * Constructs a new NonMimePart object and returns it
-     * 
-     * @return \ZBateson\MailMimeParser\Message\NonMimePart
-     */
-    public function newNonMimePart()
-    {
-        return new NonMimePart($this->headerFactory, $this->messageWriterService->getMimePartWriter());
-    }
-    
-    /**
-     * Constructs a new UUEncodedPart object and returns it
-     * 
-     * @param int $mode
-     * @param string $filename
-     */
-    public function newUUEncodedPart($mode = 0666, $filename = 'bin')
-    {
-        return new UUEncodedPart($this->headerFactory, $this->messageWriterService->getMimePartWriter(), $mode, $filename);
+    public function newInstance(
+        $handle,
+        MimePart $parent,
+        array $children,
+        array $headers,
+        array $properties
+    ) {
+        return new MimePart(
+            $this->headerFactory,
+            $this->messageWriterService->getMimePartWriter(),
+            $handle,
+            $parent,
+            $children,
+            $headers
+        );
     }
 }

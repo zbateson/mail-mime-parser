@@ -36,10 +36,11 @@ class PartBuilderFactory
      * 
      * @return \ZBateson\MailMimeParser\Message\MimePart
      */
-    public function newPartBuilder()
+    public function newPartBuilder(MimePartFactory $mimePartFactory)
     {
         return new PartBuilder(
-            $this->headerFactory
+            $this->headerFactory,
+            $mimePartFactory
         );
     }
 }

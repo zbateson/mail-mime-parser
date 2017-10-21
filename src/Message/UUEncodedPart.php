@@ -47,22 +47,32 @@ class UUEncodedPart extends NonMimePart
     public function __construct(
         HeaderFactory $headerFactory,
         MimePartWriter $partWriter,
-        $mode,
-        $filename
+        $handle,
+        MimePart $parent,
+        array $children,
+        array $headers,
+        array $properties
     ) {
-        parent::__construct($headerFactory, $partWriter);
-        $this->mode = $mode;
-        $this->filename = $filename;
         
-        $this->setRawHeader(
-            'Content-Type',
-            'application/octet-stream; name="' . addcslashes($filename, '"') . '"'
+        if (isset($properties['mode'])) {
+            $this->mode = $properties['mode'];
+        }
+        if (isset($properties['filename'])) {
+            $this->filename = $properties['filename'];
+            $headers['Content-Type'] = 'application/octet-stream; name="'
+                . addcslashes($this->filename, '"') . '"';
+            $headers['Content-Disposition'] = 'attachment; filename="'
+                . addcslashes($this->filename, '"') . '"';
+        }
+        $headers['Content-Transfer-Encoding'] = 'x-uuencode';
+        parent::__construct(
+            $headerFactory,
+            $partWriter,
+            $handle,
+            $parent,
+            $children,
+            $headers
         );
-        $this->setRawHeader(
-            'Content-Disposition',
-            'attachment; filename="' . addcslashes($filename, '"') . '"'
-        );
-        $this->setRawHeader('Content-Transfer-Encoding', 'x-uuencode');
     }
     
     /**

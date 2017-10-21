@@ -15,30 +15,54 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
  */
 class PartBuilder
 {
-    public $streamPartReadStartPos = 0;
-    public $streamContentReadStartPos = 0;
-    public $streamContentReadEndPos = 0;
-    public $streamPartReadEndPos = 0;
+    /**
+     * @var int The offset read start position for this part (beginning of
+     * headers) in the message's stream.
+     */
+    private $streamPartStartPos = 0;
     
+    /**
+     * @var int The offset read end position for this part.  If the part is a
+     * multipart mime part, the end position is after all of this parts
+     * children.
+     */
+    private $streamPartEndPos = 0;
+    
+    /**
+     * @var int The offset read start position in the message's stream for the
+     * beginning of this part's content (body).
+     */
+    private $streamContentStartPos = 0;
+    
+    /**
+     * @var int The offset read end position in the message's stream for the
+     * end of this part's content (body).
+     */
+    private $streamContentEndPos = 0;
+
     /**
      * @var \ZBateson\MailMimeParser\Header\HeaderFactory
      */
     private $headerFactory;
+    
+    private $mimePartFactory;
     
     private $endBoundaryFound = false;
     private $mimeBoundary = false;
     private $headers = [];
     private $children = [];
     private $parent = null;
+    private $properties = [];
     
     /**
      * @var ZBateson\MailMimeParser\Header\ParameterHeader
      */
     private $contentType = null;
     
-    public function __construct(HeaderFactory $hf)
+    public function __construct(HeaderFactory $hf, MimePartFactory $mpf)
     {
         $this->headerFactory = $hf;
+        $this->mimePartFactory = $mpf;
     }
     
     /**
@@ -50,9 +74,9 @@ class PartBuilder
      * @param string $name
      * @param string $value
      */
-    public function setRawHeader($name, $value)
+    public function addHeader($name, $value)
     {
-        $this->headers[strtolower($name)] = $value;
+        $this->headers[strtolower($name)] = [$name, $value];
     }
     
     /**
@@ -97,7 +121,7 @@ class PartBuilder
         if ($this->contentType === null && $this->isset($this->headers['content-type'])) {
             $this->contentType = $this->headerFactory->newInstance(
                 'content-type',
-                $this->headers['content-type']
+                $this->headers['content-type'][1]
             );
         }
         return $this->contentType;
@@ -152,5 +176,45 @@ class PartBuilder
     public function isEndBoundaryFound()
     {
         return $this->endBoundaryFound;
+    }
+    
+    public function getStreamPartStartPos()
+    {
+        return $this->streamPartStartPos;
+    }
+
+    public function getStreamPartEndPos()
+    {
+        return $this->streamPartEndPos;
+    }
+
+    public function getStreamContentStartPos()
+    {
+        return $this->streamContentStartPos;
+    }
+
+    public function getStreamContentEndPos()
+    {
+        return $this->streamContentEndPos;
+    }
+
+    public function setStreamPartStartPos($streamPartStartPos)
+    {
+        $this->streamPartStartPos = $streamPartStartPos;
+    }
+
+    public function setStreamPartEndPos($streamPartEndPos)
+    {
+        $this->streamPartEndPos = $streamPartEndPos;
+    }
+
+    public function setStreamContentStartPos($streamContentStartPos)
+    {
+        $this->streamContentStartPos = $streamContentStartPos;
+    }
+
+    public function setStreamContentEndPos($streamContentEndPos)
+    {
+        $this->streamContentEndPos = $streamContentEndPos;
     }
 }

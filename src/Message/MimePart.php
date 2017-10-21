@@ -68,10 +68,20 @@ class MimePart
      * @param HeaderFactory $headerFactory
      * @param MimePartWriter $partWriter
      */
-    public function __construct(HeaderFactory $headerFactory, MimePartWriter $partWriter)
-    {
+    public function __construct(
+        HeaderFactory $headerFactory,
+        MimePartWriter $partWriter,
+        $handle,
+        MimePart $parent,
+        array $children,
+        array $headers
+    ) {
         $this->headerFactory = $headerFactory;
         $this->partWriter = $partWriter;
+        $this->handle = $handle;
+        $this->parent = $parent;
+        $this->children = $children;
+        $this->headers = $headers;
     }
 
     /**
@@ -381,6 +391,9 @@ class MimePart
      * sets this during the parsing phase in MessageParser, and is not otherwise
      * changed or updated.  New parts added below this part, changed headers,
      * etc... would not be reflected in the returned stream handle.
+     * 
+     * This method was added mainly for signature verification in
+     * Message::getOriginalMessageStringForSignatureVerification
      * 
      * @return resource the resource handle or null if not set
      */

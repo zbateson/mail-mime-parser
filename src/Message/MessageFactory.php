@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
-class MessageFactory
+class MessageFactory extends MimePartFactory
 {
     /**
      * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
@@ -38,7 +38,6 @@ class MessageFactory
     public function __construct(
         HeaderFactory $headerFactory,   
         MessageWriterService $messageWriterService,
-        MimePartFactory $mimePartFactory,
         PartStreamRegistry $partStreamRegistry
     ) {
         $this->headerFactory = $headerFactory;
@@ -46,37 +45,21 @@ class MessageFactory
         $this->mimePartFactory = $mimePartFactory;
         $this->partStreamRegistry = $partStreamRegistry;
     }
-    
-    public function newParsedMessage(PartBuilder $builder, $handle)
-    {
-        $message = new Message(
+
+    public function newInstance(
+        $handle,
+        MimePart $parent,
+        array $children,
+        array $headers,
+        array $properties
+    ) {
+        return new MimePart(
             $this->headerFactory,
-            $this->messageWriterService->getMessageWriter(),
-            $this->mimePartFactory,
-            $builder->getHeaders(),
-            $builder->getChildParts()
+            $this->messageWriterService->getMimePartWriter(),
+            $handle,
+            $parent,
+            $children,
+            $headers
         );
-        $this->partStreamRegistry->register($message->getObjectId(), $handle);
-        
-        foreach ($message->getAllParts() as $key => $part) {
-            $bounds = $part;
-            if ($bounds === $message) {
-                $bounds = $builder;
-            }
-            
-            $this->partStreamRegistry->attachContentPartStreamHandle(
-                $part,
-                $message,
-                $bounds->streamContentReadStartPos,
-                $bounds->streamContentReadEndPos
-            );
-            $this->partStreamRegistry->attachOriginalPartStreamHandle(
-                $part,
-                $message,
-                $bounds->streamPartReadStartPos,
-                $bounds->streamPartReadEndPos
-            );
-        }
-        return $message;
     }
 }

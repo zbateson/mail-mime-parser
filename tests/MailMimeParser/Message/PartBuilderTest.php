@@ -4,15 +4,19 @@ namespace ZBateson\MailMimeParser\Message;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Description of ParserTest
+ * Description of PartBuilder
  *
- * @group MessageParser
+ * @group PartBuilder
  * @group Message
  * @covers ZBateson\MailMimeParser\Message\MessageParser
  * @author Zaahid Bateson
  */
-class MessageParserTest extends PHPUnit_Framework_TestCase
+class PartBuilderTest extends PHPUnit_Framework_TestCase
 {
+    
+    
+    
+    
     protected function getMockedMessageFactory()
     {
         $mf = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFactory')
