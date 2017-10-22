@@ -7,7 +7,6 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
 
 /**
  * A specialized NonMimePart representing a uuencoded part.
@@ -39,40 +38,25 @@ class UUEncodedPart extends NonMimePart
     /**
      * Initiates the UUEncodedPart with the passed mode and filename.
      * 
-     * @param HeaderFactory $headerFactory
-     * @param MimePartWriter $partWriter
-     * @param int $mode the unix file mode
-     * @param string $filename the filename
+     * @param resource $handle
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
+     * @param array $properties
      */
     public function __construct(
-        HeaderFactory $headerFactory,
-        MimePartWriter $partWriter,
         $handle,
         MimePart $parent,
-        array $children,
-        array $headers,
         array $properties
     ) {
-        
+        parent::__construct(
+            $handle,
+            $parent
+        );
         if (isset($properties['mode'])) {
             $this->mode = $properties['mode'];
         }
         if (isset($properties['filename'])) {
             $this->filename = $properties['filename'];
-            $headers['Content-Type'] = 'application/octet-stream; name="'
-                . addcslashes($this->filename, '"') . '"';
-            $headers['Content-Disposition'] = 'attachment; filename="'
-                . addcslashes($this->filename, '"') . '"';
         }
-        $headers['Content-Transfer-Encoding'] = 'x-uuencode';
-        parent::__construct(
-            $headerFactory,
-            $partWriter,
-            $handle,
-            $parent,
-            $children,
-            $headers
-        );
     }
     
     /**
@@ -93,5 +77,45 @@ class UUEncodedPart extends NonMimePart
     public function getFilename()
     {
         return $this->filename;
+    }
+    
+    /**
+     * Returns false.
+     * 
+     * @return bool
+     */
+    public function isTextPart()
+    {
+        return false;
+    }
+    
+    /**
+     * Returns text/plain
+     * 
+     * @return string
+     */
+    public function getContentType()
+    {
+        return 'application/octet-stream';
+    }
+    
+    /**
+     * Returns 'inline'.
+     * 
+     * @return string
+     */
+    public function getContentDisposition()
+    {
+        return 'attachment';
+    }
+    
+    /**
+     * Returns 'x-uuencode'.
+     * 
+     * @return string
+     */
+    public function getContentTransferEncoding()
+    {
+        return 'x-uuencode';
     }
 }

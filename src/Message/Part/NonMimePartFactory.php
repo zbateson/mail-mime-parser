@@ -11,18 +11,23 @@ namespace ZBateson\MailMimeParser\Message\Part;
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
-class NonMimePartFactory extends MimePartFactory
+class NonMimePartFactory extends MessagePartFactory
 {
     /**
      * Constructs a new NonMimePart object and returns it
      * 
      * @return \ZBateson\MailMimeParser\Message\NonMimePart
      */
-    public function newInstance()
-    {
+    public function newInstance(
+        $handle,
+        MimePart $parent,
+        array $children,
+        array $headers,
+        array $properties
+    ) {
         return new NonMimePart(
-            $this->headerFactory,
-            $this->messageWriterService->getMimePartWriter()
+            $handle,
+            $parent
         );
     }
 }

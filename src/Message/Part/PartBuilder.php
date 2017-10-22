@@ -76,7 +76,8 @@ class PartBuilder
      */
     public function addHeader($name, $value)
     {
-        $this->headers[strtolower($name)] = [$name, $value];
+        $nameKey = preg_replace('/[^a-z0-9]/g', '', strtolower($name));
+        $this->headers[$nameKey] = [$name, $value];
     }
     
     /**
@@ -108,8 +109,8 @@ class PartBuilder
      */
     public function isMime()
     {
-        return (isset($this->headers['content-type'])
-            || isset($this->headers['mime-version']));
+        return (isset($this->headers['contenttype'])
+            || isset($this->headers['mimeversion']));
     }
     
     /**
@@ -118,10 +119,10 @@ class PartBuilder
      */
     public function getContentType()
     {
-        if ($this->contentType === null && $this->isset($this->headers['content-type'])) {
+        if ($this->contentType === null && $this->isset($this->headers['contenttype'])) {
             $this->contentType = $this->headerFactory->newInstance(
-                'content-type',
-                $this->headers['content-type'][1]
+                'Content-Type',
+                $this->headers['contenttype'][1]
             );
         }
         return $this->contentType;

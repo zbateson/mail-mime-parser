@@ -7,28 +7,22 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 /**
- * Description of UUEncodedPartFactory
+ * Description of MessagePartFactory
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
-class UUEncodedPartFactory extends MessagePartFactory
+abstract class MessagePartFactory
 {
     /**
-     * Constructs a new UUEncodedPart object and returns it
+     * Constructs a new MessagePart object and returns it
      * 
-     * @return 
+     * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
      */
-    public function newInstance(
+    public abstract function newInstance(
         $handle,
         MimePart $parent,
         array $children,
         array $headers,
         array $properties
-    ) {
-        return new UUEncodedPart(
-            $handle,
-            $parent,
-            $properties
-        );
-    }
+    );
 }

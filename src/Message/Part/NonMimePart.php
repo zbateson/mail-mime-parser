@@ -19,17 +19,68 @@ use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
  * 
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
-class NonMimePart extends MimePart
+class NonMimePart extends MessagePart
 {
     /**
-     * Sets up a default Content-Type header of text/plain.
+     * Sets up class dependencies.
      * 
-     * @param HeaderFactory $headerFactory
-     * @param MimePartWriter $partWriter
+     * @param resource $handle
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
      */
-    public function __construct(HeaderFactory $headerFactory, MimePartWriter $partWriter)
+    public function __construct(
+        $handle,
+        MimePart $parent
+    ) {
+        parent::__construct($handle, $parent);
+    }
+    
+    /**
+     * Returns true.
+     * 
+     * @return bool
+     */
+    public function isTextPart()
     {
-        parent::__construct($headerFactory, $partWriter);
-        $this->setRawHeader('Content-Type', 'text/plain');
+        return true;
+    }
+    
+    /**
+     * Returns text/plain
+     * 
+     * @return string
+     */
+    public function getContentType()
+    {
+        return 'text/plain';
+    }
+    
+    /**
+     * Returns 'inline'.
+     * 
+     * @return string
+     */
+    public function getContentDisposition()
+    {
+        return 'inline';
+    }
+    
+    /**
+     * Returns '7bit'.
+     * 
+     * @return string
+     */
+    public function getContentTransferEncoding()
+    {
+        return '7bit';
+    }
+    
+    /**
+     * Returns false.
+     * 
+     * @return bool
+     */
+    public function isMime()
+    {
+        return false;
     }
 }
