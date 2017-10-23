@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 /**
- * Description of MessagePartFactory
+ * Abstract factory for subclasses of MessagePart.
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
