@@ -8,8 +8,6 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
-use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Writer\MessageWriter;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -44,27 +42,22 @@ class Message extends MimePart
         $mmp = new MailMimeParser();
         return $mmp->parse($handleOrString);
     }
-    
+
     /**
-     * Constructs a Message.
      * 
      * @param HeaderFactory $headerFactory
-     * @param MessageWriter $messageWriter
-     * @param MimePartFactory $mimePartFactory
+     * @param type $handle
+     * @param array $children
+     * @param array $headers
      */
     public function __construct(
-        HeaderFactory $headerFactory,   
-        MessageWriter $messageWriter,
-        MimePartFactory $mimePartFactory,
-        array $headers = null,
-        array $parts = null
+        HeaderFactory $headerFactory,
+        $handle,
+        array $children,
+        array $headers
     ) {
-        parent::__construct($headerFactory, $messageWriter);
-        $this->messageWriter = $messageWriter;
-        $this->mimePartFactory = $mimePartFactory;
+        parent::__construct($headerFactory, $handle, null, $children, $headers);
         $this->objectId = uniqid();
-        $this->headers = $headers;
-        $this->parts = $parts;
     }
     
     /**
