@@ -4,20 +4,20 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use PHPUnit_Framework_TestCase;
 
 /**
- * NonMimePartFactoryTest
+ * UUEncodedPartFactoryTest
  * 
- * @group NonMimePartFactory
+ * @group UUEncodedPartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\NonMimePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\UUEncodedPartFactory
  * @author Zaahid Bateson
  */
-class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
+class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected $nonMimePartFactory;
+    protected $uuEncodedPartFactory;
     
     protected function setUp()
     {
-        $this->nonMimePartFactory = new NonMimePartFactory();
+        $this->uuEncodedPartFactory = new UUEncodedPartFactory();
     }
     
     public function testNewInstance()
@@ -30,7 +30,7 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
         $headers = ['headers'];
         $properties = ['properties'];
         
-        $part = $this->nonMimePartFactory->newInstance(
+        $part = $this->uuEncodedPartFactory->newInstance(
             $handle,
             $mp,
             $children,
@@ -38,7 +38,7 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
             $properties
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\Part\NonMimePart',
+            '\ZBateson\MailMimeParser\Message\Part\UUEncodedPart',
             $part
         );
     }
