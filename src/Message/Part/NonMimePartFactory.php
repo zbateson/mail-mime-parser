@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 /**
- * Description of NonMimePartFactory
+ * Responsible for creating NoneMimePart instances.
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
