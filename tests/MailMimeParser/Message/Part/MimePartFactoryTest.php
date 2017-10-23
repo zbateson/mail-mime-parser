@@ -4,24 +4,24 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use PHPUnit_Framework_TestCase;
 
 /**
- * MessagePartFactoryTest
+ * MimePartFactoryTest
  * 
- * @group MessagePartFactory
+ * @group MimePartFactory
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\MimePartFactory
  * @author Zaahid Bateson
  */
-class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
+class MimePartFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected $messagePartFactory;
+    protected $mimePartFactory;
     
     protected function setUp()
     {
-        $this->messagePartFactory = $this->getMockBuilder(
-            'ZBateson\MailMimeParser\Message\Part\MessagePartFactory'
-        )
+        $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->setMethods(['newInstance'])
+            ->getMock();
+        $this->mimePartFactory = new MimePartFactory($mockHeaderFactory);
     }
     
     public function testNewInstance()
@@ -34,22 +34,16 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
         $headers = ['headers'];
         $properties = ['properties'];
         
-        $this->messagePartFactory->expects($this->once())
-            ->method('newInstance')
-            ->with(
-                $handle,
-                $mp,
-                $children,
-                $headers,
-                $properties
-            );
-        
-        $this->messagePartFactory->newInstance(
+        $part = $this->mimePartFactory->newInstance(
             $handle,
             $mp,
             $children,
             $headers,
             $properties
+        );
+        $this->assertInstanceOf(
+            '\ZBateson\MailMimeParser\Message\Part\MimePart',
+            $part
         );
     }
 }

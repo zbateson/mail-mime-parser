@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
- * Description of MimePartFactory
+ * Responsible for creating MimePart instances.
  *
  * @author Zaahid Bateson
  */

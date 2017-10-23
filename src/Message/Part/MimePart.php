@@ -66,8 +66,7 @@ class MimePart extends MessagePart
         array $children,
         array $headers
     ) {
-        parent::__construct($handle);
-        $this->parent = $parent;
+        parent::__construct($handle, $parent);
         $this->children = $children;
         $this->headers = $headers;
         $this->headerFactory = $headerFactory;
