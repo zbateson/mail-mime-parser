@@ -1,11 +1,12 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This file is part of the ZBateson\MailMimeParser project.
+ *
+ * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace ZBateson\MailMimeParser\Message;
+
+use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
 
 /**
  * Description of WritableMimePart
@@ -14,7 +15,12 @@ namespace ZBateson\MailMimeParser\Message;
  */
 class WritableMimePart
 {
-    
+    /**
+     * @var \ZBateson\MailMimeParser\Message\Writer\MimePartWriter the part
+     *      writer for this MimePart
+     */
+    protected $partWriter = null;
+
     /**
      * Registers the passed part as a child of the current part.
      * 
