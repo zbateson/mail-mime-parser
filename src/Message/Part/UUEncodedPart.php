@@ -44,11 +44,13 @@ class UUEncodedPart extends NonMimePart
      */
     public function __construct(
         $handle,
+        $contentHandle,
         MimePart $parent,
         array $properties
     ) {
         parent::__construct(
             $handle,
+            $contentHandle,
             $parent
         );
         if (isset($properties['mode'])) {

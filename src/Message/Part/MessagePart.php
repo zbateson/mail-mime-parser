@@ -6,8 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-
 /**
  * Represents a single part of a message.
  *
@@ -41,11 +39,13 @@ abstract class MessagePart
      * Sets up class dependencies.
      * 
      * @param resource $handle
+     * @param resource $contentHandle
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
      */
-    public function __construct($handle, MimePart $parent)
+    public function __construct($handle, $contentHandle, MimePart $parent)
     {
         $this->handle = $handle;
+        $this->contentHandle = $contentHandle;
         $this->parent = $parent;
     }
 
@@ -129,10 +129,10 @@ abstract class MessagePart
      */
     public function getHandle()
     {
-        if (is_resource($this->originalStreamHandle)) {
-            rewind($this->originalStreamHandle);
+        if (is_resource($this->handle)) {
+            rewind($this->handle);
         }
-        return $this->originalStreamHandle;
+        return $this->handle;
     }
 
     /**

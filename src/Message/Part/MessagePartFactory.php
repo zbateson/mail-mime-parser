@@ -20,6 +20,7 @@ abstract class MessagePartFactory
      */
     public abstract function newInstance(
         $handle,
+        $contentHandle,
         MimePart $parent,
         array $children,
         array $headers,

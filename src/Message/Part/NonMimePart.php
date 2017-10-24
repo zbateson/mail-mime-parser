@@ -29,9 +29,10 @@ class NonMimePart extends MessagePart
      */
     public function __construct(
         $handle,
+        $contentHandle,
         MimePart $parent
     ) {
-        parent::__construct($handle, $parent);
+        parent::__construct($handle, $contentHandle, $parent);
     }
     
     /**

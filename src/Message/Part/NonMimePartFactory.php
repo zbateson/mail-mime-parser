@@ -20,6 +20,7 @@ class NonMimePartFactory extends MessagePartFactory
      */
     public function newInstance(
         $handle,
+        $contentHandle,
         MimePart $parent,
         array $children,
         array $headers,
@@ -27,6 +28,7 @@ class NonMimePartFactory extends MessagePartFactory
     ) {
         return new NonMimePart(
             $handle,
+            $contentHandle,
             $parent
         );
     }

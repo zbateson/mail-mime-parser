@@ -22,7 +22,8 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
     
     public function testNewInstance()
     {
-        $handle = 'handle';
+        $handle = fopen('php://memory', 'r');
+        $cHandle = fopen('php://memory', 'r');
         $mp = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
@@ -32,6 +33,7 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
         
         $part = $this->uuEncodedPartFactory->newInstance(
             $handle,
+            $cHandle,
             $mp,
             $children,
             $headers,

@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
  * 
  * @group MessagePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\MimePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\MessagePartFactory
  * @author Zaahid Bateson
  */
 class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
@@ -38,6 +38,7 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
             ->method('newInstance')
             ->with(
                 $handle,
+                $handle,
                 $mp,
                 $children,
                 $headers,
@@ -45,6 +46,7 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
             );
         
         $this->messagePartFactory->newInstance(
+            $handle,
             $handle,
             $mp,
             $children,

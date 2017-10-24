@@ -62,11 +62,12 @@ class MimePart extends MessagePart
     public function __construct(
         HeaderFactory $headerFactory,
         $handle,
+        $contentHandle,
         MimePart $parent,
         array $children,
         array $headers
     ) {
-        parent::__construct($handle, $parent);
+        parent::__construct($handle, $contentHandle, $parent);
         $this->children = $children;
         $this->headers = $headers;
         $this->headerFactory = $headerFactory;

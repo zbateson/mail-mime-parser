@@ -38,6 +38,7 @@ class MimePartFactory extends MessagePartFactory
      */
     public function newInstance(
         $handle,
+        $contentHandle,
         MimePart $parent,
         array $children,
         array $headers,
@@ -46,6 +47,7 @@ class MimePartFactory extends MessagePartFactory
         return new MimePart(
             $this->headerFactory,
             $handle,
+            $contentHandle,
             $parent,
             $children,
             $headers
