@@ -6,8 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-
 /**
  * A specialized NonMimePart representing a uuencoded part.
  * 
