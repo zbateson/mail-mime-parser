@@ -1,34 +1,25 @@
 <?php
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of NonMimePartTest
  *
  * @group NonMimePart
- * @group Message
- * @covers ZBateson\MailMimeParser\Message\NonMimePart
+ * @group MessagePart
+ * @covers ZBateson\MailMimeParser\Message\Part\NonMimePart
  * @author Zaahid Bateson
  */
 class NonMimePartTest extends PHPUnit_Framework_TestCase
 {
-    public function testNonMimePartContentType()
+    public function testInstance()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $hf = new HeaderFactory($cs, $pf);
-        $pw = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Writer\MimePartWriter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        
-        $part = new NonMimePart($hf, $pw);
-        $this->assertNotNull($part);
-        $this->assertEquals('text/plain', $part->getHeaderValue('Content-Type'));
+        $part = new NonMimePart('handle', 'contentHandle');
+        $this->assertTrue($part->isTextPart());
+        $this->assertFalse($part->isMime());
+        $this->assertEquals('text/plain', $part->getContentType());
+        $this->assertEquals('inline', $part->getContentDisposition());
+        $this->assertEquals('7bit', $part->getContentTransferEncoding());
     }
 }
