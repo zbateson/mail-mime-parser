@@ -45,7 +45,7 @@ class PartBuilder
      */
     private $headerFactory;
     
-    private $mimePartFactory;
+    private $messagePartFactory;
     
     private $endBoundaryFound = false;
     private $mimeBoundary = false;
@@ -59,10 +59,10 @@ class PartBuilder
      */
     private $contentType = null;
     
-    public function __construct(HeaderFactory $hf, MimePartFactory $mpf)
+    public function __construct(HeaderFactory $hf, MessagePartFactory $mpf)
     {
         $this->headerFactory = $hf;
-        $this->mimePartFactory = $mpf;
+        $this->messagePartFactory = $mpf;
     }
     
     /**

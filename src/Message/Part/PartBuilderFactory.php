@@ -9,7 +9,11 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
- * Description of MimePartFactory
+ * Responsible for creating PartBuilder instances.
+ * 
+ * The PartBuilder instance must be constructed with a MessagePartFactory
+ * instance to construct a MessagePart sub-class after parsing a message into
+ * PartBuilder instances.
  *
  * @author Zaahid Bateson
  */
@@ -32,15 +36,17 @@ class PartBuilderFactory
     }
     
     /**
-     * Constructs a new MimePart object and returns it
+     * Constructs a new PartBuilder object and returns it
      * 
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @param \ZBateson\MailMimeParser\Message\Part\MessagePartFactory
+     *        $messagePartFactory 
+     * @return \ZBateson\MailMimeParser\Message\Part\PartBuilder
      */
-    public function newPartBuilder(MimePartFactory $mimePartFactory)
+    public function newPartBuilder(MessagePartFactory $messagePartFactory)
     {
         return new PartBuilder(
             $this->headerFactory,
-            $mimePartFactory
+            $messagePartFactory
         );
     }
 }

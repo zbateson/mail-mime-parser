@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 /**
- * Description of UUEncodedPartFactory
+ * Responsible for creating UUEncodedPart instances.
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
