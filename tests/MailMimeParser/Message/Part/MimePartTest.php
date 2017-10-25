@@ -183,6 +183,19 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('attachment', $part->getContentDisposition());
     }
     
+    public function testGetContentTransferEncoding()
+    {
+        $hf = $this->mockHeaderFactory;
+        $header = $this->getMockedParameterHeader('Content-Transfer-Encoding', 'base64');
+        $hf->expects($this->exactly(1))
+            ->method('newInstance')
+            ->with('Content-Transfer-Encoding', 'base64')
+            ->willReturn($header);
+        $part = $this->createNewMimePart(null, null, [], ['contenttransferencoding' => ['Content-Transfer-Encoding', 'base64']]);
+        $this->assertSame($header, $part->getHeader('CONTENT-TRANSFER_ENCODING'));
+        $this->assertEquals('base64', $part->getContentTransferEncoding());
+    }
+    
     public function testIsTextAndMultiPart()
     {
         $hf = $this->mockHeaderFactory;
