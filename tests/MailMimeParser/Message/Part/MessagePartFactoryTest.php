@@ -26,20 +26,17 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
     
     public function testNewInstance()
     {
-        $handle = 'handle';
-        $mp = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $children = ['children'];
-        $headers = ['headers'];
-        $properties = ['properties'];
+        $handle = fopen('php://memory', 'r');
+        $ch = fopen('php://memory', 'r');
+        $children = [];
+        $headers = ['Content-Type' => 'test/test'];
+        $properties = ['name' => 'value'];
         
         $this->messagePartFactory->expects($this->once())
             ->method('newInstance')
             ->with(
                 $handle,
-                $handle,
-                $mp,
+                $ch,
                 $children,
                 $headers,
                 $properties
@@ -47,8 +44,7 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
         
         $this->messagePartFactory->newInstance(
             $handle,
-            $handle,
-            $mp,
+            $ch,
             $children,
             $headers,
             $properties

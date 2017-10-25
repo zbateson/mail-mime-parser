@@ -25,14 +25,12 @@ class NonMimePart extends MessagePart
      * Sets up class dependencies.
      * 
      * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
      */
     public function __construct(
         $handle,
-        $contentHandle,
-        MimePart $parent
+        $contentHandle
     ) {
-        parent::__construct($handle, $contentHandle, $parent);
+        parent::__construct($handle, $contentHandle);
     }
     
     /**

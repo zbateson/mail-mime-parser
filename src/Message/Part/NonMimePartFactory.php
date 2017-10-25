@@ -16,20 +16,23 @@ class NonMimePartFactory extends MessagePartFactory
     /**
      * Constructs a new NonMimePart object and returns it
      * 
+     * @param resource $handle
+     * @param resource $contentHandle
+     * @param ZBateson\MailMimeParser\Message\Part\MessagePart[] $children
+     * @param array $headers
+     * @param array $properties
      * @return \ZBateson\MailMimeParser\Message\NonMimePart
      */
     public function newInstance(
         $handle,
         $contentHandle,
-        MimePart $parent,
         array $children,
         array $headers,
         array $properties
     ) {
         return new NonMimePart(
             $handle,
-            $contentHandle,
-            $parent
+            $contentHandle
         );
     }
 }

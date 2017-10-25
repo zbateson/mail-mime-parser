@@ -42,7 +42,7 @@ abstract class MessagePart
      * @param resource $contentHandle
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
      */
-    public function __construct($handle, $contentHandle, MimePart $parent)
+    public function __construct($handle, $contentHandle, MimePart $parent = null)
     {
         $this->handle = $handle;
         $this->contentHandle = $contentHandle;

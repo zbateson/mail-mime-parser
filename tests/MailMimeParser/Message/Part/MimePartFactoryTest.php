@@ -28,17 +28,13 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
     {
         $handle = fopen('php://memory', 'r');
         $cHandle = fopen('php://memory', 'r');
-        $mp = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $children = ['children'];
-        $headers = ['headers'];
-        $properties = ['properties'];
+        $children = [];
+        $headers = [];
+        $properties = [];
         
         $part = $this->mimePartFactory->newInstance(
             $handle,
             $cHandle,
-            $mp,
             $children,
             $headers,
             $properties

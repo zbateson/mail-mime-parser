@@ -34,12 +34,16 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Constructs a new MimePart object and returns it
      * 
+     * @param resource $handle
+     * @param resource $contentHandle
+     * @param ZBateson\MailMimeParser\Message\Part\MessagePart[] $children
+     * @param array $headers
+     * @param array $properties
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function newInstance(
         $handle,
         $contentHandle,
-        MimePart $parent,
         array $children,
         array $headers,
         array $properties
@@ -48,7 +52,6 @@ class MimePartFactory extends MessagePartFactory
             $this->headerFactory,
             $handle,
             $contentHandle,
-            $parent,
             $children,
             $headers
         );

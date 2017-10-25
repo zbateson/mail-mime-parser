@@ -55,7 +55,6 @@ class MimePart extends MessagePart
      * 
      * @param HeaderFactory $headerFactory
      * @param type $handle
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
      * @param array $children
      * @param array $headers
      */
@@ -63,14 +62,16 @@ class MimePart extends MessagePart
         HeaderFactory $headerFactory,
         $handle,
         $contentHandle,
-        MimePart $parent,
         array $children,
         array $headers
     ) {
-        parent::__construct($handle, $contentHandle, $parent);
+        parent::__construct($handle, $contentHandle);
         $this->children = $children;
         $this->headers = $headers;
         $this->headerFactory = $headerFactory;
+        foreach ($children as $child) {
+            $child->parent = $this;
+        }
     }
 
     /**
