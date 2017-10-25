@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
  * Represents a single part of a multi-part mime message.
@@ -67,7 +68,7 @@ class MimePart extends MessagePart
     ) {
         parent::__construct($handle, $contentHandle);
         $this->children = $children;
-        $this->headers = $headers;
+        $this->rawHeaders = $headers;
         $this->headerFactory = $headerFactory;
         foreach ($children as $child) {
             $child->parent = $this;
@@ -164,7 +165,7 @@ class MimePart extends MessagePart
         if ($filter !== null) {
             return array_values(array_filter($this->children, [ $filter, 'filter' ]));
         }
-        return $this->parts;
+        return $this->children;
     }
     
     /**
@@ -299,10 +300,13 @@ class MimePart extends MessagePart
      */
     public function getHeader($name)
     {
-        $nameKey = preg_replace('/[^a-z0-9]/g', '', strtolower($name));
+        $nameKey = preg_replace('/[^a-z0-9]/', '', strtolower($name));
         if (isset($this->rawHeaders[$nameKey])) {
             if (!isset($this->headers[$nameKey])) {
-                $this->headers[$nameKey] = $this->headerFactory->newInstance($name, $value);
+                $this->headers[$nameKey] = $this->headerFactory->newInstance(
+                    $this->rawHeaders[$nameKey][0],
+                    $this->rawHeaders[$nameKey][1]
+                );
             }
             return $this->headers[$nameKey];
         }
