@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
 /**
  * Description of WritableMimePart
  *
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class WritableMimePart
 {

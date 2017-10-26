@@ -26,9 +26,25 @@ class MimePartFactory extends MessagePartFactory
      * 
      * @param HeaderFactory $headerFactory
      */
-    public function __construct(HeaderFactory $headerFactory)
+    protected function __construct(HeaderFactory $headerFactory)
     {
         $this->headerFactory = $headerFactory;
+    }
+    
+    /**
+     * Returns the singleton instance for the class.
+     * 
+     * @param HeaderFactory $hf
+     * @return MimePartFactory
+     */
+    public static function getInstance(HeaderFactory $hf = null)
+    {
+        static $instances = [];
+        $class = get_called_class();
+        if (!isset($instances[$class])) {
+            $instances[$class] = new static($hf);
+        }
+        return $instances[$class];
     }
 
     /**

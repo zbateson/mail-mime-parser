@@ -19,7 +19,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
  * initialize it, and adds 'filename' parts to the Content-Disposition and
  * 'name' to Content-Type.
  * 
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class UUEncodedPart extends NonMimePart
 {

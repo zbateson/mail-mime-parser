@@ -6,13 +6,38 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use ZBateson\MailMimeParser\Header\HeaderFactory;
+
 /**
  * Abstract factory for subclasses of MessagePart.
  *
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 abstract class MessagePartFactory
 {
+    /**
+     * Setting default constructor visibility to 'protected'.
+     */
+    protected function __construct()
+    {
+    }
+    
+    /**
+     * Returns the singleton instance for the class.
+     * 
+     * @param HeaderFactory $hf
+     * @return MessagePartFactory
+     */
+    public static function getInstance(HeaderFactory $hf = null)
+    {
+        static $instances = [];
+        $class = get_called_class();
+        if (!isset($instances[$class])) {
+            $instances[$class] = new static();
+        }
+        return $instances[$class];
+    }
+    
     /**
      * Constructs a new MessagePart object and returns it
      * 

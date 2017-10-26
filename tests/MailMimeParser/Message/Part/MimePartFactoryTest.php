@@ -21,7 +21,7 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
             ->getMock();
-        $this->mimePartFactory = new MimePartFactory($mockHeaderFactory);
+        $this->mimePartFactory = MimePartFactory::getInstance($mockHeaderFactory);
     }
     
     public function testNewInstance()

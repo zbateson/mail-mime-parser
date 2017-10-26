@@ -17,7 +17,7 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->nonMimePartFactory = new NonMimePartFactory();
+        $this->nonMimePartFactory = NonMimePartFactory::getInstance();
     }
     
     public function testNewInstance()

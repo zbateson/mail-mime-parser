@@ -17,7 +17,7 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->uuEncodedPartFactory = new UUEncodedPartFactory();
+        $this->uuEncodedPartFactory = UUEncodedPartFactory::getInstance();
     }
     
     public function testNewInstance()
