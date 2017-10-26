@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
 
@@ -7,357 +7,251 @@ use PHPUnit_Framework_TestCase;
  * Description of PartBuilder
  *
  * @group PartBuilder
- * @group Message
- * @covers ZBateson\MailMimeParser\Message\MessageParser
+ * @group MessagePart
+ * @covers ZBateson\MailMimeParser\Message\Part\PartBuilder
  * @author Zaahid Bateson
  */
 class PartBuilderTest extends PHPUnit_Framework_TestCase
 {
+    private $mockHeaderFactory;
+    private $mockMessagePartFactory;
     
-    
-    
-    
-    protected function getMockedMessageFactory()
+    protected function setUp()
     {
-        $mf = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFactory')
+        $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'registerPartStreams',
-                'newParsedMessage',
-            ])
+            ->setMethods(['newInstance'])
             ->getMock();
-        return $mf;
-    }
-    
-    protected function getMockedMimePartFactory()
-    {
-        $mpf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePartFactory')
+        $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MessagePartFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['newMimePart', 'newNonMimePart', 'newUUEncodedPart'])
             ->getMock();
-        return $mpf;
     }
     
-    protected function getMockedPartBuilderFactory()
+    public function testSetAndGetParent()
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartBuilderFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['newPartBuilder'])
-            ->getMock();
-        return $part;
-    }
-    
-    protected function getMockedPartStreamRegistry()
-    {
-        $partStreamRegistry = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\PartStreamRegistry')
-            ->getMock();
-        return $partStreamRegistry;
-    }
-    
-    protected function callParserWithEmail($emailText, $messageFactory, $mimePartFactory, $partBuilderFactory, $partStreamRegistry)
-    {
-        $email = fopen('php://memory', 'rw');
-        fwrite(
-            $email,
-            $emailText
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
         );
-        rewind($email);
-        $parser = new MessageParser($messageFactory, $mimePartFactory, $partBuilderFactory, $partStreamRegistry);
-        $parser->parse($email);
-        fclose($email);
+        $parent = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->setParent($parent);
+        $this->assertSame($parent, $instance->getParent());
+        $this->assertNull($parent->getParent());
     }
     
-    public function testParseSimpleMessage()
+    public function testAddChildren()
     {
-        $email =
-            "Content-Type: text/html\r\n"
-            . "Subject: Money owed for services rendered\r\n"
-            . "\r\n";
-        $startPos = strlen($email);
-        $email .= "Dear Albert,\r\n\r\nAfter our wonderful time together, it's unfortunate I know, but I expect payment\r\n"
-            . "for all services hereby rendered.\r\n\r\nYours faithfully,\r\nKandice Waterskyfalls";
-        $endPos = strlen($email);
-        
-        $message = $this->getMockedPartBuilderFactory();
-        $message->expects($this->exactly(2))
-            ->method('setRawHeader')
-            ->withConsecutive(
-                ['Content-Type', 'text/html'],
-                ['Subject', 'Money owed for services rendered']
-            );
-
-        /*$partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->once())
-            ->method('attachContentPartStreamHandle')
-            ->with($this->anything(), $this->anything(), $startPos, $endPos);*/
-        
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $children = [
+            new PartBuilder(
+                $this->mockHeaderFactory,
+                $this->mockMessagePartFactory
+            ),
+            new PartBuilder(
+                $this->mockHeaderFactory,
+                $this->mockMessagePartFactory
+            )
+        ];
+        foreach ($children as $child) {
+            $instance->addChild($child);
+        }
+        $this->assertEquals($children, $instance->getChildren());
+        $this->assertSame($instance, $children[0]->getParent());
+        $this->assertSame($instance, $children[1]->getParent());
     }
     
-    public function testParseMultipartAlternativeMessage()
+    public function testAddMimeVersionHeader()
     {
-        $email =
-            "Content-Type: multipart/alternative;\r\n"
-            . " boundary=balderdash\r\n"
-            . "Subject: I'm a tiny little wee teapot\r\n"
-            . "\r\n";
-        
-        $messagePartStart = strlen($email);
-        $email .=
-            "--balderdash\r\n"
-            . "Content-Type: text/html\r\n"
-            . "\r\n";
-        $partOneStart = strlen($email);
-        $email .=
-            "<p>I'm a little teapot, short and stout.  Where is my guiness, where is"
-            . "my draught.  I certainly can't rhyme, but no I'm not daft.</p>\r\n";
-        $partOneEnd = strlen($email);
-        $email .=
-            "--balderdash\r\n"
-            . "Content-Type: text/plain\r\n"
-            . "\r\n";
-        $partTwoStart = strlen($email);
-        $email .=
-            "I'm a little teapot, short and stout.  Where is my guiness, where is"
-            . "my draught.  I certainly can't rhyme, but no I'm not daft.\r\n";
-        $partTwoEnd = strlen($email);
-        $email .= "--balderdash--\r\n\r\n";
-        
-        $firstPart = $this->getMockedPart();
-        $firstPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/html');
-        $firstPart->method('getHeaderValue')
-            ->willReturn('text/html');
-        
-        $secondPart = $this->getMockedPart();
-        $secondPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/plain');
-        $secondPart->method('getHeaderValue')
-            ->willReturn('text/plain');
-        
-        $message = $this->getMockedMessage();
-        $message->method('getHeaderValue')
-            ->willReturn('multipart/alternative');
-        $message->method('getHeaderParameter')
-            ->willReturn('balderdash');
-        $message->expects($this->exactly(2))
-            ->method('addPart')
-            ->withConsecutive(
-                [$firstPart],
-                [$secondPart]
-            );
-        
-        $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newMimePart')->will($this->onConsecutiveCalls($firstPart, $secondPart, $this->getMockedPart()));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->exactly(3))
-            ->method('attachContentPartStreamHandle')
-            ->withConsecutive(
-                [$message, $message, $messagePartStart, $messagePartStart],
-                [$firstPart, $message, $partOneStart, $partOneEnd],
-                [$secondPart, $message, $partTwoStart, $partTwoEnd]
-            );
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->addHeader('Mime-VERSION', '42');
+        $this->assertTrue($instance->isMime());
     }
     
-    public function testParseMultipartMixedMessage()
+    public function testAddContentTypeHeaderIsMime()
     {
-        $email =
-            "Content-Type: multipart/mixed; boundary=balderdash\r\n"
-            . "Subject: Of mice and men\r\n"
-            . "\r\n";
-        
-        $messagePartStart = strlen($email);
-        $email .= "This existed for nought - hidden from view\r\n";
-        $messagePartEnd = strlen($email);
-        
-        $email .=
-            "--balderdash\r\n"
-            . "Content-Type: multipart/alternative; boundary=gobbledygook\r\n"
-            . "\r\n";
-        
-        $altPartStart = strlen($email);
-        $email .= "A line to fool the senses was created... and it was this line\r\n";
-        $altPartEnd = strlen($email);
-        
-        $email .= 
-            "--gobbledygook\r\n"
-            . "Content-Type: text/html\r\n"
-            . "\r\n";
-        $partOneStart = strlen($email);
-        $email .=
-            "<p>There once was a man, who was both man and mouse.  He thought himself"
-            . "pretty, but was really - well - as ugly as you can imagine a creature"
-            . "that is part man and part mouse.</p>\r\n";
-        $partOneEnd = strlen($email);
-        $email .=
-            "--gobbledygook\r\n"
-            . "Content-Type: text/plain\r\n"
-            . "\r\n";
-        $partTwoStart = strlen($email);
-        $email .=
-            "There once was a man, who was both man and mouse.  He thought himself"
-            . "pretty, but was really - well - as ugly as you can imagine a creature"
-            . "that is part man and part mouse.\r\n";
-        $partTwoEnd = strlen($email);
-        $email .=
-            "--gobbledygook--\r\n"
-            . "--balderdash\r\n"
-            . "Content-Type: text/html\r\n"
-            . "\r\n";
-        $partThreeStart = strlen($email);
-        $email .= "<p>He wandered through the lands, and shook fancy hands.</p>\r\n";
-        $partThreeEnd = strlen($email);
-        $email .= 
-            "--balderdash\r\n"
-            . "Content-Type: text/plain\r\n"
-            . "\r\n";
-        $partFourStart = strlen($email);
-        $email .= " (^^) \r\n";
-        $partFourEnd = strlen($email);
-        $email .= "--balderdash--\r\n";
-        
-        $firstPart = $this->getMockedPart();
-        $firstPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'multipart/alternative; boundary=gobbledygook');
-        $firstPart->method('getHeaderValue')
-            ->willReturn('multipart/alternative');
-        $firstPart->method('getHeaderParameter')
-            ->willReturn('gobbledygook');
-        
-        $secondPart = $this->getMockedPart();
-        $secondPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/html');
-        $secondPart->method('getHeaderValue')
-            ->willReturn('text/html');
-        
-        $thirdPart = $this->getMockedPart();
-        $thirdPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/plain');
-        $thirdPart->method('getHeaderValue')
-            ->willReturn('text/plain');
-        
-        $fourthPart = $this->getMockedPart();
-        $fourthPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/html');
-        $fourthPart->method('getHeaderValue')
-            ->willReturn('text/html');
-        
-        $fifthPart = $this->getMockedPart();
-        $fifthPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/plain');
-        $fifthPart->method('getHeaderValue')
-            ->willReturn('text/plain');
-        
-        $message = $this->getMockedMessage();
-        $message->method('getHeaderValue')
-            ->willReturn('multipart/mixed');
-        $message->method('getHeaderParameter')
-            ->willReturn('balderdash');
-        
-        $message->expects($this->exactly(3))
-            ->method('addPart');
-        
-        $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newMimePart')->will($this->onConsecutiveCalls(
-            $firstPart,
-            $secondPart,
-            $thirdPart,
-            $fourthPart,
-            $fifthPart,
-            $this->getMockedPart()
-        ));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->exactly(6))
-            ->method('attachContentPartStreamHandle')
-            ->withConsecutive(
-                [$message, $message, $messagePartStart, $messagePartEnd],
-                [$this->anything(), $message, $altPartStart, $altPartEnd],
-                [$this->anything(), $message, $partOneStart, $partOneEnd],
-                [$thirdPart, $message, $partTwoStart, $partTwoEnd],
-                [$fourthPart, $message, $partThreeStart, $partThreeEnd],
-                [$fifthPart, $message, $partFourStart, $partFourEnd]
-            );
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->addHeader('CONTENT-TYPE', '42');
+        $this->assertTrue($instance->isMime());
     }
     
-    public function testParseUUEncodedMessage()
+    public function testGetContentType()
     {
-        $email =
-            "Subject: The Diamonds\r\n"
-            . "To: Cousin Avi\r\n"
-            . "\r\n";
-        $startPos = strlen($email);
-        $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
-        $email .= "begin 664 message.txt\r\n"
-            . convert_uuencode($messageText)
-            . "\r\nend\r\n\r\n";
-        $endPos = strlen($email);
-        $startPos2 = $endPos;
-        $email .= "begin 664 message2.txt\r\n"
-            . convert_uuencode('No, Tommy. ... It\'s tiptop. It\'s just I\'m not sure about the colour.')
-            . "\r\nend\r\n";
-        $endPos2 = strlen($email);
+        $this->mockHeaderFactory
+            ->expects($this->atLeastOnce())
+            ->method('newInstance')
+            ->willReturn(true);
         
-        $message = $this->getMockedMessage();
-        $message->expects($this->exactly(2))
-            ->method('setRawHeader')
-            ->withConsecutive(
-                ['Subject', 'The Diamonds'],
-                ['To', 'Cousin Avi']
-            );
-
-        $partFactory = $this->getMockedPartFactory();
-        $self = $this;
-        $partFactory->method('newUUEncodedPart')->will($this->returnCallback(function () use ($self) {
-            return $self->getMockedUUEncodedPart();
-        }));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->method('attachContentPartStreamHandle')
-            ->withConsecutive(
-                [$this->anything(), $this->anything(), $startPos, $endPos],
-                [$this->anything(), $this->anything(), $startPos2, $endPos2]
-            );
-        
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->addHeader('CONTENT-TYPE', '42');
+        $this->assertTrue($instance->getContentType());
     }
     
-    public function testParseNonMimeMessage()
+    public function testGetMimeBoundary()
     {
-        $email =
-            "Subject: The Diamonds\r\n"
-            . "To: Cousin Avi\r\n"
-            . "\r\n";
-        $startPos = strlen($email);
-        $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
-        $email .= $messageText . "\r\n";
-        $endPos = strlen($email);
+        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn('Castle Black');
         
-        $message = $this->getMockedMessage();
-        $message->expects($this->exactly(2))
-            ->method('setRawHeader')
-            ->withConsecutive(
-                ['Subject', 'The Diamonds'],
-                ['To', 'Cousin Avi']
-            );
-
-        $partFactory = $this->getMockedPartFactory();
-        $self = $this;
-        $partFactory->method('newNonMimePart')->will($this->returnCallback(function () use ($self) {
-            return $self->getMockedNonMimePart();
-        }));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->once())
-            ->method('attachContentPartStreamHandle')
-            ->with($this->anything(), $this->anything(), $startPos, $endPos);
+        $this->mockHeaderFactory
+            ->expects($this->atLeastOnce())
+            ->method('newInstance')
+            ->willReturn($mockHeader);
         
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->addHeader('CONTENT-TYPE', 'Snow and Ice');
+        $this->assertEquals('Castle Black', $instance->getMimeBoundary());
+    }
+    
+    public function testIsMultiPart()
+    {
+        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMock();
+        $mockHeader->expects($this->any())
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls('multipart/kookoo', 'text/plain');
+        
+        $this->mockHeaderFactory
+            ->expects($this->atLeastOnce())
+            ->method('newInstance')
+            ->willReturn($mockHeader);
+        
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $this->assertTrue($instance->isMultiPart());
+        $this->assertFalse($instance->isMultiPart());
+    }
+    
+    public function testSetEndBoundary()
+    {
+        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn('Castle Black');
+        
+        $this->mockHeaderFactory
+            ->expects($this->atLeastOnce())
+            ->method('newInstance')
+            ->willReturnOnConsecutiveCalls($mockHeader);
+        
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        
+        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertFalse($instance->setEndBoundary('Somewhere... obvs not Castle Black'));
+        $this->assertFalse($instance->setEndBoundary('Castle Black'));
+        $this->assertTrue($instance->setEndBoundary('--Castle Black'));
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertTrue($instance->setEndBoundary('--Castle Black--'));
+        $this->assertTrue($instance->isEndBoundaryFound());
+    }
+    
+    public function testSetEndBoundaryWithParent()
+    {
+        $mockParentHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockParentHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn('King\'s Landing');
+        
+        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn(null);
+        
+        $this->mockHeaderFactory
+            ->expects($this->atLeastOnce())
+            ->method('newInstance')
+            ->willReturnOnConsecutiveCalls($mockHeader, $mockParentHeader);
+        
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $parent = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $parent->addChild($instance);
+        
+        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $parent->addHeader('CONTENT-TYPE', 'keekee-kookoo');
+        
+        $this->assertSame($parent, $instance->getParent());
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertFalse($instance->setEndBoundary('Somewhere... obvs not Castle Black'));
+        $this->assertFalse($instance->setEndBoundary('King\'s Landing'));
+        $this->assertTrue($instance->setEndBoundary('--King\'s Landing'));
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertFalse($parent->isEndBoundaryFound());
+        $this->assertTrue($instance->setEndBoundary('--King\'s Landing--'));
+        $this->assertTrue($parent->isEndBoundaryFound());
+        $this->assertFalse($instance->isEndBoundaryFound());
+    }
+    
+    public function testSetAndGetStreamStartAndEndPos()
+    {
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->setStreamPartStartPos(42);
+        $instance->setStreamPartEndPos(84);
+        $this->assertEquals(42, $instance->getStreamPartStartPos());
+        $this->assertEquals(84, $instance->getStreamPartEndPos());
+    }
+    
+    public function testSetAndGetContentStartAndEndPos()
+    {
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory
+        );
+        $instance->setStreamContentStartPos(42);
+        $instance->setStreamContentEndPos(84);
+        $this->assertEquals(42, $instance->getStreamContentStartPos());
+        $this->assertEquals(84, $instance->getStreamContentEndPos());
     }
 }
