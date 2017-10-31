@@ -351,6 +351,11 @@ class CharsetConverter
      */
     private function findSupportedCharset($cs, &$mbSupported)
     {
+        /** @see https://github.com/zbateson/MailMimeParser/issues/53 */
+        if (preg_match('/UTF\-8/', $cs)){
+            $cs = 'UTF-8';
+        }
+
         $mbSupported = true;
         $comp = strtoupper($cs);
         $available = array_map('strtoupper', mb_list_encodings());
