@@ -328,6 +328,10 @@ class CharsetConverter
         // Unfortunately there's no great way of testing what charsets are available on iconv, and
         // attempting to blindly convert the string may be too costly, as could converting first
         // to an intermediate (ASSUMPTION: may be worth testing converting to an intermediate)
+        if ($this->fromCharset == $this->toCharset){
+            return $str;
+        }
+
         if ($str !== '') {
             if ($this->fromCharsetMbSupported && $this->toCharsetMbSupported) {
                 return mb_convert_encoding($str, $this->toCharset, $this->fromCharset);
