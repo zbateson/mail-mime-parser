@@ -322,6 +322,11 @@ class CharsetConverter
      */
     public function convert($str)
     {
+        /** @see https://github.com/zbateson/MailMimeParser/issues/53 */
+        if (stripos($this->fromCharset, 'utf-8') || stripos($this->fromCharset, 'utf8')) {
+            $this->fromCharset = 'UTF-8';
+        }
+
         // if the from and to are the same return the string
         if ($this->fromCharset == $this->toCharset){
             return $str;
