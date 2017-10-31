@@ -357,7 +357,7 @@ class CharsetConverter
     private function findSupportedCharset($cs, &$mbSupported)
     {
         /** @see https://github.com/zbateson/MailMimeParser/issues/53 */
-        if (preg_match('/UTF\-8/', $cs)) {
+        if (stripos($cs, 'utf-8')) {
             $cs = 'UTF-8';
         }
 
