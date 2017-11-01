@@ -342,7 +342,9 @@ class CharsetConverter
             if ($this->fromCharsetMbSupported && $this->toCharsetMbSupported) {
                 return mb_convert_encoding($str, $this->toCharset, $this->fromCharset);
             }
-            return iconv($this->fromCharset, $this->toCharset . '//TRANSLIT//IGNORE', $str);
+
+            $_str = @iconv($this->fromCharset, $this->toCharset . '//TRANSLIT//IGNORE', $str);
+            return $_str ? $_str : $str;
         }
         return $str;
     }
