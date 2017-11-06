@@ -21,7 +21,7 @@ class PartBuilderFactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
             ->getMock();
-        $this->partBuilderFactory = new PartBuilderFactory($mockHeaderFactory);
+        $this->partBuilderFactory = new PartBuilderFactory($mockHeaderFactory, 'amazon');
     }
     
     public function testNewInstance()

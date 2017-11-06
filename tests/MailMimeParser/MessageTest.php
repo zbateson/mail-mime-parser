@@ -68,10 +68,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $message = $this->createNewMessage();
         $message2 = $this->createNewMessage();
-        $this->assertNotEmpty($message->getObjectId());
-        $this->assertSame($message->getObjectId(), $message->getObjectId());
-        $this->assertSame($message2->getObjectId(), $message2->getObjectId());
-        $this->assertNotSame($message->getObjectId(), $message2->getObjectId());
+        $this->assertNotEmpty($message->getMessageObjectId());
+        $this->assertSame($message->getMessageObjectId(), $message->getMessageObjectId());
+        $this->assertSame($message2->getMessageObjectId(), $message2->getMessageObjectId());
+        $this->assertNotSame($message->getMessageObjectId(), $message2->getMessageObjectId());
     }
     
     public function testAddHtmlPart()

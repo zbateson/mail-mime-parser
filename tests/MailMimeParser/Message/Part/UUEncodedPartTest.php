@@ -15,17 +15,27 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pb->expects($this->exactly(2))
+            ->method('getProperty')
+            ->willReturnCallback(function ($param) {
+                $return = ['filename' => 'wubalubadubduuuuuub!', 'mode' => 0666];
+                $this->assertArrayHasKey($param, $return);
+                return $return[$param];
+            });
+
         $part = new UUEncodedPart(
-            'handle',
-            'contentHandle',
-            ['mode' => 0644, 'filename' => 'bin-bashy.jpg']
+            'habibi',
+            $pb
         );
         $this->assertFalse($part->isTextPart());
         $this->assertFalse($part->isMime());
         $this->assertEquals('application/octet-stream', $part->getContentType());
         $this->assertEquals('attachment', $part->getContentDisposition());
         $this->assertEquals('x-uuencode', $part->getContentTransferEncoding());
-        $this->assertEquals(0644, $part->getUnixFileMode());
-        $this->assertEquals('bin-bashy.jpg', $part->getFilename());
+        $this->assertEquals(0666, $part->getUnixFileMode());
+        $this->assertEquals('wubalubadubduuuuuub!', $part->getFilename());
     }
 }

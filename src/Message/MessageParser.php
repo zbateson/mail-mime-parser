@@ -62,9 +62,10 @@ class MessageParser
      */
     public function parse($fhandle)
     {
-        //$this->partStreamRegistry->register($this->message->getObjectId(), $fhandle);
+        $messageObjectId = uniqid();
+        $this->partStreamRegistry->register($messageObjectId, $fhandle);
         $partBuilder = $this->read($fhandle);
-        return $this->messageFactory->newParsedMessage($partBuilder, $fhandle);
+        return $partBuilder->createMessagePart($fhandle, $messageObjectId);
     }
     
     /**

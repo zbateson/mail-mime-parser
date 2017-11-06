@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\MessageFactory;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
  * Responsible for creating singleton instances of MessagePartFactory and its
@@ -24,14 +25,23 @@ class PartFactoryService
     protected $headerFactory;
     
     /**
+     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the PartFilterFactory
+     *      instance
+     */
+    protected $partFilterFactory;
+    
+    /**
      * Sets up dependencies.
      * 
      * @param HeaderFactory $headerFactory
+     * @param PartFilterFactory $partFilterFactory
      */
     public function __construct(
-        HeaderFactory $headerFactory
+        HeaderFactory $headerFactory,
+        PartFilterFactory $partFilterFactory
     ) {
         $this->headerFactory = $headerFactory;
+        $this->partFilterFactory = $partFilterFactory;
     }
 
     /**
@@ -41,7 +51,10 @@ class PartFactoryService
      */
     public function getMessageFactory()
     {
-        return MessageFactory::getInstance($this->headerFactory);
+        return MessageFactory::getInstance(
+            $this->headerFactory,
+            $this->partFilterFactory
+        );
     }
     
     /**
@@ -51,7 +64,10 @@ class PartFactoryService
      */
     public function getMimePartFactory()
     {
-        return MimePartFactory::getInstance($this->headerFactory);
+        return MimePartFactory::getInstance(
+            $this->headerFactory,
+            $this->partFilterFactory
+        );
     }
     
     /**

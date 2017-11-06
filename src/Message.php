@@ -21,16 +21,6 @@ use ZBateson\MailMimeParser\Message\PartFilter;
 class Message extends MimePart
 {
     /**
-     * @var string unique ID used to identify the object to
-     *      $this->partStreamRegistry when registering the stream.  The ID is
-     *      used for opening stream parts with the mmp-mime-message "protocol".
-     * 
-     * @see \ZBateson\MailMimeParser\SimpleDi::registerStreamExtensions
-     * @see \ZBateson\MailMimeParser\Stream\PartStream::stream_open
-     */
-    protected $objectId;
-
-    /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
      * 
@@ -41,34 +31,6 @@ class Message extends MimePart
     {
         $mmp = new MailMimeParser();
         return $mmp->parse($handleOrString);
-    }
-
-    /**
-     * 
-     * @param HeaderFactory $headerFactory
-     * @param type $handle
-     * @param array $children
-     * @param array $headers
-     */
-    public function __construct(
-        HeaderFactory $headerFactory,
-        $handle,
-        array $children,
-        array $headers
-    ) {
-        parent::__construct($headerFactory, $handle, null, $children, $headers);
-        $this->objectId = uniqid();
-    }
-    
-    /**
-     * Returns the unique object ID registered with the PartStreamRegistry
-     * service object.
-     * 
-     * @return string
-     */
-    public function getObjectId()
-    {
-        return $this->objectId;
     }
 
     /**

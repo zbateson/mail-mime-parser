@@ -14,6 +14,7 @@ use PHPUnit_Framework_TestCase;
 class MimePartFactoryTest extends PHPUnit_Framework_TestCase
 {
     protected $mimePartFactory;
+    protected $partFilterFactory;
     
     protected function setUp()
     {
@@ -21,23 +22,24 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
             ->getMock();
-        $this->mimePartFactory = MimePartFactory::getInstance($mockHeaderFactory);
+        $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mimePartFactory = MimePartFactory::getInstance($mockHeaderFactory, $mockFilterFactory);
     }
     
     public function testNewInstance()
     {
-        $handle = fopen('php://memory', 'r');
-        $cHandle = fopen('php://memory', 'r');
-        $children = [];
-        $headers = [];
-        $properties = [];
+        $messageId = 'the id';
+        $partBuilder = $this->getMockBuilder(
+            'ZBateson\MailMimeParser\Message\Part\PartBuilder'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         
         $part = $this->mimePartFactory->newInstance(
-            $handle,
-            $cHandle,
-            $children,
-            $headers,
-            $properties
+            $messageId,
+            $partBuilder
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\MimePart',

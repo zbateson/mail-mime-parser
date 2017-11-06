@@ -34,19 +34,29 @@ abstract class MessagePart
      * @var resource a resource handle to this part's content
      */
     protected $contentHandle;
+    
+    /**
+     * @var string a unique ID representing the message this part belongs to.
+     */
+    protected $messageObjectId;
 
     /**
      * Sets up class dependencies.
      * 
-     * @param resource $handle
-     * @param resource $contentHandle
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      */
-    public function __construct($handle, $contentHandle, MimePart $parent = null)
+    public function __construct($messageObjectId, PartBuilder $partBuilder)
     {
-        $this->handle = $handle;
-        $this->contentHandle = $contentHandle;
-        $this->parent = $parent;
+        $this->messageObjectId = $messageObjectId;
+        $partFilename = $partBuilder->getStreamPartFilename($messageObjectId);
+        $contentFilename = $partBuilder->getStreamContentFilename($messageObjectId);
+        if ($partFilename !== null) {
+            $this->handle = fopen($partFilename, 'r');
+        }
+        if ($contentFilename !== null) {
+            $this->contentHandle = fopen($contentFilename, 'r');
+        }
     }
 
     /**
@@ -60,6 +70,19 @@ abstract class MessagePart
         if (is_resource($this->contentHandle)) {
             fclose($this->contentHandle);
         }
+    }
+    
+    /**
+     * Returns the unique object ID registered with the PartStreamRegistry
+     * service object for the message this part belongs to.
+     * 
+     * @return string
+     * @see \ZBateson\MailMimeParser\SimpleDi::registerStreamExtensions
+     * @see \ZBateson\MailMimeParser\Stream\PartStream::stream_open
+     */
+    public function getMessageObjectId()
+    {
+        return $this->messageObjectId;
     }
 
     /**

@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
  * Abstract factory for subclasses of MessagePart.
@@ -26,9 +27,10 @@ abstract class MessagePartFactory
      * Returns the singleton instance for the class.
      * 
      * @param HeaderFactory $hf
+     * @param PartFilterFactory $pf
      * @return MessagePartFactory
      */
-    public static function getInstance(HeaderFactory $hf = null)
+    public static function getInstance(HeaderFactory $hf = null, PartFilterFactory $pf = null)
     {
         static $instances = [];
         $class = get_called_class();
@@ -41,18 +43,9 @@ abstract class MessagePartFactory
     /**
      * Constructs a new MessagePart object and returns it
      * 
-     * @param resource $handle
-     * @param resource $contentHandle
-     * @param ZBateson\MailMimeParser\Message\Part\MessagePart[] $children
-     * @param array $headers
-     * @param array $properties
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
      */
-    public abstract function newInstance(
-        $handle,
-        $contentHandle,
-        array $children,
-        array $headers,
-        array $properties
-    );
+    public abstract function newInstance($messageObjectId, PartBuilder $partBuilder);
 }

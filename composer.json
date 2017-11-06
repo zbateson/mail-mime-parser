@@ -18,7 +18,8 @@
         "phpunit/phpunit": "~4.5.0",
         "phing/phing": "~2.15.0",
         "evert/phpdoc-md": "~0.1.1",
-        "phpdocumentor/phpdocumentor": "~2.8.0"
+        "phpdocumentor/phpdocumentor": "~2.8.0",
+        "mikey179/vfsStream": "~1.6.0"
     },
     "autoload": {
         "psr-4": {"ZBateson\\MailMimeParser\\": "src/"}

@@ -155,7 +155,7 @@ class PartStreamRegistry
      */
     public function attachContentPartStreamHandle(MimePart $part, Message $message, $start, $end)
     {
-        $id = $message->getObjectId();
+        $id = $message->getMessageObjectId();
         if (empty($this->registeredHandles[$id])) {
             return null;
         }
@@ -178,7 +178,7 @@ class PartStreamRegistry
      */
     public function attachOriginalPartStreamHandle(MimePart $part, Message $message, $start, $end)
     {
-        $id = $message->getObjectId();
+        $id = $message->getMessageObjectId();
         if (empty($this->registeredHandles[$id])) {
             return null;
         }

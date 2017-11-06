@@ -20,7 +20,10 @@ class PartFactoryServiceTest extends PHPUnit_Framework_TestCase
         $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->partFactoryService = new PartFactoryService($mockHeaderFactory);
+        $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->partFactoryService = new PartFactoryService($mockHeaderFactory, $mockFilterFactory);
     }
     
     public function testInstance()

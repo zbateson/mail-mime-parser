@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
  * Responsible for creating Message instances.
@@ -18,26 +19,17 @@ class MessageFactory extends MimePartFactory
     /**
      * Constructs a new Message object and returns it
      * 
-     * @param resource $handle
-     * @param resource $contentHandle
-     * @param ZBateson\MailMimeParser\Message\Part\MessagePart[] $children
-     * @param array $headers
-     * @param array $properties
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function newInstance(
-        $handle,
-        $contentHandle,
-        array $children,
-        array $headers,
-        array $properties
-    ) {
+    public function newInstance($messageObjectId, PartBuilder $partBuilder)
+    {
         return new Message(
             $this->headerFactory,
-            $handle,
-            $contentHandle,
-            $children,
-            $headers
+            $this->partFilterFactory,
+            $messageObjectId,
+            $partBuilder
         );
     }
 }

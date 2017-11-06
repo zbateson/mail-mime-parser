@@ -16,24 +16,11 @@ class UUEncodedPartFactory extends MessagePartFactory
     /**
      * Constructs a new UUEncodedPart object and returns it
      * 
-     * @param resource $handle
-     * @param resource $contentHandle
-     * @param ZBateson\MailMimeParser\Message\Part\MessagePart[] $children
-     * @param array $headers
-     * @param array $properties
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\UUEncodedPartPart
      */
-    public function newInstance(
-        $handle,
-        $contentHandle,
-        array $children,
-        array $headers,
-        array $properties
-    ) {
-        return new UUEncodedPart(
-            $handle,
-            $contentHandle,
-            $properties
-        );
+    public function newInstance($messageObjectId, PartBuilder $partBuilder) {
+        return new UUEncodedPart($messageObjectId, $partBuilder);
     }
 }

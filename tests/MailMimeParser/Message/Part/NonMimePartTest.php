@@ -15,7 +15,10 @@ class NonMimePartTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
-        $part = new NonMimePart('handle', 'contentHandle');
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $part = new NonMimePart('habibi', $partBuilder);
         $this->assertTrue($part->isTextPart());
         $this->assertFalse($part->isMime());
         $this->assertEquals('text/plain', $part->getContentType());

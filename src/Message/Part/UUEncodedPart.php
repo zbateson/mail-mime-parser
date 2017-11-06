@@ -36,25 +36,14 @@ class UUEncodedPart extends NonMimePart
     /**
      * Initiates the UUEncodedPart with the passed mode and filename.
      * 
-     * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $parent
-     * @param array $properties
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      */
-    public function __construct(
-        $handle,
-        $contentHandle,
-        array $properties
-    ) {
-        parent::__construct(
-            $handle,
-            $contentHandle
-        );
-        if (isset($properties['mode'])) {
-            $this->mode = $properties['mode'];
-        }
-        if (isset($properties['filename'])) {
-            $this->filename = $properties['filename'];
-        }
+    public function __construct($messageObjectId, PartBuilder $partBuilder)
+    {
+        parent::__construct($messageObjectId, $partBuilder);
+        $this->mode = $partBuilder->getProperty('mode');
+        $this->filename = $partBuilder->getProperty('filename');
     }
     
     /**

@@ -6,9 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
-
 /**
  * Represents part of a non-mime message.  The part could either be a plain text
  * part or a uuencoded attachment and could be extended for other pre-mime
@@ -24,13 +21,12 @@ class NonMimePart extends MessagePart
     /**
      * Sets up class dependencies.
      * 
-     * @param resource $handle
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      */
-    public function __construct(
-        $handle,
-        $contentHandle
-    ) {
-        parent::__construct($handle, $contentHandle);
+    public function __construct($messageObjectId, PartBuilder $partBuilder)
+    {
+        parent::__construct($messageObjectId, $partBuilder);
     }
     
     /**

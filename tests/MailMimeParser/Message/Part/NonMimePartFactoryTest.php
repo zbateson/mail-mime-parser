@@ -22,18 +22,16 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
     
     public function testNewInstance()
     {
-        $handle = fopen('php://memory', 'r');
-        $cHandle = fopen('php://memory', 'r');
-        $children = [];
-        $headers = ['Content-Type' => 'test/test'];
-        $properties = ['name' => 'value'];
+        $messageId = 'the id';
+        $partBuilder = $this->getMockBuilder(
+            'ZBateson\MailMimeParser\Message\Part\PartBuilder'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         
         $part = $this->nonMimePartFactory->newInstance(
-            $handle,
-            $cHandle,
-            $children,
-            $headers,
-            $properties
+            $messageId,
+            $partBuilder
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\NonMimePart',

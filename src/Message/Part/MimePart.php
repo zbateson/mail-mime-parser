@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -24,16 +25,22 @@ use ZBateson\MailMimeParser\Message\PartFilter;
 class MimePart extends MessagePart
 {
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\MessagePart[] array of child
-     *      parts
-     */
-    protected $children = [];
-
-    /**
      * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
      *      object used for created headers
      */
     protected $headerFactory;
+    
+    /**
+     * @var \ZBateson\MailMimeParser\Message\PartFilterFactory factory object
+     *      responsible for create PartFilters
+     */
+    protected $partFilterFactory;
+
+    /**
+     * @var \ZBateson\MailMimeParser\Message\Part\MessagePart[] array of child
+     *      parts
+     */
+    protected $children = [];
 
     /**
      * @var string[][] array of headers, with keys set to lower-cased,
@@ -53,26 +60,32 @@ class MimePart extends MessagePart
 
     /**
      * Sets up class dependencies.
-     * 
-     * @param HeaderFactory $headerFactory
-     * @param type $handle
-     * @param array $children
-     * @param array $headers
+     *
+     * @param HeaderFactory $headerFactory 
+     * @param PartFilterFactory $partFilterFactory
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      */
     public function __construct(
         HeaderFactory $headerFactory,
-        $handle,
-        $contentHandle,
-        array $children,
-        array $headers
+        PartFilterFactory $partFilterFactory,
+        $messageObjectId,
+        PartBuilder $partBuilder
     ) {
-        parent::__construct($handle, $contentHandle);
-        $this->children = $children;
-        $this->rawHeaders = $headers;
+        parent::__construct($messageObjectId, $partBuilder);
         $this->headerFactory = $headerFactory;
-        foreach ($children as $child) {
-            $child->parent = $this;
+        $this->partFilterFactory = $partFilterFactory;
+
+        $pbChildren = $partBuilder->getChildren();
+        if (!empty($pbChildren)) {
+            $this->children = array_map(function ($child) use ($messageObjectId) {
+                $childPart = $child->createMessagePart($messageObjectId);
+                $childPart->parent = $this;
+                return $childPart;
+            }, $pbChildren);
         }
+        $this->headers['contenttype'] = $partBuilder->getContentType();
+        $this->rawHeaders = $partBuilder->getRawHeaders();
     }
 
     /**
@@ -187,7 +200,8 @@ class MimePart extends MessagePart
      */
     public function getPartByMimeType($mimeType, $index = 0)
     {
-        return $this->getPart($index, PartFilter::fromContentType($mimeType));
+        $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
+        return $this->getPart($index, $partFilter);
     }
     
     /**
@@ -199,7 +213,8 @@ class MimePart extends MessagePart
      */
     public function getAllPartsByMimeType($mimeType)
     {
-        return $this->getAllParts(PartFilter::fromContentType($mimeType));
+        $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
+        return $this->getAllParts($partFilter);
     }
     
     /**
@@ -210,7 +225,8 @@ class MimePart extends MessagePart
      */
     public function getCountOfPartsByMimeType($mimeType)
     {
-        return $this->getPartCount(PartFilter::fromContentType($mimeType));
+        $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
+        return $this->getPartCount($partFilter);
     }
 
     /**
@@ -223,7 +239,7 @@ class MimePart extends MessagePart
         // casting to bool, preg_match returns 1 for true
         return (bool) (preg_match(
             '~multipart/\w+~i',
-            $this->getHeaderValue('Content-Type', 'text/plain')
+            $this->getContentType()
         ));
     }
     

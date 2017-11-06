@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
  * Responsible for creating MimePart instances.
@@ -20,29 +21,39 @@ class MimePartFactory extends MessagePartFactory
      *      instance
      */
     protected $headerFactory;
+    
+    /**
+     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the PartFilterFactory
+     *      instance
+     */
+    protected $partFilterFactory;
 
     /**
      * Creates a MimePartFactory instance with its dependencies.
      * 
-     * @param HeaderFactory $headerFactory
+     * @param HeaderFactory $hf
+     * @param PartFilterFactory $pf
      */
-    protected function __construct(HeaderFactory $headerFactory)
+    protected function __construct(HeaderFactory $hf, PartFilterFactory $pf)
     {
-        $this->headerFactory = $headerFactory;
+        parent::__construct();
+        $this->headerFactory = $hf;
+        $this->partFilterFactory = $pf;
     }
     
     /**
      * Returns the singleton instance for the class.
      * 
      * @param HeaderFactory $hf
+     * @param PartFilterFactory $pf
      * @return MimePartFactory
      */
-    public static function getInstance(HeaderFactory $hf = null)
+    public static function getInstance(HeaderFactory $hf = null, PartFilterFactory $pf = null)
     {
         static $instances = [];
         $class = get_called_class();
         if (!isset($instances[$class])) {
-            $instances[$class] = new static($hf);
+            $instances[$class] = new static($hf, $pf);
         }
         return $instances[$class];
     }
@@ -50,26 +61,17 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Constructs a new MimePart object and returns it
      * 
-     * @param resource $handle
-     * @param resource $contentHandle
-     * @param ZBateson\MailMimeParser\Message\Part\MessagePart[] $children
-     * @param array $headers
-     * @param array $properties
+     * @param string $messageObjectId
+     * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function newInstance(
-        $handle,
-        $contentHandle,
-        array $children,
-        array $headers,
-        array $properties
-    ) {
+    public function newInstance($messageObjectId, PartBuilder $partBuilder)
+    {
         return new MimePart(
             $this->headerFactory,
-            $handle,
-            $contentHandle,
-            $children,
-            $headers
+            $this->partFilterFactory,
+            $messageObjectId,
+            $partBuilder
         );
     }
 }

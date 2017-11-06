@@ -100,15 +100,26 @@ class PartBuilder
     private $contentType = null;
     
     /**
+     * @var string the PartStream protocol used to create part and content
+     *      filenames for fopen
+     */
+    private $streamWrapperProtocol = null;
+    
+    /**
      * Sets up class dependencies.
      * 
      * @param HeaderFactory $hf
      * @param \ZBateson\MailMimeParser\Message\Part\MessagePartFactory $mpf
+     * @param string $streamWrapperProtocol
      */
-    public function __construct(HeaderFactory $hf, MessagePartFactory $mpf)
-    {
+    public function __construct(
+        HeaderFactory $hf,
+        MessagePartFactory $mpf,
+        $streamWrapperProtocol
+    ) {
         $this->headerFactory = $hf;
         $this->messagePartFactory = $mpf;
+        $this->streamWrapperProtocol = $streamWrapperProtocol;
     }
     
     /**
@@ -126,6 +137,49 @@ class PartBuilder
     {
         $nameKey = preg_replace('/[^a-z0-9]/', '', strtolower($name));
         $this->headers[$nameKey] = [$name, $value];
+    }
+    
+    /**
+     * Returns the raw headers added to this PartBuilder as an array consisting
+     * of:
+     * 
+     * Keys set to the name of the header, in all lowercase, and with non-
+     * alphanumeric characters removed (e.g. Content-Type becomes contenttype).
+     * 
+     * The value is an array of two elements.  The first is the original header
+     * name (e.g. Content-Type) and the second is the raw string value of the
+     * header, e.g. 'text/html; charset=utf8'.
+     * 
+     * @return array
+     */
+    public function getRawHeaders()
+    {
+        return $this->headers;
+    }
+    
+    /**
+     * Sets the specified property denoted by $name to $value.
+     * 
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setProperty($name, $value)
+    {
+        $this->properties[$name] = $value;
+    }
+    
+    /**
+     * Returns the value of the property with the given $name.
+     * 
+     * @param string $name
+     * @return mixed
+     */
+    public function getProperty($name)
+    {
+        if (!isset($this->properties[$name])) {
+            return null;
+        }
+        return $this->properties[$name];
     }
     
     /**
@@ -274,45 +328,39 @@ class PartBuilder
     }
     
     /**
-     * Returns the start position of the part in the input stream.
+     * Constructs and returns a filename where the part can be read from the
+     * passed $messageObjectId.
      * 
-     * @return int
+     * @param string $messageObjectId the message object id
+     * @return string
      */
-    public function getStreamPartStartPos()
+    public function getStreamPartFilename($messageObjectId)
     {
-        return $this->streamPartStartPos;
+        if ($this->streamPartEndPos === 0) {
+            return null;
+        }
+        return $this->streamWrapperProtocol . '://' . $messageObjectId
+            . '?start=' . $this->streamPartStartPos . '&end='
+            . $this->streamPartEndPos;
     }
-
+    
     /**
-     * Returns the end position of the part in the input stream.
+     * Constructs and returns a filename where the part's content can be read
+     * from the passed $messageObjectId.
      * 
-     * @return int
+     * @param string $messageObjectId the message object id
+     * @return string
      */
-    public function getStreamPartEndPos()
+    public function getStreamContentFilename($messageObjectId)
     {
-        return $this->streamPartEndPos;
+        if ($this->streamContentEndPos === 0) {
+            return null;
+        }
+        return $this->streamWrapperProtocol . '://' . $messageObjectId
+            . '?start=' . $this->streamContentStartPos . '&end='
+            . $this->streamContentEndPos;
     }
-
-    /**
-     * Returns the start position of the content in the input stream.
-     * 
-     * @return int
-     */
-    public function getStreamContentStartPos()
-    {
-        return $this->streamContentStartPos;
-    }
-
-    /**
-     * Returns the end position of the content in the input stream.
-     * 
-     * @return int
-     */
-    public function getStreamContentEndPos()
-    {
-        return $this->streamContentEndPos;
-    }
-
+    
     /**
      * Sets the start position of the part in the input stream.
      * 
@@ -351,5 +399,20 @@ class PartBuilder
     public function setStreamContentEndPos($streamContentEndPos)
     {
         $this->streamContentEndPos = $streamContentEndPos;
+    }
+    
+    /**
+     * Creates a MessagePart and returns it using the PartBuilder's
+     * MessagePartFactory passed in during construction.
+     * 
+     * @param string $messageObjectId
+     * @return MessagePart
+     */
+    public function createMessagePart($messageObjectId)
+    {
+        return $this->messagePartFactory->newInstance(
+            $messageObjectId,
+            $this
+        );
     }
 }

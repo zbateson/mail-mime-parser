@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * MessagePartFactoryTest
@@ -13,51 +14,105 @@ use PHPUnit_Framework_TestCase;
  */
 class MessagePartTest extends PHPUnit_Framework_TestCase
 {
-    protected $mimePart;
+    protected $partBuilder;
+    
+    protected $vfs;
     
     protected function setUp()
     {
-        $this->mimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        $this->vfs = vfsStream::setup('root');
+        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
     }
     
-    private function getMessagePart($handle, $contentHandle, $mimePart)
+    private function getMessagePart()
     {
         return $this->getMockBuilder(
             'ZBateson\MailMimeParser\Message\Part\MessagePart'
         )
-            ->setConstructorArgs([$handle, $contentHandle, $mimePart])
+            ->setConstructorArgs(['habibi', $this->partBuilder])
             ->getMockForAbstractClass();
     }
     
     public function testNewInstance()
     {
-        $handle = fopen('php://memory', 'r');
-        $contentHandle = fopen('php://memory', 'r');
-        $messagePart = $this->getMessagePart($handle, $contentHandle, $this->mimePart);
+        $messagePart = $this->getMessagePart();
         $this->assertNotNull($messagePart);
-        $this->assertTrue($messagePart->hasContent());
-        $this->assertSame($handle, $messagePart->getHandle());
-        $this->assertSame($contentHandle, $messagePart->getContentResourceHandle());
-        $this->assertSame($this->mimePart, $messagePart->getParent());
+        $this->assertFalse($messagePart->hasContent());
+        $this->assertNull($messagePart->getHandle());
+        $this->assertNull($messagePart->getContentResourceHandle());
+        $this->assertNull($messagePart->getContent());
+        $this->assertNull($messagePart->getParent());
+        $this->assertEquals('habibi', $messagePart->getMessageObjectId());
     }
     
-    public function testNullContentHandle()
+    public function testPartStreamHandle()
     {
-        $handle = fopen('php://memory', 'r');
-        $messagePart = $this->getMessagePart($handle, null, $this->mimePart);
+        $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
+        $fileMockPart->withContent('mucha agua');
+        $this->partBuilder
+            ->method('getStreamPartFilename')
+            ->willReturn($fileMockPart->url());
+        
+        $messagePart = $this->getMessagePart();
         $this->assertFalse($messagePart->hasContent());
         $this->assertNull($messagePart->getContentResourceHandle());
+        $this->assertNotNull($messagePart->getHandle());
+        $handle = $messagePart->getHandle();
+        $this->assertEquals('mucha agua', stream_get_contents($handle));
+    }
+    
+    public function testContentStreamHandle()
+    {
+        $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
+        $fileMockPart->withContent('mucho mas agua');
+        $this->partBuilder
+            ->method('getStreamContentFilename')
+            ->willReturn($fileMockPart->url());
+        
+        $messagePart = $this->getMessagePart();
+        $this->assertTrue($messagePart->hasContent());
+        $this->assertNotNull($messagePart->getContentResourceHandle());
+        $handle = $messagePart->getContentResourceHandle();
+        $this->assertEquals('mucho mas agua', stream_get_contents($handle));
     }
     
     public function testGetContent()
     {
-        $handle = fopen('php://memory', 'r');
-        $contentHandle = fopen('php://memory', 'r+');
-        fwrite($contentHandle, 'Wabalaba dub-duuuuuub!');
-        rewind($contentHandle);
-        $messagePart = $this->getMessagePart($handle, $contentHandle, $this->mimePart);
-        $this->assertEquals('Wabalaba dub-duuuuuub!', $messagePart->getContent());
+        $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
+        $fileMockPart->withContent('agua con rocas');
+        $this->partBuilder
+            ->method('getStreamContentFilename')
+            ->willReturn($fileMockPart->url());
+        $messagePart = $this->getMessagePart();
+        $this->assertEquals('agua con rocas', $messagePart->getContent());
+    }
+    
+    public function testDestructClosesHandles()
+    {
+        $filePart = vfsStream::newFile('part')->at($this->vfs);
+        $fileContent = vfsStream::newFile('content')->at($this->vfs);
+        
+        $this->partBuilder
+            ->method('getStreamPartFilename')
+            ->willReturn($filePart->url());
+        $this->partBuilder
+            ->method('getStreamContentFilename')
+            ->willReturn($fileContent->url());
+        
+        // cloned to test __destruct -- phpunit has an internal reference to
+        // the mocked object.
+        $messagePart = clone($this->getMessagePart());
+        $handle = $messagePart->getHandle();
+        $contentHandle = $messagePart->getContentResourceHandle();
+        
+        $this->assertTrue(is_resource($handle));
+        $this->assertTrue(is_resource($contentHandle));
+        
+        unset($messagePart);
+        
+        $this->assertFalse(is_resource($handle));
+        $this->assertFalse(is_resource($contentHandle));
     }
 }

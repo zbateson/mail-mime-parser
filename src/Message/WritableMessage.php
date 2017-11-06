@@ -132,7 +132,7 @@ class WritableMessage
     private function getUniqueBoundary($mimeType)
     {
         $type = ltrim(strtoupper(preg_replace('/^(multipart\/(.{3}).*|.*)$/i', '$2-', $mimeType)), '-');
-        return uniqid('----=MMP-' . $type . $this->objectId . '.', true);
+        return uniqid('----=MMP-' . $type . $this->messageObjectId . '.', true);
     }
     
     /**

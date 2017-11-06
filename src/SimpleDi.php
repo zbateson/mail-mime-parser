@@ -204,7 +204,8 @@ class SimpleDi
     {
         if ($this->partBuilderFactory === null) {
             $this->partBuilderFactory = new PartBuilderFactory(
-                $this->getHeaderFactory()
+                $this->getHeaderFactory(),
+                PartStream::STREAM_WRAPPER_PROTOCOL
             );
         }
         return $this->partBuilderFactory;
