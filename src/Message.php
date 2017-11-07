@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
@@ -43,7 +42,7 @@ class Message extends MimePart
     {
         return $this->getPart(
             $index,
-            PartFilter::fromInlineContentType('text/plain')
+            $this->partFilterFactory->newFilterFromInlineContentType('text/plain')
         );
     }
     
@@ -54,7 +53,9 @@ class Message extends MimePart
      */
     public function getTextPartCount()
     {
-        return $this->getPartCount(PartFilter::fromInlineContentType('text/plain'));
+        return $this->getPartCount(
+            $this->partFilterFactory->newFilterFromInlineContentType('text/plain')
+        );
     }
     
     /**
@@ -67,7 +68,7 @@ class Message extends MimePart
     {
         return $this->getPart(
             $index,
-            PartFilter::fromInlineContentType('text/html')
+            $this->partFilterFactory->newFilterFromInlineContentType('text/html')
         );
     }
     
@@ -78,7 +79,9 @@ class Message extends MimePart
      */
     public function getHtmlPartCount()
     {
-        return $this->getPartCount(PartFilter::fromInlineContentType('text/html'));
+        return $this->getPartCount(
+            $this->partFilterFactory->newFilterFromInlineContentType('text/html')
+        );
     }
     
     /**
@@ -172,7 +175,7 @@ class Message extends MimePart
     public function getAllAttachmentParts()
     {
         $parts = $this->getAllParts(
-            new PartFilter([
+            $this->partFilterFactory->newFilterFromArray([
                 'multipart' => PartFilter::FILTER_EXCLUDE
             ])
         );
