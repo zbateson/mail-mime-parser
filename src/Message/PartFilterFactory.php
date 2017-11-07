@@ -65,4 +65,16 @@ class PartFilterFactory
     {
         return PartFilter::fromDisposition($disposition, $multipart);
     }
+    
+    /**
+     * Constructs a PartFilter from the passed array of options and returns it.
+     * 
+     * @see PartFilter::__construct
+     * @param array $init
+     * @return PartFilter
+     */
+    public function newFilterFromArray(array $init)
+    {
+        return new PartFilter($init);
+    }
 }
