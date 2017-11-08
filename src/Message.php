@@ -129,14 +129,14 @@ class Message extends MimePart
      * @return string or null if the message doesn't have any children, or the
      *      child returns null for getOriginalStreamHandle
      */
-    public function getOriginalMessageStringForSignatureVerification()
+    public function getMessageStringForSignatureVerification()
     {
         $child = $this->getChild(0);
-        if ($child !== null && $child->getOriginalStreamHandle() !== null) {
+        if ($child !== null && $child->getHandle() !== null) {
             $normalized = preg_replace(
                 '/\r\n|\r|\n/',
                 "\r\n",
-                stream_get_contents($child->getOriginalStreamHandle())
+                stream_get_contents($child->getHandle())
             );
             $len = strlen($normalized);
             if ($len > 0 && strrpos($normalized, "\r\n") == $len - 2) {
@@ -287,7 +287,10 @@ class Message extends MimePart
      */
     public function save($handle)
     {
-        stream_copy_to_stream($this->handle, $handle);
+        if (is_resource($this->handle)) {
+            rewind($this->handle);
+            stream_copy_to_stream($this->handle, $handle);
+        }
     }
 
     /**
