@@ -653,6 +653,31 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public function testParseEmailm0021()
+    {
+        $this->runEmailTest('m0021', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3,
+            'parts' => [
+                'multipart/mixed' => [
+                    'text/plain',
+                    'image/png',
+                    'image/png',
+                    'image/png'
+                ]
+            ],
+        ]);
+    }
+
     public function testParseEmailm1001()
     {
         $this->runEmailTest('m1001', [
