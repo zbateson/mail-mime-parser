@@ -373,7 +373,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
             'habibi',
-            $this->getMockedPartBuilder()
+            $pb
         );
         
         $handle = fopen('php://temp', 'r+');
