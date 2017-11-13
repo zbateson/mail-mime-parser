@@ -17,7 +17,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
     
     protected function getMockedPartWithContentType($mimeType, $disposition = null)
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
             ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter', 'getContentResourceHandle', 'getParent'])
             ->getMock();
