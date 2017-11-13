@@ -392,13 +392,14 @@ class PartBuilder
     }
 
     /**
-     * Sets the end position of the content in the input stream.
+     * Sets the end position of the content and part in the input stream.
      * 
      * @param int $streamContentEndPos
      */
-    public function setStreamContentEndPos($streamContentEndPos)
+    public function setStreamPartAndContentEndPos($streamContentEndPos)
     {
         $this->streamContentEndPos = $streamContentEndPos;
+        $this->streamPartEndPos = $streamContentEndPos;
     }
     
     /**

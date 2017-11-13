@@ -4,7 +4,7 @@ namespace ZBateson\MailMimeParser\Message;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Description of NonMimePartTest
+ * PartFilterTest
  *
  * @group PartFilter
  * @group Message

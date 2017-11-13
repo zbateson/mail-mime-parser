@@ -4,7 +4,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Description of PartBuilder
+ * PartBuilderTest
  *
  * @group PartBuilder
  * @group MessagePart
@@ -286,11 +286,16 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             $this->mockMessagePartFactory,
             'tigris'
         );
+        $instance->setStreamPartStartPos(11);
         $instance->setStreamContentStartPos(42);
-        $instance->setStreamContentEndPos(84);
+        $instance->setStreamPartAndContentEndPos(84);
         $this->assertEquals(
             'tigris://babylon?start=42&end=84',
             $instance->getStreamContentFilename('babylon')
+        );
+        $this->assertEquals(
+            'tigris://kufa?start=11&end=84',
+            $instance->getStreamPartFilename('kufa')
         );
     }
     

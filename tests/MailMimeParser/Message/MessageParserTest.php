@@ -2,9 +2,10 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit_Framework_TestCase;
+use org\bovigo\vfs\vfsStream;
 
 /**
- * Description of ParserTest
+ * MessageParserTest
  *
  * @group MessageParser
  * @group Message
@@ -13,43 +14,63 @@ use PHPUnit_Framework_TestCase;
  */
 class MessageParserTest extends PHPUnit_Framework_TestCase
 {
-    protected function getMockedMessageFactory()
+    protected $partFactoryService;
+    protected $partBuilderFactory;
+    protected $partStreamRegistry;
+    protected $messageFactory;
+    protected $uuEncodedPartFactory;
+    protected $mimePartFactory;
+    protected $vfs;
+    
+    public function setUp()
     {
-        $mf = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFactory')
+        $this->vfs = vfsStream::setup('root');
+        
+        $this->partFactoryService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartFactoryService')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'registerPartStreams',
-                'newParsedMessage',
-            ])
             ->getMock();
-        return $mf;
-    }
-    
-    protected function getMockedMimePartFactory()
-    {
-        $mpf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePartFactory')
+           
+        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilderFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['newMimePart', 'newNonMimePart', 'newUUEncodedPart'])
             ->getMock();
-        return $mpf;
-    }
-    
-    protected function getMockedPartBuilderFactory()
-    {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartBuilderFactory')
+        
+        $this->partStreamRegistry = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\PartStreamRegistry')
             ->disableOriginalConstructor()
-            ->setMethods(['newPartBuilder'])
             ->getMock();
-        return $part;
+        
+        $this->messageFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $this->uuEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\UUEncodedPartFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $this->mimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePartFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
     
-    protected function getMockedPartStreamRegistry()
+    protected function getMimePartMock()
     {
-        $partStreamRegistry = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\PartStreamRegistry')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+            ->disableOriginalConstructor()
             ->getMock();
-        return $partStreamRegistry;
     }
     
+    protected function getPartBuilderMock($mimeMock = null)
+    {
+        if ($mimeMock === null) {
+            $mimeMock = $this->getMimePartMock();
+        }
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pb->method('createMessagePart')
+            ->willReturn($mimeMock);
+        return $pb;
+    }
+
     protected function callParserWithEmail($emailText, $messageFactory, $mimePartFactory, $partBuilderFactory, $partStreamRegistry)
     {
         $email = fopen('php://memory', 'rw');
@@ -63,31 +84,249 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         fclose($email);
     }
     
-    public function testParseSimpleMessage()
+    public function testParseEmptyMessage()
+    {
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent('');
+        $handle = fopen($content->url(), 'r');
+        
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+        
+        $pb = $this->getPartBuilderMock();
+        $pb->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pb->expects($this->never())
+            ->method('addHeader');
+        $pb->expects($this->once())
+            ->method('isMime')
+            ->willReturn(false);
+        $pb->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with(0);
+        
+        $pbf = $this->partBuilderFactory;
+        $pbf->method('newPartBuilder')
+            ->willReturn($pb);
+        
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse($handle);
+        $this->assertNotNull($message);
+        
+        fclose($handle);
+    }
+    
+    public function testParseSimpleNonMimeMessage()
     {
         $email =
-            "Content-Type: text/html\r\n"
-            . "Subject: Money owed for services rendered\r\n"
+            "Subject: Money owed for services rendered\r\n"
             . "\r\n";
         $startPos = strlen($email);
         $email .= "Dear Albert,\r\n\r\nAfter our wonderful time together, it's unfortunate I know, but I expect payment\r\n"
             . "for all services hereby rendered.\r\n\r\nYours faithfully,\r\nKandice Waterskyfalls";
         $endPos = strlen($email);
         
-        $message = $this->getMockedPartBuilderFactory();
-        $message->expects($this->exactly(2))
-            ->method('setRawHeader')
-            ->withConsecutive(
-                ['Content-Type', 'text/html'],
-                ['Subject', 'Money owed for services rendered']
-            );
-
-        /*$partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->once())
-            ->method('attachContentPartStreamHandle')
-            ->with($this->anything(), $this->anything(), $startPos, $endPos);*/
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent($email);
+        $handle = fopen($content->url(), 'r');
         
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+        
+        $pb = $this->getPartBuilderMock();
+        $pb->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pb->expects($this->once())
+            ->method('addHeader')
+            ->with('Subject', 'Money owed for services rendered');
+        $pb->expects($this->once())
+            ->method('isMime')
+            ->willReturn(false);
+        $pb->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($startPos);
+        $pb->expects($this->exactly(7))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$this->anything()], [$this->anything()], [$this->anything()],
+                [$this->anything()], [$this->anything()], [$this->anything()], [$endPos]);
+        $pb->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with($endPos);
+        
+        $pbf = $this->partBuilderFactory;
+        $pbf->method('newPartBuilder')
+            ->willReturn($pb);
+        
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse($handle);
+        $this->assertNotNull($message);
+        
+        fclose($handle);
+    }
+    
+    public function testParseMessageWithUUEncodedAttachments()
+    {
+        $email =
+            "Subject: The Diamonds\r\n"
+            . "To: Cousin Avi\r\n"
+            . "\r\n";
+        $startPos = strlen($email);
+        $email .= "Aviiiiiiiiii...\r\n\r\n";
+        $contentEnd = strlen($email);
+        $email .= "begin 666 message.txt\r\n"
+            . 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?'
+            . "\r\nend\r\n\r\n";
+        $endPos = strlen($email);
+        $startPos2 = $endPos;
+        $email .= "begin 600 message2.txt\r\n"
+            . 'No, Tommy. ... It\'s tiptop. It\'s just I\'m not sure about the colour.'
+            . "\r\nend\r\n";
+        $endEmailPos = strlen($email);
+        
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent($email);
+        $handle = fopen($content->url(), 'r');
+        
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+        $pfs->expects($this->exactly(2))
+            ->method('getUUEncodedPartFactory')
+            ->willReturn($this->uuEncodedPartFactory);
+        
+        $pbm = $this->getPartBuilderMock();
+        $pbm->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pbm->expects($this->exactly(2))
+            ->method('addHeader')
+            ->withConsecutive(
+                ['Subject', 'The Diamonds'],
+                ['To', 'Cousin Avi']
+            );
+        $pbm->expects($this->once())
+            ->method('isMime')
+            ->willReturn(false);
+        $pbm->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($startPos);
+        $pbm->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$this->anything()], [$contentEnd]);
+        $pbm->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with($endEmailPos);
+        
+        $pba1 = $this->getPartBuilderMock();
+        $pba1->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($contentEnd);
+        $pba1->expects($this->exactly(2))
+            ->method('setProperty')
+            ->withConsecutive(
+                ['mode', '666'],
+                ['filename', 'message.txt']
+            );
+        $pba1->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($contentEnd);
+        $pba1->expects($this->exactly(4))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$this->anything()], [$this->anything()],
+                [$this->anything()], [$endPos]);
+        
+        $pba2 = $this->getPartBuilderMock();
+        $pba2->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($startPos2);
+        $pba2->expects($this->exactly(2))
+            ->method('setProperty')
+            ->withConsecutive(
+                ['mode', '600'],
+                ['filename', 'message2.txt']
+            );
+        $pba2->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($startPos2);
+        $pba2->expects($this->exactly(3))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$this->anything()], [$this->anything()],
+                [$endEmailPos]);
+        
+        $pbm->expects($this->exactly(2))
+            ->method('addChild')
+            ->withConsecutive([$pba1], [$pba2]);
+        
+        $pbf = $this->partBuilderFactory;
+        $pbf->expects($this->exactly(3))
+            ->method('newPartBuilder')
+            ->willReturnOnConsecutiveCalls(
+                $pbm, $pba1, $pba2
+            );
+        
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse($handle);
+        $this->assertNotNull($message);
+        
+        fclose($handle);
+    }
+    
+    public function testParseSimpleMimeMessage()
+    {
+        $email =
+            "Subject: Money owed for services rendered\n"
+            . "Content-Type: text/html\n"
+            . "\n";
+        $startPos = strlen($email);
+        $email .= "Dear Albert,\r\n\r\nAfter our wonderful time together, it's unfortunate I know, but I expect payment\r\n"
+            . "for all services hereby rendered.\r\n\r\nYours faithfully,\r\nKandice Waterskyfalls";
+        $endPos = strlen($email);
+        
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent($email);
+        $handle = fopen($content->url(), 'r');
+        
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+        
+        $pb = $this->getPartBuilderMock();
+        $pb->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pb->expects($this->exactly(2))
+            ->method('addHeader')
+            ->withConsecutive(
+                ['Subject', 'Money owed for services rendered'],
+                ['Content-Type', 'text/html']
+            );
+        $pb->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+        $pb->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($startPos);
+        $pb->expects($this->exactly(8))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive(
+                [$this->anything()], [$this->anything()], [$this->anything()],
+                [$this->anything()], [$this->anything()], [$this->anything()],
+                [$this->anything()], [$endPos]
+            );
+        
+        $pbf = $this->partBuilderFactory;
+        $pbf->method('newPartBuilder')
+            ->willReturn($pb);
+        
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse($handle);
+        $this->assertNotNull($message);
+        
+        fclose($handle);
     }
     
     public function testParseMultipartAlternativeMessage()
@@ -99,66 +338,145 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             . "\r\n";
         
         $messagePartStart = strlen($email);
-        $email .=
-            "--balderdash\r\n"
-            . "Content-Type: text/html\r\n"
-            . "\r\n";
+        $email .= "--balderdash\r\n";
         $partOneStart = strlen($email);
+            $email .= "Content-Type: text/html\r\n"
+            . "\r\n";
+        $partOneContentStart = strlen($email);
         $email .=
             "<p>I'm a little teapot, short and stout.  Where is my guiness, where is"
             . "my draught.  I certainly can't rhyme, but no I'm not daft.</p>\r\n";
         $partOneEnd = strlen($email);
-        $email .=
-            "--balderdash\r\n"
-            . "Content-Type: text/plain\r\n"
-            . "\r\n";
+        $email .= "--balderdash\r\n";
         $partTwoStart = strlen($email);
+        $email .= "Content-Type: text/plain\r\n"
+            . "\r\n";
+        $partTwoContentStart = strlen($email);
         $email .=
             "I'm a little teapot, short and stout.  Where is my guiness, where is"
             . "my draught.  I certainly can't rhyme, but no I'm not daft.\r\n";
         $partTwoEnd = strlen($email);
         $email .= "--balderdash--\r\n\r\n";
+        $emailEnd = strlen($email);
         
-        $firstPart = $this->getMockedPart();
-        $firstPart->expects($this->once())
-            ->method('setRawHeader')
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent($email);
+        $handle = fopen($content->url(), 'r');
+        
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+        $pfs->expects($this->exactly(3))
+            ->method('getMimePartFactory')
+            ->willReturn($this->mimePartFactory);
+        
+        $pbm = $this->getPartBuilderMock();
+        $pbm->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pbm->expects($this->exactly(2))
+            ->method('addHeader')
+            ->withConsecutive(
+                ['Content-Type', "multipart/alternative;\r\n boundary=balderdash"],
+                ['Subject', 'I\'m a tiny little wee teapot']
+            );
+        $pbm->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+        $pbm->expects($this->once())
+            ->method('isMultiPart')
+            ->willReturn(true);
+        $pbm->expects($this->once())
+            ->method('setEndBoundary')
+            ->with('--balderdash')
+            ->willReturn(true);
+        $pbm->expects($this->exactly(2))
+            ->method('isEndBoundaryFound')
+            ->willReturnOnConsecutiveCalls(false, false);
+        $pbm->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($messagePartStart);
+        $pbm->expects($this->once())
+            ->method('setStreamPartAndContentEndPos')
+            ->with($messagePartStart);
+        $pbm->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with($emailEnd);
+        
+        $pba1 = $this->getPartBuilderMock();
+        $pba1->expects($this->once())
+            ->method('addHeader')
             ->with('Content-Type', 'text/html');
-        $firstPart->method('getHeaderValue')
-            ->willReturn('text/html');
+        $pba1->expects($this->exactly(2))
+            ->method('setEndBoundary')
+            ->willReturnMap([
+                [$this->anything(), false],
+                ['--balderdash', true]
+            ]);
+        $pba1->expects($this->once())
+            ->method('isEndBoundaryFound')
+            ->willReturn(false);
+        $pba1->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($partOneStart);
+        $pba1->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($partOneContentStart);
+        $pba1->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$this->anything()], [$partOneEnd]);
         
-        $secondPart = $this->getMockedPart();
-        $secondPart->expects($this->once())
-            ->method('setRawHeader')
+        $pba2 = $this->getPartBuilderMock();
+        $pba2->expects($this->once())
+            ->method('addHeader')
             ->with('Content-Type', 'text/plain');
-        $secondPart->method('getHeaderValue')
-            ->willReturn('text/plain');
+        $pba2->expects($this->exactly(2))
+            ->method('setEndBoundary')
+            ->willReturnMap([
+                [$this->anything(), false],
+                ['--balderdash--', true]
+            ]);
+        $pba2->expects($this->once())
+            ->method('isEndBoundaryFound')
+            ->willReturn(true);
+        $pba2->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($partTwoStart);
+        $pba2->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($partTwoContentStart);
+        $pba2->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$this->anything()], [$partTwoEnd]);
         
-        $message = $this->getMockedMessage();
-        $message->method('getHeaderValue')
-            ->willReturn('multipart/alternative');
-        $message->method('getHeaderParameter')
-            ->willReturn('balderdash');
-        $message->expects($this->exactly(2))
-            ->method('addPart')
-            ->withConsecutive(
-                [$firstPart],
-                [$secondPart]
+        $pba3 = $this->getPartBuilderMock();
+        $pba3->expects($this->once())
+            ->method('setParent')
+            ->with($pbm);
+        $pba3->expects($this->once())
+            ->method('setEndBoundary')
+            ->with('')
+            ->willReturn(false);
+        
+        $pbm->expects($this->exactly(2))
+            ->method('addChild')
+            ->withConsecutive([$pba1], [$pba2]);
+        
+        $pbf = $this->partBuilderFactory;
+        $pbf->expects($this->exactly(4))
+            ->method('newPartBuilder')
+            ->willReturnOnConsecutiveCalls(
+                $pbm, $pba1, $pba2, $pba3
             );
         
-        $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newMimePart')->will($this->onConsecutiveCalls($firstPart, $secondPart, $this->getMockedPart()));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->exactly(3))
-            ->method('attachContentPartStreamHandle')
-            ->withConsecutive(
-                [$message, $message, $messagePartStart, $messagePartStart],
-                [$firstPart, $message, $partOneStart, $partOneEnd],
-                [$secondPart, $message, $partTwoStart, $partTwoEnd]
-            );
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse($handle);
+        $this->assertNotNull($message);
+        
+        fclose($handle);
     }
     
-    public function testParseMultipartMixedMessage()
+    public function testParseMultipartMixedWithAlternativeMessage()
     {
         $email =
             "Content-Type: multipart/mixed; boundary=balderdash\r\n"
@@ -169,191 +487,268 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $email .= "This existed for nought - hidden from view\r\n";
         $messagePartEnd = strlen($email);
         
-        $email .=
-            "--balderdash\r\n"
-            . "Content-Type: multipart/alternative; boundary=gobbledygook\r\n"
-            . "\r\n";
-        
+        $email .= "--balderdash\r\n";
         $altPartStart = strlen($email);
-        $email .= "A line to fool the senses was created... and it was this line\r\n";
-        $altPartEnd = strlen($email);
-        
-        $email .= 
-            "--gobbledygook\r\n"
-            . "Content-Type: text/html\r\n"
+        $email .= "Content-Type: multipart/alternative; boundary=gobbledygook\r\n"
             . "\r\n";
+        
+        $altPartContentStart = strlen($email);
+        $email .= "A line to fool the senses was created... and it was this line\r\n";
+        $altPartContentEnd = strlen($email);
+        
+        $email .= "--gobbledygook\r\n";
         $partOneStart = strlen($email);
+        $email .= "Content-Type: text/html\r\n"
+            . "\r\n";
+        $partOneContentStart = strlen($email);
         $email .=
             "<p>There once was a man, who was both man and mouse.  He thought himself"
             . "pretty, but was really - well - as ugly as you can imagine a creature"
             . "that is part man and part mouse.</p>\r\n";
         $partOneEnd = strlen($email);
-        $email .=
-            "--gobbledygook\r\n"
-            . "Content-Type: text/plain\r\n"
-            . "\r\n";
+        $email .= "--gobbledygook\r\n";
         $partTwoStart = strlen($email);
+        $email .= "Content-Type: text/plain\r\n"
+            . "\r\n";
+        $partTwoContentStart = strlen($email);
         $email .=
             "There once was a man, who was both man and mouse.  He thought himself"
             . "pretty, but was really - well - as ugly as you can imagine a creature"
             . "that is part man and part mouse.\r\n";
         $partTwoEnd = strlen($email);
-        $email .=
-            "--gobbledygook--\r\n"
-            . "--balderdash\r\n"
-            . "Content-Type: text/html\r\n"
-            . "\r\n";
+        $email .= "--gobbledygook--\r\n";
+        $altPartEnd = strlen($email);
+        $email .= "--balderdash\r\n";
         $partThreeStart = strlen($email);
+        $email .= "Content-Type: text/html\r\n"
+            . "\r\n";
+        $partThreeContentStart = strlen($email);
         $email .= "<p>He wandered through the lands, and shook fancy hands.</p>\r\n";
         $partThreeEnd = strlen($email);
-        $email .= 
-            "--balderdash\r\n"
-            . "Content-Type: text/plain\r\n"
-            . "\r\n";
+        $email .= "--balderdash\r\n";
         $partFourStart = strlen($email);
+        $email .= "\r\n";
+        $partFourContentStart = strlen($email);
         $email .= " (^^) \r\n";
         $partFourEnd = strlen($email);
         $email .= "--balderdash--\r\n";
+        $emailEnd = strlen($email);
         
-        $firstPart = $this->getMockedPart();
-        $firstPart->expects($this->once())
-            ->method('setRawHeader')
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent($email);
+        $handle = fopen($content->url(), 'r');
+        
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+        $pfs->expects($this->exactly(7))
+            ->method('getMimePartFactory')
+            ->willReturn($this->mimePartFactory);
+        
+        $pbm = $this->getPartBuilderMock();
+        $pbm->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pbm->expects($this->exactly(2))
+            ->method('addHeader')
+            ->withConsecutive(
+                ['Content-Type', "multipart/mixed; boundary=balderdash"],
+                ['Subject', 'Of mice and men']
+            );
+        $pbm->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+        $pbm->expects($this->once())
+            ->method('isMultiPart')
+            ->willReturn(true);
+        $pbm->expects($this->exactly(2))
+            ->method('setEndBoundary')
+            ->withConsecutive(
+                ['This existed for nought - hidden from view'],
+                ['--balderdash']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
+        $pbm->expects($this->exactly(3))
+            ->method('isEndBoundaryFound')
+            ->willReturn(false);
+        $pbm->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($messagePartStart);
+        $pbm->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$messagePartStart], [$messagePartEnd]);
+        $pbm->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with($emailEnd);
+        
+        $pbAlt = $this->getPartBuilderMock();
+        $pbAlt->expects($this->once())
+            ->method('addHeader')
             ->with('Content-Type', 'multipart/alternative; boundary=gobbledygook');
-        $firstPart->method('getHeaderValue')
-            ->willReturn('multipart/alternative');
-        $firstPart->method('getHeaderParameter')
-            ->willReturn('gobbledygook');
+        $pbAlt->expects($this->once())
+            ->method('isMultiPart')
+            ->willReturn(true);
+        $pbAlt->expects($this->exactly(2))
+            ->method('setEndBoundary')
+            ->withConsecutive(
+                ['A line to fool the senses was created... and it was this line'],
+                ['--gobbledygook']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
+        $pbAlt->expects($this->exactly(4))
+            ->method('isEndBoundaryFound')
+            ->willReturnOnConsecutiveCalls(false, false, true, true);
+        $pbAlt->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($altPartStart);
+        $pbAlt->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($altPartContentStart);
+        $pbAlt->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$altPartContentStart], [$altPartContentEnd]);
+        $pbAlt->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with($altPartEnd);
         
-        $secondPart = $this->getMockedPart();
-        $secondPart->expects($this->once())
-            ->method('setRawHeader')
+        
+        $pba1 = $this->getPartBuilderMock();
+        $pba1->expects($this->once())
+            ->method('addHeader')
             ->with('Content-Type', 'text/html');
-        $secondPart->method('getHeaderValue')
-            ->willReturn('text/html');
+        $pba1->expects($this->exactly(2))
+            ->method('setEndBoundary')
+            ->withConsecutive(
+                ["<p>There once was a man, who was both man and mouse.  He thought himself"
+                . "pretty, but was really - well - as ugly as you can imagine a creature"
+                . "that is part man and part mouse.</p>"],
+                ['--gobbledygook']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
+        $pba1->expects($this->once())
+            ->method('isMultiPart')
+            ->willReturn(false);
+        $pba1->expects($this->exactly(1))
+            ->method('isEndBoundaryFound')
+            ->willReturn(false);
+        $pba1->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($partOneStart);
+        $pba1->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($partOneContentStart);
+        $pba1->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$partOneContentStart], [$partOneEnd]);
         
-        $thirdPart = $this->getMockedPart();
-        $thirdPart->expects($this->once())
-            ->method('setRawHeader')
+        $pba2 = $this->getPartBuilderMock();
+        $pba2->expects($this->once())
+            ->method('addHeader')
             ->with('Content-Type', 'text/plain');
-        $thirdPart->method('getHeaderValue')
-            ->willReturn('text/plain');
+        $pba2->expects($this->exactly(2))
+            ->method('setEndBoundary')
+            ->withConsecutive(
+                ["There once was a man, who was both man and mouse.  He thought himself"
+                . "pretty, but was really - well - as ugly as you can imagine a creature"
+                . "that is part man and part mouse."],
+                ['--gobbledygook--']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
+        $pba2->expects($this->once())
+            ->method('isEndBoundaryFound')
+            ->willReturn(false);
+        $pba2->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($partTwoStart);
+        $pba2->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($partTwoContentStart);
+        $pba2->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$partTwoContentStart], [$partTwoEnd]);
         
-        $fourthPart = $this->getMockedPart();
-        $fourthPart->expects($this->once())
-            ->method('setRawHeader')
+        $pba3 = $this->getPartBuilderMock();
+        $pba3->expects($this->once())
+            ->method('setParent')
+            ->with($pbm);
+        $pba3->expects($this->once())
+            ->method('setEndBoundary')
+            ->with('--balderdash')
+            ->willReturn(true);
+        
+        $pba4 = $this->getPartBuilderMock();
+        $pba4->expects($this->once())
+            ->method('addHeader')
             ->with('Content-Type', 'text/html');
-        $fourthPart->method('getHeaderValue')
-            ->willReturn('text/html');
-        
-        $fifthPart = $this->getMockedPart();
-        $fifthPart->expects($this->once())
-            ->method('setRawHeader')
-            ->with('Content-Type', 'text/plain');
-        $fifthPart->method('getHeaderValue')
-            ->willReturn('text/plain');
-        
-        $message = $this->getMockedMessage();
-        $message->method('getHeaderValue')
-            ->willReturn('multipart/mixed');
-        $message->method('getHeaderParameter')
-            ->willReturn('balderdash');
-        
-        $message->expects($this->exactly(3))
-            ->method('addPart');
-        
-        $partFactory = $this->getMockedPartFactory();
-        $partFactory->method('newMimePart')->will($this->onConsecutiveCalls(
-            $firstPart,
-            $secondPart,
-            $thirdPart,
-            $fourthPart,
-            $fifthPart,
-            $this->getMockedPart()
-        ));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->exactly(6))
-            ->method('attachContentPartStreamHandle')
+        $pba4->expects($this->exactly(2))
+            ->method('setEndBoundary')
             ->withConsecutive(
-                [$message, $message, $messagePartStart, $messagePartEnd],
-                [$this->anything(), $message, $altPartStart, $altPartEnd],
-                [$this->anything(), $message, $partOneStart, $partOneEnd],
-                [$thirdPart, $message, $partTwoStart, $partTwoEnd],
-                [$fourthPart, $message, $partThreeStart, $partThreeEnd],
-                [$fifthPart, $message, $partFourStart, $partFourEnd]
-            );
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
-    }
-    
-    public function testParseUUEncodedMessage()
-    {
-        $email =
-            "Subject: The Diamonds\r\n"
-            . "To: Cousin Avi\r\n"
-            . "\r\n";
-        $startPos = strlen($email);
-        $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
-        $email .= "begin 664 message.txt\r\n"
-            . convert_uuencode($messageText)
-            . "\r\nend\r\n\r\n";
-        $endPos = strlen($email);
-        $startPos2 = $endPos;
-        $email .= "begin 664 message2.txt\r\n"
-            . convert_uuencode('No, Tommy. ... It\'s tiptop. It\'s just I\'m not sure about the colour.')
-            . "\r\nend\r\n";
-        $endPos2 = strlen($email);
+                ['<p>He wandered through the lands, and shook fancy hands.</p>'],
+                ['--balderdash']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
+        $pba4->expects($this->once())
+            ->method('isEndBoundaryFound')
+            ->willReturn(false);
+        $pba4->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($partThreeStart);
+        $pba4->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($partThreeContentStart);
+        $pba4->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$partThreeContentStart], [$partThreeEnd]);
         
-        $message = $this->getMockedMessage();
-        $message->expects($this->exactly(2))
-            ->method('setRawHeader')
+        $pba5 = $this->getPartBuilderMock();
+        $pba5->expects($this->never())
+            ->method('addHeader');
+        $pba5->expects($this->exactly(2))
+            ->method('setEndBoundary')
             ->withConsecutive(
-                ['Subject', 'The Diamonds'],
-                ['To', 'Cousin Avi']
-            );
-
-        $partFactory = $this->getMockedPartFactory();
-        $self = $this;
-        $partFactory->method('newUUEncodedPart')->will($this->returnCallback(function () use ($self) {
-            return $self->getMockedUUEncodedPart();
-        }));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->method('attachContentPartStreamHandle')
-            ->withConsecutive(
-                [$this->anything(), $this->anything(), $startPos, $endPos],
-                [$this->anything(), $this->anything(), $startPos2, $endPos2]
+                [' (^^)'],
+                ['--balderdash--']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
+        $pba5->expects($this->once())
+            ->method('isEndBoundaryFound')
+            ->willReturn(true);
+        $pba5->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with($partFourStart);
+        $pba5->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($partFourContentStart);
+        $pba5->expects($this->exactly(2))
+            ->method('setStreamPartAndContentEndPos')
+            ->withConsecutive([$partFourContentStart], [$partFourEnd]);
+        
+        $pba6 = $this->getPartBuilderMock();
+        $pba6->expects($this->once())
+            ->method('setParent')
+            ->with($pbm);
+        // no extra trailling characters
+        $pba6->expects($this->never())
+            ->method('setEndBoundary');
+        
+        $pbm->expects($this->any())
+            ->method('addChild')
+            ->withConsecutive([$pbAlt], [$pba3], [$pba4]);
+        $pbAlt->expects($this->exactly(2))
+            ->method('addChild')
+            ->withConsecutive([$pba1], [$pba2]);
+        
+        $pbf = $this->partBuilderFactory;
+        $pbf->expects($this->exactly(8))
+            ->method('newPartBuilder')
+            ->willReturnOnConsecutiveCalls(
+                $pbm, $pbAlt, $pba1, $pba2, $pba3, $pba4, $pba5, $pba6
             );
         
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
-    }
-    
-    public function testParseNonMimeMessage()
-    {
-        $email =
-            "Subject: The Diamonds\r\n"
-            . "To: Cousin Avi\r\n"
-            . "\r\n";
-        $startPos = strlen($email);
-        $messageText = 'Listen to me... if the stones are kosher, then I\'ll buy them, won\'t I?';
-        $email .= $messageText . "\r\n";
-        $endPos = strlen($email);
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse($handle);
+        $this->assertNotNull($message);
         
-        $message = $this->getMockedMessage();
-        $message->expects($this->exactly(2))
-            ->method('setRawHeader')
-            ->withConsecutive(
-                ['Subject', 'The Diamonds'],
-                ['To', 'Cousin Avi']
-            );
-
-        $partFactory = $this->getMockedPartFactory();
-        $self = $this;
-        $partFactory->method('newNonMimePart')->will($this->returnCallback(function () use ($self) {
-            return $self->getMockedNonMimePart();
-        }));
-        $partStreamRegistry = $this->getMockedPartStreamRegistry();
-        $partStreamRegistry->expects($this->once())
-            ->method('attachContentPartStreamHandle')
-            ->with($this->anything(), $this->anything(), $startPos, $endPos);
-        
-        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+        fclose($handle);
     }
 }
