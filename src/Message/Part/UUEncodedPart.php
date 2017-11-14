@@ -38,10 +38,14 @@ class UUEncodedPart extends NonMimePart
      * 
      * @param string $messageObjectId
      * @param PartBuilder $partBuilder
+     * @param PartStreamFilterManager $partStreamFilterManager
      */
-    public function __construct($messageObjectId, PartBuilder $partBuilder)
-    {
-        parent::__construct($messageObjectId, $partBuilder);
+    public function __construct(
+        $messageObjectId,
+        PartBuilder $partBuilder,
+        PartStreamFilterManager $partStreamFilterManager
+    ) {
+        parent::__construct($messageObjectId, $partBuilder, $partStreamFilterManager);
         $this->mode = $partBuilder->getProperty('mode');
         $this->filename = $partBuilder->getProperty('filename');
     }
@@ -84,6 +88,16 @@ class UUEncodedPart extends NonMimePart
     public function getContentType()
     {
         return 'application/octet-stream';
+    }
+    
+    /**
+     * Returns null
+     * 
+     * @return string
+     */
+    public function getCharset()
+    {
+        return null;
     }
     
     /**

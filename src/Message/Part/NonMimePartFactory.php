@@ -18,10 +18,17 @@ class NonMimePartFactory extends MessagePartFactory
      * 
      * @param string $messageObjectId
      * @param PartBuilder $partBuilder
-     * @return \ZBateson\MailMimeParser\Message\NonMimePart
+     * @param PartStreamFilterManager $partStreamFilterManager
+     * @return \ZBateson\MailMimeParser\Message\Part\NonMimePart
      */
-    public function newInstance($messageObjectId, PartBuilder $partBuilder)
-    {
-        return new NonMimePart($messageObjectId, $partBuilder);
+    public function newInstance(
+        $messageObjectId,
+        PartBuilder $partBuilder
+    ) {
+        return new NonMimePart(
+            $messageObjectId,
+            $partBuilder,
+            $this->partStreamFilterManagerFactory->newInstance()
+        );
     }
 }

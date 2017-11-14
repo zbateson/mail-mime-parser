@@ -17,7 +17,17 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->nonMimePartFactory = NonMimePartFactory::getInstance();
+        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $psfmFactory
+            ->method('newInstance')
+            ->willReturn($psfm);
+        
+        $this->nonMimePartFactory = new NonMimePartFactory($psfmFactory);
     }
     
     public function testNewInstance()

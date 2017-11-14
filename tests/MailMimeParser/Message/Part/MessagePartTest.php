@@ -14,6 +14,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class MessagePartTest extends PHPUnit_Framework_TestCase
 {
+    protected $partStreamFilterManager;
     protected $partBuilder;
     
     protected $vfs;
@@ -24,6 +25,8 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+        $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager');
+        $this->partStreamFilterManager = $psf->getMock();
     }
     
     private function getMessagePart()
@@ -31,7 +34,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         return $this->getMockBuilder(
             'ZBateson\MailMimeParser\Message\Part\MessagePart'
         )
-            ->setConstructorArgs(['habibi', $this->partBuilder])
+            ->setConstructorArgs(['habibi', $this->partBuilder, $this->partStreamFilterManager])
             ->getMockForAbstractClass();
     }
     
@@ -70,11 +73,40 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->partBuilder
             ->method('getStreamContentFilename')
             ->willReturn($fileMockPart->url());
+        $this->partStreamFilterManager
+            ->expects($this->exactly(2))
+            ->method('attachContentStreamFilters')
+            ->with($this->anything(), 'wubalubadub-duuuuub', 'wigidiwamwamwazzle');
         
         $messagePart = $this->getMessagePart();
+        $messagePart->method('getContentTransferEncoding')
+            ->willReturn('wubalubadub-duuuuub');
+        $messagePart->method('getCharset')
+            ->willReturn('wigidiwamwamwazzle');
+        
         $this->assertTrue($messagePart->hasContent());
         $this->assertNotNull($messagePart->getContentResourceHandle());
         $handle = $messagePart->getContentResourceHandle();
+        $this->assertEquals('mucho mas agua', stream_get_contents($handle));
+    }
+    
+    public function testContentStreamHandleWithCustomEncodingAndCharset()
+    {
+        $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
+        $fileMockPart->withContent('mucho mas agua');
+        $this->partBuilder
+            ->method('getStreamContentFilename')
+            ->willReturn($fileMockPart->url());
+        $this->partStreamFilterManager
+            ->expects($this->exactly(2))
+            ->method('attachContentStreamFilters')
+            ->with($this->anything(), 'an-encodah', 'a-charset');
+        
+        $messagePart = $this->getMessagePart();
+        
+        $this->assertTrue($messagePart->hasContent());
+        $this->assertNotNull($messagePart->getContentResourceHandle('an-encodah', 'a-charset'));
+        $handle = $messagePart->getContentResourceHandle('an-encodah', 'a-charset');
         $this->assertEquals('mucho mas agua', stream_get_contents($handle));
     }
     
@@ -85,11 +117,17 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->partBuilder
             ->method('getStreamContentFilename')
             ->willReturn($fileMockPart->url());
+        
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('attachContentStreamFilters')
+            ->with($this->anything(), '', '');
+        
         $messagePart = $this->getMessagePart();
         $this->assertEquals('agua con rocas', $messagePart->getContent());
     }
     
-    public function testDestructClosesHandles()
+    public function testDestructClosesHandlesAndResetsFilters()
     {
         $filePart = vfsStream::newFile('part')->at($this->vfs);
         $fileContent = vfsStream::newFile('content')->at($this->vfs);
@@ -103,6 +141,11 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         
         // cloned to test __destruct -- phpunit has an internal reference to
         // the mocked object.
+        
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('reset');
+        
         $messagePart = clone($this->getMessagePart());
         $handle = $messagePart->getHandle();
         $contentHandle = $messagePart->getContentResourceHandle();

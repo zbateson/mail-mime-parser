@@ -6,10 +6,10 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\MessageFactory;
 use ZBateson\MailMimeParser\Message\MessageParser;
 use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
 use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -32,13 +32,25 @@ use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
  */
 class SimpleDi
 {
-    protected $messageFactory;
+    /**
+     * @var type 
+     */
     protected $partBuilderFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\MimePartFactory singleton 'service' instance
+     * @var type 
      */
-    protected $partFactory;
+    protected $partFactoryService;
+    
+    /**
+     * @var type 
+     */
+    protected $partFilterFactory;
+    
+    /**
+     * @var type 
+     */
+    protected $partStreamFilterManagerFactory;
     
     /**
      * @var \ZBateson\MailMimeParser\Stream\PartStreamRegistry singleton
@@ -122,24 +134,9 @@ class SimpleDi
     public function newMessageParser()
     {
         return new MessageParser(
-            $this->getMessageFactory(),
-            $this->getPartFactory(),
+            $this->getPartFactoryService(),
             $this->getPartBuilderFactory(),
             $this->getPartStreamRegistry()
-        );
-    }
-    
-    /**
-     * Constructs and returns a new Message object.
-     * 
-     * @return \ZBateson\MailMimeParser\Message
-     */
-    public function newMessage()
-    {
-        return new Message(
-            $this->getHeaderFactory(),
-            $this->getMessageWriterService()->getMessageWriter(),
-            $this->getPartFactory()
         );
     }
     
@@ -171,35 +168,31 @@ class SimpleDi
         );
     }
     
-    public function getMessageFactory()
+    
+    public function getPartFilterFactory()
     {
-        if ($this->messageFactory === null) {
-            $this->messageFactory = new MessageFactory(
-                $this->getHeaderFactory(),
-                $this->getMessageWriterService(),
-                $this->getPartFactory(),
-                $this->getPartStreamRegistry()
-            );
-        }
-        return $this->messageFactory;
+        return $this->getInstance(
+            'partFilterFactory',
+            __NAMESPACE__ . '\Message\PartFilterFactory'
+        );
     }
     
     /**
-     * Returns the part factory service instance.
      * 
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePartFactory
+     * @return type
      */
-    public function getPartFactory()
+    public function getPartFactoryService()
     {
-        if ($this->partFactory === null) {
-            $this->partFactory = new MimePartFactory(
+        if ($this->partFactoryService === null) {
+            $this->partFactoryService = new PartFactoryService(
                 $this->getHeaderFactory(),
-                $this->getMessageWriterService()
+                $this->getPartFilterFactory(),
+                $this->getPartStreamFilterManagerFactory()
             );
         }
-        return $this->partFactory;
+        return $this->partFactoryService;
     }
-    
+
     public function getPartBuilderFactory()
     {
         if ($this->partBuilderFactory === null) {
@@ -222,6 +215,14 @@ class SimpleDi
             $this->headerFactory = new HeaderFactory($this->getConsumerService());
         }
         return $this->headerFactory;
+    }
+    
+    public function getPartStreamFilterManagerFactory()
+    {
+        return $this->getInstance(
+            'partStreamFilterManagerFactory',
+            __NAMESPACE__ . '\Message\Part\PartStreamFilterManagerFactory'
+        );
     }
     
     /**

@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use ZBateson\MailMimeParser\SimpleDi;
 
 /**
  * PartFactoryServiceTest
@@ -17,13 +18,8 @@ class PartFactoryServiceTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->partFactoryService = new PartFactoryService($mockHeaderFactory, $mockFilterFactory);
+        $di = SimpleDi::singleton();
+        $this->partFactoryService = $di->getPartFactoryService();
     }
     
     public function testInstance()

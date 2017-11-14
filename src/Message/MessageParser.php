@@ -67,7 +67,7 @@ class MessageParser
         $messageObjectId = uniqid();
         $this->partStreamRegistry->register($messageObjectId, $fhandle);
         $partBuilder = $this->read($fhandle);
-        return $partBuilder->createMessagePart($fhandle, $messageObjectId);
+        return $partBuilder->createMessagePart($messageObjectId);
     }
     
     /**

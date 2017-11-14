@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\Message\Part\MessagePart;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use InvalidArgumentException;
 
@@ -277,8 +278,11 @@ class PartFilter
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return bool
      */
-    private function failsMultiPartFilter(MimePart $part)
+    private function failsMultiPartFilter(MessagePart $part)
     {
+        if (!($part instanceof MimePart)) {
+            return $this->multipart === static::FILTER_EXCLUDE;
+        }
         return ($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
             || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart());
     }
@@ -290,7 +294,7 @@ class PartFilter
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return bool
      */
-    private function failsTextPartFilter(MimePart $part)
+    private function failsTextPartFilter(MessagePart $part)
     {
         return ($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
             || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart());
@@ -303,15 +307,15 @@ class PartFilter
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
-    private function failsSignedPartFilter(MimePart $part)
+    private function failsSignedPartFilter(MessagePart $part)
     {
         if ($this->signedpart === static::FILTER_OFF) {
             return false;
-        } elseif ($part->getParent() === null) {
+        } elseif (!$part->isMime() || $part->getParent() === null) {
             return ($this->signedpart === static::FILTER_INCLUDE);
         }
-        $partMimeType = $part->getHeaderValue('Content-Type');
-        $parentMimeType = $part->getParent()->getHeaderValue('Content-Type');
+        $partMimeType = $part->getContentType();
+        $parentMimeType = $part->getParent()->getContentType();
         $parentProtocol = $part->getParent()->getHeaderParameter('Content-Type', 'protocol');
         if (strcasecmp($parentMimeType, 'multipart/signed') === 0 && strcasecmp($partMimeType, $parentProtocol) === 0) {
             return ($this->signedpart === static::FILTER_EXCLUDE);
@@ -326,12 +330,23 @@ class PartFilter
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
-    public function failsHeaderPartFilter(MimePart $part)
+    public function failsHeaderPartFilter(MessagePart $part)
     {
         foreach ($this->headers as $type => $values) {
             foreach ($values as $name => $header) {
-                $default = (isset($this->defaultHeaderValues[$name])) ? $this->defaultHeaderValues[$name] : null;
-                $headerValue = $part->getHeaderValue($name, $default);
+                
+                $headerValue = null;
+                if (strcasecmp($name, 'Content-Type') === 0) {
+                    $headerValue = $part->getContentType();
+                } elseif (strcasecmp($name, 'Content-Disposition') === 0) {
+                    $headerValue = $part->getContentDisposition();
+                } elseif (strcasecmp($name, 'Content-Transfer-Encoding')) {
+                    $headerValue = $part->getContentTransferEncoding();
+                } elseif (!($part instanceof MimePart)) {
+                    return ($type === static::FILTER_INCLUDE);
+                } else {
+                    $headerValue = $part->getHeaderValue($name);
+                }
                 if (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
                     || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0)) {
                     return true;
@@ -349,7 +364,7 @@ class PartFilter
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
-    public function filter(MimePart $part)
+    public function filter(MessagePart $part)
     {
         return !($this->failsMultiPartFilter($part)
             || $this->failsTextPartFilter($part)

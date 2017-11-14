@@ -17,25 +17,38 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 abstract class MessagePartFactory
 {
     /**
-     * Setting default constructor visibility to 'protected'.
+     * @var PartStreamFilterManagerFactory responsible for creating
+     *      PartStreamFilterManager instances
      */
-    protected function __construct()
+    protected $partStreamFilterManagerFactory;
+    
+    /**
+     * Initializes class dependencies.
+     * 
+     * @param PartStreamFilterManagerFactory $psf
+     */
+    public function __construct(PartStreamFilterManagerFactory $psf)
     {
+        $this->partStreamFilterManagerFactory = $psf;
     }
     
     /**
      * Returns the singleton instance for the class.
      * 
+     * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      * @return MessagePartFactory
      */
-    public static function getInstance(HeaderFactory $hf = null, PartFilterFactory $pf = null)
-    {
+    public static function getInstance(
+        PartStreamFilterManagerFactory $psf,
+        HeaderFactory $hf = null,
+        PartFilterFactory $pf = null
+    ) {
         static $instances = [];
         $class = get_called_class();
         if (!isset($instances[$class])) {
-            $instances[$class] = new static();
+            $instances[$class] = new static($psf);
         }
         return $instances[$class];
     }

@@ -30,7 +30,8 @@ class MessageFactory extends MimePartFactory
             $this->headerFactory,
             $this->partFilterFactory,
             $messageObjectId,
-            $partBuilder
+            $partBuilder,
+            $this->partStreamFilterManagerFactory->newInstance()
         );
     }
 }

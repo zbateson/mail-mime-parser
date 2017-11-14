@@ -31,17 +31,26 @@ class PartFactoryService
     protected $partFilterFactory;
     
     /**
+     * @var PartStreamFilterManagerFactory the PartStreamFilterManagerFactory
+     *      instance
+     */
+    protected $partStreamFilterManagerFactory;
+    
+    /**
      * Sets up dependencies.
      * 
      * @param HeaderFactory $headerFactory
      * @param PartFilterFactory $partFilterFactory
+     * @param PartStreamFilterManagerFactory $partStreamFilterManagerFactory
      */
     public function __construct(
         HeaderFactory $headerFactory,
-        PartFilterFactory $partFilterFactory
+        PartFilterFactory $partFilterFactory,
+        PartStreamFilterManagerFactory $partStreamFilterManagerFactory
     ) {
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
+        $this->partStreamFilterManagerFactory = $partStreamFilterManagerFactory;
     }
 
     /**
@@ -52,6 +61,7 @@ class PartFactoryService
     public function getMessageFactory()
     {
         return MessageFactory::getInstance(
+            $this->partStreamFilterManagerFactory,
             $this->headerFactory,
             $this->partFilterFactory
         );
@@ -65,6 +75,7 @@ class PartFactoryService
     public function getMimePartFactory()
     {
         return MimePartFactory::getInstance(
+            $this->partStreamFilterManagerFactory,
             $this->headerFactory,
             $this->partFilterFactory
         );
@@ -77,7 +88,7 @@ class PartFactoryService
      */
     public function getNonMimePartFactory()
     {
-        return NonMimePartFactory::getInstance();
+        return NonMimePartFactory::getInstance($this->partStreamFilterManagerFactory);
     }
     
     /**
@@ -87,6 +98,6 @@ class PartFactoryService
      */
     public function getUUEncodedPartFactory()
     {
-        return UUEncodedPartFactory::getInstance();
+        return UUEncodedPartFactory::getInstance($this->partStreamFilterManagerFactory);
     }
 }

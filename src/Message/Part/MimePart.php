@@ -65,14 +65,16 @@ class MimePart extends MessagePart
      * @param PartFilterFactory $partFilterFactory
      * @param string $messageObjectId
      * @param PartBuilder $partBuilder
+     * @param PartStreamFilterManager $partStreamFilterManager
      */
     public function __construct(
         HeaderFactory $headerFactory,
         PartFilterFactory $partFilterFactory,
         $messageObjectId,
-        PartBuilder $partBuilder
+        PartBuilder $partBuilder,
+        PartStreamFilterManager $partStreamFilterManager
     ) {
-        parent::__construct($messageObjectId, $partBuilder);
+        parent::__construct($messageObjectId, $partBuilder, $partStreamFilterManager);
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
 
@@ -117,13 +119,17 @@ class MimePart extends MessagePart
      * desirable as it may be a valid MimePart for the provided PartFilter.
      * 
      * @param PartFilter $filter an optional filter
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[]
+     * @return \ZBateson\MailMimeParser\Message\Part\MessagePart[]
      */
     public function getAllParts(PartFilter $filter = null)
     {
         $aParts = [ $this ];
         foreach ($this->children as $part) {
-            $aParts = array_merge($aParts, $part->getAllParts(null, true));
+            if ($part instanceof MimePart) {
+                $aParts = array_merge($aParts, $part->getAllParts(null, true));
+            } else {
+                array_push($aParts, $part);
+            }
         }
         if (!empty($filter)) {
             return array_values(array_filter(
@@ -254,26 +260,18 @@ class MimePart extends MessagePart
     }
     
     /**
-     * Returns true if this part's mime type is text/plain, text/html or has a
-     * text/* and has a defined 'charset' attribute.
+     * Returns true if this part's mime type is text/plain, text/html or if the
+     * Content-Type header defines a charset.
      * 
      * @return bool
      */
     public function isTextPart()
     {
-        $type = $this->getContentType();
-        if ($type === 'text/html' || $type === 'text/plain') {
-            return true;
-        }
-        $charset = $this->getHeaderParameter('Content-Type', 'charset');
-        return ($charset !== null && preg_match(
-            '~text/\w+~i',
-            $this->getHeaderValue('Content-Type', 'text/plain')
-        ));
+        return ($this->getCharset() !== null);
     }
     
     /**
-     * Returns the mime type of the content.
+     * Returns the lower-cased, trimmed value of the Content-Type header.
      * 
      * Parses the Content-Type header, defaults to returning text/plain if not
      * defined.
@@ -282,7 +280,27 @@ class MimePart extends MessagePart
      */
     public function getContentType($default = 'text/plain')
     {
-        return $this->getHeaderValue('Content-Type', $default);
+        return trim(strtolower($this->getHeaderValue('Content-Type', $default)));
+    }
+    
+    /**
+     * Returns the upper-cased charset of the Content-Type header's charset
+     * parameter if set, US-ASCII if the Content-Type is text/plain or text/html
+     * and the charset parameter isn't set, or null otherwise.
+     * 
+     * @return string
+     */
+    public function getCharset()
+    {
+        $charset = $this->getHeaderParameter('Content-Type', 'charset');
+        if ($charset === null) {
+            $contentType = $this->getContentType();
+            if ($contentType === 'text/plain' || $contentType === 'text/html') {
+                return 'US-ASCII';
+            }
+            return null;
+        }
+        return trim(strtoupper($charset));
     }
     
     /**
@@ -292,7 +310,7 @@ class MimePart extends MessagePart
      */
     public function getContentDisposition($default = 'inline')
     {
-        return $this->getHeaderValue('Content-Disposition', $default);
+        return strtolower($this->getHeaderValue('Content-Disposition', $default));
     }
     
     /**
@@ -303,7 +321,7 @@ class MimePart extends MessagePart
      */
     public function getContentTransferEncoding($default = '7bit')
     {
-        return $this->getHeaderValue('Content-Transfer-Encoding', $default);
+        return strtolower($this->getHeaderValue('Content-Transfer-Encoding', $default));
     }
 
     /**

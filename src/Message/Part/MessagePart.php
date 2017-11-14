@@ -36,6 +36,11 @@ abstract class MessagePart
     protected $contentHandle;
     
     /**
+     * @var PartStreamFilterManager manages attached filters to $contentHandle
+     */
+    protected $partStreamFilterManager;
+    
+    /**
      * @var string a unique ID representing the message this part belongs to.
      */
     protected $messageObjectId;
@@ -45,12 +50,17 @@ abstract class MessagePart
      * 
      * @param string $messageObjectId
      * @param PartBuilder $partBuilder
+     * @param PartStreamFilterManager $partStreamFilterManager
      */
-    public function __construct($messageObjectId, PartBuilder $partBuilder)
-    {
+    public function __construct(
+        $messageObjectId,
+        PartBuilder $partBuilder,
+        PartStreamFilterManager $partStreamFilterManager
+    ) {
         $this->messageObjectId = $messageObjectId;
         $partFilename = $partBuilder->getStreamPartFilename($messageObjectId);
         $contentFilename = $partBuilder->getStreamContentFilename($messageObjectId);
+        $this->partStreamFilterManager = $partStreamFilterManager;
         if ($partFilename !== null) {
             $this->handle = fopen($partFilename, 'r');
         }
@@ -64,6 +74,9 @@ abstract class MessagePart
      */
     public function __destruct()
     {
+        // stream_filter_append may be cleaned up by PHP, but for large files
+        // and many emails may be more efficient to fully clean up
+        $this->partStreamFilterManager->reset();
         if (is_resource($this->handle)) {
             fclose($this->handle);
         }
@@ -114,6 +127,13 @@ abstract class MessagePart
     public abstract function getContentType();
     
     /**
+     * Returns the charset of the content, or null if not applicable/defined.
+     * 
+     * @return string
+     */
+    public abstract function getCharset();
+    
+    /**
      * Returns the content's disposition.
      * 
      * @return string
@@ -139,14 +159,12 @@ abstract class MessagePart
      * stream (including headers and child parts) that was used to create the
      * current part.
      * 
-     * The part contains an original stream handle only if it was explicitly set
-     * by a call to MimePart::attachOriginalStreamHandle.  MailMimeParser only
-     * sets this during the parsing phase in MessageParser, and is not otherwise
-     * changed or updated.  New parts added below this part, changed headers,
-     * etc... would not be reflected in the returned stream handle.
+     * Note that 'rewind()' is called on the resource prior to returning it,
+     * which may affect other read operations if multiple calls to 'getHandle'
+     * are used.
      * 
-     * This method was added mainly for signature verification in
-     * Message::getOriginalMessageStringForSignatureVerification
+     * The resource stream is handled by MessagePart and is closed by the
+     * destructor.
      * 
      * @return resource the resource handle or null if not set
      */
@@ -157,7 +175,7 @@ abstract class MessagePart
         }
         return $this->handle;
     }
-
+    
     /**
      * Returns the resource stream handle for the part's content or null if not
      * set.  rewind() is called on the stream before returning it.
@@ -166,28 +184,37 @@ abstract class MessagePart
      * not be closed otherwise.
      *
      * The returned resource handle is a stream with decoding filters appended
-     * to it.  The attached filters are determined by looking at the part's
-     * Content-Encoding header.  The following encodings are currently
-     * supported:
+     * to it.  The attached filters are determined by the passed
+     * $transferEncoding and $charset headers, or by looking at the part's
+     * Content-Transfer-Encoding and Content-Type headers if not passed.  The
+     * following encodings are currently supported:
      *
      * - Quoted-Printable
      * - Base64
      * - X-UUEncode
      *
-     * UUEncode may be automatically attached for a message without a defined
-     * Content-Encoding and Content-Type if it has a UUEncoded part to support
-     * older non-mime message attachments.
-     *
-     * In addition, character encoding for text streams is converted to UTF-8
-     * if {@link \ZBateson\MailMimeParser\Message\Part\MimePart::isTextPart
-     * MimePart::isTextPart} returns true.
+     * In addition a ZBateson\MailMimeParser\Stream\CharsetStreamFilter is
+     * attached for text parts to convert text in the stream to UTF-8.
      *
      * @return resource
      */
-    public function getContentResourceHandle()
+    public function getContentResourceHandle($transferEncoding = '', $charset = '')
     {
         if (is_resource($this->contentHandle)) {
             rewind($this->contentHandle);
+            $tr = $transferEncoding;
+            $ch = $charset;
+            if ($tr === '') {
+                $tr = $this->getContentTransferEncoding();
+            }
+            if ($ch === '') {
+                $ch = $this->getCharset();
+            }
+            $this->partStreamFilterManager->attachContentStreamFilters(
+                $this->contentHandle,
+                $tr,
+                $ch
+            );
         }
         return $this->contentHandle;
     }
@@ -201,7 +228,7 @@ abstract class MessagePart
     public function getContent()
     {
         if ($this->hasContent()) {
-            $text = stream_get_contents($this->contentHandle);
+            $text = stream_get_contents($this->getContentResourceHandle());
             rewind($this->contentHandle);
             return $text;
         }

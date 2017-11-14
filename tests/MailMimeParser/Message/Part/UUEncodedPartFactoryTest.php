@@ -17,7 +17,17 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->uuEncodedPartFactory = UUEncodedPartFactory::getInstance();
+        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $psfmFactory
+            ->method('newInstance')
+            ->willReturn($psfm);
+        
+        $this->uuEncodedPartFactory = new UUEncodedPartFactory($psfmFactory);
     }
     
     public function testNewInstance()

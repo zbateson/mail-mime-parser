@@ -31,12 +31,13 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Creates a MimePartFactory instance with its dependencies.
      * 
+     * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      */
-    protected function __construct(HeaderFactory $hf, PartFilterFactory $pf)
+    public function __construct(PartStreamFilterManagerFactory $psf, HeaderFactory $hf, PartFilterFactory $pf)
     {
-        parent::__construct();
+        parent::__construct($psf);
         $this->headerFactory = $hf;
         $this->partFilterFactory = $pf;
     }
@@ -44,16 +45,20 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Returns the singleton instance for the class.
      * 
+     * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      * @return MimePartFactory
      */
-    public static function getInstance(HeaderFactory $hf = null, PartFilterFactory $pf = null)
-    {
+    public static function getInstance(
+        PartStreamFilterManagerFactory $psf,
+        HeaderFactory $hf = null,
+        PartFilterFactory $pf = null
+    ) {
         static $instances = [];
         $class = get_called_class();
         if (!isset($instances[$class])) {
-            $instances[$class] = new static($hf, $pf);
+            $instances[$class] = new static($psf, $hf, $pf);
         }
         return $instances[$class];
     }
@@ -71,7 +76,8 @@ class MimePartFactory extends MessagePartFactory
             $this->headerFactory,
             $this->partFilterFactory,
             $messageObjectId,
-            $partBuilder
+            $partBuilder,
+            $this->partStreamFilterManagerFactory->newInstance()
         );
     }
 }

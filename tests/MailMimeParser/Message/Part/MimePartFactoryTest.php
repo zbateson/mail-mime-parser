@@ -18,22 +18,29 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
+        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $psfmFactory
+            ->method('newInstance')
+            ->willReturn($psfm);
+        
         $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['newInstance'])
             ->getMock();
         $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mimePartFactory = MimePartFactory::getInstance($mockHeaderFactory, $mockFilterFactory);
+        $this->mimePartFactory = new MimePartFactory($psfmFactory, $mockHeaderFactory, $mockFilterFactory);
     }
     
     public function testNewInstance()
     {
         $messageId = 'the id';
-        $partBuilder = $this->getMockBuilder(
-            'ZBateson\MailMimeParser\Message\Part\PartBuilder'
-        )
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         

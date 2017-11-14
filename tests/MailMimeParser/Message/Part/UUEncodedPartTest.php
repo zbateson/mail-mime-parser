@@ -15,6 +15,10 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
+        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
         $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
@@ -28,7 +32,8 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
 
         $part = new UUEncodedPart(
             'habibi',
-            $pb
+            $pb,
+            $mgr
         );
         $this->assertFalse($part->isTextPart());
         $this->assertFalse($part->isMime());

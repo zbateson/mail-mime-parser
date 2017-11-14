@@ -20,7 +20,12 @@ class UUEncodedPartFactory extends MessagePartFactory
      * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\UUEncodedPartPart
      */
-    public function newInstance($messageObjectId, PartBuilder $partBuilder) {
-        return new UUEncodedPart($messageObjectId, $partBuilder);
+    public function newInstance($messageObjectId, PartBuilder $partBuilder)
+    {
+        return new UUEncodedPart(
+            $messageObjectId,
+            $partBuilder,
+            $this->partStreamFilterManagerFactory->newInstance()
+        );
     }
 }

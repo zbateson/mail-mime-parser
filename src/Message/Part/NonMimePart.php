@@ -19,17 +19,6 @@ namespace ZBateson\MailMimeParser\Message\Part;
 class NonMimePart extends MessagePart
 {
     /**
-     * Sets up class dependencies.
-     * 
-     * @param string $messageObjectId
-     * @param PartBuilder $partBuilder
-     */
-    public function __construct($messageObjectId, PartBuilder $partBuilder)
-    {
-        parent::__construct($messageObjectId, $partBuilder);
-    }
-    
-    /**
      * Returns true.
      * 
      * @return bool
@@ -47,6 +36,16 @@ class NonMimePart extends MessagePart
     public function getContentType()
     {
         return 'text/plain';
+    }
+    
+    /**
+     * Returns US-ASCII
+     * 
+     * @return string
+     */
+    public function getCharset()
+    {
+        return 'US-ASCII';
     }
     
     /**
