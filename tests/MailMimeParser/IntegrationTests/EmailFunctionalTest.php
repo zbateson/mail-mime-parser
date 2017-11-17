@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\IntegrationTests;
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
 
 /**
  * Description of EmailFunctionalTest
@@ -116,19 +117,19 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($props['attachments'], $message->getAttachmentCount(), $failMessage);
             $attachments = $message->getAllAttachmentParts();
             foreach ($attachments as $attachment) {
-                $name = $attachment->getHeaderParameter('Content-Type', 'name');
+                $name = $attachment->getContentType();
                 if (empty($name)) {
-                    $name = $attachment->getHeaderParameter('Content-Disposition', 'filename');
+                    $name = $attachment->getFilename();
                 }
                 if (!empty($name) && file_exists($this->messageDir . '/files/' . $name)) {
 
-                    if ($attachment->getHeaderValue('Content-Type') === 'text/html') {
+                    if ($attachment->getContentType() === 'text/html') {
                         $this->assertHtmlContentTypeEquals(
                             $name,
                             $attachment->getContentResourceHandle(),
                             'HTML content is not equal'
                         );
-                    } elseif (stripos($attachment->getHeaderValue('Content-Type'), 'text/') === 0) {
+                    } elseif (stripos($attachment->getContentType(), 'text/') === 0) {
                         $this->assertTextContentTypeEquals(
                             $name,
                             $attachment->getContentResourceHandle(),
@@ -165,9 +166,10 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             if (is_array($type)) {
                 $this->assertEquals(
                     strtolower($key),
-                    strtolower($part->getHeaderValue('Content-Type', 'text/plain')),
+                    $part->getContentType(),
                     $failMessage
                 );
+                $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\MimePart', $part);
                 $cparts = $part->getChildParts();
                 $curPart = current($cparts);
                 $this->assertCount(count($type), $cparts, $failMessage);
@@ -176,10 +178,12 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                     $curPart = next($cparts);
                 }
             } else {
-                $this->assertEmpty($part->getChildParts(), $failMessage);
+                if ($part instanceof MimePart) {
+                    $this->assertEmpty($part->getChildParts(), $failMessage);
+                }
                 $this->assertEquals(
                     strtolower($type),
-                    strtolower($part->getHeaderValue('Content-Type', 'text/plain')),
+                    strtolower($part->getContentType()),
                     $failMessage
                 );
             }

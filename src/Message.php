@@ -184,7 +184,7 @@ class Message extends MimePart
             function ($part) {
                 return !(
                     $part->isTextPart()
-                    && $part->getHeaderValue('Content-Disposition', 'inline') === 'inline'
+                    && $part->getContentDisposition() === 'inline'
                 );
             }
         ));

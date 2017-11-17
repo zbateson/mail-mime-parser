@@ -121,10 +121,10 @@ class PartStreamFilterManager
     public function reset()
     {
         if (is_resource($this->encoding['filter'])) {
-            stream_filter_remove($this->encoding['filter']);
+            @stream_filter_remove($this->encoding['filter']);
         }
         if (is_resource($this->charset['filter'])) {
-            stream_filter_remove($this->charset['filter']);
+            @stream_filter_remove($this->charset['filter']);
         }
         $this->encoding = [
             'type' => null,

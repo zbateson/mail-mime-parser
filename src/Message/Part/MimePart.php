@@ -250,6 +250,16 @@ class MimePart extends MessagePart
     }
     
     /**
+     * Returns a filename for the part if one is defined, or null otherwise.
+     * 
+     * @return string
+     */
+    public function getFilename()
+    {
+        return $this->getHeaderParameter('Content-Disposition', 'filename');
+    }
+    
+    /**
      * Returns true.
      * 
      * @return bool

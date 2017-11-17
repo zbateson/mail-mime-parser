@@ -281,7 +281,7 @@ class PartFilter
     private function failsMultiPartFilter(MessagePart $part)
     {
         if (!($part instanceof MimePart)) {
-            return $this->multipart === static::FILTER_EXCLUDE;
+            return $this->multipart !== static::FILTER_EXCLUDE;
         }
         return ($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
             || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart());

@@ -148,6 +148,16 @@ abstract class MessagePart
     public abstract function getContentTransferEncoding();
     
     /**
+     * Returns a filename for the part if one is defined, or null otherwise.
+     * 
+     * @return string
+     */
+    public function getFilename()
+    {
+        return null;
+    }
+    
+    /**
      * Returns true if the current part is a mime part.
      * 
      * @return bool
