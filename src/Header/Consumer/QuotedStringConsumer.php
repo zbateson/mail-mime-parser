@@ -13,6 +13,14 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
  * A quoted-pair part in a header is a literal.  There are no sub-consumers for
  * it and a Part\LiteralPart is returned.
  *
+ * Newline characters (CR and LF) are stripped entirely from the quoted part.
+ * This is based on the example at:
+ *
+ * https://tools.ietf.org/html/rfc822#section-3.1.1
+ *
+ * And https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html in section 7.2.1
+ * splitting the boundary.
+ *
  * @author Zaahid Bateson
  */
 class QuotedStringConsumer extends GenericConsumer
