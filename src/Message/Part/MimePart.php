@@ -353,7 +353,16 @@ class MimePart extends MessagePart
      */
     public function getContentTransferEncoding($default = '7bit')
     {
-        return strtolower($this->getHeaderValue('Content-Transfer-Encoding', $default));
+        static $translated = [
+            'x-uue' => 'x-uuencode',
+            'uue' => 'x-uuencode',
+            'uuencode' => 'x-uuencode'
+        ];
+        $type = strtolower($this->getHeaderValue('Content-Transfer-Encoding', $default));
+        if (isset($translated[$type])) {
+            return $translated[$type];
+        }
+        return $type;
     }
 
     /**

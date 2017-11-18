@@ -36,9 +36,6 @@ class MimePartWriter
         'quoted-printable' => 'mmp-convert.quoted-printable-encode',
         'base64' => 'mmp-convert.base64-encode',
         'x-uuencode' => 'mailmimeparser-uuencode',
-        'x-uue' => 'mailmimeparser-uuencode',
-        'uuencode' => 'mailmimeparser-uuencode',
-        'uue' => 'mailmimeparser-uuencode',
     ];
     
     /**
@@ -112,7 +109,7 @@ class MimePartWriter
     private function setTransferEncodingFilterOnStream(MimePart $part, $handle, StreamLeftover $leftovers)
     {
         $contentHandle = $part->getContentResourceHandle();
-        $encoding = strtolower($part->getHeaderValue('Content-Transfer-Encoding'));
+        $encoding = $part->getContentTransferEncoding();
         $params = array_merge(self::$defaultStreamFilterParams, [
             'leftovers' => $leftovers,
             'filename' => $part->getHeaderParameter(
