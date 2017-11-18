@@ -36,6 +36,9 @@ class MimePartWriter
         'quoted-printable' => 'mmp-convert.quoted-printable-encode',
         'base64' => 'mmp-convert.base64-encode',
         'x-uuencode' => 'mailmimeparser-uuencode',
+        'x-uue' => 'mailmimeparser-uuencode',
+        'uuencode' => 'mailmimeparser-uuencode',
+        'uue' => 'mailmimeparser-uuencode',
     ];
     
     /**

@@ -118,6 +118,9 @@ class PartStreamRegistry
                 stream_filter_append($handle, 'mmp-convert.base64-decode', STREAM_FILTER_READ);
                 break;
             case 'x-uuencode':
+            case 'x-uue':
+            case 'uuencode':
+            case 'uue':
                 stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_READ);
                 break;
             default:

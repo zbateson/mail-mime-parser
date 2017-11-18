@@ -1327,6 +1327,23 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public function testParseEmailm3007()
+    {
+        $this->runEmailTest('m3007', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'jschmuergen@example.com'
+            ],
+            'Subject' => 'The Hare and the Tortoise',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3,
+        ]);
+    }
+
     public function testRewriteEmailContentm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
