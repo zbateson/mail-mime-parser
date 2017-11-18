@@ -235,10 +235,10 @@ abstract class MessagePart
      *
      * @return string
      */
-    public function getContent()
+    public function getContent($transferEncoding = '', $charset = '')
     {
         if ($this->hasContent()) {
-            $text = stream_get_contents($this->getContentResourceHandle());
+            $text = stream_get_contents($this->getContentResourceHandle($transferEncoding, $charset));
             rewind($this->contentHandle);
             return $text;
         }

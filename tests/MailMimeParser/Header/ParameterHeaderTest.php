@@ -26,6 +26,12 @@ class ParameterHeaderTest extends PHPUnit_Framework_TestCase
         $this->consumerService = new ConsumerService($pf, $mlpf);
     }
     
+    public function testParsingContentTypeWithoutParameters()
+    {
+        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html');
+        $this->assertEquals('text/html', $header->getValue());
+    }
+    
     public function testParsingContentType()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');

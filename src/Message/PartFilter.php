@@ -76,6 +76,11 @@ class PartFilter
     private $signedpart = PartFilter::FILTER_EXCLUDE;
     
     /**
+     * @var string calculated hash of the filter
+     */
+    private $hashCode;
+    
+    /**
      * @var string[][] array of header rules.  The top-level contains keys of
      * FILTER_INCLUDE and/or FILTER_EXCLUDE, which contain key => value mapping
      * of header names => values to search for.  Note that when searching

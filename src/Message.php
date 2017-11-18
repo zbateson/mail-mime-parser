@@ -83,27 +83,7 @@ class Message extends MimePart
             $this->partFilterFactory->newFilterFromInlineContentType('text/html')
         );
     }
-    
-    /**
-     * Returns the content MimePart, which could be a text/plain part,
-     * text/html part, multipart/alternative part, or null if none is set.
-     * 
-     * This function is deprecated in favour of getTextPart/getHtmlPart and 
-     * getPartByMimeType.
-     * 
-     * @deprecated since version 0.4.2
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
-     */
-    public function getContentPart()
-    {
-        $alternative = $this->getPartByMimeType('multipart/alternative');
-        if ($alternative !== null) {
-            return $alternative;
-        }
-        $text = $this->getTextPart();
-        return ($text !== null) ? $text : $this->getHtmlPart();
-    }
-    
+
     /**
      * Returns a string containing the original message's signed part, useful
      * for verifying the email.
@@ -146,13 +126,31 @@ class Message extends MimePart
         }
         return null;
     }
+    
+    /**
+     * Returns the signature part of a multipart/signed message.
+     * 
+     * The part returned is the part containing a Content-Type matching the one
+     * defined in the multipart/signed part's "protocol" parameter.
+     * 
+     * @return MimePart
+     */
+    public function getSignaturePart()
+    {
+        return $this->getChild(
+            0,
+            $this->partFilterFactory->newFilterFromArray([
+                'signedpart' => PartFilter::FILTER_INCLUDE
+            ])
+        );
+    }
 
     /**
      * Returns the attachment part at the given 0-based index, or null if none
      * is set.
      * 
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return MessagePart
      */
     public function getAttachmentPart($index)
     {
@@ -166,11 +164,10 @@ class Message extends MimePart
     /**
      * Returns all attachment parts.
      * 
-     * Attachments are any non-multipart, non-signature and non inline text or
-     * html part (a text or html part with a Content-Disposition set to 
-     * 'attachment' is considered an attachment).
+     * "Attachments" are any non-multipart, non-signature and any text or html
+     * html part witha Content-Disposition set to  'attachment'.
      * 
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[]
+     * @return MessagePart[]
      */
     public function getAllAttachmentParts()
     {
@@ -205,13 +202,15 @@ class Message extends MimePart
      * passed $index can be read or null if unavailable.
      * 
      * @param int $index
+     * @param string $transferEncoding
+     * @param string $charset
      * @return resource
      */
-    public function getTextStream($index = 0)
+    public function getTextStream($index = 0, $transferEncoding = '', $charset = '')
     {
         $textPart = $this->getTextPart($index);
         if ($textPart !== null) {
-            return $textPart->getContentResourceHandle();
+            return $textPart->getContentResourceHandle($transferEncoding, $charset);
         }
         return null;
     }
@@ -223,13 +222,15 @@ class Message extends MimePart
      * null if the message doesn't have an inline text part.
      * 
      * @param int $index
+     * @param string $transferEncoding
+     * @param string $charset
      * @return string
      */
-    public function getTextContent($index = 0)
+    public function getTextContent($index = 0, $transferEncoding = '', $charset = '')
     {
         $part = $this->getTextPart($index);
         if ($part !== null) {
-            return $part->getContent();
+            return $part->getContent($transferEncoding, $charset);
         }
         return null;
     }
@@ -238,13 +239,16 @@ class Message extends MimePart
      * Returns a resource handle where the 'inline' text/html content at the
      * passed $index can be read or null if unavailable.
      * 
+     * @param int $index
+     * @param string $transferEncoding
+     * @param string $charset
      * @return resource
      */
-    public function getHtmlStream($index = 0)
+    public function getHtmlStream($index = 0, $transferEncoding = '', $charset = '')
     {
         $htmlPart = $this->getHtmlPart($index);
         if ($htmlPart !== null) {
-            return $htmlPart->getContentResourceHandle();
+            return $htmlPart->getContentResourceHandle($transferEncoding, $charset);
         }
         return null;
     }
@@ -256,13 +260,15 @@ class Message extends MimePart
      * null if the message doesn't have an inline html part.
      * 
      * @param int $index
+     * @param string $transferEncoding
+     * @param string $charset
      * @return string
      */
-    public function getHtmlContent($index = 0)
+    public function getHtmlContent($index = 0, $transferEncoding = '', $charset = '')
     {
         $part = $this->getHtmlPart($index);
         if ($part !== null) {
-            return $part->getContent();
+            return $part->getContent($transferEncoding, $charset);
         }
         return null;
     }

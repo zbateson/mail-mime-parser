@@ -41,7 +41,7 @@ class MimePart extends MessagePart
      *      parts
      */
     protected $children = [];
-
+    
     /**
      * @var string[][] array of headers, with keys set to lower-cased,
      *      alphanumeric characters of the header's name, and values set to an
@@ -89,18 +89,40 @@ class MimePart extends MessagePart
         $this->headers['contenttype'] = $partBuilder->getContentType();
         $this->rawHeaders = $partBuilder->getRawHeaders();
     }
+    
+    /**
+     * Returns all parts, including the current object, and all children below
+     * it (including children of children, etc...)
+     * 
+     * @return MessagePart[]
+     */
+    protected function getAllNonFilteredParts()
+    {
+        $parts = [ $this ];
+        foreach ($this->children as $part) {
+            if ($part instanceof MimePart) {
+                $parts = array_merge(
+                    $parts,
+                    $part->getAllNonFilteredParts()
+                );
+            } else {
+                array_push($parts, $part);
+            }
+        }
+        return $parts;
+    }
 
     /**
      * Returns the part at the given 0-based index, or null if none is set.
      * 
      * Note that the first part returned is the current part itself.  This is
      * often desirable for queries with a PartFilter, e.g. looking for a
-     * MimePart with a specific Content-Type that may be satisfied by the
+     * MessagePart with a specific Content-Type that may be satisfied by the
      * current part.
      *
      * @param int $index
      * @param PartFilter $filter
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return MessagePart
      */
     public function getPart($index, PartFilter $filter = null)
     {
@@ -119,25 +141,18 @@ class MimePart extends MessagePart
      * desirable as it may be a valid MimePart for the provided PartFilter.
      * 
      * @param PartFilter $filter an optional filter
-     * @return \ZBateson\MailMimeParser\Message\Part\MessagePart[]
+     * @return MessagePart[]
      */
     public function getAllParts(PartFilter $filter = null)
     {
-        $aParts = [ $this ];
-        foreach ($this->children as $part) {
-            if ($part instanceof MimePart) {
-                $aParts = array_merge($aParts, $part->getAllParts(null, true));
-            } else {
-                array_push($aParts, $part);
-            }
-        }
+        $parts = $this->getAllNonFilteredParts();
         if (!empty($filter)) {
             return array_values(array_filter(
-                $aParts,
+                $parts,
                 [ $filter, 'filter' ]
             ));
         }
-        return $aParts;
+        return $parts;
     }
 
     /**
@@ -160,7 +175,7 @@ class MimePart extends MessagePart
      *
      * @param int $index
      * @param PartFilter $filter
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return MessagePart
      */
     public function getChild($index, PartFilter $filter = null)
     {
@@ -177,7 +192,7 @@ class MimePart extends MessagePart
      * If a PartFilter is provided, the PartFilter is applied before returning.
      * 
      * @param PartFilter $filter
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[]
+     * @return MessagePart[]
      */
     public function getChildParts(PartFilter $filter = null)
     {
@@ -202,7 +217,7 @@ class MimePart extends MessagePart
      * Returns the part associated with the passed mime type if it exists.
      *
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart or null
+     * @return MessagePart or null
      */
     public function getPartByMimeType($mimeType, $index = 0)
     {
@@ -215,7 +230,7 @@ class MimePart extends MessagePart
      * exist or null otherwise.
      *
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart[] or null
+     * @return MessagePart[] or null
      */
     public function getAllPartsByMimeType($mimeType)
     {
