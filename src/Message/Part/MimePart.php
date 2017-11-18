@@ -271,7 +271,14 @@ class MimePart extends MessagePart
      */
     public function getFilename()
     {
-        return $this->getHeaderParameter('Content-Disposition', 'filename');
+        return $this->getHeaderParameter(
+            'Content-Disposition',
+            'filename',
+            $this->getHeaderParameter(
+                'Content-Type',
+                'name'
+            )
+        );
     }
     
     /**

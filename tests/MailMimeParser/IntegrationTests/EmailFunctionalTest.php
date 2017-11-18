@@ -117,10 +117,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($props['attachments'], $message->getAttachmentCount(), $failMessage);
             $attachments = $message->getAllAttachmentParts();
             foreach ($attachments as $attachment) {
-                $name = $attachment->getContentType();
-                if (empty($name)) {
-                    $name = $attachment->getFilename();
-                }
+                $name = $name = $attachment->getFilename();
                 if (!empty($name) && file_exists($this->messageDir . '/files/' . $name)) {
 
                     if ($attachment->getContentType() === 'text/html') {
@@ -811,25 +808,21 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     /*
      * m1010.txt looks like it's badly encoded.  Was it really sent like that?
      */
-    /*
     public function testParseEmailm1010()
     {
-        $this->runEmailTest('m1010', [
-            'From' => [
-                'name' => 'Doug Sauder',
-                'email' => 'dwsauder@example.com'
-            ],
-            'To' => [
-                'name' => 'Joe Blow',
-                'email' => 'blow@example.com'
-            ],
-            'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'HasenundFrФsche.txt',
-        ]);
-    }*/
+        $handle = fopen($this->messageDir . '/m1010.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $failMessage = 'Failed while parsing m1010';
+        $f = $message->getTextStream(0, null, 'iso-8859-1');
+        $this->assertNotNull($f, $failMessage);
+        $this->assertTextContentTypeEquals('HasenundFrФsche.txt', $f, $failMessage);
+    }
 
     /*
      * m1011.txt looks like it's badly encoded.  Was it really sent like that?
+     * Can't find what the file could be...
      */
     /*
     public function testParseEmailm1011()
@@ -892,7 +885,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'blow@example.com'
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'hareandtortoise.txt'
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3
         ]);
     }
 

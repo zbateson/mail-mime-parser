@@ -206,7 +206,7 @@ class Message extends MimePart
      * @param string $charset
      * @return resource
      */
-    public function getTextStream($index = 0, $transferEncoding = '', $charset = '')
+    public function getTextStream($index = 0, $transferEncoding = null, $charset = null)
     {
         $textPart = $this->getTextPart($index);
         if ($textPart !== null) {
@@ -226,7 +226,7 @@ class Message extends MimePart
      * @param string $charset
      * @return string
      */
-    public function getTextContent($index = 0, $transferEncoding = '', $charset = '')
+    public function getTextContent($index = 0, $transferEncoding = null, $charset = null)
     {
         $part = $this->getTextPart($index);
         if ($part !== null) {
@@ -244,7 +244,7 @@ class Message extends MimePart
      * @param string $charset
      * @return resource
      */
-    public function getHtmlStream($index = 0, $transferEncoding = '', $charset = '')
+    public function getHtmlStream($index = 0, $transferEncoding = null, $charset = null)
     {
         $htmlPart = $this->getHtmlPart($index);
         if ($htmlPart !== null) {
@@ -264,7 +264,7 @@ class Message extends MimePart
      * @param string $charset
      * @return string
      */
-    public function getHtmlContent($index = 0, $transferEncoding = '', $charset = '')
+    public function getHtmlContent($index = 0, $transferEncoding = null, $charset = null)
     {
         $part = $this->getHtmlPart($index);
         if ($part !== null) {

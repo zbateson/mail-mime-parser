@@ -199,25 +199,27 @@ abstract class MessagePart
      * Content-Transfer-Encoding and Content-Type headers if not passed.  The
      * following encodings are currently supported:
      *
-     * - Quoted-Printable
-     * - Base64
-     * - X-UUEncode
+     * - quoted-printable
+     * - base64
+     * - x-uuencode
      *
      * In addition a ZBateson\MailMimeParser\Stream\CharsetStreamFilter is
      * attached for text parts to convert text in the stream to UTF-8.
      *
+     * @param string $transferEncoding
+     * @param string $charset
      * @return resource
      */
-    public function getContentResourceHandle($transferEncoding = '', $charset = '')
+    public function getContentResourceHandle($transferEncoding = null, $charset = null)
     {
         if (is_resource($this->contentHandle)) {
             rewind($this->contentHandle);
             $tr = $transferEncoding;
             $ch = $charset;
-            if ($tr === '') {
+            if (empty($tr)) {
                 $tr = $this->getContentTransferEncoding();
             }
-            if ($ch === '') {
+            if (empty($ch)) {
                 $ch = $this->getCharset();
             }
             $this->partStreamFilterManager->attachContentStreamFilters(
@@ -235,7 +237,7 @@ abstract class MessagePart
      *
      * @return string
      */
-    public function getContent($transferEncoding = '', $charset = '')
+    public function getContent($transferEncoding = null, $charset = null)
     {
         if ($this->hasContent()) {
             $text = stream_get_contents($this->getContentResourceHandle($transferEncoding, $charset));
