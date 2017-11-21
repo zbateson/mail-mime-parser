@@ -85,29 +85,11 @@ class Message extends MimePart
     }
 
     /**
-     * Returns a string containing the original message's signed part, useful
-     * for verifying the email.
-     * 
-     * If the signed part of the message ends in a final empty line, the line is
-     * removed as it's considered part of the signature's mime boundary.  From
-     * RFC-3156:
-     * 
-     * Note: The accepted OpenPGP convention is for signed data to end
-     * with a <CR><LF> sequence.  Note that the <CR><LF> sequence
-     * immediately preceding a MIME boundary delimiter line is considered
-     * to be part of the delimiter in [3], 5.1.  Thus, it is not part of
-     * the signed data preceding the delimiter line.  An implementation
-     * which elects to adhere to the OpenPGP convention has to make sure
-     * it inserts a <CR><LF> pair on the last line of the data to be
-     * signed and transmitted (signed message and transmitted message
-     * MUST be identical).
-     * 
-     * The additional line should be inserted by the signer -- for verification
-     * purposes if it's missing, it would seem the content part would've been
-     * signed without a last <CR><LF>.
+     * Returns a string containing the entire body of a signed message for
+     * verification.
      * 
      * @return string or null if the message doesn't have any children, or the
-     *      child returns null for getOriginalStreamHandle
+     *      child returns null for getHandle
      */
     public function getMessageStringForSignatureVerification()
     {
@@ -118,10 +100,6 @@ class Message extends MimePart
                 "\r\n",
                 stream_get_contents($child->getHandle())
             );
-            $len = strlen($normalized);
-            if ($len > 0 && strrpos($normalized, "\r\n") == $len - 2) {
-                return substr($normalized, 0, -2);
-            }
             return $normalized;
         }
         return null;

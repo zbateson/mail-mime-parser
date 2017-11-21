@@ -7,19 +7,14 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\MessageParser;
-use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
-use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\PartStream;
 use ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter;
-use ZBateson\MailMimeParser\Stream\UUEncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
-use ZBateson\MailMimeParser\Stream\ConvertStreamFilter;
 use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
-use ZBateson\MailMimeParser\Stream\Base64EncodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
 
 /**
@@ -284,7 +279,6 @@ class SimpleDi
     protected function registerStreamExtensions()
     {
         stream_filter_register(UUDecodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUDecodeStreamFilter');
-        stream_filter_register(UUEncodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUEncodeStreamFilter');
         stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\CharsetStreamFilter');
         stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\Stream\PartStream');
         
@@ -301,14 +295,6 @@ class SimpleDi
         stream_filter_register(
             'mmp-convert.quoted-printable-decode',
             __NAMESPACE__ . '\Stream\ConvertStreamFilter'
-        );
-        stream_filter_register(
-            'mmp-convert.quoted-printable-encode',
-            __NAMESPACE__ . '\Stream\ConvertStreamFilter'
-        );
-        stream_filter_register(
-            Base64EncodeStreamFilter::STREAM_FILTER_NAME,
-            __NAMESPACE__ . '\Stream\Base64EncodeStreamFilter'
         );
         stream_filter_register(
             Base64DecodeStreamFilter::STREAM_FILTER_NAME,

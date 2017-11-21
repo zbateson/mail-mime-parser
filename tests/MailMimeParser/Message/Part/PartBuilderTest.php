@@ -28,23 +28,42 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->getMock();
     }
     
-    public function testSetAndGetParent()
+    public function testCanHaveHeaders()
     {
+        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn('Castle Black');
+        
+        $this->mockHeaderFactory
+            ->expects($this->any())
+            ->method('newInstance')
+            ->willReturn($mockHeader);
+        
         $instance = new PartBuilder(
             $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
             'euphrates'
         );
+        
+        $this->assertTrue($instance->canHaveHeaders());
+        
         $parent = new PartBuilder(
             $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
             'euphrates'
         );
-        $instance->setParent($parent);
-        $this->assertSame($parent, $instance->getParent());
-        $this->assertNull($parent->getParent());
+        $parent->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $parent->addChild($instance);
+        
+        $parent->setEndBoundaryFound('--Castle Black--');
+        $this->assertFalse($instance->canHaveHeaders());
     }
-    
+
     public function testAddChildren()
     {
         $instance = new PartBuilder(
@@ -179,7 +198,7 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($instance->isMultiPart());
     }
     
-    public function testSetEndBoundary()
+    public function testSetEndBoundaryFound()
     {
         $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
             ->disableOriginalConstructor()
@@ -191,7 +210,7 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->willReturn('Castle Black');
         
         $this->mockHeaderFactory
-            ->expects($this->atLeastOnce())
+            ->expects($this->any())
             ->method('newInstance')
             ->willReturnOnConsecutiveCalls($mockHeader);
         
@@ -203,16 +222,25 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         
         $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
         
-        $this->assertFalse($instance->isEndBoundaryFound());
-        $this->assertFalse($instance->setEndBoundary('Somewhere... obvs not Castle Black'));
-        $this->assertFalse($instance->setEndBoundary('Castle Black'));
-        $this->assertTrue($instance->setEndBoundary('--Castle Black'));
-        $this->assertFalse($instance->isEndBoundaryFound());
-        $this->assertTrue($instance->setEndBoundary('--Castle Black--'));
-        $this->assertTrue($instance->isEndBoundaryFound());
+        $this->assertFalse($instance->isParentBoundaryFound());
+        $this->assertFalse($instance->setEndBoundaryFound('Somewhere... obvs not Castle Black'));
+        $this->assertFalse($instance->setEndBoundaryFound('Castle Black'));
+        $this->assertTrue($instance->setEndBoundaryFound('--Castle Black'));
+        $this->assertFalse($instance->isParentBoundaryFound());
+        $this->assertTrue($instance->setEndBoundaryFound('--Castle Black--'));
+        
+        $child = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory,
+            'tigris'
+        );
+        $instance->addChild($child);
+        $this->assertEquals($instance, $child->getParent());
+        $this->assertCount(0, $instance->getChildren());
+        $this->assertFalse($child->canHaveHeaders());
     }
     
-    public function testSetEndBoundaryWithParent()
+    public function testSetEndBoundaryFoundWithParent()
     {
         $mockParentHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
             ->disableOriginalConstructor()
@@ -253,15 +281,62 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $parent->addHeader('CONTENT-TYPE', 'keekee-kookoo');
         
         $this->assertSame($parent, $instance->getParent());
-        $this->assertFalse($instance->isEndBoundaryFound());
-        $this->assertFalse($instance->setEndBoundary('Somewhere... obvs not Castle Black'));
-        $this->assertFalse($instance->setEndBoundary('King\'s Landing'));
-        $this->assertTrue($instance->setEndBoundary('--King\'s Landing'));
-        $this->assertFalse($instance->isEndBoundaryFound());
-        $this->assertFalse($parent->isEndBoundaryFound());
-        $this->assertTrue($instance->setEndBoundary('--King\'s Landing--'));
-        $this->assertTrue($parent->isEndBoundaryFound());
-        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertFalse($instance->isParentBoundaryFound());
+        $this->assertFalse($instance->setEndBoundaryFound('Somewhere... obvs not Castle Black'));
+        $this->assertFalse($instance->setEndBoundaryFound('King\'s Landing'));
+        $this->assertTrue($instance->setEndBoundaryFound('--King\'s Landing'));
+        $this->assertTrue($instance->isParentBoundaryFound());
+    }
+    
+    public function testSetEof()
+    {
+        $mockParentHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockParentHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn('King\'s Landing');
+        
+        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValueFor'])
+            ->getMock();
+        $mockHeader->expects($this->any())
+            ->method('getValueFor')
+            ->with('boundary')
+            ->willReturn(null);
+        
+        $this->mockHeaderFactory
+            ->expects($this->atLeastOnce())
+            ->method('newInstance')
+            ->willReturnOnConsecutiveCalls($mockHeader, $mockParentHeader);
+        
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory,
+            'euphrates'
+        );
+        $parent = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory,
+            'euphrates'
+        );
+        $parent->addChild($instance);
+        
+        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $parent->addHeader('CONTENT-TYPE', 'keekee-kookoo');
+        
+        $this->assertSame($parent, $instance->getParent());
+        $this->assertFalse($instance->isParentBoundaryFound());
+        $this->assertFalse($instance->setEndBoundaryFound('Somewhere... obvs not Castle Black'));
+        $this->assertFalse($instance->setEndBoundaryFound('Szprotka'));
+        $this->assertFalse($instance->setEndBoundaryFound('--szprotka'));
+        $this->assertFalse($instance->isParentBoundaryFound());
+        $instance->setEof();
+        $this->assertTrue($instance->isParentBoundaryFound());
+        $this->assertTrue($parent->isParentBoundaryFound());
     }
     
     public function testSetStreamPartPosAndGetFilename()
@@ -296,6 +371,63 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             'tigris://kufa?start=11&end=84',
             $instance->getStreamPartFilename('kufa')
+        );
+    }
+    
+    public function testSetStreamContentPosAndGetFilenameWithParent()
+    {
+        $instance = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory,
+            'tigris'
+        );
+        $parent = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory,
+            'euphrates'
+        );
+        $super = new PartBuilder(
+            $this->mockHeaderFactory,
+            $this->mockMessagePartFactory,
+            'vistula'
+        );
+        $parent->addChild($instance);
+        $super->addChild($parent);
+        
+        $super->setStreamPartStartPos(0);
+        $super->setStreamContentStartPos(3);
+        $super->setStreamPartAndContentEndPos(3);
+        
+        $parent->setStreamPartStartPos(11);
+        $parent->setStreamContentStartPos(13);
+        $parent->setStreamPartAndContentEndPos(20);
+        
+        $instance->setStreamPartStartPos(22);
+        $instance->setStreamContentStartPos(42);
+        $instance->setStreamPartAndContentEndPos(84);
+        $this->assertEquals(
+            'tigris://babylon?start=42&end=84',
+            $instance->getStreamContentFilename('babylon')
+        );
+        $this->assertEquals(
+            'tigris://kufa?start=22&end=84',
+            $instance->getStreamPartFilename('kufa')
+        );
+        $this->assertEquals(
+            'euphrates://babylon?start=13&end=20',
+            $parent->getStreamContentFilename('babylon')
+        );
+        $this->assertEquals(
+            'euphrates://kufa?start=11&end=84',
+            $parent->getStreamPartFilename('kufa')
+        );
+        $this->assertEquals(
+            'vistula://babylon?start=3&end=3',
+            $super->getStreamContentFilename('babylon')
+        );
+        $this->assertEquals(
+            'vistula://kufa?start=0&end=84',
+            $super->getStreamPartFilename('kufa')
         );
     }
     

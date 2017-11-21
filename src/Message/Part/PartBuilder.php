@@ -60,6 +60,12 @@ class PartBuilder
     private $endBoundaryFound = false;
     
     /**
+     * @var boolean set to true once a boundary belonging to this parent's part
+     *      is found.
+     */
+    private $parentBoundaryFound = false;
+    
+    /**
      * @var boolean|null|string false if not queried for in the content-type
      *      header of this part, null if the current part does not have a
      *      boundary, or the value of the boundary parameter of the content-type
@@ -189,8 +195,11 @@ class PartBuilder
      */
     public function addChild(PartBuilder $partBuilder)
     {
-        $partBuilder->setParent($this);
-        $this->children[] = $partBuilder;
+        $partBuilder->parent = $this;
+        // discard parts added after the end boundary
+        if (!$this->endBoundaryFound) {
+            $this->children[] = $partBuilder;
+        }
     }
     
     /**
@@ -201,17 +210,6 @@ class PartBuilder
     public function getChildren()
     {
         return $this->children;
-    }
-    
-    /**
-     * Registers the passed PartBuilder as the parent of the current
-     * PartBuilder.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\Part\PartBuilder $partBuilder
-     */
-    public function setParent(PartBuilder $partBuilder)
-    {
-        $this->parent = $partBuilder;
     }
     
     /**
@@ -300,33 +298,60 @@ class PartBuilder
      * @param string $line
      * @return boolean
      */
-    public function setEndBoundary($line)
+    public function setEndBoundaryFound($line)
     {
         $boundary = $this->getMimeBoundary();
-        if ($boundary !== null) {
+        if ($this->parent !== null && $this->parent->setEndBoundaryFound($line)) {
+            $this->parentBoundaryFound = true;
+            return true;
+        } elseif ($boundary !== null) {
             if ($line === "--$boundary--") {
                 $this->endBoundaryFound = true;
                 return true;
             } elseif ($line === "--$boundary") {
                 return true;
             }
-        } elseif ($this->getParent() !== null && $this->getParent()->setEndBoundary($line)) {
-            return true;
         }
         return false;
     }
     
     /**
      * Returns true if MessageParser passed an input line to setEndBoundary that
-     * indicates the end of the part.
+     * matches a parent's mime boundary, and the following input belongs to a
+     * new part under its parent.
      * 
      * @return boolean
      */
-    public function isEndBoundaryFound()
+    public function isParentBoundaryFound()
     {
-        return $this->endBoundaryFound;
+        return ($this->parentBoundaryFound);
     }
     
+    /**
+     * Called once EOF is reached while reading content.  The method sets the
+     * flag used by PartBuilder::isParentBoundaryFound to true on this part and
+     * all parent PartBuilders.
+     */
+    public function setEof()
+    {
+        $this->parentBoundaryFound = true;
+        if ($this->parent !== null) {
+            $this->parent->parentBoundaryFound = true;
+        }
+    }
+    
+    /**
+     * Returns false if this part has a parent part in which endBoundaryFound is
+     * set to true (i.e. this isn't a discardable part following the parent's
+     * end boundary line).
+     * 
+     * @return booelan
+     */
+    public function canHaveHeaders()
+    {
+        return ($this->parent === null || !$this->parent->endBoundaryFound);
+    }
+
     /**
      * Constructs and returns a filename where the part can be read from the
      * passed $messageObjectId.
@@ -372,13 +397,17 @@ class PartBuilder
     }
 
     /**
-     * Sets the end position of the part in the input stream.
+     * Sets the end position of the part in the input stream, and also calls
+     * parent->setParentStreamPartEndPos to expand to parent parts.
      * 
      * @param int $streamPartEndPos
      */
     public function setStreamPartEndPos($streamPartEndPos)
     {
         $this->streamPartEndPos = $streamPartEndPos;
+        if ($this->parent !== null) {
+            $this->parent->setStreamPartEndPos($streamPartEndPos);
+        }
     }
 
     /**
@@ -399,9 +428,9 @@ class PartBuilder
     public function setStreamPartAndContentEndPos($streamContentEndPos)
     {
         $this->streamContentEndPos = $streamContentEndPos;
-        $this->streamPartEndPos = $streamContentEndPos;
+        $this->setStreamPartEndPos($streamContentEndPos);
     }
-    
+
     /**
      * Creates a MessagePart and returns it using the PartBuilder's
      * MessagePartFactory passed in during construction.

@@ -20,22 +20,28 @@ use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
 class MessageParser
 {
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\PartFactoryService service
-     * instance used to create MimePartFactory objects.
+     * @var PartFactoryService service instance used to create MimePartFactory
+     *      objects.
      */
     protected $partFactoryService;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\PartBuilderFactory used to
-     *      create PartBuilders
+     * @var PartBuilderFactory used to create PartBuilders
      */
     protected $partBuilderFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Stream\PartStreamRegistry used for
-     *      registering message part streams.
+     * @var PartStreamRegistry used for registering message part streams.
      */
     protected $partStreamRegistry;
+    
+    /**
+     * @var int maintains the character length of the last line separator,
+     *      typically 2 for CRLF, to keep track of the correct 'end' position
+     *      for a part because the CRLF before a boundary is considered part of
+     *      the boundary.
+     */
+    private $lastLineSeparatorLength = 0;
     
     /**
      * Sets up the parser with its dependencies.
@@ -108,38 +114,36 @@ class MessageParser
     }
     
     /**
-     * Reads lines from the passed $handle, calling $partBuilder->setEndBoundary
-     * with the passed line until either setEndBoundary returns true or there
-     * are no more lines to be read.
+     * Reads lines from the passed $handle, calling
+     * $partBuilder->setEndBoundaryFound with the passed line until it returns
+     * true or the stream is at EOF.
      * 
-     * setEndBoundary returns true if the passed line matches a boundary for the
-     * $partBuilder itself or any of its parents.
+     * setEndBoundaryFound returns true if the passed line matches a boundary
+     * for the $partBuilder itself or any of its parents.
      * 
-     * As lines are read, setStreamPartAndContentEndPos is called with the
-     * passed $handle's read pos (ftell($handle)) to update the position of
-     * content in the part.
-     * 
-     * If the entire stream is read and an end boundary was found, i.e.
-     * $partBuilder->setEndBoundary returns true, true is returned to indicate
-     * that a content boundary was found.  Otherwise false is returned.
+     * Once a boundary is found, setStreamPartAndContentEndPos is called with
+     * the passed $handle's read pos before the boundary and its line separator
+     * were read.
      * 
      * @param resource $handle
      * @param PartBuilder $partBuilder
-     * @return boolean true if a mime content boundary was found for
-     *         $partBuilder
      */
     private function findContentBoundary($handle, PartBuilder $partBuilder)
     {
+        // last separator before a boundary belongs to the boundary, and is not
+        // part of the current part
         while (!feof($handle)) {
-            $partBuilder->setStreamPartAndContentEndPos(ftell($handle));
+            $endPos = ftell($handle) - $this->lastLineSeparatorLength;
             $line = fgets($handle);
-            $test = rtrim($line);
-            if ($partBuilder->setEndBoundary($test)) {
-                return true;
+            $test = rtrim($line, "\r\n");
+            $this->lastLineSeparatorLength = strlen($line) - strlen($test);
+            if ($partBuilder->setEndBoundaryFound($test)) {
+                $partBuilder->setStreamPartAndContentEndPos($endPos);
+                return;
             }
         }
         $partBuilder->setStreamPartAndContentEndPos(ftell($handle));
-        return false;
+        $partBuilder->setEof();
     }
     
     /**
@@ -180,11 +184,9 @@ class MessageParser
      * If the part being read is in turn a multipart part, readPart is called on
      * it recursively to read its headers and content.
      * 
-     * The method tries to read content until a mime boundary (for this part for
-     * a multipart, or for the parent boundary) is found or EOF is reached.
-     * 
      * The start/end positions of the part's content are set on the passed
-     * $partBuilder as lines are read, as is the part's end position.
+     * $partBuilder, which in turn sets the end position of the part and its
+     * parents.
      * 
      * @param resource $handle
      * @param PartBuilder $partBuilder
@@ -192,39 +194,36 @@ class MessageParser
     private function readPartContent($handle, PartBuilder $partBuilder)
     {
         $partBuilder->setStreamContentStartPos(ftell($handle));
-        if ($this->findContentBoundary($handle, $partBuilder) && $partBuilder->isMultiPart()) {
-            while (!feof($handle) && !$partBuilder->isEndBoundaryFound()) {
+        $this->findContentBoundary($handle, $partBuilder);
+        if ($partBuilder->isMultiPart()) {
+            while (!$partBuilder->isParentBoundaryFound()) {
                 $child = $this->partBuilderFactory->newPartBuilder(
                     $this->partFactoryService->getMimePartFactory()
                 );
                 $partBuilder->addChild($child);
                 $this->readPart($handle, $child);
-                if ($child->isEndBoundaryFound()) {
-                    $discard = $this->partBuilderFactory->newPartBuilder(
-                        $this->partFactoryService->getMimePartFactory()
-                    );
-                    $discard->setParent($partBuilder);
-                    $this->findContentBoundary($handle, $discard);
-                }
             }
-            // for non-multipart parts, setStreamContentAndPartEndPos is called
-            // in findContentBoundary
-            $partBuilder->setStreamPartEndPos(ftell($handle));
         }
     }
     
     /**
-     * Reads a part and any of its children, into the passed $partBuilder.
+     * Reads a part and any of its children, into the passed $partBuilder,
+     * either by calling readUUEncodedOrPlainTextMessage or readPartContent
+     * after reading headers.
      * 
      * @param resource $handle
      * @param PartBuilder $partBuilder
      * @param boolean $isMessage
      */
-    protected function readPart($handle, PartBuilder $partBuilder, $isMessage = false)
+    protected function readPart($handle, PartBuilder $partBuilder)
     {
         $partBuilder->setStreamPartStartPos(ftell($handle));
-        $this->readHeaders($handle, $partBuilder);
-        if ($isMessage && !$partBuilder->isMime()) {
+        
+        if ($partBuilder->canHaveHeaders()) {
+            $this->readHeaders($handle, $partBuilder);
+            $this->lastLineSeparatorLength = 0;
+        }
+        if ($partBuilder->getParent() === null && !$partBuilder->isMime()) {
             $this->readUUEncodedOrPlainTextMessage($handle, $partBuilder);
         } else {
             $this->readPartContent($handle, $partBuilder);
@@ -243,7 +242,7 @@ class MessageParser
         $partBuilder = $this->partBuilderFactory->newPartBuilder(
             $this->partFactoryService->getMessageFactory()
         );
-        $this->readPart($handle, $partBuilder, true);
+        $this->readPart($handle, $partBuilder);
         return $partBuilder;
     }
 }

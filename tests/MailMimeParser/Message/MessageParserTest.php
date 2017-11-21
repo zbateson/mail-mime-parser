@@ -98,6 +98,11 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pb->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with(0);
+        $pb->expects($this->once())
+            ->method('canHaveHeaders');
+        $pb->expects($this->once())
+            ->method('getParent')
+            ->willReturn(null);
         $pb->expects($this->never())
             ->method('addHeader');
         $pb->expects($this->once())
@@ -141,8 +146,14 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->method('setStreamPartStartPos')
             ->with(0);
         $pb->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pb->expects($this->once())
             ->method('addHeader')
             ->with('Subject', 'Money owed for services rendered');
+        $pb->expects($this->once())
+            ->method('getParent')
+            ->willReturn(null);
         $pb->expects($this->once())
             ->method('isMime')
             ->willReturn(false);
@@ -202,12 +213,18 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pbm->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with(0);
+        $pbm->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
         $pbm->expects($this->exactly(2))
             ->method('addHeader')
             ->withConsecutive(
                 ['Subject', 'The Diamonds'],
                 ['To', 'Cousin Avi']
             );
+        $pbm->expects($this->once())
+            ->method('getParent')
+            ->willReturn(null);
         $pbm->expects($this->once())
             ->method('isMime')
             ->willReturn(false);
@@ -298,6 +315,9 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pb->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with(0);
+        $pb->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
         $pb->expects($this->exactly(2))
             ->method('addHeader')
             ->withConsecutive(
@@ -305,18 +325,17 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
                 ['Content-Type', 'text/html']
             );
         $pb->expects($this->once())
+            ->method('getParent')
+            ->willReturn(null);
+        $pb->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
         $pb->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($startPos);
-        $pb->expects($this->exactly(8))
+        $pb->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive(
-                [$this->anything()], [$this->anything()], [$this->anything()],
-                [$this->anything()], [$this->anything()], [$this->anything()],
-                [$this->anything()], [$endPos]
-            );
+            ->with($endPos);
         
         $pbf = $this->partBuilderFactory;
         $pbf->method('newPartBuilder')
@@ -347,16 +366,16 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             "<p>I'm a little teapot, short and stout.  Where is my guiness, where is"
             . "my draught.  I certainly can't rhyme, but no I'm not daft.</p>\r\n";
         $partOneEnd = strlen($email);
-        $email .= "--balderdash\r\n";
+        $email .= "\r\n--balderdash\r\n";
         $partTwoStart = strlen($email);
         $email .= "Content-Type: text/plain\r\n"
             . "\r\n";
         $partTwoContentStart = strlen($email);
         $email .=
             "I'm a little teapot, short and stout.  Where is my guiness, where is"
-            . "my draught.  I certainly can't rhyme, but no I'm not daft.\r\n";
+            . "my draught.  I certainly can't rhyme, but no I'm not daft.";
         $partTwoEnd = strlen($email);
-        $email .= "--balderdash--\r\n\r\n";
+        $email .= "\r\n--balderdash--\r\n\r\n";
         $emailEnd = strlen($email);
         
         $content = vfsStream::newFile('part')->at($this->vfs);
@@ -374,6 +393,9 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pbm->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with(0);
+        $pbm->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
         $pbm->expects($this->exactly(2))
             ->method('addHeader')
             ->withConsecutive(
@@ -381,86 +403,101 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
                 ['Subject', 'I\'m a tiny little wee teapot']
             );
         $pbm->expects($this->once())
+            ->method('getParent')
+            ->willReturn(null);
+        $pbm->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
         $pbm->expects($this->once())
             ->method('isMultiPart')
             ->willReturn(true);
         $pbm->expects($this->once())
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->with('--balderdash')
             ->willReturn(true);
-        $pbm->expects($this->exactly(2))
-            ->method('isEndBoundaryFound')
-            ->willReturnOnConsecutiveCalls(false, false);
+        $pbm->expects($this->exactly(4))
+            ->method('isParentBoundaryFound')
+            ->willReturnOnConsecutiveCalls(false, false, false, true);
         $pbm->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($messagePartStart);
         $pbm->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
             ->with($messagePartStart);
-        $pbm->expects($this->once())
-            ->method('setStreamPartEndPos')
-            ->with($emailEnd);
-        
+
         $pba1 = $this->getPartBuilderMock();
+        $pba1->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
         $pba1->expects($this->once())
             ->method('addHeader')
             ->with('Content-Type', 'text/html');
-        $pba1->expects($this->exactly(2))
-            ->method('setEndBoundary')
+        $pba1->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbm);
+        $pba1->expects($this->exactly(3))
+            ->method('setEndBoundaryFound')
             ->willReturnMap([
+                [$this->anything(), false],
                 [$this->anything(), false],
                 ['--balderdash', true]
             ]);
-        $pba1->expects($this->once())
-            ->method('isEndBoundaryFound')
-            ->willReturn(false);
         $pba1->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with($partOneStart);
         $pba1->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($partOneContentStart);
-        $pba1->expects($this->exactly(2))
+        $pba1->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$this->anything()], [$partOneEnd]);
+            ->with($partOneEnd);
         
         $pba2 = $this->getPartBuilderMock();
         $pba2->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pba2->expects($this->once())
             ->method('addHeader')
             ->with('Content-Type', 'text/plain');
+        $pba2->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbm);
         $pba2->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->willReturnMap([
                 [$this->anything(), false],
                 ['--balderdash--', true]
             ]);
-        $pba2->expects($this->once())
-            ->method('isEndBoundaryFound')
-            ->willReturn(true);
         $pba2->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with($partTwoStart);
         $pba2->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($partTwoContentStart);
-        $pba2->expects($this->exactly(2))
+        $pba2->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$this->anything()], [$partTwoEnd]);
+            ->with($partTwoEnd);
         
         $pba3 = $this->getPartBuilderMock();
         $pba3->expects($this->once())
-            ->method('setParent')
-            ->with($pbm);
+            ->method('canHaveHeaders')
+            ->willReturn(false);
         $pba3->expects($this->once())
-            ->method('setEndBoundary')
+            ->method('getParent')
+            ->willReturn($pbm);
+        $pba3->expects($this->once())
+            ->method('setEndBoundaryFound')
             ->with('')
             ->willReturn(false);
+        $pba3->expects($this->once())
+            ->method('setEof');
+        $pba3->expects($this->once())
+            ->method('setStreamPartAndContentEndPos')
+            ->with($emailEnd);
         
-        $pbm->expects($this->exactly(2))
+        $pbm->expects($this->exactly(3))
             ->method('addChild')
-            ->withConsecutive([$pba1], [$pba2]);
+            ->withConsecutive([$pba1], [$pba2], [$pba3]);
         
         $pbf = $this->partBuilderFactory;
         $pbf->expects($this->exactly(4))
@@ -484,19 +521,19 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             . "\r\n";
         
         $messagePartStart = strlen($email);
-        $email .= "This existed for nought - hidden from view\r\n";
+        $email .= "This existed for nought - hidden from view";
         $messagePartEnd = strlen($email);
         
-        $email .= "--balderdash\r\n";
+        $email .= "\r\n--balderdash\r\n";
         $altPartStart = strlen($email);
         $email .= "Content-Type: multipart/alternative; boundary=gobbledygook\r\n"
             . "\r\n";
         
         $altPartContentStart = strlen($email);
-        $email .= "A line to fool the senses was created... and it was this line\r\n";
+        $email .= "A line to fool the senses was created... and it was this line";
         $altPartContentEnd = strlen($email);
         
-        $email .= "--gobbledygook\r\n";
+        $email .= "\r\n--gobbledygook\r\n";
         $partOneStart = strlen($email);
         $email .= "Content-Type: text/html\r\n"
             . "\r\n";
@@ -504,9 +541,9 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $email .=
             "<p>There once was a man, who was both man and mouse.  He thought himself"
             . "pretty, but was really - well - as ugly as you can imagine a creature"
-            . "that is part man and part mouse.</p>\r\n";
+            . "that is part man and part mouse.</p>";
         $partOneEnd = strlen($email);
-        $email .= "--gobbledygook\r\n";
+        $email .= "\r\n--gobbledygook\r\n";
         $partTwoStart = strlen($email);
         $email .= "Content-Type: text/plain\r\n"
             . "\r\n";
@@ -514,26 +551,25 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $email .=
             "There once was a man, who was both man and mouse.  He thought himself"
             . "pretty, but was really - well - as ugly as you can imagine a creature"
-            . "that is part man and part mouse.\r\n";
+            . "that is part man and part mouse.";
         $partTwoEnd = strlen($email);
-        $email .= "--gobbledygook--\r\n";
-        $altPartEnd = strlen($email);
-        $email .= "--balderdash\r\n";
+        $email .= "\r\n--gobbledygook--";
+        $email .= "\r\n--balderdash\r\n";
         $partThreeStart = strlen($email);
         $email .= "Content-Type: text/html\r\n"
             . "\r\n";
         $partThreeContentStart = strlen($email);
-        $email .= "<p>He wandered through the lands, and shook fancy hands.</p>\r\n";
+        $email .= "<p>He wandered through the lands, and shook fancy hands.</p>";
         $partThreeEnd = strlen($email);
-        $email .= "--balderdash\r\n";
+        $email .= "\r\n--balderdash\r\n";
         $partFourStart = strlen($email);
         $email .= "\r\n";
         $partFourContentStart = strlen($email);
-        $email .= " (^^) \r\n";
+        $email .= " (^^) ";
         $partFourEnd = strlen($email);
-        $email .= "--balderdash--\r\n";
+        $email .= "\r\n--balderdash--\r\n";
         $emailEnd = strlen($email);
-        
+
         $content = vfsStream::newFile('part')->at($this->vfs);
         $content->withContent($email);
         $handle = fopen($content->url(), 'r');
@@ -549,6 +585,9 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pbm->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with(0);
+        $pbm->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
         $pbm->expects($this->exactly(2))
             ->method('addHeader')
             ->withConsecutive(
@@ -562,26 +601,29 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->method('isMultiPart')
             ->willReturn(true);
         $pbm->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->withConsecutive(
                 ['This existed for nought - hidden from view'],
                 ['--balderdash']
             )
             ->willReturnOnConsecutiveCalls(false, true);
-        $pbm->expects($this->exactly(3))
-            ->method('isEndBoundaryFound')
-            ->willReturn(false);
+        $pbm->expects($this->exactly(5))
+            ->method('isParentBoundaryFound')
+            ->willReturnOnConsecutiveCalls(false, false, false, false, true);
         $pbm->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($messagePartStart);
-        $pbm->expects($this->exactly(2))
-            ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$messagePartStart], [$messagePartEnd]);
         $pbm->expects($this->once())
-            ->method('setStreamPartEndPos')
-            ->with($emailEnd);
+            ->method('setStreamPartAndContentEndPos')
+            ->with($messagePartEnd);
         
         $pbAlt = $this->getPartBuilderMock();
+        $pbAlt->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pbAlt->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbm);
         $pbAlt->expects($this->once())
             ->method('addHeader')
             ->with('Content-Type', 'multipart/alternative; boundary=gobbledygook');
@@ -589,35 +631,37 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->method('isMultiPart')
             ->willReturn(true);
         $pbAlt->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->withConsecutive(
                 ['A line to fool the senses was created... and it was this line'],
                 ['--gobbledygook']
             )
             ->willReturnOnConsecutiveCalls(false, true);
         $pbAlt->expects($this->exactly(4))
-            ->method('isEndBoundaryFound')
-            ->willReturnOnConsecutiveCalls(false, false, true, true);
+            ->method('isParentBoundaryFound')
+            ->willReturnOnConsecutiveCalls(false, false, false, true);
         $pbAlt->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with($altPartStart);
         $pbAlt->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($altPartContentStart);
-        $pbAlt->expects($this->exactly(2))
-            ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$altPartContentStart], [$altPartContentEnd]);
         $pbAlt->expects($this->once())
-            ->method('setStreamPartEndPos')
-            ->with($altPartEnd);
-        
+            ->method('setStreamPartAndContentEndPos')
+            ->with($altPartContentEnd);
         
         $pba1 = $this->getPartBuilderMock();
+        $pba1->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pba1->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbAlt);
         $pba1->expects($this->once())
             ->method('addHeader')
             ->with('Content-Type', 'text/html');
         $pba1->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->withConsecutive(
                 ["<p>There once was a man, who was both man and mouse.  He thought himself"
                 . "pretty, but was really - well - as ugly as you can imagine a creature"
@@ -628,25 +672,28 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pba1->expects($this->once())
             ->method('isMultiPart')
             ->willReturn(false);
-        $pba1->expects($this->exactly(1))
-            ->method('isEndBoundaryFound')
-            ->willReturn(false);
         $pba1->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with($partOneStart);
         $pba1->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($partOneContentStart);
-        $pba1->expects($this->exactly(2))
+        $pba1->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$partOneContentStart], [$partOneEnd]);
+            ->with($partOneEnd);
         
         $pba2 = $this->getPartBuilderMock();
+        $pba2->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pba2->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbAlt);
         $pba2->expects($this->once())
             ->method('addHeader')
             ->with('Content-Type', 'text/plain');
         $pba2->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->withConsecutive(
                 ["There once was a man, who was both man and mouse.  He thought himself"
                 . "pretty, but was really - well - as ugly as you can imagine a creature"
@@ -655,7 +702,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             )
             ->willReturnOnConsecutiveCalls(false, true);
         $pba2->expects($this->once())
-            ->method('isEndBoundaryFound')
+            ->method('isMultiPart')
             ->willReturn(false);
         $pba2->expects($this->once())
             ->method('setStreamPartStartPos')
@@ -663,32 +710,44 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pba2->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($partTwoContentStart);
-        $pba2->expects($this->exactly(2))
+        $pba2->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$partTwoContentStart], [$partTwoEnd]);
+            ->with($partTwoEnd);
         
         $pba3 = $this->getPartBuilderMock();
         $pba3->expects($this->once())
-            ->method('setParent')
-            ->with($pbm);
+            ->method('canHaveHeaders')
+            ->willReturn(false);
         $pba3->expects($this->once())
-            ->method('setEndBoundary')
+            ->method('getParent')
+            ->willReturn($pbAlt);
+        $pba3->expects($this->once())
+            ->method('isMultiPart')
+            ->willReturn(false);
+        $pba3->expects($this->once())
+            ->method('setEndBoundaryFound')
             ->with('--balderdash')
             ->willReturn(true);
         
         $pba4 = $this->getPartBuilderMock();
         $pba4->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pba4->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbm);
+        $pba4->expects($this->once())
             ->method('addHeader')
             ->with('Content-Type', 'text/html');
         $pba4->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->withConsecutive(
                 ['<p>He wandered through the lands, and shook fancy hands.</p>'],
                 ['--balderdash']
             )
             ->willReturnOnConsecutiveCalls(false, true);
         $pba4->expects($this->once())
-            ->method('isEndBoundaryFound')
+            ->method('isMultiPart')
             ->willReturn(false);
         $pba4->expects($this->once())
             ->method('setStreamPartStartPos')
@@ -696,47 +755,64 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         $pba4->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($partThreeContentStart);
-        $pba4->expects($this->exactly(2))
+        $pba4->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$partThreeContentStart], [$partThreeEnd]);
+            ->with($partThreeEnd);
         
         $pba5 = $this->getPartBuilderMock();
+        $pba5->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pba5->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbm);
+        $pba5->expects($this->once())
+            ->method('isMultiPart')
+            ->willReturn(false);
         $pba5->expects($this->never())
             ->method('addHeader');
         $pba5->expects($this->exactly(2))
-            ->method('setEndBoundary')
+            ->method('setEndBoundaryFound')
             ->withConsecutive(
-                [' (^^)'],
+                [' (^^) '],
                 ['--balderdash--']
             )
             ->willReturnOnConsecutiveCalls(false, true);
         $pba5->expects($this->once())
-            ->method('isEndBoundaryFound')
-            ->willReturn(true);
+            ->method('isMultiPart')
+            ->willReturn(false);
         $pba5->expects($this->once())
             ->method('setStreamPartStartPos')
             ->with($partFourStart);
         $pba5->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with($partFourContentStart);
-        $pba5->expects($this->exactly(2))
+        $pba5->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$partFourContentStart], [$partFourEnd]);
+            ->with($partFourEnd);
         
         $pba6 = $this->getPartBuilderMock();
         $pba6->expects($this->once())
-            ->method('setParent')
-            ->with($pbm);
+            ->method('canHaveHeaders')
+            ->willReturn(false);
+        $pba6->expects($this->once())
+            ->method('getParent')
+            ->willReturn($pbm);
+        $pba6->expects($this->once())
+            ->method('setStreamPartAndContentEndPos')
+            ->with($emailEnd);
+        $pba6->expects($this->once())
+            ->method('setEof');
         // no extra trailling characters
         $pba6->expects($this->never())
-            ->method('setEndBoundary');
+            ->method('setEndBoundaryFound');
         
         $pbm->expects($this->any())
             ->method('addChild')
-            ->withConsecutive([$pbAlt], [$pba3], [$pba4]);
-        $pbAlt->expects($this->exactly(2))
+            ->withConsecutive([$pbAlt], [$pba4], [$pba5], [$pba6]);
+        $pbAlt->expects($this->exactly(3))
             ->method('addChild')
-            ->withConsecutive([$pba1], [$pba2]);
+            ->withConsecutive([$pba1], [$pba2], [$pba3]);
         
         $pbf = $this->partBuilderFactory;
         $pbf->expects($this->exactly(8))

@@ -6,9 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Message;
-
 /**
  * Factory class for PartStream objects and registration class for Message
  * handles.
@@ -98,93 +95,5 @@ class PartStreamRegistry
             return null;
         }
         return $this->registeredHandles[$id];
-    }
-    
-    /**
-     * Attaches a stream filter on the passed resource $handle for the part's
-     * encoding.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @param resource $handle
-     */
-    private function attachEncodingFilterToStream(MimePart $part, $handle)
-    {
-        $encoding = strtolower($part->getHeaderValue('Content-Transfer-Encoding'));
-        switch ($encoding) {
-            case 'quoted-printable':
-                stream_filter_append($handle, 'mmp-convert.quoted-printable-decode', STREAM_FILTER_READ);
-                break;
-            case 'base64':
-                stream_filter_append($handle, 'mmp-convert.base64-decode', STREAM_FILTER_READ);
-                break;
-            case 'x-uuencode':
-                stream_filter_append($handle, 'mailmimeparser-uudecode', STREAM_FILTER_READ);
-                break;
-            default:
-                break;
-        }
-    }
-    
-    /**
-     * Attaches a mailmimeparser-encode stream filter based on the part's
-     * defined charset.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @param resource $handle
-     */
-    private function attachCharsetFilterToStream(MimePart $part, $handle)
-    {
-        if ($part->isTextPart()) {
-            stream_filter_append(
-                $handle,
-                'mailmimeparser-encode',
-                STREAM_FILTER_READ,
-                [ 'charset' => $part->getHeaderParameter('Content-Type', 'charset') ]
-            );
-        }
-    }
-
-    /**
-     * Creates a part stream handle for the start and end position of the
-     * message stream, and attaches it to the passed MimePart.
-     * 
-     * @param MimePart $part
-     * @param Message $message
-     * @param int $start
-     * @param int $end
-     */
-    public function attachContentPartStreamHandle(MimePart $part, Message $message, $start, $end)
-    {
-        $id = $message->getMessageObjectId();
-        if (empty($this->registeredHandles[$id])) {
-            return null;
-        }
-        $handle = fopen('mmp-mime-message://' . $id . '?start=' .
-            $start . '&end=' . $end, 'r');
-        
-        $this->attachEncodingFilterToStream($part, $handle);
-        $this->attachCharsetFilterToStream($part, $handle);
-        $part->attachContentResourceHandle($handle);
-    }
-    
-    /**
-     * Creates a part stream handle for the start and end position of the
-     * message stream, and attaches it to the passed MimePart.
-     * 
-     * @param MimePart $part
-     * @param Message $message
-     * @param int $start
-     * @param int $end
-     */
-    public function attachOriginalPartStreamHandle(MimePart $part, Message $message, $start, $end)
-    {
-        $id = $message->getMessageObjectId();
-        if (empty($this->registeredHandles[$id])) {
-            return null;
-        }
-        $handle = fopen('mmp-mime-message://' . $id . '?start=' .
-            $start . '&end=' . $end, 'r');
-        
-        $part->attachOriginalStreamHandle($handle);
     }
 }

@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Stream\Helper;
 /**
  * Helper class for converting strings between charsets.
  * 
- * CharasetConverter tries to convert using mb_convert_encoding when possible,
+ * CharsetConverter tries to convert using mb_convert_encoding when possible,
  * defining as many aliases as possible for supported encodings.  If not
  * supported, iconv is attempted.
  *
