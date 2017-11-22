@@ -76,20 +76,30 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn([$nested]);
         
         foreach ($children as $key => $child) {
+            // need to 'setMethods' because getAllNonFilteredParts is protected
             $childMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
+            ->setMethods([
+                'getMessageObjectId',
+                'getAllNonFilteredParts',
+                '__destruct',
+                'getContentResourceHandle',
+                'getContent',
+                'getHandle',
+                'isTextPart',
+                'getHeaderValue'
+            ])
             ->getMock();
             $childMimePart->
                 method('getMessageObjectId')
                 ->willReturn('child' . $key);
             
             if ($key === 0) {
-                $childMimePart
+                $childMimePart->expects($this->any())
                     ->method('getAllNonFilteredParts')
                     ->willReturn([$childMimePart, $nestedMimePart]);
             } else {
                 $childMimePart
-                    ->expects($this->exactly(8))
                     ->method('getAllNonFilteredParts')
                     ->willReturn([$childMimePart]);
             }
@@ -146,7 +156,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
         );
         
         $parts = $message->getAllParts();
-        var_dump(count($parts));
         $parts[1]->method('getContentResourceHandle')
             ->willReturn('oufa baloufa!');
         $parts[1]->method('getContent')
@@ -158,8 +167,8 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertNull($message->getTextPart(2));
         $this->assertNull($message->getTextStream(2));
         $this->assertNull($message->getTextContent(2));
-        //$this->assertEquals('oufa baloufa!', $message->getTextStream());
-        //$this->assertEquals('shabadabada...', $message->getTextContent());
+        $this->assertEquals('oufa baloufa!', $message->getTextStream());
+        $this->assertEquals('shabadabada...', $message->getTextContent());
     }
     
     public function testGetHtmlPartAndHtmlPartCount()
@@ -237,7 +246,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $child->method('getHandle')
             ->willReturn($handle);
         
-        $this->assertEquals("mucha\r\nagua\r\ny\r\npollo\r\n", $message->getMessageStringForSignatureVerification());        
+        $this->assertEquals("mucha\r\nagua\r\ny\r\npollo\r\n\r\n", $message->getMessageStringForSignatureVerification());
         fclose($handle);
     }
     
