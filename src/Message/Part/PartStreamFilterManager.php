@@ -45,13 +45,35 @@ class PartStreamFilterManager
     
     /**
      * @var array mapping Content-Transfer-Encoding header values to available
-     *      filters.
+     *      stream filters.
      */
-    private $encodingEncoderMap = [
-        'quoted-printable' => 'mmp-convert.quoted-printable-decode',
-        'base64' => 'mmp-convert.base64-decode',
-        'x-uuencode' => 'mailmimeparser-uudecode'
-    ];
+    private $encodingEncoderMap = [];
+    
+    /**
+     * @var string name of stream filter handling character set conversion
+     */
+    private $charsetConversionFilter;
+    
+    /**
+     * 
+     * @param string $quotedPrintableDecodeFilter
+     * @param string $base64DecodeFilter
+     * @param string $uudecodeFilter
+     * @param string $charsetConversionFilter
+     */
+    public function __construct(
+        $quotedPrintableDecodeFilter,
+        $base64DecodeFilter,
+        $uudecodeFilter,
+        $charsetConversionFilter
+    ) {
+        $this->encodingEncoderMap = [
+            'quoted-printable' => $quotedPrintableDecodeFilter,
+            'base64' => $base64DecodeFilter,
+            'x-uuencode' => $uudecodeFilter
+        ];
+        $this->charsetConversionFilter = $charsetConversionFilter;
+    }
     
     /**
      * Attaches a decoding filter to the given handle, for the passed
@@ -105,7 +127,7 @@ class PartStreamFilterManager
             if (!empty($charset)) {
                 $this->charset['filter'] = stream_filter_append(
                     $handle,
-                    'mailmimeparser-encode',
+                    $this->charsetConversionFilter,
                     STREAM_FILTER_READ,
                     [ 'charset' => $charset ]
                 );

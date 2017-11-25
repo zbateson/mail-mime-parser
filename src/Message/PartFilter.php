@@ -93,16 +93,6 @@ class PartFilter
      * ```
      */
     private $headers = [];
-
-    /**
-     * @var string[] map of headers and default values if the header isn't set.
-     *      This allows text/plain to match a Content-Type header that hasn't
-     *      been set for instance.
-     */
-    private $defaultHeaderValues = [
-        'Content-Type' => 'text/plain',
-        'Content-Disposition' => 'inline',
-    ];
     
     /**
      * Convenience method to filter for a specific mime type.
@@ -329,31 +319,50 @@ class PartFilter
     }
     
     /**
+     * Tests a single header value against $part, and returns true if the test
+     * fails.
+     * 
+     * @staticvar array $map
+     * @param MimePart $part
+     * @param int $type
+     * @param string $name
+     * @param string $header
+     * @return boolean
+     */
+    private function failsHeaderFor($part, $type, $name, $header)
+    {
+        $headerValue = null;
+        
+        static $map = [
+            'content-type' => 'getContentType',
+            'content-disposition' => 'getContentDisposition',
+            'content-transfer-encoding' => 'getContentTransferEncoding'
+        ];
+        $lower = strtolower($name);
+        if (isset($map[$lower])) {
+            $headerValue = call_user_func([$part, $map[$lower]]);
+        } elseif (!($part instanceof MimePart)) {
+            return ($type === static::FILTER_INCLUDE);
+        } else {
+            $headerValue = $part->getHeaderValue($name);
+        }
+        
+        return (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
+            || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0));
+    }
+    
+    /**
      * Returns true if the passed MimePart fails the filter's header filter
      * settings.
      * 
      * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
-    public function failsHeaderPartFilter(MessagePart $part)
+    private function failsHeaderPartFilter(MessagePart $part)
     {
         foreach ($this->headers as $type => $values) {
             foreach ($values as $name => $header) {
-                
-                $headerValue = null;
-                if (strcasecmp($name, 'Content-Type') === 0) {
-                    $headerValue = $part->getContentType();
-                } elseif (strcasecmp($name, 'Content-Disposition') === 0) {
-                    $headerValue = $part->getContentDisposition();
-                } elseif (strcasecmp($name, 'Content-Transfer-Encoding')) {
-                    $headerValue = $part->getContentTransferEncoding();
-                } elseif (!($part instanceof MimePart)) {
-                    return ($type === static::FILTER_INCLUDE);
-                } else {
-                    $headerValue = $part->getHeaderValue($name);
-                }
-                if (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
-                    || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0)) {
+                if ($this->failsHeaderFor($part, $type, $name, $header)) {
                     return true;
                 }
             }

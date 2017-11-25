@@ -13,23 +13,37 @@ use PHPUnit_Framework_TestCase;
  */
 class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
 {
+    private $partStreamFilterManager = null;
+    
+    private $quotedPrintableFilter = 'mmp-test.quoted-printable-decode';
+    private $base64Filter = 'mmp-test.base64-decode';
+    private $uudecodeFilter = 'mmp-test.uudecode';
+    private $charsetConversionFilter = 'mmp-test.charset-convert';
+    
     protected function setUp()
     {
         stream_filter_register(
-            'mmp-convert.quoted-printable-decode',
+            $this->quotedPrintableFilter,
             'ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerTestStreamFilter'
         );
         stream_filter_register(
-            'mmp-convert.base64-decode',
+            $this->base64Filter,
             'ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerTestStreamFilter'
         );
         stream_filter_register(
-            'mailmimeparser-uudecode',
+            $this->uudecodeFilter,
             'ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerTestStreamFilter'
         );
         stream_filter_register(
-            'mailmimeparser-encode',
+            $this->charsetConversionFilter,
             'ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerTestStreamFilter'
+        );
+        
+        $this->partStreamFilterManager = new PartStreamFilterManager(
+            $this->quotedPrintableFilter,
+            $this->base64Filter,
+            $this->uudecodeFilter,
+            $this->charsetConversionFilter
         );
     }
     
@@ -40,13 +54,12 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
-                $this->assertEquals('mmp-convert.quoted-printable-decode', $filtername);
+                $this->assertEquals($this->quotedPrintableFilter, $filtername);
                 ++$callCount;
             }
         );
 
-        $manager = new PartStreamFilterManager();
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', null);
+        $this->partStreamFilterManager->attachContentStreamFilters($handle, 'quoted-printable', null);
 
         $this->assertEquals(1, $callCount);
         fclose($handle);
@@ -59,13 +72,12 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
-                $this->assertEquals('mmp-convert.base64-decode', $filtername);
+                $this->assertEquals($this->base64Filter, $filtername);
                 ++$callCount;
             }
         );
 
-        $manager = new PartStreamFilterManager();
-        $manager->attachContentStreamFilters($handle, 'base64', null);
+        $this->partStreamFilterManager->attachContentStreamFilters($handle, 'base64', null);
 
         $this->assertEquals(1, $callCount);
         fclose($handle);
@@ -78,13 +90,12 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
-                $this->assertEquals('mailmimeparser-uudecode', $filtername);
+                $this->assertEquals($this->uudecodeFilter, $filtername);
                 ++$callCount;
             }
         );
 
-        $manager = new PartStreamFilterManager();
-        $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
+        $this->partStreamFilterManager->attachContentStreamFilters($handle, 'x-uuencode', null);
 
         $this->assertEquals(1, $callCount);
         fclose($handle);
@@ -97,14 +108,13 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
-                $this->assertEquals('mailmimeparser-encode', $filtername);
+                $this->assertEquals($this->charsetConversionFilter, $filtername);
                 $this->assertEquals('US-ASCII', $params['charset']);
                 ++$callCount;
             }
         );
 
-        $manager = new PartStreamFilterManager();
-        $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
+        $this->partStreamFilterManager->attachContentStreamFilters($handle, null, 'US-ASCII');
 
         $this->assertEquals(1, $callCount);
         fclose($handle);
@@ -118,9 +128,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
                 if ($callCount === 0 || $callCount === 2) {
-                    $this->assertEquals('mailmimeparser-uudecode', $filtername);
+                    $this->assertEquals($this->uudecodeFilter, $filtername);
                 } else {
-                    $this->assertEquals('mmp-convert.quoted-printable-decode', $filtername);
+                    $this->assertEquals($this->quotedPrintableFilter, $filtername);
                 }
                 ++$callCount;
             }
@@ -130,15 +140,15 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         PartStreamFilterManagerTestStreamFilter::setOnCloseCallback(
             function ($filtername, $params) use (&$closeCount) {
                 if ($closeCount === 0) {
-                    $this->assertEquals('mailmimeparser-uudecode', $filtername);
+                    $this->assertEquals($this->uudecodeFilter, $filtername);
                 } elseif ($closeCount === 1) {
-                    $this->assertEquals('mmp-convert.quoted-printable-decode', $filtername);
+                    $this->assertEquals($this->quotedPrintableFilter, $filtername);
                 }
                 ++$closeCount;
             }
         );
 
-        $manager = new PartStreamFilterManager();
+        $manager = $this->partStreamFilterManager;
         $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
         $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
         $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
@@ -159,7 +169,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
-                $this->assertEquals('mailmimeparser-encode', $filtername);
+                $this->assertEquals($this->charsetConversionFilter, $filtername);
                 if ($callCount === 0) {
                     $this->assertEquals('US-ASCII', $params['charset']);
                 } elseif ($callCount === 1) {
@@ -175,17 +185,17 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         PartStreamFilterManagerTestStreamFilter::setOnCloseCallback(
             function ($filtername, $params) use (&$closeCount) {
                 if ($closeCount === 0) {
-                    $this->assertEquals('mailmimeparser-encode', $filtername);
+                    $this->assertEquals($this->charsetConversionFilter, $filtername);
                     $this->assertEquals('US-ASCII', $params['charset']);
                 } elseif ($closeCount === 1) {
-                    $this->assertEquals('mailmimeparser-encode', $filtername);
+                    $this->assertEquals($this->charsetConversionFilter, $filtername);
                     $this->assertEquals('ISO-8859-1', $params['charset']);
                 }
                 ++$closeCount;
             }
         );
 
-        $manager = new PartStreamFilterManager();
+        $manager = $this->partStreamFilterManager;
         $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
         $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
         $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
@@ -209,9 +219,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
                 
                 // transfer-encoding filter must be applied before charset conversion
                 if ($callCount === 0) {
-                    $this->assertEquals('mmp-convert.quoted-printable-decode', $filtername);
+                    $this->assertEquals($this->quotedPrintableFilter, $filtername);
                 } elseif ($callCount === 1) {
-                    $this->assertEquals('mailmimeparser-encode', $filtername);
+                    $this->assertEquals($this->charsetConversionFilter, $filtername);
                     $this->assertEquals('US-ASCII', $params['charset']);
                 }
                 ++$callCount;
@@ -225,7 +235,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $manager = new PartStreamFilterManager();
+        $manager = $this->partStreamFilterManager;
         $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
         $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
         $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
@@ -254,7 +264,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $manager = new PartStreamFilterManager();
+        $manager = $this->partStreamFilterManager;
         $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
         $manager->reset();
 
@@ -288,7 +298,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $manager = new PartStreamFilterManager();
+        $manager = $this->partStreamFilterManager;
         $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
         $manager->attachContentStreamFilters($handle2, 'quoted-printable', 'US-ASCII');
 

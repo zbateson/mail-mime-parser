@@ -15,20 +15,26 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
 {
     private $parts = [];
     
-    protected function getMockedPartWithContentType($mimeType, $disposition = null)
+    protected function getMockedPartWithContentType($mimeType, $disposition = null, $isText = false)
     {
         $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
-            ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter', 'getContentResourceHandle', 'getParent'])
+            ->setMethods([
+                '__destruct',
+                'setRawHeader',
+                'getHeader',
+                'getHeaderValue',
+                'getHeaderParameter',
+                'getContentResourceHandle',
+                'getParent',
+                'getContentType',
+                'getContentDisposition',
+                'isTextPart',
+            ])
             ->getMock();
-        $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) use ($mimeType, $disposition) {
-            if (strcasecmp($param, 'Content-Type') === 0) {
-                return $mimeType;
-            } elseif (strcasecmp($param, 'Content-Disposition') === 0) {
-                return $disposition;
-            }
-            return $defaultValue;
-        }));
+        $part->method('getContentType')->willReturn($mimeType);
+        $part->method('getContentDisposition')->willReturn($disposition);
+        $part->method('isTextPart')->willReturn($isText);
         return $part;
     }
     
@@ -47,11 +53,11 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $signedPart = $this->getMockedSignedPart();
         $signedPartParent = $signedPart->getParent();
         $this->parts = [
-            $this->getMockedPartWithContentType('text/html'),
+            $this->getMockedPartWithContentType('text/html', null, true),
             $this->getMockedPartWithContentType('multipart/alternative', 'inline'),
-            $this->getMockedPartWithContentType('text/html', 'inline'),
-            $this->getMockedPartWithContentType('text/plain', 'attachment'),
-            $this->getMockedPartWithContentType('text/html', 'attachment'),
+            $this->getMockedPartWithContentType('text/html', 'inline', true),
+            $this->getMockedPartWithContentType('text/plain', 'attachment', true),
+            $this->getMockedPartWithContentType('text/html', 'attachment', true),
             $this->getMockedPartWithContentType('multipart/relative'),
             $signedPartParent,
             $signedPart

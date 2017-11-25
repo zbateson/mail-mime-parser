@@ -18,7 +18,7 @@ class UUDecodeStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mailmimeparser-uudecode';
+    const STREAM_FILTER_NAME = 'mmp.uudecode';
     
     /**
      * @var string Leftovers from the last incomplete line that was parsed, to

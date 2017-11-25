@@ -25,8 +25,10 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager');
-        $this->partStreamFilterManager = $psf->getMock();
+        $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->partStreamFilterManager = $psf;
     }
     
     private function getMessagePart()

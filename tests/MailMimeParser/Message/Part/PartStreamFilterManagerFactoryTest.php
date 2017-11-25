@@ -17,7 +17,12 @@ class PartStreamFilterManagerFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory();
+        $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory(
+            'test',
+            'test',
+            'test',
+            'test'
+        );
     }
     
     public function testNewInstance()

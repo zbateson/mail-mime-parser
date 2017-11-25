@@ -25,7 +25,7 @@ class CharsetStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mailmimeparser-encode';
+    const STREAM_FILTER_NAME = 'mmp.charset-convert';
     
     /**
      * @var \ZBateson\MailMimeParser\Stream\Helper\CharsetConverter the charset

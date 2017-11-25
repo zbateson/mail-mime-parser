@@ -24,7 +24,7 @@ class Base64DecodeStreamFilter extends php_user_filter
     /**
      * Name used when registering with stream_filter_register.
      */
-    const STREAM_FILTER_NAME = 'mmp-convert.base64-decode';
+    const STREAM_FILTER_NAME = 'mmp.base64-decode';
     
     /**
      * @var string Leftovers from the last incomplete line that was parsed, to

@@ -17,6 +17,12 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
+        $mockpsfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockpsfmfactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
@@ -24,15 +30,21 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
         $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageFactory = MessageFactory::getInstance($mockHeaderFactory, $mockFilterFactory);
+        
+        $mockpsfmfactory->method('newInstance')
+            ->willReturn($mockpsfm);
+        
+        $this->messageFactory = new MessageFactory(
+            $mockpsfmfactory,
+            $mockHeaderFactory,
+            $mockFilterFactory
+        );
     }
     
     public function testNewInstance()
     {
         $messageId = 'the id';
-        $partBuilder = $this->getMockBuilder(
-            'ZBateson\MailMimeParser\Message\Part\PartBuilder'
-        )
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         

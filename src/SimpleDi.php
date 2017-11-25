@@ -12,10 +12,12 @@ use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\PartStream;
+use ZBateson\MailMimeParser\Stream\ConvertStreamFilter;
 use ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
 use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
+use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -214,6 +216,14 @@ class SimpleDi
     
     public function getPartStreamFilterManagerFactory()
     {
+        if ($this->partStreamFilterManagerFactory === null) {
+            $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory(
+                ConvertStreamFilter::STREAM_DECODER_FILTER_NAME,
+                Base64DecodeStreamFilter::STREAM_FILTER_NAME,
+                UUDecodeStreamFilter::STREAM_FILTER_NAME,
+                CharsetStreamFilter::STREAM_FILTER_NAME
+            );
+        }
         return $this->getInstance(
             'partStreamFilterManagerFactory',
             __NAMESPACE__ . '\Message\Part\PartStreamFilterManagerFactory'
@@ -278,7 +288,8 @@ class SimpleDi
      */
     protected function registerStreamExtensions()
     {
-        stream_filter_register(UUDecodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUDecodeStreamFilter');
+        stream_filter_register(
+            UUDecodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUDecodeStreamFilter');
         stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\CharsetStreamFilter');
         stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\Stream\PartStream');
         
@@ -293,7 +304,7 @@ class SimpleDi
         // In 3.18-3.20, it seems we're not able to overwrite 'convert.*'
         // filters, so now they're all named mmp-convert.*
         stream_filter_register(
-            'mmp-convert.quoted-printable-decode',
+            ConvertStreamFilter::STREAM_DECODER_FILTER_NAME,
             __NAMESPACE__ . '\Stream\ConvertStreamFilter'
         );
         stream_filter_register(
