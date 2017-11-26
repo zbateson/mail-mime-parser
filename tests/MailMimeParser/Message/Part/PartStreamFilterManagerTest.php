@@ -45,12 +45,11 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             $this->uudecodeFilter,
             $this->charsetConversionFilter
         );
+        $this->partStreamFilterManager->setContentUrl('php://memory');
     }
     
     public function testAttachQuotedPrintableDecoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -59,16 +58,13 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $this->partStreamFilterManager->attachContentStreamFilters($handle, 'quoted-printable', null);
+        $this->partStreamFilterManager->getContentHandle('quoted-printable', null, null);
 
         $this->assertEquals(1, $callCount);
-        fclose($handle);
     }
     
     public function testAttachBase64Decoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -77,16 +73,13 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $this->partStreamFilterManager->attachContentStreamFilters($handle, 'base64', null);
+        $this->partStreamFilterManager->getContentHandle('base64', null, null);
 
         $this->assertEquals(1, $callCount);
-        fclose($handle);
     }
     
     public function testAttachUUEncodeDecoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -95,35 +88,30 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $this->partStreamFilterManager->attachContentStreamFilters($handle, 'x-uuencode', null);
+        $this->partStreamFilterManager->getContentHandle('x-uuencode', null, null);
 
         $this->assertEquals(1, $callCount);
-        fclose($handle);
     }
     
     public function testAttachCharsetConversionDecoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
                 $this->assertEquals($this->charsetConversionFilter, $filtername);
-                $this->assertEquals('US-ASCII', $params['charset']);
+                $this->assertEquals('US-ASCII', $params['from']);
+                $this->assertEquals('UTF-8', $params['to']);
                 ++$callCount;
             }
         );
 
-        $this->partStreamFilterManager->attachContentStreamFilters($handle, null, 'US-ASCII');
+        $this->partStreamFilterManager->getContentHandle(null, 'US-ASCII', 'UTF-8');
 
         $this->assertEquals(1, $callCount);
-        fclose($handle);
     }
     
     public function testReAttachTransferEncodingDecoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -149,33 +137,35 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $manager = $this->partStreamFilterManager;
-        $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
-        $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
-        $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', null);
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', null);
-        $manager->attachContentStreamFilters($handle, 'x-uuencode', null);
+        $manager->getContentHandle('x-uuencode', null, null);
+        $manager->getContentHandle('x-uuencode', null, null);
+        $manager->getContentHandle('x-uuencode', null, null);
+        $manager->getContentHandle('quoted-printable', null, null);
+        $manager->getContentHandle('quoted-printable', null, null);
+        $manager->getContentHandle('x-uuencode', null, null);
 
         $this->assertEquals(3, $callCount);
         $this->assertEquals(2, $closeCount);
-
-        fclose($handle);
     }
     
     public function testReAttachCharsetConversionDecoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
                 $this->assertEquals($this->charsetConversionFilter, $filtername);
                 if ($callCount === 0) {
-                    $this->assertEquals('US-ASCII', $params['charset']);
+                    $this->assertEquals('US-ASCII', $params['from']);
+                    $this->assertEquals('UTF-8', $params['to']);
                 } elseif ($callCount === 1) {
-                    $this->assertEquals('ISO-8859-1', $params['charset']);
+                    $this->assertEquals('US-ASCII', $params['from']);
+                    $this->assertEquals('WINDOWS-1252', $params['to']);
                 } elseif ($callCount === 2) {
-                    $this->assertEquals('WINDOWS-1252', $params['charset']);
+                    $this->assertEquals('ISO-8859-1', $params['from']);
+                    $this->assertEquals('WINDOWS-1252', $params['to']);
+                } elseif ($callCount === 3) {
+                    $this->assertEquals('WINDOWS-1252', $params['from']);
+                    $this->assertEquals('UTF-8', $params['to']);
                 }
                 ++$callCount;
             }
@@ -186,33 +176,35 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             function ($filtername, $params) use (&$closeCount) {
                 if ($closeCount === 0) {
                     $this->assertEquals($this->charsetConversionFilter, $filtername);
-                    $this->assertEquals('US-ASCII', $params['charset']);
+                    $this->assertEquals('US-ASCII', $params['from']);
+                    $this->assertEquals('UTF-8', $params['to']);
                 } elseif ($closeCount === 1) {
                     $this->assertEquals($this->charsetConversionFilter, $filtername);
-                    $this->assertEquals('ISO-8859-1', $params['charset']);
+                    $this->assertEquals('US-ASCII', $params['from']);
+                    $this->assertEquals('WINDOWS-1252', $params['to']);
+                } elseif ($closeCount === 2) {
+                    $this->assertEquals($this->charsetConversionFilter, $filtername);
+                    $this->assertEquals('ISO-8859-1', $params['from']);
+                    $this->assertEquals('WINDOWS-1252', $params['to']);
                 }
                 ++$closeCount;
             }
         );
 
         $manager = $this->partStreamFilterManager;
-        $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
-        $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
-        $manager->attachContentStreamFilters($handle, null, 'US-ASCII');
-        $manager->attachContentStreamFilters($handle, null, 'ISO-8859-1');
-        $manager->attachContentStreamFilters($handle, null, 'ISO-8859-1');
-        $manager->attachContentStreamFilters($handle, null, 'WINDOWS-1252');
+        $manager->getContentHandle(null, 'US-ASCII', 'UTF-8');
+        $manager->getContentHandle(null, 'US-ASCII', 'UTF-8');
+        $manager->getContentHandle(null, 'US-ASCII', 'WINDOWS-1252');
+        $manager->getContentHandle(null, 'ISO-8859-1', 'WINDOWS-1252');
+        $manager->getContentHandle(null, 'ISO-8859-1', 'WINDOWS-1252');
+        $manager->getContentHandle(null, 'WINDOWS-1252', 'UTF-8');
 
-        $this->assertEquals(3, $callCount);
-        $this->assertEquals(2, $closeCount);
-        
-        fclose($handle);
+        $this->assertEquals(4, $callCount);
+        $this->assertEquals(3, $closeCount);
     }
     
     public function testAttachCharsetConversionAndTransferEncodingDecoder()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -222,7 +214,8 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
                     $this->assertEquals($this->quotedPrintableFilter, $filtername);
                 } elseif ($callCount === 1) {
                     $this->assertEquals($this->charsetConversionFilter, $filtername);
-                    $this->assertEquals('US-ASCII', $params['charset']);
+                    $this->assertEquals('US-ASCII', $params['from']);
+                    $this->assertEquals('UTF-8', $params['to']);
                 }
                 ++$callCount;
             }
@@ -236,20 +229,16 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $manager = $this->partStreamFilterManager;
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-8');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-8');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-8');
 
         $this->assertEquals(2, $callCount);
         $this->assertEquals(0, $closeCount);
-        
-        fclose($handle);
     }
     
     public function testReset()
     {
-        $handle = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -265,25 +254,20 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $manager = $this->partStreamFilterManager;
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-8');
         $manager->reset();
 
         $this->assertEquals(2, $callCount);
         $this->assertEquals(2, $closeCount);
         
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-8');
         
         $this->assertEquals(4, $callCount);
         $this->assertEquals(2, $closeCount);
-        
-        fclose($handle);
     }
     
     public function testResetByAttachingDifferentHandle()
     {
-        $handle = fopen('php://memory', 'r');
-        $handle2 = fopen('php://memory', 'r');
-        
         $callCount = 0;
         PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
             function ($filtername, $params) use (&$callCount) {
@@ -299,13 +283,11 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $manager = $this->partStreamFilterManager;
-        $manager->attachContentStreamFilters($handle, 'quoted-printable', 'US-ASCII');
-        $manager->attachContentStreamFilters($handle2, 'quoted-printable', 'US-ASCII');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-16');
+        $manager->setContentUrl('php://temp');
+        $manager->getContentHandle('quoted-printable', 'US-ASCII', 'UTF-16');
 
         $this->assertEquals(4, $callCount);
         $this->assertEquals(2, $closeCount);
-        
-        fclose($handle);
-        fclose($handle2);
     }
 }

@@ -19,15 +19,17 @@ namespace ZBateson\MailMimeParser\Message\Part;
 class PartStreamFilterManager
 {
     /**
-     * @var resource compared against the passed $handle in
-     *      attachContentStreamFilter to check that the attached filters are
-     *      applied to the right handle (if it were to change.)
+     * @var handle current opened handle if any
      */
-    private $cachedHandle;
+    protected $contentHandle;
     
     /**
-     * @var array map of the active encoding filter active on the current
-     *      PartStreamFilterManager
+     * @var string the URL to open the content stream
+     */
+    protected $url;
+    
+    /**
+     * @var array map of the active encoding filter on the current handle.
      */
     private $encoding = [
         'type' => null,
@@ -35,11 +37,11 @@ class PartStreamFilterManager
     ];
     
     /**
-     * @var array map of the active charset filter active on the current
-     *      PartStreamFilterManager
+     * @var array map of the active charset filter on the current handle.
      */
     private $charset = [
-        'type' => null,
+        'from' => null,
+        'to' => null,
         'filter' => null
     ];
     
@@ -55,6 +57,7 @@ class PartStreamFilterManager
     private $charsetConversionFilter;
     
     /**
+     * Sets up filter names used for stream_filter_append
      * 
      * @param string $quotedPrintableDecodeFilter
      * @param string $base64DecodeFilter
@@ -76,27 +79,71 @@ class PartStreamFilterManager
     }
     
     /**
-     * Attaches a decoding filter to the given handle, for the passed
-     * $transferEncoding if not already attached to the handle.
+     * Closes the contentHandle if one is attached.
+     */
+    public function __destruct()
+    {
+        $this->url = null;
+        if (is_resource($this->contentHandle)) {
+            fclose($this->contentHandle);
+        }
+    }
+    
+    /**
+     * Sets the URL used to open the content resource handle.
      * 
-     * Checks the value of $this->encoding['type'] against the passed
-     * $transferEncoding, and, if identical, does nothing.  Otherwise detaches
-     * any attached transfer encoding decoder filters before attaching a
-     * relevant one and updating $this->encoding['type'].
+     * The function also closes the currently attached handle if any.
      * 
-     * @param resource $handle
+     * @param string $url
+     */
+    public function setContentUrl($url)
+    {
+        $this->url = $url;
+        if (is_resource($this->contentHandle)) {
+            fclose($this->contentHandle);
+            $this->contentHandle = null;
+        }
+    }
+    
+    /**
+     * Returns true if the attached stream filter used for decoding the content
+     * on the current handle is different from the one passed as an argument.
+     * 
+     * @param string $transferEncoding
+     * @return boolean
+     */
+    private function isTransferEncodingFilterChanged($transferEncoding)
+    {
+        return ($transferEncoding !== $this->encoding['type']);
+    }
+    
+    /**
+     * Returns true if the attached stream filter used for charset conversion on
+     * the current handle is different from the one needed based on the passed 
+     * arguments.
+     * 
+     * @param string $fromCharset
+     * @param string $toCharset
+     * @return boolean
+     */
+    private function isCharsetFilterChanged($fromCharset, $toCharset)
+    {
+        return ($fromCharset !== $this->charset['from']
+            || $toCharset !== $this->charset['to']);
+    }
+    
+    /**
+     * Attaches a decoding filter to the attached content handle, for the passed
+     * $transferEncoding.
+     * 
      * @param string $transferEncoding
      */
-    protected function attachTransferEncodingFilter($handle, $transferEncoding)
+    protected function attachTransferEncodingFilter($transferEncoding)
     {
-        if ($transferEncoding !== $this->encoding['type']) {
-            if (is_resource($this->encoding['filter'])) {
-                stream_filter_remove($this->encoding['filter']);
-                $this->encoding['filter'] = null;
-            }
+        if ($this->contentHandle !== null) {
             if (!empty($transferEncoding) && isset($this->encodingEncoderMap[$transferEncoding])) {
                 $this->encoding['filter'] = stream_filter_append(
-                    $handle,
+                    $this->contentHandle,
                     $this->encodingEncoderMap[$transferEncoding],
                     STREAM_FILTER_READ
                 );
@@ -106,75 +153,85 @@ class PartStreamFilterManager
     }
     
     /**
-     * Attaches a charset conversion filter to the given handle, for the passed
-     * $charset if not already attached to the handle.
+     * Attaches a charset conversion filter to the attached content handle, for
+     * the passed arguments.
      * 
-     * Checks the value of $this->charset['type'] against the passed $charset,
-     * and, if identical, does nothing.  Otherwise detaches any attached charset
-     * conversion filters before attaching a relevant one and updating
-     * $this->charset['type'].
-     * 
-     * @param resource $handle
-     * @param string $charset
+     * @param string $fromCharset the character set the content is encoded in
+     * @param string $toCharset the target encoding to return
      */
-    protected function attachCharsetFilter($handle, $charset)
+    protected function attachCharsetFilter($fromCharset, $toCharset)
     {
-        if ($charset !== $this->charset['type']) {
-            if (is_resource($this->charset['filter'])) {
-                stream_filter_remove($this->charset['filter']);
-                $this->charset['filter'] = null;
-            }
-            if (!empty($charset)) {
+        if ($this->contentHandle !== null) {
+            if (!empty($fromCharset) && !empty($toCharset)) {
                 $this->charset['filter'] = stream_filter_append(
-                    $handle,
+                    $this->contentHandle,
                     $this->charsetConversionFilter,
                     STREAM_FILTER_READ,
-                    [ 'charset' => $charset ]
+                    [ 'from' => $fromCharset, 'to' => $toCharset ]
                 );
             }
-            $this->charset['type'] = $charset;
+            $this->charset['from'] = $fromCharset;
+            $this->charset['to'] = $toCharset;
         }
     }
     
     /**
-     * Resets attached transfer-encoding decoder and charset conversion filters
-     * set for the current manager.
+     * Closes the attached resource handle, resets mapped encoding and charset
+     * filters, and reopens the handle seeking back to the current position.
+     * 
+     * Note that closing/reopening is done because of the following differences
+     * discovered between hhvm (up to 3.18 at least) and php:
+     * 
+     *  o stream_filter_remove wasn't triggering php_user_filter's onClose
+     *    callback
+     *  o read operations performed after stream_filter_remove weren't calling
+     *    filter on php_user_filter
+     * 
+     * It seems stream_filter_remove doesn't work on hhvm, or isn't implemented
+     * in the same way -- so closing and reopening seems to solve that.
      */
     public function reset()
     {
-        if (is_resource($this->encoding['filter'])) {
-            @stream_filter_remove($this->encoding['filter']);
-        }
-        if (is_resource($this->charset['filter'])) {
-            @stream_filter_remove($this->charset['filter']);
+        $pos = 0;
+        if (is_resource($this->contentHandle)) {
+            $pos = ftell($this->contentHandle);
+            fclose($this->contentHandle);
+            $this->contentHandle = null;
         }
         $this->encoding = [
             'type' => null,
             'filter' => null
         ];
         $this->charset = [
-            'type' => null,
+            'from' => null,
+            'to' => null,
             'filter' => null
         ];
+        if (!empty($this->url)) {
+            $this->contentHandle = fopen($this->url, 'r');
+            fseek($this->contentHandle, $pos);
+        }
     }
     
     /**
      * Checks what transfer-encoding decoder filters and charset conversion
-     * filters are attached on the handle, detaching them if necessary, before
-     * attaching relevant filters for the passed $transferEncoding and
-     * $charset.
+     * filters are attached on the handle, closing/reopening the handle if
+     * different, before attaching relevant filters for the passed
+     * $transferEncoding and charset arguments, and returning a resource handle.
      * 
-     * @param resource $handle
      * @param string $transferEncoding
-     * @param string $charset
+     * @param string $fromCharset the character set the content is encoded in
+     * @param string $toCharset the target encoding to return
      */
-    public function attachContentStreamFilters($handle, $transferEncoding, $charset)
+    public function getContentHandle($transferEncoding, $fromCharset, $toCharset)
     {
-        if ($this->cachedHandle !== $handle) {
+        if (!is_resource($this->contentHandle)
+            || $this->isTransferEncodingFilterChanged($transferEncoding)
+            || $this->isCharsetFilterChanged($fromCharset, $toCharset)) {
             $this->reset();
-            $this->cachedHandle = $handle;
+            $this->attachTransferEncodingFilter($transferEncoding);
+            $this->attachCharsetFilter($fromCharset, $toCharset);
         }
-        $this->attachTransferEncodingFilter($handle, $transferEncoding);
-        $this->attachCharsetFilter($handle, $charset);
+        return $this->contentHandle;
     }
 }

@@ -31,9 +31,9 @@ abstract class MessagePart
     protected $handle;
     
     /**
-     * @var resource a resource handle to this part's content
+     * @var string url for opening a content handle with partStreamFilterManager
      */
-    protected $contentHandle;
+    protected $contentUrl;
     
     /**
      * @var PartStreamFilterManager manages attached filters to $contentHandle
@@ -58,14 +58,12 @@ abstract class MessagePart
         PartStreamFilterManager $partStreamFilterManager
     ) {
         $this->messageObjectId = $messageObjectId;
-        $partFilename = $partBuilder->getStreamPartFilename($messageObjectId);
-        $contentFilename = $partBuilder->getStreamContentFilename($messageObjectId);
+        $partUrl = $partBuilder->getStreamPartUrl($messageObjectId);
+        $this->contentUrl = $partBuilder->getStreamContentUrl($messageObjectId);
+        $partStreamFilterManager->setContentUrl($this->contentUrl);
         $this->partStreamFilterManager = $partStreamFilterManager;
-        if ($partFilename !== null) {
-            $this->handle = fopen($partFilename, 'r');
-        }
-        if ($contentFilename !== null) {
-            $this->contentHandle = fopen($contentFilename, 'r');
+        if ($partUrl !== null) {
+            $this->handle = fopen($partUrl, 'r');
         }
     }
 
@@ -76,12 +74,9 @@ abstract class MessagePart
     {
         // stream_filter_append may be cleaned up by PHP, but for large files
         // and many emails may be more efficient to fully clean up
-        $this->partStreamFilterManager->reset();
+        $this->partStreamFilterManager->setContentUrl(null);
         if (is_resource($this->handle)) {
             fclose($this->handle);
-        }
-        if (is_resource($this->contentHandle)) {
-            fclose($this->contentHandle);
         }
     }
     
@@ -105,7 +100,7 @@ abstract class MessagePart
      */
     public function hasContent()
     {
-        if ($this->contentHandle !== null) {
+        if ($this->contentUrl !== null) {
             return true;
         }
         return false;
@@ -212,8 +207,7 @@ abstract class MessagePart
      */
     public function getContentResourceHandle($transferEncoding = null, $charset = null)
     {
-        if (is_resource($this->contentHandle)) {
-            rewind($this->contentHandle);
+        if ($this->contentUrl !== null) {
             $tr = $transferEncoding;
             $ch = $charset;
             if (empty($tr)) {
@@ -222,13 +216,13 @@ abstract class MessagePart
             if (empty($ch)) {
                 $ch = $this->getCharset();
             }
-            $this->partStreamFilterManager->attachContentStreamFilters(
-                $this->contentHandle,
+            return $this->partStreamFilterManager->getContentHandle(
                 $tr,
-                $ch
+                $ch,
+                'UTF-8'
             );
         }
-        return $this->contentHandle;
+        return null;
     }
 
     /**
@@ -240,8 +234,11 @@ abstract class MessagePart
     public function getContent($transferEncoding = null, $charset = null)
     {
         if ($this->hasContent()) {
-            $text = stream_get_contents($this->getContentResourceHandle($transferEncoding, $charset));
-            rewind($this->contentHandle);
+            $handle = $this->getContentResourceHandle($transferEncoding, $charset);
+            $pos = ftell($handle);
+            rewind($handle);
+            $text = stream_get_contents($handle);
+            fseek($handle, $pos);
             return $text;
         }
         return null;

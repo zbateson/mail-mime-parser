@@ -34,6 +34,16 @@ class MailMimeParser
     }
     
     /**
+     * Sets the default charset used by MMP for strings returned by read
+     * operations on text content (e.g. MessagePart::getContentResource
+     * @param type $charset
+     */
+    public function setDefaultCharset($charset)
+    {
+        
+    }
+    
+    /**
      * Parses the passed stream handle into a ZBateson\MailMimeParser\Message
      * object and returns it.
      * 

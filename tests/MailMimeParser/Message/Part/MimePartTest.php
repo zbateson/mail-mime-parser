@@ -432,7 +432,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
                 'contenttype' => ['Content-Type', 'text/plain; charset=wingding'],
                 'contenttransferencoding' => ['Content-Transfer-Encoding', 'klingon']
             ]);
-        $pb->method('getStreamContentFilename')
+        $pb->method('getStreamContentUrl')
             ->willReturn($fileContent->url());
         
         $headerType = $this->getMockedParameterHeader('Content-Type', 'text/plain', 'wingding');
@@ -447,8 +447,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         
         $manager = $this->mockPartStreamFilterManager;
         $manager->expects($this->once())
-            ->method('attachContentStreamFilters')
-            ->with($this->anything(), 'klingon', 'WINGDING');
+            ->method('getContentHandle')
+            ->with('klingon', 'WINGDING', 'UTF-8')
+            ->willReturn('totally not null');
         
         $part = new MimePart(
             $hf,

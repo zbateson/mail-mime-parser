@@ -350,7 +350,7 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $instance->setStreamPartEndPos(84);
         $this->assertEquals(
             'euphrates://kufa?start=42&end=84',
-            $instance->getStreamPartFilename('kufa')
+            $instance->getStreamPartUrl('kufa')
         );
     }
     
@@ -366,11 +366,11 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $instance->setStreamPartAndContentEndPos(84);
         $this->assertEquals(
             'tigris://babylon?start=42&end=84',
-            $instance->getStreamContentFilename('babylon')
+            $instance->getStreamContentUrl('babylon')
         );
         $this->assertEquals(
             'tigris://kufa?start=11&end=84',
-            $instance->getStreamPartFilename('kufa')
+            $instance->getStreamPartUrl('kufa')
         );
     }
     
@@ -407,27 +407,27 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $instance->setStreamPartAndContentEndPos(84);
         $this->assertEquals(
             'tigris://babylon?start=42&end=84',
-            $instance->getStreamContentFilename('babylon')
+            $instance->getStreamContentUrl('babylon')
         );
         $this->assertEquals(
             'tigris://kufa?start=22&end=84',
-            $instance->getStreamPartFilename('kufa')
+            $instance->getStreamPartUrl('kufa')
         );
         $this->assertEquals(
             'euphrates://babylon?start=13&end=20',
-            $parent->getStreamContentFilename('babylon')
+            $parent->getStreamContentUrl('babylon')
         );
         $this->assertEquals(
             'euphrates://kufa?start=11&end=84',
-            $parent->getStreamPartFilename('kufa')
+            $parent->getStreamPartUrl('kufa')
         );
         $this->assertEquals(
             'vistula://babylon?start=3&end=3',
-            $super->getStreamContentFilename('babylon')
+            $super->getStreamContentUrl('babylon')
         );
         $this->assertEquals(
             'vistula://kufa?start=0&end=84',
-            $super->getStreamPartFilename('kufa')
+            $super->getStreamPartUrl('kufa')
         );
     }
     

@@ -359,7 +359,7 @@ class PartBuilder
      * @param string $messageObjectId the message object id
      * @return string
      */
-    public function getStreamPartFilename($messageObjectId)
+    public function getStreamPartUrl($messageObjectId)
     {
         if ($this->streamPartEndPos === 0) {
             return null;
@@ -376,7 +376,7 @@ class PartBuilder
      * @param string $messageObjectId the message object id
      * @return string
      */
-    public function getStreamContentFilename($messageObjectId)
+    public function getStreamContentUrl($messageObjectId)
     {
         if ($this->streamContentEndPos === 0) {
             return null;

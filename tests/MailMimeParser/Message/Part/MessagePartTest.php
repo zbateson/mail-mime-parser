@@ -57,7 +57,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
         $fileMockPart->withContent('mucha agua');
         $this->partBuilder
-            ->method('getStreamPartFilename')
+            ->method('getStreamPartUrl')
             ->willReturn($fileMockPart->url());
         
         $messagePart = $this->getMessagePart();
@@ -72,13 +72,20 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
     {
         $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
         $fileMockPart->withContent('mucho mas agua');
+        $handle = fopen($fileMockPart->url(), 'r');
         $this->partBuilder
-            ->method('getStreamContentFilename')
+            ->expects($this->once())
+            ->method('getStreamContentUrl')
             ->willReturn($fileMockPart->url());
         $this->partStreamFilterManager
-            ->expects($this->exactly(2))
-            ->method('attachContentStreamFilters')
-            ->with($this->anything(), 'wubalubadub-duuuuub', 'wigidiwamwamwazzle');
+            ->expects($this->once())
+            ->method('setContentUrl')
+            ->with($fileMockPart->url());
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getContentHandle')
+            ->with('wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'UTF-8')
+            ->willReturn($handle);
         
         $messagePart = $this->getMessagePart();
         $messagePart->method('getContentTransferEncoding')
@@ -87,77 +94,93 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
             ->willReturn('wigidiwamwamwazzle');
         
         $this->assertTrue($messagePart->hasContent());
-        $this->assertNotNull($messagePart->getContentResourceHandle());
-        $handle = $messagePart->getContentResourceHandle();
-        $this->assertEquals('mucho mas agua', stream_get_contents($handle));
+        $this->assertSame($handle, $messagePart->getContentResourceHandle());
+        fclose($handle);
     }
     
     public function testContentStreamHandleWithCustomEncodingAndCharset()
     {
         $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
         $fileMockPart->withContent('mucho mas agua');
+        $handle = fopen($fileMockPart->url(), 'r');
         $this->partBuilder
-            ->method('getStreamContentFilename')
+            ->method('getStreamContentUrl')
             ->willReturn($fileMockPart->url());
         $this->partStreamFilterManager
-            ->expects($this->exactly(2))
-            ->method('attachContentStreamFilters')
-            ->with($this->anything(), 'an-encodah', 'a-charset');
+            ->expects($this->once())
+            ->method('setContentUrl')
+            ->with($fileMockPart->url());
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getContentHandle')
+            ->with('an-encodah', 'a-charset', 'UTF-8')
+            ->willReturn($handle);
         
         $messagePart = $this->getMessagePart();
         
         $this->assertTrue($messagePart->hasContent());
-        $this->assertNotNull($messagePart->getContentResourceHandle('an-encodah', 'a-charset'));
-        $handle = $messagePart->getContentResourceHandle('an-encodah', 'a-charset');
-        $this->assertEquals('mucho mas agua', stream_get_contents($handle));
+        $this->assertSame($handle, $messagePart->getContentResourceHandle('an-encodah', 'a-charset'));
+        fclose($handle);
     }
     
     public function testGetContent()
     {
         $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
         $fileMockPart->withContent('agua con rocas');
+        $handle = fopen($fileMockPart->url(), 'r');
         $this->partBuilder
-            ->method('getStreamContentFilename')
+            ->method('getStreamContentUrl')
             ->willReturn($fileMockPart->url());
-        
         $this->partStreamFilterManager
             ->expects($this->once())
-            ->method('attachContentStreamFilters')
-            ->with($this->anything(), '', '');
+            ->method('setContentUrl')
+            ->with($fileMockPart->url());
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getContentHandle')
+            ->with('', '', 'UTF-8')
+            ->willReturn($handle);
         
         $messagePart = $this->getMessagePart();
         $this->assertEquals('agua con rocas', $messagePart->getContent());
+        fclose($handle);
     }
     
     public function testDestructClosesHandlesAndResetsFilters()
     {
         $filePart = vfsStream::newFile('part')->at($this->vfs);
         $fileContent = vfsStream::newFile('content')->at($this->vfs);
+        $handle = fopen($fileContent->url(), 'r');
         
         $this->partBuilder
-            ->method('getStreamPartFilename')
+            ->method('getStreamPartUrl')
             ->willReturn($filePart->url());
         $this->partBuilder
-            ->method('getStreamContentFilename')
+            ->method('getStreamContentUrl')
             ->willReturn($fileContent->url());
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getContentHandle')
+            ->with('', '', 'UTF-8')
+            ->willReturn($handle);
+        $this->partStreamFilterManager
+            ->method('setContentUrl')
+            ->withConsecutive([$fileContent->url()], [null]);
         
         // cloned to test __destruct -- phpunit has an internal reference to
         // the mocked object.
         
-        $this->partStreamFilterManager
-            ->expects($this->once())
-            ->method('reset');
-        
         $messagePart = clone($this->getMessagePart());
-        $handle = $messagePart->getHandle();
+        $partHandle = $messagePart->getHandle();
         $contentHandle = $messagePart->getContentResourceHandle();
         
-        $this->assertTrue(is_resource($handle));
+        $this->assertTrue(is_resource($partHandle));
         $this->assertTrue(is_resource($contentHandle));
         
         unset($messagePart);
         
-        $this->assertFalse(is_resource($handle));
-        $this->assertFalse(is_resource($contentHandle));
+        $this->assertFalse(is_resource($partHandle));
+        // $contentHandle not actually closed, but setContentUrl is called with null
+        fclose($handle);
     }
 }

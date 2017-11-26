@@ -354,7 +354,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $content->withContent('Demigorgon');
         
         $pb = $this->getMockedPartBuilder();
-        $pb->method('getStreamPartFilename')
+        $pb->method('getStreamPartUrl')
             ->willReturn($content->url());
         $message = new Message(
             $this->mockHeaderFactory,

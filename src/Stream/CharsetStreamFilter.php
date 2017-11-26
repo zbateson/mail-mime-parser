@@ -70,8 +70,8 @@ class CharsetStreamFilter extends php_user_filter
     {
         $charset = 'ISO-8859-1';
         $to = 'UTF-8';
-        if (!empty($this->params['charset'])) {
-            $charset = $this->params['charset'];
+        if (!empty($this->params['from'])) {
+            $charset = $this->params['from'];
         }
         if (!empty($this->params['to'])) {
             $to = $this->params['to'];
