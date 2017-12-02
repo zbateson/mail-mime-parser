@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use ZBateson\MailMimeParser\MailMimeParser;
+
 /**
  * Represents a single part of a message.
  *

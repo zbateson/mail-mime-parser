@@ -14,17 +14,28 @@ use PHPUnit_Framework_TestCase;
  */
 class CommentPartTest extends PHPUnit_Framework_TestCase
 {
+    private $charsetConverter;
+    
+    public function setUp()
+    {
+        $this->charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+    }
+    
     public function testBasicComment()
     {
         $comment = 'Some silly comment made about my moustache';
-        $part = new CommentPart($comment);
+        $part = new CommentPart($this->charsetConverter, $comment);
         $this->assertEquals('', $part->getValue());
         $this->assertEquals($comment, $part->getComment());
     }
     
     public function testMimeEncoding()
     {
-        $part = new CommentPart('=?US-ASCII?Q?Kilgore_Trout?=');
+        $this->charsetConverter->expects($this->once())
+            ->method('convert')
+            ->with('Kilgore Trout', 'US-ASCII', 'UTF-8')
+            ->willReturn('Kilgore Trout');
+        $part = new CommentPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('', $part->getValue());
         $this->assertEquals('Kilgore Trout', $part->getComment());
     }

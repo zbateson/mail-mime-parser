@@ -4,7 +4,7 @@
  *
  * @license http => //opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Stream\Helper;
+namespace ZBateson\MailMimeParser\Util;
 
 /**
  * Helper class for converting strings between charsets.
@@ -276,42 +276,16 @@ class CharsetConverter
         'ISOIR166' => 'TIS620',
     ];
     
-    /**
-     * @var string charset to convert from
-     */
-    protected $fromCharset;
+    // maps
+    protected $mappedRequestedCharsets = [
+        'UTF-8' => [ true, 'UTF-8' ],
+        'US-ASCII' => [ true, 'US-ASCII' ],
+        'ISO-8859-1' => [ true, 'ISO-8859-1' ],
+    ];
     
     /**
-     * @var string charset to convert to
-     */
-    protected $toCharset;
-    
-    /**
-     * @var boolean indicates if $fromCharset is supported by
-     * mb_convert_encoding
-     */
-    protected $fromCharsetMbSupported = true;
-    
-    /**
-     * @var boolean indicates if $toCharset is supported by mb_convert_encoding
-     */
-    protected $toCharsetMbSupported = true;
-    
-    /**
-     * Constructs the charset converter with source/destination charsets.
-     * 
-     * @param string $fromCharset
-     * @param string $toCharset
-     */
-    public function __construct($fromCharset, $toCharset)
-    {
-        $this->fromCharset = $this->findSupportedCharset($fromCharset, $this->fromCharsetMbSupported);
-        $this->toCharset = $this->findSupportedCharset($toCharset, $this->toCharsetMbSupported);
-    }
-    
-    /**
-     * Converts the passed string's charset from $this->fromCharset to
-     * $this->toCharset.
+     * Converts the passed string's charset from the passed $fromCharset to the
+     * passed $toCharset
      * 
      * The function attempts to use mb_convert_encoding if possible, and falls
      * back to iconv if not.  If the source or destination character sets aren't
@@ -320,21 +294,43 @@ class CharsetConverter
      * @param string $str
      * @return string
      */
-    public function convert($str)
+    public function convert($str, $fromCharset, $toCharset)
     {
         // there may be some mb-supported encodings not supported by iconv (on my libiconv for instance
         // HZ isn't supported), and so it may happen that failing an mb_convert_encoding, an iconv
         // may also fail even though both support an encoding separately.
-        // Unfortunately there's no great way of testing what charsets are available on iconv, and
-        // attempting to blindly convert the string may be too costly, as could converting first
-        // to an intermediate (ASSUMPTION: may be worth testing converting to an intermediate)
+        // For cases like that, a two-way encoding is done with UTF-8 as an intermediary.
+        $fromMbSupported = true;
+        $toMbSupported = true;
+        $from = $this->getRealCharset($fromCharset, $fromMbSupported);
+        $to = $this->getRealCharset($toCharset, $toMbSupported);
         if ($str !== '') {
-            if ($this->fromCharsetMbSupported && $this->toCharsetMbSupported) {
-                return mb_convert_encoding($str, $this->toCharset, $this->fromCharset);
+            if ($fromMbSupported && !$toMbSupported) {
+                $str = mb_convert_encoding($str, 'UTF-8', $from);
+                return iconv('UTF-8', $to . '//TRANSLIT//IGNORE', $str);
+            } elseif (!$fromMbSupported && $toMbSupported) {
+                $str = iconv($from, 'UTF-8//TRANSLIT//IGNORE', $str);
+                return mb_convert_encoding($str, $to, 'UTF-8');
+            } elseif ($fromMbSupported && $toMbSupported) {
+                return mb_convert_encoding($str, $to, $from);
             }
-            return iconv($this->fromCharset, $this->toCharset . '//TRANSLIT//IGNORE', $str);
+            return iconv($from, $to . '//TRANSLIT//IGNORE', $str);
         }
         return $str;
+    }
+    
+    private function getRealCharset($cs, &$mbSupported)
+    {
+        $csu = strtoupper($cs);
+        if (!isset($this->mappedRequestedCharsets[$csu])) {
+            $ret = $this->findSupportedCharset($csu, $mbSupported);
+            $this->mappedRequestedCharsets[$csu] = [
+                $mbSupported,
+                $ret
+            ];
+        }
+        $mbSupported = $this->mappedRequestedCharsets[$csu][0];
+        return $this->mappedRequestedCharsets[$csu][1];
     }
     
     /**

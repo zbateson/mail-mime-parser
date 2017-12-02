@@ -14,9 +14,16 @@ use PHPUnit_Framework_TestCase;
  */
 class TokenTest extends PHPUnit_Framework_TestCase
 {
+    private $charsetConverter;
+    
+    public function setUp()
+    {
+        $this->charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+    }
+    
     public function testInstance()
     {
-        $token = new Token('testing');
+        $token = new Token($this->charsetConverter, 'testing');
         $this->assertNotNull($token);
         $this->assertEquals('testing', $token->getValue());
         $this->assertEquals('testing', strval($token));
@@ -24,14 +31,14 @@ class TokenTest extends PHPUnit_Framework_TestCase
     
     public function testSpaceTokenValue()
     {
-        $token = new Token(' ');
+        $token = new Token($this->charsetConverter, ' ');
         $this->assertTrue($token->ignoreSpacesBefore());
         $this->assertTrue($token->ignoreSpacesAfter());
     }
     
     public function testNonSpaceTokenValue()
     {
-        $token = new Token('Anything');
+        $token = new Token($this->charsetConverter, 'Anything');
         $this->assertFalse($token->ignoreSpacesBefore());
         $this->assertFalse($token->ignoreSpacesAfter());
     }

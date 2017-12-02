@@ -28,10 +28,20 @@ class CharsetStreamFilter extends php_user_filter
     const STREAM_FILTER_NAME = 'mmp.charset-convert';
     
     /**
-     * @var \ZBateson\MailMimeParser\Stream\Helper\CharsetConverter the charset
+     * @var \ZBateson\MailMimeParser\Util\CharsetConverter the charset
      *      converter
      */
     protected $converter = null;
+    
+    /**
+     * @var string charset of the source stream
+     */
+    protected $fromCharset = 'ISO-8859-1';
+    
+    /**
+     * @var string charset to convert to
+     */
+    protected $toCharset = 'UTF-8';
 
     /**
      * Filter implementation converts encoding before returning PSFS_PASS_ON.
@@ -45,7 +55,7 @@ class CharsetStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $converted = $this->converter->convert($bucket->data);
+            $converted = $this->converter->convert($bucket->data, $this->fromCharset, $this->toCharset);
             $consumed += strlen($bucket->data);
             
             // $this->stream is undocumented.  It was found looking at HHVM's source code
@@ -68,16 +78,14 @@ class CharsetStreamFilter extends php_user_filter
      */
     public function onCreate()
     {
-        $charset = 'ISO-8859-1';
-        $to = 'UTF-8';
         if (!empty($this->params['from'])) {
-            $charset = $this->params['from'];
+            $this->fromCharset = $this->params['from'];
         }
         if (!empty($this->params['to'])) {
-            $to = $this->params['to'];
+            $this->toCharset = $this->params['to'];
         }
         
         $di = SimpleDi::singleton();
-        $this->converter = $di->newCharsetConverter($charset, $to);
+        $this->converter = $di->newCharsetConverter();
     }
 }

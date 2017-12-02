@@ -15,10 +15,17 @@ use DateTime;
  */
 class DatePartTest extends PHPUnit_Framework_TestCase
 {
+    private $charsetConverter;
+    
+    public function setUp()
+    {
+        $this->charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+    }
+    
     public function testDateString()
     {
         $value = 'Wed, 17 May 2000 19:08:29 -0400';
-        $part = new DatePart($value);
+        $part = new DatePart($this->charsetConverter, $value);
         $this->assertEquals($value, $part->getValue());
         $date = $part->getDateTime();
         $this->assertNotEmpty($date);
@@ -28,7 +35,7 @@ class DatePartTest extends PHPUnit_Framework_TestCase
     public function testInvalidDate()
     {
         $value = 'Invalid Date';
-        $part = new DatePart($value);
+        $part = new DatePart($this->charsetConverter, $value);
         $this->assertEquals($value, $part->getValue());
         $date = $part->getDateTime();
         $this->assertNull($date);

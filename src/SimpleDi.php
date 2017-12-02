@@ -11,12 +11,14 @@ use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Stream\PartStream;
 use ZBateson\MailMimeParser\Stream\ConvertStreamFilter;
 use ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter;
 use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
 use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
-use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
+use ZBateson\MailMimeParser\Util\CharsetConverter;
 use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory;
 
 /**
@@ -153,16 +155,11 @@ class SimpleDi
     /**
      * Constructs and returns a new CharsetConverter object.
      * 
-     * @param string $fromCharset source charset
-     * @param string $toCharset destination charset
-     * @return \ZBateson\MailMimeParser\Stream\Helper\CharsetConverter
+     * @return \ZBateson\MailMimeParser\Util\CharsetConverter
      */
-    public function newCharsetConverter($fromCharset, $toCharset)
+    public function newCharsetConverter()
     {
-        return new CharsetConverter(
-            $fromCharset,
-            $toCharset
-        );
+        return new CharsetConverter();
     }
     
     
@@ -244,6 +241,11 @@ class SimpleDi
         return $this->getInstance('partStreamRegistry', __NAMESPACE__ . '\Stream\PartStreamRegistry');
     }
     
+    public function getCharsetConverter()
+    {
+        return new CharsetConverter();
+    }
+    
     /**
      * Returns the part factory service
      * 
@@ -251,7 +253,10 @@ class SimpleDi
      */
     public function getHeaderPartFactory()
     {
-        return $this->getInstance('headerPartFactory', __NAMESPACE__ . '\Header\Part\HeaderPartFactory');
+        if ($this->headerPartFactory === null) {
+            $this->headerPartFactory = new HeaderPartFactory($this->getCharsetConverter());
+        }
+        return $this->headerPartFactory;
     }
     
     /**
@@ -261,7 +266,10 @@ class SimpleDi
      */
     public function getMimeLiteralPartFactory()
     {
-        return $this->getInstance('mimeLiteralPartFactory', __NAMESPACE__ . '\Header\Part\MimeLiteralPartFactory');
+        if ($this->mimeLiteralPartFactory === null) {
+            $this->mimeLiteralPartFactory = new MimeLiteralPartFactory($this->getCharsetConverter());
+        }
+        return $this->mimeLiteralPartFactory;
     }
     
     /**

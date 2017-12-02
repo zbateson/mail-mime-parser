@@ -17,7 +17,8 @@ class MimeLiteralPartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->headerPartFactory = new MimeLiteralPartFactory();
+        $charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+        $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);
     }
     
     public function testNewInstance()

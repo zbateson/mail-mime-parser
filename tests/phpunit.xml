@@ -38,6 +38,9 @@
         <testsuite name="Stream">
             <directory suffix="Test.php">MailMimeParser/Stream</directory>
         </testsuite>
+        <testsuite name="Util">
+            <directory suffix="Test.php">MailMimeParser/Util</directory>
+        </testsuite>
         <testsuite name="Integration">
             <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>
         </testsuite>

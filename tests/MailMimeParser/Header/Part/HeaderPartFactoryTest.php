@@ -13,11 +13,12 @@ use PHPUnit_Framework_TestCase;
  */
 class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected $headerPartFactory;
+    private $headerPartFactory;
     
     protected function setUp()
     {
-        $this->headerPartFactory = new HeaderPartFactory();
+        $charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+        $this->headerPartFactory = new HeaderPartFactory($charsetConverter);
     }
     
     public function testNewInstance()

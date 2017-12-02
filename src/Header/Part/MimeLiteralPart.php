@@ -6,7 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Util\CharsetConverter;
 
 /**
  * Represents a single mime header part token, with the possibility of it being
@@ -38,10 +39,12 @@ class MimeLiteralPart extends LiteralPart
      * decoded value to a member variable. Sets canIgnoreSpacesBefore and
      * canIgnoreSpacesAfter.
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $token
      */
-    public function __construct($token)
+    public function __construct(CharsetConverter $charsetConverter, $token)
     {
+        parent::__construct($charsetConverter);
         $this->value = $this->decodeMime($token);
         // preg_match returns int
         $pattern = self::MIME_PART_PATTERN;
@@ -62,7 +65,9 @@ class MimeLiteralPart extends LiteralPart
     protected function decodeMime($value)
     {
         $pattern = self::MIME_PART_PATTERN;
+        // remove whitespace between two adjacent mime encoded parts
         $value = preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
+        // with PREG_SPLIT_DELIM_CAPTURE, matched and unmatched parts are returned
         $aMimeParts = preg_split("/($pattern)/", $value, -1, PREG_SPLIT_DELIM_CAPTURE);
         $ret = '';
         foreach ($aMimeParts as $entity) {
@@ -93,8 +98,7 @@ class MimeLiteralPart extends LiteralPart
             } else {
                 $body = base64_decode($body);
             }
-            $converter = new CharsetConverter($matches[1], 'UTF-8');
-            return $converter->convert($body);
+            return $this->convertEncoding($body, $matches[1], true);
         }
         return $this->convertEncoding($entity);
     }

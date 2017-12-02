@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MailMimeParser\Util\CharsetConverter;
 use DateTime;
 
 /**
@@ -24,13 +25,19 @@ class DatePart extends LiteralPart
      * Tries parsing the header's value as an RFC 2822 date, and failing that
      * into an RFC 822 date.
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $token
      */
-    public function __construct($token) {
-        parent::__construct(trim($token));
-        $date = DateTime::createFromFormat(DateTime::RFC2822, $this->value);
+    public function __construct(CharsetConverter $charsetConverter, $token) {
+        
+        // parent::__construct converts character encoding -- may cause problems
+        // sometimes.
+        $dateToken = trim($token);
+        parent::__construct($charsetConverter, $dateToken);
+        
+        $date = DateTime::createFromFormat(DateTime::RFC2822, $dateToken);
         if ($date === false) {
-            $date = DateTime::createFromFormat(DateTime::RFC822, $this->value);
+            $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
         }
         $this->date = ($date === false) ? null : $date;
     }

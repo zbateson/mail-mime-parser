@@ -27,7 +27,7 @@ use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
  *  - To: Winterfell: jonsnow@winterfell.com, Arya Stark <arya@winterfell.com>;
  *
  * Addresses may contain quoted parts and comments, and names may be mime-header
- * encoded (need to review RFC to be sure of this as its been a while).
+ * encoded.
  * 
  * @author Zaahid Bateson
  */

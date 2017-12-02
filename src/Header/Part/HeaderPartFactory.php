@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MailMimeParser\Util\CharsetConverter;
+
 /**
  * Constructs and returns HeaderPart objects.
  *
@@ -13,6 +15,22 @@ namespace ZBateson\MailMimeParser\Header\Part;
  */
 class HeaderPartFactory
 {
+    /**
+     * @var CharsetConverter $charsetConverter passed to HeaderPart constructors
+     *      for converting strings in HeaderPart::convertEncoding
+     */
+    protected $charsetConverter;
+    
+    /**
+     * Sets up dependencies.
+     * 
+     * @param CharsetConverter $charsetConverter
+     */
+    public function __construct(CharsetConverter $charsetConverter)
+    {
+        $this->charsetConverter = $charsetConverter;
+    }
+    
     /**
      * Creates and returns a default HeaderPart for this factory, allowing
      * subclass factories for specialized HeaderParts.
@@ -35,7 +53,7 @@ class HeaderPartFactory
      */
     public function newToken($value)
     {
-        return new Token($value);
+        return new Token($this->charsetConverter, $value);
     }
     
     /**
@@ -46,7 +64,7 @@ class HeaderPartFactory
      */
     public function newLiteralPart($value)
     {
-        return new LiteralPart($value);
+        return new LiteralPart($this->charsetConverter, $value);
     }
     
     /**
@@ -57,7 +75,7 @@ class HeaderPartFactory
      */
     public function newMimeLiteralPart($value)
     {
-        return new MimeLiteralPart($value);
+        return new MimeLiteralPart($this->charsetConverter, $value);
     }
     
     /**
@@ -68,7 +86,7 @@ class HeaderPartFactory
      */
     public function newCommentPart($value)
     {
-        return new CommentPart($value);
+        return new CommentPart($this->charsetConverter, $value);
     }
     
     /**
@@ -80,7 +98,7 @@ class HeaderPartFactory
      */
     public function newAddressPart($name, $email)
     {
-        return new AddressPart($name, $email);
+        return new AddressPart($this->charsetConverter, $name, $email);
     }
     
     /**
@@ -92,7 +110,7 @@ class HeaderPartFactory
      */
     public function newAddressGroupPart(array $addresses, $name = '')
     {
-        return new AddressGroupPart($addresses, $name);
+        return new AddressGroupPart($this->charsetConverter, $addresses, $name);
     }
     
     /**
@@ -103,7 +121,7 @@ class HeaderPartFactory
      */
     public function newDatePart($value)
     {
-        return new DatePart($value);
+        return new DatePart($this->charsetConverter, $value);
     }
     
     /**
@@ -115,6 +133,6 @@ class HeaderPartFactory
      */
     public function newParameterPart($name, $value)
     {
-        return new ParameterPart($name, $value);
+        return new ParameterPart($this->charsetConverter, $name, $value);
     }
 }
