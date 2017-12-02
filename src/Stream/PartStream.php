@@ -153,7 +153,7 @@ class PartStream
         if ($nRead > 0) {
             $ret = fread($this->handle, $nRead);
         }
-        $this->position += strlen($ret);
+        $this->position += mb_strlen($ret, '8bit');
         fseek($this->handle, $pos);
         return $ret;
     }
