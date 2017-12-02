@@ -107,10 +107,6 @@ class PartStream
      * This would open a file handle to a MIME message with the ID 123456, with
      * a start offset of 0, and an end offset of 20.
      * 
-     * TODO: $mode is not validated, although only read operations are
-     * implemented in PartStream.  $options are not checked for error reporting
-     * mode.
-     * 
      * @param string $path The requested path
      * @param string $mode The requested open mode
      * @param int $options Additional streams API flags
@@ -123,6 +119,12 @@ class PartStream
         $this->parseOpenPath($path, $this->id, $this->start, $this->end);
         $this->handle = $this->registry->get($this->id);
         $this->registry->increaseHandleRefCount($this->id);
+        if ($mode !== 'r') {
+            if ($options & STREAM_REPORT_ERRORS !== 0) {
+                trigger_error('Invalid open mode: only read supported');
+            }
+            return false;
+        }
         return ($this->handle !== null && $this->start !== null && $this->end !== null);
     }
     
