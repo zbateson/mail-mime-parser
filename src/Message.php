@@ -180,15 +180,14 @@ class Message extends MimePart
      * passed $index can be read or null if unavailable.
      * 
      * @param int $index
-     * @param string $transferEncoding
      * @param string $charset
      * @return resource
      */
-    public function getTextStream($index = 0, $transferEncoding = null, $charset = null)
+    public function getTextStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         $textPart = $this->getTextPart($index);
         if ($textPart !== null) {
-            return $textPart->getContentResourceHandle($transferEncoding, $charset);
+            return $textPart->getContentResourceHandle($charset);
         }
         return null;
     }
@@ -200,15 +199,14 @@ class Message extends MimePart
      * null if the message doesn't have an inline text part.
      * 
      * @param int $index
-     * @param string $transferEncoding
      * @param string $charset
      * @return string
      */
-    public function getTextContent($index = 0, $transferEncoding = null, $charset = null)
+    public function getTextContent($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         $part = $this->getTextPart($index);
         if ($part !== null) {
-            return $part->getContent($transferEncoding, $charset);
+            return $part->getContent($charset);
         }
         return null;
     }
@@ -218,15 +216,14 @@ class Message extends MimePart
      * passed $index can be read or null if unavailable.
      * 
      * @param int $index
-     * @param string $transferEncoding
      * @param string $charset
      * @return resource
      */
-    public function getHtmlStream($index = 0, $transferEncoding = null, $charset = null)
+    public function getHtmlStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         $htmlPart = $this->getHtmlPart($index);
         if ($htmlPart !== null) {
-            return $htmlPart->getContentResourceHandle($transferEncoding, $charset);
+            return $htmlPart->getContentResourceHandle($charset);
         }
         return null;
     }
@@ -238,15 +235,14 @@ class Message extends MimePart
      * null if the message doesn't have an inline html part.
      * 
      * @param int $index
-     * @param string $transferEncoding
      * @param string $charset
      * @return string
      */
-    public function getHtmlContent($index = 0, $transferEncoding = null, $charset = null)
+    public function getHtmlContent($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         $part = $this->getHtmlPart($index);
         if ($part !== null) {
-            return $part->getContent($transferEncoding, $charset);
+            return $part->getContent($charset);
         }
         return null;
     }

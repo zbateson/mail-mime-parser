@@ -832,7 +832,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $failMessage = 'Failed while parsing m1010';
-        $f = $message->getTextStream(0, null, 'iso-8859-1');
+        $message->setCharsetOverride('iso-8859-1');
+        $f = $message->getTextStream(0);
         $this->assertNotNull($f, $failMessage);
         $this->assertTextContentTypeEquals('HasenundFrФsche.txt', $f, $failMessage);
     }

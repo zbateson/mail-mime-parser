@@ -33,11 +33,10 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
     
     private function getMessagePart()
     {
-        return $this->getMockBuilder(
-            'ZBateson\MailMimeParser\Message\Part\MessagePart'
-        )
-            ->setConstructorArgs(['habibi', $this->partBuilder, $this->partStreamFilterManager])
-            ->getMockForAbstractClass();
+        return $this->getMockForAbstractClass(
+            'ZBateson\MailMimeParser\Message\Part\MessagePart',
+            ['habibi', $this->partBuilder, $this->partStreamFilterManager]
+        );
     }
     
     public function testNewInstance()
@@ -98,7 +97,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         fclose($handle);
     }
     
-    public function testContentStreamHandleWithCustomEncodingAndCharset()
+    public function testContentStreamHandleWithCustomCharset()
     {
         $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
         $fileMockPart->withContent('mucho mas agua');
@@ -111,15 +110,21 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
             ->method('setContentUrl')
             ->with($fileMockPart->url());
         $this->partStreamFilterManager
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getContentHandle')
-            ->with('an-encodah', 'a-charset', 'UTF-8')
+            ->withConsecutive(
+                [$this->anything(), null, 'a-charset'],
+                [$this->anything(), 'someCharset', 'a-charset']
+            )
             ->willReturn($handle);
         
         $messagePart = $this->getMessagePart();
-        
         $this->assertTrue($messagePart->hasContent());
-        $this->assertSame($handle, $messagePart->getContentResourceHandle('an-encodah', 'a-charset'));
+        $this->assertSame($handle, $messagePart->getContentResourceHandle('a-charset'));
+        
+        $messagePart->setCharsetOverride('someCharset', true);
+        $this->assertSame($handle, $messagePart->getContentResourceHandle('a-charset'));
+        
         fclose($handle);
     }
     

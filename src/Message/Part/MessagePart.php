@@ -46,6 +46,12 @@ abstract class MessagePart
      * @var string a unique ID representing the message this part belongs to.
      */
     protected $messageObjectId;
+    
+    /**
+     * @var string can be used to set an override for content's charset in cases
+     *      where a user wants to set a default other than ISO-8859-1.
+     */
+    protected $charsetOverride;
 
     /**
      * Sets up class dependencies.
@@ -182,7 +188,31 @@ abstract class MessagePart
         }
         return $this->handle;
     }
-    
+
+    /**
+     * Overrides the default character set used for reading content from content
+     * streams in cases where a user knows the source charset is not what is
+     * specified.
+     * 
+     * If set, the returned value from MessagePart::getCharset is ignored.
+     * 
+     * Note that setting an override on a Message and calling getTextStream,
+     * getTextContent, getHtmlStream or getHtmlContent will not be applied to
+     * those sub-parts, unless the text/html part is the Message itself.
+     * Instead, Message:getTextPart() should be called, and setCharsetOverride
+     * called on the returned MessagePart.
+     * 
+     * @param string $charsetOverride
+     * @param boolean $onlyIfNoCharset if true, $charsetOverride is used only if
+     *        getCharset returns null.
+     */
+    public function setCharsetOverride($charsetOverride, $onlyIfNoCharset = false)
+    {
+        if (!$onlyIfNoCharset || $this->getCharset() === null) {
+            $this->charsetOverride = $charsetOverride;
+        }
+    }
+
     /**
      * Returns the resource stream handle for the part's content or null if not
      * set.  rewind() is called on the stream before returning it.
@@ -191,37 +221,30 @@ abstract class MessagePart
      * not be closed otherwise.
      *
      * The returned resource handle is a stream with decoding filters appended
-     * to it.  The attached filters are determined by the passed
-     * $transferEncoding and $charset headers, or by looking at the part's
-     * Content-Transfer-Encoding and Content-Type headers if not passed.  The
-     * following encodings are currently supported:
+     * to it.  The attached filters are determined by looking at the part's
+     * Content-Transfer-Encoding and Content-Type headers unless a charset
+     * override is set.  The following transfer encodings are supported:
      *
      * - quoted-printable
      * - base64
      * - x-uuencode
      *
      * In addition a ZBateson\MailMimeParser\Stream\CharsetStreamFilter is
-     * attached for text parts to convert text in the stream to UTF-8.
+     * attached for text parts to convert from the content's charset to the
+     * target charset passed in as an argument (defaults to UTF-8).
      *
-     * @param string $transferEncoding
      * @param string $charset
      * @return resource
      */
-    public function getContentResourceHandle($transferEncoding = null, $charset = null)
+    public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->contentUrl !== null) {
-            $tr = $transferEncoding;
-            $ch = $charset;
-            if (empty($tr)) {
-                $tr = $this->getContentTransferEncoding();
-            }
-            if (empty($ch)) {
-                $ch = $this->getCharset();
-            }
+            $tr = $this->getContentTransferEncoding();
+            $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
             return $this->partStreamFilterManager->getContentHandle(
                 $tr,
                 $ch,
-                'UTF-8'
+                $charset
             );
         }
         return null;
@@ -230,13 +253,16 @@ abstract class MessagePart
     /**
      * Shortcut to reading stream content and assigning it to a string.  Returns
      * null if the part doesn't have a content stream.
+     * 
+     * The returned string is encoded to the passed $charset character encoding,
+     * defaulting to UTF-8.
      *
      * @return string
      */
-    public function getContent($transferEncoding = null, $charset = null)
+    public function getContent($charset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->hasContent()) {
-            $handle = $this->getContentResourceHandle($transferEncoding, $charset);
+            $handle = $this->getContentResourceHandle($charset);
             $pos = ftell($handle);
             rewind($handle);
             $text = stream_get_contents($handle);

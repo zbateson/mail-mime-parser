@@ -18,7 +18,7 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  * itself with its own parent or parents.
  *
  * The content of the part can be read from its PartStream resource handle,
- * accessible via MimePart::getContentResourceHanlde.
+ * accessible via MessagePart::getContentResourceHandle.
  *
  * @author Zaahid Bateson
  */

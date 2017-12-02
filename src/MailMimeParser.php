@@ -21,6 +21,11 @@ namespace ZBateson\MailMimeParser;
 class MailMimeParser
 {
     /**
+     * @var string defines the default charset used by MessagePart.
+     */
+    const DEFAULT_CHARSET = 'UTF-8';
+
+    /**
      * @var \ZBateson\MailMimeParser\SimpleDi dependency injection container
      */
     protected $di;
@@ -35,12 +40,24 @@ class MailMimeParser
     
     /**
      * Sets the default charset used by MMP for strings returned by read
-     * operations on text content (e.g. MessagePart::getContentResource
-     * @param type $charset
+     * operations on text content (e.g. MessagePart::getContentResourceHandle,
+     * getContent, etc...)
+     * 
+     * @param string $charset
      */
-    public function setDefaultCharset($charset)
+    public static function setDefaultCharset($charset)
     {
-        
+        self::$defaultCharset = $charset;
+    }
+    
+    /**
+     * Returns the default charset that will be used by MMP strings returned.
+     * 
+     * @return string
+     */
+    public static function getDefaultCharset()
+    {
+        return self::$defaultCharset;
     }
     
     /**
