@@ -153,6 +153,8 @@ class PartStream
         if ($nRead > 0) {
             $ret = fread($this->handle, $nRead);
         }
+        // use mb_strlen for cases where mbstring.func_overload is used and
+        // content is 8-bit UTF-8.
         $this->position += mb_strlen($ret, '8bit');
         fseek($this->handle, $pos);
         return $ret;
