@@ -41,27 +41,6 @@ class MimePartFactory extends MessagePartFactory
         $this->headerFactory = $hf;
         $this->partFilterFactory = $pf;
     }
-    
-    /**
-     * Returns the singleton instance for the class.
-     * 
-     * @param PartStreamFilterManagerFactory $psf
-     * @param HeaderFactory $hf
-     * @param PartFilterFactory $pf
-     * @return MimePartFactory
-     */
-    public static function getInstance(
-        PartStreamFilterManagerFactory $psf,
-        HeaderFactory $hf = null,
-        PartFilterFactory $pf = null
-    ) {
-        static $instances = [];
-        $class = get_called_class();
-        if (!isset($instances[$class])) {
-            $instances[$class] = new static($psf, $hf, $pf);
-        }
-        return $instances[$class];
-    }
 
     /**
      * Constructs a new MimePart object and returns it

@@ -9,6 +9,7 @@ use PHPUnit_Framework_TestCase;
  * @group UUEncodedPartFactory
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\UUEncodedPartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\MessagePartFactory
  * @author Zaahid Bateson
  */
 class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase

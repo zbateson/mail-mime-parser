@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderParts
  * @group SplitParameterToken
- * @covers ZBateson\MailMimeParser\Header\Part\ParameterPart
+ * @covers ZBateson\MailMimeParser\Header\Part\SplitParameterToken
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */

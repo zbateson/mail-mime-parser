@@ -9,6 +9,7 @@ use PHPUnit_Framework_TestCase;
  * @group NonMimePartFactory
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\NonMimePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\MessagePartFactory
  * @author Zaahid Bateson
  */
 class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase

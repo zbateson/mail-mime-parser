@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ReflectionClass;
 
 /**
  * Abstract factory for subclasses of MessagePart.
@@ -48,7 +49,13 @@ abstract class MessagePartFactory
         static $instances = [];
         $class = get_called_class();
         if (!isset($instances[$class])) {
-            $instances[$class] = new static($psf);
+            $rf = new ReflectionClass($class);
+            $constr = $rf->getConstructor();
+            if ($constr->getNumberOfParameters() === 3) {
+                $instances[$class] = new static($psf, $hf, $pf);
+            } else {
+                $instances[$class] = new static($psf);
+            }
         }
         return $instances[$class];
     }
