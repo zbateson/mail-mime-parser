@@ -49,4 +49,21 @@ class ParameterPartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore', $part->getValue());
     }
+    
+    public function testNameValueNotDecodedWithLanguage()
+    {
+        $this->charsetConverter->expects($this->never())
+            ->method('convert');
+        $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', '=?US-ASCII?Q?Kilgore_Trout?=', 'Kurty');
+        $this->assertEquals('=?US-ASCII?Q?name?=', $part->getName());
+        $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
+    }
+    
+    public function testGetLanguage()
+    {
+        $this->charsetConverter->expects($this->never())
+            ->method('convert');
+        $part = new ParameterPart($this->charsetConverter, 'name', 'Drogo', 'Dothraki');
+        $this->assertEquals('Dothraki', $part->getLanguage());
+    }
 }

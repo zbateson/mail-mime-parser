@@ -57,6 +57,17 @@ class HeaderPartFactory
     }
     
     /**
+     * Instantiates and returns a SplitParameterToken with the given name.
+     * 
+     * @param string $name
+     * @return SplitParameterToken
+     */
+    public function newSplitParameterToken($name)
+    {
+        return new SplitParameterToken($this->charsetConverter, $name);
+    }
+    
+    /**
      * Initializes and returns a new LiteralPart.
      * 
      * @param string $value
@@ -129,10 +140,11 @@ class HeaderPartFactory
      * 
      * @param string $name
      * @param string $value
+     * @param string $language
      * @return \ZBateson\MailMimeParser\Header\Part\ParameterPart
      */
-    public function newParameterPart($name, $value)
+    public function newParameterPart($name, $value, $language = null)
     {
-        return new ParameterPart($this->charsetConverter, $name, $value);
+        return new ParameterPart($this->charsetConverter, $name, $value, $language);
     }
 }

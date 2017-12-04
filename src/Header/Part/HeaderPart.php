@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Util\CharsetConverter;
 
 /**

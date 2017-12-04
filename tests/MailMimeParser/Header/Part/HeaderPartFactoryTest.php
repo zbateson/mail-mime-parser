@@ -35,6 +35,13 @@ class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Token', $token);
     }
     
+    public function testNewSplitParameterToken()
+    {
+        $token = $this->headerPartFactory->newSplitParameterToken('Test');
+        $this->assertNotNull($token);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\SplitParameterToken', $token);
+    }
+    
     public function testNewLiteralPart()
     {
         $part = $this->headerPartFactory->newLiteralPart('Test');
