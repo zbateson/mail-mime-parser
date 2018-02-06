@@ -343,6 +343,10 @@ class CharsetConverter
                 return mb_convert_encoding($str, $this->toCharset, $this->fromCharset);
             }
 
+            if ($this->fromCharset == 'UTF-8' && $this->toCharset == 'ISO-8859-I'){
+                return $str;
+            }
+            
             $_str = @iconv($this->fromCharset, $this->toCharset . '//TRANSLIT//IGNORE', $str);
             return $_str ? $_str : $str;
         }
