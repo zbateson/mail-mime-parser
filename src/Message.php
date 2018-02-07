@@ -594,14 +594,14 @@ class Message extends MimePart
         $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
         if (strcasecmp($contentType, 'multipart/signed') !== 0) {
             $this->makeSpaceForMultipartSignedMessage();
-            $boundary = $this->getUniqueBoundary('multipart/signed');
-            $this->setRawHeader(
-                'Content-Type',
-                "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
-            );
             $this->removeHeader('Content-Disposition');
             $this->removeHeader('Content-Transfer-Encoding');
         }
+        $boundary = $this->getUniqueBoundary('multipart/signed');
+        $this->setRawHeader(
+            'Content-Type',
+            "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
+        );
         $this->overwrite8bitContentEncoding();
         $this->ensureHtmlPartFirstForSignedMessage();
         $this->createSignaturePart('Not set');
@@ -614,7 +614,12 @@ class Message extends MimePart
      */
     public function getSignaturePart()
     {
-        return $this->getChild(0, new PartFilter([ 'signedpart' => PartFilter::FILTER_INCLUDE ]));
+        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
+        if (strcasecmp($contentType, 'multipart/signed') === 0) {
+            return $this->getChild(1);
+        } else {
+            return null;
+        }
     }
     
     /**

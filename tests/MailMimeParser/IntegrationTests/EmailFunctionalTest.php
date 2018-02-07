@@ -108,7 +108,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($props['signed']['protocol'], $protocol, $failMessage);
             $this->assertEquals($props['signed']['micalg'], $micalg, $failMessage);
             $this->assertNotNull($signedPart, $failMessage);
-            $this->assertEquals($protocol, $signedPart->getHeaderValue('Content-Type'), $failMessage);
+            $signedPartProtocol = $props['signed']['protocol'];
+            if (!empty($props['signed']['signed-part-protocol'])) {
+                $signedPartProtocol = $props['signed']['signed-part-protocol'];
+            }
+            $this->assertEquals($signedPartProtocol, $signedPart->getHeaderValue('Content-Type'), $failMessage);
             $this->assertEquals(trim($props['signed']['body']), trim($signedPart->getContent()));
         }
 
@@ -2655,5 +2659,88 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testVerifySignedEmailm4008()
+    {
+        $handle = fopen($this->messageDir . '/m4008.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $testString = $message->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
+    }
+
+    public function testParseEmailm4008()
+    {
+        $this->runEmailTest('m4008', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrФsche.txt',
+            'signed' => [
+                'protocol' => 'application/x-pgp-signature',
+                'signed-part-protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => '9825cba003a7ac85b9a3f3dc9f8423fd'
+            ],
+        ]);
+    }
+
+    public function testSetSignedPartm4008()
+    {
+        $handle = fopen($this->messageDir . '/m4008.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $text = 'For the Mighty Meint :)';
+        $message->setTextPart($text);
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+
+        $signableContent = $message->getSignableBody();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m4008", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->createSignaturePart($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m4008", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, stream_get_contents($tmpSaved));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m4008';
+
+        $testString = $messageWritten->getOriginalMessageStringForSignatureVerification();
+        $this->assertEquals($testString, $signableContent);
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ],
+        ];
+
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+        $this->assertEquals($text, trim($messageWritten->getTextContent()));
     }
 }
