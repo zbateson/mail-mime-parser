@@ -1878,6 +1878,145 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
+    public function testAddAttachmentPartm0011()
+    {
+        $handle = fopen($this->messageDir . '/m0011.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPart(
+            file_get_contents($this->messageDir . '/files/farmerandstork.txt'),
+            'text/plain',
+            'farmerandstork.txt'
+        );
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 4,
+            'parts' => [
+                'multipart/mixed' => [
+                    'text/plain',
+                    'image/png',
+                    'image/png',
+                    'image/png',
+                    'text/plain'
+                ]
+            ],
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0011');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att_m0011", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/redball.png',
+            'image/png',
+            'redball-2.png'
+        );
+        $props['attachments'] = 5;
+        $props['parts']['multipart/mixed'][] = 'image/png';
+
+        // due to what seems to be a bug in hhvm, after stream_copy_to_stream is
+        // called in MimePart::copyContentStream, the CharsetStreamFilter filter
+        // is no longer called on the stream, resulting in a failure here on the
+        // next test
+        //$this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att2_m0011", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for second added attachment to m0011';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testAddAttachmentPartm0014()
+    {
+        $handle = fopen($this->messageDir . '/m0014.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPart(
+            file_get_contents($this->messageDir . '/files/blueball.png'),
+            'image/png',
+            'blueball.png'
+        );
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'parts' => [
+                'multipart/mixed' => [
+                    'multipart/alternative' => [
+                        'text/plain',
+                        'text/html'
+                    ],
+                    'image/png'
+                ]
+            ]
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0014');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att_m0014", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added attachment to m0014';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/redball.png',
+            'image/png',
+            'redball.png'
+        );
+        $props['parts']['multipart/mixed'][] = 'image/png';
+
+        // due to what seems to be a bug in hhvm, after stream_copy_to_stream is
+        // called in MimePart::copyContentStream, the CharsetStreamFilter filter
+        // is no longer called on the stream, resulting in a failure here on the
+        // next test
+        //$this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att2_m0014", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for second added attachment to m0014';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
     public function testAddLargeAttachmentPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');

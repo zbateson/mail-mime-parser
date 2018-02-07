@@ -479,7 +479,11 @@ class Message extends MimePart
      */
     private function setMessageAsMixed()
     {
-        if ($this->handle !== null) {
+        if ($this->isMultiPart()) {
+            $part = $this->mimePartFactory->newMimePart();
+            $this->movePartContentAndChildrenToPart($this, $part);
+            $this->addPart($part, 0);
+        } elseif ($this->handle !== null) {
             $part = $this->createNewContentPartFromPart($this);
             $this->addPart($part, 0);
         }
