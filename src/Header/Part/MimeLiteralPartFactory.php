@@ -10,7 +10,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  * Extends HeaderPartFactory to instantiate MimeLiteralParts for its newInstance
  * function.
  *
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class MimeLiteralPartFactory extends HeaderPartFactory
 {

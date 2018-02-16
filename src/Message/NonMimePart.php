@@ -17,7 +17,7 @@ use ZBateson\MailMimeParser\Message\Writer\MimePartWriter;
  * This allows clients to handle all messages as mime messages by providing a
  * Content-Type header.  NonMimePart returns text/plain.
  * 
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
 class NonMimePart extends MimePart
 {
