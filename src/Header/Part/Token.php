@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPart;
-use ZBateson\MailMimeParser\Util\CharsetConverter;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Holds a string value token that will require additional processing by a

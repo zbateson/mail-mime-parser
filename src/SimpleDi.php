@@ -13,10 +13,9 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
-use ZBateson\MailMimeParser\Stream\PartStream;
-use ZBateson\MailMimeParser\Util\CharsetConverter;
 use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory;
 use ZBateson\MailMimeParser\Stream\StreamDecoderFactory;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -47,12 +46,6 @@ class SimpleDi
      * @var type 
      */
     protected $partStreamFilterManagerFactory;
-    
-    /**
-     * @var \ZBateson\MailMimeParser\Stream\PartStreamRegistry singleton
-     * 'service' instance
-     */
-    protected $partStreamRegistry;
     
     /**
      * @var \ZBateson\MailMimeParser\Header\HeaderFactory singleton 'service'
@@ -147,17 +140,6 @@ class SimpleDi
         }
         return $this->messageWriterService;
     }
-    
-    /**
-     * Constructs and returns a new CharsetConverter object.
-     * 
-     * @return \ZBateson\MailMimeParser\Util\CharsetConverter
-     */
-    public function newCharsetConverter()
-    {
-        return new CharsetConverter();
-    }
-    
     
     public function getPartFilterFactory()
     {

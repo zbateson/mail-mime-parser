@@ -18,7 +18,7 @@ class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+        $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
     }
     
     protected function assertDecoded($expected, $encodedActual)
@@ -116,7 +116,7 @@ class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
     
     public function testNonAscii()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\MailMimeParser\Util\CharsetConverter')
+        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
             ->setMethods(['__toString'])
             ->getMock();
         
@@ -187,7 +187,7 @@ class MimeLiteralPartTest extends PHPUnit_Framework_TestCase
     
     public function testLanguageParts()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\MailMimeParser\Util\CharsetConverter')
+        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
             ->setMethods(['__toString'])
             ->getMock();
         

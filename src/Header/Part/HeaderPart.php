@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Util\CharsetConverter;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Abstract base class representing a single part of a parsed header.

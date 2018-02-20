@@ -16,7 +16,7 @@ class LiteralPartTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
-        $charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
         
         $part = new LiteralPart($charsetConverter, '"');
         $this->assertNotNull($part);

@@ -51,14 +51,6 @@ class SimpleDiTest extends PHPUnit_Framework_TestCase
         $this->assertSame($singleton, $di->getHeaderPartFactory());
     }
     
-    public function testGetPartStreamRegistry()
-    {
-        $di = SimpleDi::singleton();
-        $singleton = $di->getPartStreamRegistry();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $di->getPartStreamRegistry());
-    }
-    
     public function testGetMimeLiteralPartFactory()
     {
         $di = SimpleDi::singleton();

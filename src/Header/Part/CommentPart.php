@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace ZBateson\MailMimeParser\Header\Part;
-use ZBateson\MailMimeParser\Util\CharsetConverter;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Represents a mime header comment -- text in a structured mime header

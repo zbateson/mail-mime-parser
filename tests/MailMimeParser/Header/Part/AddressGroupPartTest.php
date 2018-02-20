@@ -18,7 +18,7 @@ class AddressGroupPartTest extends PHPUnit_Framework_TestCase
     {
         $name = 'Roman Senate';
         $members = ['Caesar', 'Cicero', 'Cato'];
-        $csConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+        $csConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
         $part = new AddressGroupPart($csConverter, $members, $name);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($members, $part->getAddresses());

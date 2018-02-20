@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPart;
-use ZBateson\MailMimeParser\Util\CharsetConverter;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * A literal header string part.  The value of the part is stripped of CR and LF

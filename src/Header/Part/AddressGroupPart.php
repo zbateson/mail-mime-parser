@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Util\CharsetConverter;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Holds a group of addresses, and an optional group name.

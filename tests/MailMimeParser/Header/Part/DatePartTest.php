@@ -19,7 +19,7 @@ class DatePartTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->charsetConverter = $this->getMock('ZBateson\MailMimeParser\Util\CharsetConverter');
+        $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
     }
     
     public function testDateString()
