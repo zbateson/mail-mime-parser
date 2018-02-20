@@ -65,6 +65,7 @@ class MimePart extends MessagePart
      * @param PartFilterFactory $partFilterFactory
      * @param resource $handle
      * @param PartBuilder $partBuilder
+     * @param PartStreamFilterManager $partStreamFilterManager
      */
     public function __construct(
         HeaderFactory $headerFactory,
@@ -74,6 +75,7 @@ class MimePart extends MessagePart
         PartStreamFilterManager $partStreamFilterManager
     ) {
         parent::__construct($handle, $partBuilder, $partStreamFilterManager);
+
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
 

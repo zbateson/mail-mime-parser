@@ -352,14 +352,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
     {
         $content = vfsStream::newFile('part')->at($this->vfs);
         $content->withContent('Demigorgon');
-        
+        $messageHandle = fopen($content->url(), 'r');
+
         $pb = $this->getMockedPartBuilder();
-        $pb->method('getStreamPartUrl')
-            ->willReturn($content->url());
+        $pb->method('getStreamContentLength')->willReturn(0);
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
+            $messageHandle,
             $pb,
             $this->mockPartStreamFilterManager
         );
