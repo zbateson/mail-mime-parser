@@ -28,10 +28,10 @@ class SimpleDiTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($mp);
     }
     
-    public function testNewCharsetConverter()
+    public function testGetCharsetConverter()
     {
         $di = SimpleDi::singleton();
-        $m = $di->newCharsetConverter('ISO-8859-1', 'UTF-8');
+        $m = $di->getCharsetConverter('ISO-8859-1', 'UTF-8');
         $this->assertNotNull($m);
     }
     
