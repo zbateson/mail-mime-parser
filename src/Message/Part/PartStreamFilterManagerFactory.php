@@ -13,10 +13,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
  */
 class PartStreamFilterManagerFactory
 {
-    protected $quotedPrintableDecodeFilter;
-    protected $base64DecodeFilter;
-    protected $uudecodeFilter;
-    protected $charsetConversionFilter;
+    protected $streamDecoratorFactory;
     
     /**
      * 
@@ -25,16 +22,8 @@ class PartStreamFilterManagerFactory
      * @param string $uudecodeFilter
      * @param string $charsetConversionFilter
      */
-    public function __construct(
-        $quotedPrintableDecodeFilter,
-        $base64DecodeFilter,
-        $uudecodeFilter,
-        $charsetConversionFilter
-    ) {
-        $this->quotedPrintableDecodeFilter = $quotedPrintableDecodeFilter;
-        $this->base64DecodeFilter = $base64DecodeFilter;
-        $this->uudecodeFilter = $uudecodeFilter;
-        $this->charsetConversionFilter = $charsetConversionFilter;
+    public function __construct($streamDecoratorFactory) {
+        $this->streamDecoratorFactory = $streamDecoratorFactory;
     }
     
     /**
@@ -44,11 +33,6 @@ class PartStreamFilterManagerFactory
      */
     public function newInstance()
     {
-        return new PartStreamFilterManager(
-            $this->quotedPrintableDecodeFilter,
-            $this->base64DecodeFilter,
-            $this->uudecodeFilter,
-            $this->charsetConversionFilter
-        );
+        return new PartStreamFilterManager($this->streamDecoratorFactory);
     }
 }

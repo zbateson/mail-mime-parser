@@ -15,10 +15,10 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
 {
     private $partStreamFilterManager = null;
     
-    private $quotedPrintableFilter = 'mmp-test.quoted-printable-decode';
-    private $base64Filter = 'mmp-test.base64-decode';
-    private $uudecodeFilter = 'mmp-test.uudecode';
-    private $charsetConversionFilter = 'mmp-test.charset-convert';
+    private $quotedPrintableFilter = 'mmp-test-mgr.quoted-printable-decode';
+    private $base64Filter = 'mmp-test-mgr.base64-decode';
+    private $uudecodeFilter = 'mmp-test-mgr.uudecode';
+    private $charsetConversionFilter = 'mmp-test-mgr.charset-convert';
     
     protected function setUp()
     {

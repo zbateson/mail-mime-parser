@@ -36,16 +36,16 @@ class UUEncodedPart extends NonMimePart
     /**
      * Initiates the UUEncodedPart with the passed mode and filename.
      * 
-     * @param string $messageObjectId
+     * @param resource $handle
      * @param PartBuilder $partBuilder
      * @param PartStreamFilterManager $partStreamFilterManager
      */
     public function __construct(
-        $messageObjectId,
+        $handle,
         PartBuilder $partBuilder,
         PartStreamFilterManager $partStreamFilterManager
     ) {
-        parent::__construct($messageObjectId, $partBuilder, $partStreamFilterManager);
+        parent::__construct($handle, $partBuilder, $partStreamFilterManager);
         $this->mode = $partBuilder->getProperty('mode');
         $this->filename = $partBuilder->getProperty('filename');
     }

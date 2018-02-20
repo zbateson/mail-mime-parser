@@ -106,26 +106,17 @@ class PartBuilder
     private $contentType = null;
     
     /**
-     * @var string the PartStream protocol used to create part and content
-     *      filenames for fopen
-     */
-    private $streamWrapperProtocol = null;
-    
-    /**
      * Sets up class dependencies.
      * 
      * @param HeaderFactory $hf
      * @param \ZBateson\MailMimeParser\Message\Part\MessagePartFactory $mpf
-     * @param string $streamWrapperProtocol
      */
     public function __construct(
         HeaderFactory $hf,
-        MessagePartFactory $mpf,
-        $streamWrapperProtocol
+        MessagePartFactory $mpf
     ) {
         $this->headerFactory = $hf;
         $this->messagePartFactory = $mpf;
-        $this->streamWrapperProtocol = $streamWrapperProtocol;
     }
     
     /**
@@ -352,6 +343,29 @@ class PartBuilder
         return ($this->parent === null || !$this->parent->endBoundaryFound);
     }
 
+    public function getStreamPartStartOffset()
+    {
+        if ($this->parent) {
+            return $this->streamPartStartPos - $this->parent->streamPartStartPos;
+        }
+        return $this->streamPartStartPos;
+    }
+    
+    public function getStreamPartLength()
+    {
+        return $this->streamPartEndPos - $this->streamPartStartPos;
+    }
+
+    public function getStreamContentStartOffset()
+    {
+        return $this->streamContentStartPos - $this->streamPartStartPos;
+    }
+
+    public function getStreamContentLength()
+    {
+        return $this->streamContentEndPos - $this->streamContentStartPos;
+    }
+
     /**
      * Constructs and returns a filename where the part can be read from the
      * passed $messageObjectId.
@@ -435,13 +449,13 @@ class PartBuilder
      * Creates a MessagePart and returns it using the PartBuilder's
      * MessagePartFactory passed in during construction.
      * 
-     * @param string $messageObjectId
+     * @param resource $handle
      * @return MessagePart
      */
-    public function createMessagePart($messageObjectId)
+    public function createMessagePart($handle)
     {
         return $this->messagePartFactory->newInstance(
-            $messageObjectId,
+            $handle,
             $this
         );
     }

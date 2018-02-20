@@ -36,13 +36,12 @@ abstract class MessagePartFactory
     /**
      * Returns the singleton instance for the class.
      * 
-     * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      * @return MessagePartFactory
      */
     public static function getInstance(
-        PartStreamFilterManagerFactory $psf,
+        $handle,
         HeaderFactory $hf = null,
         PartFilterFactory $pf = null
     ) {
@@ -52,9 +51,9 @@ abstract class MessagePartFactory
             $rf = new ReflectionClass($class);
             $constr = $rf->getConstructor();
             if ($constr->getNumberOfParameters() === 3) {
-                $instances[$class] = new static($psf, $hf, $pf);
+                $instances[$class] = new static($handle, $hf, $pf);
             } else {
-                $instances[$class] = new static($psf);
+                $instances[$class] = new static($handle);
             }
         }
         return $instances[$class];
@@ -63,9 +62,9 @@ abstract class MessagePartFactory
     /**
      * Constructs a new MessagePart object and returns it
      * 
-     * @param string $messageObjectId
+     * @param resource $handle
      * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
      */
-    public abstract function newInstance($messageObjectId, PartBuilder $partBuilder);
+    public abstract function newInstance($handle, PartBuilder $partBuilder);
 }

@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
@@ -31,11 +30,6 @@ class MessageParser
     protected $partBuilderFactory;
     
     /**
-     * @var PartStreamRegistry used for registering message part streams.
-     */
-    protected $partStreamRegistry;
-    
-    /**
      * @var int maintains the character length of the last line separator,
      *      typically 2 for CRLF, to keep track of the correct 'end' position
      *      for a part because the CRLF before a boundary is considered part of
@@ -48,16 +42,13 @@ class MessageParser
      * 
      * @param \ZBateson\MailMimeParser\Message\Part\PartFactoryService $pfs
      * @param \ZBateson\MailMimeParser\Message\Part\PartBuilderFactory $pbf
-     * @param PartStreamRegistry $psr
      */
     public function __construct(
         PartFactoryService $pfs,
-        PartBuilderFactory $pbf,
-        PartStreamRegistry $psr
+        PartBuilderFactory $pbf
     ) {
         $this->partFactoryService = $pfs;
         $this->partBuilderFactory = $pbf;
-        $this->partStreamRegistry = $psr;
     }
     
     /**
@@ -70,10 +61,8 @@ class MessageParser
      */
     public function parse($fhandle)
     {
-        $messageObjectId = uniqid();
-        $this->partStreamRegistry->register($messageObjectId, $fhandle);
         $partBuilder = $this->read($fhandle);
-        return $partBuilder->createMessagePart($messageObjectId);
+        return $partBuilder->createMessagePart($fhandle);
     }
     
     /**

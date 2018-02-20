@@ -21,12 +21,12 @@ class PartStreamFilterManager
     /**
      * @var handle current opened handle if any
      */
-    protected $contentHandle;
+    protected $filteredHandle;
     
     /**
      * @var string the URL to open the content stream
      */
-    protected $url;
+    protected $handle;
     
     /**
      * @var array map of the active encoding filter on the current handle.
@@ -44,7 +44,12 @@ class PartStreamFilterManager
         'to' => null,
         'filter' => null
     ];
-    
+
+    /**
+     * @var type 
+     */
+    private $streamDecoratorFactory;
+
     /**
      * @var array mapping Content-Transfer-Encoding header values to available
      *      stream filters.
@@ -64,18 +69,15 @@ class PartStreamFilterManager
      * @param string $uudecodeFilter
      * @param string $charsetConversionFilter
      */
-    public function __construct(
-        $quotedPrintableDecodeFilter,
-        $base64DecodeFilter,
-        $uudecodeFilter,
-        $charsetConversionFilter
-    ) {
+    public function __construct($streamDecoratorFactory)
+    {
+        $this->streamDecoratorFactory = $streamDecoratorFactory;
         $this->encodingEncoderMap = [
-            'quoted-printable' => $quotedPrintableDecodeFilter,
-            'base64' => $base64DecodeFilter,
-            'x-uuencode' => $uudecodeFilter
+            'quoted-printable' => '',
+            'base64' => '',
+            'x-uuencode' => ''
         ];
-        $this->charsetConversionFilter = $charsetConversionFilter;
+        $this->charsetConversionFilter = '';
     }
     
     /**
@@ -83,9 +85,8 @@ class PartStreamFilterManager
      */
     public function __destruct()
     {
-        $this->url = null;
-        if (is_resource($this->contentHandle)) {
-            fclose($this->contentHandle);
+        if (is_resource($this->handle)) {
+            fclose($this->handle);
         }
     }
     
@@ -94,15 +95,15 @@ class PartStreamFilterManager
      * 
      * The function also closes the currently attached handle if any.
      * 
-     * @param string $url
+     * @param resource $handle
      */
-    public function setContentUrl($url)
+    public function setHandle($handle)
     {
-        $this->url = $url;
-        if (is_resource($this->contentHandle)) {
-            fclose($this->contentHandle);
-            $this->contentHandle = null;
+        if (is_resource($this->handle)) {
+            fclose($this->handle);
         }
+        $this->handle = $handle;
+        $this->filteredHandle = null;
     }
     
     /**
@@ -140,13 +141,21 @@ class PartStreamFilterManager
      */
     protected function attachTransferEncodingFilter($transferEncoding)
     {
-        if ($this->contentHandle !== null) {
+        if ($this->filteredHandle !== null) {
             if (!empty($transferEncoding) && isset($this->encodingEncoderMap[$transferEncoding])) {
-                $this->encoding['filter'] = stream_filter_append(
-                    $this->contentHandle,
-                    $this->encodingEncoderMap[$transferEncoding],
-                    STREAM_FILTER_READ
-                );
+                if ($transferEncoding === 'base64') {
+                    $this->filteredHandle = $this->streamDecoratorFactory->newBase64StreamDecorator($this->filteredHandle);
+                    $this->encoding['type'] = $transferEncoding;
+                    return;
+                } elseif ($transferEncoding === 'x-uuencode') {
+                    $this->filteredHandle = $this->streamDecoratorFactory->newUUStreamDecorator($this->filteredHandle);
+                    $this->encoding['type'] = $transferEncoding;
+                    return;
+                } elseif ($transferEncoding === 'quoted-printable') {
+                    $this->filteredHandle = $this->streamDecoratorFactory->newQuotedPrintableStreamDecorator($this->filteredHandle);
+                    $this->encoding['type'] = $transferEncoding;
+                    return;
+                }
             }
             $this->encoding['type'] = $transferEncoding;
         }
@@ -161,13 +170,12 @@ class PartStreamFilterManager
      */
     protected function attachCharsetFilter($fromCharset, $toCharset)
     {
-        if ($this->contentHandle !== null) {
+        if ($this->filteredHandle !== null) {
             if (!empty($fromCharset) && !empty($toCharset)) {
-                $this->charset['filter'] = stream_filter_append(
-                    $this->contentHandle,
-                    $this->charsetConversionFilter,
-                    STREAM_FILTER_READ,
-                    [ 'from' => $fromCharset, 'to' => $toCharset ]
+                $this->filteredHandle = $this->streamDecoratorFactory->newCharsetStreamDecorator(
+                    $this->filteredHandle,
+                    $fromCharset,
+                    $toCharset
                 );
             }
             $this->charset['from'] = $fromCharset;
@@ -193,10 +201,9 @@ class PartStreamFilterManager
     public function reset()
     {
         $pos = 0;
-        if (is_resource($this->contentHandle)) {
-            $pos = ftell($this->contentHandle);
-            fclose($this->contentHandle);
-            $this->contentHandle = null;
+        if (is_resource($this->filteredHandle)) {
+            $pos = ftell($this->handle);
+            $this->filteredHandle = null;
         }
         $this->encoding = [
             'type' => null,
@@ -207,9 +214,9 @@ class PartStreamFilterManager
             'to' => null,
             'filter' => null
         ];
-        if (!empty($this->url)) {
-            $this->contentHandle = fopen($this->url, 'r');
-            fseek($this->contentHandle, $pos);
+        if (is_resource($this->handle)) {
+            $this->filteredHandle = $this->handle;
+            fseek($this->filteredHandle, $pos);
         }
     }
     
@@ -225,13 +232,13 @@ class PartStreamFilterManager
      */
     public function getContentHandle($transferEncoding, $fromCharset, $toCharset)
     {
-        if (!is_resource($this->contentHandle)
+        if (!is_resource($this->filteredHandle)
             || $this->isTransferEncodingFilterChanged($transferEncoding)
             || $this->isCharsetFilterChanged($fromCharset, $toCharset)) {
             $this->reset();
             $this->attachTransferEncodingFilter($transferEncoding);
             $this->attachCharsetFilter($fromCharset, $toCharset);
         }
-        return $this->contentHandle;
+        return $this->filteredHandle;
     }
 }

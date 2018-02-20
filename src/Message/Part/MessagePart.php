@@ -7,6 +7,9 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\MailMimeParser;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\LimitStream;
+use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Represents a single part of a message.
@@ -33,19 +36,9 @@ abstract class MessagePart
     protected $handle;
     
     /**
-     * @var string url for opening a content handle with partStreamFilterManager
-     */
-    protected $contentUrl;
-    
-    /**
      * @var PartStreamFilterManager manages attached filters to $contentHandle
      */
     protected $partStreamFilterManager;
-    
-    /**
-     * @var string a unique ID representing the message this part belongs to.
-     */
-    protected $messageObjectId;
     
     /**
      * @var string can be used to set an override for content's charset in cases
@@ -53,26 +46,30 @@ abstract class MessagePart
      */
     protected $charsetOverride;
 
+    protected $hasContentStream = false;
+
     /**
      * Sets up class dependencies.
      * 
-     * @param string $messageObjectId
+     * @param resource $handle
      * @param PartBuilder $partBuilder
      * @param PartStreamFilterManager $partStreamFilterManager
      */
     public function __construct(
-        $messageObjectId,
+        $handle,
         PartBuilder $partBuilder,
         PartStreamFilterManager $partStreamFilterManager
     ) {
-        $this->messageObjectId = $messageObjectId;
-        $partUrl = $partBuilder->getStreamPartUrl($messageObjectId);
-        $this->contentUrl = $partBuilder->getStreamContentUrl($messageObjectId);
-        $partStreamFilterManager->setContentUrl($this->contentUrl);
-        $this->partStreamFilterManager = $partStreamFilterManager;
-        if ($partUrl !== null) {
-            $this->handle = fopen($partUrl, 'r');
+        $this->handle = $handle;
+        if ($handle && $partBuilder->getStreamContentLength() !== 0) {
+            $partStream = Psr7\stream_for($handle);
+            $partLimitStream = new LimitStream($partStream, $partBuilder->getStreamContentLength(), $partBuilder->getStreamContentStartOffset());
+            $partStreamFilterManager->setHandle(
+                StreamWrapper::getResource($partLimitStream)
+            );
+            $this->hasContentStream = true;
         }
+        $this->partStreamFilterManager = $partStreamFilterManager;
     }
 
     /**
@@ -82,23 +79,10 @@ abstract class MessagePart
     {
         // stream_filter_append may be cleaned up by PHP, but for large files
         // and many emails may be more efficient to fully clean up
-        $this->partStreamFilterManager->setContentUrl(null);
+        //$this->partStreamFilterManager->closeHandle();
         if (is_resource($this->handle)) {
             fclose($this->handle);
         }
-    }
-    
-    /**
-     * Returns the unique object ID registered with the PartStreamRegistry
-     * service object for the message this part belongs to.
-     * 
-     * @return string
-     * @see \ZBateson\MailMimeParser\SimpleDi::registerStreamExtensions
-     * @see \ZBateson\MailMimeParser\Stream\PartStream::stream_open
-     */
-    public function getMessageObjectId()
-    {
-        return $this->messageObjectId;
     }
 
     /**
@@ -108,10 +92,7 @@ abstract class MessagePart
      */
     public function hasContent()
     {
-        if ($this->contentUrl !== null) {
-            return true;
-        }
-        return false;
+        return $this->hasContentStream;
     }
 
     /**
@@ -238,7 +219,7 @@ abstract class MessagePart
      */
     public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        if ($this->contentUrl !== null) {
+        if ($this->hasContent()) {
             $tr = $this->getContentTransferEncoding();
             $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
             return $this->partStreamFilterManager->getContentHandle(

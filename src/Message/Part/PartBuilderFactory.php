@@ -26,21 +26,13 @@ class PartBuilderFactory
     protected $headerFactory;
     
     /**
-     * @var string the PartStream protocol used to create part and content
-     *      filenames for fopen
-     */
-    private $streamWrapperProtocol = null;
-    
-    /**
      * Creates a MimePartFactory instance with its dependencies.
      * 
      * @param HeaderFactory $headerFactory
-     * @param string $streamWrapperProtocol
      */
-    public function __construct(HeaderFactory $headerFactory, $streamWrapperProtocol)
+    public function __construct(HeaderFactory $headerFactory)
     {
         $this->headerFactory = $headerFactory;
-        $this->streamWrapperProtocol = $streamWrapperProtocol;
     }
     
     /**
@@ -54,8 +46,7 @@ class PartBuilderFactory
     {
         return new PartBuilder(
             $this->headerFactory,
-            $messagePartFactory,
-            $this->streamWrapperProtocol
+            $messagePartFactory
         );
     }
 }

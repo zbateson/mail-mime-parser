@@ -63,25 +63,24 @@ class MimePart extends MessagePart
      *
      * @param HeaderFactory $headerFactory 
      * @param PartFilterFactory $partFilterFactory
-     * @param string $messageObjectId
+     * @param resource $handle
      * @param PartBuilder $partBuilder
-     * @param PartStreamFilterManager $partStreamFilterManager
      */
     public function __construct(
         HeaderFactory $headerFactory,
         PartFilterFactory $partFilterFactory,
-        $messageObjectId,
+        $handle,
         PartBuilder $partBuilder,
         PartStreamFilterManager $partStreamFilterManager
     ) {
-        parent::__construct($messageObjectId, $partBuilder, $partStreamFilterManager);
+        parent::__construct($handle, $partBuilder, $partStreamFilterManager);
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
 
         $pbChildren = $partBuilder->getChildren();
         if (!empty($pbChildren)) {
-            $this->children = array_map(function ($child) use ($messageObjectId) {
-                $childPart = $child->createMessagePart($messageObjectId);
+            $this->children = array_map(function ($child) use ($handle) {
+                $childPart = $child->createMessagePart($handle);
                 $childPart->parent = $this;
                 return $childPart;
             }, $pbChildren);

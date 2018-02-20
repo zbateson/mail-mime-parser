@@ -14,12 +14,9 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Stream\PartStream;
-use ZBateson\MailMimeParser\Stream\ConvertStreamFilter;
-use ZBateson\MailMimeParser\Stream\UUDecodeStreamFilter;
-use ZBateson\MailMimeParser\Stream\CharsetStreamFilter;
-use ZBateson\MailMimeParser\Stream\Base64DecodeStreamFilter;
 use ZBateson\MailMimeParser\Util\CharsetConverter;
 use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory;
+use ZBateson\MailMimeParser\Stream\StreamDecoderFactory;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -134,8 +131,7 @@ class SimpleDi
     {
         return new MessageParser(
             $this->getPartFactoryService(),
-            $this->getPartBuilderFactory(),
-            $this->getPartStreamRegistry()
+            $this->getPartBuilderFactory()
         );
     }
     
@@ -191,8 +187,7 @@ class SimpleDi
     {
         if ($this->partBuilderFactory === null) {
             $this->partBuilderFactory = new PartBuilderFactory(
-                $this->getHeaderFactory(),
-                PartStream::STREAM_WRAPPER_PROTOCOL
+                $this->getHeaderFactory()
             );
         }
         return $this->partBuilderFactory;
@@ -215,30 +210,13 @@ class SimpleDi
     {
         if ($this->partStreamFilterManagerFactory === null) {
             $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory(
-                ConvertStreamFilter::STREAM_DECODER_FILTER_NAME,
-                Base64DecodeStreamFilter::STREAM_FILTER_NAME,
-                UUDecodeStreamFilter::STREAM_FILTER_NAME,
-                CharsetStreamFilter::STREAM_FILTER_NAME
+                new StreamDecoderFactory()
             );
         }
         return $this->getInstance(
             'partStreamFilterManagerFactory',
             __NAMESPACE__ . '\Message\Part\PartStreamFilterManagerFactory'
         );
-    }
-    
-    /**
-     * Returns the part stream registry service instance.  The method also
-     * registers the stream extension by calling registerStreamExtensions.
-     * 
-     * @return \ZBateson\MailMimeParser\Stream\PartStreamRegistry
-     */
-    public function getPartStreamRegistry()
-    {
-        if ($this->partStreamRegistry === null) {
-            $this->registerStreamExtensions();
-        }
-        return $this->getInstance('partStreamRegistry', __NAMESPACE__ . '\Stream\PartStreamRegistry');
     }
     
     public function getCharsetConverter()
@@ -288,36 +266,4 @@ class SimpleDi
         return $this->consumerService;
     }
     
-    /**
-     * Registers stream extensions for PartStream and CharsetStreamFilter
-     * 
-     * @see stream_filter_register
-     * @see stream_wrapper_register
-     */
-    protected function registerStreamExtensions()
-    {
-        stream_filter_register(
-            UUDecodeStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\UUDecodeStreamFilter');
-        stream_filter_register(CharsetStreamFilter::STREAM_FILTER_NAME, __NAMESPACE__ . '\Stream\CharsetStreamFilter');
-        stream_wrapper_register(PartStream::STREAM_WRAPPER_PROTOCOL, __NAMESPACE__ . '\Stream\PartStream');
-        
-        // originally created for HHVM compatibility, but decided to use them
-        // instead of built-in stream filters for reliability -- it seems the
-        // built-in base64-decode and encode stream filter does pretty much the
-        // same thing as HHVM's -- it only works on smaller streams where the
-        // entire stream comes in a single buffer.
-        // In addition, in HHVM 3.15 there seems to be a problem registering
-        // 'convert.quoted-printable-decode/encode -- so to make things simple
-        // decided to use my version instead and name them mmp-convert.*
-        // In 3.18-3.20, it seems we're not able to overwrite 'convert.*'
-        // filters, so now they're all named mmp-convert.*
-        stream_filter_register(
-            ConvertStreamFilter::STREAM_DECODER_FILTER_NAME,
-            __NAMESPACE__ . '\Stream\ConvertStreamFilter'
-        );
-        stream_filter_register(
-            Base64DecodeStreamFilter::STREAM_FILTER_NAME,
-            __NAMESPACE__ . '\Stream\Base64DecodeStreamFilter'
-        );
-    }
 }
