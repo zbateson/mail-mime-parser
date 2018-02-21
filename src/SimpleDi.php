@@ -14,7 +14,6 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory;
-use ZBateson\MailMimeParser\Stream\StreamDecoderFactory;
 use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
@@ -77,6 +76,8 @@ class SimpleDi
      * instances
      */
     protected $messageWriterService;
+
+    protected $streamDecoratorFactory;
     
     /**
      * Constructs a SimpleDi - call singleton() to invoke
@@ -159,6 +160,7 @@ class SimpleDi
             $this->partFactoryService = new PartFactoryService(
                 $this->getHeaderFactory(),
                 $this->getPartFilterFactory(),
+                $this->getStreamDecoratorFactory(),
                 $this->getPartStreamFilterManagerFactory()
             );
         }
@@ -187,12 +189,20 @@ class SimpleDi
         }
         return $this->headerFactory;
     }
+
+    public function getStreamDecoratorFactory()
+    {
+        return $this->getInstance(
+            'streamDecoratorFactory',
+            __NAMESPACE__ . '\Stream\StreamDecoratorFactory'
+        );
+    }
     
     public function getPartStreamFilterManagerFactory()
     {
         if ($this->partStreamFilterManagerFactory === null) {
             $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory(
-                new StreamDecoderFactory()
+                $this->getStreamDecoratorFactory()
             );
         }
         return $this->getInstance(

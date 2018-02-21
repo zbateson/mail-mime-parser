@@ -26,7 +26,7 @@ class PartBuilderFactory
     protected $headerFactory;
     
     /**
-     * Creates a MimePartFactory instance with its dependencies.
+     * Initializes dependencies
      * 
      * @param HeaderFactory $headerFactory
      */

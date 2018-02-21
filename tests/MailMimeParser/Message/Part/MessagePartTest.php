@@ -31,40 +31,43 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->partStreamFilterManager = $psf;
     }
     
-    private function getMessagePart()
+    private function getMessagePart($handle = 'habibi')
     {
         return $this->getMockForAbstractClass(
             'ZBateson\MailMimeParser\Message\Part\MessagePart',
-            ['habibi', $this->partBuilder, $this->partStreamFilterManager]
+            [$handle, $this->partBuilder, $this->partStreamFilterManager]
         );
     }
     
     public function testNewInstance()
     {
+        $this->partBuilder->method('getStreamContentLength')->willReturn(0);
         $messagePart = $this->getMessagePart();
         $this->assertNotNull($messagePart);
         $this->assertFalse($messagePart->hasContent());
-        $this->assertNull($messagePart->getHandle());
         $this->assertNull($messagePart->getContentResourceHandle());
         $this->assertNull($messagePart->getContent());
         $this->assertNull($messagePart->getParent());
-        $this->assertEquals('habibi', $messagePart->getMessageObjectId());
+        $this->assertEquals('habibi', $messagePart->getHandle());
     }
     
     public function testPartStreamHandle()
     {
         $fileMockPart = vfsStream::newFile('part')->at($this->vfs);
         $fileMockPart->withContent('mucha agua');
-        $this->partBuilder
-            ->method('getStreamPartUrl')
-            ->willReturn($fileMockPart->url());
+
+        $phandle = fopen($fileMockPart->url(), 'r');
+
+        $this->partBuilder->method('getStreamContentLength')->willReturn(0);
+        $messagePart = $this->getMessagePart($phandle);
         
-        $messagePart = $this->getMessagePart();
         $this->assertFalse($messagePart->hasContent());
         $this->assertNull($messagePart->getContentResourceHandle());
         $this->assertNotNull($messagePart->getHandle());
         $handle = $messagePart->getHandle();
         $this->assertEquals('mucha agua', stream_get_contents($handle));
+
+        fclose($phandle);
     }
     
     public function testContentStreamHandle()
@@ -74,8 +77,8 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $handle = fopen($fileMockPart->url(), 'r');
         $this->partBuilder
             ->expects($this->once())
-            ->method('getStreamContentUrl')
-            ->willReturn($fileMockPart->url());
+            ->method('getStreamContentLength')
+            ->willReturn(10);
         $this->partStreamFilterManager
             ->expects($this->once())
             ->method('setContentUrl')

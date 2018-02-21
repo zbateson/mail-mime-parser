@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use GuzzleHttp\Psr7;
@@ -19,30 +20,46 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 class MimePartFactory extends MessagePartFactory
 {
-    /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
-     *      instance
-     */
-    protected $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the PartFilterFactory
-     *      instance
-     */
-    protected $partFilterFactory;
-
-    /**
      * Creates a MimePartFactory instance with its dependencies.
-     * 
+     *
+     * @param StreamDecoratorFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      */
-    public function __construct(PartStreamFilterManagerFactory $psf, HeaderFactory $hf, PartFilterFactory $pf)
-    {
-        parent::__construct($psf);
+    public function __construct(
+        StreamDecoratorFactory $sdf,
+        PartStreamFilterManagerFactory $psf,
+        HeaderFactory $hf,
+        PartFilterFactory $pf
+    ) {
+        parent::__construct($sdf, $psf);
         $this->headerFactory = $hf;
         $this->partFilterFactory = $pf;
+    }
+
+    /**
+     * Returns the singleton instance for the class.
+     *
+     * @param PartStreamFilterManagerFactory $psf
+     * @param HeaderFactory $hf
+     * @param PartFilterFactory $pf
+     * @return MessagePartFactory
+     */
+    public static function getInstance(
+        StreamDecoratorFactory $sdf,
+        PartStreamFilterManagerFactory $psf,
+        HeaderFactory $hf = null,
+        PartFilterFactory $pf = null
+    ) {
+        $instance = static::getCachedInstance();
+        if ($instance === null) {
+            $instance = new static($sdf, $psf, $hf, $pf);
+            static::setCachedInstance($instance);
+        }
+        return $instance;
     }
 
     /**

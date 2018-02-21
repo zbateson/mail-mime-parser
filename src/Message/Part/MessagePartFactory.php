@@ -6,9 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use ReflectionClass;
+use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
 
 /**
  * Abstract factory for subclasses of MessagePart.
@@ -22,41 +20,75 @@ abstract class MessagePartFactory
      *      PartStreamFilterManager instances
      */
     protected $partStreamFilterManagerFactory;
-    
+
+    /**
+     * @var StreamDecoratorFactory the StreamDecoratorFactory instance
+     */
+    protected $streamDecoratorFactory;
+
+    /**
+     * @static MessagePartFactory[] cached instances of MessagePartFactory
+     *      sub-classes
+     */
+    private static $instances = null;
+
     /**
      * Initializes class dependencies.
-     * 
+     *
+     * @param StreamDecoratorFactory $streamDecoratorFactory
      * @param PartStreamFilterManagerFactory $psf
      */
-    public function __construct(PartStreamFilterManagerFactory $psf)
-    {
+    public function __construct(
+        StreamDecoratorFactory $streamDecoratorFactory,
+        PartStreamFilterManagerFactory $psf
+    ) {
+        $this->streamDecoratorFactory = $streamDecoratorFactory;
         $this->partStreamFilterManagerFactory = $psf;
     }
     
     /**
-     * Returns the singleton instance for the class.
      * 
-     * @param HeaderFactory $hf
-     * @param PartFilterFactory $pf
+     * @param MessagePartFactory $instance
+     */
+    protected static function setCachedInstance(MessagePartFactory $instance)
+    {
+        if (self::$instances === null) {
+            self::$instances = [];
+        }
+        $class = get_called_class();
+        self::$instances[$class] = $instance;
+    }
+
+    /**
+     * 
+     * @return MessagePartFactory
+     */
+    protected static function getCachedInstance()
+    {
+        $class = get_called_class();
+        if (self::$instances === null || !isset(self::$instances[$class])) {
+            return null;
+        }
+        return self::$instances[$class];
+    }
+
+    /**
+     * Returns the singleton instance for the class.
+     *
+     * @param StreamDecoratorFactory $sdf
+     * @param PartStreamFilterManagerFactory $psf
      * @return MessagePartFactory
      */
     public static function getInstance(
-        $handle,
-        HeaderFactory $hf = null,
-        PartFilterFactory $pf = null
+        StreamDecoratorFactory $sdf,
+        PartStreamFilterManagerFactory $psf
     ) {
-        static $instances = [];
-        $class = get_called_class();
-        if (!isset($instances[$class])) {
-            $rf = new ReflectionClass($class);
-            $constr = $rf->getConstructor();
-            if ($constr->getNumberOfParameters() === 3) {
-                $instances[$class] = new static($handle, $hf, $pf);
-            } else {
-                $instances[$class] = new static($handle);
-            }
+        $instance = static::getCachedInstance();
+        if ($instance === null) {
+            $instance = new static($sdf, $psf);
+            static::setCachedInstance($instance);
         }
-        return $instances[$class];
+        return $instance;
     }
     
     /**

@@ -8,18 +8,25 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7\LimitStream;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\StreamDecorators\Base64StreamDecorator;
 use ZBateson\StreamDecorators\QuotedPrintableStreamDecorator;
 use ZBateson\StreamDecorators\UUStreamDecorator;
 use ZBateson\StreamDecorators\CharsetStreamDecorator;
 
 /**
- * Description of StreamFactory
+ * Factory class for Psr7 stream decorators used in MailMimeParser.
  *
- * @author Zaahid Bateson <zbateson@gmail.com>
+ * @author Zaahid Bateson
  */
-class StreamDecoderFactory
+class StreamDecoratorFactory
 {
+    public function newLimitStreamDecorator(StreamInterface $stream, $length, $start)
+    {
+        return new LimitStream($stream, $length, $start);
+    }
+
     public function newBase64StreamDecorator($resource)
     {
         $stream = new Base64StreamDecorator(Psr7\stream_for($resource));
