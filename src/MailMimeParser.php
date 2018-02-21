@@ -6,6 +6,9 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\StreamWrapper;
+
 /**
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
  *
@@ -75,15 +78,14 @@ class MailMimeParser
      */
     public function parse($handleOrString)
     {
-        // $tempHandle is attached to $message, and closed in its destructor
-        $tempHandle = fopen('php://temp', 'r+');
-        if (is_string($handleOrString)) {
-            fwrite($tempHandle, $handleOrString);
-        } else {
-            stream_copy_to_stream($handleOrString, $tempHandle);
-        }
-        rewind($tempHandle);
+        $stream = Psr7\stream_for($handleOrString);
+        $copy = Psr7\stream_for(fopen('php://temp', 'r+'));
+
+        Psr7\copy_to_stream($stream, $copy);
+        $copy->rewind();
+        // don't close it when $stream gets destroyed
+        $stream->detach();
         $parser = $this->di->newMessageParser();
-        return $parser->parse($tempHandle);
+        return $parser->parse(StreamWrapper::getResource($copy));
     }
 }
