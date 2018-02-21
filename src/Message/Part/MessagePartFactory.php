@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
@@ -99,13 +100,13 @@ abstract class MessagePartFactory
         }
         return $instance;
     }
-    
+
     /**
      * Constructs a new MessagePart object and returns it
      * 
-     * @param resource $handle
+     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
      */
-    public abstract function newInstance($handle, PartBuilder $partBuilder);
+    public abstract function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder);
 }

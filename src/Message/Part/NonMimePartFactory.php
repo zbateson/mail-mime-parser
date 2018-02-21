@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\LimitStream;
 use GuzzleHttp\Psr7\StreamWrapper;
@@ -20,19 +21,13 @@ class NonMimePartFactory extends MessagePartFactory
     /**
      * Constructs a new NonMimePart object and returns it
      * 
-     * @param resource $handle
+     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
-     * @param PartStreamFilterManager $partStreamFilterManager
      * @return \ZBateson\MailMimeParser\Message\Part\NonMimePart
      */
-    public function newInstance(
-        $handle,
-        PartBuilder $partBuilder
-    ) {
-        $partStream = Psr7\stream_for($handle);
-        $partLimitStream = new LimitStream($partStream, $partBuilder->getStreamPartEnd() - $partBuilder->getStreamPartStart(), $partBuilder->getStreamPartStart());
+    public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder) {
         return new NonMimePart(
-            StreamWrapper::getResource($partLimitStream),
+            StreamWrapper::getResource($this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder)),
             $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance()
         );

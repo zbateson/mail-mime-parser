@@ -6,10 +6,12 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use GuzzleHttp\Psr7;
 
 /**
  * Represents a single part of a multi-part mime message.
@@ -63,7 +65,7 @@ class MimePart extends MessagePart
      *
      * @param HeaderFactory $headerFactory 
      * @param PartFilterFactory $partFilterFactory
-     * @param resource $handle
+     * @param StreamInterface $stream
      * @param PartBuilder $partBuilder
      * @param PartStreamFilterManager $partStreamFilterManager
      */
@@ -82,7 +84,7 @@ class MimePart extends MessagePart
         $pbChildren = $partBuilder->getChildren();
         if (!empty($pbChildren)) {
             $this->children = array_map(function ($child) use ($handle) {
-                $childPart = $child->createMessagePart($handle);
+                $childPart = $child->createMessagePart(Psr7\stream_for($handle));
                 $childPart->parent = $this;
                 return $childPart;
             }, $pbChildren);

@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
@@ -65,18 +66,16 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Constructs a new MimePart object and returns it
      * 
-     * @param resource $handle
+     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function newInstance($handle, PartBuilder $partBuilder)
+    public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder)
     {
-        $partStream = Psr7\stream_for($handle);
-        $partLimitStream = new LimitStream($partStream, $partBuilder->getStreamPartLength(), $partBuilder->getStreamPartStartOffset());
         return new MimePart(
             $this->headerFactory,
             $this->partFilterFactory,
-            StreamWrapper::getResource($partLimitStream),
+            StreamWrapper::getResource($this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder)),
             $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance()
         );

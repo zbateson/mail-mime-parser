@@ -6,9 +6,11 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
+use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -52,17 +54,16 @@ class MessageParser
     }
     
     /**
-     * Parses the passed stream handle into a ZBateson\MailMimeParser\Message
-     * object and returns it.
+     * Parses the passed stream into a ZBateson\MailMimeParser\Message object
+     * and returns it.
      * 
-     * @param resource $fhandle the resource handle to the input stream of the
-     *        mime message
+     * @param StreamInterface $stream the stream to parse the message from
      * @return \ZBateson\MailMimeParser\Message
      */
-    public function parse($fhandle)
+    public function parse(StreamInterface $stream)
     {
-        $partBuilder = $this->read($fhandle);
-        return $partBuilder->createMessagePart($fhandle);
+        $partBuilder = $this->read($stream);
+        return $partBuilder->createMessagePart($stream);
     }
     
     /**
@@ -220,18 +221,21 @@ class MessageParser
     }
     
     /**
-     * Reads the message from the input stream $handle and returns a PartBuilder
+     * Reads the message from the passed stream and returns a PartBuilder
      * representing it.
      * 
-     * @param resource $handle
+     * @param StreamInterface $stream
      * @return PartBuilder
      */
-    protected function read($handle)
+    protected function read(StreamInterface $stream)
     {
         $partBuilder = $this->partBuilderFactory->newPartBuilder(
             $this->partFactoryService->getMessageFactory()
         );
-        $this->readPart($handle, $partBuilder);
+        // the remaining parts use a resource handle for better performance...
+        // it seems fgets does much better than Psr7\readline (not specifically
+        // measured, but difference in running tests is big)
+        $this->readPart(StreamWrapper::getResource($stream), $partBuilder);
         return $partBuilder;
     }
 }

@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\LimitStream;
 use GuzzleHttp\Psr7\StreamWrapper;
@@ -20,16 +21,14 @@ class UUEncodedPartFactory extends MessagePartFactory
     /**
      * Constructs a new UUEncodedPart object and returns it
      * 
-     * @param resource $handle
+     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\UUEncodedPartPart
      */
-    public function newInstance($handle, PartBuilder $partBuilder)
+    public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder)
     {
-        $partStream = Psr7\stream_for($handle);
-        $partLimitStream = new LimitStream($partStream, $partBuilder->getStreamPartLength(), $partBuilder->getStreamPartStartOffset());
         return new UUEncodedPart(
-            StreamWrapper::getResource($partLimitStream),
+            StreamWrapper::getResource($this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder)),
             $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance()
         );

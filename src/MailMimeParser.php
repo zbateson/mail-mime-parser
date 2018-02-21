@@ -7,7 +7,6 @@
 namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
@@ -86,6 +85,6 @@ class MailMimeParser
         // don't close it when $stream gets destroyed
         $stream->detach();
         $parser = $this->di->newMessageParser();
-        return $parser->parse(StreamWrapper::getResource($copy));
+        return $parser->parse($copy);
     }
 }

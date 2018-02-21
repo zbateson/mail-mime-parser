@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
@@ -449,13 +450,13 @@ class PartBuilder
      * Creates a MessagePart and returns it using the PartBuilder's
      * MessagePartFactory passed in during construction.
      * 
-     * @param resource $handle
+     * @param StreamInterface $stream
      * @return MessagePart
      */
-    public function createMessagePart($handle)
+    public function createMessagePart(StreamInterface $stream)
     {
         return $this->messagePartFactory->newInstance(
-            $handle,
+            $stream,
             $this
         );
     }
