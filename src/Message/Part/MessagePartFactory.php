@@ -7,6 +7,8 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
  * Abstract factory for subclasses of MessagePart.
@@ -47,7 +49,8 @@ abstract class MessagePartFactory
     }
     
     /**
-     * 
+     * Sets a cached singleton instance.
+     *
      * @param MessagePartFactory $instance
      */
     protected static function setCachedInstance(MessagePartFactory $instance)
@@ -60,7 +63,9 @@ abstract class MessagePartFactory
     }
 
     /**
-     * 
+     * Returns a cached singleton instance if one exists, or null if one hasn't
+     * been created yet.
+     *
      * @return MessagePartFactory
      */
     protected static function getCachedInstance()
@@ -77,11 +82,15 @@ abstract class MessagePartFactory
      *
      * @param StreamDecoratorFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
+     * @param HeaderFactory $hf
+     * @param PartFilterFactory $pf
      * @return MessagePartFactory
      */
     public static function getInstance(
         StreamDecoratorFactory $sdf,
-        PartStreamFilterManagerFactory $psf
+        PartStreamFilterManagerFactory $psf,
+        HeaderFactory $hf = null,
+        PartFilterFactory $pf = null
     ) {
         $instance = static::getCachedInstance();
         if ($instance === null) {

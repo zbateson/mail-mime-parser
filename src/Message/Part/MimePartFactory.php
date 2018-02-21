@@ -20,7 +20,6 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 class MimePartFactory extends MessagePartFactory
 {
-    
     /**
      * Creates a MimePartFactory instance with its dependencies.
      *
@@ -43,6 +42,7 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Returns the singleton instance for the class.
      *
+     * @param StreamDecoratorFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
