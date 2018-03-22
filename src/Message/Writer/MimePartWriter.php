@@ -65,6 +65,8 @@ class MimePartWriter
     public function writePartHeadersTo(MimePart $part, $handle)
     {
         $headers = $part->getHeaders();
+        $headers = is_null($headers) ? array() : $headers;
+        
         foreach ($headers as $header) {
             fwrite($handle, "$header\r\n");
         }

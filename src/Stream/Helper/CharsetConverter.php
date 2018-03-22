@@ -322,6 +322,16 @@ class CharsetConverter
      */
     public function convert($str)
     {
+        /** @see https://github.com/zbateson/MailMimeParser/issues/53 */
+        if (stripos($this->fromCharset, 'utf-8') || stripos($this->fromCharset, 'utf8')) {
+            $this->fromCharset = 'UTF-8';
+        }
+
+        // if the from and to are the same return the string
+        if ($this->fromCharset == $this->toCharset){
+            return $str;
+        }
+
         // there may be some mb-supported encodings not supported by iconv (on my libiconv for instance
         // HZ isn't supported), and so it may happen that failing an mb_convert_encoding, an iconv
         // may also fail even though both support an encoding separately.
@@ -332,7 +342,13 @@ class CharsetConverter
             if ($this->fromCharsetMbSupported && $this->toCharsetMbSupported) {
                 return mb_convert_encoding($str, $this->toCharset, $this->fromCharset);
             }
-            return iconv($this->fromCharset, $this->toCharset . '//TRANSLIT//IGNORE', $str);
+
+            if ($this->fromCharset == 'UTF-8' && $this->toCharset == 'ISO-8859-I'){
+                return $str;
+            }
+            
+            $_str = @iconv($this->fromCharset, $this->toCharset . '//TRANSLIT//IGNORE', $str);
+            return $_str ? $_str : $str;
         }
         return $str;
     }
@@ -351,6 +367,11 @@ class CharsetConverter
      */
     private function findSupportedCharset($cs, &$mbSupported)
     {
+        /** @see https://github.com/zbateson/MailMimeParser/issues/53 */
+        if (stripos($cs, 'utf-8') || stripos($cs, 'utf8')) {
+            $cs = 'UTF-8';
+        }
+
         $mbSupported = true;
         $comp = strtoupper($cs);
         $available = array_map('strtoupper', mb_list_encodings());
