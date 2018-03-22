@@ -1,5 +1,5 @@
 {
-    "name": "zbateson/mail-mime-parser",
+    "name": "rsaccani/mail-mime-parser",
     "description": "MIME email message parser",
     "keywords": ["email", "mail", "mime", "parser", "php-imap"],
     "homepage": "https://github.com/zbateson/MailMimeParser",
