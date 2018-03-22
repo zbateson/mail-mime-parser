@@ -950,6 +950,7 @@ class Message extends MimePart
      * @param strubg $mimeType
      * @param string $filename
      * @param string $disposition
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function addAttachmentPart($stringOrHandle, $mimeType, $filename = null, $disposition = 'attachment')
     {
@@ -962,6 +963,7 @@ class Message extends MimePart
         $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
         $part->attachContentResourceHandle($this->getHandleForStringOrHandle($stringOrHandle));
         $this->addPart($part);
+        return $part;
     }
     
     /**
@@ -973,6 +975,7 @@ class Message extends MimePart
      * @param string $mimeType
      * @param string $filename
      * @param string $disposition
+     * @return \ZBateson\MailMimeParser\Message\MimePart
      */
     public function addAttachmentPartFromFile($file, $mimeType, $filename = null, $disposition = 'attachment')
     {
@@ -986,6 +989,7 @@ class Message extends MimePart
         $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$filename\"");
         $part->attachContentResourceHandle($handle);
         $this->addPart($part);
+        return $part;
     }
     
     /**
