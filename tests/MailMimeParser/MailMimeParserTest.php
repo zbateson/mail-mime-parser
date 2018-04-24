@@ -23,7 +23,7 @@ class MailMimeParserTest extends PHPUnit_Framework_TestCase
     {
         $mmp = new MailMimeParser();
         
-        $handle = fopen('php://memory', 'rw');
+        $handle = fopen('php://memory', 'r+');
         fwrite($handle, 'This is a test');
         rewind($handle);
         
