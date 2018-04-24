@@ -68,11 +68,6 @@ class PartStreamFilterManager
     public function __construct(StreamDecoratorFactory $streamDecoratorFactory)
     {
         $this->streamDecoratorFactory = $streamDecoratorFactory;
-        $this->encodingEncoderMap = [
-            'quoted-printable' => '',
-            'base64' => '',
-            'x-uuencode' => ''
-        ];
         $this->charsetConversionFilter = '';
     }
     
