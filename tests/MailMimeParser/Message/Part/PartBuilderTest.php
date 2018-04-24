@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * PartBuilderTest
@@ -348,10 +349,8 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         );
         $instance->setStreamPartStartPos(42);
         $instance->setStreamPartEndPos(84);
-        $this->assertEquals(
-            'euphrates://kufa?start=42&end=84',
-            $instance->getStreamPartUrl('kufa')
-        );
+        $this->assertEquals(42, $instance->getStreamPartStartOffset());
+        $this->assertEquals(42, $instance->getStreamPartLength());
     }
     
     public function testSetStreamContentPosAndGetFilename()
@@ -364,14 +363,10 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $instance->setStreamPartStartPos(11);
         $instance->setStreamContentStartPos(42);
         $instance->setStreamPartAndContentEndPos(84);
-        $this->assertEquals(
-            'tigris://babylon?start=42&end=84',
-            $instance->getStreamContentUrl('babylon')
-        );
-        $this->assertEquals(
-            'tigris://kufa?start=11&end=84',
-            $instance->getStreamPartUrl('kufa')
-        );
+        $this->assertEquals(11, $instance->getStreamPartStartOffset());
+        $this->assertEquals(84 - 11, $instance->getStreamPartLength());
+        $this->assertEquals(42, $instance->getStreamContentStartOffset());
+        $this->assertEquals(84 - 42, $instance->getStreamContentLength());
     }
     
     public function testSetStreamContentPosAndGetFilenameWithParent()
@@ -405,30 +400,21 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $instance->setStreamPartStartPos(22);
         $instance->setStreamContentStartPos(42);
         $instance->setStreamPartAndContentEndPos(84);
-        $this->assertEquals(
-            'tigris://babylon?start=42&end=84',
-            $instance->getStreamContentUrl('babylon')
-        );
-        $this->assertEquals(
-            'tigris://kufa?start=22&end=84',
-            $instance->getStreamPartUrl('kufa')
-        );
-        $this->assertEquals(
-            'euphrates://babylon?start=13&end=20',
-            $parent->getStreamContentUrl('babylon')
-        );
-        $this->assertEquals(
-            'euphrates://kufa?start=11&end=84',
-            $parent->getStreamPartUrl('kufa')
-        );
-        $this->assertEquals(
-            'vistula://babylon?start=3&end=3',
-            $super->getStreamContentUrl('babylon')
-        );
-        $this->assertEquals(
-            'vistula://kufa?start=0&end=84',
-            $super->getStreamPartUrl('kufa')
-        );
+
+        $this->assertEquals(42 - $parent->getStreamPartStartOffset(), $instance->getStreamContentStartOffset());
+        $this->assertEquals(84 - 42, $instance->getStreamContentLength());
+        $this->assertEquals(22 - $parent->getStreamPartStartOffset(), $instance->getStreamPartStartOffset());
+        $this->assertEquals(84 - 22, $instance->getStreamPartLength());
+
+        $this->assertEquals(13, $parent->getStreamContentStartOffset());
+        $this->assertEquals(20 - 13, $parent->getStreamContentLength());
+        $this->assertEquals(11, $parent->getStreamPartStartOffset());
+        $this->assertEquals(84 - 11, $parent->getStreamPartLength());
+
+        $this->assertEquals(3, $super->getStreamContentStartOffset());
+        $this->assertEquals(0, $super->getStreamContentLength());
+        $this->assertEquals(0, $super->getStreamPartStartOffset());
+        $this->assertEquals(84, $super->getStreamPartLength());
     }
     
     public function testSetAndGetProperties()
@@ -447,19 +433,17 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     
     public function testCreateMessagePart()
     {
-        $messageId = 'thingsnstuff';
-        
-        $this->mockMessagePartFactory->expects($this->once())
-            ->method('newInstance')
-            ->with($messageId)
-            ->willReturn(true);
-        
+        $stream = Psr7\stream_for('thingsnstuff');
         $instance = new PartBuilder(
             $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
             'euphrates'
         );
-        
-        $this->assertTrue($instance->createMessagePart($messageId));
+
+        $this->mockMessagePartFactory->expects($this->once())
+            ->method('newInstance')
+            ->with($stream)
+            ->willReturn(true);
+        $this->assertTrue($instance->createMessagePart($stream));
     }
 }

@@ -10,9 +10,6 @@ use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\LimitStream;
-use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Responsible for creating MimePart instances.
@@ -75,9 +72,10 @@ class MimePartFactory extends MessagePartFactory
         return new MimePart(
             $this->headerFactory,
             $this->partFilterFactory,
-            StreamWrapper::getResource($this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder)),
             $partBuilder,
-            $this->partStreamFilterManagerFactory->newInstance()
+            $this->partStreamFilterManagerFactory->newInstance(),
+            $this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder),
+            $this->streamDecoratorFactory->getLimitedContentStream($messageStream, $partBuilder)
         );
     }
 }

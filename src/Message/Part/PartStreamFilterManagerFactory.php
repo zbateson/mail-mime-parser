@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+
 /**
  * Responsible for creating PartStreamFilterManager instances.
  *
@@ -13,16 +15,18 @@ namespace ZBateson\MailMimeParser\Message\Part;
  */
 class PartStreamFilterManagerFactory
 {
+    /**
+     * @var StreamDecoratorFactory the StreamDecoratorFactory needed to
+     *      initialize a new PartStreamFilterManager.
+     */
     protected $streamDecoratorFactory;
     
     /**
-     * 
-     * @param string $quotedPrintableDecodeFilter
-     * @param string $base64DecodeFilter
-     * @param string $uudecodeFilter
-     * @param string $charsetConversionFilter
+     * Initializes dependencies
+     *
+     * @param StreamDecoratorFactory $streamDecoratorFactory
      */
-    public function __construct($streamDecoratorFactory) {
+    public function __construct(StreamDecoratorFactory $streamDecoratorFactory) {
         $this->streamDecoratorFactory = $streamDecoratorFactory;
     }
     

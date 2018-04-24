@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 use org\bovigo\vfs\vfsStream;
 
 /**
@@ -117,9 +118,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'sweet massage',
             $this->getMockedPartBuilder(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         $this->assertNotNull($message);
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $message);
@@ -150,9 +152,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         
         $parts = $message->getAllParts();
@@ -196,9 +199,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         
         $parts = $message->getAllParts();
@@ -222,9 +226,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilder(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         $this->assertNull($message->getMessageStringForSignatureVerification());
     }
@@ -234,9 +239,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         $content = vfsStream::newFile('part')->at($this->vfs);
         $content->withContent("mucha\ragua\ny\r\npollo\r\n\r\n");
@@ -271,9 +277,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         
         $parts = $message->getAllParts();
@@ -299,9 +306,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilder(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         $this->assertFalse($message->isMime());
     }
@@ -320,9 +328,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         $this->assertTrue($message->isMime());
     }
@@ -341,9 +350,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         $this->assertTrue($message->isMime());
     }
@@ -359,9 +369,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            $messageHandle,
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for($messageHandle),
+            Psr7\stream_for('7ajat 7ilwa')
         );
         
         $handle = fopen('php://temp', 'r+');

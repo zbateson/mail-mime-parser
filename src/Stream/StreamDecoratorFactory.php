@@ -6,8 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\LimitStream;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\StreamDecorators\Base64StreamDecorator;
@@ -50,27 +48,23 @@ class StreamDecoratorFactory
         return new LimitStream($stream, $length, $start);
     }
 
-    public function newBase64StreamDecorator($resource)
+    public function newBase64StreamDecorator(StreamInterface $stream)
     {
-        $stream = new Base64StreamDecorator(Psr7\stream_for($resource));
-        return StreamWrapper::getResource($stream);
+        return new Base64StreamDecorator($stream);
     }
 
-    public function newQuotedPrintableStreamDecorator($resource)
+    public function newQuotedPrintableStreamDecorator(StreamInterface $stream)
     {
-        $stream = new QuotedPrintableStreamDecorator(Psr7\stream_for($resource));
-        return StreamWrapper::getResource($stream);
+        return new QuotedPrintableStreamDecorator($stream);
     }
 
-    public function newUUStreamDecorator($resource)
+    public function newUUStreamDecorator(StreamInterface $stream)
     {
-        $stream = new UUStreamDecorator(Psr7\stream_for($resource));
-        return StreamWrapper::getResource($stream);
+        return new UUStreamDecorator($stream);
     }
 
-    public function newCharsetStreamDecorator($resource, $fromCharset, $toCharset)
+    public function newCharsetStreamDecorator(StreamInterface $stream, $fromCharset, $toCharset)
     {
-        $stream = new CharsetStreamDecorator(Psr7\stream_for($resource), $fromCharset, $toCharset);
-        return StreamWrapper::getResource($stream);
+        return new CharsetStreamDecorator($stream, $fromCharset, $toCharset);
     }
 }

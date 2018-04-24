@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
+
 /**
  * A specialized NonMimePart representing a uuencoded part.
  * 
@@ -36,16 +38,18 @@ class UUEncodedPart extends NonMimePart
     /**
      * Initiates the UUEncodedPart with the passed mode and filename.
      * 
-     * @param resource $handle
      * @param PartBuilder $partBuilder
      * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamInterface $stream
+     * @param StreamInterface $contentStream
      */
     public function __construct(
-        $handle,
         PartBuilder $partBuilder,
-        PartStreamFilterManager $partStreamFilterManager
+        PartStreamFilterManager $partStreamFilterManager,
+        StreamInterface $stream,
+        StreamInterface $contentStream = null
     ) {
-        parent::__construct($handle, $partBuilder, $partStreamFilterManager);
+        parent::__construct($partStreamFilterManager, $stream, $contentStream);
         $this->mode = $partBuilder->getProperty('mode');
         $this->filename = $partBuilder->getProperty('filename');
     }

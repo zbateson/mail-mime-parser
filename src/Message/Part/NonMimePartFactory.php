@@ -27,9 +27,9 @@ class NonMimePartFactory extends MessagePartFactory
      */
     public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder) {
         return new NonMimePart(
-            StreamWrapper::getResource($this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder)),
-            $partBuilder,
-            $this->partStreamFilterManagerFactory->newInstance()
+            $this->partStreamFilterManagerFactory->newInstance(),
+            $this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder),
+            $this->streamDecoratorFactory->getLimitedContentStream($messageStream, $partBuilder)
         );
     }
 }

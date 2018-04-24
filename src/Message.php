@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use GuzzleHttp\Psr7;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -19,6 +20,17 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  */
 class Message extends MimePart
 {
+    /**
+     * Overridden to close the main message StreamInterface used by this
+     * message.
+     */
+    public function __destruct()
+    {
+        if ($this->stream !== null) {
+            $this->stream->close();
+        }
+    }
+
     /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
@@ -267,9 +279,12 @@ class Message extends MimePart
      */
     public function save($handle)
     {
-        if (is_resource($this->handle)) {
-            rewind($this->handle);
-            stream_copy_to_stream($this->handle, $handle);
+        if ($this->stream !== null) {
+            $dest = Psr7\stream_for($handle);
+            $this->stream->rewind();
+            Psr7\copy_to_stream($this->stream, $dest);
+            // don't close when out of scope
+            $dest->detach();
         }
     }
 
@@ -281,11 +296,10 @@ class Message extends MimePart
      */
     public function __toString()
     {
-        $handle = fopen('php://temp', 'r+');
-        $this->save($handle);
-        rewind($handle);
-        $str = stream_get_contents($handle);
-        fclose($handle);
-        return $str;
+        if ($this->stream !== null) {
+            $this->stream->rewind();
+            return $this->stream->getContents();
+        }
+        return '';
     }
 }

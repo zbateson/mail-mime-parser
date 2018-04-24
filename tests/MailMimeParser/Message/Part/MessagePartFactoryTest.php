@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * MessagePartFactoryTest
@@ -26,17 +27,17 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
     
     public function testNewInstance()
     {
-        $messageId = 'the id';
         $partBuilder = $this->getMockBuilder(
             'ZBateson\MailMimeParser\Message\Part\PartBuilder'
         )
             ->disableOriginalConstructor()
             ->getMock();
-        
+
+        $stream = Psr7\stream_for('stuff');
         $this->messagePartFactory->expects($this->once())
             ->method('newInstance')
-            ->with($messageId, $partBuilder);
+            ->with($stream, $partBuilder);
         
-        $this->messagePartFactory->newInstance($messageId, $partBuilder);
+        $this->messagePartFactory->newInstance($stream, $partBuilder);
     }
 }

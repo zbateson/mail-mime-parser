@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * Description of NonMimePartTest
@@ -18,11 +19,7 @@ class NonMimePartTest extends PHPUnit_Framework_TestCase
         $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $part = new NonMimePart('habibi', $partBuilder, $mgr);
+        $part = new NonMimePart($mgr, Psr7\stream_for('blah'));
         $this->assertTrue($part->isTextPart());
         $this->assertFalse($part->isMime());
         $this->assertEquals('text/plain', $part->getContentType());

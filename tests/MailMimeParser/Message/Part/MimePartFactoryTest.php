@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * MimePartFactoryTest
@@ -19,6 +20,11 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
+        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamDecoratorFactory')
+            ->getMock();
+        $mocksdf->expects($this->any())
+            ->method('getLimitedPartStream')
+            ->willReturn(Psr7\stream_for('test'));
         $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -35,18 +41,17 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
         $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mimePartFactory = new MimePartFactory($psfmFactory, $mockHeaderFactory, $mockFilterFactory);
+        $this->mimePartFactory = new MimePartFactory($mocksdf, $psfmFactory, $mockHeaderFactory, $mockFilterFactory);
     }
     
     public function testNewInstance()
     {
-        $messageId = 'the id';
         $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         
         $part = $this->mimePartFactory->newInstance(
-            $messageId,
+            Psr7\stream_for('test'),
             $partBuilder
         );
         $this->assertInstanceOf(

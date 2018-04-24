@@ -359,7 +359,10 @@ class PartBuilder
 
     public function getStreamContentStartOffset()
     {
-        return $this->streamContentStartPos - $this->streamPartStartPos;
+        if ($this->parent) {
+            return $this->streamContentStartPos - $this->parent->streamPartStartPos;
+        }
+        return $this->streamContentStartPos;
     }
 
     public function getStreamContentLength()
@@ -367,40 +370,6 @@ class PartBuilder
         return $this->streamContentEndPos - $this->streamContentStartPos;
     }
 
-    /**
-     * Constructs and returns a filename where the part can be read from the
-     * passed $messageObjectId.
-     * 
-     * @param string $messageObjectId the message object id
-     * @return string
-     */
-    public function getStreamPartUrl($messageObjectId)
-    {
-        if ($this->streamPartEndPos === 0) {
-            return null;
-        }
-        return $this->streamWrapperProtocol . '://' . $messageObjectId
-            . '?start=' . $this->streamPartStartPos . '&end='
-            . $this->streamPartEndPos;
-    }
-    
-    /**
-     * Constructs and returns a filename where the part's content can be read
-     * from the passed $messageObjectId.
-     * 
-     * @param string $messageObjectId the message object id
-     * @return string
-     */
-    public function getStreamContentUrl($messageObjectId)
-    {
-        if ($this->streamContentEndPos === 0) {
-            return null;
-        }
-        return $this->streamWrapperProtocol . '://' . $messageObjectId
-            . '?start=' . $this->streamContentStartPos . '&end='
-            . $this->streamContentEndPos;
-    }
-    
     /**
      * Sets the start position of the part in the input stream.
      * 

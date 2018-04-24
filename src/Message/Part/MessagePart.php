@@ -6,9 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\LimitStream;
 use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
@@ -16,9 +15,6 @@ use GuzzleHttp\Psr7\StreamWrapper;
  *
  * A MessagePart object may have any number of child parts, or may be a child
  * itself with its own parent or parents.
- *
- * The content of the part can be read from its PartStream resource handle,
- * accessible via MimePart::getContentResourceHanlde.
  *
  * @author Zaahid Bateson
  */
@@ -30,10 +26,15 @@ abstract class MessagePart
     protected $parent;
 
     /**
-     * @var resource a resource handle containing this part's headers, content
-     *      and children
+     * @var StreamInterface a Psr7 stream containing this part's headers,
+     *      content and children
      */
-    protected $handle;
+    protected $stream;
+
+    /**
+     * @var StreamInterface a Psr7 stream containing this part's content
+     */
+    protected $contentStream;
     
     /**
      * @var PartStreamFilterManager manages attached filters to $contentHandle
@@ -46,43 +47,26 @@ abstract class MessagePart
      */
     protected $charsetOverride;
 
-    protected $hasContentStream = false;
-
     /**
      * Sets up class dependencies.
-     * 
-     * @param resource $handle
-     * @param PartBuilder $partBuilder
+     *
      * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamInterface $stream
+     * @param StreamInterface $contentStream
      */
     public function __construct(
-        $handle,
-        PartBuilder $partBuilder,
-        PartStreamFilterManager $partStreamFilterManager
+        PartStreamFilterManager $partStreamFilterManager,
+        StreamInterface $stream,
+        StreamInterface $contentStream = null
     ) {
-        $this->handle = $handle;
-        if ($handle && $partBuilder->getStreamContentLength() !== 0) {
-            $partStream = Psr7\stream_for($handle);
-            $partLimitStream = new LimitStream($partStream, $partBuilder->getStreamContentLength(), $partBuilder->getStreamContentStartOffset());
-            $partStreamFilterManager->setHandle(
-                StreamWrapper::getResource($partLimitStream)
+        $this->stream = $stream;
+        $this->contentStream = $contentStream;
+        if ($contentStream !== null) {
+            $partStreamFilterManager->setStream(
+                $contentStream
             );
-            $this->hasContentStream = true;
         }
         $this->partStreamFilterManager = $partStreamFilterManager;
-    }
-
-    /**
-     * Closes the attached resource handles.
-     */
-    public function __destruct()
-    {
-        // stream_filter_append may be cleaned up by PHP, but for large files
-        // and many emails may be more efficient to fully clean up
-        //$this->partStreamFilterManager->closeHandle();
-        if (is_resource($this->handle)) {
-            fclose($this->handle);
-        }
     }
 
     /**
@@ -92,7 +76,7 @@ abstract class MessagePart
      */
     public function hasContent()
     {
-        return $this->hasContentStream;
+        return ($this->contentStream !== null);
     }
 
     /**
@@ -164,10 +148,11 @@ abstract class MessagePart
      */
     public function getHandle()
     {
-        if (is_resource($this->handle)) {
-            rewind($this->handle);
+        if ($this->stream !== null) {
+            $this->stream->rewind();
+            return StreamWrapper::getResource($this->stream);
         }
-        return $this->handle;
+        return null;
     }
 
     /**
@@ -195,34 +180,54 @@ abstract class MessagePart
     }
 
     /**
-     * Returns the resource stream handle for the part's content or null if not
-     * set.  rewind() is called on the stream before returning it.
+     * Returns a new resource stream handle for the part's content or null if
+     * the part doesn't have a content section.
      *
-     * The resource is automatically closed by MimePart's destructor and should
-     * not be closed otherwise.
-     *
-     * The returned resource handle is a stream with decoding filters appended
-     * to it.  The attached filters are determined by looking at the part's
-     * Content-Transfer-Encoding and Content-Type headers unless a charset
-     * override is set.  The following transfer encodings are supported:
+     * The returned resource handle is a resource stream with decoding filters
+     * appended to it.  The attached filters are determined by looking at the
+     * part's Content-Transfer-Encoding and Content-Type headers unless a
+     * charset override is set.  The following transfer encodings are supported:
      *
      * - quoted-printable
      * - base64
      * - x-uuencode
      *
-     * In addition a ZBateson\MailMimeParser\Stream\CharsetStreamFilter is
-     * attached for text parts to convert from the content's charset to the
-     * target charset passed in as an argument (defaults to UTF-8).
+     * In addition, the charset of the underlying stream is converted to the
+     * passed $charset if the content is known to be text.
      *
      * @param string $charset
      * @return resource
      */
     public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
     {
+        $stream = $this->getContentStream($charset);
+        if ($stream !== null) {
+            return StreamWrapper::getResource($stream);
+        }
+        return null;
+    }
+
+    /**
+     * Returns the StreamInterface for the part's content or null if the part
+     * doesn't have a content section.
+     *
+     * Because the returned stream may be a shared object if called multiple
+     * times, the function isn't exposed publicly.  If called multiple times
+     * with the same $charset, and the value of the part's
+     * Content-Transfer-Encoding header not having changed, the returned stream
+     * is the same instance and may need to be rewound.
+     *
+     * Note that PartStreamFilterManager rewinds the stream before returning it.
+     *
+     * @param string $charset
+     * @return StreamInterface
+     */
+    protected function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
+    {
         if ($this->hasContent()) {
             $tr = $this->getContentTransferEncoding();
             $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
-            return $this->partStreamFilterManager->getContentHandle(
+            return $this->partStreamFilterManager->getContentStream(
                 $tr,
                 $ch,
                 $charset
@@ -242,13 +247,9 @@ abstract class MessagePart
      */
     public function getContent($charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        if ($this->hasContent()) {
-            $handle = $this->getContentResourceHandle($charset);
-            $pos = ftell($handle);
-            rewind($handle);
-            $text = stream_get_contents($handle);
-            fseek($handle, $pos);
-            return $text;
+        $stream = $this->getContentStream($charset);
+        if ($stream !== null) {
+            return $stream->getContents();
         }
         return null;
     }

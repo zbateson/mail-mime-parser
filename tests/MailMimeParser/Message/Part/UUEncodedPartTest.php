@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * Description of UUEncodedPartTest
@@ -31,9 +32,9 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
             });
 
         $part = new UUEncodedPart(
-            'habibi',
             $pb,
-            $mgr
+            $mgr,
+            Psr7\stream_for('Stuff')
         );
         $this->assertFalse($part->isTextPart());
         $this->assertFalse($part->isMime());

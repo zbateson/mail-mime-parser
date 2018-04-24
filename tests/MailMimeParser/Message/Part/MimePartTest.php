@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
-use org\bovigo\vfs\vfsStream;
+use GuzzleHttp\Psr7;
 
 /**
  * Description of MimePartTest
@@ -17,13 +17,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
     private $mockPartStreamFilterManager;
     private $mockHeaderFactory;
     private $mockPartFilterFactory;
-    
-    protected $vfs;
 
     protected function setUp()
     {
-        $this->vfs = vfsStream::setup('root');
-        
         $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,9 +65,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             ->willReturn(new MimePart(
                 $this->mockHeaderFactory,
                 $this->mockPartFilterFactory,
-                'nested',
                 $nested,
-                $this->mockPartStreamFilterManager
+                $this->mockPartStreamFilterManager,
+                Psr7\stream_for('nested')
             ));
         $children[0]->method('getChildren')
             ->willReturn([$nested]);
@@ -81,9 +77,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
                 ->willReturn(new MimePart(
                     $this->mockHeaderFactory,
                     $this->mockPartFilterFactory,
-                    'child' . $key,
                     $child,
-                    $this->mockPartStreamFilterManager
+                    $this->mockPartStreamFilterManager,
+                    Psr7\stream_for('child' . $key)
                 ));
         }
         $pb->method('getChildren')
@@ -96,9 +92,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilder(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertNotNull($part);
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\MimePart', $part);
@@ -110,14 +106,14 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertEquals(3, $part->getChildCount());
-        $this->assertEquals('child0', $part->getChild(0)->getMessageObjectId());
-        $this->assertEquals('child1', $part->getChild(1)->getMessageObjectId());
-        $this->assertEquals('child2', $part->getChild(2)->getMessageObjectId());
+        $this->assertEquals('child0', stream_get_contents($part->getChild(0)->getHandle()));
+        $this->assertEquals('child1', stream_get_contents($part->getChild(1)->getHandle()));
+        $this->assertEquals('child2', stream_get_contents($part->getChild(2)->getHandle()));
         $children = [
             $part->getChild(0),
             $part->getChild(1),
@@ -131,9 +127,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertEquals(5, $part->getPartCount());
         
@@ -147,11 +143,11 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertSame($children[1], $part->getPart(3));
         $this->assertSame($children[2], $part->getPart(4));
         
-        $this->assertEquals('habibi', $part->getPart(0)->getMessageObjectId());
-        $this->assertEquals('child0', $part->getPart(1)->getMessageObjectId());
-        $this->assertEquals('nested', $part->getPart(2)->getMessageObjectId());
-        $this->assertEquals('child1', $part->getPart(3)->getMessageObjectId());
-        $this->assertEquals('child2', $part->getPart(4)->getMessageObjectId());
+        $this->assertEquals('habibi', stream_get_contents($part->getPart(0)->getHandle()));
+        $this->assertEquals('child0', stream_get_contents($part->getPart(1)->getHandle()));
+        $this->assertEquals('nested', stream_get_contents($part->getPart(2)->getHandle()));
+        $this->assertEquals('child1', stream_get_contents($part->getPart(3)->getHandle()));
+        $this->assertEquals('child2', stream_get_contents($part->getPart(4)->getHandle()));
         
         $allParts = [ $part, $children[0], $nested, $children[1], $children[2]];
         $this->assertEquals($allParts, $part->getAllParts());
@@ -176,9 +172,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         
         $this->assertSame($header, $part->getHeader('CONTENT-TYPE'));
@@ -193,9 +189,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         
         $parts = $part->getAllParts();
@@ -217,9 +213,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $parts = $part->getAllParts();
         
@@ -241,9 +237,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $this->mockHeaderFactory,
             $this->mockPartFilterFactory,
-            'habibi',
             $this->getMockedPartBuilder(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertNull($part->getHeader('blah'));
         $this->assertEquals('upside-down', $part->getHeaderValue('blah', 'upside-down'));
@@ -266,9 +262,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertEquals($header, $part->getHeader('X-header'));
         $this->assertEquals('habibi', $part->getHeaderValue('x-HEADER'));
@@ -293,9 +289,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         
         $this->assertSame($header, $part->getHeader('CONTENT-DISPOSITION'));
@@ -320,9 +316,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
 
         $this->assertSame($header, $part->getHeader('CONTENT-TRANSFER_ENCODING'));
@@ -347,9 +343,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
 
         $this->assertEquals('BLAH', $part->getCharset());
@@ -380,16 +376,16 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $partText = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pbText,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $partHtml = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pbHtml,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
 
         $this->assertEquals('US-ASCII', $partText->getCharset());
@@ -414,9 +410,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         
         $this->assertNull($part->getCharset());
@@ -424,17 +420,12 @@ class MimePartTest extends PHPUnit_Framework_TestCase
     
     public function testUsesTransferEncodingAndCharsetForStreamFilter()
     {
-        $fileContent = vfsStream::newFile('content')->at($this->vfs);
-        
         $pb = $this->getMockedPartBuilder();
         $pb->method('getRawHeaders')
             ->willReturn([
                 'contenttype' => ['Content-Type', 'text/plain; charset=wingding'],
                 'contenttransferencoding' => ['Content-Transfer-Encoding', 'klingon']
             ]);
-        $pb->method('getStreamContentUrl')
-            ->willReturn($fileContent->url());
-        
         $headerType = $this->getMockedParameterHeader('Content-Type', 'text/plain', 'wingding');
         $headerEnc = $this->getMockedParameterHeader('Content-Transfer-Encoding', 'klingon');
         
@@ -447,16 +438,17 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         
         $manager = $this->mockPartStreamFilterManager;
         $manager->expects($this->once())
-            ->method('getContentHandle')
+            ->method('getContentStream')
             ->with('klingon', 'WINGDING', 'UTF-8')
-            ->willReturn('totally not null');
+            ->willReturn(Psr7\stream_for('totally not null'));
         
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi'),
+            Psr7\stream_for('blah')
         );
         
         $this->assertEquals('WINGDING', $part->getCharset());
@@ -480,9 +472,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertFalse($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
@@ -504,9 +496,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory, 
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isTextPart());
@@ -528,9 +520,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isTextPart());
@@ -556,9 +548,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isTextPart());
@@ -584,9 +576,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertFalse($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
@@ -608,9 +600,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertTrue($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
@@ -632,9 +624,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $this->mockPartFilterFactory,
-            'habibi',
             $pb,
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertTrue($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
@@ -659,9 +651,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $pf,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $parts = $part->getAllPartsByMimeType('awww geez');
         $this->assertCount(2, $parts);
@@ -689,9 +681,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $pf,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertSame($part, $part->getPartByMimeType('awww geez'));
         $this->assertSame($part->getPart(3), $part->getPartByMimeType('awww geez', 1));
@@ -716,9 +708,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = new MimePart(
             $hf,
             $pf,
-            'habibi',
             $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager
+            $this->mockPartStreamFilterManager,
+            Psr7\stream_for('habibi')
         );
         $this->assertEquals(3, $part->getCountOfPartsByMimeType('awww geez, Rick'));
     }

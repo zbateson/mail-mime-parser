@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Psr7;
 use org\bovigo\vfs\vfsStream;
 
 /**
@@ -117,7 +118,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->willReturn($pb);
         
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse($handle);
+        $message = $mp->parse(Psr7\stream_for($handle));
         $this->assertNotNull($message);
         
         fclose($handle);
@@ -173,7 +174,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->willReturn($pb);
         
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse($handle);
+        $message = $mp->parse(Psr7\stream_for($handle));
         $this->assertNotNull($message);
         
         fclose($handle);
@@ -286,7 +287,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
         
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse($handle);
+        $message = $mp->parse(Psr7\stream_for($handle));
         $this->assertNotNull($message);
         
         fclose($handle);
@@ -342,7 +343,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->willReturn($pb);
         
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse($handle);
+        $message = $mp->parse(Psr7\stream_for($handle));
         $this->assertNotNull($message);
         
         fclose($handle);
@@ -507,7 +508,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
         
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse($handle);
+        $message = $mp->parse(Psr7\stream_for($handle));
         $this->assertNotNull($message);
         
         fclose($handle);
@@ -822,7 +823,7 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             );
         
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse($handle);
+        $message = $mp->parse(Psr7\stream_for($handle));
         $this->assertNotNull($message);
         
         fclose($handle);

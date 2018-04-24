@@ -17,11 +17,10 @@ class PartStreamFilterManagerFactoryTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
+        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamDecoratorFactory')
+            ->getMock();
         $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory(
-            'test',
-            'test',
-            'test',
-            'test'
+            $mocksdf
         );
     }
     
