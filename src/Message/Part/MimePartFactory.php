@@ -19,7 +19,17 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 class MimePartFactory extends MessagePartFactory
 {
     /**
-     * Creates a MimePartFactory instance with its dependencies.
+     * @var HeaderFactory an instance used for creating MimePart objects 
+     */
+    protected $headerFactory;
+
+    /**
+     * @var PartFilterFactory an instance used for creating MimePart objects
+     */
+    protected $partFilterFactory;
+
+    /**
+     * Initializes dependencies.
      *
      * @param StreamDecoratorFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
