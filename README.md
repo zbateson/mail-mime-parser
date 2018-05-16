@@ -21,7 +21,7 @@ composer require zbateson/mail-mime-parser
 
 ## Requirements
 
-MailMimeParser requires PHP 5.4 or newer or HHVM.  Tested on PHP 5.4, 5.5, 5.6, 7 and 7.1 and HHVM 3.6, 3.9, 3.12, 3.15 and 3.18.
+MailMimeParser requires PHP 5.4 or newer or HHVM.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1 and 7.2 and HHVM 3.6, 3.9, 3.12, 3.15 and 3.18.
 
 ## Usage
 
