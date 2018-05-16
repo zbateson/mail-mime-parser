@@ -20,7 +20,7 @@ class LiteralPartTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($part);
         $this->assertEquals('"', $part->getValue());
         
-        $part = new LiteralPart(new Token('=?US-ASCII?Q?Kilgore_Trout?='));
+        $part = new LiteralPart('=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
     }
 }
