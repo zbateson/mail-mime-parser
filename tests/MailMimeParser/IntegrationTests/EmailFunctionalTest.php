@@ -236,7 +236,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -255,7 +255,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -274,7 +274,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -293,7 +293,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -312,7 +312,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -331,7 +331,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jblow@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -350,7 +350,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -369,7 +369,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -388,7 +388,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -407,7 +407,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
             ],
@@ -687,7 +687,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Netscape Communicator 4.7)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -703,8 +703,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Netscape Communicator 4.7)',
-            'text' => 'HasenundFrФsche.txt',
-            'html' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
+            'html' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -720,7 +720,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'blow@example.com'
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'attachments' => 3,
         ]);
     }
@@ -737,8 +737,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'blow@example.com'
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
-            'text' => 'HasenundFrФsche.txt',
-            'html' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 2,
         ]);
     }
@@ -755,7 +755,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 4,
         ]);
     }
@@ -772,7 +772,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Test message from Netscape Communicator 4.7',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 4,
         ]);
     }
@@ -839,7 +839,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $message->setCharsetOverride('iso-8859-1');
         $f = $message->getTextStream(0);
         $this->assertNotNull($f, $failMessage);
-        $this->assertTextContentTypeEquals('HasenundFrФsche.txt', $f, $failMessage);
+        $this->assertTextContentTypeEquals('HasenundFrosche.txt', $f, $failMessage);
     }
 
     /*
@@ -859,7 +859,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
         ]);
     }*/
 
@@ -875,7 +875,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -931,7 +931,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         fclose($handle);
 
         $stream = $message->getTextStream(1);
-        $this->assertTextContentTypeEquals('HasenundFrФsche.txt', $stream);
+        $this->assertTextContentTypeEquals('HasenundFrosche.txt', $stream);
     }
 
     public function testParseEmailm1016()
@@ -968,7 +968,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jschmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -984,8 +984,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
-            'html' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
+            'html' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -1001,7 +1001,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -1017,7 +1017,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 2,
         ]);
     }
@@ -1034,8 +1034,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'html' => 'HasenundFrФsche.txt',
-            // 'text' => 'HasenundFrФsche.txt', - contains extra text at the end
+            'html' => 'HasenundFrosche.txt',
+            // 'text' => 'HasenundFrosche.txt', - contains extra text at the end
             'attachments' => 4,
         ]);
     }
@@ -1052,7 +1052,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 2,
         ]);
     }
@@ -1069,7 +1069,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 4,
         ]);
     }
@@ -1086,7 +1086,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            //'text' => 'HasenundFrФsche.txt', contains extra text at the end
+            //'text' => 'HasenundFrosche.txt', contains extra text at the end
             'attachments' => 4,
         ]);
     }
@@ -1103,7 +1103,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 2,
         ]);
     }
@@ -1137,7 +1137,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jschmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             //'attachments' => 2, - attachments are "binhex" encoded
         ]);
     }
@@ -1154,7 +1154,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jschmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'attachments' => 3,
         ]);
     }
@@ -1171,7 +1171,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'attachments' => 2
         ]);
     }
@@ -1188,7 +1188,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'jschmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrosche.txt'
         ]);
     }
 
@@ -1204,7 +1204,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -1252,7 +1252,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
         ]);
     }
 
@@ -1353,7 +1353,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt'
+            'text' => 'HasenundFrosche.txt'
         ], 'Failed to parse m0001 from a string');
     }
     
@@ -1379,7 +1379,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
-            'text' => 'HasenundFrФsche.txt',
+            'text' => 'HasenundFrosche.txt',
             'signed' => [
                 'protocol' => 'application/pgp-signature',
                 'micalg' => 'pgp-sha256',
@@ -1474,7 +1474,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'mueller@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
-            'html' => 'HasenundFrФsche.txt',
+            'html' => 'HasenundFrosche.txt',
             'attachments' => 4,
             'signed' => [
                 'protocol' => 'application/pgp-signature',
