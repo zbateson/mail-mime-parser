@@ -118,21 +118,25 @@ class Message extends MimePart
     }
     
     /**
-     * Returns the signature part of a multipart/signed message.
-     * 
-     * The part returned is the part containing a Content-Type matching the one
-     * defined in the multipart/signed part's "protocol" parameter.
+     * Returns the signature part of a multipart/signed message or null.
+     *
+     * The signature part is determined to always be the 2nd child of a
+     * multipart/signed message, the first being the 'body'.
+     *
+     * Using the 'protocol' parameter of the Content-Type header is unreliable
+     * in some instances (for instance a difference of x-pgp-signature versus
+     * pgp-signature).
      * 
      * @return MimePart
      */
     public function getSignaturePart()
     {
-        return $this->getChild(
-            0,
-            $this->partFilterFactory->newFilterFromArray([
-                'signedpart' => PartFilter::FILTER_INCLUDE
-            ])
-        );
+        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
+        if (strcasecmp($contentType, 'multipart/signed') === 0) {
+            return $this->getChild(1);
+        } else {
+            return null;
+        }
     }
 
     /**

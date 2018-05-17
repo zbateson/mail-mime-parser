@@ -101,7 +101,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($props['signed']['protocol'], $protocol, $failMessage);
             $this->assertEquals($props['signed']['micalg'], $micalg, $failMessage);
             $this->assertNotNull($signedPart, $failMessage);
-            $this->assertEquals($protocol, $signedPart->getHeaderValue('Content-Type'), $failMessage);
+            $signedPartProtocol = $props['signed']['protocol'];
+            if (!empty($props['signed']['signed-part-protocol'])) {
+                $signedPartProtocol = $props['signed']['signed-part-protocol'];
+            }
+            $this->assertEquals($signedPartProtocol, $signedPart->getHeaderValue('Content-Type'), $failMessage);
             $this->assertEquals(trim($props['signed']['body']), trim($signedPart->getContent()));
         }
 
@@ -1559,5 +1563,26 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         
         $testString = $message->getMessageStringForSignatureVerification();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
+    }
+
+    public function testParseEmailm4008()
+    {
+        $this->runEmailTest('m4008', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
+            'signed' => [
+                'protocol' => 'application/x-pgp-signature',
+                'signed-part-protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => '9f5c560f86b607c9087b84e9baa98189'
+            ],
+        ]);
     }
 }
