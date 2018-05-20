@@ -20,14 +20,12 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 class PartFactoryService
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
-     *      object used for created headers
+     * @var HeaderFactory the HeaderFactory object used for created headers
      */
     protected $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the PartFilterFactory
-     *      instance
+     * @var PartFilterFactory the PartFilterFactory instance
      */
     protected $partFilterFactory;
     

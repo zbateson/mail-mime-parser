@@ -10,6 +10,8 @@ use GuzzleHttp\Psr7;
  * @group MimePart
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\MimePart
+ * @covers ZBateson\MailMimeParser\Message\Part\MimePartHeaderTrait
+ * @covers ZBateson\MailMimeParser\Message\Part\MimePartChildrenTrait
  * @author Zaahid Bateson
  */
 class MimePartTest extends PHPUnit_Framework_TestCase

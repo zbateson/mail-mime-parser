@@ -17,8 +17,7 @@ use ZBateson\MailMimeParser\Header\ParameterHeader;
 trait MimePartHeaderTrait
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
-     *      object used for created headers
+     * @var HeaderFactory the HeaderFactory object used for created headers
      */
     protected $headerFactory;
 
@@ -39,7 +38,7 @@ trait MimePartHeaderTrait
     protected $headers;
 
     /**
-     * @param \ZBateson\MailMimeParser\Message\Part\HeaderFactory $headerFactory
+     * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory, PartBuilder $partBuilder) {
         $this->headerFactory = $headerFactory;
