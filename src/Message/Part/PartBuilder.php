@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory;
 
 /**
  * Used by MessageParser to keep information about a parsed message as an
@@ -49,7 +50,7 @@ class PartBuilder
     private $headerFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\MessagePartFactory the factory
+     * @var MessagePartFactory the factory
      *      needed for creating the Message or MessagePart for the parsed part.
      */
     private $messagePartFactory;
@@ -110,7 +111,7 @@ class PartBuilder
      * Sets up class dependencies.
      * 
      * @param HeaderFactory $hf
-     * @param \ZBateson\MailMimeParser\Message\Part\MessagePartFactory $mpf
+     * @param MessagePartFactory $mpf
      */
     public function __construct(
         HeaderFactory $hf,

@@ -4,9 +4,10 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager;
 
 /**
  * Responsible for creating PartStreamFilterManager instances.

@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit_Framework_TestCase;
 
@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
  * 
  * @group PartStreamFilterManagerFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory
  * @author Zaahid Bateson
  */
 class PartStreamFilterManagerFactoryTest extends PHPUnit_Framework_TestCase

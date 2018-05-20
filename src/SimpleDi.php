@@ -7,13 +7,13 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\MessageParser;
-use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
-use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory;
 use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**

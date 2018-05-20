@@ -1,21 +1,22 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit_Framework_TestCase;
 use GuzzleHttp\Psr7;
 
 /**
- * NonMimePartFactoryTest
+ * MimePartFactoryTest
  * 
- * @group NonMimePartFactory
+ * @group MimePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\NonMimePartFactory
- * @covers ZBateson\MailMimeParser\Message\Part\MessagePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory
  * @author Zaahid Bateson
  */
-class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
+class MimePartFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected $nonMimePartFactory;
+    protected $mimePartFactory;
+    protected $partFilterFactory;
     
     protected function setUp()
     {
@@ -24,7 +25,7 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
         $mocksdf->expects($this->any())
             ->method('getLimitedPartStream')
             ->willReturn(Psr7\stream_for('test'));
-        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
+        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
@@ -34,7 +35,13 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->method('newInstance')
             ->willReturn($psfm);
         
-        $this->nonMimePartFactory = new NonMimePartFactory($mocksdf, $psfmFactory);
+        $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mimePartFactory = new MimePartFactory($mocksdf, $psfmFactory, $mockHeaderFactory, $mockFilterFactory);
     }
     
     public function testNewInstance()
@@ -43,12 +50,12 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         
-        $part = $this->nonMimePartFactory->newInstance(
+        $part = $this->mimePartFactory->newInstance(
             Psr7\stream_for('test'),
             $partBuilder
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\Part\NonMimePart',
+            '\ZBateson\MailMimeParser\Message\Part\MimePart',
             $part
         );
     }

@@ -23,7 +23,7 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
             ->getMock();
-        $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MessagePartFactory')
+        $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory')
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
             ->getMock();

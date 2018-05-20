@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit_Framework_TestCase;
 
@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
  * 
  * @group PartBuilderFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\PartBuilderFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory
  * @author Zaahid Bateson
  */
 class PartBuilderFactoryTest extends PHPUnit_Framework_TestCase
@@ -26,7 +26,7 @@ class PartBuilderFactoryTest extends PHPUnit_Framework_TestCase
     
     public function testNewInstance()
     {
-        $mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MessagePartFactory')
+        $mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         

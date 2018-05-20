@@ -8,8 +8,8 @@ namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\Part\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 
 /**
  * Responsible for creating Message instances.

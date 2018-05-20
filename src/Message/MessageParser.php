@@ -8,8 +8,8 @@ namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
-use ZBateson\MailMimeParser\Message\Part\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\PartFactoryService;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
 use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
@@ -42,8 +42,8 @@ class MessageParser
     /**
      * Sets up the parser with its dependencies.
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\PartFactoryService $pfs
-     * @param \ZBateson\MailMimeParser\Message\Part\PartBuilderFactory $pbf
+     * @param PartFactoryService $pfs
+     * @param PartBuilderFactory $pbf
      */
     public function __construct(
         PartFactoryService $pfs,

@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\SimpleDi;
@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\SimpleDi;
  * 
  * @group PartFactoryService
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\PartFactoryService
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService
  * @author Zaahid Bateson
  */
 class PartFactoryServiceTest extends PHPUnit_Framework_TestCase
@@ -28,12 +28,12 @@ class PartFactoryServiceTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\MessageFactory', $messageFactory);
         
         $mimePartFactory = $this->partFactoryService->getMimePartFactory();
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\MimePartFactory', $mimePartFactory);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory', $mimePartFactory);
         
         $nonMimePartFactory = $this->partFactoryService->getNonMimePartFactory();
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\NonMimePartFactory', $nonMimePartFactory);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory', $nonMimePartFactory);
         
         $uuEncodedPartFactory = $this->partFactoryService->getUUEncodedPartFactory();
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\UUEncodedPartFactory', $uuEncodedPartFactory);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory', $uuEncodedPartFactory);
     }
 }

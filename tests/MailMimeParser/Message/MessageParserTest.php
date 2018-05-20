@@ -27,11 +27,11 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
     {
         $this->vfs = vfsStream::setup('root');
         
-        $this->partFactoryService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartFactoryService')
+        $this->partFactoryService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService')
             ->disableOriginalConstructor()
             ->getMock();
            
-        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilderFactory')
+        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory')
             ->disableOriginalConstructor()
             ->getMock();
         
@@ -43,11 +43,11 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->uuEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\UUEncodedPartFactory')
+        $this->uuEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory')
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->mimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePartFactory')
+        $this->mimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
     }

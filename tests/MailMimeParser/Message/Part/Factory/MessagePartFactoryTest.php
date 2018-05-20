@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit_Framework_TestCase;
 use GuzzleHttp\Psr7;
@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7;
  * 
  * @group MessagePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\MessagePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory
  * @author Zaahid Bateson
  */
 class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
@@ -19,7 +19,7 @@ class MessagePartFactoryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->messagePartFactory = $this->getMockBuilder(
-            'ZBateson\MailMimeParser\Message\Part\MessagePartFactory'
+            'ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory'
         )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

@@ -4,12 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\LimitStream;
-use GuzzleHttp\Psr7\StreamWrapper;
+use ZBateson\MailMimeParser\Message\Part\NonMimePart;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
  * Responsible for creating NoneMimePart instances.

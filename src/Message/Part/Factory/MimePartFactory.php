@@ -4,12 +4,14 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
  * Responsible for creating MimePart instances.

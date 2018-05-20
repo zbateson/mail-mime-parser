@@ -1,21 +1,21 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit_Framework_TestCase;
 use GuzzleHttp\Psr7;
 
 /**
- * UUEncodedPartFactoryTest
+ * NonMimePartFactoryTest
  * 
- * @group UUEncodedPartFactory
+ * @group NonMimePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\UUEncodedPartFactory
- * @covers ZBateson\MailMimeParser\Message\Part\MessagePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory
  * @author Zaahid Bateson
  */
-class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
+class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected $uuEncodedPartFactory;
+    protected $nonMimePartFactory;
     
     protected function setUp()
     {
@@ -24,7 +24,7 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
         $mocksdf->expects($this->any())
             ->method('getLimitedPartStream')
             ->willReturn(Psr7\stream_for('test'));
-        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManagerFactory')
+        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
@@ -34,7 +34,7 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
             ->method('newInstance')
             ->willReturn($psfm);
         
-        $this->uuEncodedPartFactory = new UUEncodedPartFactory($mocksdf, $psfmFactory);
+        $this->nonMimePartFactory = new NonMimePartFactory($mocksdf, $psfmFactory);
     }
     
     public function testNewInstance()
@@ -43,12 +43,12 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         
-        $part = $this->uuEncodedPartFactory->newInstance(
+        $part = $this->nonMimePartFactory->newInstance(
             Psr7\stream_for('test'),
             $partBuilder
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\Part\UUEncodedPart',
+            '\ZBateson\MailMimeParser\Message\Part\NonMimePart',
             $part
         );
     }
