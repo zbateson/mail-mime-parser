@@ -23,6 +23,12 @@ class ConvertStreamFilter extends php_user_filter
      * Name used when registering with stream_filter_register.
      */
     const STREAM_FILTER_NAME = 'mmp-convert.*';
+
+    /**
+     * @var string Leftovers from the last incomplete line that was parsed, to
+     *      be prepended to the next line read.
+     */
+    private $leftover = '';
     
     /**
      * @var string function to call for encoding/decoding
@@ -48,6 +54,30 @@ class ConvertStreamFilter extends php_user_filter
         $this->fnFilterName = str_replace('-', '_', $name);
         return true;
     }
+
+    /**
+     * Sets up a remainder of read bytes if one of the last two bytes
+     * read is an '=' since quoted_printable_decode wouldn't work if one
+     * read operation ends with "=3" and the next begins with "D" for
+     * example.
+     *
+     * @param string $data
+     */
+    private function getFilteredBucket($data)
+    {
+        $ret = $this->leftover . $data;
+        if ($this->fnFilterName === 'quoted_printable_decode') {
+            $len = strlen($ret);
+            $eq = strrpos($ret, '=');
+            if (($eq !== false) && ($eq === $len - 1 || $eq === $len - 2)) {
+                $this->leftover = substr($ret, $eq);
+                $ret = substr($ret, 0, $eq);
+            } else {
+                $this->leftover = '';
+            }
+        }
+        return $ret;
+    }
     
     /**
      * Filter implementation converts calls the relevant encode/decode filter
@@ -62,7 +92,8 @@ class ConvertStreamFilter extends php_user_filter
     public function filter($in, $out, &$consumed, $closing)
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $data = call_user_func($this->fnFilterName, $bucket->data);
+            $filtered = $this->getFilteredBucket($bucket->data);
+            $data = call_user_func($this->fnFilterName, $filtered);
             stream_bucket_append($out, stream_bucket_new($this->stream, $data));
         }
         return PSFS_PASS_ON;

@@ -682,6 +682,23 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public function testParseEmailm0022()
+    {
+        $this->runEmailTest('m0022', [
+            'From' => [
+                'email' => 'test@test.sk'
+            ],
+            'Subject' => 'long att',
+            'attachments' => 1,
+            'parts' => [
+                'multipart/mixed' => [
+                    'text/html',
+                    'text/plain'
+                ]
+            ],
+        ]);
+    }
+
     public function testParseEmailm1001()
     {
         $this->runEmailTest('m1001', [
