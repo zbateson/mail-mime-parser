@@ -12,7 +12,6 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
-use ZBateson\MailMimeParser\Message\Writer\MessageWriterService;
 
 /**
  * Responsible for creating MimePart instances.
@@ -57,16 +56,13 @@ class MimePartFactory extends MessagePartFactory
      * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
-     * @param MessageWriterService $ws
      * @return MessagePartFactory
      */
     public static function getInstance(
         StreamDecoratorFactory $sdf,
         PartStreamFilterManagerFactory $psf,
         HeaderFactory $hf = null,
-        PartFilterFactory $pf = null,
-        MessageWriterService $ws = null,
-        MimePartFactory $mpf = null
+        PartFilterFactory $pf = null
     ) {
         $instance = static::getCachedInstance();
         if ($instance === null) {
@@ -92,20 +88,6 @@ class MimePartFactory extends MessagePartFactory
             $this->partStreamFilterManagerFactory->newInstance(),
             $this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder),
             $this->streamDecoratorFactory->getLimitedContentStream($messageStream, $partBuilder)
-        );
-    }
-
-    /**
-     *
-     * @return MimePart
-     */
-    public function newChildInstance()
-    {
-        return new MimePart(
-            $this->headerFactory,
-            $this->partFilterFactory,
-            null,
-            $this->partStreamFilterManagerFactory->newInstance()
         );
     }
 }
