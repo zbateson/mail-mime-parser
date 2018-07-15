@@ -120,8 +120,8 @@ class MimePart extends MessagePart
     
     /**
      * Returns the upper-cased charset of the Content-Type header's charset
-     * parameter if set, US-ASCII if the Content-Type is text/plain or text/html
-     * and the charset parameter isn't set, or null otherwise.
+     * parameter if set, ISO-8859-1 if the Content-Type is text/plain or
+     * text/html and the charset parameter isn't set, or null otherwise.
      * 
      * @return string
      */
@@ -131,7 +131,7 @@ class MimePart extends MessagePart
         if ($charset === null) {
             $contentType = $this->getContentType();
             if ($contentType === 'text/plain' || $contentType === 'text/html') {
-                return 'US-ASCII';
+                return 'ISO-8859-1';
             }
             return null;
         }

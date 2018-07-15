@@ -47,6 +47,18 @@ trait MimePartHeaderTrait
     }
 
     /**
+     * Returns the string in lower-case, and with non-alphanumeric characters
+     * stripped out.
+     *
+     * @param string $header
+     * @return string
+     */
+    private function getNormalizedHeaderName($header)
+    {
+        return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+    }
+
+    /**
      * Returns the AbstractHeader object for the header with the given $name
      *
      * Note that mime headers aren't case sensitive.
@@ -56,7 +68,7 @@ trait MimePartHeaderTrait
      */
     public function getHeader($name)
     {
-        $nameKey = preg_replace('/[^a-z0-9]/', '', strtolower($name));
+        $nameKey = $this->getNormalizedHeaderName($name);
         if (isset($this->rawHeaders[$nameKey])) {
             if (!isset($this->headers[$nameKey])) {
                 $this->headers[$nameKey] = $this->headerFactory->newInstance(
@@ -67,6 +79,17 @@ trait MimePartHeaderTrait
             return $this->headers[$nameKey];
         }
         return null;
+    }
+
+    /**
+     * Returns an array of all headers for the mime part with the first element
+     * holding the name, and the second its value.
+     *
+     * @return string[][]
+     */
+    public function getRawHeaders()
+    {
+        return array_values($this->rawHeaders);
     }
 
     /**

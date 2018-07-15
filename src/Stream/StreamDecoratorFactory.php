@@ -12,6 +12,7 @@ use ZBateson\StreamDecorators\Base64StreamDecorator;
 use ZBateson\StreamDecorators\QuotedPrintableStreamDecorator;
 use ZBateson\StreamDecorators\UUStreamDecorator;
 use ZBateson\StreamDecorators\CharsetStreamDecorator;
+use ZBateson\StreamDecorators\NonClosingLimitStream;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
@@ -45,7 +46,7 @@ class StreamDecoratorFactory
 
     private function newLimitStreamDecorator(StreamInterface $stream, $length, $start)
     {
-        return new LimitStream($stream, $length, $start);
+        return new NonClosingLimitStream($stream, $length, $start);
     }
 
     public function newBase64StreamDecorator(StreamInterface $stream)

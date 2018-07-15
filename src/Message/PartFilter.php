@@ -57,14 +57,19 @@ class PartFilter
      * @var int an included filter must be included in a part
      */
     const FILTER_INCLUDE = 2;
-    
+
     /**
-     * @var int filters based on whether MimePart::isMultiPart is set
+     * @var int filters based on whether MessagePart::hasContent is true
+     */
+    private $hascontent = PartFilter::FILTER_OFF;
+
+    /**
+     * @var int filters based on whether MimePart::isMultiPart is true
      */
     private $multipart = PartFilter::FILTER_OFF;
     
     /**
-     * @var int filters based on whether MimePart::isTextPart is set
+     * @var int filters based on whether MessagePart::isTextPart is true
      */
     private $textpart = PartFilter::FILTER_OFF;
     
@@ -163,7 +168,7 @@ class PartFilter
      */
     public function __construct(array $filter = [])
     {
-        $params = [ 'multipart', 'textpart', 'signedpart', 'headers' ];
+        $params = [ 'hascontent', 'multipart', 'textpart', 'signedpart', 'headers' ];
         foreach ($params as $param) {
             if (isset($filter[$param])) {
                 $this->__set($param, $filter[$param]);
@@ -228,7 +233,8 @@ class PartFilter
      */
     public function __set($name, $value)
     {
-        if ($name === 'multipart' || $name === 'textpart' || $name === 'signedpart') {
+        if ($name === 'hascontent' || $name === 'multipart'
+            || $name === 'textpart' || $name === 'signedpart') {
             $this->validateArgument(
                 $name,
                 $value,
@@ -265,12 +271,25 @@ class PartFilter
     {
         return $this->$name;
     }
+
+    /**
+     * Returns true if the passed MessagePart fails the filter's hascontent
+     * filter settings.
+     *
+     * @param MessagePart $part
+     * @return bool
+     */
+    private function failsHasContentFilter(MessagePart $part)
+    {
+        return ($this->hascontent === static::FILTER_EXCLUDE && $part->hasContent())
+            || ($this->hascontent === static::FILTER_INCLUDE && !$part->hasContent());
+    }
     
     /**
-     * Returns true if the passed MimePart fails the filter's multipart filter
+     * Returns true if the passed MessagePart fails the filter's multipart filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
+     * @param MessagePart $part
      * @return bool
      */
     private function failsMultiPartFilter(MessagePart $part)
@@ -283,10 +302,10 @@ class PartFilter
     }
     
     /**
-     * Returns true if the passed MimePart fails the filter's textpart filter
+     * Returns true if the passed MessagePart fails the filter's textpart filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
+     * @param MessagePart $part
      * @return bool
      */
     private function failsTextPartFilter(MessagePart $part)
@@ -296,10 +315,10 @@ class PartFilter
     }
     
     /**
-     * Returns true if the passed MimePart fails the filter's signedpart filter
-     * settings.
+     * Returns true if the passed MessagePart fails the filter's signedpart
+     * filter settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
+     * @param MessagePart $part
      * @return boolean
      */
     private function failsSignedPartFilter(MessagePart $part)

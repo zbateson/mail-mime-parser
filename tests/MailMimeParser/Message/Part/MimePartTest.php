@@ -390,8 +390,8 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             Psr7\stream_for('habibi')
         );
 
-        $this->assertEquals('US-ASCII', $partText->getCharset());
-        $this->assertEquals('US-ASCII', $partHtml->getCharset());
+        $this->assertEquals('ISO-8859-1', $partText->getCharset());
+        $this->assertEquals('ISO-8859-1', $partHtml->getCharset());
     }
     
     public function testGetNullCharsetForNonTextPlainOrHtmlPart()

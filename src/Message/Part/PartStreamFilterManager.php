@@ -70,20 +70,7 @@ class PartStreamFilterManager
         $this->streamDecoratorFactory = $streamDecoratorFactory;
         $this->charsetConversionFilter = '';
     }
-    
-    /**
-     * Closes the contentHandle if one is attached.
-     */
-    public function __destruct()
-    {
-        if ($this->filteredStream !== null) {
-            $this->filteredStream->close();
-        }
-        if ($this->stream !== null) {
-            $this->stream->close();
-        }
-    }
-    
+
     /**
      * Sets the URL used to open the content resource handle.
      * 
@@ -91,14 +78,8 @@ class PartStreamFilterManager
      * 
      * @param StreamInterface $stream
      */
-    public function setStream(StreamInterface $stream)
+    public function setStream(StreamInterface $stream = null)
     {
-        if ($this->filteredStream !== null && $this->filteredStream !== $this->stream) {
-            $this->filteredStream->close();
-        }
-        if ($this->stream !== null) {
-            $this->stream->close();
-        }
         $this->stream = $stream;
         $this->filteredStream = null;
     }
@@ -221,6 +202,9 @@ class PartStreamFilterManager
      */
     public function getContentStream($transferEncoding, $fromCharset, $toCharset)
     {
+        if ($this->stream === null) {
+            return null;
+        }
         if ($this->filteredStream === null
             || $this->isTransferEncodingFilterChanged($transferEncoding)
             || $this->isCharsetFilterChanged($fromCharset, $toCharset)) {
