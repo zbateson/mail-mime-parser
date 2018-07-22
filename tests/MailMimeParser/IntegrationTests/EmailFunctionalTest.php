@@ -1362,8 +1362,9 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $handle = fopen($this->messageDir . '/m4001.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
-        
-        $testString = $message->getMessageStringForSignatureVerification();
+
+        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+        $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
     
@@ -1394,7 +1395,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $message = $this->parser->parse($handle);
         fclose($handle);
         
-        $testString = $message->getMessageStringForSignatureVerification();
+        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+        $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 
@@ -1426,7 +1428,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $message = $this->parser->parse($handle);
         fclose($handle);
         
-        $testString = $message->getMessageStringForSignatureVerification();
+        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+        $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 
@@ -1458,7 +1461,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $message = $this->parser->parse($handle);
         fclose($handle);
         
-        $testString = $message->getMessageStringForSignatureVerification();
+        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+        $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 
@@ -1561,7 +1565,8 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $message = $this->parser->parse($handle);
         fclose($handle);
         
-        $testString = $message->getMessageStringForSignatureVerification();
+        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+        $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
 

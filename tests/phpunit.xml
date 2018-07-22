@@ -28,6 +28,7 @@
             <file>MailMimeParser/SimpleDiTest.php</file>
             <file>MailMimeParser/MailMimeParserTest.php</file>
             <file>MailMimeParser/MessageTest.php</file>
+            <file>MailMimeParser/SignedMessageTest.php</file>
         </testsuite>
         <testsuite name="Message">
             <directory suffix="Test.php">MailMimeParser/Message</directory>

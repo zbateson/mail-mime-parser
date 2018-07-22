@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message;
+use ZBateson\MailMimeParser\SignedMessage;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 
@@ -27,6 +28,16 @@ class MessageFactory extends MimePartFactory
      */
     public function newInstance(StreamInterface $stream, PartBuilder $partBuilder)
     {
+        if (strcasecmp($partBuilder->getContentType(), 'multipart/signed')) {
+            return new SignedMessage(
+                $this->headerFactory,
+                $this->partFilterFactory,
+                $partBuilder,
+                $this->partStreamFilterManagerFactory->newInstance(),
+                $stream,
+                $this->streamDecoratorFactory->getLimitedContentStream($stream, $partBuilder)
+            );
+        }
         return new Message(
             $this->headerFactory,
             $this->partFilterFactory,

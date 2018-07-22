@@ -221,41 +221,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('shabadabada...', $message->getHtmlContent());
     }
     
-    public function testGetMessageStringForSignatureVerificationWithoutChildren()
-    {
-        $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilder(),
-            $this->mockPartStreamFilterManager,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        $this->assertNull($message->getMessageStringForSignatureVerification());
-    }
-    
-    public function testGetMessageStringForSignatureVerification()
-    {
-        $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilderWithChildren(),
-            $this->mockPartStreamFilterManager,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        $content = vfsStream::newFile('part')->at($this->vfs);
-        $content->withContent("mucha\ragua\ny\r\npollo\r\n\r\n");
-        $handle = fopen($content->url(), 'r');
-        
-        $child = $message->getChild(0);
-        $child->method('getHandle')
-            ->willReturn($handle);
-        
-        $this->assertEquals("mucha\r\nagua\r\ny\r\npollo\r\n\r\n", $message->getMessageStringForSignatureVerification());
-        fclose($handle);
-    }
-    
     public function testGetAttachmentParts()
     {
         $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
