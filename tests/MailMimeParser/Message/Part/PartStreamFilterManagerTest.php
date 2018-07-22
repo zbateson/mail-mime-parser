@@ -29,7 +29,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStreamDecorator')
+            ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
@@ -40,7 +40,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newBase64StreamDecorator')
+            ->method('newBase64Stream')
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
@@ -51,7 +51,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newUUStreamDecorator')
+            ->method('newUUStream')
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
@@ -62,7 +62,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newCharsetStreamDecorator')
+            ->method('newCharsetStream')
             ->with($stream, 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
@@ -73,7 +73,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStreamDecorator')
+            ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $stream->rewind();
@@ -81,7 +81,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $stream2 = Psr7\stream_for('test2');
         $stream3 = Psr7\stream_for('test3');
         $this->mockStreamDecoratorFactory->expects($this->exactly(2))
-            ->method('newUUStreamDecorator')
+            ->method('newUUStream')
             ->with($stream)
             ->willReturnOnConsecutiveCalls($stream2, $stream3);
         $this->partStreamFilterManager->setStream($stream);
@@ -101,7 +101,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(4))
-            ->method('newCharsetStreamDecorator')
+            ->method('newCharsetStream')
             ->withConsecutive(
                 [$stream, 'US-ASCII', 'UTF-8'],
                 [$stream, 'US-ASCII', 'WINDOWS-1252'],
@@ -124,11 +124,11 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('test');
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newCharsetStreamDecorator')
+            ->method('newCharsetStream')
             ->with($stream, 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
         $this->mockStreamDecoratorFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStreamDecorator')
+            ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);

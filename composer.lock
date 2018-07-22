@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba79ca0ebd1cc779d68ba5cd63a4a3f5",
+    "content-hash": "f8e3f2e19dd40142c119bbfbc1ba06e7",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -123,16 +123,16 @@
         },
         {
             "name": "zbateson/stream-decorators",
-            "version": "0.2.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/StreamDecorators.git",
-                "reference": "8c77bfcf5dcc7f74312b0d9665007300ff4c9654"
+                "reference": "a4499c1bd1b4ed8d19bcac9c9304cf2ead115ec5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/StreamDecorators/zipball/8c77bfcf5dcc7f74312b0d9665007300ff4c9654",
-                "reference": "8c77bfcf5dcc7f74312b0d9665007300ff4c9654",
+                "url": "https://api.github.com/repos/zbateson/StreamDecorators/zipball/a4499c1bd1b4ed8d19bcac9c9304cf2ead115ec5",
+                "reference": "a4499c1bd1b4ed8d19bcac9c9304cf2ead115ec5",
                 "shasum": ""
             },
             "require": {
@@ -168,7 +168,7 @@
                 "psr7",
                 "stream"
             ],
-            "time": "2018-06-19T03:15:02+00:00"
+            "time": "2018-07-22T19:34:40+00:00"
         }
     ],
     "packages-dev": [

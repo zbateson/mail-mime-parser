@@ -6,13 +6,15 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use GuzzleHttp\Psr7\LimitStream;
+use GuzzleHttp\Psr7\CachingStream;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\StreamDecorators\Base64StreamDecorator;
-use ZBateson\StreamDecorators\QuotedPrintableStreamDecorator;
-use ZBateson\StreamDecorators\UUStreamDecorator;
-use ZBateson\StreamDecorators\CharsetStreamDecorator;
-use ZBateson\StreamDecorators\NonClosingLimitStream;
+use ZBateson\StreamDecorators\SeekingLimitStream;
+use ZBateson\StreamDecorators\Base64Stream;
+use ZBateson\StreamDecorators\QuotedPrintableStream;
+use ZBateson\StreamDecorators\UUStream;
+use ZBateson\StreamDecorators\CharsetStream;
+use ZBateson\StreamDecorators\NonClosingStream;
+use ZBateson\StreamDecorators\PregReplaceFilterStream;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
@@ -24,7 +26,7 @@ class StreamDecoratorFactory
 {
     public function getLimitedPartStream(StreamInterface $stream, PartBuilder $part)
     {
-        return $this->newLimitStreamDecorator(
+        return $this->newLimitStream(
             $stream,
             $part->getStreamPartLength(),
             $part->getStreamPartStartOffset()
@@ -35,7 +37,7 @@ class StreamDecoratorFactory
     {
         $length = $part->getStreamContentLength();
         if ($length !== 0) {
-            return $this->newLimitStreamDecorator(
+            return $this->newLimitStream(
                 $stream,
                 $part->getStreamContentLength(),
                 $part->getStreamContentStartOffset()
@@ -44,28 +46,32 @@ class StreamDecoratorFactory
         return null;
     }
 
-    private function newLimitStreamDecorator(StreamInterface $stream, $length, $start)
+    private function newLimitStream(StreamInterface $stream, $length, $start)
     {
-        return new NonClosingLimitStream($stream, $length, $start);
+        return new SeekingLimitStream(new NonClosingStream($stream), $length, $start);
     }
 
-    public function newBase64StreamDecorator(StreamInterface $stream)
+    public function newBase64Stream(StreamInterface $stream)
     {
-        return new Base64StreamDecorator($stream);
+        return new CachingStream(
+            new Base64Stream(
+                new PregReplaceFilterStream($stream, '/[^a-zA-Z0-9\/\+=]/', '')
+            )
+        );
     }
 
-    public function newQuotedPrintableStreamDecorator(StreamInterface $stream)
+    public function newQuotedPrintableStream(StreamInterface $stream)
     {
-        return new QuotedPrintableStreamDecorator($stream);
+        return new CachingStream(new QuotedPrintableStream($stream));
     }
 
-    public function newUUStreamDecorator(StreamInterface $stream)
+    public function newUUStream(StreamInterface $stream)
     {
-        return new UUStreamDecorator($stream);
+        return new CachingStream(new UUStream($stream));
     }
 
-    public function newCharsetStreamDecorator(StreamInterface $stream, $fromCharset, $toCharset)
+    public function newCharsetStream(StreamInterface $stream, $fromCharset, $toCharset)
     {
-        return new CharsetStreamDecorator($stream, $fromCharset, $toCharset);
+        return new CachingStream(new CharsetStream($stream, $fromCharset, $toCharset));
     }
 }

@@ -123,13 +123,13 @@ class PartStreamFilterManager
             $this->encoding['type'] = $transferEncoding;
             switch ($transferEncoding) {
                 case 'base64':
-                    $this->filteredStream = $this->streamDecoratorFactory->newBase64StreamDecorator($this->filteredStream);
+                    $this->filteredStream = $this->streamDecoratorFactory->newBase64Stream($this->filteredStream);
                     break;
                 case 'x-uuencode':
-                    $this->filteredStream = $this->streamDecoratorFactory->newUUStreamDecorator($this->filteredStream);
+                    $this->filteredStream = $this->streamDecoratorFactory->newUUStream($this->filteredStream);
                     break;
                 case 'quoted-printable':
-                    $this->filteredStream = $this->streamDecoratorFactory->newQuotedPrintableStreamDecorator($this->filteredStream);
+                    $this->filteredStream = $this->streamDecoratorFactory->newQuotedPrintableStream($this->filteredStream);
                     break;
             }
         }
@@ -146,7 +146,7 @@ class PartStreamFilterManager
     {
         if ($this->filteredStream !== null) {
             if (!empty($fromCharset) && !empty($toCharset)) {
-                $this->filteredStream = $this->streamDecoratorFactory->newCharsetStreamDecorator(
+                $this->filteredStream = $this->streamDecoratorFactory->newCharsetStream(
                     $this->filteredStream,
                     $fromCharset,
                     $toCharset
