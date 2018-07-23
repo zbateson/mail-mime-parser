@@ -6,15 +6,17 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
- * Header related methods attached to a mime part.
+ * A parent part containing headers.
  *
  * @author Zaahid Bateson
  */
-trait MimePartHeaderTrait
+abstract class ParentHeaderPart extends ParentPart
 {
     /**
      * @var HeaderFactory the HeaderFactory object used for created headers
@@ -31,16 +33,35 @@ trait MimePartHeaderTrait
     protected $rawHeaders;
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\AbstractHeader[] array of parsed
-     * header objects populated on-demand, the key is set to the header's name
-     * lower-cased, and with non-alphanumeric characters removed.
+     * @var AbstractHeader[] array of parsed header objects populated on-demand,
+     * the key is set to the header's name lower-cased, and with
+     * non-alphanumeric characters removed.
      */
     protected $headers;
 
     /**
      * @param HeaderFactory $headerFactory
+     * @param PartFilterFactory $partFilterFactory
+     * @param PartBuilder $partBuilder
+     * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamInterface $stream
+     * @param StreamInterface $contentStream
      */
-    public function __construct(HeaderFactory $headerFactory, PartBuilder $partBuilder) {
+    public function __construct(
+        HeaderFactory $headerFactory,
+        PartFilterFactory $partFilterFactory,
+        PartBuilder $partBuilder,
+        PartStreamFilterManager $partStreamFilterManager,
+        StreamInterface $stream,
+        StreamInterface $contentStream = null
+    ) {
+        parent::__construct(
+            $partFilterFactory,
+            $partBuilder,
+            $partStreamFilterManager,
+            $stream,
+            $contentStream
+        );
         $this->headerFactory = $headerFactory;
         $this->headers['contenttype'] = $partBuilder->getContentType();
         $this->rawHeaders = $partBuilder->getRawHeaders();
@@ -64,7 +85,7 @@ trait MimePartHeaderTrait
      * Note that mime headers aren't case sensitive.
      *
      * @param string $name
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
+     * @return AbstractHeader
      */
     public function getHeader($name)
     {
@@ -131,5 +152,36 @@ trait MimePartHeaderTrait
             return $obj->getValueFor($param, $defaultValue);
         }
         return $defaultValue;
+    }
+
+    /**
+     * Adds a header with the given $name and $value.
+     *
+     * Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
+     * registers it as a header.
+     *
+     * @param string $name
+     * @param string $value
+     */
+    public function setRawHeader($name, $value)
+    {
+        $normalized = $this->getNormalizedHeaderName($name);
+        $header = $this->headerFactory->newInstance($name, $value);
+        $this->headers[$normalized] = $header;
+        $this->rawHeaders[$normalized] = [
+            $header->getName(),
+            $header->getRawValue()
+        ];
+    }
+
+    /**
+     * Removes the header with the given name
+     *
+     * @param string $name
+     */
+    public function removeHeader($name)
+    {
+        $normalized = $this->getNormalizedHeaderName($name);
+        unset($this->headers[$normalized], $this->rawHeaders[$normalized]);
     }
 }

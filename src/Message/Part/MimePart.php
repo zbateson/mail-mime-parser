@@ -6,10 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
-
 /**
  * Represents a single part of a multi-part mime message.
  *
@@ -21,38 +17,8 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
  *
  * @author Zaahid Bateson
  */
-class MimePart extends MessagePart
+class MimePart extends ParentHeaderPart
 {
-    use MimePartHeaderTrait {
-        MimePartHeaderTrait::__construct as private mimePartHeaderConstructor;
-    }
-    use MimePartChildrenTrait {
-        MimePartChildrenTrait::__construct as private mimePartChildrenConstructor;
-    }
-
-    /**
-     * Sets up class dependencies.
-     *
-     * @param HeaderFactory $headerFactory 
-     * @param PartFilterFactory $partFilterFactory
-     * @param PartBuilder $partBuilder
-     * @param PartStreamFilterManager $partStreamFilterManager
-     * @param StreamInterface $stream
-     * @param StreamInterface $contentStream
-     */
-    public function __construct(
-        HeaderFactory $headerFactory,
-        PartFilterFactory $partFilterFactory,
-        PartBuilder $partBuilder,
-        PartStreamFilterManager $partStreamFilterManager,
-        StreamInterface $stream,
-        StreamInterface $contentStream = null
-    ) {
-        parent::__construct($partStreamFilterManager, $stream, $contentStream);
-        $this->mimePartChildrenConstructor($partFilterFactory, $partBuilder, $stream);
-        $this->mimePartHeaderConstructor($headerFactory, $partBuilder);
-    }
-
     /**
      * Returns true if this part's mime type is multipart/*
      *

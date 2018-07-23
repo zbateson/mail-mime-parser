@@ -11,34 +11,37 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
- * MimePart methods related to child parts.
+ * A MessagePart that contains children.
  *
  * @author Zaahid Bateson
  */
-trait MimePartChildrenTrait
+abstract class ParentPart extends MessagePart
 {
     /**
-     * @var \ZBateson\MailMimeParser\Message\PartFilterFactory factory object
-     *      responsible for create PartFilters
+     * @var PartFilterFactory factory object responsible for create PartFilters
      */
     protected $partFilterFactory;
 
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\MessagePart[] array of child
-     *      parts
+     * @var MessagePart[] array of child parts
      */
     protected $children = [];
 
     /**
      * @param PartFilterFactory $partFilterFactory
      * @param PartBuilder $partBuilder
+     * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamInterface $stream
+     * @param StreamInterface $contentStream
      */
     public function __construct(
         PartFilterFactory $partFilterFactory,
         PartBuilder $partBuilder,
-        StreamInterface $stream
+        PartStreamFilterManager $partStreamFilterManager,
+        StreamInterface $stream,
+        StreamInterface $contentStream = null
     ) {
+        parent::__construct($partStreamFilterManager, $stream, $contentStream);
         $this->partFilterFactory = $partFilterFactory;
         $pbChildren = $partBuilder->getChildren();
         if (!empty($pbChildren)) {
@@ -208,5 +211,65 @@ trait MimePartChildrenTrait
     {
         $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
         return $this->getPartCount($partFilter);
+    }
+
+    /**
+     * Registers the passed part as a child of the current part.
+     *
+     * If the $position parameter is non-null, adds the part at the passed
+     * position index.
+     *
+     * @param MessagePart $part
+     * @param int $position
+     */
+    public function addChild(MessagePart $part, $position = null)
+    {
+        if ($part !== $this) {
+            $part->parent = $this;
+            array_splice(
+                $this->children,
+                ($position === null) ? count($this->children) : $position,
+                0,
+                [ $part ]
+            );
+        }
+    }
+
+    /**
+     * Removes the child part from this part and returns its position or
+     * null if it wasn't found.
+     *
+     * Note that if the part is not a direct child of this part, the returned
+     * position is its index within its parent (calls removePart on its direct
+     * parent).
+     *
+     * @param MessagePart $part
+     * @return int or null if not found
+     */
+    public function removePart(MessagePart $part)
+    {
+        $parent = $part->getParent();
+        if ($this !== $parent && $parent !== null) {
+            return $parent->removePart($part);
+        } else {
+            $position = array_search($part, $this->children, true);
+            if ($position !== false) {
+                array_splice($this->children, $position, 1);
+                return $position;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Removes all parts that are matched by the passed PartFilter.
+     *
+     * @param \ZBateson\MailMimeParser\Message\PartFilter $filter
+     */
+    public function removeAllParts(PartFilter $filter = null)
+    {
+        foreach ($this->getAllParts($filter) as $part) {
+            $this->removePart($part);
+        }
     }
 }
