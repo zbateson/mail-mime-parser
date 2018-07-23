@@ -48,7 +48,16 @@ class StreamDecoratorFactory
 
     private function newLimitStream(StreamInterface $stream, $length, $start)
     {
-        return new SeekingLimitStream(new NonClosingStream($stream), $length, $start);
+        return new SeekingLimitStream(
+            $this->newNonClosingStream($stream),
+            $length,
+            $start
+        );
+    }
+
+    public function newNonClosingStream(StreamInterface $stream)
+    {
+        return new NonClosingStream($stream);
     }
 
     public function newBase64Stream(StreamInterface $stream)
@@ -73,5 +82,10 @@ class StreamDecoratorFactory
     public function newCharsetStream(StreamInterface $stream, $fromCharset, $toCharset)
     {
         return new CachingStream(new CharsetStream($stream, $fromCharset, $toCharset));
+    }
+
+    public function newMessagePartStream(MessagePart $part)
+    {
+        return new MessagePartStream($this, $part);
     }
 }

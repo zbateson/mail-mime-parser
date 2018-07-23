@@ -21,7 +21,7 @@ use GuzzleHttp\Psr7\StreamWrapper;
 abstract class MessagePart
 {
     /**
-     * @var \ZBateson\MailMimeParser\Message\Part\MimePart parent part
+     * @var ParentPart parent part
      */
     protected $parent;
 
@@ -133,26 +133,26 @@ abstract class MessagePart
     public abstract function isMime();
     
     /**
-     * Returns a resource stream handle allowing a user to read the original
-     * stream (including headers and child parts) that was used to create the
-     * current part.
-     * 
-     * Note that 'rewind()' is called on the resource prior to returning it,
-     * which may affect other read operations if multiple calls to 'getHandle'
-     * are used.
-     * 
-     * The resource stream is handled by MessagePart and is closed by the
-     * destructor.
+     * Rewrite me
      * 
      * @return resource the resource handle or null if not set
      */
     public function getHandle()
     {
-        if ($this->stream !== null) {
-            $this->stream->rewind();
-            return StreamWrapper::getResource($this->stream);
+        return StreamWrapper::getResource($this->getStream());
+    }
+
+    /**
+     * Write me
+     *
+     * @return StreamInterface the resource handle or null if not set
+     */
+    public function getStream()
+    {
+        if ($this->stream === null) {
+            // return MessagePartStream
         }
-        return null;
+        return $this->stream;
     }
 
     /**
@@ -222,7 +222,7 @@ abstract class MessagePart
      * @param string $charset
      * @return StreamInterface
      */
-    protected function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
+    public function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->hasContent()) {
             $tr = $this->getContentTransferEncoding();
