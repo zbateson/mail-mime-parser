@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\Part\MessagePart;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
-use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use GuzzleHttp\Psr7\AppendStream;
@@ -28,12 +28,12 @@ class MessagePartStream implements StreamInterface
 {
     use StreamDecoratorTrait;
 
-    protected $streamDecoratorFactory;
+    protected $streamFactory;
     protected $part;
 
-    public function __construct(StreamDecoratorFactory $sdf, MessagePart $part)
+    public function __construct(StreamFactory $sdf, MessagePart $part)
     {
-        $this->streamDecoratorFactory = $sdf;
+        $this->streamFactory = $sdf;
         $this->part = $part;
     }
 
@@ -49,7 +49,7 @@ class MessagePartStream implements StreamInterface
     {
         $charset = $part->getCharset();
         if (!empty($charset)) {
-            $decorator = $this->streamDecoratorFactory->newCharsetStream(
+            $decorator = $this->streamFactory->newCharsetStream(
                 $stream,
                 $charset,
                 MailMimeParser::DEFAULT_CHARSET
@@ -76,13 +76,13 @@ class MessagePartStream implements StreamInterface
         $decorator = null;
         switch ($encoding) {
             case 'quoted-printable':
-                $decorator = $this->streamDecoratorFactory->newQuotedPrintableStream($stream);
+                $decorator = $this->streamFactory->newQuotedPrintableStream($stream);
                 break;
             case 'base64':
-                $decorator = $this->streamDecoratorFactory->newBase64Stream($stream);
+                $decorator = $this->streamFactory->newBase64Stream($stream);
                 break;
             case 'x-uuencode':
-                $decorator = $this->streamDecoratorFactory->newUUStream($stream);
+                $decorator = $this->streamFactory->newUUStream($stream);
                 $decorator->setFilename($part->getFilename());
                 break;
             default:
@@ -102,7 +102,7 @@ class MessagePartStream implements StreamInterface
     {
         $contentStream = $part->getContentStream();
         if ($contentStream !== null) {
-            $copyStream = $this->streamDecoratorFactory->newNonClosingStream($stream);
+            $copyStream = $this->streamFactory->newNonClosingStream($stream);
             $es = $this->getTransferEncodingDecoratorForStream(
                 $part,
                 $copyStream

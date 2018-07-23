@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
-use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\MessageFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
@@ -36,27 +36,27 @@ class PartFactoryService
     protected $partStreamFilterManagerFactory;
 
     /**
-     * @var StreamDecoratorFactory the StreamDecoratorFactory instance
+     * @var StreamFactory the StreamFactory instance
      */
-    protected $streamDecoratorFactory;
+    protected $streamFactory;
     
     /**
      * Sets up dependencies.
      * 
      * @param HeaderFactory $headerFactory
      * @param PartFilterFactory $partFilterFactory
-     * @param StreamDecoratorFactory $streamDecoratorFactory
+     * @param StreamFactory $streamFactory
      * @param PartStreamFilterManagerFactory $partStreamFilterManagerFactory
      */
     public function __construct(
         HeaderFactory $headerFactory,
         PartFilterFactory $partFilterFactory,
-        StreamDecoratorFactory $streamDecoratorFactory,
+        StreamFactory $streamFactory,
         PartStreamFilterManagerFactory $partStreamFilterManagerFactory
     ) {
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
-        $this->streamDecoratorFactory = $streamDecoratorFactory;
+        $this->streamFactory = $streamFactory;
         $this->partStreamFilterManagerFactory = $partStreamFilterManagerFactory;
     }
 
@@ -68,7 +68,7 @@ class PartFactoryService
     public function getMessageFactory()
     {
         return MessageFactory::getInstance(
-            $this->streamDecoratorFactory,
+            $this->streamFactory,
             $this->partStreamFilterManagerFactory,
             $this->headerFactory,
             $this->partFilterFactory
@@ -83,7 +83,7 @@ class PartFactoryService
     public function getMimePartFactory()
     {
         return MimePartFactory::getInstance(
-            $this->streamDecoratorFactory,
+            $this->streamFactory,
             $this->partStreamFilterManagerFactory,
             $this->headerFactory,
             $this->partFilterFactory
@@ -98,7 +98,7 @@ class PartFactoryService
     public function getNonMimePartFactory()
     {
         return NonMimePartFactory::getInstance(
-            $this->streamDecoratorFactory,
+            $this->streamFactory,
             $this->partStreamFilterManagerFactory
         );
     }
@@ -111,7 +111,7 @@ class PartFactoryService
     public function getUUEncodedPartFactory()
     {
         return UUEncodedPartFactory::getInstance(
-            $this->streamDecoratorFactory,
+            $this->streamFactory,
             $this->partStreamFilterManagerFactory
         );
     }

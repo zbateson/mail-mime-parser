@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Manages attached stream filters for a MessagePart's content resource handle.
@@ -50,10 +50,10 @@ class PartStreamFilterManager
     ];
 
     /**
-     * @var StreamDecoratorFactory used to apply psr7 stream decorators to the
+     * @var StreamFactory used to apply psr7 stream decorators to the
      *      attached StreamInterface based on encoding.
      */
-    private $streamDecoratorFactory;
+    private $streamFactory;
     
     /**
      * @var string name of stream filter handling character set conversion
@@ -63,11 +63,11 @@ class PartStreamFilterManager
     /**
      * Sets up filter names used for stream_filter_append
      * 
-     * @param StreamDecoratorFactory $streamDecoratorFactory
+     * @param StreamFactory $streamFactory
      */
-    public function __construct(StreamDecoratorFactory $streamDecoratorFactory)
+    public function __construct(StreamFactory $streamFactory)
     {
-        $this->streamDecoratorFactory = $streamDecoratorFactory;
+        $this->streamFactory = $streamFactory;
         $this->charsetConversionFilter = '';
     }
 
@@ -123,13 +123,13 @@ class PartStreamFilterManager
             $this->encoding['type'] = $transferEncoding;
             switch ($transferEncoding) {
                 case 'base64':
-                    $this->filteredStream = $this->streamDecoratorFactory->newBase64Stream($this->filteredStream);
+                    $this->filteredStream = $this->streamFactory->newBase64Stream($this->filteredStream);
                     break;
                 case 'x-uuencode':
-                    $this->filteredStream = $this->streamDecoratorFactory->newUUStream($this->filteredStream);
+                    $this->filteredStream = $this->streamFactory->newUUStream($this->filteredStream);
                     break;
                 case 'quoted-printable':
-                    $this->filteredStream = $this->streamDecoratorFactory->newQuotedPrintableStream($this->filteredStream);
+                    $this->filteredStream = $this->streamFactory->newQuotedPrintableStream($this->filteredStream);
                     break;
             }
         }
@@ -146,7 +146,7 @@ class PartStreamFilterManager
     {
         if ($this->filteredStream !== null) {
             if (!empty($fromCharset) && !empty($toCharset)) {
-                $this->filteredStream = $this->streamDecoratorFactory->newCharsetStream(
+                $this->filteredStream = $this->streamFactory->newCharsetStream(
                     $this->filteredStream,
                     $fromCharset,
                     $toCharset

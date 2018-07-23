@@ -77,7 +77,7 @@ class SimpleDi
      */
     protected $messageWriterService;
 
-    protected $streamDecoratorFactory;
+    protected $streamFactory;
     
     /**
      * Constructs a SimpleDi - call singleton() to invoke
@@ -160,7 +160,7 @@ class SimpleDi
             $this->partFactoryService = new PartFactoryService(
                 $this->getHeaderFactory(),
                 $this->getPartFilterFactory(),
-                $this->getStreamDecoratorFactory(),
+                $this->getStreamFactory(),
                 $this->getPartStreamFilterManagerFactory()
             );
         }
@@ -190,11 +190,11 @@ class SimpleDi
         return $this->headerFactory;
     }
 
-    public function getStreamDecoratorFactory()
+    public function getStreamFactory()
     {
         return $this->getInstance(
-            'streamDecoratorFactory',
-            __NAMESPACE__ . '\Stream\StreamDecoratorFactory'
+            'streamFactory',
+            __NAMESPACE__ . '\Stream\StreamFactory'
         );
     }
     
@@ -202,7 +202,7 @@ class SimpleDi
     {
         if ($this->partStreamFilterManagerFactory === null) {
             $this->partStreamFilterManagerFactory = new PartStreamFilterManagerFactory(
-                $this->getStreamDecoratorFactory()
+                $this->getStreamFactory()
             );
         }
         return $this->getInstance(

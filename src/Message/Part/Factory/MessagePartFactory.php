@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
@@ -26,9 +26,9 @@ abstract class MessagePartFactory
     protected $partStreamFilterManagerFactory;
 
     /**
-     * @var StreamDecoratorFactory the StreamDecoratorFactory instance
+     * @var StreamFactory the StreamFactory instance
      */
-    protected $streamDecoratorFactory;
+    protected $streamFactory;
 
     /**
      * @static MessagePartFactory[] cached instances of MessagePartFactory
@@ -39,14 +39,14 @@ abstract class MessagePartFactory
     /**
      * Initializes class dependencies.
      *
-     * @param StreamDecoratorFactory $streamDecoratorFactory
+     * @param StreamFactory $streamFactory
      * @param PartStreamFilterManagerFactory $psf
      */
     public function __construct(
-        StreamDecoratorFactory $streamDecoratorFactory,
+        StreamFactory $streamFactory,
         PartStreamFilterManagerFactory $psf
     ) {
-        $this->streamDecoratorFactory = $streamDecoratorFactory;
+        $this->streamFactory = $streamFactory;
         $this->partStreamFilterManagerFactory = $psf;
     }
     
@@ -82,14 +82,14 @@ abstract class MessagePartFactory
     /**
      * Returns the singleton instance for the class.
      *
-     * @param StreamDecoratorFactory $sdf
+     * @param StreamFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      * @return MessagePartFactory
      */
     public static function getInstance(
-        StreamDecoratorFactory $sdf,
+        StreamFactory $sdf,
         PartStreamFilterManagerFactory $psf,
         HeaderFactory $hf = null,
         PartFilterFactory $pf = null

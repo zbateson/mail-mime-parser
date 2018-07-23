@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Stream\StreamDecoratorFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
@@ -33,13 +33,13 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Initializes dependencies.
      *
-     * @param StreamDecoratorFactory $sdf
+     * @param StreamFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      */
     public function __construct(
-        StreamDecoratorFactory $sdf,
+        StreamFactory $sdf,
         PartStreamFilterManagerFactory $psf,
         HeaderFactory $hf,
         PartFilterFactory $pf
@@ -52,14 +52,14 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Returns the singleton instance for the class.
      *
-     * @param StreamDecoratorFactory $sdf
+     * @param StreamFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      * @return MessagePartFactory
      */
     public static function getInstance(
-        StreamDecoratorFactory $sdf,
+        StreamFactory $sdf,
         PartStreamFilterManagerFactory $psf,
         HeaderFactory $hf = null,
         PartFilterFactory $pf = null
@@ -86,8 +86,8 @@ class MimePartFactory extends MessagePartFactory
             $this->partFilterFactory,
             $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance(),
-            $this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder),
-            $this->streamDecoratorFactory->getLimitedContentStream($messageStream, $partBuilder)
+            $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder),
+            $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder)
         );
     }
 }

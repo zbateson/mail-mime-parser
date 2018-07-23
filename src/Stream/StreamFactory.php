@@ -22,7 +22,7 @@ use ZBateson\MailMimeParser\Message\Part\PartBuilder;
  *
  * @author Zaahid Bateson
  */
-class StreamDecoratorFactory
+class StreamFactory
 {
     public function getLimitedPartStream(StreamInterface $stream, PartBuilder $part)
     {

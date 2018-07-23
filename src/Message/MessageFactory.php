@@ -35,7 +35,7 @@ class MessageFactory extends MimePartFactory
                 $partBuilder,
                 $this->partStreamFilterManagerFactory->newInstance(),
                 $stream,
-                $this->streamDecoratorFactory->getLimitedContentStream($stream, $partBuilder)
+                $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
             );
         }
         return new Message(
@@ -44,7 +44,7 @@ class MessageFactory extends MimePartFactory
             $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance(),
             $stream,
-            $this->streamDecoratorFactory->getLimitedContentStream($stream, $partBuilder)
+            $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
         );
     }
 }

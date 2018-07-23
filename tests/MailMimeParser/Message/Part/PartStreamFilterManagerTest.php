@@ -15,20 +15,20 @@ use GuzzleHttp\Psr7;
 class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
 {
     private $partStreamFilterManager = null;
-    private $mockStreamDecoratorFactory = null;
+    private $mockStreamFactory = null;
     
     protected function setUp()
     {
-        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamDecoratorFactory')
+        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();
         $this->partStreamFilterManager = new PartStreamFilterManager($mocksdf);
-        $this->mockStreamDecoratorFactory = $mocksdf;
+        $this->mockStreamFactory = $mocksdf;
     }
     
     public function testAttachQuotedPrintableDecoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
@@ -39,7 +39,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testAttachBase64Decoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newBase64Stream')
             ->with($stream)
             ->willReturn($stream);
@@ -50,7 +50,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testAttachUUEncodeDecoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newUUStream')
             ->with($stream)
             ->willReturn($stream);
@@ -61,7 +61,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testAttachCharsetConversionDecoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
             ->with($stream, 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
@@ -72,7 +72,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testReAttachTransferEncodingDecoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
@@ -80,7 +80,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         
         $stream2 = Psr7\stream_for('test2');
         $stream3 = Psr7\stream_for('test3');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(2))
+        $this->mockStreamFactory->expects($this->exactly(2))
             ->method('newUUStream')
             ->with($stream)
             ->willReturnOnConsecutiveCalls($stream2, $stream3);
@@ -100,7 +100,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testReAttachCharsetConversionDecoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(4))
+        $this->mockStreamFactory->expects($this->exactly(4))
             ->method('newCharsetStream')
             ->withConsecutive(
                 [$stream, 'US-ASCII', 'UTF-8'],
@@ -123,11 +123,11 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testAttachCharsetConversionAndTransferEncodingDecoder()
     {
         $stream = Psr7\stream_for('test');
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
             ->with($stream, 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
-        $this->mockStreamDecoratorFactory->expects($this->exactly(1))
+        $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);

@@ -29,8 +29,8 @@ class UUEncodedPartFactory extends MessagePartFactory
         return new UUEncodedPart(
             $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance(),
-            $this->streamDecoratorFactory->getLimitedPartStream($messageStream, $partBuilder),
-            $this->streamDecoratorFactory->getLimitedContentStream($messageStream, $partBuilder)
+            $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder),
+            $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder)
         );
     }
 }
