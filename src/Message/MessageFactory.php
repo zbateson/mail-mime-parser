@@ -30,19 +30,21 @@ class MessageFactory extends MimePartFactory
     {
         if (strcasecmp($partBuilder->getContentType(), 'multipart/signed')) {
             return new SignedMessage(
-                $this->headerFactory,
-                $this->partFilterFactory,
-                $partBuilder,
                 $this->partStreamFilterManagerFactory->newInstance(),
+                $this->streamFactory,
+                $this->partFilterFactory,
+                $this->headerFactory,
+                $partBuilder,
                 $stream,
                 $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
             );
         }
         return new Message(
-            $this->headerFactory,
-            $this->partFilterFactory,
-            $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance(),
+            $this->streamFactory,
+            $this->partFilterFactory,
+            $this->headerFactory,
+            $partBuilder,
             $stream,
             $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
         );

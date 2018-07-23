@@ -7,8 +7,9 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
 use GuzzleHttp\Psr7\StreamWrapper;
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Represents a single part of a message.
@@ -20,6 +21,16 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 abstract class MessagePart
 {
+    /**
+     * @var PartStreamFilterManager manages attached filters to $contentHandle
+     */
+    protected $partStreamFilterManager;
+
+    /**
+     * @var StreamFactory for creating MessagePartStream objects
+     */
+    protected $streamFactory;
+
     /**
      * @var ParentPart parent part
      */
@@ -37,28 +48,33 @@ abstract class MessagePart
     protected $contentStream;
     
     /**
-     * @var PartStreamFilterManager manages attached filters to $contentHandle
-     */
-    protected $partStreamFilterManager;
-    
-    /**
      * @var string can be used to set an override for content's charset in cases
      *      where a user wants to set a default other than ISO-8859-1.
      */
     protected $charsetOverride;
 
     /**
-     * Sets up class dependencies.
-     *
+     * @var boolean set to true when a user attaches a stream manually, it's
+     *      assumed to already be decoded or to have relevant transfer encoding
+     *      decorators attached already.
+     */
+    protected $ignoreTransferEncoding;
+
+    /**
      * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamFactory $streamFactory
      * @param StreamInterface $stream
      * @param StreamInterface $contentStream
      */
     public function __construct(
         PartStreamFilterManager $partStreamFilterManager,
+        StreamFactory $streamFactory,
         StreamInterface $stream,
         StreamInterface $contentStream = null
     ) {
+        $this->partStreamFilterManager = $partStreamFilterManager;
+        $this->streamFactory = $streamFactory;
+
         $this->stream = $stream;
         $this->contentStream = $contentStream;
         if ($contentStream !== null) {
@@ -66,7 +82,21 @@ abstract class MessagePart
                 $contentStream
             );
         }
-        $this->partStreamFilterManager = $partStreamFilterManager;
+    }
+
+    /**
+     * Called when operations change the content of the MessagePart.
+     *
+     * The function causes calls to getStream() to return a dynamic
+     * MessagePartStream instead of the read stream for this MessagePart and all
+     * parent MessageParts.
+     */
+    protected function onChange()
+    {
+        $this->stream = null;
+        if ($this->parent !== null) {
+            $this->parent->onChange();
+        }
     }
 
     /**
@@ -135,7 +165,7 @@ abstract class MessagePart
     /**
      * Rewrite me
      * 
-     * @return resource the resource handle or null if not set
+     * @return resource the resource handle
      */
     public function getHandle()
     {
@@ -145,12 +175,12 @@ abstract class MessagePart
     /**
      * Write me
      *
-     * @return StreamInterface the resource handle or null if not set
+     * @return StreamInterface the resource handle
      */
     public function getStream()
     {
         if ($this->stream === null) {
-            // return MessagePartStream
+            return $this->streamFactory->newMessagePartStream($this);
         }
         return $this->stream;
     }
@@ -225,7 +255,7 @@ abstract class MessagePart
     public function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->hasContent()) {
-            $tr = $this->getContentTransferEncoding();
+            $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
             $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
             return $this->partStreamFilterManager->getContentStream(
                 $tr,
@@ -262,5 +292,51 @@ abstract class MessagePart
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Attaches the stream or resource handle for the part's content.  The
+     * stream is closed when another stream is attached, or the MimePart is
+     * destroyed.
+     *
+     * @param Stream|resource $stream
+     * @param string $streamCharset
+     */
+    public function attachContentStream($stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)
+    {
+        if ($this->contentStream !== null && $this->contentStream !== $stream) {
+            $this->contentStream->close();
+        }
+        $this->contentStream = Psr7\stream_for($stream);
+        $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
+        if ($ch !== null && $streamCharset !== $ch) {
+            $this->charsetOverride = $streamCharset;
+        }
+        $this->ignoreTransferEncoding = true;
+        $this->partStreamFilterManager->setStream($stream);
+        $this->onChange();
+    }
+
+    /**
+     * Detaches and closes the content stream.
+     */
+    protected function detachContentStream()
+    {
+        $this->contentStream = null;
+        $this->partStreamFilterManager->setStream(null);
+        $this->onChange();
+    }
+
+    /**
+     * Sets the content of the part to the passed string.
+     *
+     * @param string $string
+     * @param string $charset
+     */
+    public function setContent($string, $charset = MailMimeParser::DEFAULT_CHARSET)
+    {
+        $stream = Psr7\stream_for($string);
+        $this->attachContentStream($stream, $charset);
+        // this->onChange called in attachContentStream
     }
 }

@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
@@ -40,25 +41,28 @@ abstract class ParentHeaderPart extends ParentPart
     protected $headers;
 
     /**
-     * @param HeaderFactory $headerFactory
-     * @param PartFilterFactory $partFilterFactory
-     * @param PartBuilder $partBuilder
      * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamFactory $streamFactory
+     * @param PartFilterFactory $partFilterFactory
+     * @param HeaderFactory $headerFactory
+     * @param PartBuilder $partBuilder
      * @param StreamInterface $stream
      * @param StreamInterface $contentStream
      */
     public function __construct(
-        HeaderFactory $headerFactory,
-        PartFilterFactory $partFilterFactory,
-        PartBuilder $partBuilder,
         PartStreamFilterManager $partStreamFilterManager,
+        StreamFactory $streamFactory,
+        PartFilterFactory $partFilterFactory,
+        HeaderFactory $headerFactory,
+        PartBuilder $partBuilder,
         StreamInterface $stream,
         StreamInterface $contentStream = null
     ) {
         parent::__construct(
+            $partStreamFilterManager,
+            $streamFactory,
             $partFilterFactory,
             $partBuilder,
-            $partStreamFilterManager,
             $stream,
             $contentStream
         );
@@ -172,6 +176,7 @@ abstract class ParentHeaderPart extends ParentPart
             $header->getName(),
             $header->getRawValue()
         ];
+        $this->onChange();
     }
 
     /**
@@ -183,5 +188,6 @@ abstract class ParentHeaderPart extends ParentPart
     {
         $normalized = $this->getNormalizedHeaderName($name);
         unset($this->headers[$normalized], $this->rawHeaders[$normalized]);
+        $this->onChange();
     }
 }

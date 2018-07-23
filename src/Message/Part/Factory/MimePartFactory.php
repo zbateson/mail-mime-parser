@@ -82,10 +82,11 @@ class MimePartFactory extends MessagePartFactory
     public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder)
     {
         return new MimePart(
-            $this->headerFactory,
-            $this->partFilterFactory,
-            $partBuilder,
             $this->partStreamFilterManagerFactory->newInstance(),
+            $this->streamFactory,
+            $this->partFilterFactory,
+            $this->headerFactory,
+            $partBuilder,
             $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder),
             $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder)
         );

@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * A MessagePart that contains children.
@@ -28,21 +29,24 @@ abstract class ParentPart extends MessagePart
     protected $children = [];
 
     /**
+     * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
      * @param PartBuilder $partBuilder
-     * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamInterface $stream
      * @param StreamInterface $contentStream
      */
     public function __construct(
+        PartStreamFilterManager $partStreamFilterManager,
+        StreamFactory $streamFactory,
         PartFilterFactory $partFilterFactory,
         PartBuilder $partBuilder,
-        PartStreamFilterManager $partStreamFilterManager,
         StreamInterface $stream,
         StreamInterface $contentStream = null
     ) {
-        parent::__construct($partStreamFilterManager, $stream, $contentStream);
+        parent::__construct($partStreamFilterManager, $streamFactory, $stream, $contentStream);
         $this->partFilterFactory = $partFilterFactory;
+
         $pbChildren = $partBuilder->getChildren();
         if (!empty($pbChildren)) {
             $this->children = array_map(function ($child) use ($stream) {
@@ -232,6 +236,7 @@ abstract class ParentPart extends MessagePart
                 0,
                 [ $part ]
             );
+            $this->onChange();
         }
     }
 
@@ -255,6 +260,7 @@ abstract class ParentPart extends MessagePart
             $position = array_search($part, $this->children, true);
             if ($position !== false) {
                 array_splice($this->children, $position, 1);
+                $this->onChange();
                 return $position;
             }
         }
