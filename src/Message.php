@@ -6,8 +6,15 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\MessageHelper;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -19,6 +26,44 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  */
 class Message extends MimePart
 {
+    /**
+     * @var MessageHelper helper class with various message manipulation
+     *      routines.
+     */
+    protected $messageHelper;
+
+    /**
+     * @param PartStreamFilterManager $partStreamFilterManager
+     * @param StreamFactory $streamFactory
+     * @param PartFilterFactory $partFilterFactory
+     * @param HeaderFactory $headerFactory
+     * @param PartBuilder $partBuilder
+     * @param MessageHelper $messageHelper
+     * @param StreamInterface $stream
+     * @param StreamInterface $contentStream
+     */
+    public function __construct(
+        PartStreamFilterManager $partStreamFilterManager,
+        StreamFactory $streamFactory,
+        PartFilterFactory $partFilterFactory,
+        HeaderFactory $headerFactory,
+        PartBuilder $partBuilder,
+        MessageHelper $messageHelper,
+        StreamInterface $stream,
+        StreamInterface $contentStream = null
+    ) {
+        parent::__construct(
+            $partStreamFilterManager,
+            $streamFactory,
+            $partFilterFactory,
+            $headerFactory,
+            $partBuilder,
+            $stream,
+            $contentStream
+        );
+        $this->messageHelper = $messageHelper;
+    }
+
     /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
@@ -219,5 +264,148 @@ class Message extends MimePart
         $contentType = $this->getHeaderValue('Content-Type');
         $mimeVersion = $this->getHeaderValue('Mime-Version');
         return ($contentType !== null || $mimeVersion !== null);
+    }
+
+    /**
+     * Sets the text/plain part of the message to the passed $stringOrHandle,
+     * either creating a new part if one doesn't exist for text/plain, or
+     * assigning the value of $stringOrHandle to an existing text/plain part.
+     *
+     * The optional $charset parameter is the charset for saving to.
+     * $stringOrHandle is expected to be in UTF-8 regardless of the target
+     * charset.
+     *
+     * @param string|resource $stringOrHandle
+     * @param string $charset
+     */
+    public function setTextPart($stringOrHandle, $charset = 'UTF-8')
+    {
+        $this->messageHelper->setContentPartForMimeType(
+            $this, 'text/plain', $stringOrHandle, $charset
+        );
+    }
+
+    /**
+     * Sets the text/html part of the message to the passed $stringOrHandle,
+     * either creating a new part if one doesn't exist for text/html, or
+     * assigning the value of $stringOrHandle to an existing text/html part.
+     *
+     * The optional $charset parameter is the charset for saving to.
+     * $stringOrHandle is expected to be in UTF-8 regardless of the target
+     * charset.
+     *
+     * @param string|resource $stringOrHandle
+     * @param string $charset
+     */
+    public function setHtmlPart($stringOrHandle, $charset = 'UTF-8')
+    {
+        $this->messageHelper->setContentPartForMimeType(
+            $this, 'text/html', $stringOrHandle, $charset
+        );
+    }
+
+    /**
+     * Removes the text/plain part of the message at the passed index if one
+     * exists.  Returns true on success.
+     *
+     * @return bool true on success
+     */
+    public function removeTextPart($index = 0)
+    {
+        return $this->messageHelper->removePartByMimeType(
+            $this, 'text/plain', $index
+        );
+    }
+
+    /**
+     * Removes all text/plain inline parts in this message, optionally keeping
+     * other inline parts as attachments on the main message (defaults to
+     * keeping them).
+     *
+     * @param bool $keepOtherPartsAsAttachments
+     * @return bool true on success
+     */
+    public function removeAllTextParts($keepOtherPartsAsAttachments = true)
+    {
+        return $this->messageHelper->removeAllContentPartsByMimeType(
+            $this, 'text/plain', $keepOtherPartsAsAttachments
+        );
+    }
+
+    /**
+     * Removes the html part of the message if one exists.  Returns true on
+     * success.
+     *
+     * @return bool true on success
+     */
+    public function removeHtmlPart($index = 0)
+    {
+        return $this->messageHelper->removePartByMimeType(
+            $this, 'text/html', $index
+        );
+    }
+
+    /**
+     * Removes all text/html inline parts in this message, optionally keeping
+     * other inline parts as attachments on the main message (defaults to
+     * keeping them).
+     *
+     * @param bool $keepOtherPartsAsAttachments
+     * @return bool true on success
+     */
+    public function removeAllHtmlParts($keepOtherPartsAsAttachments = true)
+    {
+        return $this->messageHelper->removeAllContentPartsByMimeType(
+            $this, 'text/html', $keepOtherPartsAsAttachments
+        );
+    }
+
+    /**
+     * Removes the attachment with the given index
+     *
+     * @param int $index
+     */
+    public function removeAttachmentPart($index)
+    {
+        $part = $this->getAttachmentPart($index);
+        $this->removePart($part);
+    }
+
+    /**
+     * Adds an attachment part for the passed raw data string or handle and
+     * given parameters.
+     *
+     * @param string|handle $stringOrHandle
+     * @param strubg $mimeType
+     * @param string $filename
+     * @param string $disposition
+     */
+    public function addAttachmentPart($stringOrHandle, $mimeType, $filename = null, $disposition = 'attachment')
+    {
+        if ($filename === null) {
+            $filename = 'file' . uniqid();
+        }
+        $part = $this->createPartForAttachment($this, $mimeType, $filename, $disposition);
+        $part->setContent($stringOrHandle);
+        $this->addChild($part);
+    }
+
+    /**
+     * Adds an attachment part using the passed file.
+     *
+     * Essentially creates a file stream and uses it.
+     *
+     * @param string $file
+     * @param string $mimeType
+     * @param string $filename
+     * @param string $disposition
+     */
+    public function addAttachmentPartFromFile($file, $mimeType, $filename = null, $disposition = 'attachment')
+    {
+        $handle = fopen($file, 'r');
+        if ($filename === null) {
+            $filename = basename($file);
+        }
+        $this->addAttachmentPart($handle, $mimeType, $filename, $disposition);
     }
 }

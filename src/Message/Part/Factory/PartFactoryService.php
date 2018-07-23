@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Part\Factory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\MessageFactory;
+use ZBateson\MailMimeParser\Message\MessageHelperFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
@@ -39,25 +40,31 @@ class PartFactoryService
      * @var StreamFactory the StreamFactory instance
      */
     protected $streamFactory;
+
+    /**
+     * @var MessageHelperFactory the MessageHelperFactory instance
+     */
+    protected $messageHelperFactory;
     
     /**
-     * Sets up dependencies.
-     * 
      * @param HeaderFactory $headerFactory
      * @param PartFilterFactory $partFilterFactory
      * @param StreamFactory $streamFactory
      * @param PartStreamFilterManagerFactory $partStreamFilterManagerFactory
+     * @param MessageHelperFactory $messageHelperFactory
      */
     public function __construct(
         HeaderFactory $headerFactory,
         PartFilterFactory $partFilterFactory,
         StreamFactory $streamFactory,
-        PartStreamFilterManagerFactory $partStreamFilterManagerFactory
+        PartStreamFilterManagerFactory $partStreamFilterManagerFactory,
+        MessageHelperFactory $messageHelperFactory
     ) {
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
         $this->streamFactory = $streamFactory;
         $this->partStreamFilterManagerFactory = $partStreamFilterManagerFactory;
+        $this->messageHelperFactory = $messageHelperFactory;
     }
 
     /**
@@ -71,7 +78,8 @@ class PartFactoryService
             $this->streamFactory,
             $this->partStreamFilterManagerFactory,
             $this->headerFactory,
-            $this->partFilterFactory
+            $this->partFilterFactory,
+            $this->messageHelperFactory->newMessageHelper($this)
         );
     }
     

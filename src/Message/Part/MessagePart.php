@@ -313,15 +313,15 @@ abstract class MessagePart
      * stream is closed when another stream is attached, or the MimePart is
      * destroyed.
      *
-     * @param Stream|resource $stream
+     * @param StreamInterface $stream
      * @param string $streamCharset
      */
-    public function attachContentStream($stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)
+    public function attachContentStream(StreamInterface $stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->contentStream !== null && $this->contentStream !== $stream) {
             $this->contentStream->close();
         }
-        $this->contentStream = Psr7\stream_for($stream);
+        $this->contentStream = $stream;
         $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
             $this->charsetOverride = $streamCharset;
@@ -344,12 +344,12 @@ abstract class MessagePart
     /**
      * Sets the content of the part to the passed string.
      *
-     * @param string $string
+     * @param string|resource $stringOrHandle
      * @param string $charset
      */
-    public function setContent($string, $charset = MailMimeParser::DEFAULT_CHARSET)
+    public function setContent($stringOrHandle, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $stream = Psr7\stream_for($string);
+        $stream = Psr7\stream_for($stringOrHandle);
         $this->attachContentStream($stream, $charset);
         // this->onChange called in attachContentStream
     }

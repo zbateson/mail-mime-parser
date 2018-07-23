@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use ZBateson\MailMimeParser\Message\MessageHelperFactory;
 use ZBateson\MailMimeParser\Message\MessageParser;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
@@ -71,11 +72,9 @@ class SimpleDi
     protected $consumerService;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\Writer\MessageWriterService 
-     * singleton 'service' instance for getting MimePartWriter and MessageWriter
-     * instances
+     * @var MessageHelperFactory Used to create MessageHelper instances
      */
-    protected $messageWriterService;
+    protected $messageHelperFactory;
 
     protected $streamFactory;
     
@@ -130,16 +129,18 @@ class SimpleDi
     }
     
     /**
-     * Returns a MessageWriterService instance.
+     * Returns a MessageHelperFactory instance.
      * 
-     * @return MessageWriterService
+     * @return MessageHelperFactory
      */
-    public function getMessageWriterService()
+    public function getMessageHelperFactory()
     {
-        if ($this->messageWriterService === null) {
-            $this->messageWriterService = new MessageWriterService();
+        if ($this->messageHelperFactory === null) {
+            $this->messageHelperFactory = new MessageHelperFactory(
+                $this->getPartBuilderFactory()
+            );
         }
-        return $this->messageWriterService;
+        return $this->messageHelperFactory;
     }
     
     public function getPartFilterFactory()
@@ -161,7 +162,8 @@ class SimpleDi
                 $this->getHeaderFactory(),
                 $this->getPartFilterFactory(),
                 $this->getStreamFactory(),
-                $this->getPartStreamFilterManagerFactory()
+                $this->getPartStreamFilterManagerFactory(),
+                $this->getMessageHelperFactory()
             );
         }
         return $this->partFactoryService;

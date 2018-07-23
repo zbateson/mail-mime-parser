@@ -50,29 +50,6 @@ class MimePartFactory extends MessagePartFactory
     }
 
     /**
-     * Returns the singleton instance for the class.
-     *
-     * @param StreamFactory $sdf
-     * @param PartStreamFilterManagerFactory $psf
-     * @param HeaderFactory $hf
-     * @param PartFilterFactory $pf
-     * @return MessagePartFactory
-     */
-    public static function getInstance(
-        StreamFactory $sdf,
-        PartStreamFilterManagerFactory $psf,
-        HeaderFactory $hf = null,
-        PartFilterFactory $pf = null
-    ) {
-        $instance = static::getCachedInstance();
-        if ($instance === null) {
-            $instance = new static($sdf, $psf, $hf, $pf);
-            static::setCachedInstance($instance);
-        }
-        return $instance;
-    }
-
-    /**
      * Constructs a new MimePart object and returns it
      * 
      * @param StreamInterface $messageStream

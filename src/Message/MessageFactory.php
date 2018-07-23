@@ -7,10 +7,15 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\SignedMessage;
+use ZBateson\MailMimeParser\Message\MessageHelper;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\SignedMessage;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Responsible for creating Message instances.
@@ -19,6 +24,29 @@ use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
  */
 class MessageFactory extends MimePartFactory
 {
+    /**
+     * @var MessageHelper helper class for message manipulation routines.
+     */
+    protected $messageHelper;
+
+    /**
+     * @param StreamFactory $sdf
+     * @param PartStreamFilterManagerFactory $psf
+     * @param HeaderFactory $hf
+     * @param PartFilterFactory $pf
+     * @param MessageHelper $mh
+     */
+    public function __construct(
+        StreamFactory $sdf,
+        PartStreamFilterManagerFactory $psf,
+        HeaderFactory $hf,
+        PartFilterFactory $pf,
+        MessageHelper $mh
+    ) {
+        parent::__construct($sdf, $psf, $hf, $pf);
+        $this->messageHelper = $mh;
+    }
+
     /**
      * Constructs a new Message object and returns it
      * 
@@ -35,6 +63,7 @@ class MessageFactory extends MimePartFactory
                 $this->partFilterFactory,
                 $this->headerFactory,
                 $partBuilder,
+                $this->messageHelper,
                 $stream,
                 $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
             );
@@ -45,6 +74,7 @@ class MessageFactory extends MimePartFactory
             $this->partFilterFactory,
             $this->headerFactory,
             $partBuilder,
+            $this->messageHelper,
             $stream,
             $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
         );
