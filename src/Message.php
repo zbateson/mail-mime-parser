@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
-use GuzzleHttp\Psr7;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -20,17 +19,6 @@ use GuzzleHttp\Psr7;
  */
 class Message extends MimePart
 {
-    /**
-     * Overridden to close the main message StreamInterface used by this
-     * message.
-     */
-    public function __destruct()
-    {
-        if ($this->stream !== null) {
-            $this->stream->close();
-        }
-    }
-
     /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
@@ -231,36 +219,5 @@ class Message extends MimePart
         $contentType = $this->getHeaderValue('Content-Type');
         $mimeVersion = $this->getHeaderValue('Mime-Version');
         return ($contentType !== null || $mimeVersion !== null);
-    }
-
-    /**
-     * Saves the message as a MIME message to the passed resource handle.
-     * 
-     * @param resource $handle
-     */
-    public function save($handle)
-    {
-        if ($this->stream !== null) {
-            $dest = Psr7\stream_for($handle);
-            $this->stream->rewind();
-            Psr7\copy_to_stream($this->stream, $dest);
-            // don't close when out of scope
-            $dest->detach();
-        }
-    }
-
-    /**
-     * Shortcut to call Message::save with a php://temp stream and return the
-     * written email message as a string.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        if ($this->stream !== null) {
-            $this->stream->rewind();
-            return $this->stream->getContents();
-        }
-        return '';
     }
 }

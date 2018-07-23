@@ -6,8 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -81,6 +82,19 @@ abstract class MessagePart
             $partStreamFilterManager->setStream(
                 $contentStream
             );
+        }
+    }
+
+    /**
+     * Overridden to close streams.
+     */
+    public function __destruct()
+    {
+        if ($this->stream !== null) {
+            $this->stream->close();
+        }
+        if ($this->contentStream !== null) {
+            $this->contentStream->close();
         }
     }
 
@@ -338,5 +352,34 @@ abstract class MessagePart
         $stream = Psr7\stream_for($string);
         $this->attachContentStream($stream, $charset);
         // this->onChange called in attachContentStream
+    }
+
+    /**
+     * Saves the message/part as to the passed resource handle.
+     *
+     * @param resource|StreamInterface $streamOrHandle
+     */
+    public function save($streamOrHandle)
+    {
+        $message = $this->getStream();
+        $message->rewind();
+        if (!($streamOrHandle instanceof StreamInterface)) {
+            $streamOrHandle = Psr7\stream_for($streamOrHandle);
+        }
+        Psr7\copy_to_stream($message, $streamOrHandle);
+        // don't close when out of scope
+        $streamOrHandle->detach();
+    }
+
+    /**
+     * Returns the message/part as a string.
+     *
+     * Convenience method for calling getStream()->getContents().
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getStream()->getContents();
     }
 }
