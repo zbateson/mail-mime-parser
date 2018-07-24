@@ -7,13 +7,14 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\StreamDecorators\SeekingLimitStream;
 use ZBateson\StreamDecorators\Base64Stream;
-use ZBateson\StreamDecorators\QuotedPrintableStream;
-use ZBateson\StreamDecorators\UUStream;
 use ZBateson\StreamDecorators\CharsetStream;
+use ZBateson\StreamDecorators\ChunkSplitStream;
+use ZBateson\StreamDecorators\SeekingLimitStream;
 use ZBateson\StreamDecorators\NonClosingStream;
 use ZBateson\StreamDecorators\PregReplaceFilterStream;
+use ZBateson\StreamDecorators\QuotedPrintableStream;
+use ZBateson\StreamDecorators\UUStream;
 use ZBateson\MailMimeParser\Message\Part\MessagePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
@@ -58,6 +59,11 @@ class StreamFactory
     public function newNonClosingStream(StreamInterface $stream)
     {
         return new NonClosingStream($stream);
+    }
+
+    public function newChunkSplitStream(StreamInterface $stream)
+    {
+        return new ChunkSplitStream($stream);
     }
 
     public function newBase64Stream(StreamInterface $stream)

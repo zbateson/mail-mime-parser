@@ -79,7 +79,8 @@ class MessagePartStream implements StreamInterface
                 $decorator = $this->streamFactory->newQuotedPrintableStream($stream);
                 break;
             case 'base64':
-                $decorator = $this->streamFactory->newBase64Stream($stream);
+                $decorator = $this->streamFactory->newBase64Stream(
+                    $this->streamFactory->newChunkSplitStream($stream));
                 break;
             case 'x-uuencode':
                 $decorator = $this->streamFactory->newUUStream($stream);
