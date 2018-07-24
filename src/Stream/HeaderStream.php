@@ -65,7 +65,7 @@ class HeaderStream implements StreamInterface
      */
     protected function createStream()
     {
-        $stream = Psr7\stream_for('php://temp');
+        $stream = Psr7\stream_for();
         $this->writePartHeadersTo($stream);
         $stream->rewind();
         return $stream;
