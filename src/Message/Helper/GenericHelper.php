@@ -16,7 +16,7 @@ use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
  *
  * @author Zaahid Bateson
  */
-final class GenericHelper extends AbstractHelper
+class GenericHelper extends AbstractHelper
 {
     /**
      * Copies the passed $header from $from, to $to or sets the header to

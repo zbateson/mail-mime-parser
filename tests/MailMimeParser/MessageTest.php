@@ -18,6 +18,8 @@ class MessageTest extends PHPUnit_Framework_TestCase
     private $mockPartStreamFilterManager;
     private $mockHeaderFactory;
     private $mockPartFilterFactory;
+    private $mockStreamFactory;
+    private $mockMessageHelperService;
     private $vfs;
 
     protected function setUp()
@@ -30,6 +32,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockMessageHelperService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MessageHelperService')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -66,9 +74,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $nestedMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
-        $nestedMimePart
-            ->method('getMessageObjectId')
-            ->willReturn('nested');
         
         $nested = $this->getMockedPartBuilder();
         $nested->method('createMessagePart')
@@ -81,12 +86,11 @@ class MessageTest extends PHPUnit_Framework_TestCase
             $childMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getMessageObjectId',
                 'getAllNonFilteredParts',
                 '__destruct',
                 'getContentResourceHandle',
                 'getContent',
-                'getHandle',
+                'getStream',
                 'isTextPart',
                 'getHeaderValue'
             ])
@@ -116,10 +120,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function testInstance()
     {
         $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilder(),
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilder(),
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -150,10 +156,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($filterMock);
         
         $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilderWithChildren(),
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilderWithChildren(),
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -197,10 +205,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($filterMock);
         
         $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilderWithChildren(),
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilderWithChildren(),
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -240,10 +250,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($filterMock);
         
         $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilderWithChildren(),
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilderWithChildren(),
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -269,10 +281,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function testIsNotMime()
     {
         $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $this->getMockedPartBuilder(),
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilder(),
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -291,10 +305,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn(['contenttype' => ['Blah', 'Blah']]);
 
         $message = new Message(
-            $hf,
-            $this->mockPartFilterFactory,
-            $pb,
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $hf,
+            $pb,
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -313,10 +329,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn(['mimeversion' => ['Mime-Version', '4.3']]);
 
         $message = new Message(
-            $hf,
-            $this->mockPartFilterFactory,
-            $pb,
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $hf,
+            $pb,
+            $this->mockMessageHelperService,
             Psr7\stream_for('habibis'),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -332,10 +350,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $pb = $this->getMockedPartBuilder();
         $pb->method('getStreamContentLength')->willReturn(0);
         $message = new Message(
-            $this->mockHeaderFactory,
-            $this->mockPartFilterFactory,
-            $pb,
             $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $pb,
+            $this->mockMessageHelperService,
             Psr7\stream_for($messageHandle),
             Psr7\stream_for('7ajat 7ilwa')
         );
@@ -348,5 +368,38 @@ class MessageTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Demigorgon', $str);
         $this->assertEquals('Demigorgon', $message->__toString());
+    }
+
+    public function testGetSignedMessageAsStringWithoutChildren()
+    {
+        $message = new Message(
+            $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilder(),
+            $this->mockMessageHelperService,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
+        );
+        $this->assertNull($message->getSignedMessageAsString());
+    }
+
+    public function testGetSignedMessageAsString()
+    {
+        $message = new Message(
+            $this->mockPartStreamFilterManager,
+            $this->mockStreamFactory,
+            $this->mockPartFilterFactory,
+            $this->mockHeaderFactory,
+            $this->getMockedPartBuilderWithChildren(),
+            $this->mockMessageHelperService,
+            Psr7\stream_for('habibis'),
+            Psr7\stream_for('7ajat 7ilwa')
+        );
+        $child = $message->getChild(0);
+
+        $child->expects($this->once())->method('getStream')->willReturn(Psr7\stream_for('Much success'));
+        $this->assertEquals('Much success', $message->getSignedMessageAsString());
     }
 }

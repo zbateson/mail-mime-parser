@@ -14,7 +14,7 @@ use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
  *
  * @author Zaahid Bateson
  */
-final class MessageHelperService
+class MessageHelperService
 {
     /**
      * @var PartBuilderFactory

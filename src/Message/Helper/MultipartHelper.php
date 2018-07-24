@@ -22,7 +22,7 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  *
  * @author Zaahid Bateson
  */
-final class MultipartHelper extends AbstractHelper
+class MultipartHelper extends AbstractHelper
 {
     /**
      * @var GenericHelper a GenericHelper instance

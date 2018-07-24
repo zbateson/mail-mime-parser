@@ -17,7 +17,7 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  *
  * @author Zaahid Bateson
  */
-final class PrivacyHelper extends AbstractHelper
+class PrivacyHelper extends AbstractHelper
 {
     /**
      * @var GenericHelper a GenericHelper instance
