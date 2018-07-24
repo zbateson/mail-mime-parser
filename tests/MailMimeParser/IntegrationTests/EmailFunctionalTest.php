@@ -835,7 +835,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
     }
 
     /*
-     * m1010.txt looks like it's badly encoded.  Was it really sent like that?
+     * m1010.txt the encoding is wrong, using setCharsetOverride
      */
     public function testParseEmailm1010()
     {
@@ -1292,7 +1292,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'email' => 'blow@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche',
-            // 'attachments' => 1, filename part is weird
+            'attachments' => 1,
         ]);
     }
 
