@@ -90,6 +90,8 @@ class MessageHelper
             $this->copyHeader($from, $to, 'Content-Transfer-Encoding');
         }
         $this->copyHeader($from, $to, 'Content-Disposition');
+        $this->copyHeader($from, $to, 'Content-ID');
+        $this->copyHeader($from, $to, 'Content-Description');
         if ($from->hasContent()) {
             $to->attachContentStream($from->getContentStream(), MailMimeParser::DEFAULT_CHARSET);
         }
@@ -97,6 +99,8 @@ class MessageHelper
             $from->removeHeader('Content-Type');
             $from->removeHeader('Content-Transfer-Encoding');
             $from->removeHeader('Content-Disposition');
+            $from->removeHeader('Content-ID');
+            $from->removeHeader('Content-Description');
             $from->detachContentStream();
         }
     }
