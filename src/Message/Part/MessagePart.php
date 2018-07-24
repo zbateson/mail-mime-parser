@@ -107,10 +107,31 @@ abstract class MessagePart
      */
     protected function onChange()
     {
-        $this->stream = null;
+        $this->markAsChanged();
         if ($this->parent !== null) {
             $this->parent->onChange();
         }
+    }
+
+    /**
+     * Marks the part as changed, forcing the part to be rewritten when saved.
+     *
+     * Normal operations to a MessagePart automatically mark the part as
+     * changed and markAsChanged() doesn't need to be called in those cases.
+     *
+     * The function can be called to indicate an external change that requires
+     * rewriting this part, for instance changing a message from a non-mime
+     * message to a mime one, would require rewriting non-mime children to
+     * insure suitable headers are written.
+     *
+     * Internally, the function discards the part's stream, forcing a stream to
+     * be created when calling getStream().
+     */
+    public function markAsChanged()
+    {
+        // the stream is not closed because $this->contentStream may still be
+        // attached to it.  GuzzleHttp will clean it up when destroyed.
+        $this->stream = null;
     }
 
     /**

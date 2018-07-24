@@ -159,9 +159,7 @@ class MessageHelper
         $atts = $message->getAllAttachmentParts();
         if (!empty($atts)) {
             foreach ($atts as $att) {
-                $copy = Psr7\stream_for();
-                Psr7\copy_to_stream($att->getContentStream(), $copy);
-                $att->attachContentStream($copy);
+                $att->markAsChanged();
             }
         }
     }

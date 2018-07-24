@@ -5,6 +5,7 @@ use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
 use GuzzleHttp\Psr7;
 
 /**
@@ -114,7 +115,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($props['attachments'], $message->getAttachmentCount(), $failMessage);
             $attachments = $message->getAllAttachmentParts();
             foreach ($attachments as $attachment) {
-                $name = $name = $attachment->getFilename();
+                $name = $attachment->getFilename();
                 if (!empty($name) && file_exists($this->messageDir . '/files/' . $name)) {
 
                     if ($attachment->getContentType() === 'text/html') {
@@ -123,7 +124,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                             $attachment->getContentResourceHandle(),
                             'HTML content is not equal'
                         );
-                    } elseif (stripos($attachment->getContentType(), 'text/') === 0) {
+                    } elseif ($attachment->isTextPart()) {
                         $this->assertTextContentTypeEquals(
                             $name,
                             $attachment->getContentResourceHandle(),
@@ -193,6 +194,12 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $this->runEmailTestForMessage($message, $props, $failMessage);
 
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
+
+        $parts = $message->getAllParts();
+        foreach ($parts as $part) {
+            $part->markAsChanged();
+        }
+
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
