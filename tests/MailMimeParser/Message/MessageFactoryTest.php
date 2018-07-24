@@ -33,6 +33,9 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
         $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
+        $mockHelperService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MessageHelperService')
+            ->disableOriginalConstructor()
+            ->getMock();
         
         $mockpsfmfactory->method('newInstance')
             ->willReturn($mockpsfm);
@@ -41,7 +44,8 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
             $mocksdf,
             $mockpsfmfactory,
             $mockHeaderFactory,
-            $mockFilterFactory
+            $mockFilterFactory,
+            $mockHelperService
         );
     }
     
@@ -52,8 +56,8 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
             ->getMock();
         
         $part = $this->messageFactory->newInstance(
-            Psr7\stream_for('test'),
-            $partBuilder
+            $partBuilder,
+            Psr7\stream_for('test')
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message',

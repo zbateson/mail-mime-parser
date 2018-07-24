@@ -44,8 +44,8 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->getMock();
         
         $part = $this->nonMimePartFactory->newInstance(
-            Psr7\stream_for('test'),
-            $partBuilder
+            $partBuilder,
+            Psr7\stream_for('test')
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\NonMimePart',

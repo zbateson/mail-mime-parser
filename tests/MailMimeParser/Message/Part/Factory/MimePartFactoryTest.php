@@ -51,8 +51,8 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->getMock();
         
         $part = $this->mimePartFactory->newInstance(
-            Psr7\stream_for('test'),
-            $partBuilder
+            $partBuilder,
+            Psr7\stream_for('test')
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\MimePart',

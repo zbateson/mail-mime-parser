@@ -44,8 +44,8 @@ class UUEncodedPartFactoryTest extends PHPUnit_Framework_TestCase
             ->getMock();
         
         $part = $this->uuEncodedPartFactory->newInstance(
-            Psr7\stream_for('test'),
-            $partBuilder
+            $partBuilder,
+            Psr7\stream_for('test')
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\UUEncodedPart',
