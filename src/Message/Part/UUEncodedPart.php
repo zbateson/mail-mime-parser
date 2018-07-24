@@ -74,6 +74,28 @@ class UUEncodedPart extends NonMimePart
     {
         return $this->filename;
     }
+
+    /**
+     * Sets the unix file mode for the uuencoded header.
+     *
+     * @param int $mode
+     */
+    public function setUnixFileMode($mode)
+    {
+        $this->mode = $mode;
+        $this->onChange();
+    }
+
+    /**
+     * Sets the filename included in the uuencoded header.
+     *
+     * @param string $filename
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+        $this->onChange();
+    }
     
     /**
      * Returns false.
