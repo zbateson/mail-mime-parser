@@ -8,12 +8,12 @@ namespace ZBateson\MailMimeParser;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager;
 use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use ZBateson\MailMimeParser\Message\MessageHelper;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -27,10 +27,10 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 class Message extends MimePart
 {
     /**
-     * @var MessageHelper helper class with various message manipulation
+     * @var MessageHelperService helper class with various message manipulation
      *      routines.
      */
-    protected $messageHelper;
+    protected $messageHelperService;
 
     /**
      * @param PartStreamFilterManager $partStreamFilterManager
@@ -38,7 +38,7 @@ class Message extends MimePart
      * @param PartFilterFactory $partFilterFactory
      * @param HeaderFactory $headerFactory
      * @param PartBuilder $partBuilder
-     * @param MessageHelper $messageHelper
+     * @param MessageHelperService $messageHelperService
      * @param StreamInterface $stream
      * @param StreamInterface $contentStream
      */
@@ -48,7 +48,7 @@ class Message extends MimePart
         PartFilterFactory $partFilterFactory,
         HeaderFactory $headerFactory,
         PartBuilder $partBuilder,
-        MessageHelper $messageHelper,
+        MessageHelperService $messageHelperService,
         StreamInterface $stream = null,
         StreamInterface $contentStream = null
     ) {
@@ -61,7 +61,7 @@ class Message extends MimePart
             $stream,
             $contentStream
         );
-        $this->messageHelper = $messageHelper;
+        $this->messageHelperService = $messageHelperService;
     }
 
     /**
@@ -280,9 +280,11 @@ class Message extends MimePart
      */
     public function setTextPart($stringOrHandle, $charset = 'UTF-8')
     {
-        $this->messageHelper->setContentPartForMimeType(
-            $this, 'text/plain', $stringOrHandle, $charset
-        );
+        $this->messageHelperService
+            ->getMultipartHelper()
+            ->setContentPartForMimeType(
+                $this, 'text/plain', $stringOrHandle, $charset
+            );
     }
 
     /**
@@ -299,9 +301,11 @@ class Message extends MimePart
      */
     public function setHtmlPart($stringOrHandle, $charset = 'UTF-8')
     {
-        $this->messageHelper->setContentPartForMimeType(
-            $this, 'text/html', $stringOrHandle, $charset
-        );
+        $this->messageHelperService
+            ->getMultipartHelper()
+            ->setContentPartForMimeType(
+                $this, 'text/html', $stringOrHandle, $charset
+            );
     }
 
     /**
@@ -312,9 +316,11 @@ class Message extends MimePart
      */
     public function removeTextPart($index = 0)
     {
-        return $this->messageHelper->removePartByMimeType(
-            $this, 'text/plain', $index
-        );
+        return $this->messageHelperService
+            ->getMultipartHelper()
+            ->removePartByMimeType(
+                $this, 'text/plain', $index
+            );
     }
 
     /**
@@ -327,9 +333,11 @@ class Message extends MimePart
      */
     public function removeAllTextParts($keepOtherPartsAsAttachments = true)
     {
-        return $this->messageHelper->removeAllContentPartsByMimeType(
-            $this, 'text/plain', $keepOtherPartsAsAttachments
-        );
+        return $this->messageHelperService
+            ->getMultipartHelper()
+            ->removeAllContentPartsByMimeType(
+                $this, 'text/plain', $keepOtherPartsAsAttachments
+            );
     }
 
     /**
@@ -340,9 +348,11 @@ class Message extends MimePart
      */
     public function removeHtmlPart($index = 0)
     {
-        return $this->messageHelper->removePartByMimeType(
-            $this, 'text/html', $index
-        );
+        return $this->messageHelperService
+            ->getMultipartHelper()
+            ->removePartByMimeType(
+                $this, 'text/html', $index
+            );
     }
 
     /**
@@ -355,9 +365,11 @@ class Message extends MimePart
      */
     public function removeAllHtmlParts($keepOtherPartsAsAttachments = true)
     {
-        return $this->messageHelper->removeAllContentPartsByMimeType(
-            $this, 'text/html', $keepOtherPartsAsAttachments
-        );
+        return $this->messageHelperService
+            ->getMultipartHelper()
+            ->removeAllContentPartsByMimeType(
+                $this, 'text/html', $keepOtherPartsAsAttachments
+            );
     }
 
     /**
@@ -385,7 +397,9 @@ class Message extends MimePart
         if ($filename === null) {
             $filename = 'file' . uniqid();
         }
-        $part = $this->messageHelper->createPartForAttachment($this, $mimeType, $filename, $disposition);
+        $part = $this->messageHelperService
+            ->getMultipartHelper()
+            ->createPartForAttachment($this, $mimeType, $filename, $disposition);
         $part->setContent($stringOrHandle);
         $this->addChild($part);
     }
@@ -419,11 +433,11 @@ class Message extends MimePart
     public function getSignedMessageAsString()
     {
         $child = $this->getChild(0);
-        if ($child !== null && $child->getHandle() !== null) {
+        if ($child !== null) {
             $normalized = preg_replace(
                 '/\r\n|\r|\n/',
                 "\r\n",
-                stream_get_contents($child->getHandle())
+                $child->getStream()->getContents()
             );
             return $normalized;
         }
@@ -466,10 +480,13 @@ class Message extends MimePart
     {
         $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
         if (strcasecmp($contentType, 'multipart/signed') !== 0) {
-            $this->messageHelper->setMessageAsMultipartSigned($this, $micalg, $protocol);
+            $this->messageHelperService->getPrivacyHelper()
+                ->setMessageAsMultipartSigned($this, $micalg, $protocol);
         }
-        $this->messageHelper->overwrite8bitContentEncoding($this);
-        $this->messageHelper->ensureHtmlPartFirstForSignedMessage($this);
+        $this->messageHelperService->getPrivacyHelper()
+            ->overwrite8bitContentEncoding($this);
+        $this->messageHelperService->getPrivacyHelper()
+            ->ensureHtmlPartFirstForSignedMessage($this);
         $this->setSignature('Not set');
     }
 
@@ -481,6 +498,7 @@ class Message extends MimePart
      */
     public function setSignature($body)
     {
-        $this->messageHelper->setSignature($this, $body);
+        $this->messageHelperService->getPrivacyHelper()
+            ->setSignature($this, $body);
     }
 }

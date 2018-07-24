@@ -6,15 +6,15 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\MessageHelperFactory;
-use ZBateson\MailMimeParser\Message\MessageParser;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
+use ZBateson\MailMimeParser\Message\MessageParser;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
 use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
@@ -72,9 +72,9 @@ class SimpleDi
     protected $consumerService;
     
     /**
-     * @var MessageHelperFactory Used to create MessageHelper instances
+     * @var MessageHelperService Used to get MessageHelper singletons
      */
-    protected $messageHelperFactory;
+    protected $messageHelperService;
 
     protected $streamFactory;
     
@@ -129,18 +129,21 @@ class SimpleDi
     }
     
     /**
-     * Returns a MessageHelperFactory instance.
+     * Returns a MessageHelperService instance.
      * 
-     * @return MessageHelperFactory
+     * @return MessageHelperService
      */
-    public function getMessageHelperFactory()
+    public function getMessageHelperService()
     {
-        if ($this->messageHelperFactory === null) {
-            $this->messageHelperFactory = new MessageHelperFactory(
+        if ($this->messageHelperService === null) {
+            $this->messageHelperService = new MessageHelperService(
                 $this->getPartBuilderFactory()
             );
+            $this->messageHelperService->setPartFactoryService(
+                $this->getPartFactoryService()
+            );
         }
-        return $this->messageHelperFactory;
+        return $this->messageHelperService;
     }
     
     public function getPartFilterFactory()
@@ -163,7 +166,7 @@ class SimpleDi
                 $this->getPartFilterFactory(),
                 $this->getStreamFactory(),
                 $this->getPartStreamFilterManagerFactory(),
-                $this->getMessageHelperFactory()
+                $this->getMessageHelperService()
             );
         }
         return $this->partFactoryService;

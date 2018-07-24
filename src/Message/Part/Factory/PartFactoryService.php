@@ -8,8 +8,8 @@ namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
 use ZBateson\MailMimeParser\Message\MessageFactory;
-use ZBateson\MailMimeParser\Message\MessageHelperFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
@@ -42,29 +42,29 @@ class PartFactoryService
     protected $streamFactory;
 
     /**
-     * @var MessageHelperFactory the MessageHelperFactory instance
+     * @var MessageHelperService the MessageHelperService instance
      */
-    protected $messageHelperFactory;
+    protected $messageHelperService;
     
     /**
      * @param HeaderFactory $headerFactory
      * @param PartFilterFactory $partFilterFactory
      * @param StreamFactory $streamFactory
      * @param PartStreamFilterManagerFactory $partStreamFilterManagerFactory
-     * @param MessageHelperFactory $messageHelperFactory
+     * @param MessageHelperService $messageHelperService
      */
     public function __construct(
         HeaderFactory $headerFactory,
         PartFilterFactory $partFilterFactory,
         StreamFactory $streamFactory,
         PartStreamFilterManagerFactory $partStreamFilterManagerFactory,
-        MessageHelperFactory $messageHelperFactory
+        MessageHelperService $messageHelperService
     ) {
         $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
         $this->streamFactory = $streamFactory;
         $this->partStreamFilterManagerFactory = $partStreamFilterManagerFactory;
-        $this->messageHelperFactory = $messageHelperFactory;
+        $this->messageHelperService = $messageHelperService;
     }
 
     /**
@@ -79,7 +79,7 @@ class PartFactoryService
             $this->partStreamFilterManagerFactory,
             $this->headerFactory,
             $this->partFilterFactory,
-            $this->messageHelperFactory->newMessageHelper($this)
+            $this->messageHelperService
         );
     }
     
