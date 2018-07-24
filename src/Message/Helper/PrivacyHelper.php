@@ -49,13 +49,13 @@ final class PrivacyHelper extends AbstractHelper
     }
 
     /**
-     * This function makes space by moving the main message part down one level.
+     * The passed message is set as multipart/signed, and a new part is created
+     * below it with content headers, content and children copied from the
+     * message.
      *
-     * The content-type, content-disposition and content-transfer-encoding
-     * headers are copied from this message to the newly created part, the
-     * resource handle is moved and detached, any attachments and content parts
-     * with parents set to this message get their parents set to the newly
-     * created part.
+     * @param Message $message
+     * @param string $micalg
+     * @param string $protocol
      */
     public function setMessageAsMultipartSigned(Message $message, $micalg, $protocol)
     {
@@ -75,6 +75,7 @@ final class PrivacyHelper extends AbstractHelper
      * Sets the signature of the message to $body, creating a signature part if
      * one doesn't exist.
      *
+     * @param Message $message
      * @param string $body
      */
     public function setSignature(Message $message, $body)
@@ -92,12 +93,14 @@ final class PrivacyHelper extends AbstractHelper
     }
 
     /**
-     * Loops over parts of this message and sets the content-transfer-encoding
+     * Loops over parts of the message and sets the content-transfer-encoding
      * header to quoted-printable for text/* mime parts, and to base64
      * otherwise for parts that are '8bit' encoded.
      *
      * Used for multipart/signed messages which doesn't support 8bit transfer
      * encodings.
+     *
+     * @param Message $message
      */
     public function overwrite8bitContentEncoding(Message $message)
     {
@@ -120,6 +123,8 @@ final class PrivacyHelper extends AbstractHelper
      * Ensures a non-text part comes first in a signed multipart/alternative
      * message as some clients seem to prefer the first content part if the
      * client doesn't understand multipart/signed.
+     *
+     * @param Message $message
      */
     public function ensureHtmlPartFirstForSignedMessage(Message $message)
     {
