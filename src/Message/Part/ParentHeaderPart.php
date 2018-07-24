@@ -55,7 +55,7 @@ abstract class ParentHeaderPart extends ParentPart
         PartFilterFactory $partFilterFactory,
         HeaderFactory $headerFactory,
         PartBuilder $partBuilder,
-        StreamInterface $stream,
+        StreamInterface $stream = null,
         StreamInterface $contentStream = null
     ) {
         parent::__construct(

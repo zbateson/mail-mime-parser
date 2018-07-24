@@ -423,11 +423,11 @@ class PartBuilder
      * @param StreamInterface $stream
      * @return MessagePart
      */
-    public function createMessagePart(StreamInterface $stream)
+    public function createMessagePart(StreamInterface $stream = null)
     {
         return $this->messagePartFactory->newInstance(
-            $stream,
-            $this
+            $this,
+            $stream
         );
     }
 }

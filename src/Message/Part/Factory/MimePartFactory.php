@@ -52,20 +52,26 @@ class MimePartFactory extends MessagePartFactory
     /**
      * Constructs a new MimePart object and returns it
      * 
-     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
+     * @param StreamInterface $messageStream
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder)
+    public function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null)
     {
+        $partStream = null;
+        $contentStream = null;
+        if ($messageStream !== null) {
+            $partStream = $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder);
+            $contentStream = $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder);
+        }
         return new MimePart(
             $this->partStreamFilterManagerFactory->newInstance(),
             $this->streamFactory,
             $this->partFilterFactory,
             $this->headerFactory,
             $partBuilder,
-            $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder),
-            $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder)
+            $partStream,
+            $contentStream
         );
     }
 }

@@ -34,9 +34,9 @@ class HeaderStream implements StreamInterface
             return $this->part->getRawHeaders();
         } elseif ($this->part->getParent() !== null && $this->part->getParent()->isMime()) {
             return [
-                'Content-Type' => $this->part->getContentType(),
-                'Content-Disposition' => $this->part->getContentDisposition(),
-                'Content-Transfer-Encoding' => $this->part->getContentTransferEncoding()
+                [ 'Content-Type', $this->part->getContentType() ],
+                [ 'Content-Disposition', $this->part->getContentDisposition() ],
+                [ 'Content-Transfer-Encoding', $this->part->getContentTransferEncoding() ]
             ];
         }
         return [];

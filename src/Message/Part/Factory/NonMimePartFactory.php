@@ -20,16 +20,23 @@ class NonMimePartFactory extends MessagePartFactory
     /**
      * Constructs a new NonMimePart object and returns it
      * 
-     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
+     * @param StreamInterface $messageStream
      * @return \ZBateson\MailMimeParser\Message\Part\NonMimePart
      */
-    public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder) {
+    public function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null)
+    {
+        $partStream = null;
+        $contentStream = null;
+        if ($messageStream !== null) {
+            $partStream = $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder);
+            $contentStream = $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder);
+        }
         return new NonMimePart(
             $this->partStreamFilterManagerFactory->newInstance(),
             $this->streamFactory,
-            $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder),
-            $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder)
+            $partStream,
+            $contentStream
         );
     }
 }

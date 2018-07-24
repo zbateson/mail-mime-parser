@@ -41,7 +41,7 @@ abstract class ParentPart extends MessagePart
         StreamFactory $streamFactory,
         PartFilterFactory $partFilterFactory,
         PartBuilder $partBuilder,
-        StreamInterface $stream,
+        StreamInterface $stream = null,
         StreamInterface $contentStream = null
     ) {
         parent::__construct($partStreamFilterManager, $streamFactory, $stream, $contentStream);
@@ -184,7 +184,7 @@ abstract class ParentPart extends MessagePart
      * Returns the part associated with the passed mime type if it exists.
      *
      * @param string $mimeType
-     * @return MessagePart or null
+     * @return MessagePart|null
      */
     public function getPartByMimeType($mimeType, $index = 0)
     {

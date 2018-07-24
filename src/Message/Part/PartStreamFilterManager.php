@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Psr7\CachingStream;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -121,16 +122,20 @@ class PartStreamFilterManager
     {
         if ($this->filteredStream !== null) {
             $this->encoding['type'] = $transferEncoding;
+            $assign = null;
             switch ($transferEncoding) {
                 case 'base64':
-                    $this->filteredStream = $this->streamFactory->newBase64Stream($this->filteredStream);
+                    $assign = $this->streamFactory->newBase64Stream($this->filteredStream);
                     break;
                 case 'x-uuencode':
-                    $this->filteredStream = $this->streamFactory->newUUStream($this->filteredStream);
+                    $assign = $this->streamFactory->newUUStream($this->filteredStream);
                     break;
                 case 'quoted-printable':
-                    $this->filteredStream = $this->streamFactory->newQuotedPrintableStream($this->filteredStream);
+                    $assign = $this->streamFactory->newQuotedPrintableStream($this->filteredStream);
                     break;
+            }
+            if ($assign !== null) {
+                $this->filteredStream = new CachingStream($assign);
             }
         }
     }
@@ -146,11 +151,11 @@ class PartStreamFilterManager
     {
         if ($this->filteredStream !== null) {
             if (!empty($fromCharset) && !empty($toCharset)) {
-                $this->filteredStream = $this->streamFactory->newCharsetStream(
+                $this->filteredStream = new CachingStream($this->streamFactory->newCharsetStream(
                     $this->filteredStream,
                     $fromCharset,
                     $toCharset
-                );
+                ));
             }
             $this->charset['from'] = $fromCharset;
             $this->charset['to'] = $toCharset;

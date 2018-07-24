@@ -117,20 +117,25 @@ class MessagePartStream implements StreamInterface
     {
         $streams = [];
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
-        foreach ($part->getChildParts() as $child) {
+        foreach ($part->getChildParts() as $i => $child) {
             if ($boundary !== null) {
-                $streams[] = Psr7\stream_for("\r\n--$boundary\r\n");
+                if ($i === 0 && !$part->hasContent()) {
+                    $streams[] = Psr7\stream_for("--$boundary\r\n");
+                } else {
+                    $streams[] = Psr7\stream_for("\r\n--$boundary\r\n");
+                }
             }
             $streams[] = $child->getStream();
         }
         if ($boundary !== null) {
             $streams[] = Psr7\stream_for("\r\n--$boundary--\r\n");
         }
+        return $streams;
     }
 
     protected function getStreamsArray()
     {
-        $content = Psr7\stream_for('php://temp');
+        $content = Psr7\stream_for();
         $this->writePartContentTo($this->part, $content);
         $content->rewind();
         $streams = [ new HeaderStream($this->part), $content ];

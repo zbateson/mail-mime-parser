@@ -49,7 +49,7 @@ class Message extends MimePart
         HeaderFactory $headerFactory,
         PartBuilder $partBuilder,
         MessageHelper $messageHelper,
-        StreamInterface $stream,
+        StreamInterface $stream = null,
         StreamInterface $contentStream = null
     ) {
         parent::__construct(
@@ -385,7 +385,7 @@ class Message extends MimePart
         if ($filename === null) {
             $filename = 'file' . uniqid();
         }
-        $part = $this->createPartForAttachment($this, $mimeType, $filename, $disposition);
+        $part = $this->messageHelper->createPartForAttachment($this, $mimeType, $filename, $disposition);
         $part->setContent($stringOrHandle);
         $this->addChild($part);
     }
@@ -407,5 +407,80 @@ class Message extends MimePart
             $filename = basename($file);
         }
         $this->addAttachmentPart($handle, $mimeType, $filename, $disposition);
+    }
+
+    /**
+     * Returns a string containing the entire body of a signed message for
+     * verification or calculating a signature.
+     *
+     * @return string or null if the message doesn't have any children, or the
+     *      child returns null for getHandle
+     */
+    public function getSignedMessageAsString()
+    {
+        $child = $this->getChild(0);
+        if ($child !== null && $child->getHandle() !== null) {
+            $normalized = preg_replace(
+                '/\r\n|\r|\n/',
+                "\r\n",
+                stream_get_contents($child->getHandle())
+            );
+            return $normalized;
+        }
+        return null;
+    }
+
+    /**
+     * Returns the signature part of a multipart/signed message or null.
+     *
+     * The signature part is determined to always be the 2nd child of a
+     * multipart/signed message, the first being the 'body'.
+     *
+     * Using the 'protocol' parameter of the Content-Type header is unreliable
+     * in some instances (for instance a difference of x-pgp-signature versus
+     * pgp-signature).
+     *
+     * @return MimePart
+     */
+    public function getSignaturePart()
+    {
+        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
+        if (strcasecmp($contentType, 'multipart/signed') === 0) {
+            return $this->getChild(1);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Turns the message into a multipart/signed message, moving the actual
+     * message into a child part, sets the content-type of the main message to
+     * multipart/signed and adds an empty signature part as well.
+     *
+     * After calling setAsMultipartSigned, call get
+     *
+     * @param string $micalg The Message Integrity Check algorithm being used
+     * @param string $protocol The mime-type of the signature body
+     */
+    public function setAsMultipartSigned($micalg, $protocol)
+    {
+        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
+        if (strcasecmp($contentType, 'multipart/signed') !== 0) {
+            $this->messageHelper->setMessageAsMultipartSigned($this, $micalg, $protocol);
+        }
+        $this->messageHelper->overwrite8bitContentEncoding($this);
+        $this->messageHelper->ensureHtmlPartFirstForSignedMessage($this);
+        $this->setSignature('Not set');
+    }
+
+    /**
+     * Sets the signature body of the message to the passed $body for a
+     * multipart/signed message.
+     *
+     * @param string $body
+     */
+    public function setSignature($body)
+    {
+        $this->messageHelper->setSignature($this, $body);
     }
 }

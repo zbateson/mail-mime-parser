@@ -14,7 +14,6 @@ use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use ZBateson\MailMimeParser\SignedMessage;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -49,24 +48,16 @@ class MessageFactory extends MimePartFactory
 
     /**
      * Constructs a new Message object and returns it
-     * 
-     * @param StreamInterface $stream
+     *
      * @param PartBuilder $partBuilder
+     * @param StreamInterface $stream
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function newInstance(StreamInterface $stream, PartBuilder $partBuilder)
+    public function newInstance(PartBuilder $partBuilder, StreamInterface $stream = null)
     {
-        if (strcasecmp($partBuilder->getContentType(), 'multipart/signed')) {
-            return new SignedMessage(
-                $this->partStreamFilterManagerFactory->newInstance(),
-                $this->streamFactory,
-                $this->partFilterFactory,
-                $this->headerFactory,
-                $partBuilder,
-                $this->messageHelper,
-                $stream,
-                $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
-            );
+        $contentStream = null;
+        if ($stream !== null) {
+            $contentStream = $this->streamFactory->getLimitedContentStream($stream, $partBuilder);
         }
         return new Message(
             $this->partStreamFilterManagerFactory->newInstance(),
@@ -76,7 +67,7 @@ class MessageFactory extends MimePartFactory
             $partBuilder,
             $this->messageHelper,
             $stream,
-            $this->streamFactory->getLimitedContentStream($stream, $partBuilder)
+            $contentStream
         );
     }
 }

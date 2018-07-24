@@ -5,6 +5,7 @@ use PHPUnit_Framework_TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
+use GuzzleHttp\Psr7;
 
 /**
  * Description of EmailFunctionalTest
@@ -17,7 +18,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 {
     private $parser;
     private $messageDir;
-    
+
     // useful for testing an actual signed message with external tools -- the
     // tests may actually fail with this set to true though, as it always
     // tries to sign rather than verify a signature
@@ -150,7 +151,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             $this->runPartsTests($message, $props['parts'], $failMessage);
         }
     }
-    
+
     private function runPartsTests($part, array $types, $failMessage)
     {
         $this->assertNotNull($part, $failMessage);
@@ -1356,18 +1357,17 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'text' => 'HasenundFrosche.txt'
         ], 'Failed to parse m0001 from a string');
     }
-    
+
     public function testVerifySignedEmailm4001()
     {
         $handle = fopen($this->messageDir . '/m4001.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
 
-        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
-    
+
     public function testParseEmailm4001()
     {
         $this->runEmailTest('m4001', [
@@ -1394,8 +1394,7 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
         $handle = fopen($this->messageDir . '/m4002.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
-        
-        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1421,14 +1420,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             ],
         ]);
     }
-    
+
     public function testVerifySignedEmailm4003()
     {
         $handle = fopen($this->messageDir . '/m4003.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
-        
-        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1454,14 +1452,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             ],
         ]);
     }
-    
+
     public function testVerifySignedEmailm4004()
     {
         $handle = fopen($this->messageDir . '/m4004.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
-        
-        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1558,14 +1555,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
             'attachments' => 1,
         ]);
     }
-    
+
     public function testVerifySignedEmailm4008()
     {
         $handle = fopen($this->messageDir . '/m4008.txt', 'r');
         $message = $this->parser->parse($handle);
         fclose($handle);
-        
-        $this->assertInstanceOf('ZBateson\MailMimeParser\SignedMessage', $message);
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1589,5 +1585,865 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                 'body' => '9f5c560f86b607c9087b84e9baa98189'
             ],
         ]);
+    }
+
+    public function testRewriteEmailContentm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $content = $message->getTextPart();
+        $content->setRawHeader('Content-Type', "text/html;\r\n\tcharset=\"iso-8859-1\"");
+        $test = '<span>This is my simple test</span>';
+        $content->setContent($test);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $c2 = $messageWritten->getHtmlPart();
+        $this->assertEquals($test, $c2->getContent());
+    }
+
+    public function testRewriteEmailAttachmentm2004()
+    {
+        $handle = fopen($this->messageDir . '/m2004.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $att = $message->getAttachmentPart(0);
+        $att->setRawHeader(
+            'Content-Disposition',
+            $att->getHeaderValue('Content-Disposition') . '; filename="greenball.png"'
+        );
+        $green = fopen($this->messageDir . '/files/greenball.png', 'r');
+        $att->attachContentStream(Psr7\stream_for($green));
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m2004", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $a2 = $messageWritten->getAttachmentPart(0);
+        $this->assertEquals($a2->getHeaderParameter('Content-Disposition', 'filename'), 'greenball.png');
+        $this->assertEquals(
+            file_get_contents($this->messageDir . '/files/greenball.png'),
+            $a2->getContent()
+        );
+    }
+
+    public function testRemoveAttachmentPartm0013()
+    {
+        $handle = fopen($this->messageDir . '/m0013.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'attachments' => 2
+        ];
+
+        $message->removeAttachmentPart(0);
+
+        $test1 = $props;
+        $test1['attachments'] = 1;
+
+        $this->assertEquals(1, $message->getAttachmentCount());
+        $att = $message->getAttachmentPart(0);
+        $this->assertEquals('redball.png', $att->getHeaderParameter('Content-Disposition', 'filename'));
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0013');
+    }
+
+    public function testRemoveContentPartsm0014()
+    {
+        $handle = fopen($this->messageDir . '/m0014.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->removeTextPart();
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+        ];
+
+        $test1 = $props;
+        unset($test1['text']);
+        $this->assertNull($message->getTextPart());
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0014');
+    }
+
+    public function testRemoveTextPartm0020()
+    {
+        $handle = fopen($this->messageDir . '/m0020.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+        ];
+
+        $test1 = $props;
+        unset($test1['text']);
+
+        $message->removeTextPart();
+        $this->assertNull($message->getTextPart());
+        $this->runEmailTestForMessage($message, $test1, 'failed removing text part from m0020');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rm_m0020", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for rm_m0020';
+        $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+    }
+
+    public function testRemoveAllHtmlPartsm0020()
+    {
+        $handle = fopen($this->messageDir . '/m0020.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+        ];
+
+        $test1 = $props;
+        unset($test1['html']);
+
+        $message->removeAllHtmlParts();
+        $this->assertNull($message->getHtmlPart());
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0020');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rmh_m0020", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for rmh_m0020';
+        $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+    }
+
+    public function testRemoveHtmlPartm0020()
+    {
+        $handle = fopen($this->messageDir . '/m0020.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+        ];
+
+        $test1 = $props;
+        unset($test1['html']);
+
+        $firstHtmlPart = $message->getHtmlPart();
+        $secondHtmlPart = $message->getHtmlPart(1);
+        $thirdHtmlPart = $message->getHtmlPart(2);
+
+        $secondContent = $secondHtmlPart->getContent();
+
+        $message->removeHtmlPart();
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNotEquals($firstHtmlPart, $message->getHtmlPart());
+        $this->assertEquals($secondHtmlPart, $message->getHtmlPart());
+        $this->assertEquals($thirdHtmlPart, $message->getHtmlPart(1));
+        $message->removeHtmlPart(1);
+        $this->assertEquals($secondHtmlPart, $message->getHtmlPart());
+        $this->assertNull($message->getHtmlPart(1));
+        $this->runEmailTestForMessage($message, $test1, 'failed removing html content parts from m0020');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rmho_m0020", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for rmho_m0020';
+        $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+
+        $this->assertNotNull($messageWritten->getHtmlPart());
+        $this->assertEquals($secondContent, $messageWritten->getHtmlContent());
+
+        $this->assertNotNull($message->getPartByMimeType('multipart/alternative'));
+        $message->removeHtmlPart();
+        $this->assertNull($message->getHtmlPart());
+        $this->assertNull($message->getPartByMimeType('multipart/alternative'));
+        $tmpSaved2 = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rmha_m0020", 'w+');
+        $message->save($tmpSaved2);
+        rewind($tmpSaved2);
+
+        $messageWritten2 = $this->parser->parse($tmpSaved2);
+        fclose($tmpSaved2);
+        $failMessage = 'Failed while parsing saved message for rmha_m0020';
+        $this->runEmailTestForMessage($messageWritten2, $test1, $failMessage);
+
+        $this->assertNotNull($messageWritten->getHtmlPart());
+        $this->assertEquals($secondContent, $messageWritten->getHtmlContent());
+    }
+
+    public function testAddHtmlPartRemoveTextPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $str = $message->getTextContent();
+        $message->setHtmlPart($str, 'utf8');
+        $this->assertNotNull($message->getTextPart());
+        $this->assertNotNull($message->getHtmlPart());
+
+        $message->removeTextPart();
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNull($message->getTextPart());
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'html' => 'HasenundFrosche.txt'
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding html part and removing text part from m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/apr_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+
+    public function testRemoveContentAndAttachmentPartsm0015()
+    {
+        $handle = fopen($this->messageDir . '/m0015.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->removeHtmlPart();
+        $this->assertNull($message->getHtmlPart());
+        $this->assertEquals(2, $message->getAttachmentCount());
+        $message->removeAttachmentPart(0);
+        $this->assertEquals(1, $message->getAttachmentCount());
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+        ];
+
+        $test1 = $props;
+        unset($test1['html']);
+        $test1['attachments'] = 1;
+        $att = $message->getAttachmentPart(0);
+        $this->assertEquals('redball.png', $att->getHeaderParameter('Content-Disposition', 'filename'));
+
+        $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0015');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rm_m0015", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m0015';
+        $this->assertNull($messageWritten->getHtmlPart());
+        $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
+    }
+
+    public function testAddHtmlContentPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $this->assertNotNull($message->getTextPart());
+        $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNotNull($message->getTextPart());
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrosche.txt',
+            'html' => 'hareandtortoise.txt',
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testAddTextAndHtmlContentPartm0013()
+    {
+        $handle = fopen($this->messageDir . '/m0013.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $this->assertNull($message->getTextPart());
+        $message->setTextPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2
+        ];
+
+        $this->assertNotNull($message->getHtmlPart());
+        $this->assertNotNull($message->getTextPart());
+        $this->runEmailTestForMessage($message, $props, 'failed adding HTML and Text parts to m0013');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0013", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0013';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testAddTextAndHtmlContentPartm0018()
+    {
+        $handle = fopen($this->messageDir . '/m0018.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
+        $this->assertTrue($message->isMime());
+        $this->assertNotNull($message->getTextPart());
+        $this->assertNotNull($message->getHtmlPart());
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 3,
+        ];
+
+        $this->assertNotNull($message->getHtmlPart());
+        $this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0018');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/add_m0018", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testAddAttachmentPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPart(
+            file_get_contents($this->messageDir . '/files/blueball.png'),
+            'image/png',
+            'blueball.png'
+        );
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrosche.txt',
+            'attachments' => 1,
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/redball.png',
+            'image/png'
+        );
+        $props['attachments'] = 2;
+
+        // due to what seems to be a bug in hhvm, after stream_copy_to_stream is
+        // called in MimePart::copyContentStream, the CharsetStreamFilter filter
+        // is no longer called on the stream, resulting in a failure here on the
+        // next test
+        //$this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att2_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for second added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testAddLargeAttachmentPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/bin-bashy.jpg',
+            'image/jpeg'
+        );
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrosche.txt',
+            'attachments' => 1,
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding large attachment part to m0001');
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/attl_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for adding a large attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+
+        $signableContent = $message->getSignedMessageAsString();
+        //$signature = md5($signableContent);
+
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0001", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertNotEmpty($signableContent);
+        $this->assertTrue(strpos(
+            preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)),
+            $signableContent
+        ) !== false);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($signableContent, $testString);
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrosche.txt',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm0014()
+    {
+        $handle = fopen($this->messageDir . '/m0014.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+
+        $this->assertEquals('text/html', $message->getHtmlPart()->getHeaderValue('Content-Type'));
+        $signableContent = $message->getSignedMessageAsString();
+
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0014", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0014", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0014';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm0015()
+    {
+        $handle = fopen($this->messageDir . '/m0015.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+
+        $this->assertEquals(2, $message->getChildCount());
+        $this->assertEquals('multipart/mixed', strtolower($message->getChild(0)->getHeaderValue('Content-Type')));
+
+        $signableContent = $message->getSignedMessageAsString();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0015", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0015", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0015';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm0018()
+    {
+        $handle = fopen($this->messageDir . '/m0018.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNull($message->getHtmlPart());
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $signableContent = $message->getSignedMessageAsString();
+
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0018", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0018", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm0019()
+    {
+        $handle = fopen($this->messageDir . '/m0019.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $this->assertNotNull($message->getHtmlPart());
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $signableContent = $message->getSignedMessageAsString();
+
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m0019", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m0019", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to signed part sig_m0019';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Joe Blow',
+                'email' => 'jblow@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'html' => 'hareandtortoise.txt',
+            'attachments' => 2,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm1005()
+    {
+        $handle = fopen($this->messageDir . '/m1005.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $signableContent = $message->getSignedMessageAsString();
+
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m1005", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m1005", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added HTML content to m1005';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'dwsauder@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Netscape Messenger 4.7)',
+            'html' => 'HasenundFrosche.txt',
+            'attachments' => 4,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 }

@@ -82,6 +82,7 @@ class MailMimeParser
 
         Psr7\copy_to_stream($stream, $copy);
         $copy->rewind();
+
         // don't close it when $stream gets destroyed
         $stream->detach();
         $parser = $this->di->newMessageParser();

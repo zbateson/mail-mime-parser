@@ -47,7 +47,7 @@ class UUEncodedPart extends NonMimePart
         PartStreamFilterManager $partStreamFilterManager,
         StreamFactory $streamFactory,
         PartBuilder $partBuilder,
-        StreamInterface $stream,
+        StreamInterface $stream = null,
         StreamInterface $contentStream = null
     ) {
         parent::__construct($partStreamFilterManager, $streamFactory, $stream, $contentStream);

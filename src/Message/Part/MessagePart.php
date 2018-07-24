@@ -70,7 +70,7 @@ abstract class MessagePart
     public function __construct(
         PartStreamFilterManager $partStreamFilterManager,
         StreamFactory $streamFactory,
-        StreamInterface $stream,
+        StreamInterface $stream = null,
         StreamInterface $contentStream = null
     ) {
         $this->partStreamFilterManager = $partStreamFilterManager;
@@ -196,6 +196,7 @@ abstract class MessagePart
         if ($this->stream === null) {
             return $this->streamFactory->newMessagePartStream($this);
         }
+        $this->stream->rewind();
         return $this->stream;
     }
 
@@ -334,7 +335,7 @@ abstract class MessagePart
     /**
      * Detaches and closes the content stream.
      */
-    protected function detachContentStream()
+    public function detachContentStream()
     {
         $this->contentStream = null;
         $this->partStreamFilterManager->setStream(null);

@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use GuzzleHttp\Psr7\CachingStream;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\StreamDecorators\SeekingLimitStream;
 use ZBateson\StreamDecorators\Base64Stream;
@@ -15,6 +14,7 @@ use ZBateson\StreamDecorators\UUStream;
 use ZBateson\StreamDecorators\CharsetStream;
 use ZBateson\StreamDecorators\NonClosingStream;
 use ZBateson\StreamDecorators\PregReplaceFilterStream;
+use ZBateson\MailMimeParser\Message\Part\MessagePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
@@ -62,26 +62,24 @@ class StreamFactory
 
     public function newBase64Stream(StreamInterface $stream)
     {
-        return new CachingStream(
-            new Base64Stream(
-                new PregReplaceFilterStream($stream, '/[^a-zA-Z0-9\/\+=]/', '')
-            )
+        return new Base64Stream(
+            new PregReplaceFilterStream($stream, '/[^a-zA-Z0-9\/\+=]/', '')
         );
     }
 
     public function newQuotedPrintableStream(StreamInterface $stream)
     {
-        return new CachingStream(new QuotedPrintableStream($stream));
+        return new QuotedPrintableStream($stream);
     }
 
     public function newUUStream(StreamInterface $stream)
     {
-        return new CachingStream(new UUStream($stream));
+        return new UUStream($stream);
     }
 
     public function newCharsetStream(StreamInterface $stream, $fromCharset, $toCharset)
     {
-        return new CachingStream(new CharsetStream($stream, $fromCharset, $toCharset));
+        return new CharsetStream($stream, $fromCharset, $toCharset);
     }
 
     public function newMessagePartStream(MessagePart $part)

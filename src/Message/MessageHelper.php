@@ -6,11 +6,15 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use GuzzleHttp\Psr7;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
+use ZBateson\MailMimeParser\Message\Part\ParentPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -51,30 +55,49 @@ class MessageHelper
     }
 
     /**
+     * Copies the passed $header from $from, to $to or sets the header to
+     * $default if it doesn't exist in $from.
+     *
+     * @param ParentHeaderPart $from
+     * @param ParentHeaderPart $to
+     * @param string $header
+     * @param string $default
+     */
+    private function copyHeader(ParentHeaderPart $from, ParentHeaderPart $to, $header, $default = null)
+    {
+        $fromHeader = $from->getHeader($header);
+        $set = ($fromHeader !== null) ? $fromHeader->getRawValue() : $default;
+        if ($set !== null) {
+            $to->setRawHeader($header, $set);
+        }
+    }
+
+    /**
      * Copies Content-Type, Content-Disposition and Content-Transfer-Encoding
      * headers from the $from header into the $to header. If the Content-Type
      * header isn't defined in $from, defaults to text/plain with utf-8 and
      * quoted-printable.
      *
-     * @param MimePart $from
-     * @param MimePart $to
+     * @param ParentHeaderPart $from
+     * @param ParentHeaderPart $to
      */
-    private function copyTypeHeadersFromPartToPart(MimePart $from, MimePart $to)
+    private function copyTypeHeadersAndContent(ParentHeaderPart $from, ParentHeaderPart $to, $move = false)
     {
-        $typeHeader = $from->getHeader('Content-Type');
-        if ($typeHeader !== null) {
-            $to->setRawHeader('Content-Type', $typeHeader->getRawValue());
-            $encodingHeader = $from->getHeader('Content-Transfer-Encoding');
-            if ($encodingHeader !== null) {
-                $to->setRawHeader('Content-Transfer-Encoding', $encodingHeader->getRawValue());
-            }
-            $dispositionHeader = $from->getHeader('Content-Disposition');
-            if ($dispositionHeader !== null) {
-                $to->setRawHeader('Content-Disposition', $dispositionHeader->getRawValue());
-            }
+        $this->copyHeader($from, $to, 'Content-Type', 'text/plain; charset=utf-8');
+        if ($from->getHeader('Content-Type') === null) {
+            $this->copyHeader($from, $to, 'Content-Transfer-Encoding', 'quoted-printable');
         } else {
-            $to->setRawHeader('Content-Type', 'text/plain; charset=utf-8');
-            $to->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+            $this->copyHeader($from, $to, 'Content-Transfer-Encoding');
+        }
+        $this->copyHeader($from, $to, 'Content-Disposition');
+        if ($from->hasContent()) {
+            $to->attachContentStream($from->getContentStream(), MailMimeParser::DEFAULT_CHARSET);
+        }
+        if ($move) {
+            $from->removeHeader('Content-Type');
+            $from->removeHeader('Content-Transfer-Encoding');
+            $from->removeHeader('Content-Disposition');
+            $from->detachContentStream();
         }
     }
 
@@ -115,12 +138,10 @@ class MessageHelper
      * @param MimePart $part
      * @return MimePart the newly-created MimePart
     */
-    private function createNewContentPartFromPart(MimePart $part)
+    private function createNewContentPartFrom(MimePart $part)
     {
         $mime = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
-        $this->copyTypeHeadersFromPartToBuilder($part, $mime);
-        $mime->attachContentStream($part->getContentStream());
-        $part->detachContentStream();
+        $this->copyTypeHeadersAndContent($part, $mime, true);
         return $mime;
     }
 
@@ -130,13 +151,19 @@ class MessageHelper
      */
     private function setMessageAsMixed(Message $message)
     {
-        if ($this->hasContent()) {
-            $part = $this->createNewContentPartFromPart($this);
+        if ($message->hasContent()) {
+            $part = $this->createNewContentPartFrom($message);
             $message->addChild($part, 0);
         }
         $this->setMimeHeaderBoundaryOnPart($message, 'multipart/mixed');
-        $this->removeHeader('Content-Transfer-Encoding');
-        $this->removeHeader('Content-Disposition');
+        $atts = $message->getAllAttachmentParts();
+        if (!empty($atts)) {
+            foreach ($atts as $att) {
+                $copy = Psr7\stream_for();
+                Psr7\copy_to_stream($att->getContentStream(), $copy);
+                $att->attachContentStream($copy);
+            }
+        }
     }
 
     /**
@@ -148,13 +175,11 @@ class MessageHelper
      */
     private function setMessageAsAlternative(Message $message)
     {
-        if ($this->hasContent()) {
-            $part = $this->createNewContentPartFromPart($this);
+        if ($message->hasContent()) {
+            $part = $this->createNewContentPartFrom($message);
             $message->addChild($part, 0);
         }
         $this->setMimeHeaderBoundaryOnPart($message, 'multipart/alternative');
-        $this->removeHeader('Content-Transfer-Encoding');
-        $this->removeHeader('Content-Disposition');
     }
 
     /**
@@ -251,11 +276,9 @@ class MessageHelper
      * @param MimePart $from
      * @param MimePart $to
      */
-    private function movePartContentAndChildrenToPart(MimePart $from, MimePart $to)
+    private function movePartContentAndChildren(MimePart $from, MimePart $to)
     {
-        $this->copyTypeHeadersFromPartToPart($from, $to);
-        $to->attachContentStream($from->getContentStream());
-        $from->detachContentStream();
+        $this->copyTypeHeadersAndContent($from, $to, true);
         foreach ($from->getChildParts() as $child) {
             $from->removePart($child);
             $to->addChild($child);
@@ -286,7 +309,7 @@ class MessageHelper
         }
         foreach ($parts as $part) {
             $from->removePart($part);
-            $this->addChild($part);
+            $message->addChild($part);
         }
     }
 
@@ -305,7 +328,7 @@ class MessageHelper
     {
         $message->removePart($replacement);
         if ($part === $message) {
-            $this->movePartContentAndChildrenToPart($replacement, $part);
+            $this->movePartContentAndChildren($replacement, $part);
             return;
         }
         $parent = $part->getParent();
@@ -322,7 +345,7 @@ class MessageHelper
     {
         if (!$message->isMime()) {
             if ($message->getAttachmentCount()) {
-                $message->setMessageAsMixed();
+                $this->setMessageAsMixed($message);
             } else {
                 $message->setRawHeader('Content-Type', "text/plain;\r\n\tcharset=\"iso-8859-1\"");
             }
@@ -387,8 +410,8 @@ class MessageHelper
     private function createContentPartForMimeType(Message $message, $mimeType, $charset)
     {
         $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-        $builder->setRawHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"");
-        $builder->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+        $builder->addHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"");
+        $builder->addHeader('Content-Transfer-Encoding', 'quoted-printable');
         $this->enforceMime($message);
         $mimePart = $builder->createMessagePart();
 
@@ -420,7 +443,7 @@ class MessageHelper
             $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
             $builder->addHeader('Content-Transfer-Encoding', 'base64');
             if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
-                $this->setMessageAsMixed();
+                $this->setMessageAsMixed($message);
             }
             $builder->addHeader('Content-Type', "$mimeType;\r\n\tname=\"$safe\"");
             $builder->addHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$safe\"");
@@ -449,7 +472,7 @@ class MessageHelper
      */
     public function removeAllContentPartsByMimeType(Message $message, $mimeType, $keepOtherContent = false)
     {
-        $alt = $this->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
+        $alt = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         if ($alt !== null) {
             return $this->removeAllContentPartsFromAlternative($message, $mimeType, $alt, $keepOtherContent);
         }
@@ -502,5 +525,92 @@ class MessageHelper
             $part->setRawHeader('Content-Type', "$contentType;\r\n\tcharset=\"$charset\"");
         }
         $part->setContent($stringOrHandle);
+    }
+
+    /**
+     * This function makes space by moving the main message part down one level.
+     *
+     * The content-type, content-disposition and content-transfer-encoding
+     * headers are copied from this message to the newly created part, the
+     * resource handle is moved and detached, any attachments and content parts
+     * with parents set to this message get their parents set to the newly
+     * created part.
+     */
+    public function setMessageAsMultipartSigned(Message $message, $micalg, $protocol)
+    {
+        $this->enforceMime($message);
+        $messagePart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+        $this->movePartContentAndChildren($message, $messagePart);
+        $message->addChild($messagePart);
+
+        $boundary = $this->getUniqueBoundary('multipart/signed');
+        $message->setRawHeader(
+            'Content-Type',
+            "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
+        );
+    }
+
+    /**
+     * Sets the signature of the message to $body, creating a signature part if
+     * one doesn't exist.
+     *
+     * @param string $body
+     */
+    public function setSignature(Message $message, $body)
+    {
+        $signedPart = $message->getSignaturePart();
+        if ($signedPart === null) {
+            $signedPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+            $message->addChild($signedPart);
+        }
+        $signedPart->setRawHeader(
+            'Content-Type',
+            $message->getHeaderParameter('Content-Type', 'protocol')
+        );
+        $signedPart->setContent($body);
+    }
+
+    /**
+     * Loops over parts of this message and sets the content-transfer-encoding
+     * header to quoted-printable for text/* mime parts, and to base64
+     * otherwise for parts that are '8bit' encoded.
+     *
+     * Used for multipart/signed messages which doesn't support 8bit transfer
+     * encodings.
+     */
+    public function overwrite8bitContentEncoding(Message $message)
+    {
+        $parts = $message->getAllParts(new PartFilter([
+            'headers' => [ PartFilter::FILTER_INCLUDE => [
+                'Content-Transfer-Encoding' => '8bit'
+            ] ]
+        ]));
+        foreach ($parts as $part) {
+            $contentType = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+            if ($contentType === 'text/plain' || $contentType === 'text/html') {
+                $part->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+            } else {
+                $part->setRawHeader('Content-Transfer-Encoding', 'base64');
+            }
+        }
+    }
+
+    /**
+     * Ensures a non-text part comes first in a signed multipart/alternative
+     * message as some clients seem to prefer the first content part if the
+     * client doesn't understand multipart/signed.
+     */
+    public function ensureHtmlPartFirstForSignedMessage(Message $message)
+    {
+        $alt = $message->getPartByMimeType('multipart/alternative');
+        if ($alt !== null && $alt instanceof ParentPart) {
+            $cont = $this->getContentPartContainerFromAlternative('text/html', $alt);
+            $children = $alt->getChildParts();
+            $pos = array_search($cont, $children, true);
+            if ($pos !== false && $pos !== 0) {
+                $alt->removePart($children[0]);
+                $alt->addChild($children[0]);
+            }
+        }
     }
 }

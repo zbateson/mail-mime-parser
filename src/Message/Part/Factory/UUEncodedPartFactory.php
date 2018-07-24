@@ -20,18 +20,24 @@ class UUEncodedPartFactory extends MessagePartFactory
     /**
      * Constructs a new UUEncodedPart object and returns it
      * 
-     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
-     * @return \ZBateson\MailMimeParser\Message\UUEncodedPartPart
+     * @param StreamInterface $messageStream
+     * @return \ZBateson\MailMimeParser\Message\Part\NonMimePart
      */
-    public function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder)
+    public function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null)
     {
+        $partStream = null;
+        $contentStream = null;
+        if ($messageStream !== null) {
+            $partStream = $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder);
+            $contentStream = $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder);
+        }
         return new UUEncodedPart(
             $this->partStreamFilterManagerFactory->newInstance(),
             $this->streamFactory,
             $partBuilder,
-            $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder),
-            $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder)
+            $partStream,
+            $contentStream
         );
     }
 }

@@ -114,9 +114,9 @@ abstract class MessagePartFactory
     /**
      * Constructs a new MessagePart object and returns it
      * 
-     * @param StreamInterface $messageStream
      * @param PartBuilder $partBuilder
+     * @param StreamInterface $messageStream
      * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
      */
-    public abstract function newInstance(StreamInterface $messageStream, PartBuilder $partBuilder);
+    public abstract function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null);
 }
