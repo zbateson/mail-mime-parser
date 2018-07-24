@@ -179,9 +179,6 @@ class PartStreamFilterManager
      */
     public function reset()
     {
-        if ($this->filteredStream !== null && $this->filteredStream !== $this->stream) {
-            $this->filteredStream->close();
-        }
         $this->encoding = [
             'type' => null,
             'filter' => null
@@ -191,6 +188,7 @@ class PartStreamFilterManager
             'to' => null,
             'filter' => null
         ];
+        $this->stream->rewind();
         $this->filteredStream = $this->stream;
     }
     

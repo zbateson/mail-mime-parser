@@ -442,7 +442,7 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
 
         $this->mockMessagePartFactory->expects($this->once())
             ->method('newInstance')
-            ->with($stream)
+            ->with($instance, $stream)
             ->willReturn(true);
         $this->assertTrue($instance->createMessagePart($stream));
     }

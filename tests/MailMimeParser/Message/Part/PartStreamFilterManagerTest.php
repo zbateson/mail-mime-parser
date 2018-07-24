@@ -3,6 +3,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit_Framework_TestCase;
 use GuzzleHttp\Psr7;
+use ZBateson\StreamDecorators\NonClosingStream;
 
 /**
  * PartStreamFilterManagerTest
@@ -33,7 +34,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
-        $this->assertSame($stream, $this->partStreamFilterManager->getContentStream('quoted-printable', null, null));
+        $managerStream = $this->partStreamFilterManager->getContentStream('quoted-printable', null, null);
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
     }
     
     public function testAttachBase64Decoder()
@@ -44,7 +47,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
-        $this->assertSame($stream, $this->partStreamFilterManager->getContentStream('base64', null, null));
+        $managerStream = $this->partStreamFilterManager->getContentStream('base64', null, null);
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
     }
     
     public function testAttachUUEncodeDecoder()
@@ -55,7 +60,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             ->with($stream)
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
-        $this->assertSame($stream, $this->partStreamFilterManager->getContentStream('x-uuencode', null, null));
+        $managerStream = $this->partStreamFilterManager->getContentStream('x-uuencode', null, null);
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
     }
     
     public function testAttachCharsetConversionDecoder()
@@ -66,7 +73,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             ->with($stream, 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
         $this->partStreamFilterManager->setStream($stream);
-        $this->assertSame($stream, $this->partStreamFilterManager->getContentStream(null, 'US-ASCII', 'UTF-8'));
+        $managerStream = $this->partStreamFilterManager->getContentStream(null, 'US-ASCII', 'UTF-8');
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
     }
     
     public function testReAttachTransferEncodingDecoder()
@@ -87,14 +96,14 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->partStreamFilterManager->setStream($stream);
 
         $manager = $this->partStreamFilterManager;
-        $this->assertSame($stream2, $manager->getContentStream('x-uuencode', null, null));
-        $this->assertSame($stream2, $manager->getContentStream('x-uuencode', null, null));
-        $this->assertSame($stream2, $manager->getContentStream('x-uuencode', null, null));
+        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
 
-        $this->assertSame($stream, $manager->getContentStream('quoted-printable', null, null));
-        $this->assertSame($stream, $manager->getContentStream('quoted-printable', null, null));
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
 
-        $this->assertSame($stream3, $manager->getContentStream('x-uuencode', null, null));
+        $this->assertEquals('test3', $manager->getContentStream('x-uuencode', null, null)->getContents());
     }
     
     public function testReAttachCharsetConversionDecoder()
@@ -112,12 +121,12 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->partStreamFilterManager->setStream($stream);
 
         $manager = $this->partStreamFilterManager;
-        $this->assertSame($stream, $manager->getContentStream(null, 'US-ASCII', 'UTF-8'));
-        $this->assertSame($stream, $manager->getContentStream(null, 'US-ASCII', 'UTF-8'));
-        $this->assertSame($stream, $manager->getContentStream(null, 'US-ASCII', 'WINDOWS-1252'));
-        $this->assertSame($stream, $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252'));
-        $this->assertSame($stream, $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252'));
-        $this->assertSame($stream, $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8'));
+        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8')->getContents());
     }
     
     public function testAttachCharsetConversionAndTransferEncodingDecoder()
@@ -125,7 +134,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $stream = Psr7\stream_for('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
-            ->with($stream, 'US-ASCII', 'UTF-8')
+            ->with($this->anything(), 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
@@ -134,9 +143,9 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->partStreamFilterManager->setStream($stream);
 
         $manager = $this->partStreamFilterManager;
-        $this->assertSame($stream, $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8'));
-        $this->assertSame($stream, $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8'));
-        $this->assertSame($stream, $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8'));
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
     }
     
     /*public function testReset()

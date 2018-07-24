@@ -16,13 +16,18 @@ use GuzzleHttp\Psr7\StreamWrapper;
 class MessagePartTest extends PHPUnit_Framework_TestCase
 {
     protected $partStreamFilterManager;
+    protected $streamFactory;
     
     protected function setUp()
     {
         $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
+        $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->partStreamFilterManager = $psf;
+        $this->streamFactory = $sf;
     }
     
     private function getMessagePart($handle = 'habibi', $contentHandle = null)
@@ -39,7 +44,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         }
         return $this->getMockForAbstractClass(
             'ZBateson\MailMimeParser\Message\Part\MessagePart',
-            [$this->partStreamFilterManager, Psr7\stream_for($handle), $contentHandle]
+            [ $this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle ]
         );
     }
     

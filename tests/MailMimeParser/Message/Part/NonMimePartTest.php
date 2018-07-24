@@ -19,7 +19,10 @@ class NonMimePartTest extends PHPUnit_Framework_TestCase
         $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $part = new NonMimePart($mgr, Psr7\stream_for('blah'));
+        $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $part = new NonMimePart($mgr, $sf);
         $this->assertTrue($part->isTextPart());
         $this->assertFalse($part->isMime());
         $this->assertEquals('text/plain', $part->getContentType());
