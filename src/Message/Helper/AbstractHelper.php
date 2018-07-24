@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
 
 /**
- * Description of AbstractHelper
+ * Base class for message helpers.
  *
  * @author Zaahid Bateson
  */
