@@ -112,9 +112,9 @@ class MimePartTest extends PHPUnit_Framework_TestCase
     {
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
         $this->assertEquals(3, $part->getChildCount());
-        $this->assertEquals('child0', stream_get_contents($part->getChild(0)->getHandle()));
-        $this->assertEquals('child1', stream_get_contents($part->getChild(1)->getHandle()));
-        $this->assertEquals('child2', stream_get_contents($part->getChild(2)->getHandle()));
+        $this->assertEquals('child0', stream_get_contents($part->getChild(0)->getResourceHandle()));
+        $this->assertEquals('child1', stream_get_contents($part->getChild(1)->getResourceHandle()));
+        $this->assertEquals('child2', stream_get_contents($part->getChild(2)->getResourceHandle()));
         $children = [
             $part->getChild(0),
             $part->getChild(1),
@@ -138,11 +138,11 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertSame($children[1], $part->getPart(3));
         $this->assertSame($children[2], $part->getPart(4));
         
-        $this->assertEquals('habibi', stream_get_contents($part->getPart(0)->getHandle()));
-        $this->assertEquals('child0', stream_get_contents($part->getPart(1)->getHandle()));
-        $this->assertEquals('nested', stream_get_contents($part->getPart(2)->getHandle()));
-        $this->assertEquals('child1', stream_get_contents($part->getPart(3)->getHandle()));
-        $this->assertEquals('child2', stream_get_contents($part->getPart(4)->getHandle()));
+        $this->assertEquals('habibi', stream_get_contents($part->getPart(0)->getResourceHandle()));
+        $this->assertEquals('child0', stream_get_contents($part->getPart(1)->getResourceHandle()));
+        $this->assertEquals('nested', stream_get_contents($part->getPart(2)->getResourceHandle()));
+        $this->assertEquals('child1', stream_get_contents($part->getPart(3)->getResourceHandle()));
+        $this->assertEquals('child2', stream_get_contents($part->getPart(4)->getResourceHandle()));
         
         $allParts = [ $part, $children[0], $nested, $children[1], $children[2]];
         $this->assertEquals($allParts, $part->getAllParts());

@@ -56,7 +56,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->assertNull($messagePart->getContentResourceHandle());
         $this->assertNull($messagePart->getContent());
         $this->assertNull($messagePart->getParent());
-        $this->assertEquals('habibi', stream_get_contents($messagePart->getHandle()));
+        $this->assertEquals('habibi', stream_get_contents($messagePart->getResourceHandle()));
     }
     
     public function testPartStreamHandle()
@@ -64,8 +64,8 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $messagePart = $this->getMessagePart('mucha agua');
         $this->assertFalse($messagePart->hasContent());
         $this->assertNull($messagePart->getContentResourceHandle());
-        $this->assertNotNull($messagePart->getHandle());
-        $handle = $messagePart->getHandle();
+        $this->assertNotNull($messagePart->getResourceHandle());
+        $handle = $messagePart->getResourceHandle();
         $this->assertEquals('mucha agua', stream_get_contents($handle));
     }
     

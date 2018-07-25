@@ -202,7 +202,7 @@ abstract class MessagePart
      * 
      * @return resource the resource handle
      */
-    public function getHandle()
+    public function getResourceHandle()
     {
         return StreamWrapper::getResource($this->getStream());
     }
@@ -364,14 +364,14 @@ abstract class MessagePart
     }
 
     /**
-     * Sets the content of the part to the passed string.
+     * Sets the content of the part to the passed resource.
      *
-     * @param string|resource $stringOrHandle
+     * @param string|resource|StreamInterface $resource
      * @param string $charset
      */
-    public function setContent($stringOrHandle, $charset = MailMimeParser::DEFAULT_CHARSET)
+    public function setContent($resource, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $stream = Psr7\stream_for($stringOrHandle);
+        $stream = Psr7\stream_for($resource);
         $this->attachContentStream($stream, $charset);
         // this->onChange called in attachContentStream
     }
@@ -385,12 +385,10 @@ abstract class MessagePart
     {
         $message = $this->getStream();
         $message->rewind();
-        if (!($streamOrHandle instanceof StreamInterface)) {
-            $streamOrHandle = Psr7\stream_for($streamOrHandle);
-        }
-        Psr7\copy_to_stream($message, $streamOrHandle);
+        $stream = Psr7\stream_for($streamOrHandle);
+        Psr7\copy_to_stream($message, $stream);
         // don't close when out of scope
-        $streamOrHandle->detach();
+        $stream->detach();
     }
 
     /**

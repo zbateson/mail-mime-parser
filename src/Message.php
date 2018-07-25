@@ -310,15 +310,15 @@ class Message extends MimePart
      * $stringOrHandle is expected to be in UTF-8 regardless of the target
      * charset.
      *
-     * @param string|resource $stringOrHandle
+     * @param string|resource|StreamInterface $resource
      * @param string $charset
      */
-    public function setTextPart($stringOrHandle, $charset = 'UTF-8')
+    public function setTextPart($resource, $charset = 'UTF-8')
     {
         $this->messageHelperService
             ->getMultipartHelper()
             ->setContentPartForMimeType(
-                $this, 'text/plain', $stringOrHandle, $charset
+                $this, 'text/plain', $resource, $charset
             );
     }
 
@@ -331,15 +331,15 @@ class Message extends MimePart
      * $stringOrHandle is expected to be in UTF-8 regardless of the target
      * charset.
      *
-     * @param string|resource $stringOrHandle
+     * @param string|resource|StreamInterface $resource
      * @param string $charset
      */
-    public function setHtmlPart($stringOrHandle, $charset = 'UTF-8')
+    public function setHtmlPart($resource, $charset = 'UTF-8')
     {
         $this->messageHelperService
             ->getMultipartHelper()
             ->setContentPartForMimeType(
-                $this, 'text/html', $stringOrHandle, $charset
+                $this, 'text/html', $resource, $charset
             );
     }
 
@@ -462,8 +462,7 @@ class Message extends MimePart
      * Returns a string containing the entire body of a signed message for
      * verification or calculating a signature.
      *
-     * @return string or null if the message doesn't have any children, or the
-     *      child returns null for getHandle
+     * @return string or null if the message doesn't have any children
      */
     public function getSignedMessageAsString()
     {
