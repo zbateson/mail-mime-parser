@@ -89,6 +89,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
                 'getAllNonFilteredParts',
                 '__destruct',
                 'getContentResourceHandle',
+                'getContentStream',
                 'getContent',
                 'getStream',
                 'isTextPart',
@@ -167,7 +168,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         );
         
         $parts = $message->getAllParts();
-        $parts[1]->method('getContentResourceHandle')
+        $parts[1]->method('getContentStream')
             ->willReturn('oufa baloufa!');
         $parts[1]->method('getContent')
             ->willReturn('shabadabada...');
@@ -216,7 +217,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         );
         
         $parts = $message->getAllParts();
-        $parts[1]->method('getContentResourceHandle')
+        $parts[1]->method('getContentStream')
             ->willReturn('oufa baloufa!');
         $parts[1]->method('getContent')
             ->willReturn('shabadabada...');

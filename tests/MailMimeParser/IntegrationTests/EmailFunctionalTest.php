@@ -45,16 +45,16 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
     protected function assertTextContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null)
     {
-        $str = stream_get_contents($actualInputStream);
-        rewind($actualInputStream);
+        $str = $actualInputStream->getContents();
+        $actualInputStream->rewind();
         $text = mb_convert_encoding(file_get_contents($this->messageDir . '/files/' . $expectedInputFileName), 'UTF-8', 'ISO-8859-1');
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
 
     protected function assertHtmlContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null)
     {
-        $str = html_entity_decode(str_replace('&nbsp;', ' ', strip_tags(stream_get_contents($actualInputStream))));
-        rewind($actualInputStream);
+        $str = html_entity_decode(str_replace('&nbsp;', ' ', strip_tags($actualInputStream->getContents())));
+        $actualInputStream->rewind();
         $text = mb_convert_encoding(file_get_contents($this->messageDir . '/files/' . $expectedInputFileName), 'UTF-8', 'ISO-8859-1');
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
@@ -120,13 +120,13 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                     if ($attachment->getContentType() === 'text/html') {
                         $this->assertHtmlContentTypeEquals(
                             $name,
-                            $attachment->getContentResourceHandle(),
+                            $attachment->getContentStream(),
                             'HTML content is not equal'
                         );
                     } elseif ($attachment->isTextPart()) {
                         $this->assertTextContentTypeEquals(
                             $name,
-                            $attachment->getContentResourceHandle(),
+                            $attachment->getContentStream(),
                             'Text content is not equal'
                         );
                     } else {

@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
@@ -182,18 +183,35 @@ class Message extends MimePart
     }
 
     /**
-     * Returns a resource handle where the 'inline' text/plain content at the
-     * passed $index can be read or null if unavailable.
+     * Returns a Psr7 Stream for the 'inline' text/plain content at the passed
+     * $index, or null if unavailable.
      * 
      * @param int $index
      * @param string $charset
-     * @return resource
+     * @return StreamInterface
      */
     public function getTextStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         $textPart = $this->getTextPart($index);
         if ($textPart !== null) {
-            return $textPart->getContentResourceHandle($charset);
+            return $textPart->getContentStream($charset);
+        }
+        return null;
+    }
+
+    /**
+     * Returns a resource handle for the 'inline' text/plain content at the
+     * passed $index, or null if unavailable.
+     *
+     * @param int $index
+     * @param string $charset
+     * @return resource
+     */
+    public function getTextResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
+    {
+        $stream = $this->getTextStream($index, $charset);
+        if ($stream !== null) {
+            return StreamWrapper::getResource($stream);
         }
         return null;
     }
@@ -218,8 +236,8 @@ class Message extends MimePart
     }
 
     /**
-     * Returns a resource handle where the 'inline' text/html content at the
-     * passed $index can be read or null if unavailable.
+     * Returns a Psr7 Stream for the 'inline' text/html content at the passed
+     * $index, or null if unavailable.
      * 
      * @param int $index
      * @param string $charset
@@ -229,7 +247,24 @@ class Message extends MimePart
     {
         $htmlPart = $this->getHtmlPart($index);
         if ($htmlPart !== null) {
-            return $htmlPart->getContentResourceHandle($charset);
+            return $htmlPart->getContentStream($charset);
+        }
+        return null;
+    }
+
+    /**
+     * Returns a resource handle for the 'inline' text/html content at the
+     * passed $index, or null if unavailable.
+     *
+     * @param int $index
+     * @param string $charset
+     * @return resource
+     */
+    public function getHtmlResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
+    {
+        $stream = $this->getHtmlStream($index, $charset);
+        if ($stream !== null) {
+            return StreamWrapper::getResource($stream);
         }
         return null;
     }
