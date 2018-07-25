@@ -2469,4 +2469,101 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
+
+    public function testCreateSignedPartForEmailm4006()
+    {
+        $handle = fopen($this->messageDir . '/m4006.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+
+        $signableContent = $message->getSignedMessageAsString();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m4006", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m4006", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m4006';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Test Sender',
+                'email' => 'sender@email.test'
+            ],
+            'To' => [
+                'name' => 'Test Recipient',
+                'email' => 'recipient@email.test'
+            ],
+            'Subject' => 'Read: invitation',
+            'attachments' => 1,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartForEmailm4007()
+    {
+        $handle = fopen($this->messageDir . '/m4007.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+
+        $signableContent = $message->getSignedMessageAsString();
+        file_put_contents(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sigpart_m4007", $signableContent);
+        $signature = $this->getSignatureForContent($signableContent);
+        $message->setSignature($signature);
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/sig_m4007", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for m4007';
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($testString, $signableContent);
+        $this->assertEquals($this->getSignatureForContent($testString), $signature);
+
+        $props = [
+            'From' => [
+                'name' => 'Test Sender',
+                'email' => 'sender@email.test'
+            ],
+            'To' => [
+                'name' => 'Test Recipient',
+                'email' => 'recipient@email.test'
+            ],
+            'Subject' => 'Test multipart-digest',
+            'attachments' => 1,
+            'signed' => [
+                'protocol' => 'application/pgp-signature',
+                'micalg' => 'pgp-sha256',
+                'body' => $signature
+            ]
+        ];
+
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
 }
