@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7;
+
 /**
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
  *
@@ -21,6 +23,11 @@ namespace ZBateson\MailMimeParser;
 class MailMimeParser
 {
     /**
+     * @var string defines the default charset used by MessagePart.
+     */
+    const DEFAULT_CHARSET = 'UTF-8';
+
+    /**
      * @var \ZBateson\MailMimeParser\SimpleDi dependency injection container
      */
     protected $di;
@@ -31,6 +38,28 @@ class MailMimeParser
     public function __construct()
     {
         $this->di = SimpleDi::singleton();
+    }
+    
+    /**
+     * Sets the default charset used by MMP for strings returned by read
+     * operations on text content (e.g. MessagePart::getContentResourceHandle,
+     * getContent, etc...)
+     * 
+     * @param string $charset
+     */
+    public static function setDefaultCharset($charset)
+    {
+        self::$defaultCharset = $charset;
+    }
+    
+    /**
+     * Returns the default charset that will be used by MMP strings returned.
+     * 
+     * @return string
+     */
+    public static function getDefaultCharset()
+    {
+        return self::$defaultCharset;
     }
     
     /**
@@ -48,16 +77,15 @@ class MailMimeParser
      */
     public function parse($handleOrString)
     {
-        // $tempHandle is attached to $message, and closed in its destructor
-        $tempHandle = fopen('php://temp', 'r+');
-        if (is_string($handleOrString)) {
-            fwrite($tempHandle, $handleOrString);
-        } else {
-            stream_copy_to_stream($handleOrString, $tempHandle);
-        }
-        rewind($tempHandle);
+        $stream = Psr7\stream_for($handleOrString);
+        $copy = Psr7\stream_for(fopen('php://temp', 'r+'));
+
+        Psr7\copy_to_stream($stream, $copy);
+        $copy->rewind();
+
+        // don't close it when $stream gets destroyed
+        $stream->detach();
         $parser = $this->di->newMessageParser();
-        $message = $parser->parse($tempHandle);
-        return $message;
+        return $parser->parse($copy);
     }
 }

@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\StreamDecorators\Util\CharsetConverter;
+
 /**
  * Holds a single address or name/address pair.
  * 
@@ -26,12 +28,14 @@ class AddressPart extends ParameterPart
      * The passed $name may be mime-encoded.  $email is stripped of any
      * whitespace.
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $name
      * @param string $email
      */
-    public function __construct($name, $email)
+    public function __construct(CharsetConverter $charsetConverter, $name, $email)
     {
         parent::__construct(
+            $charsetConverter,
             $name,
             ''
         );

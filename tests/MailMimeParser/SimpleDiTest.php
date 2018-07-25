@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * Description of SimpleDiTest
  *
- * @group SimpleDiTest
+ * @group SimpleDi
  * @group Base
  * @covers ZBateson\MailMimeParser\SimpleDi
  * @author Zaahid Bateson
@@ -28,26 +28,11 @@ class SimpleDiTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($mp);
     }
     
-    public function testNewMessage()
+    public function testGetCharsetConverter()
     {
         $di = SimpleDi::singleton();
-        $m = $di->newMessage();
+        $m = $di->getCharsetConverter('ISO-8859-1', 'UTF-8');
         $this->assertNotNull($m);
-    }
-    
-    public function testNewCharsetConverter()
-    {
-        $di = SimpleDi::singleton();
-        $m = $di->newCharsetConverter('ISO-8859-1', 'UTF-8');
-        $this->assertNotNull($m);
-    }
-    
-    public function testGetPartFactory()
-    {
-        $di = SimpleDi::singleton();
-        $singleton = $di->getPartFactory();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $di->getPartFactory());
     }
     
     public function testGetHeaderFactory()
@@ -64,14 +49,6 @@ class SimpleDiTest extends PHPUnit_Framework_TestCase
         $singleton = $di->getHeaderPartFactory();
         $this->assertNotNull($singleton);
         $this->assertSame($singleton, $di->getHeaderPartFactory());
-    }
-    
-    public function testGetPartStreamRegistry()
-    {
-        $di = SimpleDi::singleton();
-        $singleton = $di->getPartStreamRegistry();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $di->getPartStreamRegistry());
     }
     
     public function testGetMimeLiteralPartFactory()

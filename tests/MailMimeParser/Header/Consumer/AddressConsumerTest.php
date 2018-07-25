@@ -2,8 +2,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of AddressEmailConsumerTest
@@ -20,10 +18,11 @@ class AddressConsumerTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $this->addressConsumer = AddressConsumer::getInstance($cs, $pf);
+        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
+        $pf = $this->getMock('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory', ['__toString'], [$charsetConverter]);
+        $mlpf = $this->getMock('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory', ['__toString'], [$charsetConverter]);
+        $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
+        $this->addressConsumer = new AddressConsumer($cs, $pf);
     }
     
     public function testConsumeEmail()

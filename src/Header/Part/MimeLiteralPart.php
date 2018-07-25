@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Stream\Helper\CharsetConverter;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Represents a single mime header part token, with the possibility of it being
@@ -21,7 +21,7 @@ class MimeLiteralPart extends LiteralPart
     /**
      * @var string regex pattern matching a mime-encoded part
      */
-    const MIME_PART_PATTERN = '=\?[A-Za-z\-_0-9]+\?[QBqb]\?[^\?]+\?=';
+    const MIME_PART_PATTERN = '=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?=';
     
     /**
      * @var bool set to true to ignore spaces before this part
@@ -34,14 +34,25 @@ class MimeLiteralPart extends LiteralPart
     protected $canIgnoreSpacesAfter = false;
     
     /**
+     * @var array maintains an array mapping rfc1766 language tags to parts of
+     * text in the value.
+     * 
+     * Each array element is an array containing two elements, one with key
+     * 'lang', and another with key 'value'.
+     */
+    protected $languages = [];
+    
+    /**
      * Decoding the passed token value if it's mime-encoded and assigns the
      * decoded value to a member variable. Sets canIgnoreSpacesBefore and
      * canIgnoreSpacesAfter.
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $token
      */
-    public function __construct($token)
+    public function __construct(CharsetConverter $charsetConverter, $token)
     {
+        parent::__construct($charsetConverter);
         $this->value = $this->decodeMime($token);
         // preg_match returns int
         $pattern = self::MIME_PART_PATTERN;
@@ -62,13 +73,36 @@ class MimeLiteralPart extends LiteralPart
     protected function decodeMime($value)
     {
         $pattern = self::MIME_PART_PATTERN;
+        // remove whitespace between two adjacent mime encoded parts
         $value = preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
-        $aMimeParts = preg_split("/($pattern)/", $value, -1, PREG_SPLIT_DELIM_CAPTURE);
+        // with PREG_SPLIT_DELIM_CAPTURE, matched and unmatched parts are returned
+        $aMimeParts = preg_split("/($pattern)/", $value, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         $ret = '';
         foreach ($aMimeParts as $entity) {
-            $ret .= $this->decodeMatchedEntity($entity);
+            $ret .= $this->decodeSplitPart($entity);
         }
         return $ret;
+    }
+    
+    /**
+     * Decodes a matched mime entity part into a string and returns it, after
+     * adding the string into the languages array.
+     * 
+     * @param string[] $matches
+     * @return string
+     */
+    private function decodeMatchedEntity($matches)
+    {
+        $body = $matches[4];
+        if (strtoupper($matches[3]) === 'Q') {
+            $body = quoted_printable_decode(str_replace('_', '=20', $body));
+        } else {
+            $body = base64_decode($body);
+        }
+        $language = $matches[2];
+        $decoded = $this->convertEncoding($body, $matches[1], true);
+        $this->addToLanguage($decoded, $language);
+        return $decoded;
     }
     
     /**
@@ -84,19 +118,14 @@ class MimeLiteralPart extends LiteralPart
      * @param string $entity
      * @return string
      */
-    private function decodeMatchedEntity($entity)
+    private function decodeSplitPart($entity)
     {
-        if (preg_match("/^=\?([A-Za-z\-_0-9]+)\?([QBqb])\?([^\?]+)\?=$/", $entity, $matches)) {
-            $body = $matches[3];
-            if (strtoupper($matches[2]) === 'Q') {
-                $body = quoted_printable_decode(str_replace('_', '=20', $body));
-            } else {
-                $body = base64_decode($body);
-            }
-            $converter = new CharsetConverter($matches[1], 'UTF-8');
-            return $converter->convert($body);
+        if (preg_match("/^=\?([A-Za-z\-_0-9]+)\*?([A-Za-z\-_0-9]+)?\?([QBqb])\?([^\?]+)\?=$/", $entity, $matches)) {
+            return $this->decodeMatchedEntity($matches);
         }
-        return $this->convertEncoding($entity);
+        $decoded = $this->convertEncoding($entity);
+        $this->addToLanguage($decoded);
+        return $decoded;
     }
     
     /**
@@ -123,5 +152,43 @@ class MimeLiteralPart extends LiteralPart
     public function ignoreSpacesAfter()
     {
         return $this->canIgnoreSpacesAfter;
+    }
+    
+    /**
+     * Adds the passed part into the languages array with the given language.
+     * 
+     * @param string $part
+     * @param string|null $language
+     */
+    protected function addToLanguage($part, $language = null)
+    {
+        $this->languages[] = [
+            'lang' => $language,
+            'value' => $part
+        ];
+    }
+    
+    /**
+     * Returns an array of parts mapped to languages in the header value, for
+     * instance the string:
+     * 
+     * 'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
+     * 
+     * Would be mapped in the returned array as follows:
+     * 
+     * ```php
+     * [
+     *     0 => [ 'lang' => null, 'value' => 'Hello and ' ],
+     *     1 => [ 'lang' => 'fr-be', 'value' => 'bonjour ' ],
+     *     3 => [ 'lang' => 'it', 'value' => 'mi amici' ],
+     *     4 => [ 'lang' => null, 'value' => ' Weolcome!' ]
+     * ]
+     * ```
+     * 
+     * @return string[][]
+     */
+    public function getLanguageArray()
+    {
+        return $this->languages;
     }
 }

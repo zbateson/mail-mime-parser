@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\Message\Part\MessagePart;
+use ZBateson\MailMimeParser\Message\Part\MimePart;
 use InvalidArgumentException;
 
 /**
@@ -55,14 +57,19 @@ class PartFilter
      * @var int an included filter must be included in a part
      */
     const FILTER_INCLUDE = 2;
-    
+
     /**
-     * @var int filters based on whether MimePart::isMultiPart is set
+     * @var int filters based on whether MessagePart::hasContent is true
+     */
+    private $hascontent = PartFilter::FILTER_OFF;
+
+    /**
+     * @var int filters based on whether MimePart::isMultiPart is true
      */
     private $multipart = PartFilter::FILTER_OFF;
     
     /**
-     * @var int filters based on whether MimePart::isTextPart is set
+     * @var int filters based on whether MessagePart::isTextPart is true
      */
     private $textpart = PartFilter::FILTER_OFF;
     
@@ -72,6 +79,11 @@ class PartFilter
      *      parent's 'protocol' parameter in its content-type header
      */
     private $signedpart = PartFilter::FILTER_EXCLUDE;
+    
+    /**
+     * @var string calculated hash of the filter
+     */
+    private $hashCode;
     
     /**
      * @var string[][] array of header rules.  The top-level contains keys of
@@ -86,16 +98,6 @@ class PartFilter
      * ```
      */
     private $headers = [];
-
-    /**
-     * @var string[] map of headers and default values if the header isn't set.
-     *      This allows text/plain to match a Content-Type header that hasn't
-     *      been set for instance.
-     */
-    private $defaultHeaderValues = [
-        'Content-Type' => 'text/plain',
-        'Content-Disposition' => 'inline',
-    ];
     
     /**
      * Convenience method to filter for a specific mime type.
@@ -166,7 +168,7 @@ class PartFilter
      */
     public function __construct(array $filter = [])
     {
-        $params = [ 'multipart', 'textpart', 'signedpart', 'headers' ];
+        $params = [ 'hascontent', 'multipart', 'textpart', 'signedpart', 'headers' ];
         foreach ($params as $param) {
             if (isset($filter[$param])) {
                 $this->__set($param, $filter[$param]);
@@ -231,7 +233,8 @@ class PartFilter
      */
     public function __set($name, $value)
     {
-        if ($name === 'multipart' || $name === 'textpart' || $name === 'signedpart') {
+        if ($name === 'hascontent' || $name === 'multipart'
+            || $name === 'textpart' || $name === 'signedpart') {
             $this->validateArgument(
                 $name,
                 $value,
@@ -268,49 +271,65 @@ class PartFilter
     {
         return $this->$name;
     }
-    
+
     /**
-     * Returns true if the passed MimePart fails the filter's multipart filter
-     * settings.
-     * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * Returns true if the passed MessagePart fails the filter's hascontent
+     * filter settings.
+     *
+     * @param MessagePart $part
      * @return bool
      */
-    private function failsMultiPartFilter(MimePart $part)
+    private function failsHasContentFilter(MessagePart $part)
     {
+        return ($this->hascontent === static::FILTER_EXCLUDE && $part->hasContent())
+            || ($this->hascontent === static::FILTER_INCLUDE && !$part->hasContent());
+    }
+    
+    /**
+     * Returns true if the passed MessagePart fails the filter's multipart filter
+     * settings.
+     * 
+     * @param MessagePart $part
+     * @return bool
+     */
+    private function failsMultiPartFilter(MessagePart $part)
+    {
+        if (!($part instanceof MimePart)) {
+            return $this->multipart !== static::FILTER_EXCLUDE;
+        }
         return ($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
             || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart());
     }
     
     /**
-     * Returns true if the passed MimePart fails the filter's textpart filter
+     * Returns true if the passed MessagePart fails the filter's textpart filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param MessagePart $part
      * @return bool
      */
-    private function failsTextPartFilter(MimePart $part)
+    private function failsTextPartFilter(MessagePart $part)
     {
         return ($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
             || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart());
     }
     
     /**
-     * Returns true if the passed MimePart fails the filter's signedpart filter
-     * settings.
+     * Returns true if the passed MessagePart fails the filter's signedpart
+     * filter settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param MessagePart $part
      * @return boolean
      */
-    private function failsSignedPartFilter(MimePart $part)
+    private function failsSignedPartFilter(MessagePart $part)
     {
         if ($this->signedpart === static::FILTER_OFF) {
             return false;
-        } elseif ($part->getParent() === null) {
+        } elseif (!$part->isMime() || $part->getParent() === null) {
             return ($this->signedpart === static::FILTER_INCLUDE);
         }
-        $partMimeType = $part->getHeaderValue('Content-Type');
-        $parentMimeType = $part->getParent()->getHeaderValue('Content-Type');
+        $partMimeType = $part->getContentType();
+        $parentMimeType = $part->getParent()->getContentType();
         $parentProtocol = $part->getParent()->getHeaderParameter('Content-Type', 'protocol');
         if (strcasecmp($parentMimeType, 'multipart/signed') === 0 && strcasecmp($partMimeType, $parentProtocol) === 0) {
             return ($this->signedpart === static::FILTER_EXCLUDE);
@@ -319,20 +338,50 @@ class PartFilter
     }
     
     /**
+     * Tests a single header value against $part, and returns true if the test
+     * fails.
+     * 
+     * @staticvar array $map
+     * @param MimePart $part
+     * @param int $type
+     * @param string $name
+     * @param string $header
+     * @return boolean
+     */
+    private function failsHeaderFor($part, $type, $name, $header)
+    {
+        $headerValue = null;
+        
+        static $map = [
+            'content-type' => 'getContentType',
+            'content-disposition' => 'getContentDisposition',
+            'content-transfer-encoding' => 'getContentTransferEncoding'
+        ];
+        $lower = strtolower($name);
+        if (isset($map[$lower])) {
+            $headerValue = call_user_func([$part, $map[$lower]]);
+        } elseif (!($part instanceof MimePart)) {
+            return ($type === static::FILTER_INCLUDE);
+        } else {
+            $headerValue = $part->getHeaderValue($name);
+        }
+        
+        return (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
+            || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0));
+    }
+    
+    /**
      * Returns true if the passed MimePart fails the filter's header filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
-    public function failsHeaderPartFilter(MimePart $part)
+    private function failsHeaderPartFilter(MessagePart $part)
     {
         foreach ($this->headers as $type => $values) {
             foreach ($values as $name => $header) {
-                $default = (isset($this->defaultHeaderValues[$name])) ? $this->defaultHeaderValues[$name] : null;
-                $headerValue = $part->getHeaderValue($name, $default);
-                if (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
-                    || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0)) {
+                if ($this->failsHeaderFor($part, $type, $name, $header)) {
                     return true;
                 }
             }
@@ -345,10 +394,10 @@ class PartFilter
      * MimePart passes all filter tests, true is returned.  Otherwise false is
      * returned.
      * 
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
      * @return boolean
      */
-    public function filter(MimePart $part)
+    public function filter(MessagePart $part)
     {
         return !($this->failsMultiPartFilter($part)
             || $this->failsTextPartFilter($part)

@@ -2,8 +2,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of SubjectConsumerTest
@@ -20,10 +18,11 @@ class SubjectConsumerTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $this->subjectConsumer = SubjectConsumer::getInstance($cs, $mlpf);
+        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
+        $pf = $this->getMock('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory', ['__toString'], [$charsetConverter]);
+        $mlpf = $this->getMock('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory', ['__toString'], [$charsetConverter]);
+        $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
+        $this->subjectConsumer = new SubjectConsumer($cs, $mlpf);
     }
     
     public function testConsumeTokens()

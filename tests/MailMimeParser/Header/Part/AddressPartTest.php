@@ -14,11 +14,18 @@ use PHPUnit_Framework_TestCase;
  */
 class AddressPartTest extends PHPUnit_Framework_TestCase
 {
+    private $charsetConverter;
+    
+    public function setUp()
+    {
+        $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+    }
+    
     public function testNameEmail()
     {
         $name = 'Julius Caeser';
         $email = 'gaius@altavista.com';
-        $part = new AddressPart($name, $email);
+        $part = new AddressPart($this->charsetConverter, $name, $email);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
     }
@@ -26,7 +33,7 @@ class AddressPartTest extends PHPUnit_Framework_TestCase
     public function testEmailSpacesStripped()
     {
         $email = "gaius julius\t\n caesar@altavista.com";
-        $part = new AddressPart('', $email);
+        $part = new AddressPart($this->charsetConverter, '', $email);
         $this->assertEquals('gaiusjuliuscaesar@altavista.com', $part->getEmail());
     }
 }

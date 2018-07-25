@@ -16,11 +16,13 @@ class LiteralPartTest extends PHPUnit_Framework_TestCase
 {
     public function testInstance()
     {
-        $part = new LiteralPart('"');
+        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+        
+        $part = new LiteralPart($charsetConverter, '"');
         $this->assertNotNull($part);
         $this->assertEquals('"', $part->getValue());
         
-        $part = new LiteralPart('=?US-ASCII?Q?Kilgore_Trout?=');
+        $part = new LiteralPart($charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
     }
 }

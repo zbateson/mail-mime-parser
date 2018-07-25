@@ -5,6 +5,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace ZBateson\MailMimeParser\Header\Part;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Represents a mime header comment -- text in a structured mime header
@@ -22,11 +23,12 @@ class CommentPart extends MimeLiteralPart
     /**
      * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $token
      */
-    public function __construct($token)
+    public function __construct(CharsetConverter $charsetConverter, $token)
     {
-        parent::__construct($token);
+        parent::__construct($charsetConverter, $token);
         $this->comment = $this->value;
         $this->value = '';
         $this->canIgnoreSpacesBefore = true;

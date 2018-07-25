@@ -13,11 +13,12 @@ use PHPUnit_Framework_TestCase;
  */
 class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected $headerPartFactory;
+    private $headerPartFactory;
     
     protected function setUp()
     {
-        $this->headerPartFactory = new HeaderPartFactory();
+        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+        $this->headerPartFactory = new HeaderPartFactory($charsetConverter);
     }
     
     public function testNewInstance()
@@ -32,6 +33,13 @@ class HeaderPartFactoryTest extends PHPUnit_Framework_TestCase
         $token = $this->headerPartFactory->newToken('Test');
         $this->assertNotNull($token);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\Token', $token);
+    }
+    
+    public function testNewSplitParameterToken()
+    {
+        $token = $this->headerPartFactory->newSplitParameterToken('Test');
+        $this->assertNotNull($token);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\SplitParameterToken', $token);
     }
     
     public function testNewLiteralPart()
