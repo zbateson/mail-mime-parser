@@ -1,8 +1,6 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use GuzzleHttp\Psr7;
-use ZBateson\MailMimeParser\MailMimeParser;
 use PHPUnit_Framework_TestCase;
 
 /**

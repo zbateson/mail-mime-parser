@@ -10,6 +10,7 @@ use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\Part\ParentPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -114,7 +115,7 @@ class PrivacyHelper extends AbstractHelper
             ] ]
         ]));
         foreach ($parts as $part) {
-            $contentType = strtolower($part->getHeaderValue('Content-Type', 'text/plain'));
+            $contentType = strtolower($part->getContentType());
             if ($contentType === 'text/plain' || $contentType === 'text/html') {
                 $part->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
             } else {
@@ -204,8 +205,7 @@ class PrivacyHelper extends AbstractHelper
      */
     public function getSignaturePart(Message $message)
     {
-        $contentType = $message->getHeaderValue('Content-Type', 'text/plain');
-        if (strcasecmp($contentType, 'multipart/signed') === 0) {
+        if (strcasecmp($message->getContentType(), 'multipart/signed') === 0) {
             return $message->getChild(1);
         } else {
             return null;
