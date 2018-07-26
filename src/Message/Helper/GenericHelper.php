@@ -118,22 +118,21 @@ class GenericHelper extends AbstractHelper
      * Replaces the $part ParentHeaderPart with $replacement.
      *
      * Essentially removes $part from its parent, and adds $replacement in its
-     * same position.  If $part is this Message, its type headers are moved from
-     * this message to $replacement, the content resource is moved, and children
-     * are assigned to $replacement.
+     * same position.  If $part is this Message, then $part can't be removed and
+     * replaced, and instead $replacement's type headers are copied to $message,
+     * and any children below $replacement are added directly below $message.
      *
      * @param ParentHeaderPart $part
      * @param ParentHeaderPart $replacement
      */
     public function replacePart(Message $message, ParentHeaderPart $part, ParentHeaderPart $replacement)
     {
-        $message->removePart($replacement);
+        $position = $message->removePart($replacement);
         if ($part === $message) {
             $this->movePartContentAndChildren($replacement, $part);
             return;
         }
         $parent = $part->getParent();
-        $position = $parent->removePart($part);
         $parent->addChild($replacement, $position);
     }
 }
