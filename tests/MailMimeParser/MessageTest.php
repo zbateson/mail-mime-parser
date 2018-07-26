@@ -117,18 +117,25 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($children);
         return $pb;
     }
-    
-    public function testInstance()
+
+    private function newMessage($partBuilder, $stream = null, $contentStream = null)
     {
-        $message = new Message(
+        return new Message(
             $this->mockPartStreamFilterManager,
             $this->mockStreamFactory,
             $this->mockPartFilterFactory,
             $this->mockHeaderFactory,
-            $this->getMockedPartBuilder(),
+            $partBuilder,
             $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
+            $stream,
+            $stream
+        );
+    }
+
+    public function testInstance()
+    {
+        $message = $this->newMessage(
+            $this->getMockedPartBuilder()
         );
         $this->assertNotNull($message);
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $message);
@@ -140,47 +147,48 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
+
+        $message = $this->newMessage(
+            $this->getMockedPartBuilderWithChildren()
+        );
+        $parts = $message->getAllParts();
         $filterMock
             ->method('filter')
-            ->willReturnOnConsecutiveCalls(
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false
+            ->willReturnMap(
+                [
+                    [ $parts[0], false ],
+                    [ $parts[1], true ],
+                    [ $parts[2], false ],
+                    [ $parts[3], true ],
+                    [ $parts[4], false ],
+                ]
             );
         $this->mockPartFilterFactory
             ->method('newFilterFromInlineContentType')
             ->willReturn($filterMock);
-        
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $this->getMockedPartBuilderWithChildren(),
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        
-        $parts = $message->getAllParts();
-        $parts[1]->method('getContentStream')
+
+        $parts[1]->expects($this->once())
+            ->method('getContentStream')
             ->willReturn('oufa baloufa!');
-        $parts[1]->method('getContent')
+        $parts[1]->expects($this->once())
+            ->method('getContent')
+            ->with('charset')
             ->willReturn('shabadabada...');
+        $parts[3]
+            ->method('getContentResourceHandle')
+            ->with('charset')
+            ->willReturn('tilkomore');
         
         $this->assertEquals(2, $message->getTextPartCount());
         $this->assertEquals($parts[1], $message->getTextPart());
         $this->assertEquals($parts[3], $message->getTextPart(1));
         $this->assertNull($message->getTextPart(2));
         $this->assertNull($message->getTextStream(2));
+        $this->assertNull($message->getTextResourceHandle(2));
         $this->assertNull($message->getTextContent(2));
         $this->assertEquals('oufa baloufa!', $message->getTextStream());
-        $this->assertEquals('shabadabada...', $message->getTextContent());
+        $this->assertEquals('shabadabada...', $message->getTextContent(0, 'charset'));
+        $this->assertEquals('tilkomore', $message->getTextResourceHandle(1, 'charset'));
     }
     
     public function testGetHtmlPartAndHtmlPartCount()
@@ -189,79 +197,83 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
+
+        $message = $this->newMessage(
+            $this->getMockedPartBuilderWithChildren()
+        );
+        $parts = $message->getAllParts();
+        
         $filterMock
             ->method('filter')
-            ->willReturnOnConsecutiveCalls(
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false
+            ->willReturnMap(
+                [
+                    [ $parts[0], false ],
+                    [ $parts[1], true ],
+                    [ $parts[2], false ],
+                    [ $parts[3], true ],
+                    [ $parts[4], false ],
+                ]
             );
         $this->mockPartFilterFactory
             ->method('newFilterFromInlineContentType')
             ->willReturn($filterMock);
-        
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $this->getMockedPartBuilderWithChildren(),
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        
-        $parts = $message->getAllParts();
-        $parts[1]->method('getContentStream')
+
+        $parts[1]->expects($this->once())
+            ->method('getContentStream')
             ->willReturn('oufa baloufa!');
-        $parts[1]->method('getContent')
+        $parts[1]->expects($this->once())
+            ->method('getContent')
+            ->with('charset')
             ->willReturn('shabadabada...');
+        $parts[3]
+            ->method('getContentResourceHandle')
+            ->with('charset')
+            ->willReturn('tilkomore');
         
         $this->assertEquals(2, $message->getHtmlPartCount());
         $this->assertEquals($parts[1], $message->getHtmlPart());
         $this->assertEquals($parts[3], $message->getHtmlPart(1));
         $this->assertNull($message->getHtmlPart(2));
         $this->assertNull($message->getHtmlStream(2));
+        $this->assertNull($message->getHtmlResourceHandle(2));
         $this->assertNull($message->getHtmlContent(2));
         $this->assertEquals('oufa baloufa!', $message->getHtmlStream());
-        $this->assertEquals('shabadabada...', $message->getHtmlContent());
+        $this->assertEquals('shabadabada...', $message->getHtmlContent(0, 'charset'));
+        $this->assertEquals('tilkomore', $message->getHtmlResourceHandle(1, 'charset'));
     }
     
-    public function testGetAttachmentParts()
+    public function testGetAndRemoveAttachmentParts()
     {
         $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
+
+        $org = Psr7\stream_for('stream');
+        $message = $this->newMessage(
+            $this->getMockedPartBuilderWithChildren(),
+            $org
+        );
+
+        // make sure MessagePart::markAsChanged is called
+        $this->assertEquals($org, $message->getStream());
+
+        $parts = $message->getAllParts();
         $filterMock
             ->method('filter')
-            ->willReturnOnConsecutiveCalls(
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false,
-                false, true, false, true, false
+            ->willReturnMap(
+                [
+                    [ $parts[0], false ],
+                    [ $parts[1], true ],
+                    [ $parts[2], false ],
+                    [ $parts[3], true ],
+                    [ $parts[4], false ],
+                ]
             );
         $this->mockPartFilterFactory
             ->method('newFilterFromArray')
             ->willReturn($filterMock);
-        
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $this->getMockedPartBuilderWithChildren(),
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        
-        $parts = $message->getAllParts();
+
         $parts[1]->method('isTextPart')
             ->willReturn(true);
         $parts[1]->method('getHeaderValue')
@@ -277,19 +289,22 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$parts[1]], $message->getAllAttachmentParts());
         $this->assertEquals($parts[1], $message->getAttachmentPart(0));
         $this->assertNull($message->getAttachmentPart(1));
+
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newMessagePartStream')
+            ->willReturn('changed');
+
+        $message->removeAttachmentPart(0);
+        $this->assertEquals('changed', $message->getStream());
+
+        $this->assertEquals(0, $message->getAttachmentCount());
+        $this->assertEquals(null, $message->getAttachmentPart(0));
     }
     
     public function testIsNotMime()
     {
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $this->getMockedPartBuilder(),
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
+        $message = $this->newMessage(
+            $this->getMockedPartBuilder()
         );
         $this->assertFalse($message->isMime());
     }
@@ -305,15 +320,8 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $pb->method('getRawHeaders')
             ->willReturn(['contenttype' => ['Blah', 'Blah']]);
 
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $hf,
-            $pb,
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
+        $message = $this->newMessage(
+            $pb
         );
         $this->assertTrue($message->isMime());
     }
@@ -329,78 +337,117 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $pb->method('getRawHeaders')
             ->willReturn(['mimeversion' => ['Mime-Version', '4.3']]);
 
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $hf,
-            $pb,
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
+        $message = $this->newMessage(
+            $pb
         );
         $this->assertTrue($message->isMime());
     }
-    
-    public function testSaveAndToString()
-    {
-        $content = vfsStream::newFile('part')->at($this->vfs);
-        $content->withContent('Demigorgon');
-        $messageHandle = fopen($content->url(), 'r');
 
-        $pb = $this->getMockedPartBuilder();
-        $pb->method('getStreamContentLength')->willReturn(0);
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $pb,
-            $this->mockMessageHelperService,
-            Psr7\stream_for($messageHandle),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        
-        $handle = fopen('php://temp', 'r+');
-        $message->save($handle);
-        rewind($handle);
-        $str = stream_get_contents($handle);
-        fclose($handle);
-        
-        $this->assertEquals('Demigorgon', $str);
-        $this->assertEquals('Demigorgon', $message->__toString());
+    public function testSetAndRemoveHtmlPart()
+    {
+        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $message = $this->newMessage($this->getMockedPartBuilder());
+
+        $this->mockMessageHelperService->expects($this->exactly(3))
+            ->method('getMultipartHelper')
+            ->willReturn($helper);
+        $helper->expects($this->once())->method('setContentPartForMimeType')
+            ->with($message, 'text/html', 'content', 'charset');
+        $helper->expects($this->once())->method('removePartByMimeType')
+            ->with($message, 'text/html', 0);
+        $helper->expects($this->once())->method('removeAllContentPartsByMimeType')
+            ->with($message, 'text/html', true);
+
+        $message->setHtmlPart('content', 'charset');
+        $message->removeHtmlPart();
+        $message->removeAllHtmlParts();
     }
 
-    public function testGetSignedMessageAsStringWithoutChildren()
+    public function testSetAndRemoveTextPart()
     {
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $this->getMockedPartBuilder(),
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        $this->assertNull($message->getSignedMessageAsString());
+        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $message = $this->newMessage($this->getMockedPartBuilder());
+
+        $this->mockMessageHelperService->expects($this->exactly(3))
+            ->method('getMultipartHelper')
+            ->willReturn($helper);
+        $helper->expects($this->once())->method('setContentPartForMimeType')
+            ->with($message, 'text/plain', 'content', 'charset');
+        $helper->expects($this->once())->method('removePartByMimeType')
+            ->with($message, 'text/plain', 0);
+        $helper->expects($this->once())->method('removeAllContentPartsByMimeType')
+            ->with($message, 'text/plain', true);
+
+        $message->setTextPart('content', 'charset');
+        $message->removeTextPart();
+        $message->removeAllTextParts();
     }
 
-    public function testGetSignedMessageAsString()
+    public function testAddAttachmentPart()
     {
-        $message = new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
-            $this->getMockedPartBuilderWithChildren(),
-            $this->mockMessageHelperService,
-            Psr7\stream_for('habibis'),
-            Psr7\stream_for('7ajat 7ilwa')
-        );
-        $child = $message->getChild(0);
+        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $child->expects($this->once())->method('getStream')->willReturn(Psr7\stream_for('Much success'));
-        $this->assertEquals('Much success', $message->getSignedMessageAsString());
+        $message = $this->newMessage($this->getMockedPartBuilderWithChildren());
+        $part = $message->getPart(2);
+
+        $this->mockMessageHelperService->expects($this->exactly(2))
+            ->method('getMultipartHelper')
+            ->willReturn($helper);
+        $helper->expects($this->exactly(2))->method('createPartForAttachment')
+            ->withConsecutive(
+                [ $message, 'mimetype', $this->anything(), 'attachment' ],
+                [ $message, 'mimetype2', 'blueball.png', 'inline' ]
+            )
+            ->willReturn($part);
+        $part->expects($this->exactly(2))->method('setContent')
+            ->withConsecutive(
+                [ 'content' ],
+                [ $this->anything() ]
+            );
+
+        $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
+        $message->addAttachmentPart('content', 'mimetype');
+        $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline');
+    }
+
+    public function testSigningHelperMethods()
+    {
+        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockMessageHelperService->expects($this->exactly(4))
+            ->method('getPrivacyHelper')
+            ->willReturn($helper);
+
+        $message = $this->newMessage($this->getMockedPartBuilder());
+
+        $helper->expects($this->once())
+            ->method('getSignedMessageAsString')
+            ->with($message)
+            ->willReturn('test');
+        $helper->expects($this->once())
+            ->method('getSignedMessageStream')
+            ->with($message)
+            ->willReturn('test');
+        $helper->expects($this->once())
+            ->method('setMessageAsMultipartSigned')
+            ->with($message, 'micalg', 'protocol');
+        $helper->expects($this->once())
+            ->method('setSignature')
+            ->with($message, 'signature body');
+
+        $this->assertEquals('test', $message->getSignedMessageStream());
+        $this->assertEquals('test', $message->getSignedMessageAsString());
+        $message->setAsMultipartSigned('micalg', 'protocol');
+        $message->setSignature('signature body');
     }
 }

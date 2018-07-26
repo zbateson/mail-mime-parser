@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
@@ -209,9 +209,9 @@ class Message extends MimePart
      */
     public function getTextResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $stream = $this->getTextStream($index, $charset);
-        if ($stream !== null) {
-            return StreamWrapper::getResource($stream);
+        $textPart = $this->getTextPart($index);
+        if ($textPart !== null) {
+            return $textPart->getContentResourceHandle($charset);
         }
         return null;
     }
@@ -262,9 +262,9 @@ class Message extends MimePart
      */
     public function getHtmlResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $stream = $this->getHtmlStream($index, $charset);
-        if ($stream !== null) {
-            return StreamWrapper::getResource($stream);
+        $htmlPart = $this->getHtmlPart($index);
+        if ($htmlPart !== null) {
+            return $htmlPart->getContentResourceHandle($charset);
         }
         return null;
     }
@@ -408,6 +408,46 @@ class Message extends MimePart
     }
 
     /**
+     * Adds an attachment part for the passed raw data string or handle and
+     * given parameters.
+     *
+     * @param string|resource|StreamInterface $resource
+     * @param strubg $mimeType
+     * @param string $filename
+     * @param string $disposition
+     */
+    public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment')
+    {
+        if ($filename === null) {
+            $filename = 'file' . uniqid();
+        }
+        $part = $this->messageHelperService
+            ->getMultipartHelper()
+            ->createPartForAttachment($this, $mimeType, $filename, $disposition);
+        $part->setContent($resource);
+        $this->addChild($part);
+    }
+
+    /**
+     * Adds an attachment part using the passed file.
+     *
+     * Essentially creates a file stream and uses it.
+     *
+     * @param string $filePath
+     * @param string $mimeType
+     * @param string $filename
+     * @param string $disposition
+     */
+    public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment')
+    {
+        $handle = Psr7\stream_for(fopen($filePath, 'r'));
+        if ($filename === null) {
+            $filename = basename($filePath);
+        }
+        $this->addAttachmentPart($handle, $mimeType, $filename, $disposition);
+    }
+
+    /**
      * Removes the attachment with the given index
      *
      * @param int $index
@@ -419,63 +459,40 @@ class Message extends MimePart
     }
 
     /**
-     * Adds an attachment part for the passed raw data string or handle and
-     * given parameters.
+     * Returns a stream that can be used to read the content part of a signed
+     * message, which can be used to sign an email or verify a signature.
      *
-     * @param string|handle $stringOrHandle
-     * @param strubg $mimeType
-     * @param string $filename
-     * @param string $disposition
+     * The method simply returns the stream for the first child.  No
+     * verification of whether the message is in fact a signed message is
+     * performed.
+     *
+     * Note that unlike getSignedMessageAsString, getSignedMessageStream doesn't
+     * replace new lines.
+     *
+     * @return StreamInterface or null if the message doesn't have any children
      */
-    public function addAttachmentPart($stringOrHandle, $mimeType, $filename = null, $disposition = 'attachment')
+    public function getSignedMessageStream()
     {
-        if ($filename === null) {
-            $filename = 'file' . uniqid();
-        }
-        $part = $this->messageHelperService
-            ->getMultipartHelper()
-            ->createPartForAttachment($this, $mimeType, $filename, $disposition);
-        $part->setContent($stringOrHandle);
-        $this->addChild($part);
-    }
-
-    /**
-     * Adds an attachment part using the passed file.
-     *
-     * Essentially creates a file stream and uses it.
-     *
-     * @param string $file
-     * @param string $mimeType
-     * @param string $filename
-     * @param string $disposition
-     */
-    public function addAttachmentPartFromFile($file, $mimeType, $filename = null, $disposition = 'attachment')
-    {
-        $handle = fopen($file, 'r');
-        if ($filename === null) {
-            $filename = basename($file);
-        }
-        $this->addAttachmentPart($handle, $mimeType, $filename, $disposition);
+        return $this
+            ->messageHelperService
+            ->getPrivacyHelper()
+            ->getSignedMessageStream($this);
     }
 
     /**
      * Returns a string containing the entire body of a signed message for
      * verification or calculating a signature.
      *
+     * Non-CRLF new lines are replaced to always be CRLF.
+     *
      * @return string or null if the message doesn't have any children
      */
     public function getSignedMessageAsString()
     {
-        $child = $this->getChild(0);
-        if ($child !== null) {
-            $normalized = preg_replace(
-                '/\r\n|\r|\n/',
-                "\r\n",
-                $child->getStream()->getContents()
-            );
-            return $normalized;
-        }
-        return null;
+        return $this
+            ->messageHelperService
+            ->getPrivacyHelper()
+            ->getSignedMessageAsString($this);
     }
 
     /**
@@ -492,12 +509,10 @@ class Message extends MimePart
      */
     public function getSignaturePart()
     {
-        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
-        if (strcasecmp($contentType, 'multipart/signed') === 0) {
-            return $this->getChild(1);
-        } else {
-            return null;
-        }
+        return $this
+            ->messageHelperService
+            ->getPrivacyHelper()
+            ->getSignaturePart($this);
     }
 
     /**
@@ -505,23 +520,18 @@ class Message extends MimePart
      * message into a child part, sets the content-type of the main message to
      * multipart/signed and adds an empty signature part as well.
      *
-     * After calling setAsMultipartSigned, call get
+     * After calling setAsMultipartSigned, call getSignedMessageAsString to
+     * return a
      *
      * @param string $micalg The Message Integrity Check algorithm being used
      * @param string $protocol The mime-type of the signature body
      */
     public function setAsMultipartSigned($micalg, $protocol)
     {
-        $contentType = $this->getHeaderValue('Content-Type', 'text/plain');
-        if (strcasecmp($contentType, 'multipart/signed') !== 0) {
-            $this->messageHelperService->getPrivacyHelper()
-                ->setMessageAsMultipartSigned($this, $micalg, $protocol);
-        }
-        $this->messageHelperService->getPrivacyHelper()
-            ->overwrite8bitContentEncoding($this);
-        $this->messageHelperService->getPrivacyHelper()
-            ->ensureHtmlPartFirstForSignedMessage($this);
-        $this->setSignature('Not set');
+        $this
+            ->messageHelperService
+            ->getPrivacyHelper()
+            ->setMessageAsMultipartSigned($this, $micalg, $protocol);
     }
 
     /**

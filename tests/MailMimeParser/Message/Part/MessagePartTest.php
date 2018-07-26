@@ -112,4 +112,21 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $messagePart = $this->getMessagePart('habibi', 'sopa di agua con rocas');
         $this->assertEquals('sopa di agua con rocas', $messagePart->getContent());
     }
+
+    public function testSaveAndToString()
+    {
+        $messagePart = $this->getMessagePart(
+            'Demigorgon',
+            Psr7\stream_for('other demons')
+        );
+
+        $handle = fopen('php://temp', 'r+');
+        $messagePart->save($handle);
+        rewind($handle);
+        $str = stream_get_contents($handle);
+        fclose($handle);
+
+        $this->assertEquals('Demigorgon', $str);
+        $this->assertEquals('Demigorgon', $messagePart->__toString());
+    }
 }

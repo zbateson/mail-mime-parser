@@ -59,16 +59,20 @@ class PrivacyHelper extends AbstractHelper
      */
     public function setMessageAsMultipartSigned(Message $message, $micalg, $protocol)
     {
-        $this->multipartHelper->enforceMime($message);
-        $messagePart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
-        $this->genericHelper->movePartContentAndChildren($message, $messagePart);
-        $message->addChild($messagePart);
-
-        $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');
-        $message->setRawHeader(
-            'Content-Type',
-            "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
-        );
+        if (strcasecmp($message->getContentType(), 'multipart/signed') !== 0) {
+            $this->multipartHelper->enforceMime($message);
+            $messagePart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+            $this->genericHelper->movePartContentAndChildren($message, $messagePart);
+            $message->addChild($messagePart);
+            $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');
+            $message->setRawHeader(
+                'Content-Type',
+                "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
+            );
+        }
+        $this->overwrite8bitContentEncoding($message);
+        $this->ensureHtmlPartFirstForSignedMessage($message);
+        $this->setSignature($message, 'Empty');
     }
 
     /**
@@ -137,6 +141,74 @@ class PrivacyHelper extends AbstractHelper
                 $alt->removePart($children[0]);
                 $alt->addChild($children[0]);
             }
+        }
+    }
+
+    /**
+     * Returns a stream that can be used to read the content part of a signed
+     * message, which can be used to sign an email or verify a signature.
+     *
+     * The method simply returns the stream for the first child.  No
+     * verification of whether the message is in fact a signed message is
+     * performed.
+     *
+     * Note that unlike getSignedMessageAsString, getSignedMessageStream doesn't
+     * replace new lines.
+     *
+     * @param Message $message
+     * @return StreamInterface or null if the message doesn't have any children
+     */
+    public function getSignedMessageStream(Message $message)
+    {
+        $child = $message->getChild(0);
+        if ($child !== null) {
+            return $child->getStream();
+        }
+        return null;
+    }
+
+    /**
+     * Returns a string containing the entire body (content) of a signed message
+     * for verification or calculating a signature.
+     *
+     * Non-CRLF new lines are replaced to always be CRLF.
+     *
+     * @param Message $message
+     * @return string or null if the message doesn't have any children
+     */
+    public function getSignedMessageAsString(Message $message)
+    {
+        $stream = $this->getSignedMessageStream($message);
+        if ($stream !== null) {
+            return preg_replace(
+                '/\r\n|\r|\n/',
+                "\r\n",
+                $stream->getContents()
+            );
+        }
+        return null;
+    }
+
+    /**
+     * Returns the signature part of a multipart/signed message or null.
+     *
+     * The signature part is determined to always be the 2nd child of a
+     * multipart/signed message, the first being the 'body'.
+     *
+     * Using the 'protocol' parameter of the Content-Type header is unreliable
+     * in some instances (for instance a difference of x-pgp-signature versus
+     * pgp-signature).
+     *
+     * @param Message $message
+     * @return MimePart
+     */
+    public function getSignaturePart(Message $message)
+    {
+        $contentType = $message->getHeaderValue('Content-Type', 'text/plain');
+        if (strcasecmp($contentType, 'multipart/signed') === 0) {
+            return $message->getChild(1);
+        } else {
+            return null;
         }
     }
 }
