@@ -418,14 +418,9 @@ class Message extends MimePart
      */
     public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment')
     {
-        if ($filename === null) {
-            $filename = 'file' . uniqid();
-        }
-        $part = $this->messageHelperService
+        $this->messageHelperService
             ->getMultipartHelper()
-            ->createPartForAttachment($this, $mimeType, $filename, $disposition);
-        $part->setContent($resource);
-        $this->addChild($part);
+            ->createAndAddPartForAttachment($this, $resource, $mimeType, $filename, $disposition);
     }
 
     /**

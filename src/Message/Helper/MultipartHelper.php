@@ -258,8 +258,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function createMultipartRelatedPartForInlineChildrenOf(ParentHeaderPart $parent)
     {
-        $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-        $relatedPart = $builder->createMessagePart();
+        $relatedPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
         $this->setMimeHeaderBoundaryOnPart($relatedPart, 'multipart/related');
         foreach ($parent->getChildParts(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) as $part) {
             $parent->removePart($part);
@@ -288,7 +287,7 @@ class MultipartHelper extends AbstractHelper
         );
         if ($altPart !== null && $altPart->getParent() !== null && $altPart->getParent()->isMultiPart()) {
             $altPartParent = $altPart->getParent();
-            if ($altPartParent->getPartCount(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) !== 1) {
+            if ($altPartParent->getChildCount(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) !== 1) {
                 $altPart = $this->createMultipartRelatedPartForInlineChildrenOf($altPartParent);
             }
         }
@@ -328,17 +327,22 @@ class MultipartHelper extends AbstractHelper
     }
 
     /**
-     * Creates and returns a MimePart for use with a new attachment part being
-     * created.
+     * Creates and adds a MimePart for the passed content and options as an
+     * attachment.
      *
      * @param Message $message
+     * @param string|resource|StreamInterface $resource
      * @param string $mimeType
      * @param string $filename
      * @param string $disposition
      * @return MimePart
      */
-    public function createPartForAttachment(Message $message, $mimeType, $filename, $disposition)
+    public function createAndAddPartForAttachment(Message $message, $resource, $mimeType, $filename, $disposition)
     {
+        if ($filename === null) {
+            $filename = 'file' . uniqid();
+        }
+
         $safe = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
         if ($message->isMime()) {
             $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
@@ -354,7 +358,9 @@ class MultipartHelper extends AbstractHelper
             );
             $builder->setProperty('filename', $safe);
         }
-        return $builder->createMessagePart();
+        $part = $builder->createMessagePart();
+        $part->setContent($resource);
+        $message->addChild($part);
     }
 
     /**
@@ -422,7 +428,7 @@ class MultipartHelper extends AbstractHelper
         if ($part === null) {
             $part = $this->createContentPartForMimeType($message, $mimeType, $charset);
         } else {
-            $contentType = $part->getHeaderValue('Content-Type', 'text/plain');
+            $contentType = $part->getContentType();
             $part->setRawHeader('Content-Type', "$contentType;\r\n\tcharset=\"$charset\"");
         }
         $part->setContent($stringOrHandle);

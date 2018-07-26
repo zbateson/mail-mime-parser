@@ -401,18 +401,13 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->mockMessageHelperService->expects($this->exactly(2))
             ->method('getMultipartHelper')
             ->willReturn($helper);
-        $helper->expects($this->exactly(2))->method('createPartForAttachment')
+        $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
-                [ $message, 'mimetype', $this->anything(), 'attachment' ],
-                [ $message, 'mimetype2', 'blueball.png', 'inline' ]
+                [ $message, 'content', 'mimetype', $this->anything(), 'attachment' ],
+                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'blueball.png', 'inline' ]
             )
             ->willReturn($part);
-        $part->expects($this->exactly(2))->method('setContent')
-            ->withConsecutive(
-                [ 'content' ],
-                [ $this->anything() ]
-            );
-
+        
         $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
         $message->addAttachmentPart('content', 'mimetype');
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline');
