@@ -36,8 +36,6 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         if ($contentHandle !== null) {
             $contentHandle = Psr7\stream_for($contentHandle);
             $this->partStreamFilterManager
-                ->method('setStream');
-            $this->partStreamFilterManager
                 ->method('getContentStream')
                 ->willReturnCallback(function() use ($contentHandle) {
                     try {
@@ -85,6 +83,32 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($messagePart->hasContent());
         $this->assertEquals('Que tonto', $messagePart->getContentStream()->getContents());
         $this->assertEquals('Que tonto', stream_get_contents($messagePart->getContentResourceHandle()));
+    }
+
+    public function testDetachContentStream()
+    {
+        $stream = Psr7\stream_for('Que tonta');
+        $contentStream = Psr7\stream_for('Que tonto');
+        $messagePart = $this->getMessagePart($stream, $contentStream);
+        $messagePart->method('getContentTransferEncoding')
+            ->willReturn('wubalubadub-duuuuub');
+        $messagePart->method('getCharset')
+            ->willReturn('wigidiwamwamwazzle');
+
+        $this->assertSame($stream, $messagePart->getStream());
+
+        $this->partStreamFilterManager
+            ->method('setStream')
+            ->with(null);
+
+        $this->streamFactory
+            ->expects($this->once())
+            ->method('newMessagePartStream')
+            ->with($messagePart)
+            ->willReturn('Much success');
+
+        $messagePart->detachContentStream();
+        $this->assertEquals('Much success', $messagePart->getStream());
     }
     
     public function testContentStreamHandleWithCustomCharset()

@@ -14,26 +14,21 @@ use ZBateson\MailMimeParser\SimpleDi;
  */
 class PartFactoryServiceTest extends PHPUnit_Framework_TestCase
 {
-    protected $partFactoryService;
-    
-    protected function setUp()
-    {
-        $di = SimpleDi::singleton();
-        $this->partFactoryService = $di->getPartFactoryService();
-    }
-    
     public function testInstance()
     {
-        $messageFactory = $this->partFactoryService->getMessageFactory();
+        $di = SimpleDi::singleton();
+        $partFactoryService = $di->getPartFactoryService();
+
+        $messageFactory = $partFactoryService->getMessageFactory();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\MessageFactory', $messageFactory);
         
-        $mimePartFactory = $this->partFactoryService->getMimePartFactory();
+        $mimePartFactory = $partFactoryService->getMimePartFactory();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory', $mimePartFactory);
         
-        $nonMimePartFactory = $this->partFactoryService->getNonMimePartFactory();
+        $nonMimePartFactory = $partFactoryService->getNonMimePartFactory();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory', $nonMimePartFactory);
         
-        $uuEncodedPartFactory = $this->partFactoryService->getUUEncodedPartFactory();
+        $uuEncodedPartFactory = $partFactoryService->getUUEncodedPartFactory();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory', $uuEncodedPartFactory);
     }
 }

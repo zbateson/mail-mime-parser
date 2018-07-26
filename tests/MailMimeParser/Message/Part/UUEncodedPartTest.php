@@ -44,8 +44,16 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($part->isMime());
         $this->assertEquals('application/octet-stream', $part->getContentType());
         $this->assertEquals('attachment', $part->getContentDisposition());
+        $this->assertEquals('attachment', $part->getContentDisposition());
         $this->assertEquals('x-uuencode', $part->getContentTransferEncoding());
+        $this->assertNull($part->getCharset());
         $this->assertEquals(0666, $part->getUnixFileMode());
         $this->assertEquals('wubalubadubduuuuuub!', $part->getFilename());
+
+        $part->setUnixFileMode(0444);
+        $part->setFilename('wiggidywamwamwazzle!');
+
+        $this->assertEquals(0444, $part->getUnixFileMode());
+        $this->assertEquals('wiggidywamwamwazzle!', $part->getFilename());
     }
 }

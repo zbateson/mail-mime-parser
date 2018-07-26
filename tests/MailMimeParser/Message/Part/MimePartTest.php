@@ -12,6 +12,7 @@ use GuzzleHttp\Psr7;
  * @covers ZBateson\MailMimeParser\Message\Part\MimePart
  * @covers ZBateson\MailMimeParser\Message\Part\ParentHeaderPart
  * @covers ZBateson\MailMimeParser\Message\Part\ParentPart
+ * @covers ZBateson\MailMimeParser\Message\Part\MessagePart
  * @author Zaahid Bateson
  */
 class MimePartTest extends PHPUnit_Framework_TestCase
@@ -41,10 +42,11 @@ class MimePartTest extends PHPUnit_Framework_TestCase
     {
         $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getName', 'getValueFor', 'hasParameter'])
+            ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
         $header->method('getName')->willReturn($name);
         $header->method('getValue')->willReturn($value);
+        $header->method('getRawValue')->willReturn($value);
         $header->method('getValueFor')->willReturn($parameterValue);
         $header->method('hasParameter')->willReturn(true);
         return $header;
@@ -147,7 +149,228 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $allParts = [ $part, $children[0], $nested, $children[1], $children[2]];
         $this->assertEquals($allParts, $part->getAllParts());
     }
-    
+
+    public function testSetRawHeaderAndRemoveHeader()
+    {
+        $hf = $this->mockHeaderFactory;
+        $firstHeader = $this->getMockedParameterHeader('First-Header', 'Value');
+        $secondHeader = $this->getMockedParameterHeader('Second-Header', 'Second Value');
+
+        $hf->expects($this->exactly(2))
+            ->method('newInstance')
+            ->withConsecutive(
+                [$firstHeader->getName(), $firstHeader->getValue()],
+                [$secondHeader->getName(), $secondHeader->getValue()]
+            )
+            ->willReturnOnConsecutiveCalls($firstHeader, $secondHeader);
+
+        $ms = Psr7\stream_for('message');
+        $part = $this->newMimePart($this->getMockedPartBuilder(), $ms);
+
+        // make sure markAsChanged is called
+        $this->assertSame($ms, $part->getStream());
+        $this->mockStreamFactory
+            ->expects($this->once())
+            ->method('newMessagePartStream')
+            ->with($part)
+            ->willReturn('Much success');
+
+        $part->setRawHeader($firstHeader->getName(), $firstHeader->getValue());
+        $this->assertEquals('Much success', $part->getStream());
+
+        $part->setRawHeader($secondHeader->getName(), $secondHeader->getValue());
+        $this->assertSame($firstHeader, $part->getHeader($firstHeader->getName()));
+        $this->assertSame($secondHeader, $part->getHeader($secondHeader->getName()));
+        $this->assertEquals($firstHeader->getValue(), $part->getHeaderValue($firstHeader->getName()));
+        $this->assertEquals($secondHeader->getValue(), $part->getHeaderValue($secondHeader->getName()));
+        
+        $this->assertCount(2, $part->getRawHeaders());
+        $this->assertEquals([[ 'First-Header', $firstHeader->getRawValue() ], [ 'Second-Header', $secondHeader->getRawValue() ]], $part->getRawHeaders());
+
+        $part->removeHeader('FIRST-header');
+        $this->assertCount(1, $part->getRawHeaders());
+        $this->assertNull($part->getHeader($firstHeader->getName()));
+        $this->assertNull($part->getHeaderValue($firstHeader->getName()));
+        $this->assertEquals([[ 'Second-Header', $secondHeader->getRawValue() ]], $part->getRawHeaders());
+    }
+
+    public function testHeaderCaseInsensitive()
+    {
+        $hf = $this->mockHeaderFactory;
+        $firstHeader = $this->getMockedParameterHeader('First-Header', 'Value');
+        $secondHeader = $this->getMockedParameterHeader('Second-Header', 'Second Value');
+        $thirdHeader = $this->getMockedParameterHeader('FIRST-header', 'Third Value');
+
+        $hf->expects($this->exactly(3))
+            ->method('newInstance')
+            ->withConsecutive(
+                [$firstHeader->getName(), $firstHeader->getValue()],
+                [$secondHeader->getName(), $secondHeader->getValue()],
+                [$thirdHeader->getName(), $thirdHeader->getValue()]
+            )
+            ->willReturnOnConsecutiveCalls($firstHeader, $secondHeader, $thirdHeader);
+
+        $part = $this->newMimePart($this->getMockedPartBuilder());
+        $part->setRawHeader($firstHeader->getName(), $firstHeader->getValue());
+        $part->setRawHeader($secondHeader->getName(), $secondHeader->getValue());
+        $part->setRawHeader($thirdHeader->getName(), $thirdHeader->getValue());
+
+        $this->assertSame($thirdHeader, $part->getHeader('first-header'));
+        $this->assertSame($secondHeader, $part->getHeader('second-header'));
+    }
+
+    public function testGetHeaderParameter()
+    {
+        $hf = $this->mockHeaderFactory;
+        $header = $this->getMockedParameterHeader('First-Header', 'Value', 'param-value');
+        $hf->expects($this->exactly(1))
+            ->method('newInstance')
+            ->withConsecutive(
+                [$header->getName(), $header->getValue()]
+            )
+            ->willReturnOnConsecutiveCalls($header);
+        $part = $this->newMimePart($this->getMockedPartBuilder());
+        $part->setRawHeader($header->getName(), $header->getValue());
+
+        $this->assertEquals('param-value', $part->getHeaderParameter('first-header', 'param'));
+    }
+
+    public function testGetUnsetHeaderParameter()
+    {
+        $part = $this->newMimePart($this->getMockedPartBuilder());
+        $this->assertNull($part->getHeaderParameter('Nothing', 'Non-Existent'));
+        $this->assertEquals('Default', $part->getHeaderParameter('Nothing', 'Non-Existent', 'Default'));
+    }
+
+    public function testOnChangeParents()
+    {
+        $ms = Psr7\stream_for('parent');
+        $part = $this->newMimePart($this->getMockedPartBuilderWithChildren(), $ms);
+
+        $children = $part->getChildParts();
+        $nested = $children[0]->getChild(0);
+
+        $msChildren = [ $children[0]->getStream(), $children[1]->getStream(), $children[2]->getStream() ];
+        $ns = $nested->getStream();
+
+        $msFirst = Psr7\stream_for('first');
+        $first = $this->newMimePart($this->getMockedPartBuilder(), $msFirst);
+
+        $this->assertSame($ms, $part->getStream());
+
+        $this->mockStreamFactory
+            ->expects($this->exactly(3))
+            ->method('newMessagePartStream')
+            ->willReturnMap([
+                [ $nested, 'Nested success' ],
+                [ $children[0], 'Child parent success' ],
+                [ $part, 'Parent success' ],
+            ]);
+
+        $nested->addChild($first);
+
+        $this->assertSame($msFirst, $first->getStream());
+        $this->assertEquals('Nested success', $nested->getStream());
+        $this->assertEquals('Child parent success', $children[0]->getStream());
+        $this->assertEquals('Parent success', $part->getStream());
+
+        $this->assertSame($msChildren[1], $children[1]->getStream());
+        $this->assertSame($msChildren[2], $children[2]->getStream());
+    }
+
+    public function testAddRemoveAndGetPart()
+    {
+        $first = $this->newMimePart($this->getMockedPartBuilder());
+        $second = $this->newMimePart($this->getMockedPartBuilder());
+        $third = $this->newMimePart($this->getMockedPartBuilder());
+        $parent = $this->newMimePart($this->getMockedPartBuilder());
+
+        $parent->addChild($first);
+        $parent->addChild($second);
+        $second->addChild($third);
+
+        $this->assertSame($parent, $first->getParent());
+        $this->assertSame($parent, $second->getParent());
+        $this->assertSame($second, $third->getParent());
+
+        $this->assertEquals(4, $parent->getPartCount());
+        $this->assertSame($parent, $parent->getPart(0));
+        $this->assertSame($first, $parent->getPart(1));
+        $this->assertSame($second, $parent->getPart(2));
+        $this->assertSame($third, $parent->getPart(3));
+        $this->assertSame($third, $second->getPart(1));
+        $this->assertNull($parent->getPart(4));
+
+        $this->assertEquals(
+            [$parent, $first, $second, $third],
+            $parent->getAllParts()
+        );
+
+        $this->assertEquals($parent->removePart($first), 0);
+        $this->assertEquals(3, $parent->getPartCount());
+        $this->assertSame($parent, $parent->getPart(0));
+        $this->assertSame($second, $parent->getPart(1));
+        $this->assertSame($third, $parent->getPart(2));
+        $this->assertNull($parent->getPart(3));
+
+        $second->removeAllParts();
+        $this->assertEquals(2, $parent->getPartCount());
+        $this->assertSame($parent, $parent->getPart(0));
+        $this->assertSame($second, $parent->getPart(1));
+        $this->assertNull($parent->getPart(2));
+
+        $this->assertEquals(
+            [ $parent, $second ],
+            $parent->getAllParts()
+        );
+    }
+
+    public function testAddRemoveAndGetChildParts()
+    {
+        $first = $this->newMimePart($this->getMockedPartBuilder());
+        $second = $this->newMimePart($this->getMockedPartBuilder());
+        $third = $this->newMimePart($this->getMockedPartBuilder());
+        $parent = $this->newMimePart($this->getMockedPartBuilder());
+
+        $parent->addChild($first);
+        $parent->addChild($second);
+        $second->addChild($third);
+
+        $this->assertSame($parent, $first->getParent());
+        $this->assertSame($parent, $second->getParent());
+        $this->assertSame($second, $third->getParent());
+
+        $this->assertEquals(2, $parent->getChildCount());
+        $this->assertSame($first, $parent->getChild(0));
+        $this->assertSame($second, $parent->getChild(1));
+        $this->assertNull($parent->getChild(2));
+        $this->assertSame($third, $second->getChild(0));
+
+        $this->assertEquals(
+            [$first, $second],
+            $parent->getChildParts()
+        );
+
+        $this->assertEquals($third->removePart($first), 0);
+        $this->assertNull($parent->removePart($first));
+
+        $this->assertEquals(1, $parent->getChildCount());
+        $this->assertSame($second, $parent->getChild(0));
+        $this->assertNull($parent->getChild(1));
+        $this->assertSame($third, $second->getChild(0));
+
+        $second->removeAllParts();
+        $this->assertEquals(1, $parent->getChildCount());
+        $this->assertSame($second, $parent->getChild(0));
+        $this->assertEquals(0, $second->getChildCount());
+        $this->assertNull($second->getChild(0));
+
+        $this->assertEquals(
+            [$second],
+            $parent->getChildParts()
+        );
+    }
+
     public function testPartBuilderHeaders()
     {
         $hf = $this->mockHeaderFactory;
@@ -259,19 +482,19 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $pb = $this->getMockedPartBuilder();
         $pb->method('getRawHeaders')
             ->willReturn([
-                'contenttransferencoding' => ['Content-Transfer-Encoding', 'base64']
+                'contenttransferencoding' => ['Content-Transfer-Encoding', 'x-uue']
             ]);
         
-        $header = $this->getMockedParameterHeader('meen?', 'HABIBI');
+        $header = $this->getMockedParameterHeader('meen?', 'x-uue');
         $hf = $this->mockHeaderFactory;
         $hf->expects($this->once())
             ->method('newInstance')
-            ->with('Content-Transfer-Encoding', 'base64')
+            ->with('Content-Transfer-Encoding', 'x-uue')
             ->willReturn($header);
 
         $part = $this->newMimePart($pb, Psr7\stream_for('habibi'));
         $this->assertSame($header, $part->getHeader('CONTENT-TRANSFER_ENCODING'));
-        $this->assertEquals('habibi', $part->getContentTransferEncoding());
+        $this->assertEquals('x-uuencode', $part->getContentTransferEncoding());
     }
     
     public function testGetCharset()
@@ -291,6 +514,31 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         
         $part = $this->newMimePart($pb);
         $this->assertEquals('BLAH', $part->getCharset());
+    }
+
+    public function testGetFilename()
+    {
+        $pb = $this->getMockedPartBuilder();
+        $pb->method('getRawHeaders')
+            ->willReturn([
+                'contenttype' => ['Content-Type', 'text/plain; name=blooh'],
+                'contentdisposition' => ['Content-Disposition', 'attachment; filename=blah']
+            ]);
+
+        $header = $this->getMockedParameterHeader('content-type', 'text/plain', 'blooh');
+        $header2 = $this->getMockedParameterHeader('content-disposition', 'attachment', 'blah');
+
+        $hf = $this->mockHeaderFactory;
+        $hf->expects($this->exactly(2))
+            ->method('newInstance')
+            ->withConsecutive(
+                ['Content-Type', 'text/plain; name=blooh'],
+                ['Content-Disposition', 'attachment; filename=blah']
+            )
+            ->willReturnOnConsecutiveCalls($header, $header2);
+
+        $part = $this->newMimePart($pb);
+        $this->assertEquals('blah', $part->getFilename());
     }
     
     public function testGetDefaultCharsetForTextPlainAndTextHtml()

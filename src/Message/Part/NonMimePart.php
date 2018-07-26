@@ -39,13 +39,13 @@ class NonMimePart extends MessagePart
     }
     
     /**
-     * Returns US-ASCII
+     * Returns ISO-8859-1
      * 
      * @return string
      */
     public function getCharset()
     {
-        return 'US-ASCII';
+        return 'ISO-8859-1';
     }
     
     /**

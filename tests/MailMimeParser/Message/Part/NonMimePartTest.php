@@ -28,5 +28,6 @@ class NonMimePartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('text/plain', $part->getContentType());
         $this->assertEquals('inline', $part->getContentDisposition());
         $this->assertEquals('7bit', $part->getContentTransferEncoding());
+        $this->assertEquals('ISO-8859-1', $part->getCharset());
     }
 }

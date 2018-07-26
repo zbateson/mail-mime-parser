@@ -33,6 +33,8 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
+        $this->assertNull($this->partStreamFilterManager->getContentStream('quoted-printable', null, null));
+
         $this->partStreamFilterManager->setStream($stream);
         $managerStream = $this->partStreamFilterManager->getContentStream('quoted-printable', null, null);
         $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
@@ -147,58 +149,4 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
         $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
     }
-    
-    /*public function testReset()
-    {
-        $callCount = 0;
-        PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
-            function ($filtername, $params) use (&$callCount) {
-                ++$callCount;
-            }
-        );
-        
-        $closeCount = 0;
-        PartStreamFilterManagerTestStreamFilter::setOnCloseCallback(
-            function ($filtername, $params) use (&$closeCount) {
-                ++$closeCount;
-            }
-        );
-
-        $manager = $this->partStreamFilterManager;
-        $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8');
-        $manager->reset();
-
-        $this->assertEquals(2, $callCount);
-        $this->assertEquals(2, $closeCount);
-        
-        $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8');
-        
-        $this->assertEquals(4, $callCount);
-        $this->assertEquals(2, $closeCount);
-    }
-    
-    public function testResetByAttachingDifferentHandle()
-    {
-        $callCount = 0;
-        PartStreamFilterManagerTestStreamFilter::setOnCreateCallback(
-            function ($filtername, $params) use (&$callCount) {
-                ++$callCount;
-            }
-        );
-        
-        $closeCount = 0;
-        PartStreamFilterManagerTestStreamFilter::setOnCloseCallback(
-            function ($filtername, $params) use (&$closeCount) {
-                ++$closeCount;
-            }
-        );
-
-        $manager = $this->partStreamFilterManager;
-        $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-16');
-        $manager->setContentUrl('php://temp');
-        $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-16');
-
-        $this->assertEquals(4, $callCount);
-        $this->assertEquals(2, $closeCount);
-    }*/
 }

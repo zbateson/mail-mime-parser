@@ -270,11 +270,19 @@ abstract class ParentPart extends MessagePart
     /**
      * Removes all parts that are matched by the passed PartFilter.
      *
+     * Note: the current part will not be removed.  Although the function naming
+     * matches getAllParts, which returns the current part, it also doesn't only
+     * remove direct children like getChildParts.  Internally this function uses
+     * getAllParts but the current part is filtered out if returned.
+     *
      * @param \ZBateson\MailMimeParser\Message\PartFilter $filter
      */
     public function removeAllParts(PartFilter $filter = null)
     {
         foreach ($this->getAllParts($filter) as $part) {
+            if ($part === $this) {
+                continue;
+            }
             $this->removePart($part);
         }
     }
