@@ -69,6 +69,10 @@ $dest = \GuzzleHttp\Psr7\stream_for(
 * [Usage Guide](https://github.com/zbateson/MailMimeParser/wiki/Usage-Guide)
 * [API Reference](https://github.com/zbateson/MailMimeParser/wiki/ApiIndex)
 
+## Upgrading to 1.0
+
+* [Breaking Changes](https://github.com/zbateson/MailMimeParser/wiki/Breaking-Changes:-1.0)
+
 ## License
 
 BSD licensed - please see [license agreement](https://github.com/zbateson/MailMimeParser/blob/master/LICENSE).
