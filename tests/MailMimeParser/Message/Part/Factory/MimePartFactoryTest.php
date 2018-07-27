@@ -35,13 +35,10 @@ class MimePartFactoryTest extends PHPUnit_Framework_TestCase
             ->method('newInstance')
             ->willReturn($psfm);
         
-        $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
         $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mimePartFactory = new MimePartFactory($mocksdf, $psfmFactory, $mockHeaderFactory, $mockFilterFactory);
+        $this->mimePartFactory = new MimePartFactory($mocksdf, $psfmFactory, $mockFilterFactory);
     }
     
     public function testNewInstance()

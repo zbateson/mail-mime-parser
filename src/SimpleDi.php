@@ -171,7 +171,6 @@ class SimpleDi
     {
         if ($this->partFactoryService === null) {
             $this->partFactoryService = new PartFactoryService(
-                $this->getHeaderFactory(),
                 $this->getPartFilterFactory(),
                 $this->getStreamFactory(),
                 $this->getPartStreamFilterManagerFactory(),

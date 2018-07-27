@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
@@ -37,7 +36,6 @@ class Message extends MimePart
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
-     * @param HeaderFactory $headerFactory
      * @param PartBuilder $partBuilder
      * @param MessageHelperService $messageHelperService
      * @param StreamInterface $stream
@@ -47,7 +45,6 @@ class Message extends MimePart
         PartStreamFilterManager $partStreamFilterManager,
         StreamFactory $streamFactory,
         PartFilterFactory $partFilterFactory,
-        HeaderFactory $headerFactory,
         PartBuilder $partBuilder,
         MessageHelperService $messageHelperService,
         StreamInterface $stream = null,
@@ -57,7 +54,6 @@ class Message extends MimePart
             $partStreamFilterManager,
             $streamFactory,
             $partFilterFactory,
-            $headerFactory,
             $partBuilder,
             $stream,
             $contentStream

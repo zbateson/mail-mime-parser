@@ -14,18 +14,20 @@ use GuzzleHttp\Psr7;
  */
 class PartBuilderTest extends PHPUnit_Framework_TestCase
 {
-    private $mockHeaderFactory;
     private $mockMessagePartFactory;
-    
+
     protected function setUp()
     {
-        $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['newInstance'])
-            ->getMock();
         $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory')
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
+            ->getMock();
+    }
+
+    private function newMockHeaderContainer()
+    {
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
+            ->disableOriginalConstructor()
             ->getMock();
     }
     
@@ -40,24 +42,25 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->with('boundary')
             ->willReturn('Castle Black');
         
-        $this->mockHeaderFactory
-            ->expects($this->any())
-            ->method('newInstance')
-            ->willReturn($mockHeader);
-        
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $this->newMockHeaderContainer()
         );
         
         $this->assertTrue($instance->canHaveHeaders());
-        
+
+        $hc = $this->newMockHeaderContainer();
         $parent = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
+        $hc->expects($this->once())
+            ->method('add')
+            ->with('CONTENT-TYPE', 'kookoo-keekee');
+        $hc->expects($this->once())
+            ->method('get')
+            ->with('Content-Type')
+            ->willReturn($mockHeader);
         $parent->addHeader('CONTENT-TYPE', 'kookoo-keekee');
         $parent->addChild($instance);
         
@@ -68,20 +71,17 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     public function testAddChildren()
     {
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $this->newMockHeaderContainer()
         );
         $children = [
             new PartBuilder(
-                $this->mockHeaderFactory,
                 $this->mockMessagePartFactory,
-                'euphrates'
+                $this->newMockHeaderContainer()
             ),
             new PartBuilder(
-                $this->mockHeaderFactory,
                 $this->mockMessagePartFactory,
-                'euphrates'
+                $this->newMockHeaderContainer()
             )
         ];
         foreach ($children as $child) {
@@ -94,58 +94,59 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     
     public function testAddAndGetRawHeaders()
     {
+        $hc = $this->newMockHeaderContainer();
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
+        $hc->expects($this->exactly(3))
+            ->method('add')
+            ->withConsecutive(
+                [ 'Mime-VERSION', '42' ],
+                [ 'Content-TYPE', 'text/blah; blooh' ],
+                [ 'X-Northernmost-Castle', 'Castle black' ]
+            );
         $instance->addHeader('Mime-VERSION', '42');
         $instance->addHeader('Content-TYPE', 'text/blah; blooh');
         $instance->addHeader('X-Northernmost-Castle', 'Castle black');
-        
-        $expectedHeaders = [
-            'mimeversion' => ['Mime-VERSION', '42'],
-            'contenttype' => ['Content-TYPE', 'text/blah; blooh'],
-            'xnorthernmostcastle' => ['X-Northernmost-Castle', 'Castle black']
-        ];
-        $this->assertEquals($expectedHeaders, $instance->getRawHeaders());
+
+        $this->assertSame($hc, $instance->getHeaderContainer());
     }
     
-    public function testAddMimeVersionHeader()
+    public function testIsMime()
     {
+        $hc = $this->newMockHeaderContainer();
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
-        $instance->addHeader('Mime-VERSION', '42');
+        $hc->expects($this->exactly(5))
+            ->method('exists')
+            ->withConsecutive(
+                [ 'Content-Type', 0 ],
+                [ 'Content-Type', 0 ],
+                [ 'Mime-Version', 0 ],
+                [ 'Content-Type', 0 ],
+                [ 'Mime-Version', 0 ]
+            )
+            ->willReturnOnConsecutiveCalls(true, false, true, false, false);
+
         $this->assertTrue($instance->isMime());
-    }
-    
-    public function testAddContentTypeHeaderIsMime()
-    {
-        $instance = new PartBuilder(
-            $this->mockHeaderFactory,
-            $this->mockMessagePartFactory,
-            'euphrates'
-        );
-        $instance->addHeader('CONTENT-TYPE', '42');
         $this->assertTrue($instance->isMime());
+        $this->assertFalse($instance->isMime());
     }
     
     public function testGetContentType()
     {
-        $this->mockHeaderFactory
-            ->expects($this->atLeastOnce())
-            ->method('newInstance')
-            ->willReturn(true);
-        
+        $hc = $this->newMockHeaderContainer();
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
-        $instance->addHeader('CONTENT-TYPE', '42');
+        $hc->expects($this->once())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn(true);
         $this->assertTrue($instance->getContentType());
     }
     
@@ -159,18 +160,16 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->method('getValueFor')
             ->with('boundary')
             ->willReturn('Castle Black');
-        
-        $this->mockHeaderFactory
-            ->expects($this->atLeastOnce())
-            ->method('newInstance')
-            ->willReturn($mockHeader);
-        
+
+        $hc = $this->newMockHeaderContainer();
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
-        $instance->addHeader('CONTENT-TYPE', 'Snow and Ice');
+        $hc->expects($this->once())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockHeader);
         $this->assertEquals('Castle Black', $instance->getMimeBoundary());
     }
     
@@ -183,18 +182,17 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $mockHeader->expects($this->any())
             ->method('getValue')
             ->willReturnOnConsecutiveCalls('multipart/kookoo', 'text/plain');
-        
-        $this->mockHeaderFactory
-            ->expects($this->atLeastOnce())
-            ->method('newInstance')
-            ->willReturn($mockHeader);
-        
+
+        $hc = $this->newMockHeaderContainer();
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
-        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $hc->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockHeader);
+
         $this->assertTrue($instance->isMultiPart());
         $this->assertFalse($instance->isMultiPart());
     }
@@ -210,18 +208,15 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->with('boundary')
             ->willReturn('Castle Black');
         
-        $this->mockHeaderFactory
-            ->expects($this->any())
-            ->method('newInstance')
-            ->willReturnOnConsecutiveCalls($mockHeader);
-        
+        $hc = $this->newMockHeaderContainer();
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
-        
-        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $hc->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockHeader);
         
         $this->assertFalse($instance->isParentBoundaryFound());
         $this->assertFalse($instance->setEndBoundaryFound('Somewhere... obvs not Castle Black'));
@@ -231,9 +226,8 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($instance->setEndBoundaryFound('--Castle Black--'));
         
         $child = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'tigris'
+            $this->newMockHeaderContainer()
         );
         $instance->addChild($child);
         $this->assertEquals($instance, $child->getParent());
@@ -260,26 +254,27 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->method('getValueFor')
             ->with('boundary')
             ->willReturn(null);
-        
-        $this->mockHeaderFactory
-            ->expects($this->atLeastOnce())
-            ->method('newInstance')
-            ->willReturnOnConsecutiveCalls($mockHeader, $mockParentHeader);
-        
+
+        $hc = $this->newMockHeaderContainer();
+        $hc->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockHeader);
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
+
+        $hcp = $this->newMockHeaderContainer();
+        $hcp->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockParentHeader);
         $parent = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hcp
         );
         $parent->addChild($instance);
-        
-        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
-        $parent->addHeader('CONTENT-TYPE', 'keekee-kookoo');
         
         $this->assertSame($parent, $instance->getParent());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -309,25 +304,26 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
             ->with('boundary')
             ->willReturn(null);
         
-        $this->mockHeaderFactory
-            ->expects($this->atLeastOnce())
-            ->method('newInstance')
-            ->willReturnOnConsecutiveCalls($mockHeader, $mockParentHeader);
-        
+        $hc = $this->newMockHeaderContainer();
+        $hc->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockHeader);
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hc
         );
+
+        $hcp = $this->newMockHeaderContainer();
+        $hcp->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($mockParentHeader);
         $parent = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $hcp
         );
         $parent->addChild($instance);
-        
-        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
-        $parent->addHeader('CONTENT-TYPE', 'keekee-kookoo');
         
         $this->assertSame($parent, $instance->getParent());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -343,9 +339,8 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     public function testSetStreamPartPosAndGetFilename()
     {
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $this->newMockHeaderContainer()
         );
         $instance->setStreamPartStartPos(42);
         $instance->setStreamPartEndPos(84);
@@ -356,9 +351,8 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     public function testSetStreamContentPosAndGetFilename()
     {
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'tigris'
+            $this->newMockHeaderContainer()
         );
         $instance->setStreamPartStartPos(11);
         $instance->setStreamContentStartPos(42);
@@ -372,19 +366,16 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     public function testSetStreamContentPosAndGetFilenameWithParent()
     {
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'tigris'
+            $this->newMockHeaderContainer()
         );
         $parent = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $this->newMockHeaderContainer()
         );
         $super = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'vistula'
+            $this->newMockHeaderContainer()
         );
         $parent->addChild($instance);
         $super->addChild($parent);
@@ -420,9 +411,8 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetProperties()
     {
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $this->newMockHeaderContainer()
         );
         $instance->setProperty('island', 'Westeros');
         $instance->setProperty('capital', 'King\'s Landing');
@@ -435,9 +425,8 @@ class PartBuilderTest extends PHPUnit_Framework_TestCase
     {
         $stream = Psr7\stream_for('thingsnstuff');
         $instance = new PartBuilder(
-            $this->mockHeaderFactory,
             $this->mockMessagePartFactory,
-            'euphrates'
+            $this->newMockHeaderContainer()
         );
 
         $this->mockMessagePartFactory->expects($this->once())

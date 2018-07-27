@@ -7,7 +7,6 @@
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use ZBateson\MailMimeParser\Stream\StreamFactory;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
 use ZBateson\MailMimeParser\Message\MessageFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
@@ -21,15 +20,10 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 class PartFactoryService
 {
     /**
-     * @var HeaderFactory the HeaderFactory object used for created headers
-     */
-    protected $headerFactory;
-    
-    /**
      * @var PartFilterFactory the PartFilterFactory instance
      */
     protected $partFilterFactory;
-    
+
     /**
      * @var PartStreamFilterManagerFactory the PartStreamFilterManagerFactory
      *      instance
@@ -47,20 +41,17 @@ class PartFactoryService
     protected $messageHelperService;
     
     /**
-     * @param HeaderFactory $headerFactory
      * @param PartFilterFactory $partFilterFactory
      * @param StreamFactory $streamFactory
      * @param PartStreamFilterManagerFactory $partStreamFilterManagerFactory
      * @param MessageHelperService $messageHelperService
      */
     public function __construct(
-        HeaderFactory $headerFactory,
         PartFilterFactory $partFilterFactory,
         StreamFactory $streamFactory,
         PartStreamFilterManagerFactory $partStreamFilterManagerFactory,
         MessageHelperService $messageHelperService
     ) {
-        $this->headerFactory = $headerFactory;
         $this->partFilterFactory = $partFilterFactory;
         $this->streamFactory = $streamFactory;
         $this->partStreamFilterManagerFactory = $partStreamFilterManagerFactory;
@@ -77,7 +68,6 @@ class PartFactoryService
         return MessageFactory::getInstance(
             $this->streamFactory,
             $this->partStreamFilterManagerFactory,
-            $this->headerFactory,
             $this->partFilterFactory,
             $this->messageHelperService
         );
@@ -93,7 +83,6 @@ class PartFactoryService
         return MimePartFactory::getInstance(
             $this->streamFactory,
             $this->partStreamFilterManagerFactory,
-            $this->headerFactory,
             $this->partFilterFactory
         );
     }

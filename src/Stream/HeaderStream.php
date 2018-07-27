@@ -6,11 +6,12 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
+use ArrayIterator;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\StreamDecoratorTrait;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
 use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7\StreamDecoratorTrait;
-use GuzzleHttp\Psr7;
 
 /**
  * Psr7 stream decorator implementation providing a readable stream for a part's
@@ -47,18 +48,18 @@ class HeaderStream implements StreamInterface
      *
      * @return array
      */
-    private function getPartHeadersArray()
+    private function getPartHeadersIterator()
     {
         if ($this->part instanceof ParentHeaderPart) {
-            return $this->part->getRawHeaders();
+            return $this->part->getRawHeaderIterator();
         } elseif ($this->part->getParent() !== null && $this->part->getParent()->isMime()) {
-            return [
+            return new ArrayIterator([
                 [ 'Content-Type', $this->part->getContentType() ],
                 [ 'Content-Disposition', $this->part->getContentDisposition() ],
                 [ 'Content-Transfer-Encoding', $this->part->getContentTransferEncoding() ]
-            ];
+            ]);
         }
-        return [];
+        return new ArrayIterator();
     }
 
     /**
@@ -68,8 +69,7 @@ class HeaderStream implements StreamInterface
      */
     public function writePartHeadersTo(StreamInterface $stream)
     {
-        $headers = $this->getPartHeadersArray();
-        foreach ($headers as $header) {
+        foreach ($this->getPartHeadersIterator() as $header) {
             $stream->write("${header[0]}: ${header[1]}\r\n");
         }
         $stream->write("\r\n");

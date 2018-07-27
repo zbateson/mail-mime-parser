@@ -57,9 +57,15 @@ class MessageTest extends PHPUnit_Framework_TestCase
     
     protected function getMockedPartBuilder()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pb->method('getHeaderContainer')
+            ->willReturn($hc);
+        return $pb;
     }
     
     protected function getMockedPartBuilderWithChildren()
@@ -124,7 +130,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
             $this->mockPartStreamFilterManager,
             $this->mockStreamFactory,
             $this->mockPartFilterFactory,
-            $this->mockHeaderFactory,
             $partBuilder,
             $this->mockMessageHelperService,
             $stream,
@@ -311,14 +316,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
     
     public function testIsMimeWithContentType()
     {
-        $hf = $this->mockHeaderFactory;
-        $header = $this->getMockedParameterHeader('Content-Type', 'text/plain', 'utf-8');
+        $header = $this->getMockedParameterHeader('Content-Type', 'text/html', 'utf-8');
         
         $pb = $this->getMockedPartBuilder();
         $pb->method('getContentType')
             ->willReturn($header);
-        $pb->method('getRawHeaders')
-            ->willReturn(['contenttype' => ['Blah', 'Blah']]);
+        $hc = $pb->getHeaderContainer();
+        $hc->method('get')
+            ->willReturnMap([ [ 'Content-Type', 0, $header ] ]);
 
         $message = $this->newMessage(
             $pb
@@ -334,8 +339,9 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($header);
         
         $pb = $this->getMockedPartBuilder();
-        $pb->method('getRawHeaders')
-            ->willReturn(['mimeversion' => ['Mime-Version', '4.3']]);
+        $hc = $pb->getHeaderContainer();
+        $hc->method('get')
+            ->willReturnMap([ [ 'Mime-Version', 0, $header ] ]);
 
         $message = $this->newMessage(
             $pb

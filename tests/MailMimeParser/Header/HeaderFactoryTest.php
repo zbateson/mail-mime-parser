@@ -103,4 +103,12 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\ParameterHeader', get_class($header));
         }
     }
+
+    public function testHeaderContainer()
+    {
+        $this->assertInstanceOf(
+            'ZBateson\MailMimeParser\Header\HeaderContainer',
+            $this->headerFactory->newHeaderContainer()
+        );
+    }
 }

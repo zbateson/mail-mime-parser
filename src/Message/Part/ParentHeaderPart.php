@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Header\HeaderContainer;
 
 /**
  * A parent part containing headers.
@@ -20,31 +21,14 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 abstract class ParentHeaderPart extends ParentPart
 {
     /**
-     * @var HeaderFactory the HeaderFactory object used for created headers
+     * @var HeaderContainer
      */
-    protected $headerFactory;
-
-    /**
-     * @var string[][] array of headers, with keys set to lower-cased,
-     *      alphanumeric characters of the header's name, and values set to an
-     *      array of 2 elements, the first being the header's original name with
-     *      non-alphanumeric characters and original case, and the second set to
-     *      the header's value.
-     */
-    protected $rawHeaders;
-
-    /**
-     * @var AbstractHeader[] array of parsed header objects populated on-demand,
-     * the key is set to the header's name lower-cased, and with
-     * non-alphanumeric characters removed.
-     */
-    protected $headers;
+    protected $headerContainer;
 
     /**
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
-     * @param HeaderFactory $headerFactory
      * @param PartBuilder $partBuilder
      * @param StreamInterface $stream
      * @param StreamInterface $contentStream
@@ -53,7 +37,6 @@ abstract class ParentHeaderPart extends ParentPart
         PartStreamFilterManager $partStreamFilterManager,
         StreamFactory $streamFactory,
         PartFilterFactory $partFilterFactory,
-        HeaderFactory $headerFactory,
         PartBuilder $partBuilder,
         StreamInterface $stream = null,
         StreamInterface $contentStream = null
@@ -66,21 +49,7 @@ abstract class ParentHeaderPart extends ParentPart
             $stream,
             $contentStream
         );
-        $this->headerFactory = $headerFactory;
-        $this->headers['contenttype'] = $partBuilder->getContentType();
-        $this->rawHeaders = $partBuilder->getRawHeaders();
-    }
-
-    /**
-     * Returns the string in lower-case, and with non-alphanumeric characters
-     * stripped out.
-     *
-     * @param string $header
-     * @return string
-     */
-    private function getNormalizedHeaderName($header)
-    {
-        return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+        $this->headerContainer = $partBuilder->getHeaderContainer();
     }
 
     /**
@@ -91,19 +60,18 @@ abstract class ParentHeaderPart extends ParentPart
      * @param string $name
      * @return \ZBateson\MailMimeParser\Header\AbstractHeader
      */
-    public function getHeader($name)
+    public function getHeader($name, $offset = 0)
     {
-        $nameKey = $this->getNormalizedHeaderName($name);
-        if (isset($this->rawHeaders[$nameKey])) {
-            if (!isset($this->headers[$nameKey])) {
-                $this->headers[$nameKey] = $this->headerFactory->newInstance(
-                    $this->rawHeaders[$nameKey][0],
-                    $this->rawHeaders[$nameKey][1]
-                );
-            }
-            return $this->headers[$nameKey];
-        }
-        return null;
+        return $this->headerContainer->get($name, $offset);
+    }
+
+    /**
+     * 
+     * @param type $name
+     */
+    public function getAllHeadersByName($name)
+    {
+        return $this->headerContainer->getAll($name);
     }
 
     /**
@@ -114,7 +82,17 @@ abstract class ParentHeaderPart extends ParentPart
      */
     public function getRawHeaders()
     {
-        return array_values($this->rawHeaders);
+        return $this->headerContainer->getHeaders();
+    }
+
+    /**
+     * 
+     *
+     * @return \Iterator
+     */
+    public function getRawHeaderIterator()
+    {
+        return $this->headerContainer->getIterator();
     }
 
     /**
@@ -167,15 +145,24 @@ abstract class ParentHeaderPart extends ParentPart
      * @param string $name
      * @param string $value
      */
-    public function setRawHeader($name, $value)
+    public function setRawHeader($name, $value, $offset = 0)
     {
-        $normalized = $this->getNormalizedHeaderName($name);
-        $header = $this->headerFactory->newInstance($name, $value);
-        $this->headers[$normalized] = $header;
-        $this->rawHeaders[$normalized] = [
-            $header->getName(),
-            $header->getRawValue()
-        ];
+        $this->headerContainer->set($name, $value, $offset);
+        $this->onChange();
+    }
+
+    /**
+     * Adds a header with the given $name and $value.
+     *
+     * Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
+     * registers it as a header.
+     *
+     * @param string $name
+     * @param string $value
+     */
+    public function addRawHeader($name, $value)
+    {
+        $this->headerContainer->add($name, $value);
         $this->onChange();
     }
 
@@ -186,8 +173,18 @@ abstract class ParentHeaderPart extends ParentPart
      */
     public function removeHeader($name)
     {
-        $normalized = $this->getNormalizedHeaderName($name);
-        unset($this->headers[$normalized], $this->rawHeaders[$normalized]);
+        $this->headerContainer->removeAll($name);
+        $this->onChange();
+    }
+
+    /**
+     * Removes the header with the given name
+     *
+     * @param string $name
+     */
+    public function removeSingleHeader($name, $offset = 0)
+    {
+        $this->headerContainer->remove($name, $offset);
         $this->onChange();
     }
 }

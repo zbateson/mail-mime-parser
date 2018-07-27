@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use ReflectionClass;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
@@ -86,7 +85,6 @@ abstract class MessagePartFactory
      *
      * @param StreamFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
-     * @param HeaderFactory $hf
      * @param PartFilterFactory $pf
      * @param MessageHelperService $mhs
      * @return MessagePartFactory
@@ -94,7 +92,6 @@ abstract class MessagePartFactory
     public static function getInstance(
         StreamFactory $sdf,
         PartStreamFilterManagerFactory $psf,
-        HeaderFactory $hf = null,
         PartFilterFactory $pf = null,
         MessageHelperService $mhs = null
     ) {

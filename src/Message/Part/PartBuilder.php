@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory;
 
 /**
@@ -44,12 +44,6 @@ class PartBuilder
     private $streamContentEndPos = 0;
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory used to parse a
-     *      Content-Type header when needed.
-     */
-    private $headerFactory;
-    
-    /**
      * @var MessagePartFactory the factory
      *      needed for creating the Message or MessagePart for the parsed part.
      */
@@ -76,13 +70,9 @@ class PartBuilder
     private $mimeBoundary = false;
     
     /**
-     * @var string[][] an array of headers on the current part.  The key index
-     *      is set to the lower-cased, alphanumeric-only, name of the header
-     *      (after stripping out non-alphanumeric characters, e.g. contenttype)
-     *      and each element containing an array of 2 strings, the first being
-     *      the original name of the header, and the second being the value.
+     * @var HeaderContainer a container for found and parsed headers.
      */
-    private $headers = [];
+    private $headerContainer;
     
     /**
      * @var PartBuilder[] an array of children found below this part for a mime
@@ -100,25 +90,19 @@ class PartBuilder
      *      $messagePartFactory when constructing the Message and its children.
      */
     private $properties = [];
-    
-    /**
-     * @var \ZBateson\MailMimeParser\Header\ParameterHeader parsed content-type
-     *      header.
-     */
-    private $contentType = null;
-    
+
     /**
      * Sets up class dependencies.
-     * 
-     * @param HeaderFactory $hf
+     *
      * @param MessagePartFactory $mpf
+     * @param HeaderContainer $headerContainer
      */
     public function __construct(
-        HeaderFactory $hf,
-        MessagePartFactory $mpf
+        MessagePartFactory $mpf,
+        HeaderContainer $headerContainer
     ) {
-        $this->headerFactory = $hf;
         $this->messagePartFactory = $mpf;
+        $this->headerContainer = $headerContainer;
     }
     
     /**
@@ -134,26 +118,17 @@ class PartBuilder
      */
     public function addHeader($name, $value)
     {
-        $nameKey = preg_replace('/[^a-z0-9]/', '', strtolower($name));
-        $this->headers[$nameKey] = [$name, $value];
+        $this->headerContainer->add($name, $value);
     }
     
     /**
-     * Returns the raw headers added to this PartBuilder as an array consisting
-     * of:
-     * 
-     * Keys set to the name of the header, in all lowercase, and with non-
-     * alphanumeric characters removed (e.g. Content-Type becomes contenttype).
-     * 
-     * The value is an array of two elements.  The first is the original header
-     * name (e.g. Content-Type) and the second is the raw string value of the
-     * header, e.g. 'text/html; charset=utf8'.
+     * Returns the HeaderContainer object containing parsed headers.
      * 
      * @return array
      */
-    public function getRawHeaders()
+    public function getHeaderContainer()
     {
-        return $this->headers;
+        return $this->headerContainer;
     }
     
     /**
@@ -223,8 +198,8 @@ class PartBuilder
      */
     public function isMime()
     {
-        return (isset($this->headers['contenttype'])
-            || isset($this->headers['mimeversion']));
+        return ($this->headerContainer->exists('Content-Type') ||
+            $this->headerContainer->exists('Mime-Version'));
     }
     
     /**
@@ -235,13 +210,7 @@ class PartBuilder
      */
     public function getContentType()
     {
-        if ($this->contentType === null && isset($this->headers['contenttype'])) {
-            $this->contentType = $this->headerFactory->newInstance(
-                'Content-Type',
-                $this->headers['contenttype'][1]
-            );
-        }
-        return $this->contentType;
+        return $this->headerContainer->get('Content-Type');
     }
     
     /**

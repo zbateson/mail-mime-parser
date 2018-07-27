@@ -46,8 +46,8 @@ class PartBuilderFactory
     public function newPartBuilder(MessagePartFactory $messagePartFactory)
     {
         return new PartBuilder(
-            $this->headerFactory,
-            $messagePartFactory
+            $messagePartFactory,
+            $this->headerFactory->newHeaderContainer()
         );
     }
 }
