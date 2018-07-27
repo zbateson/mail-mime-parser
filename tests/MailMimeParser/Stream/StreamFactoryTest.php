@@ -50,5 +50,6 @@ class StreamFactoryTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Stream\MessagePartStream', $factory->newMessagePartStream($mockMimePart));
+        $this->assertInstanceOf('ZBateson\MailMimeParser\Stream\HeaderStream', $factory->newHeaderStream($mockMimePart));
     }
 }

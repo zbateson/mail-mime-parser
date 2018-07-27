@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @group HeaderStream
  * @group Stream
- * @covers ZBateson\MailMimeParser\Message\Helper\HeaderStream
+ * @covers ZBateson\MailMimeParser\Stream\HeaderStream
  * @author Zaahid Bateson
  */
 class HeaderStreamTest extends PHPUnit_Framework_TestCase
