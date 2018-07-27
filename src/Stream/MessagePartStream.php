@@ -6,31 +6,39 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\AppendStream;
+use GuzzleHttp\Psr7\StreamDecoratorTrait;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\Part\MessagePart;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
-use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7\StreamDecoratorTrait;
-use GuzzleHttp\Psr7\AppendStream;
-use GuzzleHttp\Psr7;
 
 /**
- * Writes a MimePart to a resource handle.
- * 
- * The class is responsible for writing out the headers and content of a
- * MimePart to an output stream buffer, taking care of encoding and filtering.
- * 
+ * Provides a readable stream for a MessagePart.
+ *
  * @author Zaahid Bateson
  */
 class MessagePartStream implements StreamInterface
 {
     use StreamDecoratorTrait;
 
+    /**
+     * @var StreamFactory For creating needed stream decorators.
+     */
     protected $streamFactory;
+
+    /**
+     * @var MessagePart The part to read from.
+     */
     protected $part;
 
+    /**
+     * @param StreamFactory $sdf
+     * @param MessagePart $part
+     */
     public function __construct(StreamFactory $sdf, MessagePart $part)
     {
         $this->streamFactory = $sdf;
@@ -38,41 +46,44 @@ class MessagePartStream implements StreamInterface
     }
 
     /**
-     * Sets up a mailmimeparser-encode stream filter on the content resource 
-     * handle of the passed MimePart if applicable and returns a reference to
-     * the filter.
+     * Attaches and returns a CharsetStream decorator to the passed $stream.
      *
-     * @param MimePart $part
-     * @return StreamInterface a reference to the appended stream filter or null
+     * If the current attached $part doesn't specify a $charset, $stream is
+     * returned as-is.
+     *
+     * @return StreamInterface
      */
-    private function getCharsetDecoratorForStream(MessagePart $part, StreamInterface $stream)
+    private function getCharsetDecoratorForStream(StreamInterface $stream)
     {
-        $charset = $part->getCharset();
+        $charset = $this->part->getCharset();
         if (!empty($charset)) {
-            $decorator = $this->streamFactory->newCharsetStream(
+            $stream = $this->streamFactory->newCharsetStream(
                 $stream,
                 $charset,
                 MailMimeParser::DEFAULT_CHARSET
             );
-            return $decorator;
         }
         return $stream;
     }
     
     /**
-     * Appends a stream filter on the passed MimePart's content resource handle
-     * based on the type of encoding for the passed part.
+     * Attaches and returns a transfer encoding stream decorator to the passed
+     * $stream.
      *
-     * @param MimePart $part
-     * @param resource $handle
-     * @param StreamLeftover $leftovers
-     * @return StreamInterface the stream filter
+     * The attached stream decorator is based on the attached part's returned
+     * value from MessagePart::getContentTransferEncoding, using one of the
+     * following stream decorators as appropriate:
+     *
+     * o QuotedPrintableStream
+     * o Base64Stream
+     * o UUStream
+     *
+     * @param StreamInterface $stream
+     * @return StreamInterface
      */
-    private function getTransferEncodingDecoratorForStream(
-        MessagePart $part,
-        StreamInterface $stream
-    ) {
-        $encoding = $part->getContentTransferEncoding();
+    private function getTransferEncodingDecoratorForStream(StreamInterface $stream)
+    {
+        $encoding = $this->part->getContentTransferEncoding();
         $decorator = null;
         switch ($encoding) {
             case 'quoted-printable':
@@ -84,7 +95,7 @@ class MessagePartStream implements StreamInterface
                 break;
             case 'x-uuencode':
                 $decorator = $this->streamFactory->newUUStream($stream);
-                $decorator->setFilename($part->getFilename());
+                $decorator->setFilename($this->part->getFilename());
                 break;
             default:
                 return $stream;
@@ -93,56 +104,75 @@ class MessagePartStream implements StreamInterface
     }
 
     /**
-     * Writes out the content portion of the mime part based on the headers that
-     * are set on the part, taking care of character/content-transfer encoding.
+     * Writes out the content portion of the attached mime part to the passed
+     * $stream.
      *
      * @param MessagePart $part
      * @param StreamInterface $stream
      */
-    public function writePartContentTo(MessagePart $part, StreamInterface $stream)
+    private function writePartContentTo(StreamInterface $stream)
     {
-        $contentStream = $part->getContentStream();
+        $contentStream = $this->part->getContentStream();
         if ($contentStream !== null) {
             $copyStream = $this->streamFactory->newNonClosingStream($stream);
-            $es = $this->getTransferEncodingDecoratorForStream(
-                $part,
-                $copyStream
-            );
-            $cs = $this->getCharsetDecoratorForStream($part, $es);
+            $es = $this->getTransferEncodingDecoratorForStream($copyStream);
+            $cs = $this->getCharsetDecoratorForStream($es);
             Psr7\copy_to_stream($contentStream, $cs);
             $cs->close();
         }
     }
 
+    /**
+     * Creates an array of streams based on the attached part's mime boundary
+     * and child streams.
+     *
+     * ParentHeaderPart $part passed in because $this->part is declared as
+     *                  MessagePart
+     * @return StreamInterface[]
+     */
     protected function getBoundaryAndChildStreams(ParentHeaderPart $part)
     {
-        $streams = [];
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
+        if ($boundary === null) {
+            return array_map(
+                function ($child) {
+                    return $child->getStream();
+                },
+                $part->getChildParts()
+            );
+        }
+        $streams = [];
         foreach ($part->getChildParts() as $i => $child) {
-            if ($boundary !== null) {
-                if ($i === 0 && !$part->hasContent()) {
-                    $streams[] = Psr7\stream_for("--$boundary\r\n");
-                } else {
-                    $streams[] = Psr7\stream_for("\r\n--$boundary\r\n");
-                }
+            if ($i !== 0 || $part->hasContent()) {
+                $streams[] = Psr7\stream_for("\r\n");
             }
+            $streams[] = Psr7\stream_for("--$boundary\r\n");
             $streams[] = $child->getStream();
         }
-        if ($boundary !== null) {
-            $streams[] = Psr7\stream_for("\r\n--$boundary--\r\n");
-        }
+        $streams[] = Psr7\stream_for("\r\n--$boundary--\r\n");
+        
         return $streams;
     }
 
+    /**
+     * Returns an array of Psr7 Streams representing the attached part and it's
+     * direct children.
+     *
+     * @return StreamInterface[]
+     */
     protected function getStreamsArray()
     {
         $content = Psr7\stream_for();
-        $this->writePartContentTo($this->part, $content);
+        $this->writePartContentTo($content);
         $content->rewind();
-        $streams = [ new HeaderStream($this->part), $content ];
+        $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];
 
-        if ($this->part instanceof ParentHeaderPart) {
-            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
+        /**
+         * @var ParentHeaderPart
+         */
+        $part = $this->part;
+        if ($part instanceof ParentHeaderPart && $part->getChildCount()) {
+            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($part));
         }
 
         return $streams;

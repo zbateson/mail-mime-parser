@@ -162,4 +162,15 @@ class StreamFactory
     {
         return new MessagePartStream($this, $part);
     }
+
+    /**
+     * Creates and returns a HeaderStream
+     *
+     * @param MessagePart $part
+     * @return HeaderStream
+     */
+    public function newHeaderStream(MessagePart $part)
+    {
+        return new HeaderStream($part);
+    }
 }
