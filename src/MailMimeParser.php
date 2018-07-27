@@ -39,29 +39,7 @@ class MailMimeParser
     {
         $this->di = SimpleDi::singleton();
     }
-    
-    /**
-     * Sets the default charset used by MMP for strings returned by read
-     * operations on text content (e.g. MessagePart::getContentResourceHandle,
-     * getContent, etc...)
-     * 
-     * @param string $charset
-     */
-    public static function setDefaultCharset($charset)
-    {
-        self::$defaultCharset = $charset;
-    }
-    
-    /**
-     * Returns the default charset that will be used by MMP strings returned.
-     * 
-     * @return string
-     */
-    public static function getDefaultCharset()
-    {
-        return self::$defaultCharset;
-    }
-    
+
     /**
      * Parses the passed stream handle into a ZBateson\MailMimeParser\Message
      * object and returns it.

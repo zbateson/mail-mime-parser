@@ -124,7 +124,7 @@ class PartBuilder
     /**
      * Returns the HeaderContainer object containing parsed headers.
      * 
-     * @return array
+     * @return HeaderContainer
      */
     public function getHeaderContainer()
     {
@@ -314,6 +314,11 @@ class PartBuilder
         return ($this->parent === null || !$this->parent->endBoundaryFound);
     }
 
+    /**
+     * Returns the offset for this part's stream within its parent stream.
+     *
+     * @return int
+     */
     public function getStreamPartStartOffset()
     {
         if ($this->parent) {
@@ -321,12 +326,22 @@ class PartBuilder
         }
         return $this->streamPartStartPos;
     }
-    
+
+    /**
+     * Returns the length of this part's stream.
+     *
+     * @return int
+     */
     public function getStreamPartLength()
     {
         return $this->streamPartEndPos - $this->streamPartStartPos;
     }
 
+    /**
+     * Returns the offset for this part's content within its part stream.
+     *
+     * @return int
+     */
     public function getStreamContentStartOffset()
     {
         if ($this->parent) {
@@ -335,6 +350,11 @@ class PartBuilder
         return $this->streamContentStartPos;
     }
 
+    /**
+     * Returns the length of this part's content stream.
+     *
+     * @return int
+     */
     public function getStreamContentLength()
     {
         return $this->streamContentEndPos - $this->streamContentStartPos;
