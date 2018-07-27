@@ -76,6 +76,9 @@ class MessageParser
     {
         if ($header !== '' && strpos($header, ':') !== false) {
             $a = explode(':', $header, 2);
+            if ($part->getHeader($a[0]) !== null) {
+                return;
+            }
             $part->setRawHeader($a[0], trim($a[1]));
         }
     }
