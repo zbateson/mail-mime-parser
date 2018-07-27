@@ -13,7 +13,12 @@ use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use GuzzleHttp\Psr7;
 
 /**
- * 
+ * Psr7 stream decorator implementation providing a readable stream for a part's
+ * headers.
+ *
+ * HeaderStream is only used by a MimePart parent.  It can accept any
+ * MessagePart - for non-MimeParts, only type headers are generated based on
+ * available information.
  *
  * @author Zaahid Bateson
  */
@@ -21,13 +26,27 @@ class HeaderStream implements StreamInterface
 {
     use StreamDecoratorTrait;
 
+    /**
+     * @var MessagePart the part to read from.
+     */
     protected $part;
 
+    /**
+     * @param MessagePart $part
+     */
     public function __construct(MessagePart $part)
     {
         $this->part = $part;
     }
 
+    /**
+     * Returns a header array for the current part.
+     *
+     * If the part is not a MimePart, Content-Type, Content-Disposition and
+     * Content-Transfer-Encoding headers are generated manually.
+     *
+     * @return array
+     */
     private function getPartHeadersArray()
     {
         if ($this->part instanceof ParentHeaderPart) {
@@ -43,10 +62,8 @@ class HeaderStream implements StreamInterface
     }
 
     /**
-     * Writes out the headers of the passed part and follows them with an
-     * empty line.
+     * Writes out headers for $this->part and follows them with an empty line.
      *
-     * @param MimePart $part
      * @param StreamInterface $stream
      */
     public function writePartHeadersTo(StreamInterface $stream)
