@@ -32,7 +32,7 @@ class SplitParameterToken extends HeaderPart
     protected $encodedParts = [];
 
     /**
-     * @var string contains literal parts that don't require any decoding (and
+     * @var string[] contains literal parts that don't require any decoding (and
      *      are therefore ISO-8859-1 (technically should be 7bit US-ASCII but
      *      allowing 8bit shouldn't be an issue as elsewhere in MMP).
      */
@@ -57,7 +57,7 @@ class SplitParameterToken extends HeaderPart
      */
     public function __construct(CharsetConverter $charsetConverter, $name)
     {
-        parent::__construct($charsetConverter, '');
+        parent::__construct($charsetConverter);
         $this->name = trim($name);
     }
 

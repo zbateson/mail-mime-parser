@@ -28,22 +28,22 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
 class SimpleDi
 {
     /**
-     * @var type 
+     * @var PartBuilderFactory
      */
     protected $partBuilderFactory;
     
     /**
-     * @var type 
+     * @var PartFactoryService
      */
     protected $partFactoryService;
     
     /**
-     * @var type 
+     * @var PartFilterFactory
      */
     protected $partFilterFactory;
     
     /**
-     * @var type 
+     * @var PartStreamFilterManagerFactory
      */
     protected $partStreamFilterManagerFactory;
     
@@ -76,6 +76,9 @@ class SimpleDi
      */
     protected $messageHelperService;
 
+    /**
+     * @var StreamFactory
+     */
     protected $streamFactory;
     
     /**
@@ -145,7 +148,12 @@ class SimpleDi
         }
         return $this->messageHelperService;
     }
-    
+
+    /**
+     * Returns a PartFilterFactory instance
+     *
+     * @return PartFilterFactory
+     */
     public function getPartFilterFactory()
     {
         return $this->getInstance(
@@ -155,8 +163,9 @@ class SimpleDi
     }
     
     /**
+     * Returns a PartFactoryService singleton.
      * 
-     * @return type
+     * @return PartFactoryService
      */
     public function getPartFactoryService()
     {
@@ -172,6 +181,11 @@ class SimpleDi
         return $this->partFactoryService;
     }
 
+    /**
+     * Returns a PartBuilderFactory instance.
+     * 
+     * @return PartBuilderFactory
+     */
     public function getPartBuilderFactory()
     {
         if ($this->partBuilderFactory === null) {
@@ -195,6 +209,11 @@ class SimpleDi
         return $this->headerFactory;
     }
 
+    /**
+     * Returns a StreamFactory.
+     *
+     * @return StreamFactory
+     */
     public function getStreamFactory()
     {
         return $this->getInstance(
@@ -202,7 +221,12 @@ class SimpleDi
             __NAMESPACE__ . '\Stream\StreamFactory'
         );
     }
-    
+
+    /**
+     * Returns a PartStreamFilterManagerFactory.
+     * 
+     * @return PartStreamFilterManagerFactory
+     */
     public function getPartStreamFilterManagerFactory()
     {
         if ($this->partStreamFilterManagerFactory === null) {
@@ -215,7 +239,12 @@ class SimpleDi
             __NAMESPACE__ . '\Message\Part\PartStreamFilterManagerFactory'
         );
     }
-    
+
+    /**
+     * Returns a CharsetConverter.
+     * 
+     * @return CharsetConverter
+     */
     public function getCharsetConverter()
     {
         return new CharsetConverter();

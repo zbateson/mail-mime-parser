@@ -543,7 +543,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
             ->method('addChild')
             ->with($attPart);
 
-        $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', null, 'dispo');
+        $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', null);
     }
     
     public function testCreateAndAddPartForAttachmentToNonMimeMessage()
@@ -582,7 +582,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
             ->method('addChild')
             ->with($attPart);
 
-        $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'test-file', 'dispo');
+        $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', 'test-file');
     }
 
     public function testSetContentPartForMimeTypeThatExists()

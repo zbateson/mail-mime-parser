@@ -89,7 +89,7 @@ abstract class ParentHeaderPart extends ParentPart
      * Note that mime headers aren't case sensitive.
      *
      * @param string $name
-     * @return AbstractHeader
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
      */
     public function getHeader($name)
     {

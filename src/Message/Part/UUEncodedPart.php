@@ -51,7 +51,7 @@ class UUEncodedPart extends NonMimePart
         StreamInterface $contentStream = null
     ) {
         parent::__construct($partStreamFilterManager, $streamFactory, $stream, $contentStream);
-        $this->mode = $partBuilder->getProperty('mode');
+        $this->mode = intval($partBuilder->getProperty('mode'));
         $this->filename = $partBuilder->getProperty('filename');
     }
     

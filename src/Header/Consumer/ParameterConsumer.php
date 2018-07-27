@@ -85,7 +85,8 @@ class ParameterConsumer extends GenericConsumer
      * @param string $strName
      * @param string $strValue
      * @param ArrayObject $splitParts
-     * @return MimeLiteralPart|SplitParameterToken|ParameterPart
+     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
+     *         |SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart
      */
     private function getPartFor($strName, $strValue, ArrayObject $splitParts)
     {

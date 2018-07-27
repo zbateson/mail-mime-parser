@@ -102,7 +102,7 @@ class PartBuilder
     private $properties = [];
     
     /**
-     * @var ZBateson\MailMimeParser\Header\ParameterHeader parsed content-type
+     * @var \ZBateson\MailMimeParser\Header\ParameterHeader parsed content-type
      *      header.
      */
     private $contentType = null;
@@ -338,7 +338,7 @@ class PartBuilder
      * set to true (i.e. this isn't a discardable part following the parent's
      * end boundary line).
      * 
-     * @return booelan
+     * @return boolean
      */
     public function canHaveHeaders()
     {

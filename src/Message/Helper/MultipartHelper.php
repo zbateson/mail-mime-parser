@@ -277,7 +277,8 @@ class MultipartHelper extends AbstractHelper
      *
      * @param Message $message
      * @param string $mimeType
-     * @return MimeType or null if not found
+     * @return \ZBateson\MailMimeParser\Message\Part\MimeType or null if not
+     *         found
      */
     public function findOtherContentPartFor(Message $message, $mimeType)
     {
@@ -301,7 +302,7 @@ class MultipartHelper extends AbstractHelper
      * @param Message $message
      * @param string $mimeType
      * @param string $charset
-     * @return MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function createContentPartForMimeType(Message $message, $mimeType, $charset)
     {
@@ -331,13 +332,14 @@ class MultipartHelper extends AbstractHelper
      * attachment.
      *
      * @param Message $message
-     * @param string|resource|StreamInterface $resource
+     * @param string|resource|Psr\Http\Message\StreamInterface\StreamInterface
+     *        $resource
      * @param string $mimeType
-     * @param string $filename
      * @param string $disposition
-     * @return MimePart
+     * @param string $filename
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function createAndAddPartForAttachment(Message $message, $resource, $mimeType, $filename, $disposition)
+    public function createAndAddPartForAttachment(Message $message, $resource, $mimeType, $disposition, $filename = null)
     {
         if ($filename === null) {
             $filename = 'file' . uniqid();

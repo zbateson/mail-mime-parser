@@ -135,7 +135,7 @@ class Message extends MimePart
      * is set.
      * 
      * @param int $index
-     * @return MessagePart
+     * @return ZBateson\MailMimeParser\Message\Part\MessagePart
      */
     public function getAttachmentPart($index)
     {
@@ -412,7 +412,7 @@ class Message extends MimePart
      * given parameters.
      *
      * @param string|resource|StreamInterface $resource
-     * @param strubg $mimeType
+     * @param string $mimeType
      * @param string $filename
      * @param string $disposition
      */
@@ -420,7 +420,7 @@ class Message extends MimePart
     {
         $this->messageHelperService
             ->getMultipartHelper()
-            ->createAndAddPartForAttachment($this, $resource, $mimeType, $filename, $disposition);
+            ->createAndAddPartForAttachment($this, $resource, $mimeType, $disposition, $filename);
     }
 
     /**

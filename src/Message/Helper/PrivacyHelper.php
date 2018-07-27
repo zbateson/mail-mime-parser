@@ -157,7 +157,8 @@ class PrivacyHelper extends AbstractHelper
      * replace new lines.
      *
      * @param Message $message
-     * @return StreamInterface or null if the message doesn't have any children
+     * @return \Psr\Http\Message\StreamInterface or null if the message doesn't
+     *         have any children
      */
     public function getSignedMessageStream(Message $message)
     {
@@ -201,7 +202,7 @@ class PrivacyHelper extends AbstractHelper
      * pgp-signature).
      *
      * @param Message $message
-     * @return MimePart
+     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getSignaturePart(Message $message)
     {

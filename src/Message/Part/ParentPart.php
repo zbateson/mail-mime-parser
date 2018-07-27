@@ -258,7 +258,7 @@ abstract class ParentPart extends MessagePart
             return $parent->removePart($part);
         } else {
             $position = array_search($part, $this->children, true);
-            if ($position !== false) {
+            if ($position !== false && is_int($position)) {
                 array_splice($this->children, $position, 1);
                 $this->onChange();
                 return $position;

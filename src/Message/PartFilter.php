@@ -11,8 +11,8 @@ use ZBateson\MailMimeParser\Message\Part\MimePart;
 use InvalidArgumentException;
 
 /**
- * Provides a way to define a filter of MimeParts for use in various calls to
- * add/remove MimeParts.
+ * Provides a way to define a filter of MessagePart for use in various calls to
+ * add/remove MessagePart.
  * 
  * A PartFilter is defined as a set of properties in the class, set to either be
  * 'included' or 'excluded'.  The filter is simplistic in that a property
@@ -235,6 +235,9 @@ class PartFilter
     {
         if ($name === 'hascontent' || $name === 'multipart'
             || $name === 'textpart' || $name === 'signedpart') {
+            if (is_array($value)) {
+                throw new InvalidArgumentException('$value must be not be an array');
+            }
             $this->validateArgument(
                 $name,
                 $value,
@@ -286,8 +289,8 @@ class PartFilter
     }
     
     /**
-     * Returns true if the passed MessagePart fails the filter's multipart filter
-     * settings.
+     * Returns true if the passed MessagePart fails the filter's multipart
+     * filter settings.
      * 
      * @param MessagePart $part
      * @return bool
@@ -342,13 +345,13 @@ class PartFilter
      * fails.
      * 
      * @staticvar array $map
-     * @param MimePart $part
+     * @param MessagePart $part
      * @param int $type
      * @param string $name
      * @param string $header
      * @return boolean
      */
-    private function failsHeaderFor($part, $type, $name, $header)
+    private function failsHeaderFor(MessagePart $part, $type, $name, $header)
     {
         $headerValue = null;
         
@@ -371,10 +374,10 @@ class PartFilter
     }
     
     /**
-     * Returns true if the passed MimePart fails the filter's header filter
+     * Returns true if the passed MessagePart fails the filter's header filter
      * settings.
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
+     * @param MessagePart $part
      * @return boolean
      */
     private function failsHeaderPartFilter(MessagePart $part)
@@ -390,11 +393,11 @@ class PartFilter
     }
     
     /**
-     * Determines if the passed MimePart should be filtered out or not.  If the
-     * MimePart passes all filter tests, true is returned.  Otherwise false is
-     * returned.
+     * Determines if the passed MessagePart should be filtered out or not.
+     * If the MessagePart passes all filter tests, true is returned.  Otherwise
+     * false is returned.
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\MimePart $part
+     * @param MessagePart $part
      * @return boolean
      */
     public function filter(MessagePart $part)

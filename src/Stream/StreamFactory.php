@@ -26,12 +26,12 @@ use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 class StreamFactory
 {
     /**
-     * Returns a SeekingLimitedStream using $part->getStreamPartLength() and
+     * Returns a SeekingLimitStream using $part->getStreamPartLength() and
      * $part->getStreamPartStartOffset()
      *
      * @param StreamInterface $stream
      * @param PartBuilder $part
-     * @return SeekingLimitedStream
+     * @return SeekingLimitStream
      */
     public function getLimitedPartStream(StreamInterface $stream, PartBuilder $part)
     {
@@ -43,12 +43,12 @@ class StreamFactory
     }
 
     /**
-     * Returns a SeekingLimitedStream using $part->getStreamContentLength() and
+     * Returns a SeekingLimitStream using $part->getStreamContentLength() and
      * $part->getStreamContentStartOffset()
      *
      * @param StreamInterface $stream
      * @param PartBuilder $part
-     * @return SeekingLimitedStream
+     * @return SeekingLimitStream
      */
     public function getLimitedContentStream(StreamInterface $stream, PartBuilder $part)
     {

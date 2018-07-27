@@ -403,8 +403,8 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($helper);
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
-                [ $message, 'content', 'mimetype', $this->anything(), 'attachment' ],
-                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'blueball.png', 'inline' ]
+                [ $message, 'content', 'mimetype', 'attachment', $this->anything() ],
+                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png' ]
             )
             ->willReturn($part);
         

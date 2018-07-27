@@ -68,7 +68,7 @@ class HeaderStream implements StreamInterface
      */
     public function writePartHeadersTo(StreamInterface $stream)
     {
-        $headers = $this->getPartHeadersArray($this->part);
+        $headers = $this->getPartHeadersArray();
         foreach ($headers as $header) {
             $stream->write("${header[0]}: ${header[1]}\r\n");
         }
