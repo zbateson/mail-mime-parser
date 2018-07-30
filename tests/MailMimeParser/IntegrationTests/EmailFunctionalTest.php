@@ -6,6 +6,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use GuzzleHttp\Psr7;
+use DateTime;
 
 /**
  * Description of EmailFunctionalTest
@@ -92,6 +93,11 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
 
         if (isset($props['Subject'])) {
             $this->assertEquals($props['Subject'], $message->getHeaderValue('subject'), $failMessage);
+        }
+
+        if (isset($props['Date'])) {
+            $this->assertNotNull($message->getHeader('date'));
+            $this->assertEquals($props['Date'], $message->getHeader('date')->getDateTime(), $failMessage);
         }
 
         if (!empty($props['signed'])) {
@@ -695,6 +701,26 @@ class EmailFunctionalTest extends PHPUnit_Framework_TestCase
                     'text/html',
                     'text/plain'
                 ]
+            ],
+        ]);
+    }
+
+    public function testParseEmailm0023()
+    {
+        $this->runEmailTest('m0023', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Date' => new DateTime('13 Mar 2003 12:44:07 -0500'),
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrosche.txt',
+            'parts' => [
+                'text/plain'
             ],
         ]);
     }

@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\StreamDecorators\Util\CharsetConverter;
 use DateTime;
+use Exception;
 
 /**
  * Parses a header into a DateTime object.
@@ -23,7 +24,8 @@ class DatePart extends LiteralPart
     
     /**
      * Tries parsing the header's value as an RFC 2822 date, and failing that
-     * into an RFC 822 date.
+     * into an RFC 822 date, and failing that, tries to parse it by calling
+     * new DateTime($value).
      * 
      * @param CharsetConverter $charsetConverter
      * @param string $token
@@ -34,12 +36,15 @@ class DatePart extends LiteralPart
         // sometimes.
         $dateToken = trim($token);
         parent::__construct($charsetConverter, $dateToken);
-        
+
         $date = DateTime::createFromFormat(DateTime::RFC2822, $dateToken);
         if ($date === false) {
             $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
         }
-        $this->date = ($date === false) ? null : $date;
+        try {
+            $this->date = ($date) ?: new DateTime($dateToken);
+        } catch (Exception $e) {
+        }
     }
     
     /**
