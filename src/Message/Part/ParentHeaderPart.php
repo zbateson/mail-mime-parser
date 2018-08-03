@@ -67,7 +67,7 @@ abstract class ParentHeaderPart extends ParentPart
 
     /**
      * 
-     * @param type $name
+     * @param string $name
      */
     public function getAllHeadersByName($name)
     {
