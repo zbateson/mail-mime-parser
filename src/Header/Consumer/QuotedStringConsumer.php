@@ -50,7 +50,7 @@ class QuotedStringConsumer extends GenericConsumer
     /**
      * Returns true if the token is a double quote.
      * 
-     * @param type $token
+     * @param string $token
      * @return boolean
      */
     protected function isEndToken($token)
