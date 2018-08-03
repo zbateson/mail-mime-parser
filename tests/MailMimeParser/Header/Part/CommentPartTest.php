@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of CommentTest
@@ -12,15 +12,15 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class CommentPartTest extends PHPUnit_Framework_TestCase
+class CommentPartTest extends TestCase
 {
     private $charsetConverter;
-    
+
     public function setUp()
     {
         $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
     }
-    
+
     public function testBasicComment()
     {
         $comment = 'Some silly comment made about my moustache';
@@ -28,7 +28,7 @@ class CommentPartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $part->getValue());
         $this->assertEquals($comment, $part->getComment());
     }
-    
+
     public function testMimeEncoding()
     {
         $this->charsetConverter->expects($this->once())

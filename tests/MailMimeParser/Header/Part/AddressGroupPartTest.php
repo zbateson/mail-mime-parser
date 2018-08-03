@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AddressGroupTest
@@ -12,7 +12,7 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class AddressGroupPartTest extends PHPUnit_Framework_TestCase
+class AddressGroupPartTest extends TestCase
 {
     public function testNameGroup()
     {

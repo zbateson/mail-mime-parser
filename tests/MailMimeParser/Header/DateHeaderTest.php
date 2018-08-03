@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of DateHeaderTest
@@ -12,10 +12,10 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
-class DateHeaderTest extends PHPUnit_Framework_TestCase
+class DateHeaderTest extends TestCase
 {
     protected $consumerService;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -23,7 +23,7 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
         $mlpf = $this->getMock('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory', ['__toString'], [$charsetConverter]);
         $this->consumerService = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
     }
-    
+
     public function testSimpleDate()
     {
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
@@ -32,20 +32,20 @@ class DateHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($dt);
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $dt->format(\DateTime::RFC2822));
     }
-    
+
     public function testInvalidDate()
     {
         $header = new DateHeader($this->consumerService, 'DATE', 'This is not a date');
         $this->assertNull($header->getDateTime());
         $this->assertEquals('This is not a date', $header->getValue());
     }
-    
+
     public function testDateWithEmptyPart()
     {
         $header = new DateHeader($this->consumerService, 'DATE', '');
         $this->assertNull($header->getDateTime());
     }
-    
+
     public function testDateHeaderToString()
     {
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');

@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of SubjectConsumerTest
@@ -12,10 +12,10 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class SubjectConsumerTest extends PHPUnit_Framework_TestCase
+class SubjectConsumerTest extends TestCase
 {
     private $subjectConsumer;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -24,21 +24,21 @@ class SubjectConsumerTest extends PHPUnit_Framework_TestCase
         $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
         $this->subjectConsumer = new SubjectConsumer($cs, $mlpf);
     }
-    
+
     public function testConsumeTokens()
     {
         $value = "Je\ \t suis\nici";
-        
+
         $ret = $this->subjectConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
         $this->assertEquals('Je\ suis ici', $ret[0]);
     }
-    
+
     public function testFilterSpacesBetweenMimeParts()
     {
         $value = "=?US-ASCII?Q?Je?=    =?US-ASCII?Q?suis?=\n=?US-ASCII?Q?ici?=";
-        
+
         $ret = $this->subjectConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);

@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -15,7 +15,7 @@ use GuzzleHttp\Psr7;
  * @covers ZBateson\MailMimeParser\Message\Part\MessagePart
  * @author Zaahid Bateson
  */
-class MimePartTest extends PHPUnit_Framework_TestCase
+class MimePartTest extends TestCase
 {
     private $mockPartStreamFilterManager;
     private $mockPartFilterFactory;
@@ -33,7 +33,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
-    
+
     protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
         $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
@@ -47,7 +47,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $header->method('hasParameter')->willReturn(true);
         return $header;
     }
-    
+
     protected function getMockedPartBuilder()
     {
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
@@ -60,7 +60,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             ->willReturn($hc);
         return $pb;
     }
-    
+
     protected function getMockedPartBuilderWithChildren()
     {
         $pb = $this->getMockedPartBuilder();
@@ -69,7 +69,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             $this->getMockedPartBuilder(),
             $this->getMockedPartBuilder()
         ];
-        
+
         $nested = $this->getMockedPartBuilder();
         $nested->method('createMessagePart')
             ->willReturn($this->newMimePart(
@@ -78,7 +78,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             ));
         $children[0]->method('getChildren')
             ->willReturn([$nested]);
-        
+
         foreach ($children as $key => $child) {
             $child->method('createMessagePart')
                 ->willReturn($this->newMimePart(
@@ -102,7 +102,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             $contentStream
         );
     }
-    
+
     public function testInstance()
     {
         $part = $this->newMimePart($this->getMockedPartBuilder());
@@ -110,7 +110,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\MimePart', $part);
         $this->assertTrue($part->isMime());
     }
-    
+
     public function testCreateChildrenAndGetChildren()
     {
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
@@ -125,28 +125,28 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         ];
         $this->assertEquals($children, $part->getChildParts());
     }
-    
+
     public function testCreateChildrenAndGetParts()
     {
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren(), Psr7\stream_for('habibi'));
         $this->assertEquals(5, $part->getPartCount());
-        
+
         $children = $part->getChildParts();
         $this->assertCount(3, $children);
         $nested = $children[0]->getChild(0);
-        
+
         $this->assertSame($part, $part->getPart(0));
         $this->assertSame($children[0], $part->getPart(1));
         $this->assertSame($nested, $part->getPart(2));
         $this->assertSame($children[1], $part->getPart(3));
         $this->assertSame($children[2], $part->getPart(4));
-        
+
         $this->assertEquals('habibi', stream_get_contents($part->getPart(0)->getResourceHandle()));
         $this->assertEquals('child0', stream_get_contents($part->getPart(1)->getResourceHandle()));
         $this->assertEquals('nested', stream_get_contents($part->getPart(2)->getResourceHandle()));
         $this->assertEquals('child1', stream_get_contents($part->getPart(3)->getResourceHandle()));
         $this->assertEquals('child2', stream_get_contents($part->getPart(4)->getResourceHandle()));
-        
+
         $allParts = [ $part, $children[0], $nested, $children[1], $children[2]];
         $this->assertEquals($allParts, $part->getAllParts());
     }
@@ -194,7 +194,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertSame($secondHeader, $part->getHeader($secondHeader->getName()));
         $this->assertEquals($firstHeader->getValue(), $part->getHeaderValue($firstHeader->getName()));
         $this->assertEquals($secondHeader->getValue(), $part->getHeaderValue($secondHeader->getName()));
-        
+
         $this->assertCount(2, $part->getRawHeaders());
         $this->assertEquals([[ 'First-Header', $firstHeader->getRawValue() ], [ 'Second-Header', $secondHeader->getRawValue() ]], $part->getRawHeaders());
 
@@ -371,17 +371,17 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $filterMock->expects($this->exactly(5))
             ->method('filter')
             ->willReturnOnConsecutiveCalls(false, true, false, true, false);
-        
+
         $returned = $part->getAllParts($filterMock);
         $this->assertCount(2, $returned);
         $this->assertEquals([$parts[1], $parts[3]], $returned);
     }
-    
+
     public function testGetFilteredChildParts()
     {
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
         $parts = $part->getAllParts();
-        
+
         $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
@@ -389,12 +389,12 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $filterMock->expects($this->exactly(3))
             ->method('filter')
             ->willReturnOnConsecutiveCalls(false, true, false);
-        
+
         $returned = $part->getChildParts($filterMock);
         $this->assertCount(1, $returned);
         $this->assertEquals([$parts[3]], $returned);
     }
-    
+
     public function testGetUnsetHeader()
     {
         $part = $this->newMimePart($this->getMockedPartBuilder());
@@ -417,7 +417,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertSame($header, $part->getHeader('Content-Disposition'));
         $this->assertEquals('habibi', $part->getContentDisposition());
     }
-    
+
     public function testGetContentTransferEncoding()
     {
         $header = $this->getMockedParameterHeader('meen?', 'x-uue');
@@ -432,7 +432,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertSame($header, $part->getHeader('Content-Transfer-Encoding'));
         $this->assertEquals('x-uuencode', $part->getContentTransferEncoding());
     }
-    
+
     public function testGetCharset()
     {
         $header = $this->getMockedParameterHeader('content-type', 'text/plain', 'blah');
@@ -442,7 +442,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Content-Type', 0)
             ->willReturn($header);
-        
+
         $part = $this->newMimePart($pb);
         $this->assertEquals('BLAH', $part->getCharset());
     }
@@ -465,7 +465,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = $this->newMimePart($pb);
         $this->assertEquals('blah', $part->getFilename());
     }
-    
+
     public function testGetDefaultCharsetForTextPlainAndTextHtml()
     {
         $headerText = $this->getMockedParameterHeader('content-type', 'text/plain');
@@ -491,7 +491,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ISO-8859-1', $partText->getCharset());
         $this->assertEquals('ISO-8859-1', $partHtml->getCharset());
     }
-    
+
     public function testGetNullCharsetForNonTextPlainOrHtmlPart()
     {
         $header = $this->getMockedParameterHeader('content-type', 'text/rtf');
@@ -504,7 +504,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $part = $this->newMimePart($pb);
         $this->assertNull($part->getCharset());
     }
-    
+
     public function testUsesTransferEncodingAndCharsetForStreamFilter()
     {
         $headerType = $this->getMockedParameterHeader('Content-Type', 'text/plain', 'wingding');
@@ -529,7 +529,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('klingon', $part->getContentTransferEncoding());
         $this->assertNotNull($part->getContentResourceHandle());
     }
-    
+
     public function testIsTextIsMultiPartForNonTextNonMultipart()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'stuff/blooh');
@@ -543,7 +543,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
     }
-    
+
     public function testIsTextForTextPlain()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'text/plain');
@@ -557,7 +557,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isTextPart());
     }
-    
+
     public function testIsTextForTextHtml()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'text/html');
@@ -571,7 +571,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isTextPart());
     }
-    
+
     public function testIsTextForTextMimeTypeWithCharset()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'text/blah', 'utf-8');
@@ -585,7 +585,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isTextPart());
     }
-    
+
     public function testIsTextForTextMimeTypeWithoutCharset()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'text/blah');
@@ -599,7 +599,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
     }
-    
+
     public function testIsMultipartForMultipartRelated()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'multipart/related');
@@ -613,7 +613,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
     }
-    
+
     public function testIsMultipartForMultipartAnything()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'multipart/anything');
@@ -627,7 +627,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
     }
-    
+
     public function testGetAllPartsByMimeType()
     {
         $pf = $this->mockPartFilterFactory;
@@ -637,7 +637,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $filter->expects($this->exactly(5))
             ->method('filter')
             ->willReturnOnConsecutiveCalls(true, true, false, false, false);
-        
+
         $pf->expects($this->once())
             ->method('newFilterFromContentType')
             ->with('awww geez')
@@ -647,7 +647,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $parts = $part->getAllPartsByMimeType('awww geez');
         $this->assertCount(2, $parts);
     }
-    
+
     public function testGetPartByMimeType()
     {
         $pf = $this->mockPartFilterFactory;
@@ -660,7 +660,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
                 true, false, false, true, false,
                 true, false, false, true, false
             );
-        
+
         $pf->expects($this->exactly(2))
             ->method('newFilterFromContentType')
             ->with('awww geez')
@@ -670,7 +670,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $this->assertSame($part, $part->getPartByMimeType('awww geez'));
         $this->assertSame($part->getPart(3), $part->getPartByMimeType('awww geez', 1));
     }
-    
+
     public function testGetCountOfPartsByMimeType()
     {
         $pf = $this->mockPartFilterFactory;
@@ -680,7 +680,7 @@ class MimePartTest extends PHPUnit_Framework_TestCase
         $filter->expects($this->exactly(5))
             ->method('filter')
             ->willReturnOnConsecutiveCalls(true, true, false, false, true);
-        
+
         $pf->expects($this->once())
             ->method('newFilterFromContentType')
             ->with('awww geez, Rick')

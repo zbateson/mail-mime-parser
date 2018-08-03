@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParameterTest
@@ -12,22 +12,22 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class ParameterPartTest extends PHPUnit_Framework_TestCase
+class ParameterPartTest extends TestCase
 {
     private $charsetConverter;
-    
+
     public function setUp()
     {
         $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
     }
-    
+
     public function testBasicNameValuePair()
     {
         $part = new ParameterPart($this->charsetConverter, 'Name', 'Value');
         $this->assertEquals('Name', $part->getName());
         $this->assertEquals('Value', $part->getValue());
     }
-    
+
     public function testMimeValue()
     {
         $this->charsetConverter->expects($this->once())
@@ -38,7 +38,7 @@ class ParameterPartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore Trout', $part->getValue());
     }
-    
+
     public function testMimeName()
     {
         $this->charsetConverter->expects($this->once())
@@ -49,7 +49,7 @@ class ParameterPartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore', $part->getValue());
     }
-    
+
     public function testNameValueNotDecodedWithLanguage()
     {
         $this->charsetConverter->expects($this->never())
@@ -58,7 +58,7 @@ class ParameterPartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('=?US-ASCII?Q?name?=', $part->getName());
         $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
     }
-    
+
     public function testGetLanguage()
     {
         $this->charsetConverter->expects($this->never())

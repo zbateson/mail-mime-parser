@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -12,7 +12,7 @@ use GuzzleHttp\Psr7;
  * @covers ZBateson\MailMimeParser\Message\Part\NonMimePart
  * @author Zaahid Bateson
  */
-class NonMimePartTest extends PHPUnit_Framework_TestCase
+class NonMimePartTest extends TestCase
 {
     public function testInstance()
     {

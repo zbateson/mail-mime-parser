@@ -1,24 +1,24 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Exception;
 
 /**
  * MessagePartFactoryTest
- * 
+ *
  * @group MessagePartClass
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\MessagePart
  * @author Zaahid Bateson
  */
-class MessagePartTest extends PHPUnit_Framework_TestCase
+class MessagePartTest extends TestCase
 {
     protected $partStreamFilterManager;
     protected $streamFactory;
-    
+
     protected function setUp()
     {
         $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
@@ -30,7 +30,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $this->partStreamFilterManager = $psf;
         $this->streamFactory = $sf;
     }
-    
+
     private function getMessagePart($handle = 'habibi', $contentHandle = null)
     {
         if ($contentHandle !== null) {
@@ -50,7 +50,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
             [ $this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle ]
         );
     }
-    
+
     public function testNewInstance()
     {
         $messagePart = $this->getMessagePart();
@@ -71,7 +71,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $handle = $messagePart->getResourceHandle();
         $this->assertEquals('mucha agua', stream_get_contents($handle));
     }
-    
+
     public function testContentStreamAndHandle()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Que tonto');
@@ -79,7 +79,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
             ->willReturn('wubalubadub-duuuuub');
         $messagePart->method('getCharset')
             ->willReturn('wigidiwamwamwazzle');
-        
+
         $this->assertTrue($messagePart->hasContent());
         $this->assertEquals('Que tonto', $messagePart->getContentStream()->getContents());
         $this->assertEquals('Que tonto', stream_get_contents($messagePart->getContentResourceHandle()));
@@ -110,7 +110,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $messagePart->detachContentStream();
         $this->assertEquals('Much success', $messagePart->getStream());
     }
-    
+
     public function testContentStreamHandleWithCustomCharset()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Que tonto');
@@ -146,7 +146,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $stream = Psr7\stream_for('test');
         $messagePart = $this->getMessagePart($stream);
         $this->assertEquals($stream, $messagePart->getStream());
-        
+
         $this->streamFactory
             ->expects($this->once())
             ->method('newMessagePartStream')
@@ -163,7 +163,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
         $messagePart = $this->getMessagePart();
         $this->assertNull($messagePart->getFilename());
     }
-    
+
     public function testGetContent()
     {
         $messagePart = $this->getMessagePart('habibi', 'sopa di agua con rocas');
@@ -196,7 +196,7 @@ class MessagePartTest extends PHPUnit_Framework_TestCase
             ->willReturn('quoted-printable');
         $part->method('getCharset')
             ->willReturn('utf-64');
-        
+
         $new = Psr7\stream_for('updated');
         $this->partStreamFilterManager
             ->method('getContentStream')

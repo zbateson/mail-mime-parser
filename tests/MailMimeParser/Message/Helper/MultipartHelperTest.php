@@ -1,18 +1,18 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MultipartHelperTest
- * 
+ *
  * @group MultipartHelper
  * @group MessageHelper
  * @covers ZBateson\MailMimeParser\Message\Helper\AbstractHelper
  * @covers ZBateson\MailMimeParser\Message\Helper\MultipartHelper
  * @author Zaahid Bateson
  */
-class MultipartHelperTest extends PHPUnit_Framework_TestCase
+class MultipartHelperTest extends TestCase
 {
     private $mockMimePartFactory;
     private $mockUUEncodedPartFactory;
@@ -34,7 +34,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
-    
+
     private function newMockMimePart()
     {
         return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
@@ -534,7 +534,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
         $partBuilder->expects($this->once())
             ->method('createMessagePart')
             ->willReturn($attPart);
-        
+
         $resource = 'test';
         $attPart->expects($this->once())
             ->method('setContent')
@@ -545,7 +545,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
 
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', null);
     }
-    
+
     public function testCreateAndAddPartForAttachmentToNonMimeMessage()
     {
         $helper = $this->newMultipartHelper();
@@ -573,7 +573,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
         $partBuilder->expects($this->once())
             ->method('createMessagePart')
             ->willReturn($attPart);
-        
+
         $resource = 'test';
         $attPart->expects($this->once())
             ->method('setContent')
@@ -623,7 +623,7 @@ class MultipartHelperTest extends PHPUnit_Framework_TestCase
         $message->expects($this->once())
             ->method('getTextPart')
             ->willReturn(null);
-        
+
         $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();

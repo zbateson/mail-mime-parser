@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
@@ -13,10 +13,10 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
-class AddressHeaderTest extends PHPUnit_Framework_TestCase
+class AddressHeaderTest extends TestCase
 {
     protected $consumerService;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -24,14 +24,14 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $mlpf = $this->getMock('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory', ['__toString'], [$charsetConverter]);
         $this->consumerService = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
     }
-    
+
     public function testEmptyHeader()
     {
         $header = new AddressHeader($this->consumerService, 'TO', '');
         $this->assertEquals('', $header->getValue());
         $this->assertNull($header->getPersonName());
     }
-    
+
     public function testSingleAddress()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
@@ -39,13 +39,13 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($header->getPersonName());
         $this->assertEquals('From', $header->getName());
     }
-    
+
     public function testAddressHeaderToString()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('From: koolaid@dontdrinkit.com', $header);
     }
-    
+
     public function testSingleAddressWithName()
     {
         $header = new AddressHeader($this->consumerService, 'From', 'Kool Aid <koolaid@dontdrinkit.com>');
@@ -56,7 +56,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Kool Aid', $addresses[0]->getName());
         $this->assertEquals('koolaid@dontdrinkit.com', $addresses[0]->getValue());
     }
-    
+
     public function testSingleAddressWithQuotedName()
     {
         $header = new AddressHeader($this->consumerService, 'To', '"Jürgen Schmürgen" <schmuergen@example.com>');
@@ -65,7 +65,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Jürgen Schmürgen', $addresses[0]->getName());
         $this->assertEquals('schmuergen@example.com', $addresses[0]->getEmail());
     }
-    
+
     public function testComplexSingleAddress()
     {
         $header = new AddressHeader(
@@ -78,7 +78,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Kilgore Trout', $addresses[0]->getName());
         $this->assertEquals('kilgoretrout@ilium.ny.us', $addresses[0]->getEmail());
     }
-    
+
     public function testMultipleAddresses()
     {
         $header = new AddressHeader(
@@ -96,7 +96,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('The Fox', $addresses[2]->getName());
         $this->assertEquals('therose@pureawesome.com', $addresses[3]->getEmail());
     }
-    
+
     public function testAddressGroups()
     {
         $header = new AddressHeader(
@@ -108,16 +108,16 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         );
         $parts = $header->getParts();
         $this->assertCount(2, $parts);
-        
+
         $starks = $parts[0];
         $lannisters = $parts[1];
         $this->assertEquals('House Stark', $starks->getName());
         $this->assertEquals('House Lannister', $lannisters->getName());
-        
+
         $this->assertCount(3, $starks->getAddresses());
         $this->assertCount(4, $lannisters->getAddresses());
     }
-    
+
     public function testHasAddress()
     {
         $header = new AddressHeader(
@@ -135,7 +135,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($header->hasAddress('maxpayne@addressunknown.com'));
         $this->assertFalse($header->hasAddress('nonexistent@example.com'));
     }
-    
+
     public function testGetAddresses()
     {
         $header = new AddressHeader(
@@ -149,7 +149,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         $addresses = $header->getAddresses();
         $this->assertCount(8, $addresses);
         $parts = $header->getParts();
-        
+
         foreach ($parts[0]->getAddresses() as $addr) {
             $this->assertSame($addr, current($addresses));
             next($addresses);
@@ -160,7 +160,7 @@ class AddressHeaderTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals('maxpayne@addressunknown.com', current($addresses)->getEmail());
     }
-    
+
     public function testGetGroups()
     {
         $header = new AddressHeader(

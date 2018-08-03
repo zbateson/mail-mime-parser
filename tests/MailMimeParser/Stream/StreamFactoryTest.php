@@ -2,17 +2,17 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * StreamFactoryTest
- * 
+ *
  * @group StreamFactory
  * @group Stream
  * @covers ZBateson\MailMimeParser\Stream\StreamFactory
  * @author Zaahid Bateson
  */
-class StreamFactoryTest extends PHPUnit_Framework_TestCase
+class StreamFactoryTest extends TestCase
 {
     public function testNewInstance()
     {
@@ -34,7 +34,7 @@ class StreamFactoryTest extends PHPUnit_Framework_TestCase
             ->willReturn(4);
 
         $factory = new StreamFactory();
-        
+
         $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedPartStream(Psr7\stream_for('test'), $partBuilder));
         $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream(Psr7\stream_for('test'), $partBuilder));
         $this->assertNull($factory->getLimitedContentStream(Psr7\stream_for('test'), $partBuilder));

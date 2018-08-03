@@ -1,20 +1,20 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartBuilderFactoryTest
- * 
+ *
  * @group PartBuilderFactory
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory
  * @author Zaahid Bateson
  */
-class PartBuilderFactoryTest extends PHPUnit_Framework_TestCase
+class PartBuilderFactoryTest extends TestCase
 {
     protected $partBuilderFactory;
-    
+
     protected function setUp()
     {
         $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
@@ -23,13 +23,13 @@ class PartBuilderFactoryTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->partBuilderFactory = new PartBuilderFactory($mockHeaderFactory, 'amazon');
     }
-    
+
     public function testNewInstance()
     {
         $mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $partBuilder = $this->partBuilderFactory->newPartBuilder($mockMessagePartFactory);
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\PartBuilder',

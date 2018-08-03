@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -12,7 +12,7 @@ use GuzzleHttp\Psr7;
  * @covers ZBateson\MailMimeParser\Message\Part\UUEncodedPart
  * @author Zaahid Bateson
  */
-class UUEncodedPartTest extends PHPUnit_Framework_TestCase
+class UUEncodedPartTest extends TestCase
 {
     public function testInstance()
     {
@@ -22,7 +22,7 @@ class UUEncodedPartTest extends PHPUnit_Framework_TestCase
         $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();

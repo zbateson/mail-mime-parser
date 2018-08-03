@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of QuotedStringConsumerTest
@@ -12,10 +12,10 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class QuotedStringConsumerTest extends PHPUnit_Framework_TestCase
+class QuotedStringConsumerTest extends TestCase
 {
     private $quotedStringConsumer;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -24,11 +24,11 @@ class QuotedStringConsumerTest extends PHPUnit_Framework_TestCase
         $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
         $this->quotedStringConsumer = new QuotedStringConsumer($cs, $pf);
     }
-    
+
     public function testConsumeTokens()
     {
         $value = 'Will end at " quote';
-        
+
         $ret = $this->quotedStringConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);

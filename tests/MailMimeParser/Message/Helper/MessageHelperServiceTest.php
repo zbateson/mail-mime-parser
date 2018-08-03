@@ -1,18 +1,18 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\SimpleDi;
 
 /**
  * MessageHelperServiceTest
- * 
+ *
  * @group MessageHelperService
  * @group MessageHelper
  * @covers ZBateson\MailMimeParser\Message\Helper\MessageHelperService
  * @author Zaahid Bateson
  */
-class MessageHelperServiceTest extends PHPUnit_Framework_TestCase
+class MessageHelperServiceTest extends TestCase
 {
     public function testInstance()
     {
