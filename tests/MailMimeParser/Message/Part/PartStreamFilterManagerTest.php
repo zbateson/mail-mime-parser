@@ -1,23 +1,23 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 use ZBateson\StreamDecorators\NonClosingStream;
 
 /**
  * PartStreamFilterManagerTest
- * 
+ *
  * @group PartStreamFilterManager
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager
  * @author Zaahid Bateson
  */
-class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
+class PartStreamFilterManagerTest extends TestCase
 {
     private $partStreamFilterManager = null;
     private $mockStreamFactory = null;
-    
+
     protected function setUp()
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
@@ -25,7 +25,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->partStreamFilterManager = new PartStreamFilterManager($mocksdf);
         $this->mockStreamFactory = $mocksdf;
     }
-    
+
     public function testAttachQuotedPrintableDecoder()
     {
         $stream = Psr7\stream_for('test');
@@ -40,7 +40,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
-    
+
     public function testAttachBase64Decoder()
     {
         $stream = Psr7\stream_for('test');
@@ -53,7 +53,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
-    
+
     public function testAttachUUEncodeDecoder()
     {
         $stream = Psr7\stream_for('test');
@@ -66,7 +66,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
-    
+
     public function testAttachCharsetConversionDecoder()
     {
         $stream = Psr7\stream_for('test');
@@ -79,7 +79,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
-    
+
     public function testReAttachTransferEncodingDecoder()
     {
         $stream = Psr7\stream_for('test');
@@ -88,7 +88,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
             ->with($stream)
             ->willReturn($stream);
         $stream->rewind();
-        
+
         $stream2 = Psr7\stream_for('test2');
         $stream3 = Psr7\stream_for('test3');
         $this->mockStreamFactory->expects($this->exactly(2))
@@ -107,7 +107,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('test3', $manager->getContentStream('x-uuencode', null, null)->getContents());
     }
-    
+
     public function testReAttachCharsetConversionDecoder()
     {
         $stream = Psr7\stream_for('test');
@@ -130,7 +130,7 @@ class PartStreamFilterManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
         $this->assertEquals('test', $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8')->getContents());
     }
-    
+
     public function testAttachCharsetConversionAndTransferEncodingDecoder()
     {
         $stream = Psr7\stream_for('test');

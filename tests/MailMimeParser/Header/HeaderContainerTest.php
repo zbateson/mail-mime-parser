@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of HeaderContainerTest
@@ -11,17 +11,17 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\HeaderContainer
  * @author Zaahid Bateson
  */
-class HeaderContainerTest extends PHPUnit_Framework_TestCase
+class HeaderContainerTest extends TestCase
 {
     protected $mockHeaderFactory;
-    
+
     protected function setUp()
     {
         $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
             ->getMock();
     }
-    
+
     public function testAddExistsGet()
     {
         $ob = new HeaderContainer($this->mockHeaderFactory);
@@ -84,7 +84,7 @@ class HeaderContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('repeated-first', $ob->get('repeated', 0));
         $this->assertEquals('repeated-second', $ob->get('repeated', 1));
         $this->assertEquals('repeated-third', $ob->get('repeated', 2));
-        
+
         $instanceHeaders = [
             'repeated-first', 'repeated-second', 'repeated-third'
         ];
@@ -250,7 +250,7 @@ class HeaderContainerTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($ob->get('first', 1));
         $this->assertEquals('second-first-value', $ob->get('first'));
-        
+
         $ob->remove('second', 1);
         $this->assertTrue($ob->exists('second'));
         $this->assertTrue($ob->exists('second', 1));

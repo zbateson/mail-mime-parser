@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
@@ -15,7 +15,7 @@ use DateTime;
  * @group EmailFunctionalTest
  * @author Zaahid Bateson
  */
-class EmailFunctionalTest extends PHPUnit_Framework_TestCase
+class EmailFunctionalTest extends TestCase
 {
     private $parser;
     private $messageDir;

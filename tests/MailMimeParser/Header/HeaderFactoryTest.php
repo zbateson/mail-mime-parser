@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of HeaderFactoryTest
@@ -11,10 +11,10 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\HeaderFactory
  * @author Zaahid Bateson
  */
-class HeaderFactoryTest extends PHPUnit_Framework_TestCase
+class HeaderFactoryTest extends TestCase
 {
     protected $headerFactory;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -23,7 +23,7 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
         $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
         $this->headerFactory = new HeaderFactory($cs, $pf);
     }
-    
+
     public function testAddressHeaderInstance()
     {
         $aValid = ['BCC', 'to', 'FrOM'];
@@ -39,7 +39,7 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\AddressHeader', get_class($header));
         }
     }
-    
+
     public function testDateHeaderInstance()
     {
         $aValid = ['Date', 'ExpIRY-Date', 'EXPIRES'];
@@ -55,7 +55,7 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\DateHeader', get_class($header));
         }
     }
-    
+
     public function testGenericHeaderInstance()
     {
         $aValid = ['Content-Id', 'content-ID', 'IN-REPLY-TO'];
@@ -87,7 +87,7 @@ class HeaderFactoryTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\SubjectHeader', get_class($header));
         }
     }
-    
+
     public function testParameterHeaderInstance()
     {
         $aValid = ['Content-Type', 'CONTENT-Disposition'];

@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PrivacyHelperTest
@@ -13,7 +13,7 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Message\Helper\PrivacyHelper
  * @author Zaahid Bateson
  */
-class PrivacyHelperTest extends PHPUnit_Framework_TestCase
+class PrivacyHelperTest extends TestCase
 {
     private $mockMimePartFactory;
     private $mockUUEncodedPartFactory;
@@ -173,7 +173,7 @@ class PrivacyHelperTest extends PHPUnit_Framework_TestCase
 
         $message = $this->newMockMessage();
         $messagePart = $this->newMockMimePart();
-        
+
         $message->expects($this->once())
             ->method('getContentType')
             ->willReturn('text/plain');

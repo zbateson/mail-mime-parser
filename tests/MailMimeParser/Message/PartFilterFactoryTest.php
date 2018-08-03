@@ -1,26 +1,26 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartFilterFactoryTest
- * 
+ *
  * @group PartFilterFactory
  * @group Message
  * @covers ZBateson\MailMimeParser\Message\PartFilterFactory
  * @covers ZBateson\MailMimeParser\Message\PartFilter
  * @author Zaahid Bateson
  */
-class PartFilterFactoryTest extends PHPUnit_Framework_TestCase
+class PartFilterFactoryTest extends TestCase
 {
     protected $partFilterFactory;
-    
+
     protected function setUp()
     {
         $this->partFilterFactory = new PartFilterFactory();
     }
-    
+
     public function testNewFilterFromContentType()
     {
         $pf = $this->partFilterFactory->newFilterFromContentType('text/html');
@@ -34,7 +34,7 @@ class PartFilterFactoryTest extends PHPUnit_Framework_TestCase
             $pf->headers
         );
     }
-    
+
     public function testNewFilterFromInlineContentType()
     {
         $pf = $this->partFilterFactory->newFilterFromInlineContentType('text/html');
@@ -51,7 +51,7 @@ class PartFilterFactoryTest extends PHPUnit_Framework_TestCase
             $pf->headers
         );
     }
-    
+
     public function testNewFilterFromDisposition()
     {
         $pf = $this->partFilterFactory->newFilterFromDisposition('inline', PartFilter::FILTER_EXCLUDE);
@@ -67,7 +67,7 @@ class PartFilterFactoryTest extends PHPUnit_Framework_TestCase
             $pf->headers
         );
     }
-    
+
     public function testNewFilterFromArray()
     {
         $headers = [

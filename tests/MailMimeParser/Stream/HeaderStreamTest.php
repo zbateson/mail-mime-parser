@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * HeaderStreamTest
@@ -12,7 +12,7 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Stream\HeaderStream
  * @author Zaahid Bateson
  */
-class HeaderStreamTest extends PHPUnit_Framework_TestCase
+class HeaderStreamTest extends TestCase
 {
     private function newMockMimePart()
     {

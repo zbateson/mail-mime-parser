@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of TokenTest
@@ -12,15 +12,15 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class TokenTest extends PHPUnit_Framework_TestCase
+class TokenTest extends TestCase
 {
     private $charsetConverter;
-    
+
     public function setUp()
     {
         $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
     }
-    
+
     public function testInstance()
     {
         $token = new Token($this->charsetConverter, 'testing');
@@ -28,14 +28,14 @@ class TokenTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('testing', $token->getValue());
         $this->assertEquals('testing', strval($token));
     }
-    
+
     public function testSpaceTokenValue()
     {
         $token = new Token($this->charsetConverter, ' ');
         $this->assertTrue($token->ignoreSpacesBefore());
         $this->assertTrue($token->ignoreSpacesAfter());
     }
-    
+
     public function testNonSpaceTokenValue()
     {
         $token = new Token($this->charsetConverter, 'Anything');

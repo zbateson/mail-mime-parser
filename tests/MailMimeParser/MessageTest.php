@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 use org\bovigo\vfs\vfsStream;
 
@@ -13,7 +13,7 @@ use org\bovigo\vfs\vfsStream;
  * @covers ZBateson\MailMimeParser\Message
  * @author Zaahid Bateson
  */
-class MessageTest extends PHPUnit_Framework_TestCase
+class MessageTest extends TestCase
 {
     private $mockPartStreamFilterManager;
     private $mockHeaderFactory;
@@ -41,7 +41,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
-    
+
     protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
         $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
@@ -54,7 +54,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $header->method('hasParameter')->willReturn(true);
         return $header;
     }
-    
+
     protected function getMockedPartBuilder()
     {
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
@@ -67,7 +67,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->willReturn($hc);
         return $pb;
     }
-    
+
     protected function getMockedPartBuilderWithChildren()
     {
         $pb = $this->getMockedPartBuilder();
@@ -76,17 +76,17 @@ class MessageTest extends PHPUnit_Framework_TestCase
             $this->getMockedPartBuilder(),
             $this->getMockedPartBuilder()
         ];
-        
+
         $nestedMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $nested = $this->getMockedPartBuilder();
         $nested->method('createMessagePart')
             ->willReturn($nestedMimePart);
         $children[0]->method('getChildren')
             ->willReturn([$nested]);
-        
+
         foreach ($children as $key => $child) {
             // need to 'setMethods' because getAllNonFilteredParts is protected
             $childMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
@@ -105,7 +105,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             $childMimePart->
                 method('getMessageObjectId')
                 ->willReturn('child' . $key);
-            
+
             if ($key === 0) {
                 $childMimePart->expects($this->any())
                     ->method('getAllNonFilteredParts')
@@ -115,7 +115,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
                     ->method('getAllNonFilteredParts')
                     ->willReturn([$childMimePart]);
             }
-            
+
             $child->method('createMessagePart')
                 ->willReturn($childMimePart);
         }
@@ -145,7 +145,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($message);
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $message);
     }
-    
+
     public function testGetTextPartAndTextPartCount()
     {
         $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
@@ -183,7 +183,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->method('getContentResourceHandle')
             ->with('charset')
             ->willReturn('tilkomore');
-        
+
         $this->assertEquals(2, $message->getTextPartCount());
         $this->assertEquals($parts[1], $message->getTextPart());
         $this->assertEquals($parts[3], $message->getTextPart(1));
@@ -195,7 +195,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('shabadabada...', $message->getTextContent(0, 'charset'));
         $this->assertEquals('tilkomore', $message->getTextResourceHandle(1, 'charset'));
     }
-    
+
     public function testGetHtmlPartAndHtmlPartCount()
     {
         $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
@@ -207,7 +207,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             $this->getMockedPartBuilderWithChildren()
         );
         $parts = $message->getAllParts();
-        
+
         $filterMock
             ->method('filter')
             ->willReturnMap(
@@ -234,7 +234,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
             ->method('getContentResourceHandle')
             ->with('charset')
             ->willReturn('tilkomore');
-        
+
         $this->assertEquals(2, $message->getHtmlPartCount());
         $this->assertEquals($parts[1], $message->getHtmlPart());
         $this->assertEquals($parts[3], $message->getHtmlPart(1));
@@ -246,7 +246,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('shabadabada...', $message->getHtmlContent(0, 'charset'));
         $this->assertEquals('tilkomore', $message->getHtmlResourceHandle(1, 'charset'));
     }
-    
+
     public function testGetAndRemoveAttachmentParts()
     {
         $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
@@ -305,7 +305,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $message->getAttachmentCount());
         $this->assertEquals(null, $message->getAttachmentPart(0));
     }
-    
+
     public function testIsNotMime()
     {
         $message = $this->newMessage(
@@ -313,11 +313,11 @@ class MessageTest extends PHPUnit_Framework_TestCase
         );
         $this->assertFalse($message->isMime());
     }
-    
+
     public function testIsMimeWithContentType()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'text/html', 'utf-8');
-        
+
         $pb = $this->getMockedPartBuilder();
         $pb->method('getContentType')
             ->willReturn($header);
@@ -330,14 +330,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
         );
         $this->assertTrue($message->isMime());
     }
-    
+
     public function testIsMimeWithMimeVersion()
     {
         $hf = $this->mockHeaderFactory;
         $header = $this->getMockedParameterHeader('Mime-Version', '4.3');
         $hf->method('newInstance')
             ->willReturn($header);
-        
+
         $pb = $this->getMockedPartBuilder();
         $hc = $pb->getHeaderContainer();
         $hc->method('get')
@@ -413,7 +413,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
                 [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png' ]
             )
             ->willReturn($part);
-        
+
         $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
         $message->addAttachmentPart('content', 'mimetype');
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline');

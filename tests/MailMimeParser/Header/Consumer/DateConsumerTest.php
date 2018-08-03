@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
 /**
@@ -13,10 +13,10 @@ use DateTime;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class DateConsumerTest extends PHPUnit_Framework_TestCase
+class DateConsumerTest extends TestCase
 {
     private $dateConsumer;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -25,7 +25,7 @@ class DateConsumerTest extends PHPUnit_Framework_TestCase
         $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
         $this->dateConsumer = new DateConsumer($cs, $pf);
     }
-    
+
     public function testConsumeDates()
     {
         $date = 'Wed, 17 May 2000 19:08:29 -0400';
@@ -36,7 +36,7 @@ class DateConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($date, $ret[0]->getValue());
         $this->assertEquals($date, $ret[0]->getDateTime()->format(DateTime::RFC2822));
     }
-    
+
     public function testConsumeDateWithComment()
     {
         $dateTest = 'Wed, 17 May 2000 19:08:29 -0400 (some comment)';

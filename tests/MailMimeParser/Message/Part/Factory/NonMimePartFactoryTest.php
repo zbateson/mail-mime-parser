@@ -1,22 +1,22 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
  * NonMimePartFactoryTest
- * 
+ *
  * @group NonMimePartFactory
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory
  * @covers ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory
  * @author Zaahid Bateson
  */
-class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
+class NonMimePartFactoryTest extends TestCase
 {
     protected $nonMimePartFactory;
-    
+
     protected function setUp()
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
@@ -33,16 +33,16 @@ class NonMimePartFactoryTest extends PHPUnit_Framework_TestCase
         $psfmFactory
             ->method('newInstance')
             ->willReturn($psfm);
-        
+
         $this->nonMimePartFactory = new NonMimePartFactory($mocksdf, $psfmFactory);
     }
-    
+
     public function testNewInstance()
     {
         $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $part = $this->nonMimePartFactory->newInstance(
             $partBuilder,
             Psr7\stream_for('test')

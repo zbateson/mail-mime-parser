@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParameterConsumerTest
@@ -12,10 +12,10 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class ParameterConsumerTest extends PHPUnit_Framework_TestCase
+class ParameterConsumerTest extends TestCase
 {
     private $parameterConsumer;
-    
+
     protected function setUp()
     {
         $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter', ['__toString']);
@@ -24,7 +24,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $cs = $this->getMock('ZBateson\MailMimeParser\Header\Consumer\ConsumerService', ['__toString'], [$pf, $mlpf]);
         $this->parameterConsumer = new ParameterConsumer($cs, $pf);
     }
-    
+
     public function testConsumeTokens()
     {
         $ret = $this->parameterConsumer->__invoke('text/html; charset=utf8');
@@ -36,7 +36,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('charset', $ret[1]->getName());
         $this->assertEquals('utf8', $ret[1]->getValue());
     }
-    
+
     public function testEscapedSeparators()
     {
         $ret = $this->parameterConsumer->__invoke('test\;with\;special\=chars; and\=more=blah');
@@ -46,7 +46,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('and=more', $ret[1]->getName());
         $this->assertEquals('blah', $ret[1]->getValue());
     }
-    
+
     public function testWithSubConsumers()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; weiner="all-beef";toppings=sriracha (boo-yah!)');
@@ -58,7 +58,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('toppings', $ret[2]->getName());
         $this->assertEquals('sriracha', $ret[2]->getValue());
     }
-    
+
     public function testSimpleSplitHeader()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="mustar";'
@@ -70,7 +70,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
         $this->assertNull($ret[1]->getLanguage());
     }
-    
+
     public function testSplitHeaderInFunnyOrder()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*2=" and mayo";'
@@ -82,7 +82,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
         $this->assertNull($ret[1]->getLanguage());
     }
-    
+
     public function testSplitHeaderWithEmptyEncodingAndLanguage()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=\'\''
@@ -94,7 +94,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
         $this->assertNull($ret[1]->getLanguage());
     }
-    
+
     public function testSplitHeaderWithEncodingAndLanguage()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=us-ascii\'en-US\''
@@ -106,7 +106,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
         $this->assertEquals('en-US', $ret[1]->getLanguage());
     }
-    
+
     public function testSplitHeaderWithMultiByteEncodedPart()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=utf-8\'\''
@@ -118,7 +118,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mustardized–ketchup', $ret[1]->getValue());
         $this->assertNull($ret[1]->getLanguage());
     }
-    
+
     public function testSplitHeaderWithMultiByteEncodedPartAndLanguage()
     {
         $str = 'هلا هلا شخبار بعد؟ شلون تبرمج؟';
@@ -126,7 +126,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $halfPos = floor((strlen($encoded) / 3) / 2) * 3;
         $part1 = substr($encoded, 0, $halfPos);
         $part2 = substr($encoded, $halfPos);
-        
+
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0*=utf-8\'abv-BH\''. $part1
             . '; condiments*1*=' . $part2);
         $this->assertNotEmpty($ret);

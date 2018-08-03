@@ -1,21 +1,21 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
  * MessageFactoryTest
- * 
+ *
  * @group MessageFactory
  * @group Message
  * @covers ZBateson\MailMimeParser\Message\MessageFactory
  * @author Zaahid Bateson
  */
-class MessageFactoryTest extends PHPUnit_Framework_TestCase
+class MessageFactoryTest extends TestCase
 {
     protected $messageFactory;
-    
+
     protected function setUp()
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
@@ -32,10 +32,10 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
         $mockHelperService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MessageHelperService')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $mockpsfmfactory->method('newInstance')
             ->willReturn($mockpsfm);
-        
+
         $this->messageFactory = new MessageFactory(
             $mocksdf,
             $mockpsfmfactory,
@@ -43,7 +43,7 @@ class MessageFactoryTest extends PHPUnit_Framework_TestCase
             $mockHelperService
         );
     }
-    
+
     public function testNewInstance()
     {
         $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')

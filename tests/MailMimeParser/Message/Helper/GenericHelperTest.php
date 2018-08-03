@@ -3,18 +3,18 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
 use ZBateson\MailMimeParser\MailMimeParser;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * GenericHelperTest
- * 
+ *
  * @group GenericHelper
  * @group MessageHelper
  * @covers ZBateson\MailMimeParser\Message\Helper\AbstractHelper
  * @covers ZBateson\MailMimeParser\Message\Helper\GenericHelper
  * @author Zaahid Bateson
  */
-class GenericHelperTest extends PHPUnit_Framework_TestCase
+class GenericHelperTest extends TestCase
 {
     private $mockMimePartFactory;
     private $mockUUEncodedPartFactory;
@@ -32,7 +32,7 @@ class GenericHelperTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
-    
+
     private function newMockMimePart()
     {
         return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
@@ -179,7 +179,7 @@ class GenericHelperTest extends PHPUnit_Framework_TestCase
             ->method('attachContentStream');
         $from->expects($this->exactly(5))
             ->method('removeHeader');
-        
+
         $helper->createNewContentPartFrom($from);
     }
 
@@ -204,7 +204,7 @@ class GenericHelperTest extends PHPUnit_Framework_TestCase
         $to->expects($this->once())
             ->method('getContentStream')
             ->willReturn($toStream);
-        
+
         $to->expects($this->once())
             ->method('getChildParts')
             ->willReturn([ $child1, $child2 ]);
