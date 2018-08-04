@@ -19,6 +19,25 @@ use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
 class GenericHelper extends AbstractHelper
 {
     /**
+     * @var string[] List of content headers grabbed from
+     *      https://tools.ietf.org/html/rfc4021#section-2.2
+     */
+    private static $contentHeaders = [
+        'Content-Type',
+        'Content-Transfer-Encoding',
+        'Content-Disposition',
+        'Content-ID',
+        'Content-Description',
+        'Content-Language',
+        'Content-Base',
+        'Content-Location',
+        'Content-features',
+        'Content-Alternative',
+        'Content-MD5',
+        'Content-Duration'
+    ];
+    
+    /**
      * Copies the passed $header from $from, to $to or sets the header to
      * $default if it doesn't exist in $from.
      *
@@ -37,32 +56,31 @@ class GenericHelper extends AbstractHelper
     }
 
     /**
-     * Removes the following headers from the passed part: Content-Type,
-     * Content-Transfer-Encoding, Content-Disposition, Content-ID and
-     * Content-Description, then detaches its content stream.
+     * Removes Content-* headers (permanent ones as defined in 
+     * https://tools.ietf.org/html/rfc4021#section-2.2) from the passed part,
+     * then detaches its content stream.
      * 
      * @param ParentHeaderPart $part
      */
-    public function removeTypeHeadersAndContent(ParentHeaderPart $part)
+    public function removeContentHeadersAndContent(ParentHeaderPart $part)
     {
-        $part->removeHeader('Content-Type');
-        $part->removeHeader('Content-Transfer-Encoding');
-        $part->removeHeader('Content-Disposition');
-        $part->removeHeader('Content-ID');
-        $part->removeHeader('Content-Description');
+        foreach (static::$contentHeaders as $header) {
+            $part->removeHeader($header);
+        }
         $part->detachContentStream();
     }
 
     /**
-     * Copies Content-Type, Content-Disposition and Content-Transfer-Encoding
-     * headers from the $from header into the $to header. If the Content-Type
-     * header isn't defined in $from, defaults to text/plain with utf-8 and
+     * Copies Content-* headers (permanent ones as defined in 
+     * https://tools.ietf.org/html/rfc4021#section-2.2)
+     * from the $from header into the $to header. If the Content-Type header
+     * isn't defined in $from, defaults to text/plain with utf-8 and
      * quoted-printable.
      *
      * @param ParentHeaderPart $from
      * @param ParentHeaderPart $to
      */
-    public function copyTypeHeadersAndContent(ParentHeaderPart $from, ParentHeaderPart $to, $move = false)
+    public function copyContentHeadersAndContent(ParentHeaderPart $from, ParentHeaderPart $to, $move = false)
     {
         $this->copyHeader($from, $to, 'Content-Type', 'text/plain; charset=utf-8');
         if ($from->getHeader('Content-Type') === null) {
@@ -70,14 +88,15 @@ class GenericHelper extends AbstractHelper
         } else {
             $this->copyHeader($from, $to, 'Content-Transfer-Encoding');
         }
-        $this->copyHeader($from, $to, 'Content-Disposition');
-        $this->copyHeader($from, $to, 'Content-ID');
-        $this->copyHeader($from, $to, 'Content-Description');
+        $rem = array_diff(static::$contentHeaders, [ 'Content-Type', 'Content-Transfer-Encoding']);
+        foreach ($rem as $header) {
+            $this->copyHeader($from, $to, $header);
+        }
         if ($from->hasContent()) {
             $to->attachContentStream($from->getContentStream(), MailMimeParser::DEFAULT_CHARSET);
         }
         if ($move) {
-            $this->removeTypeHeadersAndContent($from);
+            $this->removeContentHeadersAndContent($from);
         }
     }
 
@@ -92,7 +111,7 @@ class GenericHelper extends AbstractHelper
     public function createNewContentPartFrom(ParentHeaderPart $part)
     {
         $mime = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
-        $this->copyTypeHeadersAndContent($part, $mime, true);
+        $this->copyContentHeadersAndContent($part, $mime, true);
         return $mime;
     }
 
@@ -107,7 +126,7 @@ class GenericHelper extends AbstractHelper
      */
     public function movePartContentAndChildren(ParentHeaderPart $from, ParentHeaderPart $to)
     {
-        $this->copyTypeHeadersAndContent($from, $to, true);
+        $this->copyContentHeadersAndContent($from, $to, true);
         foreach ($from->getChildParts() as $child) {
             $from->removePart($child);
             $to->addChild($child);

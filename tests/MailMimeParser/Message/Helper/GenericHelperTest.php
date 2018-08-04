@@ -76,27 +76,34 @@ class GenericHelperTest extends TestCase
         $helper->copyHeader($from, $to, 'test');
     }
 
-    public function testRemoveTypeHeadersAndContent()
+    public function testRemoveContentHeadersAndContent()
     {
         $helper = $this->newGenericHelper();
         $part = $this->newMockMimePart();
 
-        $part->expects($this->exactly(5))
+        $part->expects($this->exactly(12))
             ->method('removeHeader')
             ->withConsecutive(
                 [ 'Content-Type' ],
                 [ 'Content-Transfer-Encoding' ],
                 [ 'Content-Disposition' ],
                 [ 'Content-ID' ],
-                [ 'Content-Description' ]
+                [ 'Content-Description' ],
+                [ 'Content-Language' ],
+                [ 'Content-Base' ],
+                [ 'Content-Location' ],
+                [ 'Content-features' ],
+                [ 'Content-Alternative' ],
+                [ 'Content-MD5' ],
+                [ 'Content-Duration' ]
             );
         $part->expects($this->once())
             ->method('detachContentStream');
 
-        $helper->removeTypeHeadersAndContent($part);
+        $helper->removeContentHeadersAndContent($part);
     }
 
-    public function testCopyTypeHeadersAndContent()
+    public function testCopyContentHeadersAndContent()
     {
         $helper = $this->newGenericHelper();
 
@@ -115,7 +122,7 @@ class GenericHelperTest extends TestCase
             ->method('getContentStream')
             ->willReturn($fromStream);
 
-        $from->expects($this->exactly(6))
+        $from->expects($this->exactly(13))
             ->method('getHeader')
             ->withConsecutive(
                 [ 'Content-Type' ],
@@ -123,7 +130,14 @@ class GenericHelperTest extends TestCase
                 [ 'Content-Transfer-Encoding' ],
                 [ 'Content-Disposition' ],
                 [ 'Content-ID' ],
-                [ 'Content-Description' ]
+                [ 'Content-Description' ],
+                [ 'Content-Language' ],
+                [ 'Content-Base' ],
+                [ 'Content-Location' ],
+                [ 'Content-features' ],
+                [ 'Content-Alternative' ],
+                [ 'Content-MD5' ],
+                [ 'Content-Duration' ]
             )
             ->willReturnOnConsecutiveCalls(
                 $mockHeader, $mockHeader, null
@@ -136,7 +150,7 @@ class GenericHelperTest extends TestCase
         $from->expects($this->never())
             ->method('removeHeader');
 
-        $helper->copyTypeHeadersAndContent($from, $to);
+        $helper->copyContentHeadersAndContent($from, $to);
     }
 
     public function testCreateNewContentPartFrom()
@@ -163,7 +177,7 @@ class GenericHelperTest extends TestCase
             ->method('hasContent')
             ->willReturn(false);
 
-        $from->expects($this->exactly(6))
+        $from->expects($this->exactly(13))
             ->method('getHeader')
             ->withConsecutive(
                 [ 'Content-Type' ],
@@ -171,13 +185,20 @@ class GenericHelperTest extends TestCase
                 [ 'Content-Transfer-Encoding' ],
                 [ 'Content-Disposition' ],
                 [ 'Content-ID' ],
-                [ 'Content-Description' ]
+                [ 'Content-Description' ],
+                [ 'Content-Language' ],
+                [ 'Content-Base' ],
+                [ 'Content-Location' ],
+                [ 'Content-features' ],
+                [ 'Content-Alternative' ],
+                [ 'Content-MD5' ],
+                [ 'Content-Duration' ]
             )
             ->willReturn(null);
 
         $to->expects($this->never())
             ->method('attachContentStream');
-        $from->expects($this->exactly(5))
+        $from->expects($this->exactly(12))
             ->method('removeHeader');
 
         $helper->createNewContentPartFrom($from);
@@ -213,7 +234,7 @@ class GenericHelperTest extends TestCase
             ->method('removePart')
             ->withConsecutive([$to]);
 
-        $to->expects($this->exactly(6))
+        $to->expects($this->exactly(13))
             ->method('getHeader')
             ->withConsecutive(
                 [ 'Content-Type' ],
@@ -221,7 +242,14 @@ class GenericHelperTest extends TestCase
                 [ 'Content-Transfer-Encoding' ],
                 [ 'Content-Disposition' ],
                 [ 'Content-ID' ],
-                [ 'Content-Description' ]
+                [ 'Content-Description' ],
+                [ 'Content-Language' ],
+                [ 'Content-Base' ],
+                [ 'Content-Location' ],
+                [ 'Content-features' ],
+                [ 'Content-Alternative' ],
+                [ 'Content-MD5' ],
+                [ 'Content-Duration' ]
             )
             ->willReturnOnConsecutiveCalls(
                 $mockHeader, $mockHeader, null
@@ -235,7 +263,7 @@ class GenericHelperTest extends TestCase
             ->method('addChild')
             ->withConsecutive([$child1], [$child2]);
 
-        $to->expects($this->exactly(5))
+        $to->expects($this->exactly(12))
             ->method('removeHeader');
 
         $helper->replacePart($from, $from, $to);
