@@ -66,8 +66,10 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
-     * 
+     * Returns an array of headers that match the passed name.
+     *
      * @param string $name
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
      */
     public function getAllHeadersByName($name)
     {
@@ -86,7 +88,11 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
-     * 
+     * Returns an iterator to the headers in this collection.  Each returned
+     * element is an array with its first element set to the header's name, and
+     * the second to its raw value:
+     *
+     * [ 'Header-Name', 'Header Value' ]
      *
      * @return \Iterator
      */
