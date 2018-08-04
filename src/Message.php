@@ -18,7 +18,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
- * 
+ *
  * A mime message may have any number of mime parts, and each part may have any
  * number of sub-parts, etc...
  *
@@ -64,7 +64,7 @@ class Message extends MimePart
     /**
      * Convenience method to parse a handle or string into a Message without
      * requiring including MailMimeParser, instantiating it, and calling parse.
-     * 
+     *
      * @param resource|string $handleOrString the resource handle to the input
      *        stream of the mime message, or a string containing a mime message
      */
@@ -76,7 +76,7 @@ class Message extends MimePart
 
     /**
      * Returns the text/plain part at the given index (or null if not found.)
-     * 
+     *
      * @param int $index
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
@@ -87,10 +87,10 @@ class Message extends MimePart
             $this->partFilterFactory->newFilterFromInlineContentType('text/plain')
         );
     }
-    
+
     /**
      * Returns the number of text/plain parts in this message.
-     * 
+     *
      * @return int
      */
     public function getTextPartCount()
@@ -99,11 +99,11 @@ class Message extends MimePart
             $this->partFilterFactory->newFilterFromInlineContentType('text/plain')
         );
     }
-    
+
     /**
      * Returns the text/html part at the given index (or null if not found.)
-     * 
-     * @param $index
+     *
+     * @param int $index
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
     public function getHtmlPart($index = 0)
@@ -113,10 +113,10 @@ class Message extends MimePart
             $this->partFilterFactory->newFilterFromInlineContentType('text/html')
         );
     }
-    
+
     /**
      * Returns the number of text/html parts in this message.
-     * 
+     *
      * @return int
      */
     public function getHtmlPartCount()
@@ -129,7 +129,7 @@ class Message extends MimePart
     /**
      * Returns the attachment part at the given 0-based index, or null if none
      * is set.
-     * 
+     *
      * @param int $index
      * @return ZBateson\MailMimeParser\Message\Part\MessagePart
      */
@@ -144,10 +144,10 @@ class Message extends MimePart
 
     /**
      * Returns all attachment parts.
-     * 
+     *
      * "Attachments" are any non-multipart, non-signature and any text or html
      * html part witha Content-Disposition set to  'attachment'.
-     * 
+     *
      * @return MessagePart[]
      */
     public function getAllAttachmentParts()
@@ -170,7 +170,7 @@ class Message extends MimePart
 
     /**
      * Returns the number of attachments available.
-     * 
+     *
      * @return int
      */
     public function getAttachmentCount()
@@ -181,7 +181,7 @@ class Message extends MimePart
     /**
      * Returns a Psr7 Stream for the 'inline' text/plain content at the passed
      * $index, or null if unavailable.
-     * 
+     *
      * @param int $index
      * @param string $charset
      * @return StreamInterface
@@ -214,10 +214,10 @@ class Message extends MimePart
 
     /**
      * Returns the content of the inline text/plain part at the given index.
-     * 
+     *
      * Reads the entire stream content into a string and returns it.  Returns
      * null if the message doesn't have an inline text part.
-     * 
+     *
      * @param int $index
      * @param string $charset
      * @return string
@@ -234,7 +234,7 @@ class Message extends MimePart
     /**
      * Returns a Psr7 Stream for the 'inline' text/html content at the passed
      * $index, or null if unavailable.
-     * 
+     *
      * @param int $index
      * @param string $charset
      * @return resource
@@ -267,10 +267,10 @@ class Message extends MimePart
 
     /**
      * Returns the content of the inline text/html part at the given index.
-     * 
+     *
      * Reads the entire stream content into a string and returns it.  Returns
      * null if the message doesn't have an inline html part.
-     * 
+     *
      * @param int $index
      * @param string $charset
      * @return string
@@ -287,7 +287,7 @@ class Message extends MimePart
     /**
      * Returns true if either a Content-Type or Mime-Version header are defined
      * in this Message.
-     * 
+     *
      * @return bool
      */
     public function isMime()
