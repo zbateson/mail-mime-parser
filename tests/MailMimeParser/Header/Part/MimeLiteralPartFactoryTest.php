@@ -17,7 +17,9 @@ class MimeLiteralPartFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->disableOriginalConstructor()
+			->getMock();
         $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);
     }
 

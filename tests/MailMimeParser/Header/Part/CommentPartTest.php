@@ -18,7 +18,9 @@ class CommentPartTest extends TestCase
 
     public function setUp()
     {
-        $this->charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->disableOriginalConstructor()
+			->getMock();
     }
 
     public function testBasicComment()

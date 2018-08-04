@@ -17,7 +17,9 @@ class HeaderPartTest extends TestCase
 
     protected function setUp()
     {
-        $charsetConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->disableOriginalConstructor()
+			->getMock();
         $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Part\HeaderPart')
             ->setConstructorArgs([$charsetConverter])
             ->getMockForAbstractClass();

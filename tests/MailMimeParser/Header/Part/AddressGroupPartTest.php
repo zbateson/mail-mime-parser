@@ -18,7 +18,9 @@ class AddressGroupPartTest extends TestCase
     {
         $name = 'Roman Senate';
         $members = ['Caesar', 'Cicero', 'Cato'];
-        $csConverter = $this->getMock('ZBateson\StreamDecorators\Util\CharsetConverter');
+        $csConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->disableOriginalConstructor()
+			->getMock();
         $part = new AddressGroupPart($csConverter, $members, $name);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($members, $part->getAddresses());

@@ -102,9 +102,6 @@ class MessageTest extends TestCase
                 'getHeaderValue'
             ])
             ->getMock();
-            $childMimePart->
-                method('getMessageObjectId')
-                ->willReturn('child' . $key);
 
             if ($key === 0) {
                 $childMimePart->expects($this->any())
