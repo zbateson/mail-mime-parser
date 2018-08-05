@@ -7,7 +7,6 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
