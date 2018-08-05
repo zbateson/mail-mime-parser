@@ -64,7 +64,7 @@ class GenericHelper extends AbstractHelper
      */
     public function removeContentHeadersAndContent(ParentHeaderPart $part)
     {
-        foreach (static::$contentHeaders as $header) {
+        foreach (self::$contentHeaders as $header) {
             $part->removeHeader($header);
         }
         $part->detachContentStream();
@@ -88,7 +88,7 @@ class GenericHelper extends AbstractHelper
         } else {
             $this->copyHeader($from, $to, 'Content-Transfer-Encoding');
         }
-        $rem = array_diff(static::$contentHeaders, [ 'Content-Type', 'Content-Transfer-Encoding']);
+        $rem = array_diff(self::$contentHeaders, [ 'Content-Type', 'Content-Transfer-Encoding']);
         foreach ($rem as $header) {
             $this->copyHeader($from, $to, $header);
         }
