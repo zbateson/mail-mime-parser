@@ -30,7 +30,10 @@ Alternatively for procedural/non dependency injected usage, calling `Message::fr
 // $resource = fopen('my-file.mime', 'r');
 // ...
 $parser = new \ZBateson\MailMimeParser\MailMimeParser();
-$message = $parser->parse($resource);     // returns a ZBateson\MailMimeParser\Message
+
+// parse() returns a ZBateson\MailMimeParser\Message
+$message = $parser->parse($resource);
+
 // alternatively:
 // $string = 'an email message to load';
 $message = Message::from($string);
@@ -50,7 +53,9 @@ To retrieve an AbstractHeader object, call `Message::getHeader()` from a [ZBates
 ```php
 // $message = $parser->parse($resource);
 // ...
-$to = $message->getHeader('To');     // would return a ZBateson\MailMimeParser\Header\AddressHeader
+
+// getHeader('To') returns a ZBateson\MailMimeParser\Header\AddressHeader
+$to = $message->getHeader('To');
 if ($to->hasAddress('someone@example.com')) {
     // ...
 }
@@ -62,14 +67,20 @@ For convenience, `Message::getHeaderValue()` can be used to retrieve the value o
 $contentType = $message->getHeaderValue('Content-Type');
 ```
 
-In addition, `Message::getHeaderParameter()` can be used as a convenience method to retrieve the value of parameter part of a `ParameterHeader`, for example:
+In addition, `Message::getHeaderParameter()` can be used as a convenience method to retrieve the value of a parameter part of a `ParameterHeader`, for example:
 
 ```php
-// 3rd parameter optionally defines a default return value
-$charset = $message->getHeaderParameter('Content-Type', 'charset', 'us-ascii');
+// 3rd argument optionally defines a default return value
+$charset = $message->getHeaderParameter(
+    'Content-Type',
+    'charset',
+    'us-ascii'
+);
 // as opposed to
 $parameterHeader = $message->getHeader('Content-Type');
-$charset = $parameterHeader->getValueFor('charset', 'us-ascii');    // 2nd parameter also optional
+
+// 2nd argument to getValueFor also optional, defining a default return value
+$charset = $parameterHeader->getValueFor('charset', 'us-ascii');
 ```
 
 ### Message parts (text, html and other attachments)

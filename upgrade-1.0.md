@@ -21,7 +21,8 @@ $message = Message::from($handle);
 echo $message->getTextStream()->getContents();
 // equivalent shortcut
 echo $message->getTextContent();
-// or if your code is already using a resource handle, it may be easier to use getTextResourceHandle
+// or if your code is already using a resource handle, it may be easier to
+// use getTextResourceHandle
 $contentHandle = $message->getTextResourceHandle
 ```
 
