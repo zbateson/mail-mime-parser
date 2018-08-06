@@ -1,3 +1,7 @@
+[Home](/)
+
+# Upgrading to 1.0
+
 The majority of changes won't have an effect on simple implementations parsing emails to extract content/attachments.  For simple uses, only a few changes will need to be made -- most likely changing calls from ``` Message::getTextStream ``` and ``` Message::getHtmlStream ``` to ``` Message::getTextResourceHandle ``` and ``` Message::getHtmlResourceHandle ```.
 
 If you're modifying messages after parsing them, ``` MimePart::attachContentResourceHandle ``` has been removed.  Instead, ``` MessagePart::setContent ``` accepts a wider range of parameters.  You can pass a resource handle, a string or a Psr7 StreamInterface.
