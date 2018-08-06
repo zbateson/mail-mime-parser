@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-	<title>zbateson\mail-mime-parser</title>
+    <title>zbateson\mail-mime-parser</title>
     <parser>
         <target>./api/</target>
     </parser>

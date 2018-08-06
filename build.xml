@@ -53,12 +53,14 @@
     <target name="generate-docs" description="Generates phpdoc API documentation">
         
         <echo>Generating documentation for ${version}</echo>
+        <delete dir="${api-dir}" quiet="true"/>
         <mkdir dir="${api-dir}"/>
         
         <echo>Calling phpdoc and generating XML in ${api-dir}</echo>
-        <phpdoc2 title="MailMimeParser ${version}"
+        <phpdoc2 title="MailMimeParser ${api-version}"
                  destdir="${api-dir}"
-                 template="clean"
+                 template="responsive"
+                 defaultPackageName="MailMimeParser"
                  pharlocation="./vendor/bin/phpdoc">
             <fileset dir="./src">
                 <include name="**/*.php" />
