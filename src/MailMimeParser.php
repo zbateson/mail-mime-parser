@@ -28,16 +28,19 @@ class MailMimeParser
     const DEFAULT_CHARSET = 'UTF-8';
 
     /**
-     * @var \ZBateson\MailMimeParser\SimpleDi dependency injection container
+     * @var \ZBateson\MailMimeParser\Container dependency injection container
      */
     protected $di;
     
     /**
      * Sets up the parser.
      */
-    public function __construct()
+    public function __construct(Container $di = null)
     {
-        $this->di = SimpleDi::singleton();
+        if ($di === null) {
+            $di = new Container();
+        }
+        $this->di = $di;
     }
 
     /**

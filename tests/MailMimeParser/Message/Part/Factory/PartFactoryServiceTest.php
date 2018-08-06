@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\SimpleDi;
+use ZBateson\MailMimeParser\Container;
 
 /**
  * PartFactoryServiceTest
@@ -16,7 +16,7 @@ class PartFactoryServiceTest extends TestCase
 {
     public function testInstance()
     {
-        $di = SimpleDi::singleton();
+        $di = new Container();
         $partFactoryService = $di->getPartFactoryService();
 
         $messageFactory = $partFactoryService->getMessageFactory();

@@ -25,7 +25,7 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
  *
  * @author Zaahid Bateson
  */
-class SimpleDi
+class Container
 {
     /**
      * @var PartBuilderFactory
@@ -82,26 +82,12 @@ class SimpleDi
     protected $streamFactory;
     
     /**
-     * Constructs a SimpleDi - call singleton() to invoke
+     * Constructs a Container - call singleton() to invoke
      */
-    private function __construct()
+    public function __construct()
     {
     }
-    
-    /**
-     * Returns the singleton instance.
-     * 
-     * @return \ZBateson\MailMimeParser\SimpleDi
-     */
-    public static function singleton()
-    {
-        static $singleton = null;
-        if ($singleton === null) {
-            $singleton = new SimpleDi();
-        }
-        return $singleton;
-    }
-    
+
     /**
      * Returns a singleton 'service' instance for the given service named $var
      * with a class type of $class.

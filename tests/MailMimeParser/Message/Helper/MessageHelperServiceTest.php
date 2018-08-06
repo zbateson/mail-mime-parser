@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\SimpleDi;
+use ZBateson\MailMimeParser\Container;
 
 /**
  * MessageHelperServiceTest
@@ -16,7 +16,7 @@ class MessageHelperServiceTest extends TestCase
 {
     public function testInstance()
     {
-        $di = SimpleDi::singleton();
+        $di = new Container();
         $messageHelperService = $di->getMessageHelperService();
 
         $genericHelper = $messageHelperService->getGenericHelper();

@@ -13,31 +13,60 @@ use PHPUnit\Framework\TestCase;
  */
 class MailMimeParserTest extends TestCase
 {
+    private $mockDi;
+    private $mmp;
+    
+    protected function setUp()
+    {
+        $this->mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
+            ->disableOriginalConstructor()
+            ->setMethods(['newMessageParser'])
+            ->getMock();
+        $this->mmp = new MailMimeParser($this->mockDi);
+    }
+    
     public function testConstructMailMimeParser()
     {
-        $mmp = new MailMimeParser();
-        $this->assertNotNull($mmp);
+        $this->assertNotNull($this->mmp);
     }
 
     public function testParseFromHandle()
     {
-        $mmp = new MailMimeParser();
-
         $handle = fopen('php://memory', 'r+');
         fwrite($handle, 'This is a test');
         rewind($handle);
 
-        $ret = $mmp->parse($handle);
-        $this->assertNotNull($ret);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $ret);
+        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageParser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockDi
+            ->expects($this->once())
+            ->method('newMessageParser')
+            ->willReturn($mockParser);
+        $mockParser
+            ->expects($this->once())
+            ->method('parse')
+            ->willReturn('test');
+
+        $ret = $this->mmp->parse($handle);
+        $this->assertEquals('test', $ret);
     }
 
     public function testParseFromString()
     {
-        $mmp = new MailMimeParser();
+        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageParser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockDi
+            ->expects($this->once())
+            ->method('newMessageParser')
+            ->willReturn($mockParser);
+        $mockParser
+            ->expects($this->once())
+            ->method('parse')
+            ->willReturn('test');
 
-        $ret = $mmp->parse('This is a test');
-        $this->assertNotNull($ret);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $ret);
+        $ret = $this->mmp->parse('This is a test');
+        $this->assertEquals('test', $ret);
     }
 }

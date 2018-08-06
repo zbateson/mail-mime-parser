@@ -19,13 +19,13 @@
         </whitelist>
     </filter>
     <!--
-    Files specified in order for code coverage reporting - for example, SimpleDi
+    Files specified in order for code coverage reporting - for example, Container
     as a singleton instance only gets constructed once, and for coverage to be
     reported correctly, needs to be the first class tested.
     -->
     <testsuites>
         <testsuite name="Base">
-            <file>MailMimeParser/SimpleDiTest.php</file>
+            <file>MailMimeParser/ContainerTest.php</file>
             <file>MailMimeParser/MailMimeParserTest.php</file>
             <file>MailMimeParser/MessageTest.php</file>
         </testsuite>
