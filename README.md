@@ -55,9 +55,9 @@ echo stream_get_contents(                       // get the attached file
 
 ## Documentation
 
-* [Wiki Introduction](https://github.com/zbateson/MailMimeParser/wiki)
-* [Usage Guide](https://github.com/zbateson/MailMimeParser/wiki/Usage-Guide)
-* [API Reference](https://github.com/zbateson/MailMimeParser/wiki/ApiIndex)
+* [About](https://mail-mime-parser.org/)
+* [Usage Guide](https://mail-mime-parser.org/usage-guide-0.4.html)
+* [API Reference](https://mail-mime-parser.org/api/0.4)
 
 ## License
 

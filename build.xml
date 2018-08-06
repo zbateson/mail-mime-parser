@@ -4,11 +4,13 @@
     
     <property name="version-file" value="version.txt"/>
     <loadfile property="version" file="version.txt"/>
+    <propertyregex property="api-version" subject="${version}"
+                   pattern="^\d+\.\d+" match="$0" defaultValue="0.0.1"/>
     <property name="release-type" value=""/>
-    <property name="docs-dir" value="docs"/>
-    <property name="phpdocs-dir" value="${docs-dir}/phpdocs"/>
-    <property name="mdapi-dir" value="${docs-dir}/md-api"/>
-    <property name="wiki-git" value="git@github.com:zbateson/MailMimeParser.wiki.git"/>
+    <property name="clone-dir" value="/tmp/mmp"/>
+    <property name="api-dir" value="${clone-dir}/api/${api-version}"/>
+    <property name="api-git" value="git@github.com:zbateson/MailMimeParser.git"/>
+    <property name="api-branch" value="gh-pages"/>
     
     <target name="nothing" hidden="true">
         <echo>
@@ -18,57 +20,56 @@
     </target>
     
     <target name="clone-docs" description="Clones documentation from remote">
-        <echo>Cloning ${wiki-git} to ${mdapi-dir}</echo>
+        <echo>Cloning ${api-git} to ${clone-dir}</echo>
         <exec executable="git" logoutput="true">
             <arg value="clone"/>
-            <arg value="${wiki-git}"/>
-            <arg path="${mdapi-dir}"/>
+            <arg value="-b"/>
+            <arg value="${api-branch}"/>
+            <arg value="${api-git}"/>
+            <arg value="--depth"/>
+            <arg value="1"/>
+            <arg path="${clone-dir}"/>
         </exec>
     </target>
     
     <target name="push-docs" description="Pushes changed documentation to git remote">
-        <echo>Executing "git add -A" on ${mdapi-dir}</echo>
-        <exec executable="git" dir="${mdapi-dir}" logoutput="true">
+        <echo>Executing "git add -A" on ${clone-dir}</echo>
+        <exec executable="git" dir="${clone-dir}" logoutput="true">
             <arg value="add"/>
             <arg value="-A"/>
         </exec>
         <echo>git commit</echo>
-        <exec executable="git" dir="${mdapi-dir}" logoutput="true">
+        <exec executable="git" dir="${clone-dir}" logoutput="true">
             <arg value="commit"/>
             <arg value="-m"/>
-            <arg value="API update for version: ${version}"/>
+            <arg value="phpdoc generation for version: ${version}"/>
         </exec>
         <echo>git push</echo>
-        <exec executable="git" dir="${mdapi-dir}" logoutput="true">
+        <exec executable="git" dir="${clone-dir}" logoutput="true">
             <arg value="push"/>
         </exec>
     </target>
     
-    <target name="generate-docs" description="Creates MD-formatted API documentation">
+    <target name="generate-docs" description="Generates phpdoc API documentation">
         
         <echo>Generating documentation for ${version}</echo>
-        <mkdir dir="${phpdocs-dir}"/>
-        <mkdir dir="${mdapi-dir}"/>
+        <delete dir="${api-dir}" quiet="true"/>
+        <mkdir dir="${api-dir}"/>
         
-        <echo>Calling phpdoc and generating XML in ${phpdocs-dir}</echo>
-        <exec executable="vendor/bin/phpdoc">
-            <arg value="-d"/>
-            <arg path="src"/>
-            <arg value="-t"/>
-            <arg path="${phpdocs-dir}"/>
-            <arg value="--template=xml"/>
-        </exec>
-        <echo>Calling phpdocmd and generating MD in ${mdapi-dir}</echo>
-        <exec executable="vendor/bin/phpdocmd">
-            <arg value="--lt"/>
-            <arg value="%c"/>
-            <arg path="${phpdocs-dir}/structure.xml"/>
-            <arg path="${mdapi-dir}"/>
-        </exec>
+        <echo>Calling phpdoc and generating XML in ${api-dir}</echo>
+        <phpdoc2 title="MailMimeParser ${api-version}"
+                 destdir="${api-dir}"
+                 template="responsive"
+                 defaultPackageName="MailMimeParser"
+                 pharlocation="./vendor/bin/phpdoc">
+            <fileset dir="./src">
+                <include name="**/*.php" />
+            </fileset>
+        </phpdoc2>
     </target>
     
     <target name="cleanup-docs" description="Deletes documentation directories">
-        <delete dir="${docs-dir}" quiet="true"/>
+        <delete dir="${clone-dir}" quiet="true"/>
     </target>
     
     <target name="release" description="Bumps the version number, then updates documentation">
@@ -102,7 +103,13 @@
             </then>
         </if>
         <echo>${release-type} Release - incrememting version number</echo>
+        
         <version releasetype="${release-type}" file="version.txt" property="version"/>
+        <propertyregex property="api-version" subject="${version}"
+                       pattern="^\d+\.\d+" match="$0" defaultValue="0.0.1"
+                       override="true"/>
+        <property name="api-dir" value="${clone-dir}/${api-version}" override="true"/>
+
         <phingcall target="cleanup-docs"/>
         <phingcall target="clone-docs"/>
         <phingcall target="generate-docs"/>
