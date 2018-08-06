@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>MailMimeParser 1.0 » ZBateson\MailMimeParser</title>
+<title>MailMimeParser 1.0 » MailMimeParser</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -56,57 +56,106 @@
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
-<i class="icon-map-marker"></i> Namespaces</li>
+<i class="icon-map-marker"></i> Packages</li>
 <li>
-<a href="../namespaces/ZBateson.MailMimeParser.html" title="MailMimeParser"><i class="icon-th"></i>MailMimeParser</a><ul class="nav nav-list nav-namespaces">
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Header.html" title="Header"><i class="icon-th"></i>Header</a><ul class="nav nav-list nav-namespaces">
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.html" title="Consumer"><i class="icon-th"></i>Consumer</a><ul class="nav nav-list nav-namespaces"></ul>
-</li>
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Header.Part.html" title="Part"><i class="icon-th"></i>Part</a><ul class="nav nav-list nav-namespaces"></ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Message.html" title="Message"><i class="icon-th"></i>Message</a><ul class="nav nav-list nav-namespaces">
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Message.Helper.html" title="Helper"><i class="icon-th"></i>Helper</a><ul class="nav nav-list nav-namespaces"></ul>
-</li>
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Message.Part.html" title="Part"><i class="icon-th"></i>Part</a><ul class="nav nav-list nav-namespaces"><li>
-<a href="../namespaces/ZBateson.MailMimeParser.Message.Part.Factory.html" title="Factory"><i class="icon-th"></i>Factory</a><ul class="nav nav-list nav-namespaces"></ul>
-</li></ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="../namespaces/ZBateson.MailMimeParser.Stream.html" title="Stream"><i class="icon-th"></i>Stream</a><ul class="nav nav-list nav-namespaces"></ul>
-</li>
-</ul>
+<a href="../packages/MailMimeParser.html" title="MailMimeParser"><i class="icon-folder-open"></i>MailMimeParser</a><ul class="nav nav-list nav-packages"></ul>
 </li>
 <li class="nav-header">
 <i title="Classes" class="icon-custom icon-class"></i> Classes</li>
 <li><a href="#Message" title="A parsed mime message with optional mime parts depending on its type.">Message</a></li>
 <li><a href="#Container" title="Dependency injection container for use by ZBateson\MailMimeParser - because a
 more complex one seems like overkill.">Container</a></li>
+<li><a href="#MessagePartStream" title="Provides a readable stream for a MessagePart.">MessagePartStream</a></li>
+<li><a href="#StreamFactory" title="Factory class for Psr7 stream decorators used in MailMimeParser.">StreamFactory</a></li>
+<li><a href="#HeaderStream" title="Psr7 stream decorator implementation providing a readable stream for a part's
+headers.">HeaderStream</a></li>
+<li><a href="#MimePart" title="Represents a single part of a multi-part mime message.">MimePart</a></li>
+<li><a href="#UUEncodedPart" title="A specialized NonMimePart representing a uuencoded part.">UUEncodedPart</a></li>
+<li><a href="#MimePartFactory" title="Responsible for creating MimePart instances.">MimePartFactory</a></li>
+<li><a href="#PartFactoryService" title="Responsible for creating singleton instances of MessagePartFactory and its
+subclasses.">PartFactoryService</a></li>
+<li><a href="#UUEncodedPartFactory" title="Responsible for creating UUEncodedPart instances.">UUEncodedPartFactory</a></li>
+<li><a href="#NonMimePartFactory" title="Responsible for creating NoneMimePart instances.">NonMimePartFactory</a></li>
+<li><a href="#PartStreamFilterManagerFactory" title="Responsible for creating PartStreamFilterManager instances.">PartStreamFilterManagerFactory</a></li>
+<li><a href="#MessagePartFactory" title="Abstract factory for subclasses of MessagePart.">MessagePartFactory</a></li>
+<li><a href="#PartBuilderFactory" title="Responsible for creating PartBuilder instances.">PartBuilderFactory</a></li>
+<li><a href="#PartBuilder" title="Used by MessageParser to keep information about a parsed message as an
+intermediary before creating a Message object and its MessagePart children.">PartBuilder</a></li>
+<li><a href="#PartStreamFilterManager" title="Manages attached stream filters for a MessagePart's content resource handle.">PartStreamFilterManager</a></li>
+<li><a href="#NonMimePart" title="Represents part of a non-mime message.  The part could either be a plain text
+part or a uuencoded attachment and could be extended for other pre-mime
+message encoding types.">NonMimePart</a></li>
+<li><a href="#ParentPart" title="A MessagePart that contains children.">ParentPart</a></li>
+<li><a href="#MessagePart" title="Represents a single part of a message.">MessagePart</a></li>
+<li><a href="#ParentHeaderPart" title="A parent part containing headers.">ParentHeaderPart</a></li>
+<li><a href="#PartFilter" title="Provides a way to define a filter of MessagePart for use in various calls to
+add/remove MessagePart.">PartFilter</a></li>
+<li><a href="#MultipartHelper" title="Provides various routines to manipulate and create multipart messages from an
+existing message (e.g. to make space for attachments in a message, or to
+change a simple message to a multipart/alternative one, etc.">MultipartHelper</a></li>
+<li><a href="#PrivacyHelper" title="Provides routines to set or retrieve the signature part of a signed message.">PrivacyHelper</a></li>
+<li><a href="#GenericHelper" title="Provides common Message helper routines for Message manipulation.">GenericHelper</a></li>
+<li><a href="#MessageHelperService" title="Responsible for creating helper singletons.">MessageHelperService</a></li>
+<li><a href="#AbstractHelper" title="Base class for message helpers.">AbstractHelper</a></li>
+<li><a href="#MessageFactory" title="Responsible for creating Message instances.">MessageFactory</a></li>
+<li><a href="#PartFilterFactory" title="Injectable factory class used by MimePart to construct PartFilter instances
+in a testable way.">PartFilterFactory</a></li>
+<li><a href="#MessageParser" title="Parses a mail mime message into its component parts.  To invoke, call
+MailMimeParser::parse.">MessageParser</a></li>
+<li><a href="#SubjectHeader" title="Reads the header using a SubjectConsumer.">SubjectHeader</a></li>
+<li><a href="#ParameterHeader" title="Represents a header containing a primary value part and subsequent name/value
+parts using a ParameterConsumer.">ParameterHeader</a></li>
+<li><a href="#AbstractHeader" title="Abstract base class representing a mime email's header.">AbstractHeader</a></li>
+<li><a href="#ParameterPart" title="Represents a name/value pair part of a header.">ParameterPart</a></li>
+<li><a href="#AddressPart" title="Holds a single address or name/address pair.">AddressPart</a></li>
+<li><a href="#MimeLiteralPartFactory" title="Extends HeaderPartFactory to instantiate MimeLiteralParts for its newInstance
+function.">MimeLiteralPartFactory</a></li>
+<li><a href="#LiteralPart" title="A literal header string part.  The value of the part is stripped of CR and LF
+characters, but otherwise not transformed or changed in any way.">LiteralPart</a></li>
+<li><a href="#Token" title="Holds a string value token that will require additional processing by a
+consumer prior to returning to a client.">Token</a></li>
+<li><a href="#HeaderPartFactory" title="Constructs and returns HeaderPart objects.">HeaderPartFactory</a></li>
+<li><a href="#MimeLiteralPart" title="Represents a single mime header part token, with the possibility of it being
+MIME-Encoded as per RFC-2047.">MimeLiteralPart</a></li>
+<li><a href="#AddressGroupPart" title="Holds a group of addresses, and an optional group name.">AddressGroupPart</a></li>
+<li><a href="#HeaderPart" title="Abstract base class representing a single part of a parsed header.">HeaderPart</a></li>
+<li><a href="#CommentPart" title="Represents a mime header comment -- text in a structured mime header
+value existing within parentheses.">CommentPart</a></li>
+<li><a href="#DatePart" title="Parses a header into a DateTime object.">DatePart</a></li>
+<li><a href="#SplitParameterToken" title="Holds a running value for an RFC-2231 split header parameter.">SplitParameterToken</a></li>
+<li><a href="#AddressHeader" title="Reads an address list header using the AddressBaseConsumer.">AddressHeader</a></li>
+<li><a href="#DateHeader" title="Reads a DatePart value header in either RFC 2822 or RFC 822 format.">DateHeader</a></li>
+<li><a href="#HeaderFactory" title="Constructs various AbstractHeader types depending on the type of header
+passed.">HeaderFactory</a></li>
+<li><a href="#HeaderContainer" title="Maintains a collection of headers for a part.">HeaderContainer</a></li>
+<li><a href="#AddressBaseConsumer" title="Serves as a base-consumer for recipient/sender email address headers (like
+From and To).">AddressBaseConsumer</a></li>
+<li><a href="#CommentConsumer" title="Consumes all tokens within parentheses as comments.">CommentConsumer</a></li>
+<li><a href="#SubjectConsumer" title="Extends GenericConsumer to remove its sub consumers.">SubjectConsumer</a></li>
+<li><a href="#AddressGroupConsumer" title="Parses a single group of addresses (as a named-group part of an address
+header).">AddressGroupConsumer</a></li>
+<li><a href="#ConsumerService" title="Simple service provider for consumer singletons.">ConsumerService</a></li>
+<li><a href="#AddressConsumer" title="Parses a single part of an address header.">AddressConsumer</a></li>
+<li><a href="#AbstractConsumer" title="Abstract base class for all header token consumers.">AbstractConsumer</a></li>
+<li><a href="#GenericConsumer" title="A minimal implementation of AbstractConsumer defining a CommentConsumer and
+QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.">GenericConsumer</a></li>
+<li><a href="#DateConsumer" title="Parses a date header into a Part\DatePart taking care of comment and quoted
+parts as necessary.">DateConsumer</a></li>
+<li><a href="#QuotedStringConsumer" title="Represents a quoted part of a header value starting at a single quote, and
+ending at the next single quote.">QuotedStringConsumer</a></li>
+<li><a href="#ParameterConsumer" title="Reads headers separated into parameters consisting of a main value, and
+subsequent name/value pairs - for example text/html; charset=utf-8.">ParameterConsumer</a></li>
+<li><a href="#GenericHeader" title="Reads the header using GenericConsumer.">GenericHeader</a></li>
 <li><a href="#MailMimeParser" title="Parses a MIME message into a \ZBateson\MailMimeParser\Message object.">MailMimeParser</a></li>
 </ul>
 </div>
-<div class="span8 namespace-contents">
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-</ul>
-<div class="namespace-indent">
+<div class="span8 package-contents">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/MailMimeParser.html">MailMimeParser</a></li>
+</li></ul>
+<div class="package-indent">
 <h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
+<i title="Classes" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
 <div xmlns:php="http://php.net/xsl" id="Container" class="element ajax clickable class">
 <h1>Container<a href="../classes/ZBateson.MailMimeParser.Container.html">¶</a>
 </h1>
@@ -115,35 +164,6 @@ more complex one seems like overkill.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Container.html" class="more">« More »</a>
 </div>
-<div xmlns:php="http://php.net/xsl" id="MailMimeParser" class="element ajax clickable class">
-<h1>MailMimeParser<a href="../classes/ZBateson.MailMimeParser.MailMimeParser.html">¶</a>
-</h1>
-<p class="short_description">Parses a MIME message into a \ZBateson\MailMimeParser\Message object.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.MailMimeParser.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="Message" class="element ajax clickable class">
-<h1>Message<a href="../classes/ZBateson.MailMimeParser.Message.html">¶</a>
-</h1>
-<p class="short_description">A parsed mime message with optional mime parts depending on its type.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.html" class="more">« More »</a>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.html">Header</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
 <div xmlns:php="http://php.net/xsl" id="AbstractHeader" class="element ajax clickable class">
 <h1>AbstractHeader<a href="../classes/ZBateson.MailMimeParser.Header.AbstractHeader.html">¶</a>
 </h1>
@@ -158,68 +178,6 @@ more complex one seems like overkill.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Header.AddressHeader.html" class="more">« More »</a>
 </div>
-<div xmlns:php="http://php.net/xsl" id="DateHeader" class="element ajax clickable class">
-<h1>DateHeader<a href="../classes/ZBateson.MailMimeParser.Header.DateHeader.html">¶</a>
-</h1>
-<p class="short_description">Reads a DatePart value header in either RFC 2822 or RFC 822 format.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Header.DateHeader.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="GenericHeader" class="element ajax clickable class">
-<h1>GenericHeader<a href="../classes/ZBateson.MailMimeParser.Header.GenericHeader.html">¶</a>
-</h1>
-<p class="short_description">Reads the header using GenericConsumer.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Header.GenericHeader.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="HeaderContainer" class="element ajax clickable class">
-<h1>HeaderContainer<a href="../classes/ZBateson.MailMimeParser.Header.HeaderContainer.html">¶</a>
-</h1>
-<p class="short_description">Maintains a collection of headers for a part.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Header.HeaderContainer.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="HeaderFactory" class="element ajax clickable class">
-<h1>HeaderFactory<a href="../classes/ZBateson.MailMimeParser.Header.HeaderFactory.html">¶</a>
-</h1>
-<p class="short_description">Constructs various AbstractHeader types depending on the type of header
-passed.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Header.HeaderFactory.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="ParameterHeader" class="element ajax clickable class">
-<h1>ParameterHeader<a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html">¶</a>
-</h1>
-<p class="short_description">Represents a header containing a primary value part and subsequent name/value
-parts using a ParameterConsumer.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="SubjectHeader" class="element ajax clickable class">
-<h1>SubjectHeader<a href="../classes/ZBateson.MailMimeParser.Header.SubjectHeader.html">¶</a>
-</h1>
-<p class="short_description">Reads the header using a SubjectConsumer.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Header.SubjectHeader.html" class="more">« More »</a>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.html">Header</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.html">Consumer</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
 <div xmlns:php="http://php.net/xsl" id="AbstractConsumer" class="element ajax clickable class">
 <h1>AbstractConsumer<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html">¶</a>
 </h1>
@@ -303,25 +261,43 @@ ending at the next single quote.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.SubjectConsumer.html" class="more">« More »</a>
 </div>
+<div xmlns:php="http://php.net/xsl" id="DateHeader" class="element ajax clickable class">
+<h1>DateHeader<a href="../classes/ZBateson.MailMimeParser.Header.DateHeader.html">¶</a>
+</h1>
+<p class="short_description">Reads a DatePart value header in either RFC 2822 or RFC 822 format.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.DateHeader.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.html">Header</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.Part.html">Part</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
+<div xmlns:php="http://php.net/xsl" id="GenericHeader" class="element ajax clickable class">
+<h1>GenericHeader<a href="../classes/ZBateson.MailMimeParser.Header.GenericHeader.html">¶</a>
+</h1>
+<p class="short_description">Reads the header using GenericConsumer.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.GenericHeader.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="HeaderContainer" class="element ajax clickable class">
+<h1>HeaderContainer<a href="../classes/ZBateson.MailMimeParser.Header.HeaderContainer.html">¶</a>
+</h1>
+<p class="short_description">Maintains a collection of headers for a part.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.HeaderContainer.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="HeaderFactory" class="element ajax clickable class">
+<h1>HeaderFactory<a href="../classes/ZBateson.MailMimeParser.Header.HeaderFactory.html">¶</a>
+</h1>
+<p class="short_description">Constructs various AbstractHeader types depending on the type of header
+passed.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.HeaderFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="ParameterHeader" class="element ajax clickable class">
+<h1>ParameterHeader<a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html">¶</a>
+</h1>
+<p class="short_description">Represents a header containing a primary value part and subsequent name/value
+parts using a ParameterConsumer.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html" class="more">« More »</a>
+</div>
 <div xmlns:php="http://php.net/xsl" id="AddressGroupPart" class="element ajax clickable class">
 <h1>AddressGroupPart<a href="../classes/ZBateson.MailMimeParser.Header.Part.AddressGroupPart.html">¶</a>
 </h1>
@@ -411,72 +387,27 @@ consumer prior to returning to a client.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Header.Part.Token.html" class="more">« More »</a>
 </div>
-</div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.html">Message</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
-<div xmlns:php="http://php.net/xsl" id="MessageFactory" class="element ajax clickable class">
-<h1>MessageFactory<a href="../classes/ZBateson.MailMimeParser.Message.MessageFactory.html">¶</a>
+<div xmlns:php="http://php.net/xsl" id="SubjectHeader" class="element ajax clickable class">
+<h1>SubjectHeader<a href="../classes/ZBateson.MailMimeParser.Header.SubjectHeader.html">¶</a>
 </h1>
-<p class="short_description">Responsible for creating Message instances.</p>
+<p class="short_description">Reads the header using a SubjectConsumer.</p>
 <div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.MessageFactory.html" class="more">« More »</a>
+<a href="../classes/ZBateson.MailMimeParser.Header.SubjectHeader.html" class="more">« More »</a>
 </div>
-<div xmlns:php="http://php.net/xsl" id="MessageParser" class="element ajax clickable class">
-<h1>MessageParser<a href="../classes/ZBateson.MailMimeParser.Message.MessageParser.html">¶</a>
+<div xmlns:php="http://php.net/xsl" id="MailMimeParser" class="element ajax clickable class">
+<h1>MailMimeParser<a href="../classes/ZBateson.MailMimeParser.MailMimeParser.html">¶</a>
 </h1>
-<p class="short_description">Parses a mail mime message into its component parts.  To invoke, call
-MailMimeParser::parse.</p>
+<p class="short_description">Parses a MIME message into a \ZBateson\MailMimeParser\Message object.</p>
 <div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.MessageParser.html" class="more">« More »</a>
+<a href="../classes/ZBateson.MailMimeParser.MailMimeParser.html" class="more">« More »</a>
 </div>
-<div xmlns:php="http://php.net/xsl" id="PartFilter" class="element ajax clickable class">
-<h1>PartFilter<a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">¶</a>
+<div xmlns:php="http://php.net/xsl" id="Message" class="element ajax clickable class">
+<h1>Message<a href="../classes/ZBateson.MailMimeParser.Message.html">¶</a>
 </h1>
-<p class="short_description">Provides a way to define a filter of MessagePart for use in various calls to
-add/remove MessagePart.</p>
+<p class="short_description">A parsed mime message with optional mime parts depending on its type.</p>
 <div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html" class="more">« More »</a>
+<a href="../classes/ZBateson.MailMimeParser.Message.html" class="more">« More »</a>
 </div>
-<div xmlns:php="http://php.net/xsl" id="PartFilterFactory" class="element ajax clickable class">
-<h1>PartFilterFactory<a href="../classes/ZBateson.MailMimeParser.Message.PartFilterFactory.html">¶</a>
-</h1>
-<p class="short_description">Injectable factory class used by MimePart to construct PartFilter instances
-in a testable way.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.PartFilterFactory.html" class="more">« More »</a>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.html">Message</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.Helper.html">Helper</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
 <div xmlns:php="http://php.net/xsl" id="AbstractHelper" class="element ajax clickable class">
 <h1>AbstractHelper<a href="../classes/ZBateson.MailMimeParser.Message.Helper.AbstractHelper.html">¶</a>
 </h1>
@@ -514,25 +445,87 @@ change a simple message to a multipart/alternative one, etc.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Message.Helper.PrivacyHelper.html" class="more">« More »</a>
 </div>
+<div xmlns:php="http://php.net/xsl" id="MessageFactory" class="element ajax clickable class">
+<h1>MessageFactory<a href="../classes/ZBateson.MailMimeParser.Message.MessageFactory.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating Message instances.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.MessageFactory.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.html">Message</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.Part.html">Part</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
+<div xmlns:php="http://php.net/xsl" id="MessageParser" class="element ajax clickable class">
+<h1>MessageParser<a href="../classes/ZBateson.MailMimeParser.Message.MessageParser.html">¶</a>
+</h1>
+<p class="short_description">Parses a mail mime message into its component parts.  To invoke, call
+MailMimeParser::parse.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.MessageParser.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="PartFilter" class="element ajax clickable class">
+<h1>PartFilter<a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">¶</a>
+</h1>
+<p class="short_description">Provides a way to define a filter of MessagePart for use in various calls to
+add/remove MessagePart.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="PartFilterFactory" class="element ajax clickable class">
+<h1>PartFilterFactory<a href="../classes/ZBateson.MailMimeParser.Message.PartFilterFactory.html">¶</a>
+</h1>
+<p class="short_description">Injectable factory class used by MimePart to construct PartFilter instances
+in a testable way.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.PartFilterFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="MessagePartFactory" class="element ajax clickable class">
+<h1>MessagePartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MessagePartFactory.html">¶</a>
+</h1>
+<p class="short_description">Abstract factory for subclasses of MessagePart.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MessagePartFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="MimePartFactory" class="element ajax clickable class">
+<h1>MimePartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MimePartFactory.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating MimePart instances.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MimePartFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="NonMimePartFactory" class="element ajax clickable class">
+<h1>NonMimePartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.NonMimePartFactory.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating NoneMimePart instances.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.NonMimePartFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="PartBuilderFactory" class="element ajax clickable class">
+<h1>PartBuilderFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartBuilderFactory.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating PartBuilder instances.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartBuilderFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="PartFactoryService" class="element ajax clickable class">
+<h1>PartFactoryService<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartFactoryService.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating singleton instances of MessagePartFactory and its
+subclasses.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartFactoryService.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="PartStreamFilterManagerFactory" class="element ajax clickable class">
+<h1>PartStreamFilterManagerFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartStreamFilterManagerFactory.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating PartStreamFilterManager instances.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartStreamFilterManagerFactory.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="UUEncodedPartFactory" class="element ajax clickable class">
+<h1>UUEncodedPartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.UUEncodedPartFactory.html">¶</a>
+</h1>
+<p class="short_description">Responsible for creating UUEncodedPart instances.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.UUEncodedPartFactory.html" class="more">« More »</a>
+</div>
 <div xmlns:php="http://php.net/xsl" id="MessagePart" class="element ajax clickable class">
 <h1>MessagePart<a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">¶</a>
 </h1>
@@ -592,95 +585,6 @@ intermediary before creating a Message object and its MessagePart children.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Message.Part.UUEncodedPart.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.html">Message</a>
-</li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.Part.html">Part</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.Part.Factory.html">Factory</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
-<div xmlns:php="http://php.net/xsl" id="MessagePartFactory" class="element ajax clickable class">
-<h1>MessagePartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MessagePartFactory.html">¶</a>
-</h1>
-<p class="short_description">Abstract factory for subclasses of MessagePart.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MessagePartFactory.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="MimePartFactory" class="element ajax clickable class">
-<h1>MimePartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MimePartFactory.html">¶</a>
-</h1>
-<p class="short_description">Responsible for creating MimePart instances.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MimePartFactory.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="NonMimePartFactory" class="element ajax clickable class">
-<h1>NonMimePartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.NonMimePartFactory.html">¶</a>
-</h1>
-<p class="short_description">Responsible for creating NoneMimePart instances.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.NonMimePartFactory.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="PartBuilderFactory" class="element ajax clickable class">
-<h1>PartBuilderFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartBuilderFactory.html">¶</a>
-</h1>
-<p class="short_description">Responsible for creating PartBuilder instances.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartBuilderFactory.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="PartFactoryService" class="element ajax clickable class">
-<h1>PartFactoryService<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartFactoryService.html">¶</a>
-</h1>
-<p class="short_description">Responsible for creating singleton instances of MessagePartFactory and its
-subclasses.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartFactoryService.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="PartStreamFilterManagerFactory" class="element ajax clickable class">
-<h1>PartStreamFilterManagerFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartStreamFilterManagerFactory.html">¶</a>
-</h1>
-<p class="short_description">Responsible for creating PartStreamFilterManager instances.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartStreamFilterManagerFactory.html" class="more">« More »</a>
-</div>
-<div xmlns:php="http://php.net/xsl" id="UUEncodedPartFactory" class="element ajax clickable class">
-<h1>UUEncodedPartFactory<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.UUEncodedPartFactory.html">¶</a>
-</h1>
-<p class="short_description">Responsible for creating UUEncodedPart instances.</p>
-<div class="details collapse"></div>
-<a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.UUEncodedPartFactory.html" class="more">« More »</a>
-</div>
-</div>
-</div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Stream.html">Stream</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i title="Class" class="icon-custom icon-class"></i> Classes, interfaces, and traits</h3>
 <div xmlns:php="http://php.net/xsl" id="HeaderStream" class="element ajax clickable class">
 <h1>HeaderStream<a href="../classes/ZBateson.MailMimeParser.Stream.HeaderStream.html">¶</a>
 </h1>
@@ -702,7 +606,6 @@ headers.</p>
 <p class="short_description">Factory class for Psr7 stream decorators used in MailMimeParser.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Stream.StreamFactory.html" class="more">« More »</a>
-</div>
 </div>
 </div>
 </div>
