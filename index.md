@@ -1,4 +1,5 @@
-[Installation](#installation) - [Quick Guide](#quick-usage-guide) - [API Documentation](api/1.0)
+[Installation](#installation) - [Quick Guide](#quick-usage-guide) - [API Documentation](api/1.0) -
+[Upgrading to 1.0](upgrade-1.0.html) - [Contributors](#contributors)
 
 # zbateson/mail-mime-parser
 
@@ -16,6 +17,8 @@ composer require zbateson/mail-mime-parser
 ```
 
 ## Quick Usage Guide
+
+> For the 0.4 usage guide, [click here](usage-guide-0.4.html)
 
 ### Parsing a stream
 
@@ -114,5 +117,10 @@ echo $htmlStream->getContents();
 echo $message->getHtmlContent();
 ```
 
-### Documentation
-* [API Reference](api/1.0)
+## API Documentation
+* [Current (1.0)](api/1.0)
+* [0.4](api/0.4)
+
+## Contributors
+
+Special thanks to our [contributors](https://github.com/zbateson/MailMimeParser/graphs/contributors).
