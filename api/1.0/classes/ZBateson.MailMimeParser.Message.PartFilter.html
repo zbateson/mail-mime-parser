@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>MailMimeParser 1.0.0
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">MailMimeParser 1.0.0
+</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/ZBateson.html">\ZBateson</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">56</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-509921878"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-509921878" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1196555694"></a>
+                                <a href="../namespaces/ZBateson.html" style="margin-left: 30px; padding-left: 0">ZBateson</a>
+            </div>
+            <div id="namespace-1196555694" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1222672896"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.html" style="margin-left: 30px; padding-left: 0">MailMimeParser</a>
+            </div>
+            <div id="namespace-1222672896" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-210036689"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Header.html" style="margin-left: 30px; padding-left: 0">Header</a>
+            </div>
+            <div id="namespace-210036689" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1650215839"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.html" style="margin-left: 30px; padding-left: 0">Consumer</a>
+            </div>
+            <div id="namespace-1650215839" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html">AbstractConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressBaseConsumer.html">AddressBaseConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html">AddressConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressGroupConsumer.html">AddressGroupConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.CommentConsumer.html">CommentConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ConsumerService.html">ConsumerService</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.DateConsumer.html">DateConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html">GenericConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ParameterConsumer.html">ParameterConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.QuotedStringConsumer.html">QuotedStringConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.SubjectConsumer.html">SubjectConsumer</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1371492511"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Header.Part.html" style="margin-left: 30px; padding-left: 0">Part</a>
+            </div>
+            <div id="namespace-1371492511" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.AddressGroupPart.html">AddressGroupPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.AddressPart.html">AddressPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.CommentPart.html">CommentPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.DatePart.html">DatePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">HeaderPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPartFactory.html">HeaderPartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.LiteralPart.html">LiteralPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.MimeLiteralPart.html">MimeLiteralPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.MimeLiteralPartFactory.html">MimeLiteralPartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.ParameterPart.html">ParameterPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.SplitParameterToken.html">SplitParameterToken</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.Token.html">Token</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.AbstractHeader.html">AbstractHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.AddressHeader.html">AddressHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.DateHeader.html">DateHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.GenericHeader.html">GenericHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.HeaderContainer.html">HeaderContainer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.HeaderFactory.html">HeaderFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html">ParameterHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.SubjectHeader.html">SubjectHeader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-45711941"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.html" style="margin-left: 30px; padding-left: 0">Message</a>
+            </div>
+            <div id="namespace-45711941" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-979909939"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-979909939" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.AbstractHelper.html">AbstractHelper</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.GenericHelper.html">GenericHelper</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.MessageHelperService.html">MessageHelperService</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.MultipartHelper.html">MultipartHelper</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.PrivacyHelper.html">PrivacyHelper</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1007072085"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.Part.html" style="margin-left: 30px; padding-left: 0">Part</a>
+            </div>
+            <div id="namespace-1007072085" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1509046490"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.Part.Factory.html" style="margin-left: 30px; padding-left: 0">Factory</a>
+            </div>
+            <div id="namespace-1509046490" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MessagePartFactory.html">MessagePartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MimePartFactory.html">MimePartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.NonMimePartFactory.html">NonMimePartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartBuilderFactory.html">PartBuilderFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartFactoryService.html">PartFactoryService</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartStreamFilterManagerFactory.html">PartStreamFilterManagerFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.UUEncodedPartFactory.html">UUEncodedPartFactory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">MessagePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.MimePart.html">MimePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.NonMimePart.html">NonMimePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.ParentHeaderPart.html">ParentHeaderPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.ParentPart.html">ParentPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.PartBuilder.html">PartBuilder</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.PartStreamFilterManager.html">PartStreamFilterManager</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.UUEncodedPart.html">UUEncodedPart</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.MessageFactory.html">MessageFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.MessageParser.html">MessageParser</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">PartFilter</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.PartFilterFactory.html">PartFilterFactory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1983608700"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Stream.html" style="margin-left: 30px; padding-left: 0">Stream</a>
+            </div>
+            <div id="namespace-1983608700" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Stream.HeaderStream.html">HeaderStream</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Stream.MessagePartStream.html">MessagePartStream</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Stream.StreamFactory.html">StreamFactory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Container.html">Container</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.MailMimeParser.html">MailMimeParser</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.html">Message</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/ZBateson.MailMimeParser.Message.html">\ZBateson\MailMimeParser\Message</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\ZBateson\MailMimeParser\Message</small>PartFilter</h1>
+                    <p><em>Provides a way to define a filter of MessagePart for use in various calls to
+add/remove MessagePart.</em></p>
+                    <p>A PartFilter is defined as a set of properties in the class, set to either be
+'included' or 'excluded'.  The filter is simplistic in that a property
+defined as included must be set on a part for it to be passed, and an
+excluded filter must not be set for the part to be passed.  There is no
+provision for creating logical conditions.</p>
+<p>The only property set by default is $signedpart, which defaults to
+FILTER_EXCLUDE.</p>
+<p>A PartFilter can be instantiated with an array of keys matching class
+properties, and values to set them for convenience.</p>
+<pre><code class="language-php">$inlineParts = $message-&gt;getAllParts(new PartFilter([
+    'multipart' =&gt; PartFilter::FILTER_INCLUDE,
+    'headers' =&gt; [
+        FILTER_EXCLUDE =&gt; [
+            'Content-Disposition': 'attachment'
+        ]
+    ]
+]));
+
+$inlineTextPart = $message-&gt;getAllParts(PartFilter::fromInlineContentType('text/plain'));</code></pre>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_fromContentType" class="">fromContentType()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_fromInlineContentType" class="">fromInlineContentType()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_fromDisposition" class="">fromDisposition()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_setHeaders" class="">setHeaders()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method___set" class="">__set()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method___isset" class="">__isset()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method___get" class="">__get()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_filter" class="">filter()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#constant_FILTER_OFF" class="">FILTER_OFF</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#constant_FILTER_EXCLUDE" class="">FILTER_EXCLUDE</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#constant_FILTER_INCLUDE" class="">FILTER_INCLUDE</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_validateArgument" class="">validateArgument()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_failsHasContentFilter" class="">failsHasContentFilter()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_failsMultiPartFilter" class="">failsMultiPartFilter()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_failsTextPartFilter" class="">failsTextPartFilter()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_failsSignedPartFilter" class="">failsSignedPartFilter()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_failsHeaderFor" class="">failsHeaderFor()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#method_failsHeaderPartFilter" class="">failsHeaderPartFilter()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#property_hascontent" class="">$hascontent</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#property_multipart" class="">$multipart</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#property_textpart" class="">$textpart</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#property_signedpart" class="">$signedpart</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#property_hashCode" class="">$hashCode</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html#property_headers" class="">$headers</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Message.PartFilter.html"><div class="path-wrapper">Message/PartFilter.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\ZBateson\MailMimeParser\Message\PartFilter</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>Zaahid Bateson</p>
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_FILTER_OFF" name="constant_FILTER_OFF" class="anchor"></a>
+            <article id="constant_FILTER_OFF" class="constant">
+                <h3 class="">FILTER_OFF</h3>
+                <pre class="signature">FILTER_OFF</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_FILTER_EXCLUDE" name="constant_FILTER_EXCLUDE" class="anchor"></a>
+            <article id="constant_FILTER_EXCLUDE" class="constant">
+                <h3 class="">FILTER_EXCLUDE</h3>
+                <pre class="signature">FILTER_EXCLUDE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_FILTER_INCLUDE" name="constant_FILTER_INCLUDE" class="anchor"></a>
+            <article id="constant_FILTER_INCLUDE" class="constant">
+                <h3 class="">FILTER_INCLUDE</h3>
+                <pre class="signature">FILTER_INCLUDE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_hascontent" name="property_hascontent" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$hascontent</h3>
+                <pre class="signature">$hascontent : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; filters based on whether MessagePart::hasContent is true                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_multipart" name="property_multipart" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$multipart</h3>
+                <pre class="signature">$multipart : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; filters based on whether MimePart::isMultiPart is true                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_textpart" name="property_textpart" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$textpart</h3>
+                <pre class="signature">$textpart : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; filters based on whether MessagePart::isTextPart is true                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_signedpart" name="property_signedpart" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$signedpart</h3>
+                <pre class="signature">$signedpart : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; filters based on whether the parent of a part is a
+     multipart/signed part and this part has a content-type equal to its
+     parent&#039;s &#039;protocol&#039; parameter in its content-type header                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_hashCode" name="property_hashCode" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$hashCode</h3>
+                <pre class="signature">$hashCode : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; calculated hash of the filter                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_headers" name="property_headers" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$headers</h3>
+                <pre class="signature">$headers : array&lt;mixed,string[]&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,string[]&gt;
+                &mdash; array of header rules.  The top-level contains keys of
+FILTER_INCLUDE and/or FILTER_EXCLUDE, which contain key =&gt; value mapping
+of header names =&gt; values to search for.  Note that when searching
+MimePart::getHeaderValue is used (so additional parameters need not be
+matched) and strcasecmp is used.
+
+```php
+$filter = new PartFilter();
+$filter-&gt;headers = [ PartFilter::FILTER_INCLUDE =&gt; [ &#039;Content-Type&#039; =&gt; &#039;text/plain&#039; ] ];
+```                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fromContentType" name="method_fromContentType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fromContentType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fromContentType(string  <span class="argument">$mimeType</span>) : \ZBateson\MailMimeParser\Message\PartFilter</pre>
+                <p><em>Convenience method to filter for a specific mime type.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$mimeType </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">\ZBateson\MailMimeParser\Message\PartFilter</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fromInlineContentType" name="method_fromInlineContentType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fromInlineContentType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fromInlineContentType(string  <span class="argument">$mimeType</span>) : \ZBateson\MailMimeParser\Message\PartFilter</pre>
+                <p><em>Convenience method to look for parts of a specific mime-type, and that
+do not specifically have a Content-Disposition equal to &#039;attachment&#039;.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$mimeType </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">\ZBateson\MailMimeParser\Message\PartFilter</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fromDisposition" name="method_fromDisposition" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fromDisposition()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fromDisposition(string  <span class="argument">$disposition</span>, integer  <span class="argument">$multipart = \ZBateson\MailMimeParser\Message\PartFilter::FILTER_OFF</span>) : \ZBateson\MailMimeParser\Message\PartFilter</pre>
+                <p><em>Convenience method to search for parts with a specific
+Content-Disposition, optionally including multipart parts.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$disposition </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$multipart </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">\ZBateson\MailMimeParser\Message\PartFilter</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(array  <span class="argument">$filter = array()</span>) </pre>
+                <p><em>Constructs a PartFilter, optionally instantiating member variables with
+values in the passed array.</em></p>
+                <p>The passed array must use keys equal to member variable names, e.g.
+'multipart', 'textpart', 'signedpart' and 'headers'.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$filter </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setHeaders" name="method_setHeaders" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setHeaders()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setHeaders(array  <span class="argument">$headers</span>) </pre>
+                <p><em>Sets the PartFilter&#039;s headers filter to the passed array after validating
+it.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$headers </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___set" name="method___set" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__set()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__set(string  <span class="argument">$name</span>, integer|array  <span class="argument">$value</span>) </pre>
+                <p><em>Sets the member variable denoted by $name to the passed $value after
+validating it.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|array</td>
+                                <td>$value </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___isset" name="method___isset" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__isset()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__isset(string  <span class="argument">$name</span>) : boolean</pre>
+                <p><em>Returns true if the variable denoted by $name is a member variable of
+PartFilter.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___get" name="method___get" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__get()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__get(string  <span class="argument">$name</span>) : mixed</pre>
+                <p><em>Returns the value of the member variable denoted by $name</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_filter" name="method_filter" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">filter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">filter(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>) : boolean</pre>
+                <p><em>Determines if the passed MessagePart should be filtered out or not.</em></p>
+                <p>If the MessagePart passes all filter tests, true is returned.  Otherwise
+false is returned.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateArgument" name="method_validateArgument" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateArgument()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateArgument(string  <span class="argument">$name</span>, string  <span class="argument">$value</span>, array  <span class="argument">$valid</span>) </pre>
+                <p><em>Validates an argument passed to __set to insure it&#039;s set to a value in
+$valid.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Name of the member variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$value </td>
+                                <td><p>The value to test</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$valid </td>
+                                <td><p>an array of valid values</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failsHasContentFilter" name="method_failsHasContentFilter" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">failsHasContentFilter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failsHasContentFilter(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>) : boolean</pre>
+                <p><em>Returns true if the passed MessagePart fails the filter&#039;s hascontent
+filter settings.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failsMultiPartFilter" name="method_failsMultiPartFilter" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">failsMultiPartFilter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failsMultiPartFilter(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>) : boolean</pre>
+                <p><em>Returns true if the passed MessagePart fails the filter&#039;s multipart
+filter settings.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failsTextPartFilter" name="method_failsTextPartFilter" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">failsTextPartFilter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failsTextPartFilter(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>) : boolean</pre>
+                <p><em>Returns true if the passed MessagePart fails the filter&#039;s textpart filter
+settings.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failsSignedPartFilter" name="method_failsSignedPartFilter" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">failsSignedPartFilter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failsSignedPartFilter(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>) : boolean</pre>
+                <p><em>Returns true if the passed MessagePart fails the filter&#039;s signedpart
+filter settings.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failsHeaderFor" name="method_failsHeaderFor" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">failsHeaderFor()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failsHeaderFor(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>, integer  <span class="argument">$type</span>, string  <span class="argument">$name</span>, string  <span class="argument">$header</span>) : boolean</pre>
+                <p><em>Tests a single header value against $part, and returns true if the test
+fails.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$header </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            staticvar
+                        </th>
+                        <td>
+                                                                                            <p>array $map</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failsHeaderPartFilter" name="method_failsHeaderPartFilter" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">failsHeaderPartFilter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failsHeaderPartFilter(\ZBateson\MailMimeParser\Message\Part\MessagePart  <span class="argument">$part</span>) : boolean</pre>
+                <p><em>Returns true if the passed MessagePart fails the filter&#039;s header filter
+settings.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">\ZBateson\MailMimeParser\Message\Part\MessagePart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">PartFilter.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Message/PartFilter.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/ZBateson.html">\ZBateson</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on August 6th, 2018 at 04:29.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

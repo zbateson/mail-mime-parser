@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>MailMimeParser 1.0.0
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">MailMimeParser 1.0.0
+</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/ZBateson.html">\ZBateson</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">56</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-351212805"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-351212805" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-121241548"></a>
+                                <a href="../namespaces/ZBateson.html" style="margin-left: 30px; padding-left: 0">ZBateson</a>
+            </div>
+            <div id="namespace-121241548" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-624059824"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.html" style="margin-left: 30px; padding-left: 0">MailMimeParser</a>
+            </div>
+            <div id="namespace-624059824" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1985136495"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Header.html" style="margin-left: 30px; padding-left: 0">Header</a>
+            </div>
+            <div id="namespace-1985136495" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1485009963"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.html" style="margin-left: 30px; padding-left: 0">Consumer</a>
+            </div>
+            <div id="namespace-1485009963" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html">AbstractConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressBaseConsumer.html">AddressBaseConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html">AddressConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressGroupConsumer.html">AddressGroupConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.CommentConsumer.html">CommentConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ConsumerService.html">ConsumerService</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.DateConsumer.html">DateConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html">GenericConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ParameterConsumer.html">ParameterConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.QuotedStringConsumer.html">QuotedStringConsumer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.SubjectConsumer.html">SubjectConsumer</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-889834222"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Header.Part.html" style="margin-left: 30px; padding-left: 0">Part</a>
+            </div>
+            <div id="namespace-889834222" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.AddressGroupPart.html">AddressGroupPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.AddressPart.html">AddressPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.CommentPart.html">CommentPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.DatePart.html">DatePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">HeaderPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPartFactory.html">HeaderPartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.LiteralPart.html">LiteralPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.MimeLiteralPart.html">MimeLiteralPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.MimeLiteralPartFactory.html">MimeLiteralPartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.ParameterPart.html">ParameterPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.SplitParameterToken.html">SplitParameterToken</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.Part.Token.html">Token</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.AbstractHeader.html">AbstractHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.AddressHeader.html">AddressHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.DateHeader.html">DateHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.GenericHeader.html">GenericHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.HeaderContainer.html">HeaderContainer</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.HeaderFactory.html">HeaderFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html">ParameterHeader</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Header.SubjectHeader.html">SubjectHeader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-975871694"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.html" style="margin-left: 30px; padding-left: 0">Message</a>
+            </div>
+            <div id="namespace-975871694" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1050148382"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-1050148382" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.AbstractHelper.html">AbstractHelper</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.GenericHelper.html">GenericHelper</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.MessageHelperService.html">MessageHelperService</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.MultipartHelper.html">MultipartHelper</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Helper.PrivacyHelper.html">PrivacyHelper</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1209584876"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.Part.html" style="margin-left: 30px; padding-left: 0">Part</a>
+            </div>
+            <div id="namespace-1209584876" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-62794759"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Message.Part.Factory.html" style="margin-left: 30px; padding-left: 0">Factory</a>
+            </div>
+            <div id="namespace-62794759" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MessagePartFactory.html">MessagePartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.MimePartFactory.html">MimePartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.NonMimePartFactory.html">NonMimePartFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartBuilderFactory.html">PartBuilderFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartFactoryService.html">PartFactoryService</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.PartStreamFilterManagerFactory.html">PartStreamFilterManagerFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.Factory.UUEncodedPartFactory.html">UUEncodedPartFactory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html">MessagePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.MimePart.html">MimePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.NonMimePart.html">NonMimePart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.ParentHeaderPart.html">ParentHeaderPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.ParentPart.html">ParentPart</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.PartBuilder.html">PartBuilder</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.PartStreamFilterManager.html">PartStreamFilterManager</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.Part.UUEncodedPart.html">UUEncodedPart</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.MessageFactory.html">MessageFactory</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.MessageParser.html">MessageParser</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.PartFilter.html">PartFilter</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.PartFilterFactory.html">PartFilterFactory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-524026764"></a>
+                                <a href="../namespaces/ZBateson.MailMimeParser.Stream.html" style="margin-left: 30px; padding-left: 0">Stream</a>
+            </div>
+            <div id="namespace-524026764" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Stream.HeaderStream.html">HeaderStream</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Stream.MessagePartStream.html">MessagePartStream</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Stream.StreamFactory.html">StreamFactory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Container.html">Container</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.MailMimeParser.html">MailMimeParser</a></li>
+                                                    <li class="class"><a href="../classes/ZBateson.MailMimeParser.Message.html">Message</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.html">\ZBateson\MailMimeParser\Header\Consumer</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\ZBateson\MailMimeParser\Header\Consumer</small>AddressConsumer</h1>
+                    <p><em>Parses a single part of an address header.</em></p>
+                    <p>Represents a single part of a list of addresses.  A part could be one email
+address, or one 'group' containing multiple addresses.  The consumer ends on
+finding either a comma token, representing a separation between addresses, or
+a semi-colon token representing the end of a group.</p>
+<p>A single email address may consist of just an email, or a name and an email
+address.  Both of these are valid examples of a From header:</p>
+<ul>
+<li>From: jonsnow@winterfell.com</li>
+<li>From: Jon Snow <a href="mailto:jonsnow@winterfell.com">jonsnow@winterfell.com</a></li>
+</ul>
+<p>Groups must be named, for example:</p>
+<ul>
+<li>To: Winterfell: jonsnow@winterfell.com, Arya Stark <a href="mailto:arya@winterfell.com">arya@winterfell.com</a>;</li>
+</ul>
+<p>Addresses may contain quoted parts and comments, and names may be mime-header
+encoded.</p>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getInstance" class="">getInstance()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method___invoke" class="">__invoke()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html#method_getTokenSeparators" class="">getTokenSeparators()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html#method_getSubConsumers" class="">getSubConsumers()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getAllConsumers" class="">getAllConsumers()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getAllTokenSeparators" class="">getAllTokenSeparators()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getTokenSplitPattern" class="">getTokenSplitPattern()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_splitRawValue" class="">splitRawValue()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html#method_isStartToken" class="">isStartToken()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html#method_isEndToken" class="">isEndToken()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getPartForToken" class="">getPartForToken()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getConsumerTokenParts" class="">getConsumerTokenParts()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getTokenParts" class="">getTokenParts()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_advanceToNextToken" class="">advanceToNextToken()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_parseTokensIntoParts" class="">parseTokensIntoParts()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html#method_processParts" class="">processParts()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#property_consumerService" class="">$consumerService</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#property_partFactory" class="">$partFactory</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_parseRawValue" class="">parseRawValue()</a><br />
+                                                                    <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AddressConsumer.html#method_processSinglePart" class="">processSinglePart()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Header.Consumer.AddressConsumer.html"><div class="path-wrapper">Header/Consumer/AddressConsumer.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper"><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</a></div>
+                                                                                                    <div class="namespace-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AddressConsumer</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>Zaahid Bateson</p>
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_consumerService" name="property_consumerService" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$consumerService</h3>
+                <pre class="signature">$consumerService : \ZBateson\MailMimeParser\Header\Consumer\ConsumerService</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ConsumerService.html">\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</a>
+                &mdash; used to
+     get consumer instances for sub-consumers                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_partFactory" name="property_partFactory" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$partFactory</h3>
+                <pre class="signature">$partFactory : \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPartFactory.html">\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory</a>
+                &mdash; used to construct
+HeaderPart objects                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService  <span class="argument">$consumerService</span>, \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory  <span class="argument">$partFactory</span>) </pre>
+                <p><em>Initializes the instance.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ConsumerService.html">\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</a></td>
+                                <td>$consumerService </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPartFactory.html">\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory</a></td>
+                                <td>$partFactory </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getInstance" name="method_getInstance" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getInstance()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getInstance(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService  <span class="argument">$consumerService</span>, \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory  <span class="argument">$partFactory</span>) </pre>
+                <p><em>Returns the singleton instance for the class.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ConsumerService.html">\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</a></td>
+                                <td>$consumerService </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPartFactory.html">\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory</a></td>
+                                <td>$partFactory </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___invoke" name="method___invoke" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__invoke()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__invoke(string  <span class="argument">$value</span>) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
+                <p><em>Invokes parsing of a header&#039;s value into header parts.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$value </td>
+                                <td><p>the raw header value</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;
+                                            &mdash; <p>the array of parsed
+parts</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTokenSeparators" name="method_getTokenSeparators" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTokenSeparators()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTokenSeparators() : array&lt;mixed,string&gt;</pre>
+                <p><em>Overridden to return patterns matching the beginning part of an address
+in a name/address part (&quot;&lt;&quot; and &quot;&gt;&quot; chars), end tokens (&quot;,&quot; and &quot;;&quot;), and
+whitespace.</em></p>
+                <p>Each array element makes part of a generated regular expression that is
+used in a call to preg_split().  RegEx patterns can be used, and care
+should be taken to escape special characters.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,string&gt;
+                                            &mdash; <p>the patterns</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSubConsumers" name="method_getSubConsumers" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getSubConsumers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSubConsumers() : array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</pre>
+                <p><em>Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</a>&gt;
+                                            &mdash; <p>the sub-consumers</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAllConsumers" name="method_getAllConsumers" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getAllConsumers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAllConsumers() : array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractConsumer&gt;</pre>
+                <p><em>Returns this consumer and all unique sub consumers.</em></p>
+                <p>Loops into the sub-consumers (and their sub-consumers, etc...) finding
+all unique consumers, and returns them in an array.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractConsumer&gt;
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAllTokenSeparators" name="method_getAllTokenSeparators" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getAllTokenSeparators()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAllTokenSeparators() : array&lt;mixed,string&gt;</pre>
+                <p><em>Returns a list of regular expression markers for this consumer and all
+sub-consumers by calling &#039;getTokenSeparators&#039;.</em></p>
+                <p>.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,string&gt;
+                                            &mdash; <p>an array of regular expression markers</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTokenSplitPattern" name="method_getTokenSplitPattern" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getTokenSplitPattern()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTokenSplitPattern() : string</pre>
+                <p><em>Returns a regex pattern used to split the input header string.  The
+default implementation calls getAllTokenSeparators and implodes the
+returned array with the regex OR &#039;|&#039; character as its glue.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>the regex pattern</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_splitRawValue" name="method_splitRawValue" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">splitRawValue()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">splitRawValue(string  <span class="argument">$rawValue</span>) : array</pre>
+                <p><em>Returns an array of split tokens from the input string.</em></p>
+                <p>The method calls preg_split using getTokenSplitPattern.  The split
+array will not contain any empty parts and will contain the markers.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$rawValue </td>
+                                <td><p>the raw string</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>the array of tokens</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isStartToken" name="method_isStartToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isStartToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isStartToken(string  <span class="argument">$token</span>) : boolean</pre>
+                <p><em>AddressConsumer is &quot;greedy&quot;, so this always returns true.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$token </td>
+                                <td><p>the current token</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>false</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isEndToken" name="method_isEndToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isEndToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isEndToken(string  <span class="argument">$token</span>) : boolean</pre>
+                <p><em>Returns true for commas and semi-colons.</em></p>
+                <p>Although the semi-colon is not strictly the end token of an
+AddressConsumer, it could end a parent AddressGroupConsumer. I can't
+think of a valid scenario where this would be an issue, but additional
+thought may be needed (and documented here).</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$token </td>
+                                <td><p>the current token</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>false</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPartForToken" name="method_getPartForToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getPartForToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPartForToken(string  <span class="argument">$token</span>, boolean  <span class="argument">$isLiteral</span>) : \ZBateson\MailMimeParser\Header\Part\HeaderPart</pre>
+                <p><em>Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
+for the passed string token.  If the token should be ignored, the
+function must return null.</em></p>
+                <p>The default created part uses the instance's partFactory-&gt;newInstance
+method.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$token </td>
+                                <td><p>the token</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$isLiteral </td>
+                                <td><p>set to true if the token represents a literal -
+e.g. an escaped token</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>
+                                            &mdash; <p>the constructed
+header part or null if the token should be ignored</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getConsumerTokenParts" name="method_getConsumerTokenParts" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getConsumerTokenParts()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getConsumerTokenParts(\Iterator  <span class="argument">$tokens</span>) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;|array</pre>
+                <p><em>Iterates through this consumer&#039;s sub-consumers checking if the current
+token triggers a sub-consumer&#039;s start token and passes control onto that
+sub-consumer&#039;s parseTokenIntoParts.  If no sub-consumer is responsible
+for the current token, calls getPartForToken and returns it in an array.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Iterator</td>
+                                <td>$tokens </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;|array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTokenParts" name="method_getTokenParts" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getTokenParts()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTokenParts(\Iterator  <span class="argument">$tokens</span>) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;|array</pre>
+                <p><em>Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
+the current token on the iterator.</em></p>
+                <p>If the current token is a start token from a sub-consumer, the sub-
+consumer's parseTokensIntoParts method is called.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Iterator</td>
+                                <td>$tokens </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;|array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_advanceToNextToken" name="method_advanceToNextToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">advanceToNextToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">advanceToNextToken(\Iterator  <span class="argument">$tokens</span>, boolean  <span class="argument">$isStartToken</span>) </pre>
+                <p><em>Determines if the iterator should be advanced to the next token after
+reading tokens or finding a start token.</em></p>
+                <p>The default implementation will advance for a start token, but not
+advance on the end token of the current consumer, allowing the end token
+to be passed up to a higher-level consumer.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Iterator</td>
+                                <td>$tokens </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$isStartToken </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_parseTokensIntoParts" name="method_parseTokensIntoParts" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">parseTokensIntoParts()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">parseTokensIntoParts(\Iterator  <span class="argument">$tokens</span>) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
+                <p><em>Iterates over the passed token Iterator and returns an array of parsed
+\ZBateson\MailMimeParser\Header\Part\HeaderPart objects.</em></p>
+                <p>The method checks each token to see if the token matches a sub-consumer's
+start token, or if it matches the current consumer's end token to stop
+processing.</p>
+<p>If a sub-consumer's start token is matched, the sub-consumer is invoked
+and its returned parts are merged to the current consumer's header parts.</p>
+<p>After all tokens are read and an array of Header\Parts are constructed,
+the array is passed to AbstractConsumer::processParts for any final
+processing.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Iterator</td>
+                                <td>$tokens </td>
+                                <td><p>an iterator over a string of tokens</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;
+                                            &mdash; <p>an array of parsed
+parts</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_processParts" name="method_processParts" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">processParts()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">processParts(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;  <span class="argument">$parts</span>) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;|array</pre>
+                <p><em>Performs final processing on parsed parts.</em></p>
+                <p>AddressConsumer's implementation looks for tokens representing the
+beginning of an address part, to create a Part\AddressPart out of a
+name/address pair, or assign the name part to a parsed Part\AddressGroupPart
+returned from its AddressGroupConsumer sub-consumer.</p>
+<p>The returned array consists of a single element - either a
+Part\AddressPart or a Part\AddressGroupPart.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;</td>
+                                <td>$parts </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;|array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_parseRawValue" name="method_parseRawValue" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">parseRawValue()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">parseRawValue(string  <span class="argument">$value</span>) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
+                <p><em>Called by __invoke to parse the raw header value into header parts.</em></p>
+                <p>Calls splitTokens to split the value into token part strings, then calls
+parseParts to parse the returned array.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$value </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a>&gt;
+                                            &mdash; <p>the array of parsed
+parts</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"><div class="path-wrapper">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_processSinglePart" name="method_processSinglePart" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">processSinglePart()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">processSinglePart(\ZBateson\MailMimeParser\Header\Part\HeaderPart  <span class="argument">$part</span>, string  <span class="argument">$strName</span>, string  <span class="argument">$strValue</span>) </pre>
+                <p><em>Checks if the passed part represents the beginning or end of an address
+part (less than/greater than characters) and either appends the value of
+the part to the passed $strValue, or sets up $strName</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/ZBateson.MailMimeParser.Header.Part.HeaderPart.html">\ZBateson\MailMimeParser\Header\Part\HeaderPart</a></td>
+                                <td>$part </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$strName </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$strValue </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">AddressConsumer.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Header/Consumer/AddressConsumer.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/ZBateson.html">\ZBateson</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on August 6th, 2018 at 04:29.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
