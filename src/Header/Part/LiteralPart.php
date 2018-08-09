@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPart;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * A literal header string part.  The value of the part is stripped of CR and LF
@@ -19,10 +20,15 @@ class LiteralPart extends HeaderPart
     /**
      * Creates a LiteralPart out of the passed string token
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $token
      */
-    public function __construct($token)
+    public function __construct(CharsetConverter $charsetConverter, $token = null)
     {
-        $this->value = preg_replace('/\r|\n/', '', $this->convertEncoding($token));
+        parent::__construct($charsetConverter);
+        $this->value = $token;
+        if ($token !== null) {
+            $this->value = preg_replace('/\r|\n/', '', $this->convertEncoding($token));
+        }
     }
 }

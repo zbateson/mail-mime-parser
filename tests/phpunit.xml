@@ -19,29 +19,27 @@
         </whitelist>
     </filter>
     <!--
-    Files specified in order for code coverage reporting - for example, SimpleDi
+    Files specified in order for code coverage reporting - for example, Container
     as a singleton instance only gets constructed once, and for coverage to be
     reported correctly, needs to be the first class tested.
     -->
     <testsuites>
         <testsuite name="Base">
-            <file>MailMimeParser/SimpleDiTest.php</file>
+            <file>MailMimeParser/ContainerTest.php</file>
             <file>MailMimeParser/MailMimeParserTest.php</file>
             <file>MailMimeParser/MessageTest.php</file>
         </testsuite>
         <testsuite name="Message">
-            <file>MailMimeParser/Message/MessageParserTest.php</file>
-            <file>MailMimeParser/Message/MimePartFactoryTest.php</file>
-            <file>MailMimeParser/Message/MimePartTest.php</file>
-            <file>MailMimeParser/Message/NonMimePartTest.php</file>
-            <file>MailMimeParser/Message/PartFilterTest.php</file>
-            <file>MailMimeParser/Message/UUEncodedPartTest.php</file>
+            <directory suffix="Test.php">MailMimeParser/Message</directory>
         </testsuite>
         <testsuite name="Header">
             <directory suffix="Test.php">MailMimeParser/Header</directory>
         </testsuite>
         <testsuite name="Stream">
             <directory suffix="Test.php">MailMimeParser/Stream</directory>
+        </testsuite>
+        <testsuite name="Util">
+            <directory suffix="Test.php">MailMimeParser/Util</directory>
         </testsuite>
         <testsuite name="Integration">
             <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>

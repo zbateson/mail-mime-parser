@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParameterTest
@@ -12,26 +12,60 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class ParameterPartTest extends PHPUnit_Framework_TestCase
+class ParameterPartTest extends TestCase
 {
+    private $charsetConverter;
+
+    public function setUp()
+    {
+        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->disableOriginalConstructor()
+			->getMock();
+    }
+
     public function testBasicNameValuePair()
     {
-        $part = new ParameterPart('Name', 'Value');
+        $part = new ParameterPart($this->charsetConverter, 'Name', 'Value');
         $this->assertEquals('Name', $part->getName());
         $this->assertEquals('Value', $part->getValue());
     }
-    
+
     public function testMimeValue()
     {
-        $part = new ParameterPart('name', '=?US-ASCII?Q?Kilgore_Trout?=');
+        $this->charsetConverter->expects($this->once())
+            ->method('convert')
+            ->with('Kilgore Trout', 'US-ASCII', 'UTF-8')
+            ->willReturn('Kilgore Trout');
+        $part = new ParameterPart($this->charsetConverter, 'name', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore Trout', $part->getValue());
     }
-    
+
     public function testMimeName()
     {
-        $part = new ParameterPart('=?US-ASCII?Q?name?=', 'Kilgore');
+        $this->charsetConverter->expects($this->once())
+            ->method('convert')
+            ->with('name', 'US-ASCII', 'UTF-8')
+            ->willReturn('name');
+        $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', 'Kilgore');
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore', $part->getValue());
+    }
+
+    public function testNameValueNotDecodedWithLanguage()
+    {
+        $this->charsetConverter->expects($this->never())
+            ->method('convert');
+        $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', '=?US-ASCII?Q?Kilgore_Trout?=', 'Kurty');
+        $this->assertEquals('=?US-ASCII?Q?name?=', $part->getName());
+        $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
+    }
+
+    public function testGetLanguage()
+    {
+        $this->charsetConverter->expects($this->never())
+            ->method('convert');
+        $part = new ParameterPart($this->charsetConverter, 'name', 'Drogo', 'Dothraki');
+        $this->assertEquals('Dothraki', $part->getLanguage());
     }
 }

@@ -1,10 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParametersHeaderTest
@@ -15,24 +12,42 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
-class ParameterHeaderTest extends PHPUnit_Framework_TestCase
+class ParameterHeaderTest extends TestCase
 {
     protected $consumerService;
-    
+
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $this->consumerService = new ConsumerService($pf, $mlpf);
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->setMethods(['__toString'])
+			->getMock();
+        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+			->setConstructorArgs([$pf, $mlpf])
+			->setMethods(['__toString'])
+			->getMock();
     }
-    
+
+    public function testParsingContentTypeWithoutParameters()
+    {
+        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html');
+        $this->assertEquals('text/html', $header->getValue());
+    }
+
     public function testParsingContentType()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
         $this->assertEquals('text/html', $header->getValue());
         $this->assertEquals('utf-8', $header->getValueFor('charset'));
     }
-    
+
     public function testParsingMultipleParts()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'TEXT/html; CHARSET=utf-8; Boundary="blooh";answer-to-everything=42');
@@ -41,14 +56,14 @@ class ParameterHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('blooh', $header->getValueFor('boundary'));
         $this->assertEquals('42', $header->getValueFor('answer-to-everything'));
     }
-    
+
     public function testDefaultParameterValue()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
         $this->assertEquals(null, $header->getValueFor('boundary'));
         $this->assertEquals('default', $header->getValueFor('test', 'default'));
     }
-    
+
     public function testParameterHeaderToString()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');

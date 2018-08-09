@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
@@ -12,7 +12,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
  * @coversNothing
  * @author Zaahid Bateson
  */
-class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
+class ParserHeadersIntegrationTest extends TestCase
 {
     public function testParsingBasicHeaders()
     {
@@ -25,7 +25,7 @@ class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('More than two lines of text for a header', $message->getHeaderValue('FiFtH'));
         $this->assertNull($message->getHeaderValue('Body'));
     }
-    
+
     public function testParsingHeadersWithLFOnlyAndNoBody()
     {
         $parser = new MailMimeParser();
@@ -35,7 +35,7 @@ class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('With Value', $message->getHeaderValue('Invalid Header'));
         $this->assertEquals('Why not?', $message->getHeaderValue('No-Body'));
     }
-    
+
     public function testParsingHeadersWithLFOnlyAndInvalidHeaders()
     {
         $parser = new MailMimeParser();
@@ -47,7 +47,7 @@ class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
             $message->getHeaderValue('Followed-by-a-long-header-line')
         );
     }
-    
+
     public function testParsingHeadersWithEncoding()
     {
         $parser = new MailMimeParser();
@@ -56,16 +56,16 @@ class ParserHeadersIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('muzner@example.com', $message->getHeaderValue('To'));
         $this->assertEquals('Müller Müzner', $message->getHeader('To')->getPersonName());
         $this->assertEquals('في إيه يا باشا', $message->getHeaderValue('Other'));
-        
+
         $parts = $message->getHeader('From')->getParts();
         $this->assertEquals('jsnow@example.com', $parts[0]->getEmail());
         $this->assertEquals('Jon Snow', $parts[0]->getName());
         $this->assertEquals('muzner@example.com', $parts[1]->getEmail());
         $this->assertEquals('Müller Müzner', $parts[1]->getName());
-        
+
         $this->assertEquals('Andreas Müzner', $message->getHeader('Cc')->getPersonName());
         $this->assertEquals('Andreas Müzner', $message->getHeader('Bcc')->getPersonName());
-        
+
         $this->assertEquals('Технические работы (ERP Галактика и Отчеты ТД)', $message->getHeaderValue('Test'));
     }
 }

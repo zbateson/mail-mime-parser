@@ -1,10 +1,8 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Description of DateConsumerTest
@@ -15,18 +13,30 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class DateConsumerTest extends PHPUnit_Framework_TestCase
+class DateConsumerTest extends TestCase
 {
     private $dateConsumer;
-    
+
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $this->dateConsumer = DateConsumer::getInstance($cs, $pf);
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->setMethods(['__toString'])
+			->getMock();
+        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+			->setConstructorArgs([$pf, $mlpf])
+			->setMethods(['__toString'])
+			->getMock();
+        $this->dateConsumer = new DateConsumer($cs, $pf);
     }
-    
+
     public function testConsumeDates()
     {
         $date = 'Wed, 17 May 2000 19:08:29 -0400';
@@ -37,7 +47,7 @@ class DateConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($date, $ret[0]->getValue());
         $this->assertEquals($date, $ret[0]->getDateTime()->format(DateTime::RFC2822));
     }
-    
+
     public function testConsumeDateWithComment()
     {
         $dateTest = 'Wed, 17 May 2000 19:08:29 -0400 (some comment)';

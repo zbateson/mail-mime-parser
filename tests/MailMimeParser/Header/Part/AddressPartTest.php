@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AddressPartTest
@@ -12,21 +12,30 @@ use PHPUnit_Framework_TestCase;
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class AddressPartTest extends PHPUnit_Framework_TestCase
+class AddressPartTest extends TestCase
 {
+    private $charsetConverter;
+
+    public function setUp()
+    {
+        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->disableOriginalConstructor()
+			->getMock();
+    }
+
     public function testNameEmail()
     {
         $name = 'Julius Caeser';
         $email = 'gaius@altavista.com';
-        $part = new AddressPart($name, $email);
+        $part = new AddressPart($this->charsetConverter, $name, $email);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
     }
-    
+
     public function testEmailSpacesStripped()
     {
         $email = "gaius julius\t\n caesar@altavista.com";
-        $part = new AddressPart('', $email);
+        $part = new AddressPart($this->charsetConverter, '', $email);
         $this->assertEquals('gaiusjuliuscaesar@altavista.com', $part->getEmail());
     }
 }

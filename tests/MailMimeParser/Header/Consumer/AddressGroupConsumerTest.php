@@ -1,9 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AddressGroupConsumerTest
@@ -14,18 +12,30 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
+class AddressGroupConsumerTest extends TestCase
 {
     private $addressGroupConsumer;
-    
+
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $this->addressGroupConsumer = AddressGroupConsumer::getInstance($cs, $pf);
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->setMethods(['__toString'])
+			->getMock();
+        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+			->setConstructorArgs([$pf, $mlpf])
+			->setMethods(['__toString'])
+			->getMock();
+        $this->addressGroupConsumer = new AddressGroupConsumer($cs, $pf);
     }
-    
+
     public function testConsumeGroup()
     {
         $group = 'Wilfred, Emma';
@@ -36,7 +46,7 @@ class AddressGroupConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Wilfred', $ret[0]->getAddress(0)->getEmail());
         $this->assertEquals('Emma', $ret[0]->getAddress(1)->getEmail());
     }
-    
+
     public function testConsumeGroupWithinGroup()
     {
         $group = 'Wilfred, Bubba: One, Two';

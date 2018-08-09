@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPart;
+use ZBateson\StreamDecorators\Util\CharsetConverter;
 
 /**
  * Holds a string value token that will require additional processing by a
@@ -24,10 +25,12 @@ class Token extends HeaderPart
     /**
      * Initializes a token.
      * 
+     * @param CharsetConverter $charsetConverter
      * @param string $value the token's value
      */
-    public function __construct($value)
+    public function __construct(CharsetConverter $charsetConverter, $value)
     {
+        parent::__construct($charsetConverter);
         $this->value = $value;
     }
     

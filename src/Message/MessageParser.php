@@ -6,8 +6,11 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
+use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
+use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
+use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -18,82 +21,80 @@ use ZBateson\MailMimeParser\Stream\PartStreamRegistry;
 class MessageParser
 {
     /**
-     * @var \ZBateson\MailMimeParser\Message the Message object that the read
-     * mail mime message will be parsed into
+     * @var PartFactoryService service instance used to create MimePartFactory
+     *      objects.
      */
-    protected $message;
+    protected $partFactoryService;
     
     /**
-     * @var \ZBateson\MailMimeParser\Message\MimePartFactory the MimePartFactory object
-     * used to create parts.
+     * @var PartBuilderFactory used to create PartBuilders
      */
-    protected $partFactory;
+    protected $partBuilderFactory;
     
     /**
-     * @var \ZBateson\MailMimeParser\Stream\PartStreamRegistry the
-     *      PartStreamRegistry 
-     * object used to register stream parts.
+     * @var int maintains the character length of the last line separator,
+     *      typically 2 for CRLF, to keep track of the correct 'end' position
+     *      for a part because the CRLF before a boundary is considered part of
+     *      the boundary.
      */
-    protected $partStreamRegistry;
+    private $lastLineSeparatorLength = 0;
     
     /**
      * Sets up the parser with its dependencies.
      * 
-     * @param \ZBateson\MailMimeParser\Message $m
-     * @param \ZBateson\MailMimeParser\Message\MimePartFactory $pf
-     * @param \ZBateson\MailMimeParser\Stream\PartStreamRegistry $psr
+     * @param PartFactoryService $pfs
+     * @param PartBuilderFactory $pbf
      */
-    public function __construct(Message $m, MimePartFactory $pf, PartStreamRegistry $psr)
-    {
-        $this->message = $m;
-        $this->partFactory = $pf;
-        $this->partStreamRegistry = $psr;
+    public function __construct(
+        PartFactoryService $pfs,
+        PartBuilderFactory $pbf
+    ) {
+        $this->partFactoryService = $pfs;
+        $this->partBuilderFactory = $pbf;
     }
     
     /**
-     * Parses the passed stream handle into the ZBateson\MailMimeParser\Message
-     * object and returns it.
+     * Parses the passed stream into a ZBateson\MailMimeParser\Message object
+     * and returns it.
      * 
-     * @param resource $fhandle the resource handle to the input stream of the
-     *        mime message
+     * @param StreamInterface $stream the stream to parse the message from
      * @return \ZBateson\MailMimeParser\Message
      */
-    public function parse($fhandle)
+    public function parse(StreamInterface $stream)
     {
-        $this->partStreamRegistry->register($this->message->getObjectId(), $fhandle);
-        $this->read($fhandle, $this->message);
-        return $this->message;
+        $partBuilder = $this->read($stream);
+        return $partBuilder->createMessagePart($stream);
     }
     
     /**
-     * Ensures the header isn't empty, and contains a colon character, then
-     * splits it and assigns it to $part
+     * Ensures the header isn't empty and contains a colon separator character,
+     * then splits it and calls $partBuilder->addHeader.
      * 
      * @param string $header
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
+     * @param PartBuilder $partBuilder
      */
-    private function addRawHeaderToPart($header, MimePart $part)
+    private function addRawHeaderToPart($header, PartBuilder $partBuilder)
     {
         if ($header !== '' && strpos($header, ':') !== false) {
             $a = explode(':', $header, 2);
-            $part->setRawHeader($a[0], trim($a[1]));
+            $partBuilder->addHeader($a[0], trim($a[1]));
         }
     }
     
     /**
-     * Reads header lines up to an empty line, adding them to the passed $part.
+     * Reads header lines up to an empty line, adding them to the passed
+     * $partBuilder.
      * 
      * @param resource $handle the resource handle to read from
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part the current part to add
-     *        headers to
+     * @param PartBuilder $partBuilder the current part to add headers to
      */
-    protected function readHeaders($handle, MimePart $part)
+    protected function readHeaders($handle, PartBuilder $partBuilder)
     {
         $header = '';
         do {
             $line = fgets($handle, 1000);
-            if ($line[0] !== "\t" && $line[0] !== ' ') {
-                $this->addRawHeaderToPart($header, $part);
+            if (empty($line) || $line[0] !== "\t" && $line[0] !== ' ') {
+                $this->addRawHeaderToPart($header, $partBuilder);
                 $header = '';
             } else {
                 $line = "\r\n" . $line;
@@ -103,275 +104,138 @@ class MessageParser
     }
     
     /**
-     * Finds the end of the Mime part at the current read position in $handle
-     * and sets $boundaryLength to the number of bytes in the part, and
-     * $endBoundaryFound to true if it's an 'end' boundary, meaning there are no
-     * further parts for the current mime part (ends with --).
+     * Reads lines from the passed $handle, calling
+     * $partBuilder->setEndBoundaryFound with the passed line until it returns
+     * true or the stream is at EOF.
+     * 
+     * setEndBoundaryFound returns true if the passed line matches a boundary
+     * for the $partBuilder itself or any of its parents.
+     * 
+     * Once a boundary is found, setStreamPartAndContentEndPos is called with
+     * the passed $handle's read pos before the boundary and its line separator
+     * were read.
      * 
      * @param resource $handle
-     * @param string $boundary
-     * @param int $boundaryLength
-     * @param boolean $endBoundaryFound
+     * @param PartBuilder $partBuilder
      */
-    private function findPartBoundaries($handle, $boundary, &$boundaryLength, &$endBoundaryFound)
+    private function findContentBoundary($handle, PartBuilder $partBuilder)
     {
-        do {
+        // last separator before a boundary belongs to the boundary, and is not
+        // part of the current part
+        while (!feof($handle)) {
+            $endPos = ftell($handle) - $this->lastLineSeparatorLength;
             $line = fgets($handle);
-            $boundaryLength = strlen($line);
-            $test = rtrim($line);
-            if ($test === "--$boundary") {
-                break;
-            } elseif ($test === "--$boundary--") {
-                $endBoundaryFound = true;
-                break;
+            $test = rtrim($line, "\r\n");
+            $this->lastLineSeparatorLength = strlen($line) - strlen($test);
+            if ($partBuilder->setEndBoundaryFound($test)) {
+                $partBuilder->setStreamPartAndContentEndPos($endPos);
+                return;
             }
-        } while (!feof($handle));
-    }
-    
-    /**
-     * Adds the part to its parent.
-     * 
-     * @param MimePart $part
-     */
-    private function addToParent(MimePart $part)
-    {
-        if ($part->getParent() !== null) {
-            $part->getParent()->addPart($part);
         }
+        $partBuilder->setStreamPartAndContentEndPos(ftell($handle));
+        $partBuilder->setEof();
     }
     
     /**
-     * 
-     * 
-     * @param type $handle
-     * @param MimePart $part
-     * @param Message $message
-     * @param type $contentStartPos
-     * @param type $boundaryLength
-     */
-    protected function attachStreamHandles($handle, MimePart $part, Message $message, $contentStartPos, $boundaryLength)
-    {
-        $end = ftell($handle) - $boundaryLength;
-        $this->partStreamRegistry->attachContentPartStreamHandle($part, $message, $contentStartPos, $end);
-        $this->partStreamRegistry->attachOriginalPartStreamHandle($part, $message, $part->startHandlePosition, $end);
-        
-        if ($part->getParent() !== null) {
-            do {
-                $end = ftell($handle);
-            } while (!feof($handle) && rtrim(fgets($handle)) === '');
-            fseek($handle, $end, SEEK_SET);
-            $this->partStreamRegistry->attachOriginalPartStreamHandle(
-                $part->getParent(),
-                $message,
-                $part->getParent()->startHandlePosition,
-                $end
-            );
-        }
-    }
-    
-    /**
-     * Reads the content of a mime part up to a boundary, or the entire message
-     * if no boundary is specified.
-     * 
-     * readPartContent may be called to skip to the first boundary to read its
-     * headers, in which case $skipPart should be true.
-     * 
-     * If the end boundary is found, the method returns true.
-     * 
-     * @param resource $handle the input stream resource
-     * @param \ZBateson\MailMimeParser\Message $message the current Message
-     *        object
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part the current MimePart
-     *        object to load the content into.
-     * @param string $boundary the MIME boundary
-     * @param boolean $skipPart pass true if the intention is to read up to the
-     *        beginning MIME boundary's headers
-     * @return boolean if the end boundary is found
-     */
-    protected function readPartContent($handle, Message $message, MimePart $part, $boundary, $skipPart)
-    {
-        $start = ftell($handle);
-        $boundaryLength = 0;
-        $endBoundaryFound = false;
-        if ($boundary !== null) {
-            $this->findPartBoundaries($handle, $boundary, $boundaryLength, $endBoundaryFound);
-        } else {
-            fseek($handle, 0, SEEK_END);
-        }
-        $type = $part->getHeaderValue('Content-Type', 'text/plain');
-        if (!$skipPart || preg_match('~multipart/\w+~i', $type)) {
-            $this->attachStreamHandles($handle, $part, $message, $start, $boundaryLength);
-            $this->addToParent($part);
-        }
-        return $endBoundaryFound;
-    }
-    
-    /**
-     * Returns the boundary from the parent MimePart, or the current boundary if
-     * $parent is null
-     * 
-     * @param string $curBoundary
-     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
-     * @return string
-     */
-    private function getParentBoundary($curBoundary, MimePart $parent = null)
-    {
-        return $parent !== null ?
-            $parent->getHeaderParameter('Content-Type', 'boundary') :
-            $curBoundary;
-    }
-    
-    /**
-     * Instantiates and returns a new MimePart setting the part's parent to
-     * either the passed $parent, or $message if $parent is null.
-     * 
-     * @param \ZBateson\MailMimeParser\Message $message
-     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
-     * @return \ZBateson\MailMimeParser\Message\MimePart
-     */
-    private function newMimePartForMessage(Message $message, MimePart $parent = null)
-    {
-        $nextPart = $this->partFactory->newMimePart();
-        $nextPart->setParent($parent === null ? $message : $parent);
-        return $nextPart;
-    }
-    
-    /**
-     * Keeps reading if an end boundary is found, to find the parent's boundary
-     * and the part's content.
+     * Reads content for a non-mime message.  If there are uuencoded attachment
+     * parts in the message (denoted by 'begin' lines), those parts are read and
+     * added to the passed $partBuilder as children.
      * 
      * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message $message
-     * @param \ZBateson\MailMimeParser\Message\MimePart $parent
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part
-     * @param string $boundary
-     * @param bool $skipFirst
-     * @return \ZBateson\MailMimeParser\Message\MimePart
+     * @param PartBuilder $partBuilder
+     * @return string
      */
-    private function readMimeMessageBoundaryParts(
-        $handle,
-        Message $message,
-        MimePart $parent,
-        MimePart $part,
-        $boundary,
-        $skipFirst
-    ) {
-        $skipPart = $skipFirst;
-        while ($this->readPartContent($handle, $message, $part, $boundary, $skipPart) && $parent !== null) {
-            $parent = $parent->getParent();
-            // $boundary used by next call to readPartContent
-            $boundary = $this->getParentBoundary($boundary, $parent);
-            $skipPart = true;
-        }
-        return $this->newMimePartForMessage($message, $parent);
-    }
-    
-    /**
-     * Finds the boundaries for the current MimePart, reads its content and
-     * creates and returns the next part, setting its parent part accordingly.
-     * 
-     * @param resource $handle The handle to read from
-     * @param \ZBateson\MailMimeParser\Message $message The current Message
-     * @param \ZBateson\MailMimeParser\Message\MimePart $part 
-     * @return MimePart
-     */
-    protected function readMimeMessagePart($handle, Message $message, MimePart $part)
+    protected function readUUEncodedOrPlainTextMessage($handle, PartBuilder $partBuilder)
     {
-        $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
-        $skipFirst = true;
-        $parent = $part;
-
-        if ($boundary === null || !$part->isMultiPart()) {
-            // either there is no boundary (possibly no parent boundary either) and message is read
-            // till the end, or we're in a boundary already and content should be read till the parent
-            // boundary is reached
-            if ($part->getParent() !== null) {
-                $parent = $part->getParent();
-                $boundary = $parent->getHeaderParameter('Content-Type', 'boundary');
-            }
-            $skipFirst = false;
-        }
-        return $this->readMimeMessageBoundaryParts($handle, $message, $parent, $part, $boundary, $skipFirst);
-    }
-    
-    /**
-     * Extracts the filename and end position of a UUEncoded part.
-     * 
-     * The filename is set to the passed $nextFilename parameter.  The end
-     * position is returned.
-     * 
-     * @param resource $handle the current file handle
-     * @param int &$nextMode is assigned the value of the next file mode or null
-     *        if not found
-     * @param string &$nextFilename is assigned the value of the next filename
-     *        or null if not found
-     * @param int &$end assigned the offset position within the passed resource
-     *        $handle of the end of the uuencoded part
-     */
-    private function findNextUUEncodedPartPosition($handle)
-    {
-        $end = ftell($handle);
-        do {
+        $partBuilder->setStreamContentStartPos(ftell($handle));
+        $part = $partBuilder;
+        while (!feof($handle)) {
+            $start = ftell($handle);
             $line = trim(fgets($handle));
-            $matches = null;
-            if (preg_match('/^begin [0-7]{3} .*$/', $line, $matches)) {
-                fseek($handle, $end);
-                break;
+            if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
+                $part = $this->partBuilderFactory->newPartBuilder(
+                    $this->partFactoryService->getUUEncodedPartFactory()
+                );
+                $part->setStreamPartStartPos($start);
+                // 'begin' line is part of the content
+                $part->setStreamContentStartPos($start);
+                $part->setProperty('mode', $matches[1]);
+                $part->setProperty('filename', $matches[2]);
+                $partBuilder->addChild($part);
             }
-            $end = ftell($handle);
-        } while (!feof($handle));
-        return $end;
-    }
-    
-    /**
-     * Reads one part of a UUEncoded message and adds it to the passed Message
-     * as a MimePart.
-     * 
-     * The method reads up to the first 'begin' part of the message, or to the
-     * end of the message if no 'begin' exists.
-     * 
-     * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message $message
-     * @return string
-     */
-    protected function readUUEncodedOrPlainTextPart($handle, Message $message)
-    {
-        $start = ftell($handle);
-        $line = trim(fgets($handle));
-        $end = $this->findNextUUEncodedPartPosition($handle);
-        $part = $message;
-        if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
-            $mode = $matches[1];
-            $filename = $matches[2];
-            $part = $this->partFactory->newUUEncodedPart($mode, $filename);
-            $message->addPart($part);
+            $part->setStreamPartAndContentEndPos(ftell($handle));
         }
-        $this->partStreamRegistry->attachContentPartStreamHandle($part, $message, $start, $end);
+        $partBuilder->setStreamPartEndPos(ftell($handle));
     }
     
     /**
-     * Reads the message from the input stream $handle into $message.
+     * Reads content for a single part of a MIME message.
      * 
-     * The method will loop to read headers and find and parse multipart-mime
-     * message parts and uuencoded attachments (as mime-parts), adding them to
-     * the passed Message object.
+     * If the part being read is in turn a multipart part, readPart is called on
+     * it recursively to read its headers and content.
+     * 
+     * The start/end positions of the part's content are set on the passed
+     * $partBuilder, which in turn sets the end position of the part and its
+     * parents.
      * 
      * @param resource $handle
-     * @param \ZBateson\MailMimeParser\Message $message
+     * @param PartBuilder $partBuilder
      */
-    protected function read($handle, Message $message)
+    private function readPartContent($handle, PartBuilder $partBuilder)
     {
-        $part = $message;
-        $part->startHandlePosition = 0;
-        $this->readHeaders($handle, $message);
-        do {
-            if (!$message->isMime()) {
-                $this->readUUEncodedOrPlainTextPart($handle, $message);
-            } else {
-                $part = $this->readMimeMessagePart($handle, $message, $part);
-                $part->startHandlePosition = ftell($handle);
-                $this->readHeaders($handle, $part);
+        $partBuilder->setStreamContentStartPos(ftell($handle));
+        $this->findContentBoundary($handle, $partBuilder);
+        if ($partBuilder->isMultiPart()) {
+            while (!$partBuilder->isParentBoundaryFound()) {
+                $child = $this->partBuilderFactory->newPartBuilder(
+                    $this->partFactoryService->getMimePartFactory()
+                );
+                $partBuilder->addChild($child);
+                $this->readPart($handle, $child);
             }
-        } while (!feof($handle));
+        }
+    }
+    
+    /**
+     * Reads a part and any of its children, into the passed $partBuilder,
+     * either by calling readUUEncodedOrPlainTextMessage or readPartContent
+     * after reading headers.
+     * 
+     * @param resource $handle
+     * @param PartBuilder $partBuilder
+     * @param boolean $isMessage
+     */
+    protected function readPart($handle, PartBuilder $partBuilder)
+    {
+        $partBuilder->setStreamPartStartPos(ftell($handle));
+        
+        if ($partBuilder->canHaveHeaders()) {
+            $this->readHeaders($handle, $partBuilder);
+            $this->lastLineSeparatorLength = 0;
+        }
+        if ($partBuilder->getParent() === null && !$partBuilder->isMime()) {
+            $this->readUUEncodedOrPlainTextMessage($handle, $partBuilder);
+        } else {
+            $this->readPartContent($handle, $partBuilder);
+        }
+    }
+    
+    /**
+     * Reads the message from the passed stream and returns a PartBuilder
+     * representing it.
+     * 
+     * @param StreamInterface $stream
+     * @return PartBuilder
+     */
+    protected function read(StreamInterface $stream)
+    {
+        $partBuilder = $this->partBuilderFactory->newPartBuilder(
+            $this->partFactoryService->getMessageFactory()
+        );
+        // the remaining parts use a resource handle for better performance...
+        // it seems fgets does much better than Psr7\readline (not specifically
+        // measured, but difference in running tests is big)
+        $this->readPart(StreamWrapper::getResource($stream), $partBuilder);
+        return $partBuilder;
     }
 }

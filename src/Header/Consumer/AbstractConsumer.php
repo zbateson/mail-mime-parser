@@ -41,7 +41,7 @@ abstract class AbstractConsumer
      * @param ConsumerService $consumerService
      * @param HeaderPartFactory $partFactory
      */
-    protected function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
+    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
     {
         $this->consumerService = $consumerService;
         $this->partFactory = $partFactory;

@@ -1,9 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParameterConsumerTest
@@ -14,18 +12,30 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class ParameterConsumerTest extends PHPUnit_Framework_TestCase
+class ParameterConsumerTest extends TestCase
 {
     private $parameterConsumer;
-    
+
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $this->parameterConsumer = ParameterConsumer::getInstance($cs, $pf);
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->setMethods(['__toString'])
+			->getMock();
+        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+			->setConstructorArgs([$pf, $mlpf])
+			->setMethods(['__toString'])
+			->getMock();
+        $this->parameterConsumer = new ParameterConsumer($cs, $pf);
     }
-    
+
     public function testConsumeTokens()
     {
         $ret = $this->parameterConsumer->__invoke('text/html; charset=utf8');
@@ -37,7 +47,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('charset', $ret[1]->getName());
         $this->assertEquals('utf8', $ret[1]->getValue());
     }
-    
+
     public function testEscapedSeparators()
     {
         $ret = $this->parameterConsumer->__invoke('test\;with\;special\=chars; and\=more=blah');
@@ -47,7 +57,7 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('and=more', $ret[1]->getName());
         $this->assertEquals('blah', $ret[1]->getValue());
     }
-    
+
     public function testWithSubConsumers()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; weiner="all-beef";toppings=sriracha (boo-yah!)');
@@ -58,5 +68,83 @@ class ParameterConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('all-beef', $ret[1]->getValue());
         $this->assertEquals('toppings', $ret[2]->getName());
         $this->assertEquals('sriracha', $ret[2]->getValue());
+    }
+
+    public function testSimpleSplitHeader()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="mustar";'
+            . 'condiments*1="d, ketchup"; condiments*2=" and mayo"');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
+        $this->assertNull($ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderInFunnyOrder()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*2=" and mayo";'
+            . 'condiments*1="d, ketchup"; condiments*0="mustar"');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
+        $this->assertNull($ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderWithEmptyEncodingAndLanguage()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=\'\''
+            . 'mustard,%20ketchup%20and%20mayo');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
+        $this->assertNull($ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderWithEncodingAndLanguage()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=us-ascii\'en-US\''
+            . 'mustard,%20ketchup%20and%20mayo');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
+        $this->assertEquals('en-US', $ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderWithMultiByteEncodedPart()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=utf-8\'\''
+            . 'mustardized%E2%80%93ketchup');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustardized–ketchup', $ret[1]->getValue());
+        $this->assertNull($ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderWithMultiByteEncodedPartAndLanguage()
+    {
+        $str = 'هلا هلا شخبار بعد؟ شلون تبرمج؟';
+        $encoded = rawurlencode($str);
+        $halfPos = floor((strlen($encoded) / 3) / 2) * 3;
+        $part1 = substr($encoded, 0, $halfPos);
+        $part2 = substr($encoded, $halfPos);
+
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0*=utf-8\'abv-BH\''. $part1
+            . '; condiments*1*=' . $part2);
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals($str, $ret[1]->getValue());
+        $this->assertEquals('abv-BH', $ret[1]->getLanguage());
     }
 }

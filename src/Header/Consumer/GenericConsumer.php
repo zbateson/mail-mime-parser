@@ -160,16 +160,17 @@ class GenericConsumer extends AbstractConsumer
      */
     protected function filterIgnoredSpaces(array $parts)
     {
+        $partsFiltered = array_values(array_filter($parts));
         $retParts = [];
         $spacePart = null;
-        $count = count($parts);
+        $count = count($partsFiltered);
         for ($i = 0; $i < $count; ++$i) {
-            $part = $parts[$i];
+            $part = $partsFiltered[$i];
             if ($this->isSpaceToken($part)) {
                 $spacePart = $part;
                 continue;
             }
-            $this->addSpaces($parts, $retParts, $i, $spacePart);
+            $this->addSpaces($partsFiltered, $retParts, $i, $spacePart);
             $retParts[] = $part;
         }
         // ignore trailing spaces

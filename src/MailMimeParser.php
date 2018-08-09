@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7;
+
 /**
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
  *
@@ -21,18 +23,26 @@ namespace ZBateson\MailMimeParser;
 class MailMimeParser
 {
     /**
-     * @var \ZBateson\MailMimeParser\SimpleDi dependency injection container
+     * @var string defines the default charset used by MessagePart.
+     */
+    const DEFAULT_CHARSET = 'UTF-8';
+
+    /**
+     * @var \ZBateson\MailMimeParser\Container dependency injection container
      */
     protected $di;
     
     /**
      * Sets up the parser.
      */
-    public function __construct()
+    public function __construct(Container $di = null)
     {
-        $this->di = SimpleDi::singleton();
+        if ($di === null) {
+            $di = new Container();
+        }
+        $this->di = $di;
     }
-    
+
     /**
      * Parses the passed stream handle into a ZBateson\MailMimeParser\Message
      * object and returns it.
@@ -48,16 +58,15 @@ class MailMimeParser
      */
     public function parse($handleOrString)
     {
-        // $tempHandle is attached to $message, and closed in its destructor
-        $tempHandle = fopen('php://temp', 'r+');
-        if (is_string($handleOrString)) {
-            fwrite($tempHandle, $handleOrString);
-        } else {
-            stream_copy_to_stream($handleOrString, $tempHandle);
-        }
-        rewind($tempHandle);
+        $stream = Psr7\stream_for($handleOrString);
+        $copy = Psr7\stream_for(fopen('php://temp', 'r+'));
+
+        Psr7\copy_to_stream($stream, $copy);
+        $copy->rewind();
+
+        // don't close it when $stream gets destroyed
+        $stream->detach();
         $parser = $this->di->newMessageParser();
-        $message = $parser->parse($tempHandle);
-        return $message;
+        return $parser->parse($copy);
     }
 }

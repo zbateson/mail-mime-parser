@@ -1,37 +1,43 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Description of NonMimePartTest
+ * PartFilterTest
  *
  * @group PartFilter
  * @group Message
  * @covers ZBateson\MailMimeParser\Message\PartFilter
  * @author Zaahid Bateson
  */
-class PartFilterTest extends PHPUnit_Framework_TestCase
+class PartFilterTest extends TestCase
 {
     private $parts = [];
-    
-    protected function getMockedPartWithContentType($mimeType, $disposition = null)
+
+    protected function getMockedPartWithContentType($mimeType, $disposition = null, $isText = false)
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
             ->disableOriginalConstructor()
-            ->setMethods(['setRawHeader', 'getHeader', 'getHeaderValue', 'getHeaderParameter', 'getContentResourceHandle', 'getParent'])
+            ->setMethods([
+                '__destruct',
+                'setRawHeader',
+                'getHeader',
+                'getHeaderValue',
+                'getHeaderParameter',
+                'getContentResourceHandle',
+                'getParent',
+                'getContentType',
+                'getContentDisposition',
+                'isTextPart',
+            ])
             ->getMock();
-        $part->method('getHeaderValue')->will($this->returnCallback(function($param, $defaultValue = null) use ($mimeType, $disposition) {
-            if (strcasecmp($param, 'Content-Type') === 0) {
-                return $mimeType;
-            } elseif (strcasecmp($param, 'Content-Disposition') === 0) {
-                return $disposition;
-            }
-            return $defaultValue;
-        }));
+        $part->method('getContentType')->willReturn($mimeType);
+        $part->method('getContentDisposition')->willReturn($disposition);
+        $part->method('isTextPart')->willReturn($isText);
         return $part;
     }
-    
+
     protected function getMockedSignedPart()
     {
         $parent = $this->getMockedPartWithContentType('multipart/signed');
@@ -40,27 +46,27 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $part->method('getParent')->willReturn($parent);
         return $part;
     }
-    
+
     public function setUp()
     {
         parent::setUp();
         $signedPart = $this->getMockedSignedPart();
         $signedPartParent = $signedPart->getParent();
         $this->parts = [
-            $this->getMockedPartWithContentType('text/html'),
+            $this->getMockedPartWithContentType('text/html', null, true),
             $this->getMockedPartWithContentType('multipart/alternative', 'inline'),
-            $this->getMockedPartWithContentType('text/html', 'inline'),
-            $this->getMockedPartWithContentType('text/plain', 'attachment'),
-            $this->getMockedPartWithContentType('text/html', 'attachment'),
+            $this->getMockedPartWithContentType('text/html', 'inline', true),
+            $this->getMockedPartWithContentType('text/plain', 'attachment', true),
+            $this->getMockedPartWithContentType('text/html', 'attachment', true),
             $this->getMockedPartWithContentType('multipart/relative'),
             $signedPartParent,
             $signedPart
         ];
     }
-    
+
     public function testFromContentType()
     {
-        
+
         $filter = PartFilter::fromContentType('text/html');
         $this->assertNotNull($filter);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
@@ -76,7 +82,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->parts[2], $filtered[1]);
         $this->assertSame($this->parts[4], $filtered[2]);
     }
-    
+
     public function testFromInlineContentType()
     {
         $filter = PartFilter::fromInlineContentType('text/html');
@@ -96,10 +102,10 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->parts[0], $filtered[0]);
         $this->assertSame($this->parts[2], $filtered[1]);
     }
-    
+
     public function testFromNonExistentContentType()
     {
-        
+
         $filter = PartFilter::fromContentType('doesnot/exist');
         $this->assertNotNull($filter);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
@@ -112,7 +118,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertEmpty($filtered);
     }
-    
+
     public function testFromDispositionAttachment()
     {
         $filter = PartFilter::fromDisposition('attachment');
@@ -121,13 +127,13 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        
+
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertCount(2, $filtered);
         $this->assertSame($this->parts[3], $filtered[0]);
         $this->assertSame($this->parts[4], $filtered[1]);
     }
-    
+
     public function testFromDispositionInline()
     {
         $filter = PartFilter::fromDisposition('inline');
@@ -141,7 +147,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->parts[1], $filtered[0]);
         $this->assertSame($this->parts[2], $filtered[1]);
     }
-    
+
     public function testFromDispositionInlineExcludeMultiPart()
     {
         $filter = PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE);
@@ -154,7 +160,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $filtered);
         $this->assertSame($this->parts[2], $filtered[0]);
     }
-    
+
     public function testFromDispositionInlineIncludeMultiPart()
     {
         $filter = PartFilter::fromDisposition('inline', PartFilter::FILTER_INCLUDE);
@@ -167,7 +173,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $filtered);
         $this->assertSame($this->parts[1], $filtered[0]);
     }
-    
+
     public function testForNonExistentDisposition()
     {
         $filter = PartFilter::fromDisposition('unreal');
@@ -179,7 +185,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertEmpty($filtered);
     }
-    
+
     public function testMultiPartFilterInclude()
     {
         $filter = new PartFilter([
@@ -190,14 +196,14 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        
+
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertCount(3, $filtered);
         $this->assertSame($this->parts[1], $filtered[0]);
         $this->assertSame($this->parts[5], $filtered[1]);
         $this->assertSame($this->parts[6], $filtered[2]);
     }
-    
+
     public function testMultiPartFilterExcludeWithHeaderExcludeFilter()
     {
         $filter = new PartFilter([
@@ -217,7 +223,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $filtered);
         $this->assertSame($this->parts[3], $filtered[0]);
     }
-    
+
     public function testMultiPartFilterIncludeWithHeaderExcludeFilter()
     {
         $filter = new PartFilter([
@@ -238,7 +244,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->parts[5], $filtered[0]);
         $this->assertSame($this->parts[6], $filtered[1]);
     }
-    
+
     public function testTextPartFilterInclude()
     {
         $filter = new PartFilter([
@@ -249,7 +255,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
         $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->textpart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        
+
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertCount(4, $filtered);
         $this->assertSame($this->parts[0], $filtered[0]);
@@ -257,7 +263,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->parts[3], $filtered[2]);
         $this->assertSame($this->parts[4], $filtered[3]);
     }
-    
+
     public function testTextPartFilterExcludeWithHeaderExcludeFilter()
     {
         $filter = new PartFilter([
@@ -278,7 +284,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->parts[1], $filtered[0]);
         $this->assertSame($this->parts[6], $filtered[1]);
     }
-    
+
     public function testTextPartFilterIncludeWithHeaderExcludeFilter()
     {
         $filter = new PartFilter([
@@ -298,7 +304,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $filtered);
         $this->assertSame($this->parts[3], $filtered[0]);
     }
-    
+
     public function testSignedPartFilterInclude()
     {
         $filter = new PartFilter([
@@ -309,12 +315,12 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
         $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->signedpart);
-        
+
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertCount(1, $filtered);
         $this->assertSame($this->parts[7], $filtered[0]);
     }
-    
+
     public function testSignedPartFilterOffWithDispositionExclude()
     {
         $filter = new PartFilter([
@@ -330,7 +336,7 @@ class PartFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
         $this->assertEquals(PartFilter::FILTER_OFF, $filter->signedpart);
-        
+
         $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
         $this->assertCount(6, $filtered);
         $this->assertSame($this->parts[0], $filtered[0]);

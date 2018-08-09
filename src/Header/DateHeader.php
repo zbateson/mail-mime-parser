@@ -30,7 +30,7 @@ class DateHeader extends AbstractHeader
     /**
      * Convenience method returning the part's DateTime object.
      * 
-     * @return DateTime
+     * @return \DateTime
      */
     public function getDateTime()
     {

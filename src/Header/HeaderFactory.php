@@ -113,4 +113,14 @@ class HeaderFactory
         $class = $this->getClassFor($name);
         return new $class($this->consumerService, $name, $value);
     }
+
+    /**
+     * Creates and returns a HeaderContainer.
+     *
+     * @return HeaderContainer;
+     */
+    public function newHeaderContainer()
+    {
+        return new HeaderContainer($this);
+    }
 }

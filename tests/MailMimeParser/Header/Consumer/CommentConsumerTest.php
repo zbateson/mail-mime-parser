@@ -1,9 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of CommentConsumerTest
@@ -14,18 +12,30 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
-class CommentConsumerTest extends PHPUnit_Framework_TestCase
+class CommentConsumerTest extends TestCase
 {
     private $commentConsumer;
-    
+
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $cs = new ConsumerService($pf, $mlpf);
-        $this->commentConsumer = CommentConsumer::getInstance($cs, $pf);
+        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->setMethods(['__toString'])
+			->getMock();
+        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+			->setConstructorArgs([$pf, $mlpf])
+			->setMethods(['__toString'])
+			->getMock();
+        $this->commentConsumer = new CommentConsumer($cs, $pf);
     }
-    
+
     protected function assertCommentConsumed($expected, $value)
     {
         $ret = $this->commentConsumer->__invoke($value);
@@ -35,25 +45,25 @@ class CommentConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $ret[0]->getValue());
         $this->assertEquals($expected, $ret[0]->getComment());
     }
-    
+
     public function testConsumeTokens()
     {
         $comment = 'Some silly comment made about my moustache';
         $this->assertCommentConsumed($comment, $comment);
     }
-    
+
     public function testNestedComments()
     {
         $comment = 'A very silly comment (made about my (very awesome) moustache no less)';
         $this->assertCommentConsumed($comment, $comment);
     }
-    
+
     public function testCommentWithQuotedLiteral()
     {
         $comment = 'A ("very ) wrong") comment was made (about my moustache obviously)';
         $this->assertCommentConsumed($comment, $comment);
     }
-    
+
     public function testMimeEncodedComment()
     {
         $this->assertCommentConsumed(

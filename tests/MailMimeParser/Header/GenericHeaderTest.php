@@ -1,10 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit_Framework_TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of GenericHeaderTest
@@ -15,17 +12,29 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
-class GenericHeaderTest extends PHPUnit_Framework_TestCase
+class GenericHeaderTest extends TestCase
 {
     protected $consumerService;
-    
+
     protected function setUp()
     {
-        $pf = new HeaderPartFactory();
-        $mlpf = new MimeLiteralPartFactory();
-        $this->consumerService = new ConsumerService($pf, $mlpf);
+		$charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+			->setMethods(['__toString'])
+			->getMock();
+        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+			->setConstructorArgs([$charsetConverter])
+			->setMethods(['__toString'])
+			->getMock();
+        $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+			->setConstructorArgs([$pf, $mlpf])
+			->setMethods(['__toString'])
+			->getMock();
     }
-    
+
     public function testParsing()
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
@@ -34,7 +43,7 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $header->getParts());
         $this->assertEquals('Hunted-By', $header->getName());
     }
-    
+
     public function testMultilineMimeParts()
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', '=?US-ASCII?Q?Hunt?=
@@ -42,9 +51,9 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
              =?US-ASCII?Q?Thompson?=');
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
-    
+
     /**
-     * 
+     *
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
      */
@@ -57,7 +66,7 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals('Dwayne "The Rock" Jackson', $header->getValue());
     }
-    
+
     public function testCommentBetweenParts()
     {
         $header = new GenericHeader(
@@ -67,7 +76,7 @@ class GenericHeaderTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals('Dwayne Jackson', $header->getValue());
     }
-    
+
     public function testGenericHeaderToString()
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
