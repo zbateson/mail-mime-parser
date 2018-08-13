@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">56</span></a></li>
+                <span class="label label-info">4</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -62,8 +62,7 @@
 <ul xmlns:php="http://php.net/xsl" class="side-nav nav nav-list">
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
-                    <ul><li class="method public "><a href="#method___construct" title="__construct() :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li></ul>
+                    <ul><li class="method public "><a href="#method___construct" title="__construct() :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li></ul>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
@@ -132,8 +131,7 @@ $stream.</span><pre>writePartContentTo()</pre></a></li>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct " data-toggle="collapse" data-target=".method___construct .collapse" title="public">
-<h2>__construct()
-        </h2>
+<h2>Constructor</h2>
 <pre>__construct(\ZBateson\MailMimeParser\Stream\StreamFactory $sdf, \ZBateson\MailMimeParser\Message\Part\MessagePart $part) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -165,10 +163,12 @@ and child streams.</h2>
 <pre>getBoundaryAndChildStreams(\ZBateson\MailMimeParser\Message\Part\ParentHeaderPart $part) : array&lt;mixed,\Psr\Http\Message\StreamInterface&gt;</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>ParentHeaderPart $part passed in because $this-&gt;part is declared as
-MessagePart</p></div>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$part</h4></div>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\Part\ParentHeaderPart</code><p>passed in because $this->part is declared
+as MessagePart</p></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>array&lt;mixed,\Psr\Http\Message\StreamInterface&gt;</code></div>
 </div></div>
@@ -189,10 +189,13 @@ direct children.</h2>
 <pre>getCharsetDecoratorForStream(\Psr\Http\Message\StreamInterface $stream) : \Psr\Http\Message\StreamInterface</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>If the current attached $part doesn't specify a $charset, $stream is
+<div class="long_description"><p>If the current attached MessagePart doesn't specify a charset, $stream is
 returned as-is.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$stream</h4></div>
+<div class="subelement argument">
+<h4>$stream</h4>
+<code>\Psr\Http\Message\StreamInterface</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response"><code>\Psr\Http\Message\StreamInterface</code></div>
 </div></div>
@@ -261,7 +264,7 @@ $stream.</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-08-06T00:03:02-05:00.<br></footer></div>
+            generated on 2018-08-12T22:56:07-05:00.<br></footer></div>
 </div>
 </body>
 </html>

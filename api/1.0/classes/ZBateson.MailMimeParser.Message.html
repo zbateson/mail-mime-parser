@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">56</span></a></li>
+                <span class="label label-info">4</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -63,10 +63,8 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct() :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
-<li class="method public inherited"><a href="#method___construct" title="__construct() :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct() :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#method___construct" title="__construct() :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
 <li class="method public inherited"><a href="#method___destruct" title="__destruct() :: Overridden to close streams."><span class="description">Overridden to close streams.</span><pre>__destruct()</pre></a></li>
 <li class="method public inherited"><a href="#method___toString" title="__toString() :: Returns the message/part as a string."><span class="description">Returns the message/part as a string.</span><pre>__toString()</pre></a></li>
 <li class="method public "><a href="#method_addAttachmentPart" title="addAttachmentPart() :: Adds an attachment part for the passed raw data string or handle and
@@ -116,7 +114,7 @@ doesn't have a content section.</span><pre>getContentStream()</pre></a></li>
 <li class="method public inherited"><a href="#method_getContentType" title="getContentType() :: Returns the mime type of the content."><span class="description">Returns the mime type of the content.</span><pre>getContentType()</pre></a></li>
 <li class="method public inherited"><a href="#method_getCountOfPartsByMimeType" title="getCountOfPartsByMimeType() :: Returns the number of parts matching the passed $mimeType"><span class="description">Returns the number of parts matching the passed $mimeType</span><pre>getCountOfPartsByMimeType()</pre></a></li>
 <li class="method public inherited"><a href="#method_getFilename" title="getFilename() :: Returns a filename for the part if one is defined, or null otherwise."><span class="description">Returns a filename for the part if one is defined, or null otherwise.</span><pre>getFilename()</pre></a></li>
-<li class="method public inherited"><a href="#method_getHeader" title="getHeader() :: Returns the AbstractHeader object for the header with the given $name"><span class="description">Returns the AbstractHeader object for the header with the given $name</span><pre>getHeader()</pre></a></li>
+<li class="method public inherited"><a href="#method_getHeader" title="getHeader() :: Returns the AbstractHeader object for the header with the given $name."><span class="description">Returns the AbstractHeader object for the header with the given $name.</span><pre>getHeader()</pre></a></li>
 <li class="method public inherited"><a href="#method_getHeaderParameter" title="getHeaderParameter() :: Returns a parameter of the header $header, given the parameter named
 $param."><span class="description">Returns a parameter of the header $header, given the parameter named
 $param.</span><pre>getHeaderParameter()</pre></a></li>
@@ -132,7 +130,9 @@ $index, or null if unavailable."><span class="description">Returns a Psr7 Stream
 $index, or null if unavailable.</span><pre>getHtmlStream()</pre></a></li>
 <li class="method public inherited"><a href="#method_getParent" title="getParent() :: Returns this part's parent."><span class="description">Returns this part's parent.</span><pre>getParent()</pre></a></li>
 <li class="method public inherited"><a href="#method_getPart" title="getPart() :: Returns the part at the given 0-based index, or null if none is set."><span class="description">Returns the part at the given 0-based index, or null if none is set.</span><pre>getPart()</pre></a></li>
-<li class="method public inherited"><a href="#method_getPartByMimeType" title="getPartByMimeType() :: Returns the part associated with the passed mime type if it exists."><span class="description">Returns the part associated with the passed mime type if it exists.</span><pre>getPartByMimeType()</pre></a></li>
+<li class="method public inherited"><a href="#method_getPartByMimeType" title="getPartByMimeType() :: Returns the part associated with the passed mime type, at the passed
+index, if it exists."><span class="description">Returns the part associated with the passed mime type, at the passed
+index, if it exists.</span><pre>getPartByMimeType()</pre></a></li>
 <li class="method public inherited"><a href="#method_getPartCount" title="getPartCount() :: Returns the total number of parts in this and all children."><span class="description">Returns the total number of parts in this and all children.</span><pre>getPartCount()</pre></a></li>
 <li class="method public inherited"><a href="#method_getRawHeaderIterator" title="getRawHeaderIterator() :: Returns an iterator to the headers in this collection.  Each returned
 element is an array with its first element set to the header's name, and
@@ -182,14 +182,16 @@ keeping them)."><span class="description">Removes all text/plain inline parts in
 other inline parts as attachments on the main message (defaults to
 keeping them).</span><pre>removeAllTextParts()</pre></a></li>
 <li class="method public "><a href="#method_removeAttachmentPart" title="removeAttachmentPart() :: Removes the attachment with the given index"><span class="description">Removes the attachment with the given index</span><pre>removeAttachmentPart()</pre></a></li>
-<li class="method public inherited"><a href="#method_removeHeader" title="removeHeader() :: Removes the header with the given name"><span class="description">Removes the header with the given name</span><pre>removeHeader()</pre></a></li>
+<li class="method public inherited"><a href="#method_removeHeader" title="removeHeader() :: Removes all headers from this part with the passed name."><span class="description">Removes all headers from this part with the passed name.</span><pre>removeHeader()</pre></a></li>
 <li class="method public "><a href="#method_removeHtmlPart" title="removeHtmlPart() :: Removes the html part of the message if one exists.  Returns true on
 success."><span class="description">Removes the html part of the message if one exists.  Returns true on
 success.</span><pre>removeHtmlPart()</pre></a></li>
 <li class="method public inherited"><a href="#method_removePart" title="removePart() :: Removes the child part from this part and returns its position or
 null if it wasn't found."><span class="description">Removes the child part from this part and returns its position or
 null if it wasn't found.</span><pre>removePart()</pre></a></li>
-<li class="method public inherited"><a href="#method_removeSingleHeader" title="removeSingleHeader() :: Removes the header with the given name"><span class="description">Removes the header with the given name</span><pre>removeSingleHeader()</pre></a></li>
+<li class="method public inherited"><a href="#method_removeSingleHeader" title="removeSingleHeader() :: Removes a single header with the passed name (in cases where more than
+one may exist, and others should be preserved)."><span class="description">Removes a single header with the passed name (in cases where more than
+one may exist, and others should be preserved).</span><pre>removeSingleHeader()</pre></a></li>
 <li class="method public "><a href="#method_removeTextPart" title="removeTextPart() :: Removes the text/plain part of the message at the passed index if one
 exists.  Returns true on success."><span class="description">Removes the text/plain part of the message at the passed index if one
 exists.  Returns true on success.</span><pre>removeTextPart()</pre></a></li>
@@ -210,7 +212,15 @@ either creating a new part if one doesn't exist for text/html, or
 assigning the value of $stringOrHandle to an existing text/html part."><span class="description">Sets the text/html part of the message to the passed $stringOrHandle,
 either creating a new part if one doesn't exist for text/html, or
 assigning the value of $stringOrHandle to an existing text/html part.</span><pre>setHtmlPart()</pre></a></li>
-<li class="method public inherited"><a href="#method_setRawHeader" title="setRawHeader() :: Adds a header with the given $name and $value."><span class="description">Adds a header with the given $name and $value.</span><pre>setRawHeader()</pre></a></li>
+<li class="method public inherited"><a href="#method_setRawHeader" title="setRawHeader() :: Adds a header with the given $name and $value.  An optional $offset may
+be passed, which will overwrite a header if one exists with the given
+name and offset. Otherwise a new header is added.  The passed $offset may
+be ignored in that case if it doesn't represent the next insert position
+for the header with the passed name."><span class="description">Adds a header with the given $name and $value.  An optional $offset may
+be passed, which will overwrite a header if one exists with the given
+name and offset. Otherwise a new header is added.  The passed $offset may
+be ignored in that case if it doesn't represent the next insert position
+for the header with the passed name.</span><pre>setRawHeader()</pre></a></li>
 <li class="method public "><a href="#method_setSignature" title="setSignature() :: Sets the signature body of the message to the passed $body for a
 multipart/signed message."><span class="description">Sets the signature body of the message to the passed $body for a
 multipart/signed message.</span><pre>setSignature()</pre></a></li>
@@ -239,7 +249,7 @@ it (including children of children, etc.</span><pre>getAllNonFilteredParts()</pr
 where a user wants to set a default other than ISO-8859-1.</span><pre>$charsetOverride</pre></a></li>
 <li class="property protected "><a href="#property_children" title="$children() :: "><span class="description">array of child parts</span><pre>$children</pre></a></li>
 <li class="property protected "><a href="#property_contentStream" title="$contentStream() :: "><span class="description">a Psr7 stream containing this part's content</span><pre>$contentStream</pre></a></li>
-<li class="property protected "><a href="#property_headerContainer" title="$headerContainer() :: "><span class="description"></span><pre>$headerContainer</pre></a></li>
+<li class="property protected "><a href="#property_headerContainer" title="$headerContainer() :: "><span class="description">Contains headers for this part.</span><pre>$headerContainer</pre></a></li>
 <li class="property protected "><a href="#property_ignoreTransferEncoding" title="$ignoreTransferEncoding() :: "><span class="description">set to true when a user attaches a stream manually, it's
 assumed to already be decoded or to have relevant transfer encoding
 decorators attached already.</span><pre>$ignoreTransferEncoding</pre></a></li>
@@ -290,8 +300,7 @@ number of sub-parts, etc...</p></div>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct " data-toggle="collapse" data-target=".method___construct .collapse" title="public">
-<h2>__construct()
-        </h2>
+<h2>Constructor</h2>
 <pre>__construct(\ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager $partStreamFilterManager, \ZBateson\MailMimeParser\Stream\StreamFactory $streamFactory, \ZBateson\MailMimeParser\Message\PartFilterFactory $partFilterFactory, \ZBateson\MailMimeParser\Message\Part\PartBuilder $partBuilder, \ZBateson\MailMimeParser\Message\Helper\MessageHelperService $messageHelperService, \Psr\Http\Message\StreamInterface $stream<code> = null</code>, \Psr\Http\Message\StreamInterface $contentStream<code> = null</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -328,8 +337,7 @@ number of sub-parts, etc...</p></div>
 </div></div>
 </div>
 <a id="method___construct"></a><div class="element clickable method public method___construct inherited" data-toggle="collapse" data-target=".method___construct .collapse" title="public">
-<h2>__construct()
-        </h2>
+<h2>Constructor</h2>
 <pre>__construct(\ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager $partStreamFilterManager, \ZBateson\MailMimeParser\Stream\StreamFactory $streamFactory, \Psr\Http\Message\StreamInterface $stream<code> = null</code>, \Psr\Http\Message\StreamInterface $contentStream<code> = null</code>) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -443,7 +451,10 @@ position index.</p></div>
 <pre>addRawHeader(string $name, string $value) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
+<div class="long_description"><p>Note: If a header with the passed name already exists, a new header is
+created with the same name.  This should only be used when that is
+intentional - in most cases setRawHeader should be called.</p>
+<p>Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
 registers it as a header.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -643,13 +654,16 @@ set.</h2>
 <a id="method_getContent"></a><div class="element clickable method public method_getContent inherited" data-toggle="collapse" data-target=".method_getContent .collapse" title="public">
 <h2>Shortcut to reading stream content and assigning it to a string.  Returns
 null if the part doesn't have a content stream.</h2>
-<pre>getContent($charset<code> = \ZBateson\MailMimeParser\MailMimeParser::DEFAULT_CHARSET</code>) : string</pre>
+<pre>getContent(string $charset<code> = \ZBateson\MailMimeParser\MailMimeParser::DEFAULT_CHARSET</code>) : string</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>The returned string is encoded to the passed $charset character encoding,
 defaulting to UTF-8.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$charset</h4></div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code>string</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -757,17 +771,22 @@ is the same instance and may need to be rewound.</p>
 </div></div>
 </div>
 <a id="method_getHeader"></a><div class="element clickable method public method_getHeader inherited" data-toggle="collapse" data-target=".method_getHeader .collapse" title="public">
-<h2>Returns the AbstractHeader object for the header with the given $name</h2>
-<pre>getHeader(string $name, $offset<code> = 0</code>) : \ZBateson\MailMimeParser\Header\AbstractHeader</pre>
+<h2>Returns the AbstractHeader object for the header with the given $name.</h2>
+<pre>getHeader(string $name, integer $offset<code> = 0</code>) : \ZBateson\MailMimeParser\Header\AbstractHeader</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Note that mime headers aren't case sensitive.</p></div>
+<div class="long_description"><p>If the optional $offset is passed, and multiple headers exist with the
+same name, the one at the passed offset is returned.</p>
+<p>Note that mime headers aren't case sensitive.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
 <code>string</code>
 </div>
-<div class="subelement argument"><h4>$offset</h4></div>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code>integer</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response"><code>\ZBateson\MailMimeParser\Header\AbstractHeader</code></div>
 </div></div>
@@ -936,8 +955,9 @@ current part.</p></div>
 </div></div>
 </div>
 <a id="method_getPartByMimeType"></a><div class="element clickable method public method_getPartByMimeType inherited" data-toggle="collapse" data-target=".method_getPartByMimeType .collapse" title="public">
-<h2>Returns the part associated with the passed mime type if it exists.</h2>
-<pre>getPartByMimeType(string $mimeType, $index<code> = 0</code>) : \ZBateson\MailMimeParser\Message\Part\MessagePart | null</pre>
+<h2>Returns the part associated with the passed mime type, at the passed
+index, if it exists.</h2>
+<pre>getPartByMimeType(string $mimeType, integer $index<code> = 0</code>) : \ZBateson\MailMimeParser\Message\Part\MessagePart | null</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -946,7 +966,10 @@ current part.</p></div>
 <h4>$mimeType</h4>
 <code>string</code>
 </div>
-<div class="subelement argument"><h4>$index</h4></div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>integer</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>\ZBateson\MailMimeParser\Message\Part\MessagePart</code><code>null</code>
@@ -1276,7 +1299,7 @@ keeping them).</h2>
 </div></div>
 </div>
 <a id="method_removeHeader"></a><div class="element clickable method public method_removeHeader inherited" data-toggle="collapse" data-target=".method_removeHeader .collapse" title="public">
-<h2>Removes the header with the given name</h2>
+<h2>Removes all headers from this part with the passed name.</h2>
 <pre>removeHeader(string $name) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -1291,12 +1314,15 @@ keeping them).</h2>
 <a id="method_removeHtmlPart"></a><div class="element clickable method public method_removeHtmlPart " data-toggle="collapse" data-target=".method_removeHtmlPart .collapse" title="public">
 <h2>Removes the html part of the message if one exists.  Returns true on
 success.</h2>
-<pre>removeHtmlPart($index<code> = 0</code>) : boolean</pre>
+<pre>removeHtmlPart(integer $index<code> = 0</code>) : boolean</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$index</h4></div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>integer</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>boolean</code>true on success</div>
@@ -1322,7 +1348,8 @@ parent).</p></div>
 </div></div>
 </div>
 <a id="method_removeSingleHeader"></a><div class="element clickable method public method_removeSingleHeader inherited" data-toggle="collapse" data-target=".method_removeSingleHeader .collapse" title="public">
-<h2>Removes the header with the given name</h2>
+<h2>Removes a single header with the passed name (in cases where more than
+one may exist, and others should be preserved).</h2>
 <pre>removeSingleHeader(string $name, $offset<code> = 0</code>) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -1338,12 +1365,15 @@ parent).</p></div>
 <a id="method_removeTextPart"></a><div class="element clickable method public method_removeTextPart " data-toggle="collapse" data-target=".method_removeTextPart .collapse" title="public">
 <h2>Removes the text/plain part of the message at the passed index if one
 exists.  Returns true on success.</h2>
-<pre>removeTextPart($index<code> = 0</code>) : boolean</pre>
+<pre>removeTextPart(integer $index<code> = 0</code>) : boolean</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$index</h4></div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>integer</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>boolean</code>true on success</div>
@@ -1443,12 +1473,30 @@ charset.</p></div>
 </div></div>
 </div>
 <a id="method_setRawHeader"></a><div class="element clickable method public method_setRawHeader inherited" data-toggle="collapse" data-target=".method_setRawHeader .collapse" title="public">
-<h2>Adds a header with the given $name and $value.</h2>
-<pre>setRawHeader(string $name, string $value, $offset<code> = 0</code>) </pre>
+<h2>Adds a header with the given $name and $value.  An optional $offset may
+be passed, which will overwrite a header if one exists with the given
+name and offset. Otherwise a new header is added.  The passed $offset may
+be ignored in that case if it doesn't represent the next insert position
+for the header with the passed name.</h2>
+<pre>setRawHeader(string $name, string $value, integer $offset<code> = 0</code>) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
-registers it as a header.</p></div>
+<div class="long_description"><p>.. instead it would be 'pushed' on at
+the next position.</p>
+<pre><code class="language-php">$part = $myParentHeaderPart;
+$part-&gt;setRawHeader('New-Header', 'value');
+echo $part-&gt;getHeaderValue('New-Header');        // 'value'
+
+$part-&gt;setRawHeader('New-Header', 'second', 4);
+echo is_null($part-&gt;getHeader('New-Header', 4)); // '1' (true)
+echo $part-&gt;getHeader('New-Header', 1)
+     -&gt;getValue();                               // 'second'</code></pre>
+<p>A new \ZBateson\MailMimeParser\Header\AbstractHeader object is created
+from the passed value.  No processing on the passed string is performed,
+and so the passed name and value must be formatted correctly according to
+related RFCs.  In particular, be careful to encode non-ascii data, to
+keep lines under 998 characters in length, and to follow any special
+formatting required for the type of header.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -1458,7 +1506,10 @@ registers it as a header.</p></div>
 <h4>$value</h4>
 <code>string</code>
 </div>
-<div class="subelement argument"><h4>$offset</h4></div>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code>integer</code>
+</div>
 </div></div>
 </div>
 <a id="method_setSignature"></a><div class="element clickable method public method_setSignature " data-toggle="collapse" data-target=".method_setSignature .collapse" title="public">
@@ -1549,7 +1600,7 @@ where a user wants to set a default other than ISO-8859-1.</h2>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_headerContainer"> </a><div class="element clickable property protected property_headerContainer" data-toggle="collapse" data-target=".property_headerContainer .collapse" title="protected">
-<h2>$headerContainer</h2>
+<h2>Contains headers for this part.</h2>
 <pre>$headerContainer : \ZBateson\MailMimeParser\Header\HeaderContainer</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
@@ -1639,7 +1690,7 @@ content and children</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-08-06T00:03:02-05:00.<br></footer></div>
+            generated on 2018-08-12T22:56:07-05:00.<br></footer></div>
 </div>
 </body>
 </html>

@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">56</span></a></li>
+                <span class="label label-info">4</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -63,8 +63,7 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public inherited"><a href="#method___construct" title="__construct() :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#method___construct" title="__construct() :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
 <li class="method public "><a href="#method_copyContentHeadersAndContent" title="copyContentHeadersAndContent() :: Copies Content-* headers (permanent ones as defined in
 https://tools.ietf.org/html/rfc4021#section-2.2)
 from the $from header into the $to header. If the Content-Type header
@@ -154,8 +153,7 @@ then detaches its content stream.</span><pre>removeContentHeadersAndContent()</p
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct inherited" data-toggle="collapse" data-target=".method___construct .collapse" title="public">
-<h2>__construct()
-        </h2>
+<h2>Constructor</h2>
 <pre>__construct(\ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory $mimePartFactory, \ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory $uuEncodedPartFactory, \ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory $partBuilderFactory) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
@@ -181,7 +179,7 @@ https://tools.ietf.org/html/rfc4021#section-2.2)
 from the $from header into the $to header. If the Content-Type header
 isn't defined in $from, defaults to text/plain with utf-8 and
 quoted-printable.</h2>
-<pre>copyContentHeadersAndContent(\ZBateson\MailMimeParser\Message\Part\ParentHeaderPart $from, \ZBateson\MailMimeParser\Message\Part\ParentHeaderPart $to, $move<code> = false</code>) </pre>
+<pre>copyContentHeadersAndContent(\ZBateson\MailMimeParser\Message\Part\ParentHeaderPart $from, \ZBateson\MailMimeParser\Message\Part\ParentHeaderPart $to, boolean $move<code> = false</code>) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -194,7 +192,10 @@ quoted-printable.</h2>
 <h4>$to</h4>
 <code>\ZBateson\MailMimeParser\Message\Part\ParentHeaderPart</code>
 </div>
-<div class="subelement argument"><h4>$move</h4></div>
+<div class="subelement argument">
+<h4>$move</h4>
+<code>boolean</code>
+</div>
 </div></div>
 </div>
 <a id="method_copyHeader"></a><div class="element clickable method public method_copyHeader " data-toggle="collapse" data-target=".method_copyHeader .collapse" title="public">
@@ -286,7 +287,10 @@ same position.  If $part is this Message, then $part can't be removed and
 replaced, and instead $replacement's type headers are copied to $message,
 and any children below $replacement are added directly below $message.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$message</h4></div>
+<div class="subelement argument">
+<h4>$message</h4>
+<code>\ZBateson\MailMimeParser\Message</code>
+</div>
 <div class="subelement argument">
 <h4>$part</h4>
 <code>\ZBateson\MailMimeParser\Message\Part\ParentHeaderPart</code>
@@ -347,7 +351,7 @@ and any children below $replacement are added directly below $message.</p></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-08-06T00:03:02-05:00.<br></footer></div>
+            generated on 2018-08-12T22:56:07-05:00.<br></footer></div>
 </div>
 </body>
 </html>
