@@ -32,6 +32,7 @@ class ConsumerService
      * Sets up the HeaderPartFactory member variable.
      * 
      * @param HeaderPartFactory $partFactory
+     * @param MimeLiteralPartFactory $mimeLiteralPartFactory
      */
     public function __construct(HeaderPartFactory $partFactory, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {

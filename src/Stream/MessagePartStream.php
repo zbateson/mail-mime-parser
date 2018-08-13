@@ -12,7 +12,6 @@ use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -36,6 +35,8 @@ class MessagePartStream implements StreamInterface
     protected $part;
 
     /**
+     * Constructor
+     * 
      * @param StreamFactory $sdf
      * @param MessagePart $part
      */
@@ -48,9 +49,10 @@ class MessagePartStream implements StreamInterface
     /**
      * Attaches and returns a CharsetStream decorator to the passed $stream.
      *
-     * If the current attached $part doesn't specify a $charset, $stream is
+     * If the current attached MessagePart doesn't specify a charset, $stream is
      * returned as-is.
      *
+     * @param StreamInterface $stream
      * @return StreamInterface
      */
     private function getCharsetDecoratorForStream(StreamInterface $stream)
@@ -107,7 +109,6 @@ class MessagePartStream implements StreamInterface
      * Writes out the content portion of the attached mime part to the passed
      * $stream.
      *
-     * @param MessagePart $part
      * @param StreamInterface $stream
      */
     private function writePartContentTo(StreamInterface $stream)
@@ -126,8 +127,8 @@ class MessagePartStream implements StreamInterface
      * Creates an array of streams based on the attached part's mime boundary
      * and child streams.
      *
-     * ParentHeaderPart $part passed in because $this->part is declared as
-     *                  MessagePart
+     * @param ParentHeaderPart $part passed in because $this->part is declared
+     *        as MessagePart
      * @return StreamInterface[]
      */
     protected function getBoundaryAndChildStreams(ParentHeaderPart $part)

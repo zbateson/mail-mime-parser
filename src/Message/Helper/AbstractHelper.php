@@ -33,6 +33,8 @@ abstract class AbstractHelper
     protected $partBuilderFactory;
 
     /**
+     * Constructor
+     * 
      * @param MimePartFactory $mimePartFactory
      * @param UUEncodedPartFactory $uuEncodedPartFactory
      * @param PartBuilderFactory $partBuilderFactory

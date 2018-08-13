@@ -33,6 +33,8 @@ class Message extends MimePart
     protected $messageHelperService;
 
     /**
+     * Constructor
+     *
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
@@ -343,6 +345,7 @@ class Message extends MimePart
      * Removes the text/plain part of the message at the passed index if one
      * exists.  Returns true on success.
      *
+     * @param int $index
      * @return bool true on success
      */
     public function removeTextPart($index = 0)
@@ -375,6 +378,7 @@ class Message extends MimePart
      * Removes the html part of the message if one exists.  Returns true on
      * success.
      *
+     * @param int $index
      * @return bool true on success
      */
     public function removeHtmlPart($index = 0)

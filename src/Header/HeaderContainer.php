@@ -52,6 +52,8 @@ class HeaderContainer implements IteratorAggregate
     private $nextIndex = 0;
 
     /**
+     * Constructor
+     *
      * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory)

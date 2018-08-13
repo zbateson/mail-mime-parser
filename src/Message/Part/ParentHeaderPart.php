@@ -20,11 +20,13 @@ use ZBateson\MailMimeParser\Header\HeaderContainer;
 abstract class ParentHeaderPart extends ParentPart
 {
     /**
-     * @var HeaderContainer
+     * @var HeaderContainer Contains headers for this part.
      */
     protected $headerContainer;
 
     /**
+     * Constructor
+     *
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
@@ -52,11 +54,14 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
-     * Returns the AbstractHeader object for the header with the given $name
+     * Returns the AbstractHeader object for the header with the given $name.
+     * If the optional $offset is passed, and multiple headers exist with the
+     * same name, the one at the passed offset is returned.
      *
      * Note that mime headers aren't case sensitive.
      *
      * @param string $name
+     * @param int $offset
      * @return \ZBateson\MailMimeParser\Header\AbstractHeader
      */
     public function getHeader($name, $offset = 0)
@@ -142,13 +147,34 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
-     * Adds a header with the given $name and $value.
+     * Adds a header with the given $name and $value.  An optional $offset may
+     * be passed, which will overwrite a header if one exists with the given
+     * name and offset. Otherwise a new header is added.  The passed $offset may
+     * be ignored in that case if it doesn't represent the next insert position
+     * for the header with the passed name... instead it would be 'pushed' on at
+     * the next position.
      *
-     * Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
-     * registers it as a header.
+     * ```php
+     * $part = $myParentHeaderPart;
+     * $part->setRawHeader('New-Header', 'value');
+     * echo $part->getHeaderValue('New-Header');        // 'value'
+     *
+     * $part->setRawHeader('New-Header', 'second', 4);
+     * echo is_null($part->getHeader('New-Header', 4)); // '1' (true)
+     * echo $part->getHeader('New-Header', 1)
+     *      ->getValue();                               // 'second'
+     * ```
+     *
+     * A new \ZBateson\MailMimeParser\Header\AbstractHeader object is created
+     * from the passed value.  No processing on the passed string is performed,
+     * and so the passed name and value must be formatted correctly according to
+     * related RFCs.  In particular, be careful to encode non-ascii data, to
+     * keep lines under 998 characters in length, and to follow any special
+     * formatting required for the type of header.
      *
      * @param string $name
      * @param string $value
+     * @param int $offset
      */
     public function setRawHeader($name, $value, $offset = 0)
     {
@@ -158,6 +184,10 @@ abstract class ParentHeaderPart extends ParentPart
 
     /**
      * Adds a header with the given $name and $value.
+     * 
+     * Note: If a header with the passed name already exists, a new header is
+     * created with the same name.  This should only be used when that is
+     * intentional - in most cases setRawHeader should be called.
      *
      * Creates a new \ZBateson\MailMimeParser\Header\AbstractHeader object and
      * registers it as a header.
@@ -172,7 +202,7 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
-     * Removes the header with the given name
+     * Removes all headers from this part with the passed name.
      *
      * @param string $name
      */
@@ -183,7 +213,8 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
-     * Removes the header with the given name
+     * Removes a single header with the passed name (in cases where more than
+     * one may exist, and others should be preserved).
      *
      * @param string $name
      */

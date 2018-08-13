@@ -62,6 +62,8 @@ abstract class MessagePart
     protected $ignoreTransferEncoding;
 
     /**
+     * Constructor
+     * 
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param StreamInterface $stream
@@ -309,6 +311,7 @@ abstract class MessagePart
      * The returned string is encoded to the passed $charset character encoding,
      * defaulting to UTF-8.
      *
+     * @param string $charset
      * @return string
      */
     public function getContent($charset = MailMimeParser::DEFAULT_CHARSET)

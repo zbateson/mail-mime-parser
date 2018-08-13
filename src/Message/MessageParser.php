@@ -203,7 +203,6 @@ class MessageParser
      * 
      * @param resource $handle
      * @param PartBuilder $partBuilder
-     * @param boolean $isMessage
      */
     protected function readPart($handle, PartBuilder $partBuilder)
     {

@@ -76,7 +76,8 @@ class MimePart extends ParentHeaderPart
      * 
      * Parses the Content-Type header, defaults to returning text/plain if not
      * defined.
-     * 
+     *
+     * @param string $default pass to override the returned value when not set
      * @return string
      */
     public function getContentType($default = 'text/plain')
@@ -106,7 +107,9 @@ class MimePart extends ParentHeaderPart
     
     /**
      * Returns the content's disposition, defaulting to 'inline' if not set.
-     * 
+     *
+     * @param string $default pass to override the default returned disposition
+     *        when not set.
      * @return string
      */
     public function getContentDisposition($default = 'inline')
@@ -117,7 +120,8 @@ class MimePart extends ParentHeaderPart
     /**
      * Returns the content-transfer-encoding used for this part, defaulting to
      * '7bit' if not set.
-     * 
+     *
+     * @param string $default pass to override the default when not set.
      * @return string
      */
     public function getContentTransferEncoding($default = '7bit')

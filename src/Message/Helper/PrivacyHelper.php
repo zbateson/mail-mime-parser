@@ -31,6 +31,8 @@ class PrivacyHelper extends AbstractHelper
     private $multipartHelper;
 
     /**
+     * Constructor
+     * 
      * @param MimePartFactory $mimePartFactory
      * @param UUEncodedPartFactory $uuEncodedPartFactory
      * @param PartBuilderFactory $partBuilderFactory

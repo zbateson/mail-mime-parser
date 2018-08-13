@@ -29,6 +29,8 @@ abstract class ParentPart extends MessagePart
     protected $children = [];
 
     /**
+     * Constructor
+     * 
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
@@ -181,9 +183,11 @@ abstract class ParentPart extends MessagePart
     }
 
     /**
-     * Returns the part associated with the passed mime type if it exists.
+     * Returns the part associated with the passed mime type, at the passed
+     * index, if it exists.
      *
      * @param string $mimeType
+     * @param int $index
      * @return MessagePart|null
      */
     public function getPartByMimeType($mimeType, $index = 0)

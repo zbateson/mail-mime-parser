@@ -28,22 +28,23 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
 class Container
 {
     /**
-     * @var PartBuilderFactory
+     * @var PartBuilderFactory The PartBuilderFactory instance
      */
     protected $partBuilderFactory;
     
     /**
-     * @var PartFactoryService
+     * @var PartFactoryService The PartFactoryService instance
      */
     protected $partFactoryService;
     
     /**
-     * @var PartFilterFactory
+     * @var PartFilterFactory The PartFilterFactory instance
      */
     protected $partFilterFactory;
     
     /**
-     * @var PartStreamFilterManagerFactory
+     * @var PartStreamFilterManagerFactory The PartStreamFilterManagerFactory
+     *      instance
      */
     protected $partStreamFilterManagerFactory;
     

@@ -114,7 +114,8 @@ class ParameterConsumer extends GenericConsumer
      * Returns true if the token was processed, and false otherwise.
      * 
      * @param string $tokenValue
-     * @param array $combined
+     * @param ArrayObject $combined
+     * @param ArrayObject $splitParts
      * @param string $strName
      * @param string $strCat
      * @return boolean

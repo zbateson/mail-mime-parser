@@ -37,6 +37,8 @@ class UUEncodedPart extends NonMimePart
     protected $filename = null;
     
     /**
+     * Constructor
+     * 
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartBuilder $partBuilder
