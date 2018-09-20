@@ -181,6 +181,7 @@ class CharsetConverter
         'SHIFTJIS' => 'SJIS',
         'SHIFTJIS2004' => 'SJIS-2004',
         'SJIS2004' => 'SJIS-2004',
+        '134' => 'GB2312',
     ];
     
     /**
