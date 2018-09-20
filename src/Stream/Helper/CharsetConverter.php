@@ -31,6 +31,7 @@ class CharsetConverter
         'CP850' => 'CP850',
         'GB2312' => 'GB2312',
         // aliases
+        'UTF8' => 'UTF-8',
         '646' => 'ASCII',
         'ANSIX341968' => 'ASCII',
         'ANSIX341986' => 'ASCII',
