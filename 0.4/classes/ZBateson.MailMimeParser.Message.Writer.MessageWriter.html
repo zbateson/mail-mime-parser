@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>MailMimeParser 0.4 » \ZBateson\MailMimeParser\Message\Writer\MessageWriter</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">MailMimeParser 0.4</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ZBateson.html"><i class="icon-th"></i> ZBateson</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/MailMimeParser.html"><i class="icon-folder-open"></i> MailMimeParser</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">15</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">1</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div xmlns:php="http://php.net/xsl" class="btn-toolbar">
+<div class="btn-group visibility" data-toggle="buttons-checkbox">
+<button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button>
+</div>
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+</div>
+<ul xmlns:php="http://php.net/xsl" class="side-nav nav nav-list">
+<li class="nav-header">
+<i title="Methods" class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public inherited"><a href="#method_getInstance" title="getInstance() :: Returns the singleton instance for the class, instantiating it if not
+already created."><span class="description">Returns the singleton instance for the class, instantiating it if not
+already created.</span><pre>getInstance()</pre></a></li>
+<li class="method public "><a href="#method_getSignableBody" title="getSignableBody() :: Returns the content part of a signed message for a signature to be
+calculated on the message."><span class="description">Returns the content part of a signed message for a signature to be
+calculated on the message.</span><pre>getSignableBody()</pre></a></li>
+<li class="method public "><a href="#method_writeMessageTo" title="writeMessageTo() :: Saves the message as a MIME message to the passed resource handle."><span class="description">Saves the message as a MIME message to the passed resource handle.</span><pre>writeMessageTo()</pre></a></li>
+<li class="method public inherited"><a href="#method_writePartContentTo" title="writePartContentTo() :: Writes out the content portion of the mime part based on the headers that
+are set on the part, taking care of character/content-transfer encoding."><span class="description">Writes out the content portion of the mime part based on the headers that
+are set on the part, taking care of character/content-transfer encoding.</span><pre>writePartContentTo()</pre></a></li>
+<li class="method public inherited"><a href="#method_writePartHeadersTo" title="writePartHeadersTo() :: Writes out the headers of the passed MimePart and follows them with an
+empty line."><span class="description">Writes out the headers of the passed MimePart and follows them with an
+empty line.</span><pre>writePartHeadersTo()</pre></a></li>
+<li class="method public inherited"><a href="#method_writePartTo" title="writePartTo() :: Writes out the MimePart to the passed resource."><span class="description">Writes out the MimePart to the passed resource.</span><pre>writePartTo()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected "><a href="#method_recursiveWriteParts" title="recursiveWriteParts() :: Writes out headers and content for the passed MimePart, then loops over
+its child parts calling recursiveWriteParts on each part."><span class="description">Writes out headers and content for the passed MimePart, then loops over
+its child parts calling recursiveWriteParts on each part.</span><pre>recursiveWriteParts()</pre></a></li>
+<li class="method protected "><a href="#method_writeBoundary" title="writeBoundary() :: Writes out a mime boundary to the passed $handle optionally writing out a
+number of empty lines before it."><span class="description">Writes out a mime boundary to the passed $handle optionally writing out a
+number of empty lines before it.</span><pre>writeBoundary()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private inherited"><a href="#method_copyContentStream" title="copyContentStream() :: Copies the content of the $fromHandle stream into the $toHandle stream,
+maintaining the current read position in $fromHandle.  The passed
+MimePart is where $fromHandle originated after setting up filters on
+$fromHandle."><span class="description">Copies the content of the $fromHandle stream into the $toHandle stream,
+maintaining the current read position in $fromHandle.  The passed
+MimePart is where $fromHandle originated after setting up filters on
+$fromHandle.</span><pre>copyContentStream()</pre></a></li>
+<li class="method private inherited"><a href="#method_setCharsetStreamFilterOnPartStream" title="setCharsetStreamFilterOnPartStream() :: Sets up a mailmimeparser-encode stream filter on the content resource
+handle of the passed MimePart if applicable and returns a reference to
+the filter."><span class="description">Sets up a mailmimeparser-encode stream filter on the content resource
+handle of the passed MimePart if applicable and returns a reference to
+the filter.</span><pre>setCharsetStreamFilterOnPartStream()</pre></a></li>
+<li class="method private inherited"><a href="#method_setTransferEncodingFilterOnStream" title="setTransferEncodingFilterOnStream() :: Appends a stream filter on the passed MimePart's content resource handle
+based on the type of encoding for the passed part."><span class="description">Appends a stream filter on the passed MimePart's content resource handle
+based on the type of encoding for the passed part.</span><pre>setTransferEncodingFilterOnStream()</pre></a></li>
+<li class="method private inherited"><a href="#method_trimTextBeforeCopying" title="trimTextBeforeCopying() :: Trims out any starting and ending CRLF characters in the stream."><span class="description">Trims out any starting and ending CRLF characters in the stream.</span><pre>trimTextBeforeCopying()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property_defaultStreamFilterParams" title="$defaultStreamFilterParams() :: "><span class="description">default params for stream filters in
+     setTransferEncodingFilterOnStream</span><pre>$defaultStreamFilterParams</pre></a></li>
+<li class="property private "><a href="#property_typeToEncodingMap" title="$typeToEncodingMap() :: "><span class="description">map of transfer-encoding types to registered stream filter
+names used in setTransferEncodingFilterOnStream</span><pre>$typeToEncodingMap</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a xmlns:php="http://php.net/xsl" id="\ZBateson\MailMimeParser\Message\Writer\MessageWriter"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
+<li>
+<a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.html">Message</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Message.Writer.html">Writer</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ZBateson.MailMimeParser.Message.Writer.MessageWriter.html">MessageWriter</a>
+</li>
+</ul>
+<div xmlns:php="http://php.net/xsl" class="element class">
+<p class="short_description">Writes out a message in a mail-compliant format.</p>
+<div class="details">
+<div class="long_description"><p>Provides a way of writing out a ZBateson\MailMimeParser\Message object to a
+resource handle.</p></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Zaahid Bateson</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/MailMimeParser.html">MailMimeParser</a></td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Message\Writer\MimePartWriter</td>
+</tr>
+</table>
+<h3>
+<i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_getInstance"></a><div class="element clickable method public method_getInstance inherited" data-toggle="collapse" data-target=".method_getInstance .collapse" title="public">
+<h2>Returns the singleton instance for the class, instantiating it if not
+already created.</h2>
+<pre>getInstance() </pre>
+<div class="labels">
+<span class="label">Inherited</span><span class="label">Static</span>
+</div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_getSignableBody"></a><div class="element clickable method public method_getSignableBody " data-toggle="collapse" data-target=".method_getSignableBody .collapse" title="public">
+<h2>Returns the content part of a signed message for a signature to be
+calculated on the message.</h2>
+<pre>getSignableBody(\ZBateson\MailMimeParser\Message $message) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$message</h4>
+<code>\ZBateson\MailMimeParser\Message</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_writeMessageTo"></a><div class="element clickable method public method_writeMessageTo " data-toggle="collapse" data-target=".method_writeMessageTo .collapse" title="public">
+<h2>Saves the message as a MIME message to the passed resource handle.</h2>
+<pre>writeMessageTo(\ZBateson\MailMimeParser\Message $message, resource $handle) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$message</h4>
+<code>\ZBateson\MailMimeParser\Message</code>
+</div>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+</div></div>
+</div>
+<a id="method_writePartContentTo"></a><div class="element clickable method public method_writePartContentTo inherited" data-toggle="collapse" data-target=".method_writePartContentTo .collapse" title="public">
+<h2>Writes out the content portion of the mime part based on the headers that
+are set on the part, taking care of character/content-transfer encoding.</h2>
+<pre>writePartContentTo(\ZBateson\MailMimeParser\Message\MimePart $part, resource $handle) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code>
+</div>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+</div></div>
+</div>
+<a id="method_writePartHeadersTo"></a><div class="element clickable method public method_writePartHeadersTo inherited" data-toggle="collapse" data-target=".method_writePartHeadersTo .collapse" title="public">
+<h2>Writes out the headers of the passed MimePart and follows them with an
+empty line.</h2>
+<pre>writePartHeadersTo(\ZBateson\MailMimeParser\Message\MimePart $part, resource $handle) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code>
+</div>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+</div></div>
+</div>
+<a id="method_writePartTo"></a><div class="element clickable method public method_writePartTo inherited" data-toggle="collapse" data-target=".method_writePartTo .collapse" title="public">
+<h2>Writes out the MimePart to the passed resource.</h2>
+<pre>writePartTo(\ZBateson\MailMimeParser\Message\MimePart $part, resource $handle) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Takes care of character and content transfer encoding on the output based
+on what headers are set.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code>
+</div>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+</div></div>
+</div>
+<a id="method_recursiveWriteParts"></a><div class="element clickable method protected method_recursiveWriteParts " data-toggle="collapse" data-target=".method_recursiveWriteParts .collapse" title="protected">
+<h2>Writes out headers and content for the passed MimePart, then loops over
+its child parts calling recursiveWriteParts on each part.</h2>
+<pre>recursiveWriteParts(\ZBateson\MailMimeParser\Message\MimePart $part, resource $handle) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code><p>the current part to write out</p></div>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code><p>the handle to write out to</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>true if the part had children (and ended with writing a
+     boundary)</div>
+</div></div>
+</div>
+<a id="method_writeBoundary"></a><div class="element clickable method protected method_writeBoundary " data-toggle="collapse" data-target=".method_writeBoundary .collapse" title="protected">
+<h2>Writes out a mime boundary to the passed $handle optionally writing out a
+number of empty lines before it.</h2>
+<pre>writeBoundary(resource $handle, string $boundary, integer $numLinesBefore, boolean $isEnd) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+<div class="subelement argument">
+<h4>$boundary</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$numLinesBefore</h4>
+<code>integer</code>
+</div>
+<div class="subelement argument">
+<h4>$isEnd</h4>
+<code>boolean</code>
+</div>
+</div></div>
+</div>
+<a id="method_copyContentStream"></a><div class="element clickable method private method_copyContentStream inherited" data-toggle="collapse" data-target=".method_copyContentStream .collapse" title="private">
+<h2>Copies the content of the $fromHandle stream into the $toHandle stream,
+maintaining the current read position in $fromHandle.  The passed
+MimePart is where $fromHandle originated after setting up filters on
+$fromHandle.</h2>
+<pre>copyContentStream(\ZBateson\MailMimeParser\Message\MimePart $part, resource $fromHandle, resource $toHandle) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code>
+</div>
+<div class="subelement argument">
+<h4>$fromHandle</h4>
+<code>resource</code>
+</div>
+<div class="subelement argument">
+<h4>$toHandle</h4>
+<code>resource</code>
+</div>
+</div></div>
+</div>
+<a id="method_setCharsetStreamFilterOnPartStream"></a><div class="element clickable method private method_setCharsetStreamFilterOnPartStream inherited" data-toggle="collapse" data-target=".method_setCharsetStreamFilterOnPartStream .collapse" title="private">
+<h2>Sets up a mailmimeparser-encode stream filter on the content resource
+handle of the passed MimePart if applicable and returns a reference to
+the filter.</h2>
+<pre>setCharsetStreamFilterOnPartStream(\ZBateson\MailMimeParser\Message\MimePart $part) : resource</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>resource</code>a reference to the appended stream filter or null</div>
+</div></div>
+</div>
+<a id="method_setTransferEncodingFilterOnStream"></a><div class="element clickable method private method_setTransferEncodingFilterOnStream inherited" data-toggle="collapse" data-target=".method_setTransferEncodingFilterOnStream .collapse" title="private">
+<h2>Appends a stream filter on the passed MimePart's content resource handle
+based on the type of encoding for the passed part.</h2>
+<pre>setTransferEncodingFilterOnStream(\ZBateson\MailMimeParser\Message\MimePart $part, resource $handle, \ZBateson\MailMimeParser\Stream\StreamLeftover $leftovers) : resource</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$part</h4>
+<code>\ZBateson\MailMimeParser\Message\MimePart</code>
+</div>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+<div class="subelement argument">
+<h4>$leftovers</h4>
+<code>\ZBateson\MailMimeParser\Stream\StreamLeftover</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>resource</code>the stream filter</div>
+</div></div>
+</div>
+<a id="method_trimTextBeforeCopying"></a><div class="element clickable method private method_trimTextBeforeCopying inherited" data-toggle="collapse" data-target=".method_trimTextBeforeCopying .collapse" title="private">
+<h2>Trims out any starting and ending CRLF characters in the stream.</h2>
+<pre>trimTextBeforeCopying(string $read, boolean $first, string $lastChars) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$read</h4>
+<code>string</code><p>the read string, and where the result will be written
+       to</p></div>
+<div class="subelement argument">
+<h4>$first</h4>
+<code>boolean</code><p>set to true if this is the first set of read
+characters from the stream (ltrims CRLF)</p></div>
+<div class="subelement argument">
+<h4>$lastChars</h4>
+<code>string</code><p>contains any CRLF characters from the last $read
+line if it ended with a CRLF (because they're trimmed from the
+end, and get prepended to $read).</p></div>
+</div></div>
+</div>
+<h3>
+<i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_defaultStreamFilterParams"> </a><div class="element clickable property private property_defaultStreamFilterParams" data-toggle="collapse" data-target=".property_defaultStreamFilterParams .collapse" title="private">
+<h2>default params for stream filters in
+     setTransferEncodingFilterOnStream</h2>
+<pre>$defaultStreamFilterParams : array</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('line-length' => 76, 'line-break-chars' => "\r\n")</code></div>
+</div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_typeToEncodingMap"> </a><div class="element clickable property private property_typeToEncodingMap" data-toggle="collapse" data-target=".property_typeToEncodingMap .collapse" title="private">
+<h2>map of transfer-encoding types to registered stream filter
+names used in setTransferEncodingFilterOnStream</h2>
+<pre>$typeToEncodingMap : array</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array('quoted-printable' => 'mmp-convert.quoted-printable-encode', 'base64' => 'mmp-convert.base64-encode', 'x-uuencode' => 'mailmimeparser-uuencode', 'x-uue' => 'mailmimeparser-uuencode', 'uuencode' => 'mailmimeparser-uuencode', 'uue' => 'mailmimeparser-uuencode')</code></div>
+</div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
+            generated on 2018-09-21T13:23:57-05:00.<br></footer></div>
+</div>
+</body>
+</html>
