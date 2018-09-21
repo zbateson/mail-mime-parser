@@ -46,6 +46,8 @@ class CharsetConverterTest extends PHPUnit_Framework_TestCase
             'ISO_IR_157',
             'CS-ISO-LATIN-4',
             'ISO_IR_100',
+            'UTF-#@*(@8',
+            'UTF8'
         ];
         $test = 'This is my string';
         

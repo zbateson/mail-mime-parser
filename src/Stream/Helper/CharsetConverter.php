@@ -358,8 +358,10 @@ class CharsetConverter
             return $comp;
         }
         $stripped = preg_replace('/[^A-Z0-9]+/', '', $comp);
-        if (in_array($stripped, $available)) {
-            return $stripped;
+        $amb = preg_replace('/[^A-Z0-9]+/', '', $available);
+        $index = array_search($stripped, $amb, true);
+        if ($index !== false) {
+            return $available[$index];
         }
         return $this->findAliasedCharset($comp, $stripped, $mbSupported);
     }
