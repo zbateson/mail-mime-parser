@@ -181,6 +181,20 @@ class CharsetConverter
         'SHIFTJIS' => 'SJIS',
         'SHIFTJIS2004' => 'SJIS-2004',
         'SJIS2004' => 'SJIS-2004',
+        // Microsoft charset values
+        '0' => 'WINDOWS-1252',
+        '128' => 'SJIS',
+        '129' => 'EUC-KR',
+        '134' => 'GB2312',
+        '136' => 'BIG-5',
+        '161' => 'WINDOWS-1253',
+        '162' => 'WINDOWS-1254',
+        '177' => 'WINDOWS-1255',
+        '178' => 'WINDOWS-1256',
+        '186' => 'WINDOWS-1257',
+        '204' => 'WINDOWS-1251',
+        '222' => 'WINDOWS-874',
+        '238' => 'WINDOWS-1250',
     ];
     
     /**
