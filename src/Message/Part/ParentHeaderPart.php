@@ -62,7 +62,14 @@ abstract class ParentHeaderPart extends ParentPart
      *
      * @param string $name
      * @param int $offset
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader|
+     *         \ZBateson\MailMimeParser\Header\AddressHeader|
+     *         \ZBateson\MailMimeParser\Header\DateHeader|
+     *         \ZBateson\MailMimeParser\Header\GenericHeader|
+     *         \ZBateson\MailMimeParser\Header\IdHeader|
+     *         \ZBateson\MailMimeParser\Header\ParameterHeader|
+     *         \ZBateson\MailMimeParser\Header\ReferenceHeader|
+     *         \ZBateson\MailMimeParser\Header\SubjectHeader
      */
     public function getHeader($name, $offset = 0)
     {

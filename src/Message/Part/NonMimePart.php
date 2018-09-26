@@ -77,4 +77,16 @@ class NonMimePart extends MessagePart
     {
         return false;
     }
+
+    /**
+     * Returns the Content ID of the part.
+     *
+     * NonMimeParts do not have a Content ID, and so this simply returns null.
+     *
+     * @return string|null
+     */
+    public function getContentId()
+    {
+        return null;
+    }
 }

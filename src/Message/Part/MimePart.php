@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use ZBateson\MailMimeParser\Message\PartFilter;
+
 /**
  * Represents a single part of a multi-part mime message.
  *
@@ -136,5 +138,41 @@ class MimePart extends ParentHeaderPart
             return $translated[$type];
         }
         return $type;
+    }
+
+    /**
+     * Returns the Content ID of the part.
+     *
+     * Parses the value of the Content-ID header, stripping out the surrounding
+     * '<' and '>' characters, and returning just the ID if set... or null if
+     * not set or incorrectly formatted.
+     *
+     * @return string|null
+     */
+    public function getContentId()
+    {
+        $header = $this->getHeader('Content-ID');
+        if ($header !== null) {
+            return $header->getId();
+        }
+    }
+
+    /**
+     * Convenience method to find a part by its Content-ID header.
+     *
+     * @param string $contentId
+     * @return MessagePart
+     */
+    public function getPartByContentId($contentId)
+    {
+        $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
+        $filter = $this->partFilterFactory->newFilterFromArray([
+            'headers' => [
+                PartFilter::FILTER_INCLUDE => [
+                    'Content-ID' => $sanitized
+                ]
+            ]
+        ]);
+        return $this->getPart(0, $filter);
     }
 }

@@ -100,6 +100,11 @@ class EmailFunctionalTest extends TestCase
             $this->assertEquals($props['Date'], $message->getHeader('date')->getDateTime(), $failMessage);
         }
 
+        if (isset($props['Message-ID'])) {
+            $this->assertNotNull($message->getMessageId());
+            $this->assertEquals($props['Message-ID'], $message->getMessageId(), $failMessage);
+        }
+
         if (!empty($props['signed'])) {
             $this->assertEquals('multipart/signed', $message->getHeaderValue('Content-Type'), $failMessage);
             $protocol = $message->getHeaderParameter('Content-Type', 'protocol');
@@ -249,6 +254,7 @@ class EmailFunctionalTest extends TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com',
             'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
@@ -268,6 +274,7 @@ class EmailFunctionalTest extends TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGMEKBCHAA.doug@example.com',
             'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
@@ -287,6 +294,7 @@ class EmailFunctionalTest extends TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGAEKCCHAA.doug@example.com',
             'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
@@ -306,6 +314,7 @@ class EmailFunctionalTest extends TestCase
                 'email' => 'schmuergen@example.com'
             ],
             'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGEEKCCHAA.doug@example.com',
             'text' => 'HasenundFrosche.txt',
             'parts' => [
                 'text/plain'
@@ -572,6 +581,23 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
+    public function testGetAttachmentByContentIdFromEmailm0016()
+    {
+        $handle = fopen($this->messageDir . '/m0016.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $part = $message->getPartByContentId('823504223@17052000-0f8d');
+        $this->assertNotNull($part);
+        $this->assertEquals('823504223@17052000-0f8d', $part->getContentId());
+        $this->assertEquals('blueball.png', $part->getFilename());
+
+        $other = $message->getPartByContentId('<823504223@17052000-0f94>');
+        $this->assertNotNull($other);
+        $this->assertEquals('823504223@17052000-0f94', $other->getContentId());
+        $this->assertEquals('redball.png', $other->getFilename());
+    }
+
     public function testParseEmailm0017()
     {
         $this->runEmailTest('m0017', [
@@ -694,6 +720,7 @@ class EmailFunctionalTest extends TestCase
             'From' => [
                 'email' => 'test@test.sk'
             ],
+            'Message-ID' => 'dcf0f7ab-4210-4ee7-7ac3-3db26735f7b1@gmail.com',
             'Subject' => 'long att',
             'attachments' => 1,
             'parts' => [
@@ -736,6 +763,7 @@ class EmailFunctionalTest extends TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'schmuergen@example.com'
             ],
+            'Message-ID' => '3923561C.B7078DEF@example.com',
             'Subject' => 'Die Hasen und die Frösche (Netscape Communicator 4.7)',
             'text' => 'HasenundFrosche.txt',
         ]);
@@ -1017,6 +1045,7 @@ class EmailFunctionalTest extends TestCase
                 'name' => 'Jürgen Schmürgen',
                 'email' => 'jschmuergen@example.com'
             ],
+            'Message-ID' => '4.2.0.58.20000519001217.00a85b60@pop.example.com',
             'Subject' => 'Die Hasen und die Frösche',
             'text' => 'HasenundFrosche.txt',
         ]);

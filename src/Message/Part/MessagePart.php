@@ -198,6 +198,13 @@ abstract class MessagePart
      * @return bool
      */
     public abstract function isMime();
+
+    /**
+     * Returns the Content ID of the part, or null if not defined.
+     *
+     * @return string|null
+     */
+    public abstract function getContentId();
     
     /**
      * Rewrite me

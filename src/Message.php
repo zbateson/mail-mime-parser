@@ -77,6 +77,24 @@ class Message extends MimePart
     }
 
     /**
+     * Returns the Message ID of the message.
+     *
+     * Parses the value of the Message-ID header, stripping out the surrounding
+     * '<' and '>' characters, and returning just the ID if set... or null if
+     * not set or incorrectly formatted.
+     *
+     * @return string|null
+     */
+    public function getMessageId()
+    {
+        $header = $this->getHeader('Message-ID');
+        if ($header !== null) {
+            return $header->getId();
+        }
+        return null;
+    }
+
+    /**
      * Returns the text/plain part at the given index (or null if not found.)
      *
      * @param int $index
