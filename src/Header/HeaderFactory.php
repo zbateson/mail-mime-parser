@@ -20,6 +20,8 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * Resent-Cc, Resent-Bcc, Resent-Reply-To
  * DateHeader: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date, Reply-By
  * ParameterHeader: Content-Type, Content-Disposition
+ * IdHeader: Message-ID, Content-ID, In-Reply-To
+ * ReferenceHeader: Reference
  *
  * @author Zaahid Bateson
  */
@@ -62,6 +64,14 @@ class HeaderFactory
         ],
         'ZBateson\MailMimeParser\Header\SubjectHeader' => [
             'subject',
+        ],
+        'ZBateson\MailMimeParser\Header\IdHeader' => [
+            'message-id',
+            'content-id'
+        ],
+        'ZBateson\MailMimeParser\Header\MultipleIdHeader' => [
+            'in-reply-to',
+            'reference'
         ]
     ];
     
