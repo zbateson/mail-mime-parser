@@ -16,10 +16,12 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
  *
  * FROM ehlo name (hostname [address]), for example: FROM computer (domain.com
  * [1.2.3.4]) would contain "computer" for getEhloName(), domain.com for
- * getHostname and [1.2.3.4] for getAddress().
+ * getHostname and 1.2.3.4 for getAddress().
  *
  * This doesn't change if the ehlo name is an address, it is still returned in
- * getEhloName(), and not in getAddress().
+ * getEhloName(), and not in getAddress().  Additionally square brackets are not
+ * stripped from getEhloName() if its an address.  For example: "FROM [1.2.3.4]"
+ * would return "[1.2.3.4]" in a call to getEhloName().
  *
  * For further information on how the header's parsed, check the documentation
  * for {@see \ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumer}.

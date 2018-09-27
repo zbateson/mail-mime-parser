@@ -69,7 +69,7 @@ class DomainConsumer extends GenericReceivedConsumer
      */
     private function matchHostPart($value, &$hostname, &$address) {
         $matches = [];
-        $pattern = '~^(?P<name>[a-z0-9\-]+\.[a-z0-9\-\.]+)?\s*(?P<addr>\[?(IPv6)?[a-f\d\.\:\%]+\]?)?$~i';
+        $pattern = '~^(?P<name>[a-z0-9\-]+\.[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr>[a-f\d\.\:]+)\])?$~i';
         if (preg_match($pattern, $value, $matches)) {
             if (!empty($matches['name'])) {
                 $hostname = $matches['name'];

@@ -168,7 +168,7 @@ class ReceivedConsumerTest extends TestCase
 
         $this->assertEquals('by', $ret[1]->getName());
         $this->assertEquals('MyComputer', $ret[1]->getEhloName());
-        $this->assertEquals('[1.2.2.2]', $ret[1]->getAddress());
+        $this->assertEquals('1.2.2.2', $ret[1]->getAddress());
 
         $this->assertEquals('with', $ret[2]->getName());
         $this->assertEquals('ESMTP', $ret[2]->getValue());
