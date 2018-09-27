@@ -193,6 +193,7 @@ abstract class AbstractConsumer
      * the current consumer.
      * 
      * @param string $token the current token
+     * @return bool
      */
     abstract protected function isStartToken($token);
     
@@ -201,6 +202,7 @@ abstract class AbstractConsumer
      * current consumer.
      * 
      * @param string $token the current token
+     * @return bool
      */
     abstract protected function isEndToken($token);
     
