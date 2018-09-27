@@ -147,4 +147,43 @@ class HeaderPartFactory
     {
         return new ParameterPart($this->charsetConverter, $name, $value, $language);
     }
+
+    /**
+     * Initializes and returns a new ReceivedPart.
+     *
+     * @param string $name
+     * @param string $value
+     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedPart
+     */
+    public function newReceivedPart($name, $value)
+    {
+        return new ReceivedPart($this->charsetConverter, $name, $value);
+    }
+
+    /**
+     * Initializes and returns a new ReceivedDomainPart.
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $ehloName
+     * @param string $hostName
+     * @param string $hostAddress
+     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart
+     */
+    public function newReceivedDomainPart(
+        $name,
+        $value,
+        $ehloName = null,
+        $hostName = null,
+        $hostAddress = null
+    ) {
+        return new ReceivedDomainPart(
+            $this->charsetConverter,
+            $name,
+            $value,
+            $ehloName,
+            $hostName,
+            $hostAddress
+        );
+    }
 }

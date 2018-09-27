@@ -92,4 +92,25 @@ class HeaderPartFactoryTest extends TestCase
         $this->assertNotNull($part);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ParameterPart', $part);
     }
+
+    public function testNewReceivedPart()
+    {
+        $part = $this->headerPartFactory->newReceivedPart('Test', 'Value');
+        $this->assertNotNull($part);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedPart', $part);
+        $this->assertEquals('Test', $part->getName());
+        $this->assertEquals('Value', $part->getValue());
+    }
+
+    public function testNewReceivedDomainPart()
+    {
+        $part = $this->headerPartFactory->newReceivedDomainPart('Test', 'Value', 'ehlo', 'host', 'addr');
+        $this->assertNotNull($part);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart', $part);
+        $this->assertEquals('Test', $part->getName());
+        $this->assertEquals('Value', $part->getValue());
+        $this->assertEquals('ehlo', $part->getEhloName());
+        $this->assertEquals('host', $part->getHostname());
+        $this->assertEquals('addr', $part->getAddress());
+    }
 }
