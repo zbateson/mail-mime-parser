@@ -18,8 +18,6 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * AbstractHeader::getConsumer is an abstract method that must be overridden to
  * return an appropriate Consumer\AbstractConsumer type.
  *
- * AbstractHeader::parseHeaderValue shou
- *
  * @author Zaahid Bateson
  */
 abstract class AbstractHeader
@@ -30,8 +28,8 @@ abstract class AbstractHeader
     protected $name;
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the
-     * header's parts (as returned from the consumer)
+     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the header's parts
+     * (as returned from the consumer)
      */
     protected $parts;
 
@@ -42,7 +40,7 @@ abstract class AbstractHeader
 
     /**
      * Assigns the header's name and raw value, then calls getConsumer and
-     * parseHeaderValue to extract a parsed value.
+     * setParseHeaderValue to extract a parsed value.
      *
      * @param ConsumerService $consumerService
      * @param string $name
