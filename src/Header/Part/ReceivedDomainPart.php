@@ -21,6 +21,9 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
  * This doesn't change if the ehlo name is an address, it is still returned in
  * getEhloName(), and not in getAddress().
  *
+ * For further information on how the header's parsed, check the documentation
+ * for {@see \ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumer}.
+ *
  * @author Zaahid Bateson
  */
 class ReceivedDomainPart extends ReceivedPart
