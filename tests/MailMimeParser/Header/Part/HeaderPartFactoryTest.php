@@ -88,7 +88,7 @@ class HeaderPartFactoryTest extends TestCase
 
     public function testNewParameterPart()
     {
-        $part = $this->headerPartFactory->newParameterPart('Test', 'Test');
+        $part = $this->headerPartFactory->newParameterPart('Test', 'Value');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ParameterPart', $part);
     }

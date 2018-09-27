@@ -69,8 +69,8 @@ class HeaderFactoryTest extends TestCase
 
     public function testGenericHeaderInstance()
     {
-        $aValid = ['X-Generic-Header', 'Received', 'Authentication-Results'];
-        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'Reference'];
+        $aValid = ['X-Generic-Header', 'Authentication-Results'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'Reference', 'Received'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
@@ -144,6 +144,22 @@ class HeaderFactoryTest extends TestCase
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\ParameterHeader', get_class($header));
+        }
+    }
+
+    public function testReceivedHeaderInstance()
+    {
+        $aValid = ['Received'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Authentication-Results', 'In-Reply-To', 'Reference', 'Message-ID'];
+        foreach ($aValid as $name) {
+            $header = $this->headerFactory->newInstance($name, 'Test');
+            $this->assertNotNull($header);
+            $this->assertEquals('ZBateson\MailMimeParser\Header\ReceivedHeader', get_class($header));
+        }
+        foreach ($aNot as $name) {
+            $header = $this->headerFactory->newInstance($name, 'Test');
+            $this->assertNotNull($header);
+            $this->assertNotEquals('ZBateson\MailMimeParser\Header\ReceivedHeader', get_class($header));
         }
     }
 

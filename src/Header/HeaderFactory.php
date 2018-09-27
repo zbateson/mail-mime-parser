@@ -72,6 +72,9 @@ class HeaderFactory
         'ZBateson\MailMimeParser\Header\MultipleIdHeader' => [
             'in-reply-to',
             'reference'
+        ],
+        'ZBateson\MailMimeParser\Header\ReceivedHeader' => [
+            'received'
         ]
     ];
     
