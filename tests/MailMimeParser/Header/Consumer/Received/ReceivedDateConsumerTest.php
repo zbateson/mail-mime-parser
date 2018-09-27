@@ -9,7 +9,7 @@ use DateTime;
  *
  * @group Consumers
  * @group ReceivedDateConsumer
- * @covers ZBateson\MailMimeParser\Header\Consumer\ReceivedDateConsumer
+ * @covers ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumer
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
  * @author Zaahid Bateson
  */
