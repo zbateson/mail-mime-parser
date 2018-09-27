@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use DateTimeInterface;
+use DateTime;
 
 /**
  * Description of ReceivedHeaderTest
@@ -74,7 +74,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertEquals('TEST', $header->getValueFor('WITH'));
         $dt = $header->getDateTime();
         $this->assertNotNull($dt);
-        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTimeInterface::RFC3339));
+        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
     public function testParsingWithFullExampleLine()
@@ -97,6 +97,6 @@ class ReceivedHeaderTest extends TestCase
 
         $dt = $header->getDateTime();
         $this->assertNotNull($dt);
-        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTimeInterface::RFC3339));
+        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 }

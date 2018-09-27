@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
-use DateTimeInterface;
+use DateTime;
 
 /**
  * Description of ReceivedConsumerTest
@@ -133,7 +133,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertCount(1, $ret);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\DatePart', $ret[0]);
         $dt = $ret[0]->getDateTime();
-        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTimeInterface::RFC3339));
+        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
     public function testFromAndDate()
@@ -149,7 +149,7 @@ class ReceivedConsumerTest extends TestCase
 
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\DatePart', $ret[1]);
         $dt = $ret[1]->getDateTime();
-        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTimeInterface::RFC3339));
+        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
     public function testExampleFullLines()
@@ -179,6 +179,6 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('123', $ret[4]->getValue());
 
         $dt = $ret[5]->getDateTime();
-        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTimeInterface::RFC3339));
+        $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 }
