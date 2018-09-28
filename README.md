@@ -12,9 +12,7 @@ The goals of this project are to be:
 
 * Well written
 * Standards-compliant but forgiving
-* Includable via composer
 * Tested where possible
-* Minimal dependencies
 
 To include it for use in your project, please install via composer:
 
