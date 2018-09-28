@@ -41,9 +41,17 @@ $message = \ZBateson\MailMimeParser\Message::from($string);
 
 echo $message->getHeaderValue('from');          // user@example.com
 echo $message
-    ->getHeader('from')
+    ->getHeader('from')                         // AddressHeader
     ->getPersonName();                          // Person Name
 echo $message->getHeaderValue('subject');       // The email's subject
+echo $message
+    ->getHeader('to')                           // also AddressHeader
+    ->getAddresses()[0]                         // AddressPart
+    ->getName();                                // Person Name
+echo $message
+    ->getHeader('cc')                           // also AddressHeader
+    ->getAddress()[0]                           // AddressPart
+    ->getEmail();                               // user@example.com
 
 echo $message->getTextContent();                // or getHtmlContent()
 
@@ -61,15 +69,18 @@ $dest = \GuzzleHttp\Psr7\stream_for(
 \GuzzleHttp\Psr7\copy_to_stream(
     $stream, $dest
 );
+// OR: more simply if saving or copying to another stream
+$att->saveContent('my-file.ext');               // writes to my-file.ext
+$att->saveContent($stream);                     // copies to the stream
 ```
 
 ## Documentation
 
 * [About](https://mail-mime-parser.org)
 * [Usage Guide](https://mail-mime-parser.org/#quick-usage-guide)
-* [API Reference](https://mail-mime-parser.org/api/1.0)
+* [API Reference](https://mail-mime-parser.org/api/1.1)
 
-## Upgrading to 1.0
+## Upgrading to 1.x
 
 * [Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
 
