@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Holds a running value for an RFC-2231 split header parameter.
@@ -52,10 +52,10 @@ class SplitParameterToken extends HeaderPart
     /**
      * Initializes a SplitParameterToken.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $name the parameter's name
      */
-    public function __construct(CharsetConverter $charsetConverter, $name)
+    public function __construct(MbWrapper $charsetConverter, $name)
     {
         parent::__construct($charsetConverter);
         $this->name = trim($name);

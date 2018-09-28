@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 use DateTime;
 use Exception;
 
@@ -27,10 +27,10 @@ class DatePart extends LiteralPart
      * an RFC 822 date, and failing that, tries to parse it by calling
      * ``` new DateTime($value) ```.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $token
      */
-    public function __construct(CharsetConverter $charsetConverter, $token) {
+    public function __construct(MbWrapper $charsetConverter, $token) {
         
         // parent::__construct converts character encoding -- may cause problems
         // sometimes.

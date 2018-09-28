@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Constructs and returns HeaderPart objects.
@@ -16,7 +16,7 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
 class HeaderPartFactory
 {
     /**
-     * @var CharsetConverter $charsetConverter passed to HeaderPart constructors
+     * @var MbWrapper $charsetConverter passed to HeaderPart constructors
      *      for converting strings in HeaderPart::convertEncoding
      */
     protected $charsetConverter;
@@ -24,9 +24,9 @@ class HeaderPartFactory
     /**
      * Sets up dependencies.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      */
-    public function __construct(CharsetConverter $charsetConverter)
+    public function __construct(MbWrapper $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
     }

@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of ParameterTest
@@ -18,9 +19,7 @@ class SplitParameterTokenTest extends TestCase
 
     public function setUp()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
-			->disableOriginalConstructor()
-			->getMock();
+        $this->charsetConverter = new MbWrapper();
     }
 
     public function testGetNameAndNullLanguage()
@@ -70,10 +69,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testAddEncodedPart()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with('Khal Drogo', 'ISO-8859-1', 'UTF-8')
-            ->willReturn('Khal Drogo');
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khal%20Drogo', true, 0);
         $this->assertEquals('Khal Drogo', $part->getValue());
@@ -81,13 +76,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testAddMultiEncodedPart()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with(
-                'Khal Drogo, Ruler of his Khalisar', 'ISO-8859-1', 'UTF-8'
-            )
-            ->willReturn('Khal Drogo, Ruler of his Khalisar');
-
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khal%20Drogo,%20', true, 0);
         $part->addPart('Ruler%20of%20', true, 1);
@@ -98,13 +86,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testAddUnsortedMultiEncodedPart()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with(
-                'Khal Drogo, Ruler of his Khalisar', 'ISO-8859-1', 'UTF-8'
-            )
-            ->willReturn('Khal Drogo, Ruler of his Khalisar');
-
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
         $part->addPart('Khal%20Drogo,%20', true, 0);
@@ -115,13 +96,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testAddUnsortedMultiEncodedPartWithLanguage()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with(
-                'Khal Drogo, Ruler of his Khalisar', 'us-ascii', 'UTF-8'
-            )
-            ->willReturn('Khal Drogo, Ruler of his Khalisar');
-
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
         $part->addPart('us-ascii\'dothraki-LHAZ\'Khal%20Drogo,%20', true, 0);
@@ -133,13 +107,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testLanguageNotSetOnNonZeroPart()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with(
-                'Khal Drogo, Ruler of his Khalisar', 'us-ascii', 'UTF-8'
-            )
-            ->willReturn('Khal Drogo, Ruler of his Khalisar');
-
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
         $part->addPart('us-ascii\'dothraki-LHAZ\'Khal%20Drogo,%20', true, 0);
@@ -151,14 +118,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testAddMixedEncodedAndNonEncodedCombinesCharsetConversion()
     {
-        $this->charsetConverter->expects($this->exactly(2))
-            ->method('convert')
-            ->withConsecutive(
-                [ 'Khal Drogo, Ruler of ', 'us-ascii', 'UTF-8' ],
-                [ 'Khalisar', 'us-ascii', 'UTF-8' ]
-            )
-            ->willReturnOnConsecutiveCalls('Khal Drogo, Ruler of ', 'Khalisar');
-
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('us-ascii\'dothraki-LHAZ\'Khal%20Drogo,%20', true, 0);
         $part->addPart('Ruler%20of%20', true, 1);
@@ -170,14 +129,6 @@ class SplitParameterTokenTest extends TestCase
 
     public function testAddUnsortedMixedEncodedAndNonEncodedCombinesCharsetConversion()
     {
-        $this->charsetConverter->expects($this->exactly(2))
-            ->method('convert')
-            ->withConsecutive(
-                [ 'Khal Drogo, Ruler of ', 'us-ascii', 'UTF-8' ],
-                [ 'Khalisar', 'us-ascii', 'UTF-8' ]
-            )
-            ->willReturnOnConsecutiveCalls('Khal Drogo, Ruler of ', 'Khalisar');
-
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
         $part->addPart('Ruler%20of%20', true, 1);

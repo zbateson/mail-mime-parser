@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of ParameterTest
@@ -18,9 +19,7 @@ class ParameterPartTest extends TestCase
 
     public function setUp()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
-			->disableOriginalConstructor()
-			->getMock();
+        $this->charsetConverter = new MbWrapper();
     }
 
     public function testBasicNameValuePair()
@@ -32,10 +31,6 @@ class ParameterPartTest extends TestCase
 
     public function testMimeValue()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with('Kilgore Trout', 'US-ASCII', 'UTF-8')
-            ->willReturn('Kilgore Trout');
         $part = new ParameterPart($this->charsetConverter, 'name', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore Trout', $part->getValue());
@@ -43,10 +38,6 @@ class ParameterPartTest extends TestCase
 
     public function testMimeName()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with('name', 'US-ASCII', 'UTF-8')
-            ->willReturn('name');
         $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', 'Kilgore');
         $this->assertEquals('name', $part->getName());
         $this->assertEquals('Kilgore', $part->getValue());
@@ -54,8 +45,6 @@ class ParameterPartTest extends TestCase
 
     public function testNameValueNotDecodedWithLanguage()
     {
-        $this->charsetConverter->expects($this->never())
-            ->method('convert');
         $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', '=?US-ASCII?Q?Kilgore_Trout?=', 'Kurty');
         $this->assertEquals('=?US-ASCII?Q?name?=', $part->getName());
         $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
@@ -63,8 +52,6 @@ class ParameterPartTest extends TestCase
 
     public function testGetLanguage()
     {
-        $this->charsetConverter->expects($this->never())
-            ->method('convert');
         $part = new ParameterPart($this->charsetConverter, 'name', 'Drogo', 'Dothraki');
         $this->assertEquals('Dothraki', $part->getLanguage());
     }

@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Represents a name/value pair part of a header.
@@ -32,12 +32,12 @@ class ParameterPart extends MimeLiteralPart
      * If $language is provided, $name and $value are not mime-decoded. Instead,
      * they're taken as literals as part of a SplitParameterToken.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $name
      * @param string $value
      * @param string $language
      */
-    public function __construct(CharsetConverter $charsetConverter, $name, $value, $language = null)
+    public function __construct(MbWrapper $charsetConverter, $name, $value, $language = null)
     {
         if ($language !== null) {
             parent::__construct($charsetConverter, '');

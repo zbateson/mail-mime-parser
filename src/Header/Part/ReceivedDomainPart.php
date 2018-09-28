@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Holds extra information about a parsed Received header part, for FROM and BY
@@ -47,14 +47,14 @@ class ReceivedDomainPart extends ReceivedPart
 
     /**
      *
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $name
      * @param string $value
      * @param string $ehloName
      * @param string $hostname
      * @param string $address
      */
-    public function __construct(CharsetConverter $charsetConverter, $name, $value, $ehloName = null, $hostname = null, $address = null) {
+    public function __construct(MbWrapper $charsetConverter, $name, $value, $ehloName = null, $hostname = null, $address = null) {
         parent::__construct($charsetConverter, $name, $value);
         $this->ehloName = $ehloName;
         $this->hostname = $hostname;

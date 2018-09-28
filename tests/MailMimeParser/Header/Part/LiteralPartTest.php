@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of LiteralTest
@@ -16,9 +17,7 @@ class LiteralPartTest extends TestCase
 {
     public function testInstance()
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
-			->disableOriginalConstructor()
-			->getMock();
+        $charsetConverter = new MbWrapper();
 
         $part = new LiteralPart($charsetConverter, '"');
         $this->assertNotNull($part);

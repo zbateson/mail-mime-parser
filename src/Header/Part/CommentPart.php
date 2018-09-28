@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 namespace ZBateson\MailMimeParser\Header\Part;
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Represents a mime header comment -- text in a structured mime header
@@ -23,10 +23,10 @@ class CommentPart extends MimeLiteralPart
     /**
      * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $token
      */
-    public function __construct(CharsetConverter $charsetConverter, $token)
+    public function __construct(MbWrapper $charsetConverter, $token)
     {
         parent::__construct($charsetConverter, $token);
         $this->comment = $this->value;

@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Represents one parameter in a parsed 'Received' header, e.g. the FROM or VIA
@@ -23,11 +23,11 @@ class ReceivedPart extends ParameterPart
     /**
      * Constructor.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $name
      * @param string $value
      */
-    public function __construct(CharsetConverter $charsetConverter, $name, $value) {
+    public function __construct(MbWrapper $charsetConverter, $name, $value) {
         parent::__construct($charsetConverter, '', '');
         // can't be mime-encoded
         $this->name = trim($name);
