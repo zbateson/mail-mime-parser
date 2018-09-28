@@ -282,6 +282,18 @@ class MessagePartTest extends TestCase
         $this->assertEquals('Demigorgon', $messagePart->__toString());
     }
 
+    public function testSaveToFile()
+    {
+        $messagePart = $this->getMessagePart(
+            'Demigorgon',
+            Psr7\stream_for('other demons')
+        );
+
+        $part = vfsStream::newFile('part')->at($this->vfs);
+        $messagePart->save($part->url());
+        $this->assertEquals('Demigorgon', file_get_contents($part->url()));
+    }
+
     public function testSetContentAndAttachContentStream()
     {
         $ms = Psr7\stream_for('message');

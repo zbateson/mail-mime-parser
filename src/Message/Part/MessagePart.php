@@ -481,18 +481,32 @@ abstract class MessagePart
     }
 
     /**
-     * Saves the message/part as to the passed resource handle.
+     * Saves the message/part to the passed file, resource, or stream.
      *
-     * @param resource|StreamInterface $streamOrHandle
+     * If the passed parameter is a string, it's assumed to be a filename to
+     * write to.  The file is opened in 'w+' mode, and closed before returning.
+     *
+     * When passing a resource or Psr7 Stream, the resource is not closed, nor
+     * rewound.
+     *
+     * @param string|resource|StreamInterface $filenameResourceOrStream
      */
-    public function save($streamOrHandle)
+    public function save($filenameResourceOrStream)
     {
-        $message = $this->getStream();
-        $message->rewind();
-        $stream = Psr7\stream_for($streamOrHandle);
-        Psr7\copy_to_stream($message, $stream);
-        // don't close when out of scope for a resource
-        if (!($streamOrHandle instanceof StreamInterface)) {
+        $resourceOrStream = $filenameResourceOrStream;
+        if (is_string($filenameResourceOrStream)) {
+            $resourceOrStream = fopen($filenameResourceOrStream, 'w+');
+        }
+
+        $partStream = $this->getStream();
+        $partStream->rewind();
+        $stream = Psr7\stream_for($resourceOrStream);
+        Psr7\copy_to_stream($partStream, $stream);
+
+        if (!is_string($filenameResourceOrStream)
+            && !($filenameResourceOrStream instanceof StreamInterface)) {
+            // only detach if it wasn't a string or StreamInterface, so the
+            // fopen call can be properly closed if it was
             $stream->detach();
         }
     }
