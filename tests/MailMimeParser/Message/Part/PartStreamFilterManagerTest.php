@@ -149,4 +149,32 @@ class PartStreamFilterManagerTest extends TestCase
         $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
         $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
     }
+
+    public function testGetBinaryStream()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newQuotedPrintableStream')
+            ->with($stream)
+            ->willReturn($stream);
+        $stream->rewind();
+
+        $stream2 = Psr7\stream_for('test2');
+        $stream3 = Psr7\stream_for('test3');
+        $this->mockStreamFactory->expects($this->exactly(2))
+            ->method('newUUStream')
+            ->with($stream)
+            ->willReturnOnConsecutiveCalls($stream2, $stream3);
+        $this->partStreamFilterManager->setStream($stream);
+
+        $manager = $this->partStreamFilterManager;
+        $this->assertEquals('test2', $manager->getBinaryStream('x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryStream('x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryStream('x-uuencode')->getContents());
+
+        $this->assertEquals('test', $manager->getBinaryStream('quoted-printable')->getContents());
+        $this->assertEquals('test', $manager->getBinaryStream('quoted-printable')->getContents());
+
+        $this->assertEquals('test3', $manager->getBinaryStream('x-uuencode')->getContents());
+    }
 }

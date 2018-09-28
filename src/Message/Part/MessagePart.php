@@ -257,23 +257,14 @@ abstract class MessagePart
     }
 
     /**
-     * Returns a new resource stream handle for the part's content or null if
-     * the part doesn't have a content section.
+     * Returns a resource handle for the content's stream, or null if the part
+     * doesn't have a content stream.
      *
-     * The returned resource handle is a resource stream with decoding filters
-     * appended to it.  The attached filters are determined by looking at the
-     * part's Content-Transfer-Encoding and Content-Type headers unless a
-     * charset override is set.  The following transfer encodings are supported:
-     *
-     * - quoted-printable
-     * - base64
-     * - x-uuencode
-     *
-     * In addition, the charset of the underlying stream is converted to the
-     * passed $charset if the content is known to be text.
+     * The method wraps a call to {@see MessagePart::getContentStream()} and
+     * returns a resource handle for the returned Stream.
      *
      * @param string $charset
-     * @return resource
+     * @return resource|null
      */
     public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
     {
@@ -288,13 +279,31 @@ abstract class MessagePart
      * Returns the StreamInterface for the part's content or null if the part
      * doesn't have a content section.
      *
-     * Because the returned stream may be a shared object if called multiple
-     * times, the function isn't exposed publicly.  If called multiple times
-     * with the same $charset, and the value of the part's
-     * Content-Transfer-Encoding header not having changed, the returned stream
-     * is the same instance and may need to be rewound.
+     * The library automatically handles decoding and charset conversion (to the
+     * target passed $charset) based on the part's transfer encoding as returned
+     * by {@see MessagePart::getContentTransferEncoding()} and the part's
+     * charset as returned by {@see MessagePart::getCharset()}.  The returned
+     * stream is ready to be read from directly.
      *
-     * Note that PartStreamFilterManager rewinds the stream before returning it.
+     * Note that the returned Stream is a shared object.  If called multiple
+     * time with the same $charset, and the value of the part's
+     * Content-Transfer-Encoding header not having changed, the stream will be
+     * rewound.  This would affect other existing variables referencing the
+     * stream, for example:
+     *
+     * ```
+     * // assuming $part is a part containing the following
+     * // string for its content: '12345678'
+     * $stream = $part->getContentStream();
+     * $someChars = $part->read(4);
+     *
+     * $stream2 = $part->getContentStream();
+     * $moreChars = $part->read(4);
+     * echo ($someChars === $moreChars);    //1
+     * ```
+     *
+     * In this case the Stream was rewound, and $stream's second call to read 4
+     * bytes reads the same first 4.
      *
      * @param string $charset
      * @return StreamInterface
@@ -314,12 +323,95 @@ abstract class MessagePart
     }
 
     /**
+     * Returns the raw data stream for the current part, if it exists, or null
+     * if there's no content associated with the stream.
+     *
+     * This is basically the same as calling
+     * {@see MessagePart::getContentStream()}, except no automatic charset
+     * conversion is done.  Note that for non-text streams, this doesn't have an
+     * effect, as charset conversion is not performed in that case, and is
+     * useful only when:
+     *
+     * - The charset defined is not correct, and the conversion produces errors;
+     *   or
+     * - You'd like to read the raw contents without conversion, for instance to
+     *   save it to file or allow a user to download it as-is (in a download
+     *   link for example).
+     *
+     * @param string $charset
+     * @return StreamInterface
+     */
+    public function getBinaryContentStream()
+    {
+        if ($this->hasContent()) {
+            $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
+            return $this->partStreamFilterManager->getBinaryStream($tr);
+        }
+        return null;
+    }
+
+    /**
+     * Returns a resource handle for the content's raw data stream, or null if
+     * the part doesn't have a content stream.
+     *
+     * The method wraps a call to {@see MessagePart::getBinaryContentStream()}
+     * and returns a resource handle for the returned Stream.
+     *
+     * @return resource|null
+     */
+    public function getBinaryContentResourceHandle()
+    {
+        $stream = $this->getBinaryContentStream();
+        if ($stream !== null) {
+            return StreamWrapper::getResource($stream);
+        }
+        return null;
+    }
+
+    /**
+     * Saves the binary content of the stream to the passed file, resource or
+     * stream.
+     *
+     * Note that charset conversion is not performed in this case, and the
+     * contents of the part are saved in their binary format as transmitted (but
+     * after any content-transfer decoding is performed).  {@see
+     * MessagePart::getBinaryContentStream()} for a more detailed description of
+     * the stream.
+     *
+     * If the passed parameter is a string, it's assumed to be a filename to
+     * write to.  The file is opened in 'w+' mode, and closed before returning.
+     *
+     * When passing a resource or Psr7 Stream, the resource is not closed, nor
+     * rewound.
+     *
+     * @param string|resource|Stream $filenameResourceOrStream
+     */
+    public function saveContent($filenameResourceOrStream)
+    {
+        $resourceOrStream = $filenameResourceOrStream;
+        if (is_string($filenameResourceOrStream)) {
+            $resourceOrStream = fopen($filenameResourceOrStream, 'w+');
+        }
+
+        $stream = Psr7\stream_for($resourceOrStream);
+        Psr7\copy_to_stream($this->getBinaryContentStream(), $stream);
+
+        if (!is_string($filenameResourceOrStream)
+            && !($filenameResourceOrStream instanceof StreamInterface)) {
+            // only detach if it wasn't a string or StreamInterface, so the
+            // fopen call can be properly closed if it was
+            $stream->detach();
+        }
+    }
+
+    /**
      * Shortcut to reading stream content and assigning it to a string.  Returns
      * null if the part doesn't have a content stream.
      * 
      * The returned string is encoded to the passed $charset character encoding,
      * defaulting to UTF-8.
      *
+     * @see MessagePart::getContentStream()
      * @param string $charset
      * @return string
      */
@@ -399,8 +491,10 @@ abstract class MessagePart
         $message->rewind();
         $stream = Psr7\stream_for($streamOrHandle);
         Psr7\copy_to_stream($message, $stream);
-        // don't close when out of scope
-        $stream->detach();
+        // don't close when out of scope for a resource
+        if (!($streamOrHandle instanceof StreamInterface)) {
+            $stream->detach();
+        }
     }
 
     /**
