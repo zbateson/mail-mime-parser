@@ -207,7 +207,8 @@ abstract class MessagePart
     public abstract function getContentId();
     
     /**
-     * Rewrite me
+     * Returns a resource handle containing this part, including any headers for
+     * a MimePart, its content, and all its children.
      * 
      * @return resource the resource handle
      */
@@ -217,7 +218,8 @@ abstract class MessagePart
     }
 
     /**
-     * Write me
+     * Returns a Psr7 StreamInterface containing this part, including any
+     * headers for a MimePart, its content, and all its children.
      *
      * @return StreamInterface the resource handle
      */
