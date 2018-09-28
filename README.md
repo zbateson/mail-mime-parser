@@ -77,4 +77,4 @@ $dest = \GuzzleHttp\Psr7\stream_for(
 
 ## License
 
-BSD licensed - please see [license agreement](https://github.com/zbateson/MailMimeParser/blob/master/LICENSE).
+BSD licensed - please see [license agreement](https://github.com/zbateson/mail-mime-parser/blob/master/LICENSE).
