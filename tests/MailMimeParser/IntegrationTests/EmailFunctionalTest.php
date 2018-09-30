@@ -101,8 +101,8 @@ class EmailFunctionalTest extends TestCase
         }
 
         if (isset($props['Message-ID'])) {
-            $this->assertNotNull($message->getMessageId());
-            $this->assertEquals($props['Message-ID'], $message->getMessageId(), $failMessage);
+            $this->assertNotNull($message->getHeaderValue('Message-ID'));
+            $this->assertEquals($props['Message-ID'], $message->getHeaderValue('Message-ID'), $failMessage);
         }
 
         if (!empty($props['signed'])) {

@@ -181,4 +181,24 @@ class ConsumerService
     {
         return ReceivedConsumer::getInstance($this, $this->partFactory);
     }
+
+    /**
+     * Returns the IdConsumer singleton instance.
+     *
+     * @return \ZBateson\MailMimeParser\Header\Consumer\IdConsumer
+     */
+    public function getIdConsumer()
+    {
+        return IdConsumer::getInstance($this, $this->partFactory);
+    }
+
+    /**
+     * Returns the IdBaseConsumer singleton instance.
+     *
+     * @return \ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer
+     */
+    public function getIdBaseConsumer()
+    {
+        return IdBaseConsumer::getInstance($this, $this->partFactory);
+    }
 }

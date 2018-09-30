@@ -53,9 +53,9 @@ class MimePartTest extends TestCase
     {
         $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\IdHeader')
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getValue'])
             ->getMock();
-        $header->method('getId')->willReturn($id);
+        $header->method('getValue')->willReturn($id);
         return $header;
     }
 

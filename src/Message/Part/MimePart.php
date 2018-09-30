@@ -143,18 +143,14 @@ class MimePart extends ParentHeaderPart
     /**
      * Returns the Content ID of the part.
      *
-     * Parses the value of the Content-ID header, stripping out the surrounding
-     * '<' and '>' characters, and returning just the ID if set... or null if
-     * not set or incorrectly formatted.
-     *
+     * In MimePart, this is merely a shortcut to calling
+     * ``` $part->getHeaderValue('Content-ID'); ```.
+     * 
      * @return string|null
      */
     public function getContentId()
     {
-        $header = $this->getHeader('Content-ID');
-        if ($header !== null) {
-            return $header->getId();
-        }
+        return $this->getHeaderValue('Content-ID');
     }
 
     /**

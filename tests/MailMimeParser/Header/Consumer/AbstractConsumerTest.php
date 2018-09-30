@@ -18,7 +18,7 @@ class AbstractConsumerTest extends TestCase
     protected function setUp()
     {
         $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer')
-            ->setMethods(['combineParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
+            ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -40,7 +40,7 @@ class AbstractConsumerTest extends TestCase
         $stub->expects($this->once())
             ->method('getPartForToken')
             ->with($value);
-        $stub->method('combineParts')
+        $stub->method('processParts')
             ->willReturn([$value]);
 
         $ret = $stub($value);
@@ -59,7 +59,7 @@ class AbstractConsumerTest extends TestCase
             ->method('getPartForToken')
             ->withConsecutive([$parts[0]], [$parts[1]], [$parts[2]], [$parts[3]], [$parts[4]], [$parts[5]])
             ->will($this->onConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5]));
-        $stub->method('combineParts')
+        $stub->method('processParts')
             ->willReturn($parts);
 
         $ret = $stub($value);

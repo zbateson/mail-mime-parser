@@ -85,8 +85,8 @@ class HeaderFactoryTest extends TestCase
 
     public function testIdHeaderInstance()
     {
-        $aValid = ['Content-ID', 'Message-ID'];
-        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Received', 'Authentication-Results', 'In-Reply-To', 'Reference'];
+        $aValid = ['Content-ID', 'Message-ID', 'In-Reply-To', 'Reference'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Received', 'Authentication-Results'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
@@ -96,22 +96,6 @@ class HeaderFactoryTest extends TestCase
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
             $this->assertNotEquals('ZBateson\MailMimeParser\Header\IdHeader', get_class($header));
-        }
-    }
-
-    public function testMultipleIdHeaderInstance()
-    {
-        $aValid = ['Reference', 'In-Reply-To'];
-        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Received', 'Authentication-Results', 'Content-ID', 'Message-ID'];
-        foreach ($aValid as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertEquals('ZBateson\MailMimeParser\Header\MultipleIdHeader', get_class($header));
-        }
-        foreach ($aNot as $name) {
-            $header = $this->headerFactory->newInstance($name, 'Test');
-            $this->assertNotNull($header);
-            $this->assertNotEquals('ZBateson\MailMimeParser\Header\MultipleIdHeader', get_class($header));
         }
     }
 

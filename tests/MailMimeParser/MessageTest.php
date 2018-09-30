@@ -458,23 +458,4 @@ class MessageTest extends TestCase
         $message->setAsMultipartSigned('micalg', 'protocol');
         $message->setSignature('signature body');
     }
-
-    public function testGetMessageId()
-    {
-        $hf = $this->mockHeaderFactory;
-        $header = $this->getMockedIdHeader('1337');
-        $hf->method('newInstance')
-            ->willReturn($header);
-
-        $pb = $this->getMockedPartBuilder();
-        $hc = $pb->getHeaderContainer();
-        $hc->method('get')
-            ->willReturnOnConsecutiveCalls($header, null);
-
-        $message = $this->newMessage(
-            $pb
-        );
-        $this->assertEquals('1337', $message->getMessageId());
-        $this->assertNull($message->getMessageId());
-    }
 }

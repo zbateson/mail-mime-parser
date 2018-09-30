@@ -6,25 +6,73 @@
  */
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
+
 /**
- * Represents a Content-ID or Message-ID header.
+ * Represents a Content-ID, Message-ID, In-Reply-To or Reference header.
+ *
+ * For a multi-id header like In-Reply-To or Reference, all IDs can be retrieved
+ * by calling 'getIds()'.  Otherwise, to retrieve the first (or only) ID call
+ * 'getValue()'.
  * 
  * @author Zaahid Bateson
  */
 class IdHeader extends GenericHeader
 {
     /**
-     * Strips out leading and trailing less than and greater than ('<', '>')
-     * chars to return just the ID portion of the header.  If '<>' chars aren't
-     * found, the value is returned as-is.
-     *
-     * For example, a header value of <123.456@example.com> would return the
-     * string '123.456@example.com'.
-     * 
-     * @return string
+     * @var string[] an array of ids found. 
      */
-    public function getId()
+    protected $ids = [];
+
+    /**
+     * Returns an IdBaseConsumer.
+     *
+     * @param ConsumerService $consumerService
+     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     */
+    protected function getConsumer(ConsumerService $consumerService)
     {
-        return preg_replace('/^<|>$/', '', $this->getValue());
+        return $consumerService->getIdBaseConsumer();
+    }
+
+    /**
+     * Overridden to extract all IDs into ids array.
+     *
+     * @param AbstractConsumer $consumer
+     */
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    {
+        parent::setParseHeaderValue($consumer);
+        foreach ($this->parts as $part) {
+            if (!($part instanceof CommentPart)) {
+                $this->ids[] = $part->getValue();
+            }
+        }
+    }
+
+    /**
+     * Returns the first parsed ID or null if none exist.
+     *
+     * @return string|null
+     */
+    public function getValue()
+    {
+        if (!empty($this->ids)) {
+            return $this->ids[0];
+        }
+        return null;
+    }
+
+    /**
+     * Returns all IDs parsed for a multi-id header like Reference or
+     * In-Reply-To.
+     * 
+     * @return string[]
+     */
+    public function getIds()
+    {
+        return $this->ids;
     }
 }

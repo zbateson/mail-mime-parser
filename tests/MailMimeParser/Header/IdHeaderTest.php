@@ -38,19 +38,40 @@ class IdHeaderTest extends TestCase
     public function testGetId()
     {
         $header = new IdHeader($this->consumerService, 'Content-ID', ' <1337@example.com> ');
-        $this->assertEquals('<1337@example.com>', $header->getValue());
-        $this->assertEquals('1337@example.com', $header->getId());
+        $this->assertEquals('1337@example.com', $header->getValue());
     }
 
     public function testGetIdWithInvalidId()
     {
         $header = new IdHeader($this->consumerService, 'Content-ID', 'Test');
-        $this->assertEquals('Test', $header->getId());
+        $this->assertEquals('Test', $header->getValue());
     }
 
     public function testGetIdWithEmptyValue()
     {
         $header = new IdHeader($this->consumerService, 'Content-ID', '');
-        $this->assertEquals('', $header->getId());
+        $this->assertNull($header->getValue());
+        $this->assertEquals([], $header->getIds());
+    }
+
+    public function testGetIds()
+    {
+        $header = new IdHeader($this->consumerService, 'Reference', ' <1337@example.com> <7331@example.com> <4@example.com> ');
+        $this->assertEquals('1337@example.com', $header->getValue());
+        $this->assertEquals([ '1337@example.com', '7331@example.com', '4@example.com' ], $header->getIds());
+    }
+
+    public function testGetIdsWithComments()
+    {
+        $header = new IdHeader($this->consumerService, 'Reference', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
+        $this->assertEquals('1337@example.com', $header->getValue());
+        $this->assertEquals([ '1337@example.com', '7331@example.com', '4@example.com' ], $header->getIds());
+    }
+
+    public function testGetIdsWithInvalidValue()
+    {
+        $header = new IdHeader($this->consumerService, 'In-Reply-To', 'Blah Blah');
+        $this->assertEquals('Blah Blah', $header->getValue());
+        $this->assertEquals(['Blah Blah'], $header->getIds());
     }
 }
