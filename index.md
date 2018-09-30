@@ -185,6 +185,7 @@ Internally, a Message maintains the structure of its parsed parts.  Most users w
 * [MessagePart::getContentType()](api/1.1/classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getContentType)
 * [MessagePart::getFilename()](api/1.1/classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getFilename)
 * [MessagePart::getCharset()](api/1.1/classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getCharset)
+* [MessagePart::saveContent()](api/1.1/classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_saveContent)
 
 Example:
 ```php
