@@ -125,6 +125,8 @@ and sub-classes, depending on the type of header being parsed.  In general terms
 * [AddressHeader](api/1.1/classes/ZBateson.MailMimeParser.Header.AddressHeader.html) is returned for headers consisting of addresses and address groups (e.g. `From:`, `To:`, `Cc:`, etc...)
 * [DateHeader](api/1.1/classes/ZBateson.MailMimeParser.Header.DateHeader.html) parses header values into a `DateTime` object (e.g. a `Date:` header)
 * [ParameterHeader](api/1.1/classes/ZBateson.MailMimeParser.Header.ParameterHeader.html) represents headers consisting of multiple name/values (e.g. `Content-Type:`)
+* [IdHeader](api/1.1/classes/ZBateson.MailMimeParser.Header.IdHeader.html) for ID headers, like 'Message-ID', 'Content-ID', 'In-Reply-To' and 'Reference'
+* [ReceivedHeader](api/1.1/classes/ZBateson.MailMimeParser.Header.ReceivedHeader.html) for 'Received' header parsing
 * [GenericHeader](api/1.1/classes/ZBateson.MailMimeParser.Header.GenericHeader.html) is used for any other header
 
 To retrieve an AbstractHeader object, call `Message::getHeader()` from a [ZBateson\MailMimeParser\Message](api/1.1/classes/ZBateson.MailMimeParser.Message.html) object.
