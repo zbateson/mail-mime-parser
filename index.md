@@ -14,7 +14,7 @@ called zbateson\stream-decorators.
 
 Yes, it's *this* easy:
 
-```php7
+```php
 use ZBateson\MailMimeParser\Message;
 use GuzzleHttp\Psr7;
 
