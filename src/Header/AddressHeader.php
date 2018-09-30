@@ -104,19 +104,6 @@ class AddressHeader extends AbstractHeader
     }
 
     /**
-     * Overridden to return the first email address in the header.
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        if (!empty($this->addresses)) {
-            return $this->addresses[0]->getEmail();
-        }
-        return null;
-    }
-
-    /**
      * Same as getValue, but for clarity to match AddressPart.
      *
      * @return string
