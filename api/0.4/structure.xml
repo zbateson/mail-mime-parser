@@ -1937,8 +1937,6 @@ parameters. "Charset" is a common parameter of Content-Type.</long-description>
       </method>
     </class>
     <parse_markers>
-      <error line="354" code="PPC:ERR-50014">Name of argument $mimeType does not match with the DocBlock's name $contentType in removePartByMimeType()</error>
-      <notice line="354" code="PPC:ERR-50013">Parameter $contentType could not be found in removePartByMimeType()</notice>
       <error line="820" code="PPC:ERR-50015">Argument $index is missing from the Docblock of removeTextPart</error>
       <error line="844" code="PPC:ERR-50015">Argument $index is missing from the Docblock of removeHtmlPart</error>
       <error line="1035" code="PPC:ERR-50015">Argument $index is missing from the Docblock of getHtmlStream</error>
@@ -3342,7 +3340,7 @@ stream to $out.</description>
     </parse_markers>
     <source>eJylV2tv40QU/Z5fcakCSUoSFwn6gZBlu0srkLalarogLUHZsXNTm7XH1sy4oWL737nzsB2/wgKWWsv23Ne5Z86dfPd9FmYD7/R0AKdwH0YSdlGMQPeMCQXpDlSI8O4VUyhTvr5mUXwdJXjLhEQBmUj/wEDNyVjbv4yjALlECJXKvvW8NKOnNBcBzlPx4Lmv0vPlduYe5hQeXq1+IHNvwFmCMmNBb8D1SglkyWIwyCkKmW7oLjaUskJBb10ddhXY1xCk/BGFkuBHnIknkOarBJVCniMP0i1uQeGfVRksV2Eq4B1jYbQFl4rJMIiZlPD27aUxs3GubBhygHwrm1kN/hoAXSYzfZ3CDVUJtGIL+xA5CHyIJC2M+APsIxW6/Jz5pvg8d+aeuVNNUsHq/u7y4npz9dOb+8u7zc3F9SUsYZQQZAlBlhnIZkWNo4WxbGbz8pEJB9gb3KmUoKpFykT0SADAMHZf5RE/fprG3dYhsi2KX0WkCCXKcsdiid2eCnSloV5GgBNUwy1TTEOjYWJ8CyzLDNyR0o0cprkqEIIyJUKAaOCMrAfzjwwcKRpLBVq6Gn9Afxnd/Dz4gMq1pbO6Xc4DFaW88HrBtxcmvbEJOjXuJsbEskFfQ7eYiluSJ3ygVmcxkX888tZizT+uxcc190ZTONGPJ9PC+6boqPU+mSwOfMbIuPEoqOpkLHOf8h7bhyriZApnU5h9RbbW0POo9oTaC5Q1xBFHeA9BSKAEqiAEXdEOxlWMJZFtNDkoSV8CVS54ldJzV3K2IpiX76r1jv0W9A1zMBJ+08YnjvvxUJFizV7YD9PSWwHJcye/NAmJXLrDmmCWmbCjDc8OBMHIHxHlgIM2TEmSwl9IdIyxj301Sh1nz14n5thPjP3RJDbu5I6hMcHvkzpwOD8/h9Gi1qWIMlYFPiYT+dtIS7vW2NHvk2bbrMf5EnpNDloKSJu3z8GI53E86iLA/2rtIdW7+3pnmGdVY5emqqep7UZZyjqdON6iB1RVg65MkHGzOc6d4fh7/Y/KPDmeOCMh24k0MblHvKU65d6XUyN+e0thvbosrvDmWPoPoljRkvjTEfG/CmNhEHFlFE7mCeEe8YDkBbkWO/8JeJ741B06XPhPug6y39r6KZvjDdBLSV5fWzjGtN6q6xS+KMM1G7IP9ZFmPHT5LhtsS9gH3BhEmR+jdtmzO8rNUY7C2YtHFueohcw6m73QKxc1Y70dP3OWtTHYjGIi2XVHpGDRZ9McsUrkWF/8XC+qbM+Xy3r+tOXrhkN+h3Ss4BY7+uxGD3wOX3/TWKpS1xyNVzcalTsaIWdHYGgBrSdOLwAHq92e+MUZuQWdu7cBUZe2Hc/IzVg36mdFcf2N6s+zmIstS311TPT2iaA7y0k18Dtdz/8FQq0m1+s/64egQT8bsX1kKn27c1NzlHSLqDuFR0kWG6VhhwcyCehqAh9pKKATaf3idnW12txerFabn28+RS0/Yb53imDjmz4q6wNLKquhU44iMqzLYO7T76VKBe1vg271m5ZeW6cGi3i/hFYKWmHuMjpE6dgsWyGBnWdmNJUshNTXPxOPlpTy15SYwtY47T3NlO67jjONfQCtg82BdZtgz4O/AWhraBE=</source>
   </file>
-  <file path="Stream/Helper/CharsetConverter.php" generated-path="Stream.Helper.CharsetConverter.html" hash="2b0e48e64391444d9bb55acdabe61a36" package="MailMimeParser">
+  <file path="Stream/Helper/CharsetConverter.php" generated-path="Stream.Helper.CharsetConverter.html" hash="babc0475c3c2ab8311ff55ca1c2653ac" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -3364,7 +3362,7 @@ supported, iconv is attempted.</long-description>
       <property static="true" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="29" package="MailMimeParser">
         <name>$mbAliases</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::mbAliases</full_name>
-        <default>array('CP850' =&gt; 'CP850', 'GB2312' =&gt; 'GB2312', '646' =&gt; 'ASCII', 'ANSIX341968' =&gt; 'ASCII', 'ANSIX341986' =&gt; 'ASCII', 'CP367' =&gt; 'ASCII', 'CSASCII' =&gt; 'ASCII', 'IBM367' =&gt; 'ASCII', 'ISO646US' =&gt; 'ASCII', 'ISO646IRV1991' =&gt; 'ASCII', 'ISOIR6' =&gt; 'ASCII', 'US' =&gt; 'ASCII', 'USASCII' =&gt; 'ASCII', 'BIG5' =&gt; 'BIG-5', 'BIG5TW' =&gt; 'BIG-5', 'CSBIG5' =&gt; 'BIG-5', '1251' =&gt; 'WINDOWS-1251', 'CP1251' =&gt; 'WINDOWS-1251', 'WINDOWS1251' =&gt; 'WINDOWS-1251', '1252' =&gt; 'WINDOWS-1252', 'CP1252' =&gt; 'WINDOWS-1252', 'WINDOWS1252' =&gt; 'WINDOWS-1252', 'WE8MSWIN1252' =&gt; 'WINDOWS-1252', '1254' =&gt; 'WINDOWS-1254', 'CP1254' =&gt; 'WINDOWS-1254', 'WINDOWS1254' =&gt; 'WINDOWS-1254', '1255' =&gt; 'ISO-8859-8', 'CP1255' =&gt; 'ISO-8859-8', 'ISO88598I' =&gt; 'ISO-8859-8', 'WINDOWS1255' =&gt; 'ISO-8859-8', '850' =&gt; 'CP850', 'CSPC850MULTILINGUAL' =&gt; 'CP850', 'IBM850' =&gt; 'CP850', '866' =&gt; 'CP866', 'CSIBM866' =&gt; 'CP866', 'IBM866' =&gt; 'CP866', '932' =&gt; 'CP932', 'MS932' =&gt; 'CP932', 'MSKANJI' =&gt; 'CP932', '950' =&gt; 'CP950', 'MS950' =&gt; 'CP950', 'EUCJP' =&gt; 'EUC-JP', 'UJIS' =&gt; 'EUC-JP', 'EUCKR' =&gt; 'EUC-KR', 'KOREAN' =&gt; 'EUC-KR', 'KSC5601' =&gt; 'EUC-KR', 'KSC56011987' =&gt; 'EUC-KR', 'KSX1001' =&gt; 'EUC-KR', 'GB180302000' =&gt; 'GB18030', 'CHINESE' =&gt; 'GB2312', 'CSISO58GB231280' =&gt; 'GB2312', 'EUCCN' =&gt; 'GB2312', 'EUCGB2312CN' =&gt; 'GB2312', 'GB23121980' =&gt; 'GB2312', 'GB231280' =&gt; 'GB2312', 'ISOIR58' =&gt; 'GB2312', 'GBK' =&gt; 'CP936', '936' =&gt; 'CP936', 'ms936' =&gt; 'CP936', 'HZGB' =&gt; 'HZ', 'HZGB2312' =&gt; 'HZ', 'CSISO2022JP' =&gt; 'ISO-2022-JP', 'ISO2022JP' =&gt; 'ISO-2022-JP', 'ISO2022JP2004' =&gt; 'ISO-2022-JP-2004', 'CSISO2022KR' =&gt; 'ISO-2022-KR', 'ISO2022KR' =&gt; 'ISO-2022-KR', 'CSISOLATIN6' =&gt; 'ISO-8859-10', 'ISO885910' =&gt; 'ISO-8859-10', 'ISO8859101992' =&gt; 'ISO-8859-10', 'ISOIR157' =&gt; 'ISO-8859-10', 'L6' =&gt; 'ISO-8859-10', 'LATIN6' =&gt; 'ISO-8859-10', 'ISO885913' =&gt; 'ISO-8859-13', 'ISO885914' =&gt; 'ISO-8859-14', 'ISO8859141998' =&gt; 'ISO-8859-14', 'ISOCELTIC' =&gt; 'ISO-8859-14', 'ISOIR199' =&gt; 'ISO-8859-14', 'L8' =&gt; 'ISO-8859-14', 'LATIN8' =&gt; 'ISO-8859-14', 'ISO885915' =&gt; 'ISO-8859-15', 'ISO885916' =&gt; 'ISO-8859-16', 'ISO8859162001' =&gt; 'ISO-8859-16', 'ISOIR226' =&gt; 'ISO-8859-16', 'L10' =&gt; 'ISO-8859-16', 'LATIN10' =&gt; 'ISO-8859-16', 'CSISOLATIN2' =&gt; 'ISO-8859-2', 'ISO88592' =&gt; 'ISO-8859-2', 'ISO885921987' =&gt; 'ISO-8859-2', 'ISOIR101' =&gt; 'ISO-8859-2', 'L2' =&gt; 'ISO-8859-2', 'LATIN2' =&gt; 'ISO-8859-2', 'CSISOLATIN3' =&gt; 'ISO-8859-3', 'ISO88593' =&gt; 'ISO-8859-3', 'ISO885931988' =&gt; 'ISO-8859-3', 'ISOIR109' =&gt; 'ISO-8859-3', 'L3' =&gt; 'ISO-8859-3', 'LATIN3' =&gt; 'ISO-8859-3', 'CSISOLATIN4' =&gt; 'ISO-8859-4', 'ISO88594' =&gt; 'ISO-8859-4', 'ISO885941988' =&gt; 'ISO-8859-4', 'ISOIR110' =&gt; 'ISO-8859-4', 'L4' =&gt; 'ISO-8859-4', 'LATIN4' =&gt; 'ISO-8859-4', 'CSISOLATINCYRILLIC' =&gt; 'ISO-8859-5', 'CYRILLIC' =&gt; 'ISO-8859-5', 'ISO88595' =&gt; 'ISO-8859-5', 'ISO885951988' =&gt; 'ISO-8859-5', 'ISOIR144' =&gt; 'ISO-8859-5', 'ARABIC' =&gt; 'ISO-8859-6', 'ASMO708' =&gt; 'ISO-8859-6', 'CSISOLATINARABIC' =&gt; 'ISO-8859-6', 'ECMA114' =&gt; 'ISO-8859-6', 'ISO88596' =&gt; 'ISO-8859-6', 'ISO885961987' =&gt; 'ISO-8859-6', 'ISOIR127' =&gt; 'ISO-8859-6', 'CSISOLATINGREEK' =&gt; 'ISO-8859-7', 'ECMA118' =&gt; 'ISO-8859-7', 'ELOT928' =&gt; 'ISO-8859-7', 'GREEK' =&gt; 'ISO-8859-7', 'GREEK8' =&gt; 'ISO-8859-7', 'ISO88597' =&gt; 'ISO-8859-7', 'ISO885971987' =&gt; 'ISO-8859-7', 'ISOIR126' =&gt; 'ISO-8859-7', 'CSISOLATINHEBREW' =&gt; 'ISO-8859-8', 'HEBREW' =&gt; 'ISO-8859-8', 'ISO88598' =&gt; 'ISO-8859-8', 'ISO885981988' =&gt; 'ISO-8859-8', 'ISOIR138' =&gt; 'ISO-8859-8', 'CSISOLATIN5' =&gt; 'ISO-8859-9', 'ISO88599' =&gt; 'ISO-8859-9', 'ISO885991989' =&gt; 'ISO-8859-9', 'ISOIR148' =&gt; 'ISO-8859-9', 'L5' =&gt; 'ISO-8859-9', 'LATIN5' =&gt; 'ISO-8859-9', 'CSKOI8R' =&gt; 'KOI8-R', 'KOI8R' =&gt; 'KOI8-R', '8859' =&gt; 'ISO-8859-1', 'CP819' =&gt; 'ISO-8859-1', 'CSISOLATIN1' =&gt; 'ISO-8859-1', 'IBM819' =&gt; 'ISO-8859-1', 'ISO8859' =&gt; 'ISO-8859-1', 'ISO88591' =&gt; 'ISO-8859-1', 'ISO885911987' =&gt; 'ISO-8859-1', 'ISOIR100' =&gt; 'ISO-8859-1', 'L1' =&gt; 'ISO-8859-1', 'LATIN' =&gt; 'ISO-8859-1', 'LATIN1' =&gt; 'ISO-8859-1', 'CSSHIFTJIS' =&gt; 'SJIS', 'SHIFTJIS' =&gt; 'SJIS', 'SHIFTJIS2004' =&gt; 'SJIS-2004', 'SJIS2004' =&gt; 'SJIS-2004')</default>
+        <default>array('CP850' =&gt; 'CP850', 'GB2312' =&gt; 'GB2312', '646' =&gt; 'ASCII', 'ANSIX341968' =&gt; 'ASCII', 'ANSIX341986' =&gt; 'ASCII', 'CP367' =&gt; 'ASCII', 'CSASCII' =&gt; 'ASCII', 'IBM367' =&gt; 'ASCII', 'ISO646US' =&gt; 'ASCII', 'ISO646IRV1991' =&gt; 'ASCII', 'ISOIR6' =&gt; 'ASCII', 'US' =&gt; 'ASCII', 'USASCII' =&gt; 'ASCII', 'BIG5' =&gt; 'BIG-5', 'BIG5TW' =&gt; 'BIG-5', 'CSBIG5' =&gt; 'BIG-5', '1251' =&gt; 'WINDOWS-1251', 'CP1251' =&gt; 'WINDOWS-1251', 'WINDOWS1251' =&gt; 'WINDOWS-1251', '1252' =&gt; 'WINDOWS-1252', 'CP1252' =&gt; 'WINDOWS-1252', 'WINDOWS1252' =&gt; 'WINDOWS-1252', 'WE8MSWIN1252' =&gt; 'WINDOWS-1252', '1254' =&gt; 'WINDOWS-1254', 'CP1254' =&gt; 'WINDOWS-1254', 'WINDOWS1254' =&gt; 'WINDOWS-1254', '1255' =&gt; 'ISO-8859-8', 'CP1255' =&gt; 'ISO-8859-8', 'ISO88598I' =&gt; 'ISO-8859-8', 'WINDOWS1255' =&gt; 'ISO-8859-8', '850' =&gt; 'CP850', 'CSPC850MULTILINGUAL' =&gt; 'CP850', 'IBM850' =&gt; 'CP850', '866' =&gt; 'CP866', 'CSIBM866' =&gt; 'CP866', 'IBM866' =&gt; 'CP866', '932' =&gt; 'CP932', 'MS932' =&gt; 'CP932', 'MSKANJI' =&gt; 'CP932', '950' =&gt; 'CP950', 'MS950' =&gt; 'CP950', 'EUCJP' =&gt; 'EUC-JP', 'UJIS' =&gt; 'EUC-JP', 'EUCKR' =&gt; 'EUC-KR', 'KOREAN' =&gt; 'EUC-KR', 'KSC5601' =&gt; 'EUC-KR', 'KSC56011987' =&gt; 'EUC-KR', 'KSX1001' =&gt; 'EUC-KR', 'GB180302000' =&gt; 'GB18030', 'CHINESE' =&gt; 'GB2312', 'CSISO58GB231280' =&gt; 'GB2312', 'EUCCN' =&gt; 'GB2312', 'EUCGB2312CN' =&gt; 'GB2312', 'GB23121980' =&gt; 'GB2312', 'GB231280' =&gt; 'GB2312', 'ISOIR58' =&gt; 'GB2312', 'GBK' =&gt; 'CP936', '936' =&gt; 'CP936', 'ms936' =&gt; 'CP936', 'HZGB' =&gt; 'HZ', 'HZGB2312' =&gt; 'HZ', 'CSISO2022JP' =&gt; 'ISO-2022-JP', 'ISO2022JP' =&gt; 'ISO-2022-JP', 'ISO2022JP2004' =&gt; 'ISO-2022-JP-2004', 'CSISO2022KR' =&gt; 'ISO-2022-KR', 'ISO2022KR' =&gt; 'ISO-2022-KR', 'CSISOLATIN6' =&gt; 'ISO-8859-10', 'ISO885910' =&gt; 'ISO-8859-10', 'ISO8859101992' =&gt; 'ISO-8859-10', 'ISOIR157' =&gt; 'ISO-8859-10', 'L6' =&gt; 'ISO-8859-10', 'LATIN6' =&gt; 'ISO-8859-10', 'ISO885913' =&gt; 'ISO-8859-13', 'ISO885914' =&gt; 'ISO-8859-14', 'ISO8859141998' =&gt; 'ISO-8859-14', 'ISOCELTIC' =&gt; 'ISO-8859-14', 'ISOIR199' =&gt; 'ISO-8859-14', 'L8' =&gt; 'ISO-8859-14', 'LATIN8' =&gt; 'ISO-8859-14', 'ISO885915' =&gt; 'ISO-8859-15', 'ISO885916' =&gt; 'ISO-8859-16', 'ISO8859162001' =&gt; 'ISO-8859-16', 'ISOIR226' =&gt; 'ISO-8859-16', 'L10' =&gt; 'ISO-8859-16', 'LATIN10' =&gt; 'ISO-8859-16', 'CSISOLATIN2' =&gt; 'ISO-8859-2', 'ISO88592' =&gt; 'ISO-8859-2', 'ISO885921987' =&gt; 'ISO-8859-2', 'ISOIR101' =&gt; 'ISO-8859-2', 'L2' =&gt; 'ISO-8859-2', 'LATIN2' =&gt; 'ISO-8859-2', 'CSISOLATIN3' =&gt; 'ISO-8859-3', 'ISO88593' =&gt; 'ISO-8859-3', 'ISO885931988' =&gt; 'ISO-8859-3', 'ISOIR109' =&gt; 'ISO-8859-3', 'L3' =&gt; 'ISO-8859-3', 'LATIN3' =&gt; 'ISO-8859-3', 'CSISOLATIN4' =&gt; 'ISO-8859-4', 'ISO88594' =&gt; 'ISO-8859-4', 'ISO885941988' =&gt; 'ISO-8859-4', 'ISOIR110' =&gt; 'ISO-8859-4', 'L4' =&gt; 'ISO-8859-4', 'LATIN4' =&gt; 'ISO-8859-4', 'CSISOLATINCYRILLIC' =&gt; 'ISO-8859-5', 'CYRILLIC' =&gt; 'ISO-8859-5', 'ISO88595' =&gt; 'ISO-8859-5', 'ISO885951988' =&gt; 'ISO-8859-5', 'ISOIR144' =&gt; 'ISO-8859-5', 'ARABIC' =&gt; 'ISO-8859-6', 'ASMO708' =&gt; 'ISO-8859-6', 'CSISOLATINARABIC' =&gt; 'ISO-8859-6', 'ECMA114' =&gt; 'ISO-8859-6', 'ISO88596' =&gt; 'ISO-8859-6', 'ISO885961987' =&gt; 'ISO-8859-6', 'ISOIR127' =&gt; 'ISO-8859-6', 'CSISOLATINGREEK' =&gt; 'ISO-8859-7', 'ECMA118' =&gt; 'ISO-8859-7', 'ELOT928' =&gt; 'ISO-8859-7', 'GREEK' =&gt; 'ISO-8859-7', 'GREEK8' =&gt; 'ISO-8859-7', 'ISO88597' =&gt; 'ISO-8859-7', 'ISO885971987' =&gt; 'ISO-8859-7', 'ISOIR126' =&gt; 'ISO-8859-7', 'CSISOLATINHEBREW' =&gt; 'ISO-8859-8', 'HEBREW' =&gt; 'ISO-8859-8', 'ISO88598' =&gt; 'ISO-8859-8', 'ISO885981988' =&gt; 'ISO-8859-8', 'ISOIR138' =&gt; 'ISO-8859-8', 'CSISOLATIN5' =&gt; 'ISO-8859-9', 'ISO88599' =&gt; 'ISO-8859-9', 'ISO885991989' =&gt; 'ISO-8859-9', 'ISOIR148' =&gt; 'ISO-8859-9', 'L5' =&gt; 'ISO-8859-9', 'LATIN5' =&gt; 'ISO-8859-9', 'CSKOI8R' =&gt; 'KOI8-R', 'KOI8R' =&gt; 'KOI8-R', '8859' =&gt; 'ISO-8859-1', 'CP819' =&gt; 'ISO-8859-1', 'CSISOLATIN1' =&gt; 'ISO-8859-1', 'IBM819' =&gt; 'ISO-8859-1', 'ISO8859' =&gt; 'ISO-8859-1', 'ISO88591' =&gt; 'ISO-8859-1', 'ISO885911987' =&gt; 'ISO-8859-1', 'ISOIR100' =&gt; 'ISO-8859-1', 'L1' =&gt; 'ISO-8859-1', 'LATIN' =&gt; 'ISO-8859-1', 'LATIN1' =&gt; 'ISO-8859-1', 'CSSHIFTJIS' =&gt; 'SJIS', 'SHIFTJIS' =&gt; 'SJIS', 'SHIFTJIS2004' =&gt; 'SJIS-2004', 'SJIS2004' =&gt; 'SJIS-2004', '0' =&gt; 'WINDOWS-1252', '128' =&gt; 'SJIS', '129' =&gt; 'EUC-KR', '134' =&gt; 'GB2312', '136' =&gt; 'BIG-5', '161' =&gt; 'WINDOWS-1253', '162' =&gt; 'WINDOWS-1254', '177' =&gt; 'WINDOWS-1255', '178' =&gt; 'WINDOWS-1256', '186' =&gt; 'WINDOWS-1257', '204' =&gt; 'WINDOWS-1251', '222' =&gt; 'WINDOWS-874', '238' =&gt; 'WINDOWS-1250')</default>
         <docblock line="29">
           <description></description>
           <long-description></long-description>
@@ -3373,76 +3371,76 @@ supported, iconv is attempted.</long-description>
           </tag>
         </docblock>
       </property>
-      <property static="true" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="189" package="MailMimeParser">
+      <property static="true" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="203" package="MailMimeParser">
         <name>$iconvAliases</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::iconvAliases</full_name>
         <default>array('BIG5HKSCS' =&gt; 'BIG5HKSCS', 'HKSCS' =&gt; 'BIG5HKSCS', '037' =&gt; 'CP037', 'EBCDICCPCA' =&gt; 'CP037', 'EBCDICCPNL' =&gt; 'CP037', 'EBCDICCPUS' =&gt; 'CP037', 'EBCDICCPWT' =&gt; 'CP037', 'CSIBM037' =&gt; 'CP037', 'IBM037' =&gt; 'CP037', 'IBM039' =&gt; 'CP037', '1026' =&gt; 'CP1026', 'CSIBM1026' =&gt; 'CP1026', 'IBM1026' =&gt; 'CP1026', '1140' =&gt; 'CP1140', 'IBM1140' =&gt; 'CP1140', '1250' =&gt; 'CP1250', 'WINDOWS1250' =&gt; 'CP1250', '1253' =&gt; 'CP1253', 'WINDOWS1253' =&gt; 'CP1253', '1256' =&gt; 'CP1256', 'WINDOWS1256' =&gt; 'CP1256', '1257' =&gt; 'CP1257', 'WINDOWS1257' =&gt; 'CP1257', '1258' =&gt; 'CP1258', 'WINDOWS1258' =&gt; 'CP1258', '424' =&gt; 'CP424', 'CSIBM424' =&gt; 'CP424', 'EBCDICCPHE' =&gt; 'CP424', 'IBM424' =&gt; 'CP424', '437' =&gt; 'CP437', 'CSPC8CODEPAGE437' =&gt; 'CP437', 'IBM437' =&gt; 'CP437', '500' =&gt; 'CP500', 'CSIBM500' =&gt; 'CP500', 'EBCDICCPBE' =&gt; 'CP500', 'EBCDICCPCH' =&gt; 'CP500', 'IBM500' =&gt; 'CP500', '775' =&gt; 'CP775', 'CSPC775BALTIC' =&gt; 'CP775', 'IBM775' =&gt; 'CP775', '860' =&gt; 'CP860', 'CSIBM860' =&gt; 'CP860', 'IBM860' =&gt; 'CP860', '861' =&gt; 'CP861', 'CPIS' =&gt; 'CP861', 'CSIBM861' =&gt; 'CP861', 'IBM861' =&gt; 'CP861', '862' =&gt; 'CP862', 'CSPC862LATINHEBREW' =&gt; 'CP862', 'IBM862' =&gt; 'CP862', '863' =&gt; 'CP863', 'CSIBM863' =&gt; 'CP863', 'IBM863' =&gt; 'CP863', '864' =&gt; 'CP864', 'CSIBM864' =&gt; 'CP864', 'IBM864' =&gt; 'CP864', '865' =&gt; 'CP865', 'CSIBM865' =&gt; 'CP865', 'IBM865' =&gt; 'CP865', '869' =&gt; 'CP869', 'CPGR' =&gt; 'CP869', 'CSIBM869' =&gt; 'CP869', 'IBM869' =&gt; 'CP869', '949' =&gt; 'CP949', 'MS949' =&gt; 'CP949', 'UHC' =&gt; 'CP949', 'ROMAN8' =&gt; 'ROMAN8', 'HPROMAN8' =&gt; 'ROMAN8', 'R8' =&gt; 'ROMAN8', 'CSHPROMAN8' =&gt; 'ROMAN8', 'ISO2022JP2' =&gt; 'ISO2022JP2', 'THAI' =&gt; 'ISO885911', 'ISO885911' =&gt; 'ISO885911', 'ISO8859112001' =&gt; 'ISO885911', 'JOHAB' =&gt; 'CP1361', 'MS1361' =&gt; 'CP1361', 'MACCYRILLIC' =&gt; 'MACCYRILLIC', 'CSPTCP154' =&gt; 'PT154', 'PTCP154' =&gt; 'PT154', 'CP154' =&gt; 'PT154', 'CYRILLICASIAN' =&gt; 'PT154', 'TIS620' =&gt; 'TIS620', 'TIS6200' =&gt; 'TIS620', 'TIS62025290' =&gt; 'TIS620', 'TIS62025291' =&gt; 'TIS620', 'ISOIR166' =&gt; 'TIS620')</default>
-        <docblock line="189">
+        <docblock line="203">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="189" description="&lt;p&gt;aliased charsets supported by iconv.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="203" description="&lt;p&gt;aliased charsets supported by iconv.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="282" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="296" package="MailMimeParser">
         <name>$fromCharset</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::fromCharset</full_name>
         <default></default>
-        <docblock line="282">
+        <docblock line="296">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="282" description="&lt;p&gt;charset to convert from&lt;/p&gt;" type="string" variable="">
+          <tag name="var" line="296" description="&lt;p&gt;charset to convert from&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="287" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="301" package="MailMimeParser">
         <name>$toCharset</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::toCharset</full_name>
         <default></default>
-        <docblock line="287">
+        <docblock line="301">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="287" description="&lt;p&gt;charset to convert to&lt;/p&gt;" type="string" variable="">
+          <tag name="var" line="301" description="&lt;p&gt;charset to convert to&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="293" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="307" package="MailMimeParser">
         <name>$fromCharsetMbSupported</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::fromCharsetMbSupported</full_name>
         <default>true</default>
-        <docblock line="293">
+        <docblock line="307">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="293" description="&lt;p&gt;indicates if $fromCharset is supported by&#10;mb_convert_encoding&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="307" description="&lt;p&gt;indicates if $fromCharset is supported by&#10;mb_convert_encoding&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="298" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Stream\Helper" line="312" package="MailMimeParser">
         <name>$toCharsetMbSupported</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::toCharsetMbSupported</full_name>
         <default>true</default>
-        <docblock line="298">
+        <docblock line="312">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="298" description="&lt;p&gt;indicates if $toCharset is supported by mb_convert_encoding&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="312" description="&lt;p&gt;indicates if $toCharset is supported by mb_convert_encoding&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="306" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="320" package="MailMimeParser">
         <name>__construct</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::__construct()</full_name>
-        <docblock line="306">
+        <docblock line="320">
           <description>Constructs the charset converter with source/destination charsets.</description>
           <long-description></long-description>
-          <tag name="param" line="306" description="" type="string" variable="$fromCharset">
+          <tag name="param" line="320" description="" type="string" variable="$fromCharset">
             <type>string</type>
           </tag>
-          <tag name="param" line="306" description="" type="string" variable="$toCharset">
+          <tag name="param" line="320" description="" type="string" variable="$toCharset">
             <type>string</type>
           </tag>
         </docblock>
@@ -3457,19 +3455,19 @@ supported, iconv is attempted.</long-description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="323" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Stream\Helper" line="337" package="MailMimeParser">
         <name>convert</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::convert()</full_name>
-        <docblock line="323">
+        <docblock line="337">
           <description>Converts the passed string's charset from $this-&gt;fromCharset to
 $this-&gt;toCharset.</description>
           <long-description>The function attempts to use mb_convert_encoding if possible, and falls
 back to iconv if not.  If the source or destination character sets aren't
 supported, a blank string is returned.</long-description>
-          <tag name="param" line="323" description="" type="string" variable="$str">
+          <tag name="param" line="337" description="" type="string" variable="$str">
             <type>string</type>
           </tag>
-          <tag name="return" line="323" description="" type="string">
+          <tag name="return" line="337" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -3479,22 +3477,22 @@ supported, a blank string is returned.</long-description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Stream\Helper" line="352" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Stream\Helper" line="366" package="MailMimeParser">
         <name>findSupportedCharset</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::findSupportedCharset()</full_name>
-        <docblock line="352">
+        <docblock line="366">
           <description>Looks up the passed $cs in mb_list_encodings, then strips non
 alpha-numeric characters and tries again, then failing that calls
 findAliasedCharset.  The method returns the charset name that should be
 used in calls to mb_convert_encoding or iconv.</description>
           <long-description>If the charset is part of mb_list_encodings, $mbSupported is set to true.</long-description>
-          <tag name="param" line="352" description="" type="string" variable="$cs">
+          <tag name="param" line="366" description="" type="string" variable="$cs">
             <type>string</type>
           </tag>
-          <tag name="param" line="352" description="" type="boolean" variable="$mbSupported">
+          <tag name="param" line="366" description="" type="boolean" variable="$mbSupported">
             <type>boolean</type>
           </tag>
-          <tag name="return" line="352" description="the final charset name to use" type="string">
+          <tag name="return" line="366" description="the final charset name to use" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -3509,25 +3507,25 @@ used in calls to mb_convert_encoding or iconv.</description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Stream\Helper" line="380" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Stream\Helper" line="396" package="MailMimeParser">
         <name>findAliasedCharset</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::findAliasedCharset()</full_name>
-        <docblock line="380">
+        <docblock line="396">
           <description>Looks up the passed $comp and $stripped strings in self::$mbAliases, and
 returns the mapped charset if applicable.  Otherwise calls
 $this-&gt;findAliasedIconvCharset.</description>
           <long-description>$mbSupported is set to false if the charset is not located in
 self::$mbAliases.</long-description>
-          <tag name="param" line="380" description="" type="string" variable="$comp">
+          <tag name="param" line="396" description="" type="string" variable="$comp">
             <type>string</type>
           </tag>
-          <tag name="param" line="380" description="" type="string" variable="$stripped">
+          <tag name="param" line="396" description="" type="string" variable="$stripped">
             <type>string</type>
           </tag>
-          <tag name="param" line="380" description="" type="boolean" variable="$mbSupported">
+          <tag name="param" line="396" description="" type="boolean" variable="$mbSupported">
             <type>boolean</type>
           </tag>
-          <tag name="return" line="380" description="the mapped charset" type="string">
+          <tag name="return" line="396" description="the mapped charset" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -3547,20 +3545,20 @@ self::$mbAliases.</long-description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Stream\Helper" line="399" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Stream\Helper" line="415" package="MailMimeParser">
         <name>findAliasedIconvCharset</name>
         <full_name>\ZBateson\MailMimeParser\Stream\Helper\CharsetConverter::findAliasedIconvCharset()</full_name>
-        <docblock line="399">
+        <docblock line="415">
           <description>Looks up the passed $comp and $stripped strings in self::$iconvAliases,
 and returns the mapped charset if applicable.  Otherwise returns $comp.</description>
           <long-description></long-description>
-          <tag name="param" line="399" description="" type="string" variable="$comp">
+          <tag name="param" line="415" description="" type="string" variable="$comp">
             <type>string</type>
           </tag>
-          <tag name="param" line="399" description="" type="string" variable="$stripped">
+          <tag name="param" line="415" description="" type="string" variable="$stripped">
             <type>string</type>
           </tag>
-          <tag name="return" line="399" description="the mapped charset (if mapped) or $comp otherwise" type="string">
+          <tag name="return" line="415" description="the mapped charset (if mapped) or $comp otherwise" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -3576,7 +3574,7 @@ and returns the mapped charset if applicable.  Otherwise returns $comp.</descrip
         </argument>
       </method>
     </class>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="Stream/PartStream.php" generated-path="Stream.PartStream.html" hash="ba71d0899777e6b4172c48816e693e33" package="MailMimeParser">
     <docblock line="0">
@@ -4879,7 +4877,6 @@ parameters. "Charset" is a common parameter of Content-Type.</long-description>
     </class>
     <parse_markers>
       <error line="255" code="PPC:ERR-50015">Argument $index is missing from the Docblock of getPartByMimeType</error>
-      <error line="255" code="PPC:ERR-50014">Name of argument $index does not match with the DocBlock's name $mimeType in getPartByMimeType()</error>
       <error line="51" code="PPC:ERR-50007">No summary for property $originalStreamHandle</error>
     </parse_markers>
     <source>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</source>
@@ -14484,7 +14481,6 @@ returning it to the consumer client.</description>
     </class>
     <parse_markers>
       <error line="36" code="PPC:ERR-50015">Argument $mimeLiteralPartFactory is missing from the Docblock of __construct</error>
-      <error line="36" code="PPC:ERR-50014">Name of argument $mimeLiteralPartFactory does not match with the DocBlock's name $partFactory in __construct()</error>
       <error line="36" code="PPC:ERR-50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $mimeLiteralPartFactory in __construct()</error>
     </parse_markers>
     <source>eJy9lt9vmzAQx9/5K+6hD2nUhvd0P5Nq3aRV6pY9VZEqBy7BE9jINpGmqf/7zhQiAnZIulBewPC9+959bAu/+5gneRCOxwGM4VfCNax5ikD3nCkDcg0mQXicMYNaiuU94+k9z/CBKY0KciV/Y2QmFGzjP6U8QqEREmPyaRjKnEayUBFOpNqE1VcdrnR8XQ0mZA+zxS2Fh4FgGeqcRV7D5VdkMd3mUugiQ3UTBIXuVdPIVM/28QuLjFR/bo4Ota+/c4OKpXvxNbYFz3JiRmFbaspC2XIKhrVUEFWVguZik6Kh4Y4WK0xCkkfGEh5DVUgJIkqZ1lB3uXhJHPwNgK7S1F6UYcsULF/VvZ3WOk33IxfaMEG9EKIYjIRIIZk0lLaLMjos79SzoYVA4ou8ich+e33VbvAvRRHcOuEdClQ8qnHtqvfXmHlm1FXuAo2GIi/3QZdUhtmKLKklzlYp1o6wa5ZwsMwR2OS0X2axor0B60JEhksBT092DRlVRGZ0OM0VeIB5+r0s/V5Wlb0uDO3/6w+NjPDeMZ8NqTuvjTpE+NnJ+SeaQgldcv4cxwq1njGN884G2s1vF7Yqc/Qurjrn0uFzcC42aBwhozbIqgyHdDqlFN+q+kclxSsH98sTQb0FpBMBHQlnYDB3Shb5W9DZMzoS0V5MD6c97blhzWWWoTCDcmp59CFqyX10WrJzg2n/WYYA0/LoA9OS+8C0ZIfAeH4ONaNDfBbFyp7/BuXT8ujj05L7+LRk/8Gnbw39KOjYES+MIjaDgnIZ9dFyxfiQubTn3nC31OqgkJoGfXCaWh+UpubcMB7s0RFp4Q1KpOPSh6UT4GPTEZ4K6Dn4Bwvyvcs=</source>
