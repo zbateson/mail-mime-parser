@@ -71,7 +71,7 @@ class IdHeaderTest extends TestCase
     public function testGetIdsWithInvalidValue()
     {
         $header = new IdHeader($this->consumerService, 'In-Reply-To', 'Blah Blah');
-        $this->assertEquals('Blah Blah', $header->getValue());
-        $this->assertEquals(['Blah Blah'], $header->getIds());
+        $this->assertEquals('Blah', $header->getValue());
+        $this->assertEquals(['Blah', 'Blah'], $header->getIds());
     }
 }

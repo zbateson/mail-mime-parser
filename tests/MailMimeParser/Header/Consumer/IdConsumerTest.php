@@ -63,6 +63,6 @@ class IdConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\LiteralPart', $ret[0]);
-        $this->assertEquals('first  quoted', $ret[0]->getValue());
+        $this->assertEquals('first quoted', $ret[0]->getValue());
     }
 }

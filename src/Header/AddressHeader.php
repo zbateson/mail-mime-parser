@@ -102,10 +102,33 @@ class AddressHeader extends AbstractHeader
         }
         return false;
     }
-    
+
     /**
-     * Returns the name associated with the first email address (or group) to
-     * complement getValue()
+     * Overridden to return the first email address in the header.
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        if (!empty($this->addresses)) {
+            return $this->addresses[0]->getEmail();
+        }
+        return null;
+    }
+
+    /**
+     * Same as getValue, but for clarity to match AddressPart.
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->getValue();
+    }
+
+    /**
+     * Returns the name associated with the first email address to complement
+     * getValue().
      * 
      * @return string
      */

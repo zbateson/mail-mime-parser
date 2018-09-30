@@ -6,29 +6,32 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use Iterator;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Serves as a base-consumer for ID headers (like Message-ID and Content-ID).
  * 
- * IdBaseConsumer passes on token processing to its sub-consumer, an
- * IdConsumer, and collects Part\LiteralPart objects processed and returned
- * by IdConsumer.
+ * IdBaseConsumer handles invalidly-formatted IDs not within '<' and '>'
+ * characters.  Processing for validly-formatted IDs are passed on to its
+ * sub-consumer, IdConsumer.
  *
  * @author Zaahid Bateson
  */
 class IdBaseConsumer extends AbstractConsumer
 {
     /**
-     * Returns \ZBateson\MailMimeParser\Header\Consumer\IdConsumer as a
-     * sub-consumer.
-     * 
+     * Returns the following as sub-consumers:
+     *  - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+     *  - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+     *  - \ZBateson\MailMimeParser\Header\Consumer\IdConsumer
+     *
      * @return AbstractConsumer[] the sub-consumers
      */
     protected function getSubConsumers()
     {
         return [
             $this->consumerService->getCommentConsumer(),
+            $this->consumerService->getQuotedStringConsumer(),
             $this->consumerService->getIdConsumer()
         ];
     }
@@ -41,20 +44,6 @@ class IdBaseConsumer extends AbstractConsumer
     protected function getTokenSeparators()
     {
         return ['\s+'];
-    }
-
-    /**
-     * Disables advancing for start tokens not matching '<'.
-     *
-     * @param Iterator $tokens
-     * @param bool $isStartToken
-     */
-    protected function advanceToNextToken(Iterator $tokens, $isStartToken)
-    {
-        if ($isStartToken && $tokens->current() !== '<' && $tokens->current() !== '(') {
-            return;
-        }
-        parent::advanceToNextToken($tokens, $isStartToken);
     }
 
     /**
@@ -83,8 +72,7 @@ class IdBaseConsumer extends AbstractConsumer
     }
     
     /**
-     * Could be reached by whitespace characters.  Returns null to ignore the
-     * passed token.
+     * Returns null for whitespace, and LiteralPart for anything else.
      * 
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
@@ -94,6 +82,25 @@ class IdBaseConsumer extends AbstractConsumer
      */
     protected function getPartForToken($token, $isLiteral)
     {
-        return null;
+        if (preg_match('/^\s+$/', $token)) {
+            return null;
+        }
+        return $this->partFactory->newLiteralPart($token);
+    }
+
+    /**
+     * Overridden to filter out any found CommentPart objects.
+     *
+     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     */
+    protected function processParts(array $parts)
+    {
+        return array_values(array_filter($parts, function ($part) {
+            if (empty($part) || $part instanceof CommentPart) {
+                return false;
+            }
+            return true;
+        }));
     }
 }

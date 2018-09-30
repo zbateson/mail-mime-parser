@@ -7,8 +7,6 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Represents a Content-ID, Message-ID, In-Reply-To or References header.
@@ -22,11 +20,6 @@ use ZBateson\MailMimeParser\Header\Part\CommentPart;
 class IdHeader extends GenericHeader
 {
     /**
-     * @var string[] an array of ids found. 
-     */
-    protected $ids = [];
-
-    /**
      * Returns an IdBaseConsumer.
      *
      * @param ConsumerService $consumerService
@@ -38,31 +31,13 @@ class IdHeader extends GenericHeader
     }
 
     /**
-     * Overridden to extract all IDs into ids array.
-     *
-     * @param AbstractConsumer $consumer
-     */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
-    {
-        parent::setParseHeaderValue($consumer);
-        foreach ($this->parts as $part) {
-            if (!($part instanceof CommentPart)) {
-                $this->ids[] = $part->getValue();
-            }
-        }
-    }
-
-    /**
-     * Returns the first parsed ID or null if none exist.
+     * Synonym for getValue().
      *
      * @return string|null
      */
-    public function getValue()
+    public function getId()
     {
-        if (!empty($this->ids)) {
-            return $this->ids[0];
-        }
-        return null;
+        return $this->getValue();
     }
 
     /**
@@ -73,6 +48,6 @@ class IdHeader extends GenericHeader
      */
     public function getIds()
     {
-        return $this->ids;
+        return $this->parts;
     }
 }
