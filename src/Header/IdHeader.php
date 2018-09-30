@@ -11,11 +11,11 @@ use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
- * Represents a Content-ID, Message-ID, In-Reply-To or Reference header.
+ * Represents a Content-ID, Message-ID, In-Reply-To or References header.
  *
- * For a multi-id header like In-Reply-To or Reference, all IDs can be retrieved
- * by calling 'getIds()'.  Otherwise, to retrieve the first (or only) ID call
- * 'getValue()'.
+ * For a multi-id header like In-Reply-To or References, all IDs can be
+ * retrieved by calling ``` getIds() ```.  Otherwise, to retrieve the first (or
+ * only) ID call ``` getValue() ```.
  * 
  * @author Zaahid Bateson
  */
@@ -66,7 +66,7 @@ class IdHeader extends GenericHeader
     }
 
     /**
-     * Returns all IDs parsed for a multi-id header like Reference or
+     * Returns all IDs parsed for a multi-id header like References or
      * In-Reply-To.
      * 
      * @return string[]

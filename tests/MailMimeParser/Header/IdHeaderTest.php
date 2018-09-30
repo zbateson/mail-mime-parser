@@ -56,14 +56,14 @@ class IdHeaderTest extends TestCase
 
     public function testGetIds()
     {
-        $header = new IdHeader($this->consumerService, 'Reference', ' <1337@example.com> <7331@example.com> <4@example.com> ');
+        $header = new IdHeader($this->consumerService, 'References', ' <1337@example.com> <7331@example.com> <4@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
         $this->assertEquals([ '1337@example.com', '7331@example.com', '4@example.com' ], $header->getIds());
     }
 
     public function testGetIdsWithComments()
     {
-        $header = new IdHeader($this->consumerService, 'Reference', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
+        $header = new IdHeader($this->consumerService, 'References', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
         $this->assertEquals([ '1337@example.com', '7331@example.com', '4@example.com' ], $header->getIds());
     }

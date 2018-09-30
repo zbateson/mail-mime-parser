@@ -70,7 +70,7 @@ class HeaderFactoryTest extends TestCase
     public function testGenericHeaderInstance()
     {
         $aValid = ['X-Generic-Header', 'Authentication-Results'];
-        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'Reference', 'Received'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'References', 'Received'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
@@ -85,7 +85,7 @@ class HeaderFactoryTest extends TestCase
 
     public function testIdHeaderInstance()
     {
-        $aValid = ['Content-ID', 'Message-ID', 'In-Reply-To', 'Reference'];
+        $aValid = ['Content-ID', 'Message-ID', 'In-Reply-To', 'References'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Received', 'Authentication-Results'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
@@ -134,7 +134,7 @@ class HeaderFactoryTest extends TestCase
     public function testReceivedHeaderInstance()
     {
         $aValid = ['Received'];
-        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Authentication-Results', 'In-Reply-To', 'Reference', 'Message-ID'];
+        $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Authentication-Results', 'In-Reply-To', 'References', 'Message-ID'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
