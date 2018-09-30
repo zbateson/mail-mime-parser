@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">5</span></a></li>
+                <span class="label label-info">6</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -373,7 +373,7 @@ for the current token, calls getPartForToken and returns it in an array.</h2>
 <h2>Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
 for the passed string token.  If the token should be ignored, the
 function must return null.</h2>
-<pre>getPartForToken(string $token, boolean $isLiteral) : \ZBateson\MailMimeParser\Header\Part\HeaderPart</pre>
+<pre>getPartForToken(string $token, boolean $isLiteral) : \ZBateson\MailMimeParser\Header\Part\HeaderPart | null</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>The default created part uses the instance's partFactory-&gt;newInstance
@@ -388,8 +388,8 @@ method.</p></div>
 e.g. an escaped token</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>the constructed
-        header part or null if the token should be ignored</div>
+<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code><code>null</code>the
+        constructed header part or null if the token should be ignored</div>
 </div></div>
 </div>
 <a id="method_getPartName"></a><div class="element clickable method protected method_getPartName inherited" data-toggle="collapse" data-target=".method_getPartName .collapse" title="protected">
@@ -538,8 +538,8 @@ processing.</p></div>
 <code>\Iterator</code><p>an iterator over a string of tokens</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>an array of parsed
-        parts</div>
+<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>an array of
+        parsed parts</div>
 </div></div>
 </div>
 <a id="method_processParts"></a><div class="element clickable method protected method_processParts " data-toggle="collapse" data-target=".method_processParts .collapse" title="protected">
@@ -549,7 +549,8 @@ CommentPart.</h2>
 <pre>processParts(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart&gt;</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>The default implementation simply returns the passed array.</p></div>
+<div class="long_description"><p>The default implementation simply returns the passed array after
+filtering out null/empty parts.</p></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumer::processParts()</td>
@@ -570,7 +571,8 @@ returning it to the consumer client.</h2>
 <pre>processParts(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>The default implementation simply returns the passed array.</p></div>
+<div class="long_description"><p>The default implementation simply returns the passed array after
+filtering out null/empty parts.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$parts</h4>
@@ -772,7 +774,7 @@ HeaderPart objects</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-28T21:12:17+02:00.<br></footer></div>
+            generated on 2018-09-30T16:45:25+02:00.<br></footer></div>
 </div>
 </body>
 </html>

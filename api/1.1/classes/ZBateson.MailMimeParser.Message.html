@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">5</span></a></li>
+                <span class="label label-info">6</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -135,7 +135,6 @@ passed $index, or null if unavailable.</span><pre>getHtmlResourceHandle()</pre><
 <li class="method public "><a href="#method_getHtmlStream" title="getHtmlStream() :: Returns a Psr7 Stream for the 'inline' text/html content at the passed
 $index, or null if unavailable."><span class="description">Returns a Psr7 Stream for the 'inline' text/html content at the passed
 $index, or null if unavailable.</span><pre>getHtmlStream()</pre></a></li>
-<li class="method public "><a href="#method_getMessageId" title="getMessageId() :: Returns the Message ID of the message."><span class="description">Returns the Message ID of the message.</span><pre>getMessageId()</pre></a></li>
 <li class="method public inherited"><a href="#method_getParent" title="getParent() :: Returns this part's parent."><span class="description">Returns this part's parent.</span><pre>getParent()</pre></a></li>
 <li class="method public inherited"><a href="#method_getPart" title="getPart() :: Returns the part at the given 0-based index, or null if none is set."><span class="description">Returns the part at the given 0-based index, or null if none is set.</span><pre>getPart()</pre></a></li>
 <li class="method public inherited"><a href="#method_getPartByContentId" title="getPartByContentId() :: Convenience method to find a part by its Content-ID header."><span class="description">Convenience method to find a part by its Content-ID header.</span><pre>getPartByContentId()</pre></a></li>
@@ -1004,20 +1003,6 @@ $index, or null if unavailable.</h2>
 <div class="subelement response"><code>resource</code></div>
 </div></div>
 </div>
-<a id="method_getMessageId"></a><div class="element clickable method public method_getMessageId " data-toggle="collapse" data-target=".method_getMessageId .collapse" title="public">
-<h2>Returns the Message ID of the message.</h2>
-<pre>getMessageId() : string | null</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Parses the value of the Message-ID header, stripping out the surrounding
-'&lt;' and '&gt;' characters, and returning just the ID if set... or null if
-not set or incorrectly formatted.</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code><code>null</code>
-</div>
-</div></div>
-</div>
 <a id="method_getParent"></a><div class="element clickable method public method_getParent inherited" data-toggle="collapse" data-target=".method_getParent .collapse" title="public">
 <h2>Returns this part's parent.</h2>
 <pre>getParent() : \ZBateson\MailMimeParser\Message\Part\MimePart</pre>
@@ -1828,7 +1813,7 @@ content and children</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-28T21:12:15+02:00.<br></footer></div>
+            generated on 2018-09-30T16:45:23+02:00.<br></footer></div>
 </div>
 </body>
 </html>

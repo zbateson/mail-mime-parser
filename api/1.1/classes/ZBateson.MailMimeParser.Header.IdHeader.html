@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">5</span></a></li>
+                <span class="label label-info">6</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -69,20 +69,21 @@ setParseHeaderValue to extract a parsed value.</span><pre>__construct()</pre></a
 <li class="method public inherited"><a href="#method___toString" title="__toString() :: Returns the string representation of the header.  At the moment this is
 just in the form of:"><span class="description">Returns the string representation of the header.  At the moment this is
 just in the form of:</span><pre>__toString()</pre></a></li>
-<li class="method public "><a href="#method_getId" title="getId() :: Strips out leading and trailing less than and greater than ('&lt;', '&gt;')
-chars to return just the ID portion of the header.  If '&lt;&gt;' chars aren't
-found, the value is returned as-is."><span class="description">Strips out leading and trailing less than and greater than ('&lt;', '&gt;')
-chars to return just the ID portion of the header.  If '&lt;&gt;' chars aren't
-found, the value is returned as-is.</span><pre>getId()</pre></a></li>
+<li class="method public "><a href="#method_getIds" title="getIds() :: Returns all IDs parsed for a multi-id header like Reference or
+In-Reply-To."><span class="description">Returns all IDs parsed for a multi-id header like Reference or
+In-Reply-To.</span><pre>getIds()</pre></a></li>
 <li class="method public inherited"><a href="#method_getName" title="getName() :: Returns the name of the header."><span class="description">Returns the name of the header.</span><pre>getName()</pre></a></li>
 <li class="method public inherited"><a href="#method_getParts" title="getParts() :: Returns an array of HeaderPart objects associated with this header."><span class="description">Returns an array of HeaderPart objects associated with this header.</span><pre>getParts()</pre></a></li>
 <li class="method public inherited"><a href="#method_getRawValue" title="getRawValue() :: Returns the raw value of the header prior to any processing."><span class="description">Returns the raw value of the header prior to any processing.</span><pre>getRawValue()</pre></a></li>
+<li class="method public "><a href="#method_getValue" title="getValue() :: Returns the first parsed ID or null if none exist."><span class="description">Returns the first parsed ID or null if none exist.</span><pre>getValue()</pre></a></li>
 <li class="method public inherited"><a href="#method_getValue" title="getValue() :: Returns the parsed value of the header -- calls getValue on $this-&gt;part"><span class="description">Returns the parsed value of the header -- calls getValue on $this-&gt;part</span><pre>getValue()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="method protected "><a href="#method_getConsumer" title="getConsumer() :: Returns an IdBaseConsumer."><span class="description">Returns an IdBaseConsumer.</span><pre>getConsumer()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getConsumer" title="getConsumer() :: Returns the header's Consumer"><span class="description">Returns the header's Consumer</span><pre>getConsumer()</pre></a></li>
+<li class="method protected "><a href="#method_setParseHeaderValue" title="setParseHeaderValue() :: Overridden to extract all IDs into ids array."><span class="description">Overridden to extract all IDs into ids array.</span><pre>setParseHeaderValue()</pre></a></li>
 <li class="method protected inherited"><a href="#method_setParseHeaderValue" title="setParseHeaderValue() :: Calls the consumer and assigns the parsed parts to member variables."><span class="description">Calls the consumer and assigns the parsed parts to member variables.</span><pre>setParseHeaderValue()</pre></a></li>
 </ul>
 </li>
@@ -92,6 +93,7 @@ found, the value is returned as-is.</span><pre>getId()</pre></a></li>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="property protected "><a href="#property_ids" title="$ids() :: "><span class="description">an array of ids found.</span><pre>$ids</pre></a></li>
 <li class="property protected "><a href="#property_name" title="$name() :: "><span class="description">the name of the header</span><pre>$name</pre></a></li>
 <li class="property protected "><a href="#property_parts" title="$parts() :: "><span class="description">the header's parts
 (as returned from the consumer)</span><pre>$parts</pre></a></li>
@@ -117,10 +119,11 @@ found, the value is returned as-is.</span><pre>getId()</pre></a></li>
 </li>
 </ul>
 <div xmlns:php="http://php.net/xsl" class="element class">
-<p class="short_description">Represents a Content-ID or Message-ID header.</p>
+<p class="short_description">Represents a Content-ID, Message-ID, In-Reply-To or Reference header.</p>
 <div class="details">
-<div class="long_description"><p>Header's may contain mime-encoded parts, quoted parts, and comments.
-GenericConsumer returns a single part value.</p></div>
+<div class="long_description"><p>For a multi-id header like In-Reply-To or Reference, all IDs can be retrieved
+by calling 'getIds()'.  Otherwise, to retrieve the first (or only) ID call
+'getValue()'.</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -172,17 +175,15 @@ No additional processing is performed (for instance to wrap long lines.)</div>
 <div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
-<a id="method_getId"></a><div class="element clickable method public method_getId " data-toggle="collapse" data-target=".method_getId .collapse" title="public">
-<h2>Strips out leading and trailing less than and greater than ('&lt;', '&gt;')
-chars to return just the ID portion of the header.  If '&lt;&gt;' chars aren't
-found, the value is returned as-is.</h2>
-<pre>getId() : string</pre>
+<a id="method_getIds"></a><div class="element clickable method public method_getIds " data-toggle="collapse" data-target=".method_getIds .collapse" title="public">
+<h2>Returns all IDs parsed for a multi-id header like Reference or
+In-Reply-To.</h2>
+<pre>getIds() : array&lt;mixed,string&gt;</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>For example, a header value of <a href="mailto:123.456@example.com">123.456@example.com</a> would return the
-string '123.456@example.com'.</p></div>
+<div class="long_description"></div>
 <h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
+<div class="subelement response"><code>array&lt;mixed,string&gt;</code></div>
 </div></div>
 </div>
 <a id="method_getName"></a><div class="element clickable method public method_getName inherited" data-toggle="collapse" data-target=".method_getName .collapse" title="public">
@@ -215,6 +216,18 @@ string '123.456@example.com'.</p></div>
 <div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
+<a id="method_getValue"></a><div class="element clickable method public method_getValue " data-toggle="collapse" data-target=".method_getValue .collapse" title="public">
+<h2>Returns the first parsed ID or null if none exist.</h2>
+<pre>getValue() : string | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code><code>null</code>
+</div>
+</div></div>
+</div>
 <a id="method_getValue"></a><div class="element clickable method public method_getValue inherited" data-toggle="collapse" data-target=".method_getValue .collapse" title="public">
 <h2>Returns the parsed value of the header -- calls getValue on $this-&gt;part</h2>
 <pre>getValue() : string</pre>
@@ -223,6 +236,25 @@ string '123.456@example.com'.</p></div>
 <div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getConsumer"></a><div class="element clickable method protected method_getConsumer " data-toggle="collapse" data-target=".method_getConsumer .collapse" title="protected">
+<h2>Returns an IdBaseConsumer.</h2>
+<pre>getConsumer(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService $consumerService) : \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\GenericHeader::getConsumer()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$consumerService</h4>
+<code>\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</code></div>
 </div></div>
 </div>
 <a id="method_getConsumer"></a><div class="element clickable method protected method_getConsumer inherited" data-toggle="collapse" data-target=".method_getConsumer .collapse" title="protected">
@@ -240,6 +272,19 @@ string '123.456@example.com'.</p></div>
 <div class="subelement response"><code>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</code></div>
 </div></div>
 </div>
+<a id="method_setParseHeaderValue"></a><div class="element clickable method protected method_setParseHeaderValue " data-toggle="collapse" data-target=".method_setParseHeaderValue .collapse" title="protected">
+<h2>Overridden to extract all IDs into ids array.</h2>
+<pre>setParseHeaderValue(\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer $consumer) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$consumer</h4>
+<code>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</code>
+</div>
+</div></div>
+</div>
 <a id="method_setParseHeaderValue"></a><div class="element clickable method protected method_setParseHeaderValue inherited" data-toggle="collapse" data-target=".method_setParseHeaderValue .collapse" title="protected">
 <h2>Calls the consumer and assigns the parsed parts to member variables.</h2>
 <pre>setParseHeaderValue(\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer $consumer) </pre>
@@ -255,6 +300,16 @@ string '123.456@example.com'.</p></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_ids"> </a><div class="element clickable property protected property_ids" data-toggle="collapse" data-target=".property_ids .collapse" title="protected">
+<h2>an array of ids found.</h2>
+<pre>$ids : array&lt;mixed,string&gt;</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"><code>array()</code></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_name"> </a><div class="element clickable property protected property_name" data-toggle="collapse" data-target=".property_name .collapse" title="protected">
 <h2>the name of the header</h2>
 <pre>$name : string</pre>
@@ -293,7 +348,7 @@ string '123.456@example.com'.</p></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-28T21:12:16+02:00.<br></footer></div>
+            generated on 2018-09-30T16:45:24+02:00.<br></footer></div>
 </div>
 </body>
 </html>

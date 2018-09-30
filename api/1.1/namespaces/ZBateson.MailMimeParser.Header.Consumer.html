@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">5</span></a></li>
+                <span class="label label-info">6</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -66,6 +66,7 @@
 <i title="Classes" class="icon-custom icon-class"></i> Classes</li>
 <li><a href="#AddressBaseConsumer" title="Serves as a base-consumer for recipient/sender email address headers (like
 From and To).">AddressBaseConsumer</a></li>
+<li><a href="#IdBaseConsumer" title="Serves as a base-consumer for ID headers (like Message-ID and Content-ID).">IdBaseConsumer</a></li>
 <li><a href="#CommentConsumer" title="Consumes all tokens within parentheses as comments.">CommentConsumer</a></li>
 <li><a href="#SubjectConsumer" title="Extends GenericConsumer to remove its sub consumers.">SubjectConsumer</a></li>
 <li><a href="#AddressGroupConsumer" title="Parses a single group of addresses (as a named-group part of an address
@@ -81,6 +82,7 @@ parts as necessary.">DateConsumer</a></li>
 and CommentParts.">ReceivedConsumer</a></li>
 <li><a href="#QuotedStringConsumer" title="Represents a quoted part of a header value starting at a single quote, and
 ending at the next single quote.">QuotedStringConsumer</a></li>
+<li><a href="#IdConsumer" title="Parses a single ID from an ID header.">IdConsumer</a></li>
 <li><a href="#ParameterConsumer" title="Reads headers separated into parameters consisting of a main value, and
 subsequent name/value pairs - for example text/html; charset=utf-8.">ParameterConsumer</a></li>
 </ul>
@@ -164,6 +166,20 @@ QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html" class="more">« More »</a>
 </div>
+<div xmlns:php="http://php.net/xsl" id="IdBaseConsumer" class="element ajax clickable class">
+<h1>IdBaseConsumer<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdBaseConsumer.html">¶</a>
+</h1>
+<p class="short_description">Serves as a base-consumer for ID headers (like Message-ID and Content-ID).</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdBaseConsumer.html" class="more">« More »</a>
+</div>
+<div xmlns:php="http://php.net/xsl" id="IdConsumer" class="element ajax clickable class">
+<h1>IdConsumer<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdConsumer.html">¶</a>
+</h1>
+<p class="short_description">Parses a single ID from an ID header.</p>
+<div class="details collapse"></div>
+<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdConsumer.html" class="more">« More »</a>
+</div>
 <div xmlns:php="http://php.net/xsl" id="ParameterConsumer" class="element ajax clickable class">
 <h1>ParameterConsumer<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.ParameterConsumer.html">¶</a>
 </h1>
@@ -244,7 +260,7 @@ and CommentParts.</p>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-28T21:12:15+02:00.<br></footer></div>
+            generated on 2018-09-30T16:45:23+02:00.<br></footer></div>
 </div>
 </body>
 </html>

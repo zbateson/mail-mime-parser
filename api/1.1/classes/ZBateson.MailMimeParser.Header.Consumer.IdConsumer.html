@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>MailMimeParser 1.1 » \ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumer</title>
+<title>MailMimeParser 1.1 » \ZBateson\MailMimeParser\Header\Consumer\IdConsumer</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -66,6 +66,9 @@
 <li class="method public inherited"><a href="#method___construct" title="__construct() :: Initializes the instance."><span class="description">Initializes the instance.</span><pre>__construct()</pre></a></li>
 <li class="method public inherited"><a href="#method___invoke" title="__invoke() :: Invokes parsing of a header's value into header parts."><span class="description">Invokes parsing of a header's value into header parts.</span><pre>__invoke()</pre></a></li>
 <li class="method public inherited"><a href="#method_getInstance" title="getInstance() :: Returns the singleton instance for the class."><span class="description">Returns the singleton instance for the class.</span><pre>getInstance()</pre></a></li>
+<li class="method public "><a href="#method_getTokenSeparators" title='getTokenSeparators() :: Overridden to return patterns matching the beginning part of an ID ("&lt;"
+and "&gt;\s*" chars).'><span class="description">Overridden to return patterns matching the beginning part of an ID ("&lt;"
+and "&gt;\s*" chars).</span><pre>getTokenSeparators()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header protected">» Protected
@@ -73,7 +76,6 @@
 <li class="method protected inherited"><a href="#method_advanceToNextToken" title="advanceToNextToken() :: Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token."><span class="description">Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token.</span><pre>advanceToNextToken()</pre></a></li>
-<li class="method protected inherited"><a href="#method_filterIgnoredSpaces" title="filterIgnoredSpaces() :: Filters out ignorable spaces between parts in the passed array."><span class="description">Filters out ignorable spaces between parts in the passed array.</span><pre>filterIgnoredSpaces()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getAllConsumers" title="getAllConsumers() :: Returns this consumer and all unique sub consumers."><span class="description">Returns this consumer and all unique sub consumers.</span><pre>getAllConsumers()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getAllTokenSeparators" title="getAllTokenSeparators() :: Returns a list of regular expression markers for this consumer and all
 sub-consumers by calling 'getTokenSeparators'."><span class="description">Returns a list of regular expression markers for this consumer and all
@@ -90,6 +92,11 @@ for the passed string token.  If the token should be ignored, the
 function must return null."><span class="description">Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
 for the passed string token.  If the token should be ignored, the
 function must return null.</span><pre>getPartForToken()</pre></a></li>
+<li class="method protected "><a href="#method_getSubConsumers" title="getSubConsumers() :: Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer"><span class="description">Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer</span><pre>getSubConsumers()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getSubConsumers" title="getSubConsumers() :: Called during construction to set up the list of sub-consumers that will
 take control from this consumer should a token match a sub-consumer's
 start token."><span class="description">Called during construction to set up the list of sub-consumers that will
@@ -98,7 +105,6 @@ start token.</span><pre>getSubConsumers()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getTokenParts" title="getTokenParts() :: Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
 the current token on the iterator."><span class="description">Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
 the current token on the iterator.</span><pre>getTokenParts()</pre></a></li>
-<li class="method protected "><a href="#method_getTokenSeparators" title="getTokenSeparators() :: Returns an array containing ';'."><span class="description">Returns an array containing ';'.</span><pre>getTokenSeparators()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getTokenSeparators" title="getTokenSeparators() :: Returns an array of regular expression separators specific to this
 consumer.  The returned patterns are used to split the header value into
 tokens for the consumer to parse into parts."><span class="description">Returns an array of regular expression separators specific to this
@@ -109,16 +115,20 @@ default implementation calls getAllTokenSeparators and implodes the
 returned array with the regex OR '|' character as its glue."><span class="description">Returns a regex pattern used to split the input header string.  The
 default implementation calls getAllTokenSeparators and implodes the
 returned array with the regex OR '|' character as its glue.</span><pre>getTokenSplitPattern()</pre></a></li>
+<li class="method protected "><a href="#method_isEndToken" title="isEndToken() :: Returns true for '&gt;'."><span class="description">Returns true for '&gt;'.</span><pre>isEndToken()</pre></a></li>
 <li class="method protected inherited"><a href="#method_isEndToken" title="isEndToken() :: Returns true if the passed string token marks the end marker for the
 current consumer."><span class="description">Returns true if the passed string token marks the end marker for the
 current consumer.</span><pre>isEndToken()</pre></a></li>
-<li class="method protected "><a href="#method_isStartToken" title="isStartToken() :: Returns true if the token is a ';'"><span class="description">Returns true if the token is a ';'</span><pre>isStartToken()</pre></a></li>
+<li class="method protected "><a href="#method_isStartToken" title="isStartToken() :: AddressConsumer is &quot;greedy&quot;, so this always returns true unless the token
+consists only of whitespace (as it would between '&gt;' and '&lt;' chars)."><span class="description">AddressConsumer is "greedy", so this always returns true unless the token
+consists only of whitespace (as it would between '&gt;' and '&lt;' chars).</span><pre>isStartToken()</pre></a></li>
 <li class="method protected inherited"><a href="#method_isStartToken" title="isStartToken() :: Returns true if the passed string token marks the beginning marker for
 the current consumer."><span class="description">Returns true if the passed string token marks the beginning marker for
 the current consumer.</span><pre>isStartToken()</pre></a></li>
 <li class="method protected inherited"><a href="#method_parseTokensIntoParts" title="parseTokensIntoParts() :: Iterates over the passed token Iterator and returns an array of parsed
 \ZBateson\MailMimeParser\Header\Part\HeaderPart objects."><span class="description">Iterates over the passed token Iterator and returns an array of parsed
 \ZBateson\MailMimeParser\Header\Part\HeaderPart objects.</span><pre>parseTokensIntoParts()</pre></a></li>
+<li class="method protected "><a href="#method_processParts" title="processParts() :: Concatenates the passed parts into a single part and returns it."><span class="description">Concatenates the passed parts into a single part and returns it.</span><pre>processParts()</pre></a></li>
 <li class="method protected inherited"><a href="#method_processParts" title="processParts() :: Performs any final processing on the array of parsed parts before
 returning it to the consumer client."><span class="description">Performs any final processing on the array of parsed parts before
 returning it to the consumer client.</span><pre>processParts()</pre></a></li>
@@ -126,19 +136,7 @@ returning it to the consumer client.</span><pre>processParts()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul>
-<li class="method private inherited"><a href="#method_addSpaceToRetParts" title="addSpaceToRetParts() :: Loops over the $parts array from the current position, checks if the
-space should be added, then adds it to $retParts and returns."><span class="description">Loops over the $parts array from the current position, checks if the
-space should be added, then adds it to $retParts and returns.</span><pre>addSpaceToRetParts()</pre></a></li>
-<li class="method private inherited"><a href="#method_addSpaces" title="addSpaces() :: Checks if the passed space part should be added to the returned parts and
-adds it."><span class="description">Checks if the passed space part should be added to the returned parts and
-adds it.</span><pre>addSpaces()</pre></a></li>
-<li class="method private inherited"><a href="#method_isSpaceToken" title="isSpaceToken() :: Returns true if the passed HeaderPart is a Token instance and a space."><span class="description">Returns true if the passed HeaderPart is a Token instance and a space.</span><pre>isSpaceToken()</pre></a></li>
-<li class="method private inherited"><a href="#method_parseRawValue" title="parseRawValue() :: Called by __invoke to parse the raw header value into header parts."><span class="description">Called by __invoke to parse the raw header value into header parts.</span><pre>parseRawValue()</pre></a></li>
-<li class="method private inherited"><a href="#method_shouldAddSpace" title="shouldAddSpace() :: Returns true if a space should be added based on the passed last and next
-parts."><span class="description">Returns true if a space should be added based on the passed last and next
-parts.</span><pre>shouldAddSpace()</pre></a></li>
-</ul>
+                    <ul><li class="method private inherited"><a href="#method_parseRawValue" title="parseRawValue() :: Called by __invoke to parse the raw header value into header parts."><span class="description">Called by __invoke to parse the raw header value into header parts.</span><pre>parseRawValue()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i title="Properties" class="icon-custom icon-property"></i> Properties
@@ -155,7 +153,7 @@ HeaderPart objects</span><pre>$partFactory</pre></a></li>
 </ul>
 </div>
 <div class="span8">
-<a xmlns:php="http://php.net/xsl" id="\ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumer"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
+<a xmlns:php="http://php.net/xsl" id="\ZBateson\MailMimeParser\Header\Consumer\IdConsumer"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -169,18 +167,17 @@ HeaderPart objects</span><pre>$partFactory</pre></a></li>
 <li>
 <span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.html">Consumer</a>
 </li>
-<li>
-<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.Consumer.Received.html">Received</a>
-</li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.Received.ReceivedDateConsumer.html">ReceivedDateConsumer</a>
+<span class="divider">\</span><a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdConsumer.html">IdConsumer</a>
 </li>
 </ul>
 <div xmlns:php="http://php.net/xsl" class="element class">
-<p class="short_description">Parses the date portion of a Received header into a DatePart.</p>
+<p class="short_description">Parses a single ID from an ID header.</p>
 <div class="details">
-<div class="long_description"><p>The only difference between DateConsumer and ReceivedDateConsumer is the
-addition of a start token, ';', and a token separator (also ';').</p></div>
+<div class="long_description"><p>Begins consuming greedily on anything except a space, to allow for
+incorrectly-formatted ID headers.  Ends consuming only when a '&gt;' character
+is found.  This means an incorrectly-formatted header can't have multiple
+IDs, but one surrounded by '&lt;&gt;' chars may contain spaces.</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -192,7 +189,7 @@ addition of a start token, ';', and a token separator (also ';').</p></div>
 </tr>
 <tr>
 <th>inherited_from</th>
-<td>\ZBateson\MailMimeParser\Header\Consumer\DateConsumer</td>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</td>
 </tr>
 </table>
 <h3>
@@ -249,6 +246,24 @@ addition of a start token, ';', and a token separator (also ';').</p></div>
 </div>
 </div></div>
 </div>
+<a id="method_getTokenSeparators"></a><div class="element clickable method public method_getTokenSeparators " data-toggle="collapse" data-target=".method_getTokenSeparators .collapse" title="public">
+<h2>Overridden to return patterns matching the beginning part of an ID ("&lt;"
+and "&gt;\s*" chars).</h2>
+<pre>getTokenSeparators() : array&lt;mixed,string&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Each array element makes part of a generated regular expression that is
+used in a call to preg_split().  RegEx patterns can be used, and care
+should be taken to escape special characters.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array&lt;mixed,string&gt;</code>the patterns</div>
+</div></div>
+</div>
 <a id="method_advanceToNextToken"></a><div class="element clickable method protected method_advanceToNextToken inherited" data-toggle="collapse" data-target=".method_advanceToNextToken .collapse" title="protected">
 <h2>Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token.</h2>
@@ -267,24 +282,6 @@ to be passed up to a higher-level consumer.</p></div>
 <h4>$isStartToken</h4>
 <code>boolean</code>
 </div>
-</div></div>
-</div>
-<a id="method_filterIgnoredSpaces"></a><div class="element clickable method protected method_filterIgnoredSpaces inherited" data-toggle="collapse" data-target=".method_filterIgnoredSpaces .collapse" title="protected">
-<h2>Filters out ignorable spaces between parts in the passed array.</h2>
-<pre>filterIgnoredSpaces(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Spaces with parts on either side of it that specify they can be ignored
-are filtered out.  filterIgnoredSpaces is called from within
-processParts, and if needed by an implementing class that overrides
-processParts, must be specifically called.</p></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$parts</h4>
-<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code></div>
 </div></div>
 </div>
 <a id="method_getAllConsumers"></a><div class="element clickable method protected method_getAllConsumers inherited" data-toggle="collapse" data-target=".method_getAllConsumers .collapse" title="protected">
@@ -353,6 +350,23 @@ e.g. an escaped token</p></div>
         constructed header part or null if the token should be ignored</div>
 </div></div>
 </div>
+<a id="method_getSubConsumers"></a><div class="element clickable method protected method_getSubConsumers " data-toggle="collapse" data-target=".method_getSubConsumers .collapse" title="protected">
+<h2>Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer</h2>
+<pre>getSubConsumers() : array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</code>the sub-consumers</div>
+</div></div>
+</div>
 <a id="method_getSubConsumers"></a><div class="element clickable method protected method_getSubConsumers inherited" data-toggle="collapse" data-target=".method_getSubConsumers .collapse" title="protected">
 <h2>Called during construction to set up the list of sub-consumers that will
 take control from this consumer should a token match a sub-consumer's
@@ -385,17 +399,6 @@ consumer's parseTokensIntoParts method is called.</p></div>
 </div>
 </div></div>
 </div>
-<a id="method_getTokenSeparators"></a><div class="element clickable method protected method_getTokenSeparators " data-toggle="collapse" data-target=".method_getTokenSeparators .collapse" title="protected">
-<h2>Returns an array containing ';'.</h2>
-<pre>getTokenSeparators() : array&lt;mixed,string&gt;</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>array&lt;mixed,string&gt;</code>an array of regex pattern matchers</div>
-</div></div>
-</div>
 <a id="method_getTokenSeparators"></a><div class="element clickable method protected method_getTokenSeparators inherited" data-toggle="collapse" data-target=".method_getTokenSeparators .collapse" title="protected">
 <h2>Returns an array of regular expression separators specific to this
 consumer.  The returned patterns are used to split the header value into
@@ -424,6 +427,20 @@ returned array with the regex OR '|' character as its glue.</h2>
 <code>string</code>the regex pattern</div>
 </div></div>
 </div>
+<a id="method_isEndToken"></a><div class="element clickable method protected method_isEndToken " data-toggle="collapse" data-target=".method_isEndToken .collapse" title="protected">
+<h2>Returns true for '&gt;'.</h2>
+<pre>isEndToken(string $token) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$token</h4></div>
+</div></div>
+</div>
 <a id="method_isEndToken"></a><div class="element clickable method protected method_isEndToken inherited" data-toggle="collapse" data-target=".method_isEndToken .collapse" title="protected">
 <h2>Returns true if the passed string token marks the end marker for the
 current consumer.</h2>
@@ -440,18 +457,24 @@ current consumer.</h2>
 </div></div>
 </div>
 <a id="method_isStartToken"></a><div class="element clickable method protected method_isStartToken " data-toggle="collapse" data-target=".method_isStartToken .collapse" title="protected">
-<h2>Returns true if the token is a ';'</h2>
+<h2>AddressConsumer is "greedy", so this always returns true unless the token
+consists only of whitespace (as it would between '&gt;' and '&lt;' chars).</h2>
 <pre>isStartToken(string $token) : boolean</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$token</h4>
 <code>string</code>
 </div>
 <h3>Returns</h3>
-<div class="subelement response"><code>boolean</code></div>
+<div class="subelement response">
+<code>boolean</code>false</div>
 </div></div>
 </div>
 <a id="method_isStartToken"></a><div class="element clickable method protected method_isStartToken inherited" data-toggle="collapse" data-target=".method_isStartToken .collapse" title="protected">
@@ -493,6 +516,26 @@ processing.</p></div>
         parsed parts</div>
 </div></div>
 </div>
+<a id="method_processParts"></a><div class="element clickable method protected method_processParts " data-toggle="collapse" data-target=".method_processParts .collapse" title="protected">
+<h2>Concatenates the passed parts into a single part and returns it.</h2>
+<pre>processParts(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>The default implementation simply returns the passed array after
+filtering out null/empty parts.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parts</h4>
+<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code></div>
+</div></div>
+</div>
 <a id="method_processParts"></a><div class="element clickable method protected method_processParts inherited" data-toggle="collapse" data-target=".method_processParts .collapse" title="protected">
 <h2>Performs any final processing on the array of parsed parts before
 returning it to the consumer client.</h2>
@@ -526,78 +569,6 @@ array will not contain any empty parts and will contain the markers.</p></div>
 <code>array</code>the array of tokens</div>
 </div></div>
 </div>
-<a id="method_addSpaceToRetParts"></a><div class="element clickable method private method_addSpaceToRetParts inherited" data-toggle="collapse" data-target=".method_addSpaceToRetParts .collapse" title="private">
-<h2>Loops over the $parts array from the current position, checks if the
-space should be added, then adds it to $retParts and returns.</h2>
-<pre>addSpaceToRetParts(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts, array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $retParts, integer $curIndex, \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart, \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart) </pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$parts</h4>
-<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
-</div>
-<div class="subelement argument">
-<h4>$retParts</h4>
-<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
-</div>
-<div class="subelement argument">
-<h4>$curIndex</h4>
-<code>integer</code>
-</div>
-<div class="subelement argument">
-<h4>$spacePart</h4>
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>
-</div>
-<div class="subelement argument">
-<h4>$lastPart</h4>
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>
-</div>
-</div></div>
-</div>
-<a id="method_addSpaces"></a><div class="element clickable method private method_addSpaces inherited" data-toggle="collapse" data-target=".method_addSpaces .collapse" title="private">
-<h2>Checks if the passed space part should be added to the returned parts and
-adds it.</h2>
-<pre>addSpaces(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts, array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $retParts, integer $curIndex, \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart<code> = null</code>) </pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Never adds a space if it's the first part, otherwise only add it if
-either part isn't set to ignore the space</p></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$parts</h4>
-<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
-</div>
-<div class="subelement argument">
-<h4>$retParts</h4>
-<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
-</div>
-<div class="subelement argument">
-<h4>$curIndex</h4>
-<code>integer</code>
-</div>
-<div class="subelement argument">
-<h4>$spacePart</h4>
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>
-</div>
-</div></div>
-</div>
-<a id="method_isSpaceToken"></a><div class="element clickable method private method_isSpaceToken inherited" data-toggle="collapse" data-target=".method_isSpaceToken .collapse" title="private">
-<h2>Returns true if the passed HeaderPart is a Token instance and a space.</h2>
-<pre>isSpaceToken(\ZBateson\MailMimeParser\Header\Part\HeaderPart $part) : boolean</pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$part</h4>
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>boolean</code></div>
-</div></div>
-</div>
 <a id="method_parseRawValue"></a><div class="element clickable method private method_parseRawValue inherited" data-toggle="collapse" data-target=".method_parseRawValue .collapse" title="private">
 <h2>Called by __invoke to parse the raw header value into header parts.</h2>
 <pre>parseRawValue(string $value) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
@@ -614,26 +585,6 @@ parseParts to parse the returned array.</p></div>
 <div class="subelement response">
 <code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>the array of parsed
         parts</div>
-</div></div>
-</div>
-<a id="method_shouldAddSpace"></a><div class="element clickable method private method_shouldAddSpace inherited" data-toggle="collapse" data-target=".method_shouldAddSpace .collapse" title="private">
-<h2>Returns true if a space should be added based on the passed last and next
-parts.</h2>
-<pre>shouldAddSpace(\ZBateson\MailMimeParser\Header\Part\HeaderPart $nextPart, \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart) : boolean</pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$nextPart</h4>
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>
-</div>
-<div class="subelement argument">
-<h4>$lastPart</h4>
-<code>\ZBateson\MailMimeParser\Header\Part\HeaderPart</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>boolean</code></div>
 </div></div>
 </div>
 <h3>
