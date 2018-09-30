@@ -69,8 +69,8 @@ setParseHeaderValue to extract a parsed value.</span><pre>__construct()</pre></a
 <li class="method public inherited"><a href="#method___toString" title="__toString() :: Returns the string representation of the header.  At the moment this is
 just in the form of:"><span class="description">Returns the string representation of the header.  At the moment this is
 just in the form of:</span><pre>__toString()</pre></a></li>
-<li class="method public "><a href="#method_getIds" title="getIds() :: Returns all IDs parsed for a multi-id header like Reference or
-In-Reply-To."><span class="description">Returns all IDs parsed for a multi-id header like Reference or
+<li class="method public "><a href="#method_getIds" title="getIds() :: Returns all IDs parsed for a multi-id header like References or
+In-Reply-To."><span class="description">Returns all IDs parsed for a multi-id header like References or
 In-Reply-To.</span><pre>getIds()</pre></a></li>
 <li class="method public inherited"><a href="#method_getName" title="getName() :: Returns the name of the header."><span class="description">Returns the name of the header.</span><pre>getName()</pre></a></li>
 <li class="method public inherited"><a href="#method_getParts" title="getParts() :: Returns an array of HeaderPart objects associated with this header."><span class="description">Returns an array of HeaderPart objects associated with this header.</span><pre>getParts()</pre></a></li>
@@ -119,11 +119,11 @@ In-Reply-To.</span><pre>getIds()</pre></a></li>
 </li>
 </ul>
 <div xmlns:php="http://php.net/xsl" class="element class">
-<p class="short_description">Represents a Content-ID, Message-ID, In-Reply-To or Reference header.</p>
+<p class="short_description">Represents a Content-ID, Message-ID, In-Reply-To or References header.</p>
 <div class="details">
-<div class="long_description"><p>For a multi-id header like In-Reply-To or Reference, all IDs can be retrieved
-by calling 'getIds()'.  Otherwise, to retrieve the first (or only) ID call
-'getValue()'.</p></div>
+<div class="long_description"><p>For a multi-id header like In-Reply-To or References, all IDs can be
+retrieved by calling <code>getIds()</code>.  Otherwise, to retrieve the first (or
+only) ID call <code>getValue()</code>.</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -176,7 +176,7 @@ No additional processing is performed (for instance to wrap long lines.)</div>
 </div></div>
 </div>
 <a id="method_getIds"></a><div class="element clickable method public method_getIds " data-toggle="collapse" data-target=".method_getIds .collapse" title="public">
-<h2>Returns all IDs parsed for a multi-id header like Reference or
+<h2>Returns all IDs parsed for a multi-id header like References or
 In-Reply-To.</h2>
 <pre>getIds() : array&lt;mixed,string&gt;</pre>
 <div class="labels"></div>
@@ -348,7 +348,7 @@ In-Reply-To.</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-30T16:45:24+02:00.<br></footer></div>
+            generated on 2018-09-30T16:59:35+02:00.<br></footer></div>
 </div>
 </body>
 </html>
