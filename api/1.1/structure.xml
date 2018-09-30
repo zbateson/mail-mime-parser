@@ -13918,7 +13918,7 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
     </class>
     <source>eJyVVcFy0zAQvfsrlpkcnE4T3xsoUBiGS4FpmR7a5KDYm1jgSEYrp+0w/XdWku3ExmlaHRJb2n3SvvdWfvu+zMsoOTmJ4AR+5pJgJQsE/i+FsaBXYHOE2wthkbSaXwpZXMoN/hCG0EBp9C9M7ZSTXf6HQqaoCCG3tjxLEl3ym65MilNt1km9SsmSskn9MuXt4eL6M6cnkRIbpFKkBzecf0WRoZlFUUXHguaftKJqs/dwjWbLu85elfxxSdaI1DYTL8rmN+t+uB6Lxr3xkWuSr7A0SKgsgYDcx0OqlRVSSbXmudLIjTCPsBVFhUEGoTKgakn4p+JEcDwlftkBugiCikJ2u2tzYCcOeHVEZXNt4FaIXGZQV+CJTwtBtEsNVQA+WFQZQUNBmI7+RsDDV+MGA2+FgfmrKblbwG98hI0o2WYNVqHv0UxSQb7yEOzrJU8CH1OnkjfKoINF0xog8f/sS8u+5KhRi0LwDu4WM7/er+AKbWUUHaAvxLTVekTomQpGaXeiDTce+yg/Bw13oLBVpVIrtYI1tqHxsUONPUgQ0I36bP2wyTmD/sdEPA7kPQ1S+H2LxsgsQwVWO53kWvU08gu13oNCN1hBb44e1rgvRZ+xXT3HuCNfJmHQ4MZ1VHwYrc8e787deHY2hLJLmrXxK21QpDnEI8sX7eQ8NK4gb1I73kN2Q6440He/VGSFSpFZ6xDSz3BjB127/o6rsdqzHeC8uN94NR6PF9wTfnLWAXqKuk/DijdNYw1fU3xasdex+CCJa7uXNvcfkJINwcQ7YQ+pyOd0N9jIxfSbZ6l1gUJ15ayW/A3ZaZkLatmJPcoBt0s+io2fJ8qnL541fFs+lxeu6vpjuWOhLX8tt9wXDvQU+AYeZbgSVWFvwhUe8JhBpa2z5KsY6i4NATckhphnOWRn+NQvuubgtAvJdlFVUfSJdVZ9UxM6IEPfp82ts48861luP+4FSnlTh85rRXuK/gHkItFD</source>
   </file>
-  <file path="Header/IdHeader.php" generated-path="Header.IdHeader.html" hash="855881a777dae6d20d91e4b61ee51ee1" package="MailMimeParser">
+  <file path="Header/IdHeader.php" generated-path="Header.IdHeader.html" hash="10d1299c48713b1984e619bb6adbe1b3" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -13926,33 +13926,19 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
       <tag name="package" line="0" description="MailMimeParser"/>
     </docblock>
     <namespace-alias name="ConsumerService">\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</namespace-alias>
-    <namespace-alias name="AbstractConsumer">\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</namespace-alias>
-    <namespace-alias name="CommentPart">\ZBateson\MailMimeParser\Header\Part\CommentPart</namespace-alias>
-    <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header" line="22" package="MailMimeParser">
+    <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header" line="20" package="MailMimeParser">
       <extends>\ZBateson\MailMimeParser\Header\GenericHeader</extends>
       <name>IdHeader</name>
       <full_name>\ZBateson\MailMimeParser\Header\IdHeader</full_name>
-      <docblock line="22">
+      <docblock line="20">
         <description>Represents a Content-ID, Message-ID, In-Reply-To or References header.</description>
         <long-description>For a multi-id header like In-Reply-To or References, all IDs can be
 retrieved by calling ``` getIds() ```.  Otherwise, to retrieve the first (or
 only) ID call ``` getValue() ```.</long-description>
-        <tag name="author" line="22" description="Zaahid Bateson"/>
-        <tag name="package" line="22" description="MailMimeParser"/>
+        <tag name="author" line="20" description="Zaahid Bateson"/>
+        <tag name="package" line="20" description="MailMimeParser"/>
         <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\GenericHeader" refers="\ZBateson\MailMimeParser\Header\GenericHeader" link="/classes/ZBateson.MailMimeParser.Header.GenericHeader.html"/>
       </docblock>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="27" package="MailMimeParser">
-        <name>$ids</name>
-        <full_name>\ZBateson\MailMimeParser\Header\IdHeader::ids</full_name>
-        <default>array()</default>
-        <docblock line="27">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="27" description="&lt;p&gt;an array of ids found.&lt;/p&gt;" type="array&lt;mixed,string&gt;" variable="">
-            <type>array&lt;mixed,string&gt;</type>
-          </tag>
-        </docblock>
-      </property>
       <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="28" package="MailMimeParser">
         <name>$name</name>
         <full_name>\ZBateson\MailMimeParser\Header\AbstractHeader::name</full_name>
@@ -13989,16 +13975,16 @@ only) ID call ``` getValue() ```.</long-description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="35" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="28" package="MailMimeParser">
         <name>getConsumer</name>
         <full_name>\ZBateson\MailMimeParser\Header\IdHeader::getConsumer()</full_name>
-        <docblock line="35">
+        <docblock line="28">
           <description>Returns an IdBaseConsumer.</description>
           <long-description></long-description>
-          <tag name="param" line="35" description="" type="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService" variable="$consumerService">
+          <tag name="param" line="28" description="" type="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService" variable="$consumerService">
             <type>\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</type>
           </tag>
-          <tag name="return" line="35" description="" type="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">
+          <tag name="return" line="28" description="" type="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">
             <type>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\GenericHeader::getConsumer()" refers="\ZBateson\MailMimeParser\Header\GenericHeader::getConsumer()" link="/classes/ZBateson.MailMimeParser.Header.GenericHeader.html#method_getConsumer"/>
@@ -14009,42 +13995,26 @@ only) ID call ``` getValue() ```.</long-description>
           <type>\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="45" package="MailMimeParser">
-        <name>setParseHeaderValue</name>
-        <full_name>\ZBateson\MailMimeParser\Header\IdHeader::setParseHeaderValue()</full_name>
-        <docblock line="45">
-          <description>Overridden to extract all IDs into ids array.</description>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="38" package="MailMimeParser">
+        <name>getId</name>
+        <full_name>\ZBateson\MailMimeParser\Header\IdHeader::getId()</full_name>
+        <docblock line="38">
+          <description>Synonym for getValue().</description>
           <long-description></long-description>
-          <tag name="param" line="45" description="" type="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer" variable="$consumer">
-            <type>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</type>
-          </tag>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$consumer</name>
-          <default></default>
-          <type>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="60" package="MailMimeParser">
-        <name>getValue</name>
-        <full_name>\ZBateson\MailMimeParser\Header\IdHeader::getValue()</full_name>
-        <docblock line="60">
-          <description>Returns the first parsed ID or null if none exist.</description>
-          <long-description></long-description>
-          <tag name="return" line="60" description="" type="string|null">
+          <tag name="return" line="38" description="" type="string|null">
             <type>string</type>
             <type>null</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="74" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="49" package="MailMimeParser">
         <name>getIds</name>
         <full_name>\ZBateson\MailMimeParser\Header\IdHeader::getIds()</full_name>
-        <docblock line="74">
+        <docblock line="49">
           <description>Returns all IDs parsed for a multi-id header like References or
 In-Reply-To.</description>
           <long-description></long-description>
-          <tag name="return" line="74" description="" type="array&lt;mixed,string&gt;">
+          <tag name="return" line="49" description="" type="array&lt;mixed,string&gt;">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
         </docblock>
@@ -14184,7 +14154,7 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
         <inherited_from>\ZBateson\MailMimeParser\Header\AbstractHeader</inherited_from>
       </method>
     </class>
-    <source>eJydVFFv0zAQfs+vOKQ+pNPS8ryyAWMC+jANbRMPWyvNTS6NIbEj2ylUsP/O2XHSNF1UwC+xnbvPd999d2/ellkZTE9OAjiB+4xrSHmOQN+SKQMyBZMhPFwyg1qKxTXj+TUv8AtTGhWUSn7D2EzI2fq/y3mMQiNkxpRn06ks6SQrFeNEqvXU/9XTlU4if5jQ83B5d0Xu00CwAnXJ4sEHF5+RJahmQVDpY0aLD1Loquhs7lBt6NXZPzm/X2mjWGyai7/yppMhiKJAYeyeAvYU32KpUNO1BgaEaWgbza9O4Rq1Zmt0+7mIyC7fRvcSpCKfFBWKGDVkDr/h+yP9ZFBUueERT/xPyPl3HIY4BZbnML/SEDMBK7Q4Co3iuMEEVlu6znMu1vD09ARrNPNEh2N7mADckBbUD67xFIxsvZxCUq60gVAqiydFvh3TGw6rAfrK8go9lDVygmGVySi8B8YySsCT6rQQ50xrmCc1o4A/ialEwycUqHhc3wa/AqDlqLWLADdMARWMEnhcAiXIlGJbK2NOzqmsRDIBbzx1X5KwIQlT7iNrcg6PS6pWD/YWTaWEtoDz5JJpbNQw8Rbt+9Q1rICe4mAU71+05soBw+J/1TiQSlqJ2HApLO+NaXgsqLEDqSm1y8fWN4sunCq6LITjmfN6PiDuZoNK8SRBYRVDRbTBtwrkgi4t665KA1z2U94FdCx5jcbRWJNY628YrZ8+vU69eXb2EsrOadbap1IhizMIR4bGaHRh5ydlpmFkd+MOsl08hfBV6H4RDdow6k1SaWdmjPsudnls4ozkfV5Du4L47prteTwH+7vD+jTC3rVwaXNNbPNSX4qKKkWhCimQqse1OSiSV0ndc7+tw35ZqhVN+j1B+lB7dDtCsCjNNtwlecBBo8kdDa+Xs16WHTsbzpA02572YvSJp8MztTOHZSO+7qBtuIGXyXlcHmPGzdqBLmwzbvJ5Dv4ABJJlHA==</source>
+    <source>eJyNVE2P0zAQvedXzIFDWzXNnUWwlArIoQLRFYelSHWTSWNw7MjjLESw/33HrlPaQlV8iT/m6703kxev2rpNsskkgQnc1ZKgkgqBv62wDkwFrka4nwuHZPR6KaRaygY/CktoobXmGxZuxs7e/1bJAjUh1M61z7PMtHwynS1wZuwui6+UbalM42HG6WG+WrB7lmjRILWiuJhw/R5FifYmSTq6ZrR+YzR1zdFmhfaBs7J3xPsJW4uE2hEIYCvH2zRfTGGJRGKHYZ/rlO1Un94ZMJZ9KrSoCySoQ54B/Ft+FNB0yslUlvERlPyOl0NMQSgF+YKgEBq26ONYdFbiA5aw7flaKal3sNlsYIcuL2k09ocZwAcWxv6QhFNw5uAV5KqkJQcjY308o1U/5hwh1hDos1AdxlDeKKgnOldzefdC1AwgkhuEKZQggrzcMwv4k5kqCd6hRiuL/W3yKwFegVq/PL2us5q51ew6F4SDELNoMRjecq+JBs50gmfF6cXB3IbAsP7fBni9JWdF4YaLGCgLX+5hxz3MfFedLpw02hM0mI6uFTUOQfbY/Yq1nZulL4N8xyyMxjfB6zE5J27Va6P7BipW449Yf7EWUzE2bpHfulPqFFi35SE7QZWXo0v1Op79UGTMdqm2g6ixcVtPeRlKvdD9RxNjBuqPR2LABf8G9uXrdVR0BZb/l9GA6DF5Av3Vj34=</source>
   </file>
   <file path="Header/AbstractHeader.php" generated-path="Header.AbstractHeader.html" hash="1dce989e0db1f12065c71a0d6f736327" package="MailMimeParser">
     <docblock line="0">
@@ -19101,7 +19071,7 @@ for 'UTF-8'.</long-description>
     </class>
     <source>eJylWG1T20YQ/u5fsZlhxjL1C5BpQqFumqTJhElJmUDamQBhztLZUpBP6t0J4nbIb+/uvciSLBuSegaMpL19fZ7dFT8/y+O8M9re7sA2nMWJgmmScsDvnEkN2RR0zOHjC6a5ysTFMUvS42TOT5hUXEIus8881EM8TOd/TZOQC8Uh1jo/GI2yHK+yQoZ8mMnZyD1Vo4mKBu5iiObhxelveHzUEWzOVc7CtQYv3nAW4Rde6cNOp1BVyclfkuU5Pi3/QhEX2ZssjRQwkIUQiZjBDUsLDtNMAhPw/vXLwd7e411QeZpoiI0Nih/d0VxSdEA/J/7Oy0yoYo4yoeRkHU7pYPn4LLvG0OA25gJNtislfSbZUmn0oxBRH12JgEXopyomiv9dcKHdaaqFAp2RtyxFo9HC2Y4gE1iuKemjSpUGgJIJc6bDmKuyQKzQMQb9kbE4icClzuQ+TJlqDQT4F80FemVzT6nv/NsB/Jjc0gcV3zAJSkvKrTHsgFNNopEcmW/EjUbcoPdbJI11Wq/v/BKuOc8VcBFmER6xyTAVxJzETIPgeBuzM+EQcSM0BHjLF8qrMx8mOSiuSZBcS0TEv9RQXubaZZDqgRCLCCc1TSqTmiKdcHzibOL1KMxEiCkVjJ6ujdjFcWLCGMP55X3ho1rNEkQUusclSz0cKPQoE10NEtGSoCdMLEpvIED/VxKAcUrr9dHpH4P9/R9/GuxCgK7FIglZmi5AxVmRRpTLpxNMx4fTwfPTl0dHMCl0XVuaZrdkZ5/E7CnyZUJuILYVEoxh1VLFb8koJhyOj096a/PiontgXgxrd58+eQIBAtowRvcgZWJWsBkHSjHcJjqGLNdJJjBrKKPZTPVrUUg+w6eqD1yHw+F635zezS6FMXUpgyeqGfEXg64VfK0Ff3YM3WVluqv2jkSiE5Ym/3DqZy189Rag9NAgGsquWNrCNnbDpWlGNUkXjaFmncVdZdhdj6GYYC+HaSFCSjRcXWHsqKIIdbDBZt/q7xkdtp8YbQhSoQ8OqlpWzvYOS/ktjTNr8ItxdQzo+Dyweq3I3Ur+Xn3RkoWIMJ9wYnkJm6nM5gRf32tMl+lT2zCEx2TMseHSt9cXFpI8hmxCkxA7MWzZzoLdfWfZ0imNduiYjuN6UBUZXiGTki3WFdGXxqhqPEvQC2t7DcbKEnGbg2Ou2ZHAZoBTAm8/F9GfpDbYclFbZc0KYYRBjrS5MrMl6H79FJx/uuhebvcuupW/htu9ra/dPpTK3Cjq9Sq6vD6XsvF4DDvN55UqLzkSPOLzXC8Cr/V89xIVP4PKNRw0jh2uU1tWv0XvXkPvXkXvsilUld7Vrmz4qLnU8PhyKX/XxHEVEOc2K5d02GjxkKbfTVg/9yDLcYy7IelR5pcegyxqTnZ2rmDsiLCrXjnoI36Rfli5Mj0EZl+CBHFDIg5KhC6iToUYru50aAl+POEmtB+ekutCGvewVc64NhBcce2s1NBcLEglzWPSyJTZh6p5qBECMzDDvU1ov5xFUWWM16a3FZB8ULYhx/9aeN9D00mWpRxbzDLVD+Rxo8+i8wSTClu9vk3MdfC2z5tU8zSEnTaIWqJ6IytnHYC/qbVUzJhFoV1ndTGoksKx204F4xYm3ZnoNSNop82ZZHgY30naCAiF0EmKU1ZkYuAWchy9uI4uzO5ut3bcPiqwwE3ZQ9TSzQu2QBofmSWqudriebayjNr11t7FNc+uVJUNT/ISqbzNmGcaWnHoRPMud3Z7/nD2erDvyTDhJOKPrOLcPnGqGvMmuUEaLYGKpH6HsHC4sThoQnMLxyiW1A3ToKUY1ZlPBRhTGe4T9J0Pl6ru8vZtTK+4gbH5CEfOlCH0VvDszw7Hxrt6k3f+CozrHh+MtHj7QI/pY3hmTpBzJtgfYLdtLE7wFfB64/SxmTLa2ijtqriGSTVVkt0WMrXNO/DJ6fXb+OpmRP0ZzZLyRm/TKHu/RHJ1b1rzkobdMiO6oDdYVIvhGirNBLKBKkj0N0G50XL9eFqFb+5eWlo61jLvlbRjeu5BwjUNtXtkHJA3sWYDwI3P5+swWemwrQRug1PT+bzhr8u0aYxXkkdFyIMWn+rAKbOPhMWTCxoems/b+ODhbORgaAUb/Kgr73YfikmLH0Lgxv9vfCes3qGWFVTV2Wn/UfIwF8uVbXVbmtLLjJlaokhTuhbZ/yXF787cPRHU9+W7zl3nP86iAWE=</source>
   </file>
-  <file path="Header/AddressHeader.php" generated-path="Header.AddressHeader.html" hash="4113d2c361e0f921effb2ea374b9936c" package="MailMimeParser">
+  <file path="Header/AddressHeader.php" generated-path="Header.AddressHeader.html" hash="cc02aeaae4aa688e4496044f426bc0ba" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -19265,14 +19235,37 @@ in groups.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="112" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="111" package="MailMimeParser">
+        <name>getValue</name>
+        <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getValue()</full_name>
+        <docblock line="111">
+          <description>Overridden to return the first email address in the header.</description>
+          <long-description></long-description>
+          <tag name="return" line="111" description="" type="string">
+            <type>string</type>
+          </tag>
+          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\AbstractHeader::getValue()" refers="\ZBateson\MailMimeParser\Header\AbstractHeader::getValue()" link="/classes/ZBateson.MailMimeParser.Header.AbstractHeader.html#method_getValue"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="124" package="MailMimeParser">
+        <name>getEmail</name>
+        <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getEmail()</full_name>
+        <docblock line="124">
+          <description>Same as getValue, but for clarity to match AddressPart.</description>
+          <long-description></long-description>
+          <tag name="return" line="124" description="" type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="135" package="MailMimeParser">
         <name>getPersonName</name>
         <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getPersonName()</full_name>
-        <docblock line="112">
-          <description>Returns the name associated with the first email address (or group) to
-complement getValue()</description>
+        <docblock line="135">
+          <description>Returns the name associated with the first email address to complement
+getValue().</description>
           <long-description></long-description>
-          <tag name="return" line="112" description="" type="string">
+          <tag name="return" line="135" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -19412,7 +19405,7 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
         <inherited_from>\ZBateson\MailMimeParser\Header\AbstractHeader</inherited_from>
       </method>
     </class>
-    <source>eJytVt9v2zYQftdfcQP8IAWJXeRpiOd2SddtL12LduhD42CgqZPFQSIFksoPDPnfdyQlWVIs28EmwDBF3R3vvvvujj+9q/IqWpydRXAGf+bCQCYKBPqvmLagMrA5wvcbZtEouf7IRPFRlPiZaYMaKq3+Rm7npOz0fy4ER2kQcmurq8VCVfSmas1xrvR20Xw1i41JL5qXOR0PN19/IfVFJFmJpmJ88sD178hS1Msoqs0xofV7JU1d0uJ6Y6xm3LYby1dpt4uvqO/J55OU6c2ur9NUozFu/Wql37Sqq6DZJucLSRlgElgQgUIYC7nXhdoIufWpagzcMIOt5y494H7XI+WSPQEnIbemTCuJoDSUSmMrh+7EtNPaOreMt/eB8bzbN0hsoeBS2DwBI5tlyc69JjoxrzYWMliKC64KJTv/fqXTs7oowFTIRSY4s4LcOyfZwClDpHp4eJgLtJmnlM64+13+eHk5t4+25SGrbU62vjOWixQa2D3FeMHI3wakADzgo0VJ2LY8CdvRPxHQ49F3D5m9ZxrWr0z97R0wrQlolbV2dtg2Owv/T8VkqZgIn9lOYgW3d0v/+T9703Fq2qUmwVNuha8HfPqCttbSs3Q/D4NYF4IjRAmjCoMZH2504tqbPxr0ZOFPxJXVkjuiwRY70fiYU4k3Ejjinsa3sdjFWzK6B4s4CQg+78Xx0z1qLdIUJVjl+OmiAEaVsWOGkPSpV6Yuo1MIj4HYuXkMEoPWgxug/caKGuNpa2NQ6HSU9upqn5Wd0rKTz6j1uIYRzyyNoou3bgZRaAZmbpX0LLtHZCTox5SQxjLJkZpYr/TG8u5pDHe4US2sgvXlQPYZsDB46ISunE45hg7xCfqL4t1iPP58HlzokwVNnCTLKcOhEiedj4ar/STrinVHKwiAC+lHSTNbhORFnbr5MiSgzRlxUnflSVrdfBix8MTCfdk7h/SsN3RrGJRrD6yJehwhfajq+oCEkbUHjv8luF4rPhahFz0WXsD9lNisrtEVTu8egY80/w08CJv7OCuakNQCsKQwWqEXUb9XJYEjKFx3V0zd1YFTe3N1Qtc6YcU9FpPtiNqHo9PMHzHGcaNUgUwexCVnpkEyDkbG8IwbSa9PmjBe9zUT8ssFwcsq9jK+Hj84+3Fy3ribwGq1gjf7ir4JwEF8uB57whmjNnNS4igz7n5MARjFhb9HdSnLhKYr3CBjENMFyPMioRnSWqObWVVgSU3ZcSs04mSK0SFNxwj6GTWx4A9y7QVJHaY/YFnZp0FDT8bgDcnsZW7f3Hn0g93lNICS7ostfs/Rvx6Q94c=</source>
+    <source>eJytV99v2zYQftdfcQP8IAeOXeRpiOeuSddtL12LZthD42CgqZPFQSIFksoPFPnfdyQlWVYk20ErwLAs3R3vvvu+I/3Lr2VWRouzswjO4O9MGEhFjkDfJdMWVAo2Q/h6zSwaJdcfmcg/igI/M21QQ6nVf8jtnJyd/7tccJQGIbO2vFwsVEm/VKU5zpXeLuq3ZrExyXn9Y07Lw/XNb+S+iCQr0JSMjy64/hNZgnoZRZU5ZrR+r6SpCrq52hirGbfNg+WrvJubG9T3lPNJzvTLrq+SRKMx7v7VTn9oVZXBs2nOF7IywCSwYAK5MBYy7wuVEXLrW1UHuGYGm8xde8B9rnrOBXsCTkbunjqtJILSUCiNjR26FZPWa+vSMj7eB8az9rlBYgsVl8DmCRjFLAo2857ozLxb38hgIc65ypVs8/udVk+rPAdTIhep4MwKSm9GtoFThkj18PAwF2hTTymdcve5+PniYm4fbcNDVtmMYn1lLBMJ1LB7ivGcUb41SAF4wEeLkrBteBIeR98ioMuj7y4Ke880rF/Z+ts7YFoT0Cpt4uywrZ8s/DeJyZKYCJ/JzmIFt3dL//q7s2k5NZ5S3eCxtMLbAzl9QVtp6Vk6zMNg1pbgCFFAT2Ew4fsPWnPtwx8telT4I3WlleSOaLDF1jQ+ltTUBwkccVedW9/s/C0FHcAingYEnwdx/HSPWoskQQlWOX66KoCRMnbMEJJedWTqOjqGcB+IXZrHIDFoPbgB2n9YXmE8Hq0PCq2O0l5eDkXZOS1b+5RGjxsY8cTSVnT+1u1BVJqBibubdiK7S6Rk6LcpIY1lkiMNsY70+vbuqgO3uJEWViH6cs/2GTA3eGiFVk6nLEOL+Ab9S/VuMe6/noUUumRBE0+ny7HAQYmjyUf7d8Mka8W6oxUEwIX0W0m9twjJ8ypx+8s+AW3GiJO6lSd5tftDj4UnCvfl7NynZ7WhU8OeXDtgjeixh/Qh1XUBCVvWABw/pLjOKD5WoTc9Vl7A/ZTarK7QCadzjsBH2v8NPAib+TpL2iFpBGBBZTRGL6p+rwoCR1C57qyYuKMDp/HmdELHOmHFPeaj44jGh6PTxC/Rx3GjVI5MHsQlY6ZGMg5B+vD0B0lnTpqwvQ4NE8rLFcGLMvY2Xo8fXPx4OqvTncJqtYI3Q6KvC3AQH9ZjxzhlNGaaxh3eBprw1KJUaDqy7XVomKV9cAPyxzgXBnQfU4fQT1iU9ukFqtM+HCPqu31z18V0OY6LpGPgGCw39DfB9bHJdAabyrqWA53utLBPDq2CWep/Z5h8HyR1xodV2CI3lnmrQmqUDFUYxYU/FLf6G2ouFUSH6jLHgvbTJtpuvdGhdFpxn1GTkP+ihE5oup+JRxrubZpmh7gn9vo5+h+5Q3aB</source>
   </file>
   <file path="Header/DateHeader.php" generated-path="Header.DateHeader.html" hash="cebd03475d37e9ebd060b7d383c3dc61" package="MailMimeParser">
     <docblock line="0">
@@ -21187,23 +21180,23 @@ filtering out null/empty parts.</long-description>
     </class>
     <source>eJzNVktv00AQvudXzAGJtGrie4sKFKhA4iWSE4TD2juJF5xda2ddiFD/OzObteu4SVupQmKVxI+d5zffzObZ87qsR9nx8QiOYV4agqWpEPhaKx/ALSGUCF8vVEBydvFBmeqDWeNn5Qk91N79wCJMWVn0X1SmQEsIZQj1aZa5mp9c4wucOr/K0i5lOelJepiye7iYvWb1bGTVGqlWxUGHi7eoNF9eOUvNGv3ZaNSwu3cBvQpOHlMmM/RXSKD4A7kinBRJA5bOg8fC1AZtyAgt2wNcsxtQWnskgjI6IRhX5ieKtUvv1qCshrk7klxBvi+30hdsvQ2HMSPOD5yF4H6iFXwKljF2xS/ABAJq8i6WE7bZs/Sq91pD4aqKoSXgzMMiiXyONcl/xI1kHHWU9xgab1GLwXwztNlVSDWhZAS+KlUaDQnlCH5RcfB7s8LfgWHivZyCV0VoN0Z/RsArQi7rGL7EIAgWD6zfYhBmLFhrrA/VtH3ZXl9s870V07fvkbB9XUo6WbwyaoHhY9SWjS2C4VqtMMyavLVA46MouE1OVnL1rXsh60ngZpmct06EcMzoyTkbGySV7Mn6fhZvr+PvIfCUZT7WYQPKe7U5mDnnzbzifFk+Skqzelzhb6Zh4I6wsFahKB8GwFz4OkNuemmkwxjcmcFrQyqvpO/0lbKF0F7ajYLQNnYE3UpnLtW6EYgK+0jYm0iccL8fxqyxlzRHsTHIwbqhADlu21Nze94GVRJfd4OEqxujHWznzlXwxNBM4o2I3YfsFgicu4/cRFFjPPRxsmtxCLxZwnhXoLd5U5mz7t11d8dB84w7Pd0TxAHfdxV3X1G0Q7JPA5TqKlUx40kBrfEEv6p+qQ2lQDtMl6ri8X+gEFtyJ4iGzJcyIJMgWrivAobeWN1P+gCzo7H/IP/CabZ/xRxZ4buVdR7/ITQ3pX8kOB+RI2ZpxfNG986fPlpT+MRC3miNcj4CqWBouenwHUzyx0ITz4FdkHa7+L2RTqyAUGYPBN+gdFunxunUnAO3kPyLqJL0pLWWFk5X0ziyqVA1athblvvOw3jGb+/jSJMYZIpxTLFk238kA89pHnqwTVXtRk6layotI89EnPQDTgBxfOl8nw0nPZgOMCMdgxLKJRfP+c3k3OKvHU61xLke/QVPYD3C</source>
   </file>
-  <file path="Header/Consumer/IdBaseConsumer.php" generated-path="Header.Consumer.IdBaseConsumer.html" hash="a391f7534aa7600de5902a0668424e82" package="MailMimeParser">
+  <file path="Header/Consumer/IdBaseConsumer.php" generated-path="Header.Consumer.IdBaseConsumer.html" hash="66e16315d35047633442910242f511c4" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
       <tag name="license" line="0" description="BSD" link="http://opensource.org/licenses/bsd-license.php"/>
       <tag name="package" line="0" description="MailMimeParser"/>
     </docblock>
-    <namespace-alias name="Iterator">\Iterator</namespace-alias>
+    <namespace-alias name="CommentPart">\ZBateson\MailMimeParser\Header\Part\CommentPart</namespace-alias>
     <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header\Consumer" line="20" package="MailMimeParser">
       <extends>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</extends>
       <name>IdBaseConsumer</name>
       <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer</full_name>
       <docblock line="20">
         <description>Serves as a base-consumer for ID headers (like Message-ID and Content-ID).</description>
-        <long-description>IdBaseConsumer passes on token processing to its sub-consumer, an
-IdConsumer, and collects Part\LiteralPart objects processed and returned
-by IdConsumer.</long-description>
+        <long-description>IdBaseConsumer handles invalidly-formatted IDs not within '&lt;' and '&gt;'
+characters.  Processing for validly-formatted IDs are passed on to its
+sub-consumer, IdConsumer.</long-description>
         <tag name="author" line="20" description="Zaahid Bateson"/>
         <tag name="package" line="20" description="MailMimeParser"/>
         <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"/>
@@ -21232,71 +21225,46 @@ by IdConsumer.</long-description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="28" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="30" package="MailMimeParser">
         <name>getSubConsumers</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::getSubConsumers()</full_name>
-        <docblock line="28">
-          <description>Returns \ZBateson\MailMimeParser\Header\Consumer\IdConsumer as a
-sub-consumer.</description>
+        <docblock line="30">
+          <description>Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\IdConsumer</description>
           <long-description></long-description>
-          <tag name="return" line="28" description="the sub-consumers" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;">
+          <tag name="return" line="30" description="the sub-consumers" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;">
             <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getSubConsumers"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="41" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="44" package="MailMimeParser">
         <name>getTokenSeparators</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::getTokenSeparators()</full_name>
-        <docblock line="41">
+        <docblock line="44">
           <description>Returns '\s+' as a whitespace separator.</description>
           <long-description>Each array element makes part of a generated regular expression that is
 used in a call to preg_split().  RegEx patterns can be used, and care
 should be taken to escape special characters.</long-description>
-          <tag name="return" line="41" description="an array of regex pattern matchers" type="array&lt;mixed,string&gt;">
+          <tag name="return" line="44" description="an array of regex pattern matchers" type="array&lt;mixed,string&gt;">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getTokenSeparators"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="52" package="MailMimeParser">
-        <name>advanceToNextToken</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::advanceToNextToken()</full_name>
-        <docblock line="52">
-          <description>Disables advancing for start tokens not matching '&lt;'.</description>
-          <long-description>The default implementation will advance for a start token, but not
-advance on the end token of the current consumer, allowing the end token
-to be passed up to a higher-level consumer.</long-description>
-          <tag name="param" line="52" description="" type="\Iterator" variable="$tokens">
-            <type>\Iterator</type>
-          </tag>
-          <tag name="param" line="52" description="" type="boolean" variable="$isStartToken">
-            <type>boolean</type>
-          </tag>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::advanceToNextToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::advanceToNextToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_advanceToNextToken"/>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$tokens</name>
-          <default></default>
-          <type>\Iterator</type>
-        </argument>
-        <argument line="0" by_reference="false">
-          <name>$isStartToken</name>
-          <default></default>
-          <type>boolean</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="67" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="56" package="MailMimeParser">
         <name>isEndToken</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::isEndToken()</full_name>
-        <docblock line="67">
+        <docblock line="56">
           <description>IdBaseConsumer doesn't have start/end tokens, and so always returns
 false.</description>
           <long-description></long-description>
-          <tag name="param" line="67" description="" type="string" variable="$token">
+          <tag name="param" line="56" description="" type="string" variable="$token">
             <type>string</type>
           </tag>
-          <tag name="return" line="67" description="false" type="boolean">
+          <tag name="return" line="56" description="false" type="boolean">
             <type>boolean</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_isEndToken"/>
@@ -21307,18 +21275,18 @@ false.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="80" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="69" package="MailMimeParser">
         <name>isStartToken</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::isStartToken()</full_name>
-        <docblock line="80">
+        <docblock line="69">
           <description>IdBaseConsumer doesn't have start/end tokens, and so always returns
 false.</description>
           <long-description></long-description>
-          <tag name="codeCoverageIgnore" line="80" description=""/>
-          <tag name="param" line="80" description="" type="string" variable="$token">
+          <tag name="codeCoverageIgnore" line="69" description=""/>
+          <tag name="param" line="69" description="" type="string" variable="$token">
             <type>string</type>
           </tag>
-          <tag name="return" line="80" description="false" type="boolean">
+          <tag name="return" line="69" description="false" type="boolean">
             <type>boolean</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_isStartToken"/>
@@ -21329,21 +21297,20 @@ false.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="95" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="83" package="MailMimeParser">
         <name>getPartForToken</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::getPartForToken()</full_name>
-        <docblock line="95">
-          <description>Could be reached by whitespace characters.  Returns null to ignore the
-passed token.</description>
+        <docblock line="83">
+          <description>Returns null for whitespace, and LiteralPart for anything else.</description>
           <long-description>The default created part uses the instance's partFactory-&gt;newInstance
 method.</long-description>
-          <tag name="param" line="95" description="&lt;p&gt;the token&lt;/p&gt;" type="string" variable="$token">
+          <tag name="param" line="83" description="&lt;p&gt;the token&lt;/p&gt;" type="string" variable="$token">
             <type>string</type>
           </tag>
-          <tag name="param" line="95" description="&lt;p&gt;set to true if the token represents a literal -&#10;e.g. an escaped token&lt;/p&gt;" type="boolean" variable="$isLiteral">
+          <tag name="param" line="83" description="&lt;p&gt;set to true if the token represents a literal -&#10;e.g. an escaped token&lt;/p&gt;" type="boolean" variable="$isLiteral">
             <type>boolean</type>
           </tag>
-          <tag name="return" line="95" description="the&#10;        constructed header part or null if the token should be ignored" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart|null">
+          <tag name="return" line="83" description="the&#10;        constructed header part or null if the token should be ignored" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart|null">
             <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
             <type>null</type>
           </tag>
@@ -21358,6 +21325,27 @@ method.</long-description>
           <name>$isLiteral</name>
           <default></default>
           <type>boolean</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="97" package="MailMimeParser">
+        <name>processParts</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer::processParts()</full_name>
+        <docblock line="97">
+          <description>Overridden to filter out any found CommentPart objects.</description>
+          <long-description>The default implementation simply returns the passed array after
+filtering out null/empty parts.</long-description>
+          <tag name="param" line="97" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+          <tag name="return" line="97" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_processParts"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$parts</name>
+          <default></default>
+          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Consumer" line="44" package="MailMimeParser">
@@ -21744,7 +21732,7 @@ filtering out null/empty parts.</long-description>
         <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
     </class>
-    <source>eJy1VttO20AQfc9XTCVEEkqSd26lQKsilQo1PEF4WNuT2ODsWjtrLmr5986svY6TNhCpYgX4sp7LOXNmloNPRVp0Rjs7HdiBqzQjmGY5Al8LZR2YKbgU4fpEOSSjJxcqyy+yOV4qS2ihsOYOYzdkY7E/zrMYNSGkzhV7o5Ep+MmUNsahsbNRvUujiJJB/TDk8HAyPmPzUUerOVKh4rUBJ99QJXw5NZrKOdr9TqfkcOcOrXJGHmskY7QPSKD4ByJFOIhrC5gaC+dnkHpHBL08u0e4QCI1wwFvKJ0Au3eoHT/2BRrI73lywn5CYGaHGAkYDc7coxYmYnaS6Rm/gMwRUBk1UXfZbeXktPUmgdjkOfNHwPDc5HsmOPJLT3x05zdqv5j47y260mpMxFf03HLXVECVLmWE10qlWQI1i57cOOeUV2HgEwNNCD5H5KyKXdjo/OoAL8+mrB346UMTTDYszWSRnC9D8NOmZRhehutxBfCvdG5uvQzbtlTbjPyVaXLMF9M0LXXsMq7LDN24jIIH6vX9hxUuWXWom+aFrC3HLTA4CkFERqzTwRE7OzXzOYsiOOz1dze1XDBRJyHrdt/fvvi/68juTuhjt1LxY8rqqJqDkHtT9L6WP2aPlcisKQ3KWvUsjWxxhk8sXMcq0zBXLk43o/FKFD4OQdcz6bNtcK1iOstIRbk0ZfKgdCydIr1ITuTum4hAG1clJrvdg24A2OCTHOZNvzPp3m5lOzImh62MxuLaJ/8WyColvDI/uCG8RW81xu6yx1UOsin0lj6A7e1gyqoorWXt9Prw4fBQgL222+v2W44XBO83716aOwbMlnt7/wCwJu915VkZDIlB0l0HqXrAqkYjHhQQfMowIgMqf1TPVOfXlGGqch7sf2mzKk4lzRr8qm6lcsia9R7eKlpGX3TSxrpGl97Za932/tBjk7D/B1bUDM9n2lh8R1YWxf5PXk5NmScQIRsonhWJHDmtMRSnSmY0z5AhNBNLl3nuT0CPUqZ28OZPzJrGjcThR/4yIcv9XZ+XPA9lgICzJUofNmacd2GRuEFkgOb114PgrV44nA1lTiLFqggJrpbgrVPPn9/Vvdz+rmhYgA9LjgfO05es+hek/j/LVswtpU9pKEDFZrLBrJboX41tl3+3xdUaKUjsoISXzh/72xpn</source>
+    <source>eJy1Vt9v2zYQfvdfcQ8BZGe29d4UWZd2xQIsWFf3qUkW0NJZ0iqTAo+KazT53/uRkmxHiRd3bYnElsy77+6++0G+/LXKq0F8fDygY/qQF0KLomTCd6WsI7MglzN9PFOOxeirC1WUF8WS3ykrbKmy5l9O3BTKXv9VWSSshSl3rnoRx6bCm6ltwlNjs7jdlXgu6aR9mcI8nc3eQD0eaLVkqVSy1+DVH6xSfL02Wuol25PBoJZnpfHmoLJcsnb+GVptwDO2tyyk8EdzJTxJWmBaGEvnbygPCELDsvjEdMEiKuMJNpROCV44QOJ15Bkg/3+engGn849yyJWwUOhbVRZpuZ4AeKmc4xTwQto4WhUuLzRFL6OAGp1GHijJlVWJg/Ep0TtrEtgudBYcexpLWUbSRPBqNDlDhROPJPV8E9cYDnbObbKmapcD9aNSeZFSy2VISFICrx8Tf0bUqdBvc3HexW5j8GVAWIFav47pPbvaagkltDBlaVY+ArC965K86MRpQlcHJr5L58b2/4D4uzagbuYsnPoenC2jrXYH8sqG+B8RdXkdGHlAQqsTh2+0lUNbIZGLWieuQDozdrN63iHIcBQEG8b9ak1dbn7w6wiFJZPTzoivdnTd5BRgPf6Go/Ghmk/R9g3qW7baGPy6PgmP9+FzXxVFV/JL1PTqKi9cOymEMaiUM76cG/k+/RJcBelKo0esWvupZjnjz2gXdA9E0EVJflgWPphPrGed0f2JCN5u4urH1Gup1LDoyGFc3CIihxkVo8XQw7Al4zAWxJAqV2otrYXOV1qoEmP0UfDewWUbO/LhkfrEzI0pGaQEhOdCL+R3nYbghw3ansAD2H+l8+eHnpgU+LdsMavPM20s/0RWZt7lH8FLV+a6Lssw5bdF3tDwJ16tKv0JFvaVXvuDIyM+tADC2HkYdCPlY6ajQloTaCrnDxBna1wFFls1BFNZFgwO34VlKz3ZTM1m8TSb+mZjSVTFKT1J83PjNRzazbN/vAu0wJGeLfIzBn6GtDSndXtzsQ2TD9yX3NRlSnNEFeoiPaDhvfW3xu6meLzDVT/dsDcER9lNmCnDKP4Hg+AojsZtDkajHeGd+vDOnmw27vvl005UH9pbHCXGrienmlc7NdGV376R8xcawhZpyuFugFseNMnUztcR6qkOF5rNHYnM3N/spKurXsF8Y/YwfI+86/KdVXB5/VzCquam5IVl2Ez7xvKetgwiN7hQ1dzK3zTUDBu18Ra6+aWfPp9vXlZu3W3f3TUWcefDONMJ47TZIbav//SIeFwHO3K+LXdKZbRJ+f3gK9jNros=</source>
   </file>
   <file path="Header/Consumer/CommentConsumer.php" generated-path="Header.Consumer.CommentConsumer.html" hash="77f2c52770e4e154368928a70bcf297f" package="MailMimeParser">
     <docblock line="0">
@@ -29606,26 +29594,26 @@ processing.</long-description>
     </class>
     <source>eJzFVV1P2zAUfe+vuGJIhYomKkxigsH42NgeYGKUJyhCbnLbeEvszL6hVBP/fdeOU0o36PYwzWrq1vb9OPcc37x9V2ZlK+50WtCBy0xaGMkcgedSGAI9AsoQro4EodVqcCZkfiYLPBfGooHS6K+YUMTGzv4glwkqi5ARlTtxrEv+pyuTYKTNOA67Nh7atBv+RBwejvrv2TxuKVGgLUXybMDBJxQpT8da2apAs9tqUr/A0qBFRRYEfK80YTpDICDzZnAn8grBEq9LNQZBvGX5FwP2JhsgVOq8oUrDAYde4T09OefwgnsOQ6huKaSp40n1GE+6ZHJJaEQeAZcXDYLgR2mw1bCbBBhcdG2cP0kuAzZiuDQ4rS3PvVsLBqkyCtOm2p9xkkuFkGTCiIScm7XjC+/g9GTdx7FkZFlyKbgw0mA+hZHRhQc1V6Noxj1/hsLyslb+EN6LomTUgnZCUMesZWpJ69xGEmnkqc2oyGMzSt5sbr6yrAipVXcr6kW9YHbISTWmk8kkmmx5s3OjSSfsydn2tl734u3bzduzKifpE3NuXUWDS9iONr1LsCWX1ZPo0hzqSqXCTGc6FBVl2sCVEJlMIWjJSyzJhbXwxYPvc3XUuNESgyXm3cJHVGhk0qy3frSAh9eZG53fW6carWoTZOKO66WmTwn27HN1C+TE0kClbRwKBViUNGXOjHAo6uVmPqiP17thMfZzWQ35HsGoUnV9xkj9atjkZNfW/akagBvB0fXNrl968N+L8C7q5IAMXxZZNwDS31DVek41B328CAupMm2i8Lpjbla92SKMIUvnKQpWARPMspsBkbbvbumls1+r3TyDJezC3t4etFfa6/8bGQq1HNwHlf4jaLOGZnCM93y9iRuDcv1lKcAQtUZ4fbMMBWvNY+ijqwzpF+TWHqy0X5ScUyyTkvju/Uvvcx0t3BjukH/HTL3niIFVaYNX7r8EletzXcA7NFPKnKlv3aEvBm9OF42vMEI/XyzbYMkraxHVH5TXHTvRZl4pG3Monqn2KoOx3X3XP0/4taDNtLuvcDIXulFdw8hD6yegzXlc</source>
   </file>
-  <file path="Header/Consumer/IdConsumer.php" generated-path="Header.Consumer.IdConsumer.html" hash="9a4f93ad4b6745159c59fd42d8db6521" package="MailMimeParser">
+  <file path="Header/Consumer/IdConsumer.php" generated-path="Header.Consumer.IdConsumer.html" hash="ad06657c2e7530ddacf0131049b9ee6b" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
       <tag name="license" line="0" description="BSD" link="http://opensource.org/licenses/bsd-license.php"/>
       <tag name="package" line="0" description="MailMimeParser"/>
     </docblock>
-    <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header\Consumer" line="19" package="MailMimeParser">
-      <extends>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</extends>
+    <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header\Consumer" line="15" package="MailMimeParser">
+      <extends>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</extends>
       <name>IdConsumer</name>
       <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer</full_name>
-      <docblock line="19">
-        <description>Parses a single ID from an ID header.</description>
-        <long-description>Begins consuming greedily on anything except a space, to allow for
-incorrectly-formatted ID headers.  Ends consuming only when a '&gt;' character
-is found.  This means an incorrectly-formatted header can't have multiple
-IDs, but one surrounded by '&lt;&gt;' chars may contain spaces.</long-description>
-        <tag name="author" line="19" description="Zaahid Bateson"/>
-        <tag name="package" line="19" description="MailMimeParser"/>
-        <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html"/>
+      <docblock line="15">
+        <description>Parses a single ID from an ID header.  Begins consuming on a '&lt;' char, and
+ends on a '&gt;' char.</description>
+        <long-description>Note that GenericConsumer should be instantiated with a
+MimeLiteralPartFactory instead of a HeaderPartFactory.  Sub-classes may not
+need MimeLiteralPartFactory instances though.</long-description>
+        <tag name="author" line="15" description="Zaahid Bateson"/>
+        <tag name="package" line="15" description="MailMimeParser"/>
+        <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer" refers="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer" link="/classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html"/>
       </docblock>
       <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="30" package="MailMimeParser">
         <name>$consumerService</name>
@@ -29651,90 +29639,311 @@ IDs, but one surrounded by '&lt;&gt;' chars may contain spaces.</long-descriptio
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="28" package="MailMimeParser">
-        <name>getSubConsumers</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::getSubConsumers()</full_name>
-        <docblock line="28">
-          <description>Returns the following as sub-consumers:
- - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
- - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer</description>
-          <long-description></long-description>
-          <tag name="return" line="28" description="the sub-consumers" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;">
-            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</type>
-          </tag>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getSubConsumers"/>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Consumer" line="42" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Consumer" line="23" package="MailMimeParser">
         <name>getTokenSeparators</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::getTokenSeparators()</full_name>
+        <docblock line="23">
+          <description>Overridden to return patterns matching the beginning part of an ID ('&lt;'
+and '&gt;' chars).</description>
+          <long-description>The whitespace character delimits mime-encoded parts for decoding.</long-description>
+          <tag name="return" line="23" description="the patterns" type="array&lt;mixed,string&gt;">
+            <type>array&lt;mixed,string&gt;</type>
+          </tag>
+          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::getTokenSeparators()" refers="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::getTokenSeparators()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html#method_getTokenSeparators"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="31" package="MailMimeParser">
+        <name>isEndToken</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::isEndToken()</full_name>
+        <docblock line="31">
+          <description>Returns true for '&gt;'.</description>
+          <long-description></long-description>
+          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::isEndToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::isEndToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html#method_isEndToken"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$token</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="42" package="MailMimeParser">
+        <name>isStartToken</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::isStartToken()</full_name>
         <docblock line="42">
-          <description>Overridden to return patterns matching the beginning part of an ID ("&lt;"
-and "&gt;\s*" chars).</description>
+          <description>Returns true for '&lt;'.</description>
+          <long-description></long-description>
+          <tag name="param" line="42" description="" type="string" variable="$token">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="42" description="false" type="boolean">
+            <type>boolean</type>
+          </tag>
+          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::isStartToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::isStartToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html#method_isStartToken"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$token</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="88" package="MailMimeParser">
+        <name>getSubConsumers</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()</full_name>
+        <docblock line="88">
+          <description>Called during construction to set up the list of sub-consumers that will
+take control from this consumer should a token match a sub-consumer's
+start token.</description>
+          <long-description></long-description>
+          <tag name="return" line="88" description="the array of consumers" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</type>
+          </tag>
+        </docblock>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="140" package="MailMimeParser">
+        <name>getTokenSeparators</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()</full_name>
+        <docblock line="140">
+          <description>Returns an array of regular expression separators specific to this
+consumer.  The returned patterns are used to split the header value into
+tokens for the consumer to parse into parts.</description>
           <long-description>Each array element makes part of a generated regular expression that is
 used in a call to preg_split().  RegEx patterns can be used, and care
 should be taken to escape special characters.</long-description>
-          <tag name="return" line="42" description="the patterns" type="array&lt;mixed,string&gt;">
+          <tag name="return" line="140" description="the array of patterns" type="array&lt;mixed,string&gt;">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_getTokenSeparators"/>
         </docblock>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="50" package="MailMimeParser">
+      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="207" package="MailMimeParser">
         <name>isEndToken</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::isEndToken()</full_name>
-        <docblock line="50">
-          <description>Returns true for '&gt;'.</description>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()</full_name>
+        <docblock line="207">
+          <description>Returns true if the passed string token marks the end marker for the
+current consumer.</description>
           <long-description></long-description>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_isEndToken"/>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$token</name>
-          <default></default>
-          <type>string</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="62" package="MailMimeParser">
-        <name>isStartToken</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::isStartToken()</full_name>
-        <docblock line="62">
-          <description>AddressConsumer is "greedy", so this always returns true unless the token
-consists only of whitespace (as it would between '&gt;' and '&lt;' chars).</description>
-          <long-description></long-description>
-          <tag name="param" line="62" description="" type="string" variable="$token">
+          <tag name="param" line="207" description="&lt;p&gt;the current token&lt;/p&gt;" type="string" variable="$token">
             <type>string</type>
           </tag>
-          <tag name="return" line="62" description="false" type="boolean">
+          <tag name="return" line="207" description="" type="boolean">
             <type>boolean</type>
           </tag>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_isStartToken"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$token</name>
           <default></default>
           <type>string</type>
         </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="73" package="MailMimeParser">
-        <name>processParts</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\IdConsumer::processParts()</full_name>
-        <docblock line="73">
-          <description>Concatenates the passed parts into a single part and returns it.</description>
-          <long-description>The default implementation simply returns the passed array after
-filtering out null/empty parts.</long-description>
-          <tag name="param" line="73" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
+      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="198" package="MailMimeParser">
+        <name>isStartToken</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()</full_name>
+        <docblock line="198">
+          <description>Returns true if the passed string token marks the beginning marker for
+the current consumer.</description>
+          <long-description></long-description>
+          <tag name="param" line="198" description="&lt;p&gt;the current token&lt;/p&gt;" type="string" variable="$token">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="198" description="" type="boolean">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$token</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="86" package="MailMimeParser">
+        <name>shouldAddSpace</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::shouldAddSpace()</full_name>
+        <docblock line="86">
+          <description>Returns true if a space should be added based on the passed last and next
+parts.</description>
+          <long-description></long-description>
+          <tag name="param" line="86" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart" variable="$nextPart">
+            <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+          </tag>
+          <tag name="param" line="86" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart" variable="$lastPart">
+            <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+          </tag>
+          <tag name="return" line="86" description="" type="boolean">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$nextPart</name>
+          <default></default>
+          <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$lastPart</name>
+          <default></default>
+          <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="101" package="MailMimeParser">
+        <name>addSpaceToRetParts</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::addSpaceToRetParts()</full_name>
+        <docblock line="101">
+          <description>Loops over the $parts array from the current position, checks if the
+space should be added, then adds it to $retParts and returns.</description>
+          <long-description></long-description>
+          <tag name="param" line="101" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
             <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
           </tag>
-          <tag name="return" line="73" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;">
+          <tag name="param" line="101" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$retParts">
             <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
           </tag>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()" refers="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.AbstractConsumer.html#method_processParts"/>
+          <tag name="param" line="101" description="" type="integer" variable="$curIndex">
+            <type>integer</type>
+          </tag>
+          <tag name="param" line="101" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart" variable="$spacePart">
+            <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+          </tag>
+          <tag name="param" line="101" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart" variable="$lastPart">
+            <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+          </tag>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$parts</name>
           <default></default>
           <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
         </argument>
+        <argument line="0" by_reference="true">
+          <name>$retParts</name>
+          <default></default>
+          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$curIndex</name>
+          <default></default>
+          <type>integer</type>
+        </argument>
+        <argument line="0" by_reference="true">
+          <name>$spacePart</name>
+          <default></default>
+          <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$lastPart</name>
+          <default></default>
+          <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="131" package="MailMimeParser">
+        <name>addSpaces</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::addSpaces()</full_name>
+        <docblock line="131">
+          <description>Checks if the passed space part should be added to the returned parts and
+adds it.</description>
+          <long-description>Never adds a space if it's the first part, otherwise only add it if
+either part isn't set to ignore the space</long-description>
+          <tag name="param" line="131" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+          <tag name="param" line="131" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$retParts">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+          <tag name="param" line="131" description="" type="integer" variable="$curIndex">
+            <type>integer</type>
+          </tag>
+          <tag name="param" line="131" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart" variable="$spacePart">
+            <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$parts</name>
+          <default></default>
+          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+        </argument>
+        <argument line="0" by_reference="true">
+          <name>$retParts</name>
+          <default></default>
+          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$curIndex</name>
+          <default></default>
+          <type>integer</type>
+        </argument>
+        <argument line="0" by_reference="true">
+          <name>$spacePart</name>
+          <default>null</default>
+          <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="145" package="MailMimeParser">
+        <name>isSpaceToken</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::isSpaceToken()</full_name>
+        <docblock line="145">
+          <description>Returns true if the passed HeaderPart is a Token instance and a space.</description>
+          <long-description></long-description>
+          <tag name="param" line="145" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart" variable="$part">
+            <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+          </tag>
+          <tag name="return" line="145" description="" type="boolean">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$part</name>
+          <default></default>
+          <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="161" package="MailMimeParser">
+        <name>filterIgnoredSpaces</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::filterIgnoredSpaces()</full_name>
+        <docblock line="161">
+          <description>Filters out ignorable spaces between parts in the passed array.</description>
+          <long-description>Spaces with parts on either side of it that specify they can be ignored
+are filtered out.  filterIgnoredSpaces is called from within
+processParts, and if needed by an implementing class that overrides
+processParts, must be specifically called.</long-description>
+          <tag name="param" line="161" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+          <tag name="return" line="161" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$parts</name>
+          <default></default>
+          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</inherited_from>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="331" package="MailMimeParser">
+        <name>processParts</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()</full_name>
+        <docblock line="331">
+          <description>Performs any final processing on the array of parsed parts before
+returning it to the consumer client.</description>
+          <long-description>The default implementation simply returns the passed array after
+filtering out null/empty parts.</long-description>
+          <tag name="param" line="331" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+          <tag name="return" line="331" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;">
+            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$parts</name>
+          <default></default>
+          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
+        </argument>
+        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Consumer" line="44" package="MailMimeParser">
         <name>__construct</name>
@@ -29806,20 +30015,6 @@ filtering out null/empty parts.</long-description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
-      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="88" package="MailMimeParser">
-        <name>getSubConsumers</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getSubConsumers()</full_name>
-        <docblock line="88">
-          <description>Called during construction to set up the list of sub-consumers that will
-take control from this consumer should a token match a sub-consumer's
-start token.</description>
-          <long-description></long-description>
-          <tag name="return" line="88" description="the array of consumers" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;">
-            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</type>
-          </tag>
-        </docblock>
-        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
-      </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="98" package="MailMimeParser">
         <name>getAllConsumers</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getAllConsumers()</full_name>
@@ -29852,22 +30047,6 @@ parseParts to parse the returned array.</long-description>
           <default></default>
           <type>string</type>
         </argument>
-        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
-      </method>
-      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="140" package="MailMimeParser">
-        <name>getTokenSeparators</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::getTokenSeparators()</full_name>
-        <docblock line="140">
-          <description>Returns an array of regular expression separators specific to this
-consumer.  The returned patterns are used to split the header value into
-tokens for the consumer to parse into parts.</description>
-          <long-description>Each array element makes part of a generated regular expression that is
-used in a call to preg_split().  RegEx patterns can be used, and care
-should be taken to escape special characters.</long-description>
-          <tag name="return" line="140" description="the array of patterns" type="array&lt;mixed,string&gt;">
-            <type>array&lt;mixed,string&gt;</type>
-          </tag>
-        </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="148" package="MailMimeParser">
@@ -29913,48 +30092,6 @@ array will not contain any empty parts and will contain the markers.</long-descr
         </docblock>
         <argument line="0" by_reference="false">
           <name>$rawValue</name>
-          <default></default>
-          <type>string</type>
-        </argument>
-        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
-      </method>
-      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="198" package="MailMimeParser">
-        <name>isStartToken</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isStartToken()</full_name>
-        <docblock line="198">
-          <description>Returns true if the passed string token marks the beginning marker for
-the current consumer.</description>
-          <long-description></long-description>
-          <tag name="param" line="198" description="&lt;p&gt;the current token&lt;/p&gt;" type="string" variable="$token">
-            <type>string</type>
-          </tag>
-          <tag name="return" line="198" description="" type="boolean">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$token</name>
-          <default></default>
-          <type>string</type>
-        </argument>
-        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
-      </method>
-      <method final="false" abstract="true" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="207" package="MailMimeParser">
-        <name>isEndToken</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::isEndToken()</full_name>
-        <docblock line="207">
-          <description>Returns true if the passed string token marks the end marker for the
-current consumer.</description>
-          <long-description></long-description>
-          <tag name="param" line="207" description="&lt;p&gt;the current token&lt;/p&gt;" type="string" variable="$token">
-            <type>string</type>
-          </tag>
-          <tag name="return" line="207" description="" type="boolean">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$token</name>
           <default></default>
           <type>string</type>
         </argument>
@@ -30097,33 +30234,11 @@ processing.</long-description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="331" package="MailMimeParser">
-        <name>processParts</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()</full_name>
-        <docblock line="331">
-          <description>Performs any final processing on the array of parsed parts before
-returning it to the consumer client.</description>
-          <long-description>The default implementation simply returns the passed array after
-filtering out null/empty parts.</long-description>
-          <tag name="param" line="331" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;" variable="$parts">
-            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
-          </tag>
-          <tag name="return" line="331" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;">
-            <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
-          </tag>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$parts</name>
-          <default></default>
-          <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</type>
-        </argument>
-        <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
-      </method>
     </class>
     <parse_markers>
-      <error line="50" code="PPC:ERR-50015">Argument $token is missing from the Docblock of isEndToken</error>
+      <error line="31" code="PPC:ERR-50015">Argument $token is missing from the Docblock of isEndToken</error>
     </parse_markers>
-    <source>eJydVduO2zYQffdXTA0Dll3bQl+zu26y2RZdoEHaOuhD4jSgpLHFViIFDrWuUey/d4aivGsne0n0IFEU53bOmdH5j03ZDNLpdABTeFdqgo2uEPjZKOfBbsCXCO8vlUeyZv1G6eqNrvE35QgdNM7+jblfsLHYv6x0joYQSu+bF2lqG36zrctxYd02jV8pzaiYx5cFh4fL1RWbpwOjaqRG5Q8GXP+CquDHa2uordGdDfrUw3cCBaTNlgu4voKNszUoI8symPVpXuJWG4I8OOHjsHWIha72YA0b7H0pm/hvjo0Xj5LRDLwFVVV2BxvrxIs2uXWOq6/2c96qlfdY3AWjBcBPprgfxhoOsSuRg8B4OYa8VE7lHjt3jLxtTcFmgYYaFefI6X85ThcEcmXGHkp1g1C3lddNheLs+opmkLXMn0Gg1jnxzFbZHsbnMTKHUHvJzittuiLpQKRqfWkdvFeq1AVEMgJHeaWI4LroKWCcPEqdrzLyUk7/YfDfAPgK/Mg1hT/Qt46LEkVtrGApqCjiDLN5Hs3oRX8c5rB+pg54Uddo7mJ/g4vfW8vArrzjpE799M+XLpTwWa0fPoaijuqINml4cqN4ppAp2LQm95qFtkW/arPeAyWTcLADTa4Y6sNhQ64Ra5Pmyz7ICt0N99F8yc5OIEgms+dafqny++Yfz8LyNtxPSX17g87pomBVc4fEpBsRqVDNas1DNwk8mfSdkbd+tnTdmQzPh707ZQoYLtc0HXYinSwe4oBCvhH5PuAx6G3GU+YI8Xf2HzQr5PjK20dAH5+PZ9Kjj5Z+0LNrRdBODBZP0a6Jp0JIIxl5eTyQQvwKFxcX4nfyWCKvisIh0aEleXwMw0zbD2dAFoR6Hl47tafoPibdmortAoIhWu9QVKLJUzeymKhdqX0czQk3rPaws23FAwX9DjlLGWdCHeP2IG8Ceh1pg9FRvJ7TzNqK5x5sVEX4NJIrzzp6DpaNw+2noMVknP61pu9HKfMbbeA7hviHRwFmZHOeIkYmSdQbEeciOmY0jPwb+j9P0LZg0SOtfY/FCRRPjSZ+83EtS5b6KAQ8Re2r/TyFLG/xz4DkMCXKOf5PdJFP8R0xm3+qipXEIh2fHfa5GVDlJYu4Q4glE1aTe7bH9ouL7kQYSGErmdz5u/2sQeM4E5OfeRBbt58vDe5+ZZk6VUnmycH55NDFt4P/AVRqxkc=</source>
+    <source>eJyVUk1v1EAMvedX+IC0HyzJne5CtRRBDxWI7andHmZnnM1AMhPZDkJC/e94ZpNWFFWoc4gzsd/ze3bW7/umL6rlsoAlXDeeofYtgsbekECsQRqEm60R5Bj2V8a3V77Dr4YYCXqK39FKqeCEP2+9xcAIjUj/tqpir7c4kMUy0rEas1wd2L0ZL6W2h+3uQuFVEUyH3Bv7bMP9ZzROw4cYeOiQzopJes4zGGAfjmrg8gJqih2YkF6bDCsBtnj0gcFmvFZCDIqZrWdgG0MrLXeJDYPjMfXulHqwaAZpIsGNMY13MMrM6m1rmOHSTeIAf0km+oQBydvpe/G7AD1ZeDpL+PITibxzGEAiEMpAQecvgqRiOyO2SVrTJg7JQEi3aT8nh3P1MNGpiQfdvCinz1M8HxuwkPLc3mXeqdtYVOXYDwddE9RDsOJ1HEeU6/gDww61uZFIPF/kwpOjdEbu29meX89WabKrpOXuLFfc5+dT+98yhkFoQKh1uAoo/xZCUfQ/Q/eoxfPH4LKa+StJ4RklYxY2m03iXbxMyHr27/iS926cHpzYn472EGOLupjatIz/d7IT3eVLvawfvdwXfwAxqByK</source>
   </file>
   <file path="Header/Consumer/ParameterConsumer.php" generated-path="Header.Consumer.ParameterConsumer.html" hash="7bc6e69a8a710e3e8e79c5dfafae57e8" package="MailMimeParser">
     <docblock line="0">

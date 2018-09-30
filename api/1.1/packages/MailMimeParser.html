@@ -155,7 +155,8 @@ parts as necessary.">DateConsumer</a></li>
 and CommentParts.">ReceivedConsumer</a></li>
 <li><a href="#QuotedStringConsumer" title="Represents a quoted part of a header value starting at a single quote, and
 ending at the next single quote.">QuotedStringConsumer</a></li>
-<li><a href="#IdConsumer" title="Parses a single ID from an ID header.">IdConsumer</a></li>
+<li><a href="#IdConsumer" title="Parses a single ID from an ID header.  Begins consuming on a '&lt;' char, and
+ends on a '&gt;' char.">IdConsumer</a></li>
 <li><a href="#ParameterConsumer" title="Reads headers separated into parameters consisting of a main value, and
 subsequent name/value pairs - for example text/html; charset=utf-8.">ParameterConsumer</a></li>
 <li><a href="#GenericHeader" title="Reads the header using GenericConsumer.">GenericHeader</a></li>
@@ -261,7 +262,8 @@ QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.</p>
 <div xmlns:php="http://php.net/xsl" id="IdConsumer" class="element ajax clickable class">
 <h1>IdConsumer<a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdConsumer.html">¶</a>
 </h1>
-<p class="short_description">Parses a single ID from an ID header.</p>
+<p class="short_description">Parses a single ID from an ID header.  Begins consuming on a '<' char, and
+ends on a '>' char.</p>
 <div class="details collapse"></div>
 <a href="../classes/ZBateson.MailMimeParser.Header.Consumer.IdConsumer.html" class="more">« More »</a>
 </div>
@@ -699,7 +701,7 @@ headers.</p>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-30T16:59:34+02:00.<br></footer></div>
+            generated on 2018-09-30T21:18:54+02:00.<br></footer></div>
 </div>
 </body>
 </html>

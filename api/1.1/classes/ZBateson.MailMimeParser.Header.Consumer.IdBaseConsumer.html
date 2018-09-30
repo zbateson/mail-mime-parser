@@ -70,7 +70,6 @@
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="method protected "><a href="#method_advanceToNextToken" title="advanceToNextToken() :: Disables advancing for start tokens not matching '&lt;'."><span class="description">Disables advancing for start tokens not matching '&lt;'.</span><pre>advanceToNextToken()</pre></a></li>
 <li class="method protected inherited"><a href="#method_advanceToNextToken" title="advanceToNextToken() :: Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token."><span class="description">Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token.</span><pre>advanceToNextToken()</pre></a></li>
@@ -85,17 +84,19 @@ for the current token, calls getPartForToken and returns it in an array."><span 
 token triggers a sub-consumer's start token and passes control onto that
 sub-consumer's parseTokenIntoParts.  If no sub-consumer is responsible
 for the current token, calls getPartForToken and returns it in an array.</span><pre>getConsumerTokenParts()</pre></a></li>
-<li class="method protected "><a href="#method_getPartForToken" title="getPartForToken() :: Could be reached by whitespace characters.  Returns null to ignore the
-passed token."><span class="description">Could be reached by whitespace characters.  Returns null to ignore the
-passed token.</span><pre>getPartForToken()</pre></a></li>
+<li class="method protected "><a href="#method_getPartForToken" title="getPartForToken() :: Returns null for whitespace, and LiteralPart for anything else."><span class="description">Returns null for whitespace, and LiteralPart for anything else.</span><pre>getPartForToken()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getPartForToken" title="getPartForToken() :: Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
 for the passed string token.  If the token should be ignored, the
 function must return null."><span class="description">Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
 for the passed string token.  If the token should be ignored, the
 function must return null.</span><pre>getPartForToken()</pre></a></li>
-<li class="method protected "><a href="#method_getSubConsumers" title="getSubConsumers() :: Returns \ZBateson\MailMimeParser\Header\Consumer\IdConsumer as a
-sub-consumer."><span class="description">Returns \ZBateson\MailMimeParser\Header\Consumer\IdConsumer as a
-sub-consumer.</span><pre>getSubConsumers()</pre></a></li>
+<li class="method protected "><a href="#method_getSubConsumers" title="getSubConsumers() :: Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\IdConsumer"><span class="description">Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\IdConsumer</span><pre>getSubConsumers()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getSubConsumers" title="getSubConsumers() :: Called during construction to set up the list of sub-consumers that will
 take control from this consumer should a token match a sub-consumer's
 start token."><span class="description">Called during construction to set up the list of sub-consumers that will
@@ -130,6 +131,7 @@ the current consumer.</span><pre>isStartToken()</pre></a></li>
 <li class="method protected inherited"><a href="#method_parseTokensIntoParts" title="parseTokensIntoParts() :: Iterates over the passed token Iterator and returns an array of parsed
 \ZBateson\MailMimeParser\Header\Part\HeaderPart objects."><span class="description">Iterates over the passed token Iterator and returns an array of parsed
 \ZBateson\MailMimeParser\Header\Part\HeaderPart objects.</span><pre>parseTokensIntoParts()</pre></a></li>
+<li class="method protected "><a href="#method_processParts" title="processParts() :: Overridden to filter out any found CommentPart objects."><span class="description">Overridden to filter out any found CommentPart objects.</span><pre>processParts()</pre></a></li>
 <li class="method protected inherited"><a href="#method_processParts" title="processParts() :: Performs any final processing on the array of parsed parts before
 returning it to the consumer client."><span class="description">Performs any final processing on the array of parsed parts before
 returning it to the consumer client.</span><pre>processParts()</pre></a></li>
@@ -175,9 +177,9 @@ HeaderPart objects</span><pre>$partFactory</pre></a></li>
 <div xmlns:php="http://php.net/xsl" class="element class">
 <p class="short_description">Serves as a base-consumer for ID headers (like Message-ID and Content-ID).</p>
 <div class="details">
-<div class="long_description"><p>IdBaseConsumer passes on token processing to its sub-consumer, an
-IdConsumer, and collects Part\LiteralPart objects processed and returned
-by IdConsumer.</p></div>
+<div class="long_description"><p>IdBaseConsumer handles invalidly-formatted IDs not within '&lt;' and '&gt;'
+characters.  Processing for validly-formatted IDs are passed on to its
+sub-consumer, IdConsumer.</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -246,29 +248,6 @@ by IdConsumer.</p></div>
 </div>
 </div></div>
 </div>
-<a id="method_advanceToNextToken"></a><div class="element clickable method protected method_advanceToNextToken " data-toggle="collapse" data-target=".method_advanceToNextToken .collapse" title="protected">
-<h2>Disables advancing for start tokens not matching '&lt;'.</h2>
-<pre>advanceToNextToken(\Iterator $tokens, boolean $isStartToken) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>The default implementation will advance for a start token, but not
-advance on the end token of the current consumer, allowing the end token
-to be passed up to a higher-level consumer.</p></div>
-<table class="table table-bordered"><tr>
-<th>inherited_from</th>
-<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::advanceToNextToken()</td>
-</tr></table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$tokens</h4>
-<code>\Iterator</code>
-</div>
-<div class="subelement argument">
-<h4>$isStartToken</h4>
-<code>boolean</code>
-</div>
-</div></div>
-</div>
 <a id="method_advanceToNextToken"></a><div class="element clickable method protected method_advanceToNextToken inherited" data-toggle="collapse" data-target=".method_advanceToNextToken .collapse" title="protected">
 <h2>Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token.</h2>
@@ -333,8 +312,7 @@ for the current token, calls getPartForToken and returns it in an array.</h2>
 </div></div>
 </div>
 <a id="method_getPartForToken"></a><div class="element clickable method protected method_getPartForToken " data-toggle="collapse" data-target=".method_getPartForToken .collapse" title="protected">
-<h2>Could be reached by whitespace characters.  Returns null to ignore the
-passed token.</h2>
+<h2>Returns null for whitespace, and LiteralPart for anything else.</h2>
 <pre>getPartForToken(string $token, boolean $isLiteral) : \ZBateson\MailMimeParser\Header\Part\HeaderPart | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -382,8 +360,10 @@ e.g. an escaped token</p></div>
 </div></div>
 </div>
 <a id="method_getSubConsumers"></a><div class="element clickable method protected method_getSubConsumers " data-toggle="collapse" data-target=".method_getSubConsumers .collapse" title="protected">
-<h2>Returns \ZBateson\MailMimeParser\Header\Consumer\IdConsumer as a
-sub-consumer.</h2>
+<h2>Returns the following as sub-consumers:
+ - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+ - \ZBateson\MailMimeParser\Header\Consumer\IdConsumer</h2>
 <pre>getSubConsumers() : array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer&gt;</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -576,6 +556,26 @@ processing.</p></div>
         parsed parts</div>
 </div></div>
 </div>
+<a id="method_processParts"></a><div class="element clickable method protected method_processParts " data-toggle="collapse" data-target=".method_processParts .collapse" title="protected">
+<h2>Overridden to filter out any found CommentPart objects.</h2>
+<pre>processParts(array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt; $parts) : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>The default implementation simply returns the passed array after
+filtering out null/empty parts.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::processParts()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parts</h4>
+<code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\HeaderPart&gt;</code></div>
+</div></div>
+</div>
 <a id="method_processParts"></a><div class="element clickable method protected method_processParts inherited" data-toggle="collapse" data-target=".method_processParts .collapse" title="protected">
 <h2>Performs any final processing on the array of parsed parts before
 returning it to the consumer client.</h2>
@@ -658,7 +658,7 @@ HeaderPart objects</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-30T16:59:36+02:00.<br></footer></div>
+            generated on 2018-09-30T21:18:56+02:00.<br></footer></div>
 </div>
 </body>
 </html>
