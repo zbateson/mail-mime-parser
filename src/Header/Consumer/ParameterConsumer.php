@@ -36,9 +36,13 @@ class ParameterConsumer extends GenericConsumer
     }
 
     /**
-     * Returns a regex pattern used to split the input header string.  The
-     * default implementation calls getAllTokenSeparators and implodes the
-     * returned array with the regex OR '|' character as its glue.
+     * Overridden to use a specialized regex for finding mime-encoded parts
+     * (RFC 2047).
+     *
+     * Some implementations seem to place mime-encoded parts within quoted
+     * parameters, and split the mime-encoded parts across multiple split
+     * parameters.  The specialized regex doesn't allow double quotes inside a
+     * mime encoded part, so it can be "continued" in another parameter.
      *
      * @return string the regex pattern
      */
