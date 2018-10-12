@@ -21,7 +21,12 @@ class MimeLiteralPart extends LiteralPart
     /**
      * @var string regex pattern matching a mime-encoded part
      */
-    const MIME_PART_PATTERN = '=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?=';
+    const MIME_PART_PATTERN = '=\?[^?=]+\?[QBqb]\?[^\?]+\?=';
+
+    /**
+     * @var string regex pattern used when parsing parameterized headers
+     */
+    const MIME_PART_PATTERN_NO_QUOTES = '=\?[^\?=]+\?[QBqb]\?[^\?"]+\?=';
     
     /**
      * @var bool set to true to ignore spaces before this part

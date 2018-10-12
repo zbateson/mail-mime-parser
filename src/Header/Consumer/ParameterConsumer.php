@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\Token;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use ZBateson\MailMimeParser\Header\Part\SplitParameterToken;
 use ArrayObject;
 
@@ -33,7 +34,21 @@ class ParameterConsumer extends GenericConsumer
     {
         return [';', '='];
     }
-    
+
+    /**
+     * Returns a regex pattern used to split the input header string.  The
+     * default implementation calls getAllTokenSeparators and implodes the
+     * returned array with the regex OR '|' character as its glue.
+     *
+     * @return string the regex pattern
+     */
+    protected function getTokenSplitPattern()
+    {
+        $sChars = implode('|', $this->getAllTokenSeparators());
+        $mimePartPattern = MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES;
+        return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
+    }
+
     /**
      * Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
      * the passed string token and returns it, unless the token is an escaped
@@ -132,7 +147,7 @@ class ParameterConsumer extends GenericConsumer
             $strName = '';
             $strCat = '';
             return true;
-        } elseif ($tokenValue === '=') {
+        } elseif ($tokenValue === '=' && $strCat !== '') {
             $strName = $strCat;
             $strCat = '';
             return true;

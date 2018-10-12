@@ -70,7 +70,27 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('sriracha', $ret[2]->getValue());
     }
 
-    public function testSimpleSplitHeader()
+    public function testQuotedWithRfc2047Value()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments="=?US-ASCII?Q?mustard?="');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard', $ret[1]->getValue());
+    }
+
+    public function testUnquotedWithRfc2047Value()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments==?US-ASCII?Q?mustard?=');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard', $ret[1]->getValue());
+    }
+
+    public function testSimpleSplitHeaderWithDoubleQuotedParts()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="mustar";'
             . 'condiments*1="d, ketchup"; condiments*2=" and mayo"');
@@ -118,6 +138,30 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('en-US', $ret[1]->getLanguage());
     }
 
+    public function testSplitHeaderWithEncodingLanguageAndQuotedPart()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0*=us-ascii\'en-US\''
+            . 'mustard,%20ketchup; condiments*1*=%20and; condiments*2=" mayo"');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
+        $this->assertEquals('en-US', $ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderWithEncodingLanguageAndQuotedPartAndWrongNumbering()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*1*=us-ascii\'en-US\''
+            . 'mustard,%20ketchup; condiments*2*=%20and; condiments*3=" mayo"');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('hotdogs', $ret[0]->getValue());
+        $this->assertEquals('condiments', $ret[1]->getName());
+        $this->assertEquals('mustard, ketchup and mayo', $ret[1]->getValue());
+        // $this->assertEquals('en-US', $ret[1]->getLanguage());
+    }
+
     public function testSplitHeaderWithMultiByteEncodedPart()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=utf-8\'\''
@@ -146,5 +190,32 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('condiments', $ret[1]->getName());
         $this->assertEquals($str, $ret[1]->getValue());
         $this->assertEquals('abv-BH', $ret[1]->getLanguage());
+    }
+
+    public function testSplitHeaderWithRfc2047()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=\'\''
+            . '=?US-ASCII?Q?TS_Eliot?=');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('TS Eliot', $ret[1]->getValue());
+    }
+
+    public function testSplitHeaderWithSplitRfc2047()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
+            . '=?US-ASCII?Q?TS_Eli"; condiments*1="ot?="');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('TS Eliot', $ret[1]->getValue());
+    }
+
+    public function testSplitHeaderWithMultipleSplitRfc2047()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
+            . '=?US-ASCII?Q?TS_E?=   =?US-ASCII?Q?li"; condiments*1="ot?="');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('TS Eliot', $ret[1]->getValue());
     }
 }
