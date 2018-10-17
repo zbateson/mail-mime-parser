@@ -80,7 +80,25 @@ class MessageParser
             $partBuilder->addHeader($a[0], trim($a[1]));
         }
     }
-    
+
+    /**
+     * Reads a line of up to the passed number of characters.  If the line is
+     * larger than that, the remaining characters in the line are read and
+     * discarded, and only the first part is returned.
+     * 
+     * @param resource $handle
+     * @param int $size
+     * @return string
+     */
+    private function readLine($handle, $size = 4096)
+    {
+        $ret = $line = fgets($handle, $size);
+        while (strlen($line) === $size - 1 && substr($line, -1) !== "\n") {
+            $line = fgets($handle, $size);
+        }
+        return $ret;
+    }
+
     /**
      * Reads header lines up to an empty line, adding them to the passed
      * $partBuilder.
@@ -92,7 +110,7 @@ class MessageParser
     {
         $header = '';
         do {
-            $line = fgets($handle, 1000);
+            $line = $this->readLine($handle);
             if (empty($line) || $line[0] !== "\t" && $line[0] !== ' ') {
                 $this->addRawHeaderToPart($header, $partBuilder);
                 $header = '';
@@ -102,7 +120,7 @@ class MessageParser
             $header .= rtrim($line, "\r\n");
         } while ($header !== '');
     }
-    
+
     /**
      * Reads lines from the passed $handle, calling
      * $partBuilder->setEndBoundaryFound with the passed line until it returns
