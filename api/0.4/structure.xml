@@ -7629,7 +7629,7 @@ parameters. "Charset" is a common parameter of Content-Type.</long-description>
     </class>
     <source>eJx9UsFu2zAMvfsreAiQLmjiezKsQTcMu2QY2gIDigAFI9ORBlsSJGpdMPTfR8tO6hRrfJEp8b1HPvLjjde+KGezAmbwoE2E2jQEcnoMDK4G1gSPt8gUnd1u0DQb09IPDJEC+OB+keKFgDv8ujGKbCTQzH5Zls5L5FJQtHBhXw6vsdzFaj4EC5GH2/svAi8Liy1Fj+pdwe2GYsQ9rYoixfezvhFWp+MrKnbhsLqIGHi3P4PhLuxfuA9FbTDojnygSJZf7UGwzs5bAUDbkyxAjKQ+QbnUVEBGTAywI8n2DRoLTH+4I+xZgtynRFa5iipAZlS6FRVAWw0UghUI2S6hFoDLjFJNlu6oBnXINMbugQ+eYjcaOM0Wm8Y9R1CNyT2wAy0SMm95OBJIVoRxPxF2h27Sv02mxY7ts7NSDM8fRAN09lna/u7s0TkIxCnYmDstc9OnUtaYWEsPj4jaVDCMJG+AajDGM56+6wjHi+JvAfLlgXTfDO5JWklePKyoxtTw/6rLmzwupccez7UMAls42xiY6HH4JvV8RWDiT/9DYplPn3ay6VAnq9g4C09PytnIISm+uqR2fUHgQ2bufcgaGKTb5XLM/ZZtDF+dkBOWrZh/isR3+NyXczUduze9humrbdMB+lK8FP8AsLpq9w==</source>
   </file>
-  <file path="Message/MessageParser.php" generated-path="Message.MessageParser.html" hash="f67265e3d689544ef9125b33f3f6f031" package="MailMimeParser">
+  <file path="Message/MessageParser.php" generated-path="Message.MessageParser.html" hash="194efd84df824ea64a43384754ee6c17" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -7762,16 +7762,45 @@ splits it and assigns it to $part</description>
           <type>\ZBateson\MailMimeParser\Message\MimePart</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="93" package="MailMimeParser">
-        <name>readHeaders</name>
-        <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readHeaders()</full_name>
-        <docblock line="93">
-          <description>Reads header lines up to an empty line, adding them to the passed $part.</description>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="95" package="MailMimeParser">
+        <name>readLine</name>
+        <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readLine()</full_name>
+        <docblock line="95">
+          <description>Reads a line of up to the passed number of characters.  If the line is
+larger than that, the remaining characters in the line are read and
+discarded, and only the first part is returned.</description>
           <long-description></long-description>
-          <tag name="param" line="93" description="&lt;p&gt;the resource handle to read from&lt;/p&gt;" type="resource" variable="$handle">
+          <tag name="param" line="95" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="93" description="&lt;p&gt;the current part to add&#10;       headers to&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
+          <tag name="param" line="95" description="" type="integer" variable="$size">
+            <type>integer</type>
+          </tag>
+          <tag name="return" line="95" description="" type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$handle</name>
+          <default></default>
+          <type>resource</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$size</name>
+          <default>4096</default>
+          <type>integer</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="111" package="MailMimeParser">
+        <name>readHeaders</name>
+        <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readHeaders()</full_name>
+        <docblock line="111">
+          <description>Reads header lines up to an empty line, adding them to the passed $part.</description>
+          <long-description></long-description>
+          <tag name="param" line="111" description="&lt;p&gt;the resource handle to read from&lt;/p&gt;" type="resource" variable="$handle">
+            <type>resource</type>
+          </tag>
+          <tag name="param" line="111" description="&lt;p&gt;the current part to add&#10;       headers to&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
         </docblock>
@@ -7786,25 +7815,25 @@ splits it and assigns it to $part</description>
           <type>\ZBateson\MailMimeParser\Message\MimePart</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="119" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="137" package="MailMimeParser">
         <name>findPartBoundaries</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::findPartBoundaries()</full_name>
-        <docblock line="119">
+        <docblock line="137">
           <description>Finds the end of the Mime part at the current read position in $handle
 and sets $boundaryLength to the number of bytes in the part, and
 $endBoundaryFound to true if it's an 'end' boundary, meaning there are no
 further parts for the current mime part (ends with --).</description>
           <long-description></long-description>
-          <tag name="param" line="119" description="" type="resource" variable="$handle">
+          <tag name="param" line="137" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="119" description="" type="string" variable="$boundary">
+          <tag name="param" line="137" description="" type="string" variable="$boundary">
             <type>string</type>
           </tag>
-          <tag name="param" line="119" description="" type="integer" variable="$boundaryLength">
+          <tag name="param" line="137" description="" type="integer" variable="$boundaryLength">
             <type>integer</type>
           </tag>
-          <tag name="param" line="119" description="" type="boolean" variable="$endBoundaryFound">
+          <tag name="param" line="137" description="" type="boolean" variable="$endBoundaryFound">
             <type>boolean</type>
           </tag>
         </docblock>
@@ -7829,13 +7858,13 @@ further parts for the current mime part (ends with --).</description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="139" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="157" package="MailMimeParser">
         <name>addToParent</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::addToParent()</full_name>
-        <docblock line="139">
+        <docblock line="157">
           <description>Adds the part to its parent.</description>
           <long-description></long-description>
-          <tag name="param" line="139" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
+          <tag name="param" line="157" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
         </docblock>
@@ -7845,25 +7874,25 @@ further parts for the current mime part (ends with --).</description>
           <type>\ZBateson\MailMimeParser\Message\MimePart</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="155" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="173" package="MailMimeParser">
         <name>attachStreamHandles</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::attachStreamHandles()</full_name>
-        <docblock line="155">
+        <docblock line="173">
           <description></description>
           <long-description></long-description>
-          <tag name="param" line="155" description="" type="\ZBateson\MailMimeParser\Message\type" variable="$handle">
+          <tag name="param" line="173" description="" type="\ZBateson\MailMimeParser\Message\type" variable="$handle">
             <type>\ZBateson\MailMimeParser\Message\type</type>
           </tag>
-          <tag name="param" line="155" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
+          <tag name="param" line="173" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="param" line="155" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="173" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
-          <tag name="param" line="155" description="" type="\ZBateson\MailMimeParser\Message\type" variable="$contentStartPos">
+          <tag name="param" line="173" description="" type="\ZBateson\MailMimeParser\Message\type" variable="$contentStartPos">
             <type>\ZBateson\MailMimeParser\Message\type</type>
           </tag>
-          <tag name="param" line="155" description="" type="\ZBateson\MailMimeParser\Message\type" variable="$boundaryLength">
+          <tag name="param" line="173" description="" type="\ZBateson\MailMimeParser\Message\type" variable="$boundaryLength">
             <type>\ZBateson\MailMimeParser\Message\type</type>
           </tag>
         </docblock>
@@ -7893,32 +7922,32 @@ further parts for the current mime part (ends with --).</description>
           <type>\ZBateson\MailMimeParser\Message\type</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="194" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="212" package="MailMimeParser">
         <name>readPartContent</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readPartContent()</full_name>
-        <docblock line="194">
+        <docblock line="212">
           <description>Reads the content of a mime part up to a boundary, or the entire message
 if no boundary is specified.</description>
           <long-description>readPartContent may be called to skip to the first boundary to read its
 headers, in which case $skipPart should be true.
 
 If the end boundary is found, the method returns true.</long-description>
-          <tag name="param" line="194" description="&lt;p&gt;the input stream resource&lt;/p&gt;" type="resource" variable="$handle">
+          <tag name="param" line="212" description="&lt;p&gt;the input stream resource&lt;/p&gt;" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="194" description="&lt;p&gt;the current Message&#10;       object&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="212" description="&lt;p&gt;the current Message&#10;       object&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
-          <tag name="param" line="194" description="&lt;p&gt;the current MimePart&#10;       object to load the content into.&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
+          <tag name="param" line="212" description="&lt;p&gt;the current MimePart&#10;       object to load the content into.&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="param" line="194" description="&lt;p&gt;the MIME boundary&lt;/p&gt;" type="string" variable="$boundary">
+          <tag name="param" line="212" description="&lt;p&gt;the MIME boundary&lt;/p&gt;" type="string" variable="$boundary">
             <type>string</type>
           </tag>
-          <tag name="param" line="194" description="&lt;p&gt;pass true if the intention is to read up to the&#10;beginning MIME boundary's headers&lt;/p&gt;" type="boolean" variable="$skipPart">
+          <tag name="param" line="212" description="&lt;p&gt;pass true if the intention is to read up to the&#10;beginning MIME boundary's headers&lt;/p&gt;" type="boolean" variable="$skipPart">
             <type>boolean</type>
           </tag>
-          <tag name="return" line="194" description="if the end boundary is found" type="boolean">
+          <tag name="return" line="212" description="if the end boundary is found" type="boolean">
             <type>boolean</type>
           </tag>
         </docblock>
@@ -7948,20 +7977,20 @@ If the end boundary is found, the method returns true.</long-description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="220" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="238" package="MailMimeParser">
         <name>getParentBoundary</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::getParentBoundary()</full_name>
-        <docblock line="220">
+        <docblock line="238">
           <description>Returns the boundary from the parent MimePart, or the current boundary if
 $parent is null</description>
           <long-description></long-description>
-          <tag name="param" line="220" description="" type="string" variable="$curBoundary">
+          <tag name="param" line="238" description="" type="string" variable="$curBoundary">
             <type>string</type>
           </tag>
-          <tag name="param" line="220" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$parent">
+          <tag name="param" line="238" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$parent">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="return" line="220" description="" type="string">
+          <tag name="return" line="238" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -7976,20 +8005,20 @@ $parent is null</description>
           <type>\ZBateson\MailMimeParser\Message\MimePart</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="235" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="253" package="MailMimeParser">
         <name>newMimePartForMessage</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::newMimePartForMessage()</full_name>
-        <docblock line="235">
+        <docblock line="253">
           <description>Instantiates and returns a new MimePart setting the part's parent to
 either the passed $parent, or $message if $parent is null.</description>
           <long-description></long-description>
-          <tag name="param" line="235" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="253" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
-          <tag name="param" line="235" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$parent">
+          <tag name="param" line="253" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$parent">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="return" line="235" description="" type="\ZBateson\MailMimeParser\Message\MimePart">
+          <tag name="return" line="253" description="" type="\ZBateson\MailMimeParser\Message\MimePart">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
         </docblock>
@@ -8004,32 +8033,32 @@ either the passed $parent, or $message if $parent is null.</description>
           <type>\ZBateson\MailMimeParser\Message\MimePart</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="254" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="272" package="MailMimeParser">
         <name>readMimeMessageBoundaryParts</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readMimeMessageBoundaryParts()</full_name>
-        <docblock line="254">
+        <docblock line="272">
           <description>Keeps reading if an end boundary is found, to find the parent's boundary
 and the part's content.</description>
           <long-description></long-description>
-          <tag name="param" line="254" description="" type="resource" variable="$handle">
+          <tag name="param" line="272" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="254" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="272" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
-          <tag name="param" line="254" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$parent">
+          <tag name="param" line="272" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$parent">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="param" line="254" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
+          <tag name="param" line="272" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="param" line="254" description="" type="string" variable="$boundary">
+          <tag name="param" line="272" description="" type="string" variable="$boundary">
             <type>string</type>
           </tag>
-          <tag name="param" line="254" description="" type="boolean" variable="$skipFirst">
+          <tag name="param" line="272" description="" type="boolean" variable="$skipFirst">
             <type>boolean</type>
           </tag>
-          <tag name="return" line="254" description="" type="\ZBateson\MailMimeParser\Message\MimePart">
+          <tag name="return" line="272" description="" type="\ZBateson\MailMimeParser\Message\MimePart">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
         </docblock>
@@ -8064,23 +8093,23 @@ and the part's content.</description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="281" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="299" package="MailMimeParser">
         <name>readMimeMessagePart</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readMimeMessagePart()</full_name>
-        <docblock line="281">
+        <docblock line="299">
           <description>Finds the boundaries for the current MimePart, reads its content and
 creates and returns the next part, setting its parent part accordingly.</description>
           <long-description></long-description>
-          <tag name="param" line="281" description="&lt;p&gt;The handle to read from&lt;/p&gt;" type="resource" variable="$handle">
+          <tag name="param" line="299" description="&lt;p&gt;The handle to read from&lt;/p&gt;" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="281" description="&lt;p&gt;The current Message&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="299" description="&lt;p&gt;The current Message&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
-          <tag name="param" line="281" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
+          <tag name="param" line="299" description="" type="\ZBateson\MailMimeParser\Message\MimePart" variable="$part">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
-          <tag name="return" line="281" description="" type="\ZBateson\MailMimeParser\Message\MimePart">
+          <tag name="return" line="299" description="" type="\ZBateson\MailMimeParser\Message\MimePart">
             <type>\ZBateson\MailMimeParser\Message\MimePart</type>
           </tag>
         </docblock>
@@ -8100,23 +8129,23 @@ creates and returns the next part, setting its parent part accordingly.</descrip
           <type>\ZBateson\MailMimeParser\Message\MimePart</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="314" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="332" package="MailMimeParser">
         <name>findNextUUEncodedPartPosition</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::findNextUUEncodedPartPosition()</full_name>
-        <docblock line="314">
+        <docblock line="332">
           <description>Extracts the filename and end position of a UUEncoded part.</description>
           <long-description>The filename is set to the passed $nextFilename parameter.  The end
 position is returned.</long-description>
-          <tag name="param" line="314" description="&lt;p&gt;the current file handle&lt;/p&gt;" type="resource" variable="$handle">
+          <tag name="param" line="332" description="&lt;p&gt;the current file handle&lt;/p&gt;" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="314" description="&lt;p&gt;&amp;$nextMode is assigned the value of the next file mode or null&#10;if not found&lt;/p&gt;" type="integer" variable="">
+          <tag name="param" line="332" description="&lt;p&gt;&amp;$nextMode is assigned the value of the next file mode or null&#10;if not found&lt;/p&gt;" type="integer" variable="">
             <type>integer</type>
           </tag>
-          <tag name="param" line="314" description="&lt;p&gt;&amp;$nextFilename is assigned the value of the next filename&#10;or null if not found&lt;/p&gt;" type="string" variable="">
+          <tag name="param" line="332" description="&lt;p&gt;&amp;$nextFilename is assigned the value of the next filename&#10;or null if not found&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
-          <tag name="param" line="314" description="&lt;p&gt;&amp;$end assigned the offset position within the passed resource&#10;$handle of the end of the uuencoded part&lt;/p&gt;" type="integer" variable="">
+          <tag name="param" line="332" description="&lt;p&gt;&amp;$end assigned the offset position within the passed resource&#10;$handle of the end of the uuencoded part&lt;/p&gt;" type="integer" variable="">
             <type>integer</type>
           </tag>
         </docblock>
@@ -8126,21 +8155,21 @@ position is returned.</long-description>
           <type>resource</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="340" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="358" package="MailMimeParser">
         <name>readUUEncodedOrPlainTextPart</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readUUEncodedOrPlainTextPart()</full_name>
-        <docblock line="340">
+        <docblock line="358">
           <description>Reads one part of a UUEncoded message and adds it to the passed Message
 as a MimePart.</description>
           <long-description>The method reads up to the first 'begin' part of the message, or to the
 end of the message if no 'begin' exists.</long-description>
-          <tag name="param" line="340" description="" type="resource" variable="$handle">
+          <tag name="param" line="358" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="340" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="358" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
-          <tag name="return" line="340" description="" type="string">
+          <tag name="return" line="358" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -8155,18 +8184,18 @@ end of the message if no 'begin' exists.</long-description>
           <type>\ZBateson\MailMimeParser\Message</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="365" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="383" package="MailMimeParser">
         <name>read</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::read()</full_name>
-        <docblock line="365">
+        <docblock line="383">
           <description>Reads the message from the input stream $handle into $message.</description>
           <long-description>The method will loop to read headers and find and parse multipart-mime
 message parts and uuencoded attachments (as mime-parts), adding them to
 the passed Message object.</long-description>
-          <tag name="param" line="365" description="" type="resource" variable="$handle">
+          <tag name="param" line="383" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="365" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
+          <tag name="param" line="383" description="" type="\ZBateson\MailMimeParser\Message" variable="$message">
             <type>\ZBateson\MailMimeParser\Message</type>
           </tag>
         </docblock>
@@ -8183,9 +8212,9 @@ the passed Message object.</long-description>
       </method>
     </class>
     <parse_markers>
-      <error line="155" code="PPC:ERR-50008">No summary for method attachStreamHandles()</error>
+      <error line="173" code="PPC:ERR-50008">No summary for method attachStreamHandles()</error>
     </parse_markers>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="Header/SubjectHeader.php" generated-path="Header.SubjectHeader.html" hash="be12ebb6e134ac475885e5f74d4d33a0" package="MailMimeParser">
     <docblock line="0">
