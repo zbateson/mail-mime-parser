@@ -108,7 +108,7 @@
         <propertyregex property="api-version" subject="${version}"
                        pattern="^\d+\.\d+" match="$0" defaultValue="0.0.1"
                        override="true"/>
-        <property name="api-dir" value="${clone-dir}/${api-version}" override="true"/>
+        <property name="api-dir" value="${clone-dir}/api/${api-version}" override="true"/>
 
         <phingcall target="cleanup-docs"/>
         <phingcall target="clone-docs"/>
