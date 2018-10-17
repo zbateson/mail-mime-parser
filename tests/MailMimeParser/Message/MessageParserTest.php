@@ -384,4 +384,60 @@ class MessageParserTest extends PHPUnit_Framework_TestCase
         
         $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
     }
+
+    public function testParseMimeMessageWithLongHeader()
+    {
+        $email =
+            "Subject: Money owed for services rendered\r\n"
+            . "Content-Type: text/html\r\n"
+            // Exactly 2 before the "\r\n" position
+            . "X-Long-Header-1: " . str_repeat('A', 4096 - 22) . "\r\n\tABC\r\n"
+            // Exactly 1 before the "\r\n" position
+            . "X-Long-Header-2: " . str_repeat('A', 4096 - 21) . "\r\n\tABC\r\n"
+            // Exactly before the "\r\n" position
+            . "X-Long-Header-3: " . str_repeat('A', 4096 - 20) . "\r\n\tABC\r\n"
+            // In the middle of "\r\n"
+            . "X-Long-Header-4: " . str_repeat('A', 4096 - 19) . "\r\n\tABC\r\n"
+            // Exactly at the "\r\n" position, so next readline would be empty
+            . "X-Long-Header-5: " . str_repeat('A', 4096 - 18) . "\r\n\tABC\r\n"
+            // additional characters should be dumped, in this case 1 char
+            . "X-Long-Header-6: " . str_repeat('A', 4096 - 17) . "\r\n\tABC\r\n"
+            // additional characters should be dumped, in this case 18 chars
+            . "X-Long-Header-7: " . str_repeat('A', 4096) . "\r\n\tABC\r\n"
+            . "X-Test-Header: test-value\r\n"
+            . "\r\n";
+        $startPos = strlen($email);
+        $email .= "Dear Albert,\r\n\r\nAfter our wonderful time together, it's unfortunate I know, but I expect payment\r\n"
+            . "for all services hereby rendered.\r\n\r\nYours faithfully,\r\nKandice Waterskyfalls";
+        $endPos = strlen($email);
+
+        $message = $this->getMockedMessage();
+        $message->method('getHeaderValue')->willReturn('text/html');
+        $message->expects($this->exactly(10))
+            ->method('setRawHeader')
+            ->withConsecutive(
+                ['Subject', 'Money owed for services rendered'],
+                ['Content-Type', 'text/html'],
+                ['X-Long-Header-1', str_repeat('A', 4096 - 22) . "\r\n\tABC"],
+                ['X-Long-Header-2', str_repeat('A', 4096 - 21) . "\r\n\tABC"],
+                ['X-Long-Header-3', str_repeat('A', 4096 - 20) . "\r\n\tABC"],
+                ['X-Long-Header-4', str_repeat('A', 4096 - 19) . "\r\n\tABC"],
+                ['X-Long-Header-5', str_repeat('A', 4096 - 18) . "\r\n\tABC"],
+                ['X-Long-Header-6', str_repeat('A', 4096 - 18) . "\r\n\tABC"],
+                ['X-Long-Header-7', str_repeat('A', 4096 - 18) . "\r\n\tABC"],
+                ['X-Test-Header', 'test-value']
+            );
+
+        $partFactory = $this->getMockedPartFactory();
+        $self = $this;
+        $partFactory->method('newMimePart')->will($this->returnCallback(function () use ($self) {
+            return $self->getMockedPart();
+        }));
+        $partStreamRegistry = $this->getMockedPartStreamRegistry();
+        $partStreamRegistry->expects($this->once())
+            ->method('attachContentPartStreamHandle')
+            ->with($this->anything(), $this->anything(), $startPos, $endPos);
+
+        $this->callParserWithEmail($email, $message, $partFactory, $partStreamRegistry);
+    }
 }
