@@ -436,10 +436,9 @@ class MessageParserTest extends TestCase
         $pba1->expects($this->once())
             ->method('getParent')
             ->willReturn($pbm);
-        $pba1->expects($this->exactly(3))
+        $pba1->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
             ->willReturnMap([
-                [$this->anything(), false],
                 [$this->anything(), false],
                 ['--balderdash', true]
             ]);
@@ -486,10 +485,6 @@ class MessageParserTest extends TestCase
         $pba3->expects($this->once())
             ->method('getParent')
             ->willReturn($pbm);
-        $pba3->expects($this->once())
-            ->method('setEndBoundaryFound')
-            ->with('')
-            ->willReturn(false);
         $pba3->expects($this->once())
             ->method('setEof');
         $pba3->expects($this->once())

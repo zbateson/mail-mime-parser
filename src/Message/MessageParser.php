@@ -82,21 +82,48 @@ class MessageParser
     }
 
     /**
-     * Reads a line of up to the passed number of characters.  If the line is
-     * larger than that, the remaining characters in the line are read and
-     * discarded, and only the first part is returned.
-     * 
+     * Reads a line of up to 4096 characters.  If the line is larger than that,
+     * the remaining characters in the line are read and discarded, and only the
+     * first 4096 characters are returned.
+     *
      * @param resource $handle
-     * @param int $size
      * @return string
      */
-    private function readLine($handle, $size = 4096)
+    private function readLine($handle)
     {
+        $size = 4096;
         $ret = $line = fgets($handle, $size);
         while (strlen($line) === $size - 1 && substr($line, -1) !== "\n") {
             $line = fgets($handle, $size);
         }
         return $ret;
+    }
+
+    /**
+     * Reads a line of 2048 characters.  If the line is larger than that, the
+     * remaining characters in the line are read and
+     * discarded, and only the first part is returned.
+     *
+     * This method is identical to readLine, except it calculates the number of
+     * characters that make up the line's new line characters (e.g. 2 for "\r\n"
+     * or 1 for "\n").
+     *
+     * @param resource $handle
+     * @param int $lineSeparatorLength
+     * @return string
+     */
+    private function readBoundaryLine($handle, &$lineSeparatorLength = 0)
+    {
+        $size = 2048;
+        $isCut = false;
+        $line = fgets($handle, $size);
+        while (strlen($line) === $size - 1 && substr($line, -1) !== "\n") {
+            $line = fgets($handle, $size);
+            $isCut = true;
+        }
+        $ret = rtrim($line, "\r\n");
+        $lineSeparatorLength = strlen($line) - strlen($ret);
+        return ($isCut) ? '' : $ret;
     }
 
     /**
@@ -142,10 +169,8 @@ class MessageParser
         // part of the current part
         while (!feof($handle)) {
             $endPos = ftell($handle) - $this->lastLineSeparatorLength;
-            $line = fgets($handle);
-            $test = rtrim($line, "\r\n");
-            $this->lastLineSeparatorLength = strlen($line) - strlen($test);
-            if ($partBuilder->setEndBoundaryFound($test)) {
+            $line = $this->readBoundaryLine($handle, $this->lastLineSeparatorLength);
+            if ($line !== '' && $partBuilder->setEndBoundaryFound($line)) {
                 $partBuilder->setStreamPartAndContentEndPos($endPos);
                 return;
             }
@@ -169,7 +194,7 @@ class MessageParser
         $part = $partBuilder;
         while (!feof($handle)) {
             $start = ftell($handle);
-            $line = trim(fgets($handle));
+            $line = trim($this->readLine($handle));
             if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
                 $part = $this->partBuilderFactory->newPartBuilder(
                     $this->partFactoryService->getUUEncodedPartFactory()
