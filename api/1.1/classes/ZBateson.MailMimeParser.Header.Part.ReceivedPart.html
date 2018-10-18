@@ -120,7 +120,10 @@ text in the value.</span><pre>$languages</pre></a></li>
 </li>
 <li class="nav-header">
 <i title="Constants" class="icon-custom icon-constant"></i> Constants
-                    <ul><li class="constant  "><a href="#constant_MIME_PART_PATTERN" title="MIME_PART_PATTERN() :: "><span class="description">&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;</span><pre>MIME_PART_PATTERN</pre></a></li></ul>
+                    <ul>
+<li class="constant  "><a href="#constant_MIME_PART_PATTERN" title="MIME_PART_PATTERN() :: "><span class="description">&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;</span><pre>MIME_PART_PATTERN</pre></a></li>
+<li class="constant  "><a href="#constant_MIME_PART_PATTERN_NO_QUOTES" title="MIME_PART_PATTERN_NO_QUOTES() :: "><span class="description">&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;</span><pre>MIME_PART_PATTERN_NO_QUOTES</pre></a></li>
+</ul>
 </li>
 </ul>
 </div>
@@ -463,7 +466,13 @@ text in the value.</h2>
 <i title="Constants" class="icon-custom icon-constant"></i> Constants</h3>
 <a id="constant_MIME_PART_PATTERN"> </a><div class="element clickable constant  constant_MIME_PART_PATTERN" data-toggle="collapse" data-target=".constant_MIME_PART_PATTERN .collapse" title="">
 <h2>&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;</h2>
-<pre>MIME_PART_PATTERN = '=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?=' : string</pre>
+<pre>MIME_PART_PATTERN = '=\?[^?=]+\?[QBqb]\?[^\?]+\?=' : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_MIME_PART_PATTERN_NO_QUOTES"> </a><div class="element clickable constant  constant_MIME_PART_PATTERN_NO_QUOTES" data-toggle="collapse" data-target=".constant_MIME_PART_PATTERN_NO_QUOTES .collapse" title="">
+<h2>&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;</h2>
+<pre>MIME_PART_PATTERN_NO_QUOTES = '=\?[^\?=]+\?[QBqb]\?[^\?"]+\?=' : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -474,7 +483,7 @@ text in the value.</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-30T21:18:55+02:00.<br></footer></div>
+            generated on 2018-10-18T16:25:07+02:00.<br></footer></div>
 </div>
 </body>
 </html>

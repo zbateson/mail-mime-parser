@@ -13115,7 +13115,7 @@ filter.</description>
     </class>
     <source>eJy1Ve9r2zAQ/e6/4j4UmoUm/p5udOuPQKDdxpbCKIWiyJdGxZaEJNOF0f99d3LcKk3cZqMVJI6tu3d3771YH4/swmZ5v59BH6YL5WGuSgS6WuECmDmEBcLVsQjojb6+EKq8UBV+F86jA+vMHcowpGTO/1wqidojLEKwozw3lu5M7SQOjbvNV7s+n/lisLoZUnk4/nlK6XmmRYXeCtlZ8PoCvRe3eJi1LU80NyBm1PNcyGDcEmQpvIfaYwGzJaySAwQD0mgfXC0D8JOxKgPNoOiZ0BI9wykNAqhyg3gvljwa8OeSynsQDgF/WypJ6IRIVSJBlBCUTGErDAtTeCiUo+hyCYMBRRKvDNa06FVlaQO1FNbXJU/MYFXsQoOZ8WgjjgeTQI9Gc2eqE6MD6jBdWuyImOhSaXw97lR5a7wKyuhWR4+YhMVHoqZ5HFwJsVAFrOSJqjXDPIWPGx2yPxnQijrx6sOJwzijYI8xR3MCZPYsARCfFUnFGnG/g0AND9vM9hoN2jALd7UPIEVZ+pe42YB4NtsWMldx5H9RkbBO6VvY497Wth2G2uk1luJOHq+2npHBYV5rybyCxvsVOevVeo/AH2JewxmvDfyNTpPcw5j2EL87Wdewr6Il9t+b/w3n7abCFsO+uxYbNf9ZkZcQdtKlQ43i6W9J2hVgLP8UJVR1GRS/nVukJv9/xFqjInkP7KbX2otjq1JFZ4TSgYRsJwGjkc+atMJ4cj49+3HzbTw+aHPj2hIz+Xpyfnl6BkTglt2zX3H3LdySTNxLhztIZ/nUMcaOftqlxsvGak859lZyIjF4ajDhnFgy642zfHRZ05QHFV73wM3N44H6TN0Gek9pFd6C9i8M10tAO6ikpAS/14S2VD1kfwH5Gtl+</source>
   </file>
-  <file path="Message/MessageParser.php" generated-path="Message.MessageParser.html" hash="d69d1e3029697c309329c7ad19074887" package="MailMimeParser">
+  <file path="Message/MessageParser.php" generated-path="Message.MessageParser.html" hash="9d22058f4bd7ed5a88e1245e564ef64d" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -13243,17 +13243,69 @@ then splits it and calls $partBuilder-&gt;addHeader.</description>
           <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="91" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="92" package="MailMimeParser">
+        <name>readLine</name>
+        <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readLine()</full_name>
+        <docblock line="92">
+          <description>Reads a line of up to 4096 characters.  If the line is larger than that,
+the remaining characters in the line are read and discarded, and only the
+first 4096 characters are returned.</description>
+          <long-description></long-description>
+          <tag name="param" line="92" description="" type="resource" variable="$handle">
+            <type>resource</type>
+          </tag>
+          <tag name="return" line="92" description="" type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$handle</name>
+          <default></default>
+          <type>resource</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="115" package="MailMimeParser">
+        <name>readBoundaryLine</name>
+        <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readBoundaryLine()</full_name>
+        <docblock line="115">
+          <description>Reads a line of 2048 characters.  If the line is larger than that, the
+remaining characters in the line are read and
+discarded, and only the first part is returned.</description>
+          <long-description>This method is identical to readLine, except it calculates the number of
+characters that make up the line's new line characters (e.g. 2 for "\r\n"
+or 1 for "\n").</long-description>
+          <tag name="param" line="115" description="" type="resource" variable="$handle">
+            <type>resource</type>
+          </tag>
+          <tag name="param" line="115" description="" type="integer" variable="$lineSeparatorLength">
+            <type>integer</type>
+          </tag>
+          <tag name="return" line="115" description="" type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$handle</name>
+          <default></default>
+          <type>resource</type>
+        </argument>
+        <argument line="0" by_reference="true">
+          <name>$lineSeparatorLength</name>
+          <default>0</default>
+          <type>integer</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="136" package="MailMimeParser">
         <name>readHeaders</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readHeaders()</full_name>
-        <docblock line="91">
+        <docblock line="136">
           <description>Reads header lines up to an empty line, adding them to the passed
 $partBuilder.</description>
           <long-description></long-description>
-          <tag name="param" line="91" description="&lt;p&gt;the resource handle to read from&lt;/p&gt;" type="resource" variable="$handle">
+          <tag name="param" line="136" description="&lt;p&gt;the resource handle to read from&lt;/p&gt;" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="91" description="&lt;p&gt;the current part to add headers to&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
+          <tag name="param" line="136" description="&lt;p&gt;the current part to add headers to&lt;/p&gt;" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
             <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
           </tag>
         </docblock>
@@ -13268,10 +13320,10 @@ $partBuilder.</description>
           <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="166" package="MailMimeParser">
         <name>findContentBoundary</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::findContentBoundary()</full_name>
-        <docblock line="121">
+        <docblock line="166">
           <description>Reads lines from the passed $handle, calling
 $partBuilder-&gt;setEndBoundaryFound with the passed line until it returns
 true or the stream is at EOF.</description>
@@ -13281,10 +13333,10 @@ for the $partBuilder itself or any of its parents.
 Once a boundary is found, setStreamPartAndContentEndPos is called with
 the passed $handle's read pos before the boundary and its line separator
 were read.</long-description>
-          <tag name="param" line="121" description="" type="resource" variable="$handle">
+          <tag name="param" line="166" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="121" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
+          <tag name="param" line="166" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
             <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
           </tag>
         </docblock>
@@ -13299,21 +13351,21 @@ were read.</long-description>
           <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="148" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="191" package="MailMimeParser">
         <name>readUUEncodedOrPlainTextMessage</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readUUEncodedOrPlainTextMessage()</full_name>
-        <docblock line="148">
+        <docblock line="191">
           <description>Reads content for a non-mime message.  If there are uuencoded attachment
 parts in the message (denoted by 'begin' lines), those parts are read and
 added to the passed $partBuilder as children.</description>
           <long-description></long-description>
-          <tag name="param" line="148" description="" type="resource" variable="$handle">
+          <tag name="param" line="191" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="148" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
+          <tag name="param" line="191" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
             <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
           </tag>
-          <tag name="return" line="148" description="" type="string">
+          <tag name="return" line="191" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -13328,10 +13380,10 @@ added to the passed $partBuilder as children.</description>
           <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="184" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Message" line="227" package="MailMimeParser">
         <name>readPartContent</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readPartContent()</full_name>
-        <docblock line="184">
+        <docblock line="227">
           <description>Reads content for a single part of a MIME message.</description>
           <long-description>If the part being read is in turn a multipart part, readPart is called on
 it recursively to read its headers and content.
@@ -13339,10 +13391,10 @@ it recursively to read its headers and content.
 The start/end positions of the part's content are set on the passed
 $partBuilder, which in turn sets the end position of the part and its
 parents.</long-description>
-          <tag name="param" line="184" description="" type="resource" variable="$handle">
+          <tag name="param" line="227" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="184" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
+          <tag name="param" line="227" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
             <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
           </tag>
         </docblock>
@@ -13357,18 +13409,18 @@ parents.</long-description>
           <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="207" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="250" package="MailMimeParser">
         <name>readPart</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::readPart()</full_name>
-        <docblock line="207">
+        <docblock line="250">
           <description>Reads a part and any of its children, into the passed $partBuilder,
 either by calling readUUEncodedOrPlainTextMessage or readPartContent
 after reading headers.</description>
           <long-description></long-description>
-          <tag name="param" line="207" description="" type="resource" variable="$handle">
+          <tag name="param" line="250" description="" type="resource" variable="$handle">
             <type>resource</type>
           </tag>
-          <tag name="param" line="207" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
+          <tag name="param" line="250" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder" variable="$partBuilder">
             <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
           </tag>
         </docblock>
@@ -13383,17 +13435,17 @@ after reading headers.</description>
           <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="229" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Message" line="272" package="MailMimeParser">
         <name>read</name>
         <full_name>\ZBateson\MailMimeParser\Message\MessageParser::read()</full_name>
-        <docblock line="229">
+        <docblock line="272">
           <description>Reads the message from the passed stream and returns a PartBuilder
 representing it.</description>
           <long-description></long-description>
-          <tag name="param" line="229" description="" type="\Psr\Http\Message\StreamInterface" variable="$stream">
+          <tag name="param" line="272" description="" type="\Psr\Http\Message\StreamInterface" variable="$stream">
             <type>\Psr\Http\Message\StreamInterface</type>
           </tag>
-          <tag name="return" line="229" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder">
+          <tag name="return" line="272" description="" type="\ZBateson\MailMimeParser\Message\Part\PartBuilder">
             <type>\ZBateson\MailMimeParser\Message\Part\PartBuilder</type>
           </tag>
         </docblock>
@@ -13404,7 +13456,7 @@ representing it.</description>
         </argument>
       </method>
     </class>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="Header/SubjectHeader.php" generated-path="Header.SubjectHeader.html" hash="be12ebb6e134ac475885e5f74d4d33a0" package="MailMimeParser">
     <docblock line="0">
@@ -14366,11 +14418,23 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
           <tag name="var" line="24" description="&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
@@ -14399,38 +14463,38 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
         <name>$canIgnoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -14542,18 +14606,18 @@ split RFC-2231 part with a language tag set.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -14564,17 +14628,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -14585,10 +14649,10 @@ adding the string into the languages array.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -14596,10 +14660,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -14638,16 +14702,16 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -14664,10 +14728,10 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -14682,7 +14746,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -14780,11 +14844,23 @@ returns the email address as well.</long-description>
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
           <tag name="var" line="24" description="&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
@@ -14813,38 +14889,38 @@ returns the email address as well.</long-description>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
         <name>$canIgnoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -14960,18 +15036,18 @@ split RFC-2231 part with a language tag set.</description>
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\ParameterPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -14982,17 +15058,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -15003,10 +15079,10 @@ adding the string into the languages array.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -15014,10 +15090,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -15056,16 +15132,16 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -15082,10 +15158,10 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -15100,7 +15176,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -15206,11 +15282,23 @@ for [\ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumer](../classe
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
           <tag name="var" line="24" description="&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
@@ -15275,38 +15363,38 @@ for [\ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumer](../classe
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
         <name>$canIgnoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -15473,18 +15561,18 @@ split RFC-2231 part with a language tag set.</description>
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\ParameterPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -15495,17 +15583,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -15516,10 +15604,10 @@ adding the string into the languages array.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -15527,10 +15615,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -15569,16 +15657,16 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -15595,10 +15683,10 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -15613,7 +15701,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -16276,11 +16364,23 @@ from them.</long-description>
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
           <tag name="var" line="24" description="&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
@@ -16309,38 +16409,38 @@ from them.</long-description>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
         <name>$canIgnoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -16445,18 +16545,18 @@ split RFC-2231 part with a language tag set.</description>
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\ParameterPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -16467,17 +16567,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -16488,10 +16588,10 @@ adding the string into the languages array.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -16499,10 +16599,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -16541,16 +16641,16 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -16567,10 +16667,10 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -16585,7 +16685,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -17224,7 +17324,7 @@ subclass factories for specialized HeaderParts.</description>
     </class>
     <source>eJy9lltP2zAUx9/7KfyAREGFvsOuwC5IY0IDaRKqhFzHbbyldmQ7RdvEd9+xc7PTJC7Nurykrs/t/zvHbl+9TeN0ND0+HqFjdB8zhRYsoQjeKZYaiQXSMUUPF1hTJfjsBrPkhq3oLZaKSpRK8YMSfQrOxv9dwgjliqJY6/RsOhUprEQmCT0VcjktdtV0rqKTYnEK6dHF3RW4T0ccr6hKMelMOPtMcQQvWOnz0ShTruX8u8RpCrvVJzAplF0KrrTMiFYI8whJqjPJFcrD3Vqlc6NEVVJwpmMh0QPGMYtQkcRWSRKsXNePmGghf43+jBA8NqF5IMYaS1QVgw5IbERoqGVNpTb4IBCNkBZuIaQsVUhVRrLPAsohuS/jSwRG8FKIccf77Kyw+MCJiGC/iDC1b2iXBpGQcqOWc2vQVHBHAViWoohCJyPKCaOGUL5ZyYRJwas+oX4R2Rx6jxYZJ5oJjh4fK8XjnhhH1jlnbJ4DDcN68maD6esubc+tCi8lNa31pgKD3gXOEu22xdDX9nzk7Z4gnCTiqUaMVDbPRyO3AFTWSaWUMJyw34C9jreJ8R7OWZmXrdKErijX2CKqC+P0Cd2Ln5R3dSGfCnSwxklGq708gJO+tyOQ5Bo6gjmh4zxQE34Rr+gB2NuaSuM+3tec6ZxGk/kwabMtboyZDR+S7klp112VOu6YwgnaCoVhDDQ25+8uTZi+NaopRLOp0BPTsb2Ml2wNS3NXhkgZmyaoltAhIi0uYxu7B0+rTycsG2z3sfnCIAxOTI/3NzxOkhAwxzQ8SJ7xoHHqQ2RE/RdMjUQhVA3zMK4Nh70huxQrcwXvF5eTJITKMQ1j8oz3huh9FEmq1DaIvLvI36Ir4LMTPSd/iJ5jml9ekyJxD0TPp/fyqoINZvlJiix1BDV5YinxL3SAc2uqtsG9A9JmGSGulf24WWBBCP6YHR6GWddxuoE3Qw+AfgVAemAPP9+NBJ0YS7vwya4t93asq9/tgQfbx+bvJZgvM7zcjapXYAitZ1ydfVvbpK4D5pNnSd9t0IgTug+aCap+vKwX3yih8IcvclsxtBMvQe3mD5F2bX3QPVh9p62oDkR5JeCq5v8SaOP3LE7E127XWCgd2C4uw0ENq1Vu27baY1w1KudeL/Oprtel1uL4ODulzPadQmGxafeO+uejrTobrmNkfCNfRpsUT07j61JLy9deq4yKcjafR38B9d/w7w==</source>
   </file>
-  <file path="Header/Part/MimeLiteralPart.php" generated-path="Header.Part.MimeLiteralPart.html" hash="5d55c86ef716ac344b3229549e2c04f4" package="MailMimeParser">
+  <file path="Header/Part/MimeLiteralPart.php" generated-path="Header.Part.MimeLiteralPart.html" hash="bba743f0b41305f2f71d27f066eecb36" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -17247,7 +17347,7 @@ MIME-Encoded as per RFC-2047.</description>
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
@@ -17256,38 +17356,50 @@ MIME-Encoded as per RFC-2047.</description>
           </tag>
         </docblock>
       </constant>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
-        <name>$canIgnoreSpacesBefore</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
         <docblock line="29">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
           </tag>
         </docblock>
-      </property>
+      </constant>
       <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <name>$canIgnoreSpacesBefore</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -17316,18 +17428,18 @@ MIME-Encoded as per RFC-2047.</description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="53" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="58" package="MailMimeParser">
         <name>__construct</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::__construct()</full_name>
-        <docblock line="53">
+        <docblock line="58">
           <description>Decoding the passed token value if it's mime-encoded and assigns the
 decoded value to a member variable. Sets canIgnoreSpacesBefore and
 canIgnoreSpacesAfter.</description>
           <long-description></long-description>
-          <tag name="param" line="53" description="" type="\ZBateson\MbWrapper\MbWrapper" variable="$charsetConverter">
+          <tag name="param" line="58" description="" type="\ZBateson\MbWrapper\MbWrapper" variable="$charsetConverter">
             <type>\ZBateson\MbWrapper\MbWrapper</type>
           </tag>
-          <tag name="param" line="53" description="" type="string" variable="$token">
+          <tag name="param" line="58" description="" type="string" variable="$token">
             <type>string</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Part\LiteralPart::__construct()" refers="\ZBateson\MailMimeParser\Header\Part\LiteralPart::__construct()" link="/classes/ZBateson.MailMimeParser.Header.Part.LiteralPart.html#method___construct"/>
@@ -17343,18 +17455,18 @@ canIgnoreSpacesAfter.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -17364,17 +17476,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -17384,10 +17496,10 @@ adding the string into the languages array.</description>
           <type>array&lt;mixed,string&gt;</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -17395,10 +17507,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -17408,40 +17520,40 @@ way to go to support the most charsets.</long-description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="139" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="144" package="MailMimeParser">
         <name>ignoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::ignoreSpacesBefore()</full_name>
-        <docblock line="139">
+        <docblock line="144">
           <description>Returns true if spaces before this part should be ignored.</description>
           <long-description>Overridden to return $this-&gt;canIgnoreSpacesBefore which is setup in the
 constructor.</long-description>
-          <tag name="return" line="139" description="" type="boolean">
+          <tag name="return" line="144" description="" type="boolean">
             <type>boolean</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="152" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="157" package="MailMimeParser">
         <name>ignoreSpacesAfter</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::ignoreSpacesAfter()</full_name>
-        <docblock line="152">
+        <docblock line="157">
           <description>Returns true if spaces before this part should be ignored.</description>
           <long-description>Overridden to return $this-&gt;canIgnoreSpacesAfter which is setup in the
 constructor.</long-description>
-          <tag name="return" line="152" description="" type="boolean">
+          <tag name="return" line="157" description="" type="boolean">
             <type>boolean</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -17457,10 +17569,10 @@ constructor.</long-description>
           <type>string|null</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -17475,7 +17587,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -17588,7 +17700,7 @@ for 'UTF-8'.</long-description>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
     </class>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="Header/Part/AddressGroupPart.php" generated-path="Header.Part.AddressGroupPart.html" hash="23098b4cf7a33b73e2a2e3713f2d3f44" package="MailMimeParser">
     <docblock line="0">
@@ -17615,11 +17727,23 @@ AddressGroupConsumer's AddressGroupPart.</long-description>
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
           <tag name="var" line="24" description="&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
@@ -17636,38 +17760,38 @@ AddressGroupConsumer's AddressGroupPart.</long-description>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
         <name>$canIgnoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -17788,18 +17912,18 @@ optional name (which may be mime-encoded).</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -17810,17 +17934,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -17831,10 +17955,10 @@ adding the string into the languages array.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -17842,10 +17966,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -17884,16 +18008,16 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -17910,10 +18034,10 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -17928,7 +18052,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -18168,11 +18292,23 @@ value existing within parentheses.</description>
       <constant namespace="ZBateson\MailMimeParser\Header\Part" line="24" package="MailMimeParser">
         <name>MIME_PART_PATTERN</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN</full_name>
-        <value>'=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?='</value>
+        <value>'=\?[^?=]+\?[QBqb]\?[^\?]+\?='</value>
         <docblock line="24">
           <description></description>
           <long-description></long-description>
           <tag name="var" line="24" description="&lt;p&gt;regex pattern matching a mime-encoded part&lt;/p&gt;" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </constant>
+      <constant namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+        <name>MIME_PART_PATTERN_NO_QUOTES</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES</full_name>
+        <value>'=\?[^\?=]+\?[QBqb]\?[^\?"]+\?='</value>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="29" description="&lt;p&gt;regex pattern used when parsing parameterized headers&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
@@ -18189,38 +18325,38 @@ value existing within parentheses.</description>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="29" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
         <name>$canIgnoreSpacesBefore</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesBefore</full_name>
-        <default>false</default>
-        <docblock line="29">
-          <description></description>
-          <long-description></long-description>
-          <tag name="var" line="29" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
-            <type>boolean</type>
-          </tag>
-        </docblock>
-      </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="34" package="MailMimeParser">
-        <name>$canIgnoreSpacesAfter</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
         <default>false</default>
         <docblock line="34">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+          <tag name="var" line="34" description="&lt;p&gt;set to true to ignore spaces before this part&lt;/p&gt;" type="boolean" variable="">
             <type>boolean</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="43" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="39" package="MailMimeParser">
+        <name>$canIgnoreSpacesAfter</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::canIgnoreSpacesAfter</full_name>
+        <default>false</default>
+        <docblock line="39">
+          <description></description>
+          <long-description></long-description>
+          <tag name="var" line="39" description="&lt;p&gt;set to true to ignore spaces after this part&lt;/p&gt;" type="boolean" variable="">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="48" package="MailMimeParser">
         <name>$languages</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::languages</full_name>
         <default>array()</default>
-        <docblock line="43">
+        <docblock line="48">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="43" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
+          <tag name="var" line="48" description="&lt;p&gt;maintains an array mapping rfc1766 language tags to parts of&#10;text in the value.&lt;/p&gt;&#10;&lt;p&gt;Each array element is an array containing two elements, one with key&#10;'lang', and another with key 'value'.&lt;/p&gt;" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
@@ -18302,18 +18438,18 @@ value existing within parentheses.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="73" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="78" package="MailMimeParser">
         <name>decodeMime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMime()</full_name>
-        <docblock line="73">
+        <docblock line="78">
           <description>Finds and replaces mime parts with their values.</description>
           <long-description>The method splits the token value into an array on mime-part-patterns,
 either replacing a mime part with its value by calling iconv_mime_decode
 or converts the encoding on the text part by calling convertEncoding.</long-description>
-          <tag name="param" line="73" description="" type="string" variable="$value">
+          <tag name="param" line="78" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="73" description="" type="string">
+          <tag name="return" line="78" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -18324,17 +18460,17 @@ or converts the encoding on the text part by calling convertEncoding.</long-desc
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="94" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="99" package="MailMimeParser">
         <name>decodeMatchedEntity</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeMatchedEntity()</full_name>
-        <docblock line="94">
+        <docblock line="99">
           <description>Decodes a matched mime entity part into a string and returns it, after
 adding the string into the languages array.</description>
           <long-description></long-description>
-          <tag name="param" line="94" description="" type="array&lt;mixed,string&gt;" variable="$matches">
+          <tag name="param" line="99" description="" type="array&lt;mixed,string&gt;" variable="$matches">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
-          <tag name="return" line="94" description="" type="string">
+          <tag name="return" line="99" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -18345,10 +18481,10 @@ adding the string into the languages array.</description>
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="121" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="126" package="MailMimeParser">
         <name>decodeSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::decodeSplitPart()</full_name>
-        <docblock line="121">
+        <docblock line="126">
           <description>Decodes a single mime-encoded entity.</description>
           <long-description>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
 PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
@@ -18356,10 +18492,10 @@ support all charsets.
 
 Parsing out the charset and body of the encoded entity seems to be the
 way to go to support the most charsets.</long-description>
-          <tag name="param" line="121" description="" type="string" variable="$entity">
+          <tag name="param" line="126" description="" type="string" variable="$entity">
             <type>string</type>
           </tag>
-          <tag name="return" line="121" description="" type="string">
+          <tag name="return" line="126" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -18398,16 +18534,16 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\HeaderPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Part" line="168" package="MailMimeParser">
         <name>addToLanguage</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::addToLanguage()</full_name>
-        <docblock line="163">
+        <docblock line="168">
           <description>Adds the passed part into the languages array with the given language.</description>
           <long-description></long-description>
-          <tag name="param" line="163" description="" type="string" variable="$part">
+          <tag name="param" line="168" description="" type="string" variable="$part">
             <type>string</type>
           </tag>
-          <tag name="param" line="163" description="" type="string|null" variable="$language">
+          <tag name="param" line="168" description="" type="string|null" variable="$language">
             <type>string</type>
             <type>null</type>
           </tag>
@@ -18424,10 +18560,10 @@ Tokens if the Token's value is a single space, and for CommentParts.</descriptio
         </argument>
         <inherited_from>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="190" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="195" package="MailMimeParser">
         <name>getLanguageArray</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::getLanguageArray()</full_name>
-        <docblock line="190">
+        <docblock line="195">
           <description>Returns an array of parts mapped to languages in the header value, for
 instance the string:</description>
           <long-description>'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
@@ -18442,7 +18578,7 @@ Would be mapped in the returned array as follows:
     4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Weolcome!' ]
 ]
 ```</long-description>
-          <tag name="return" line="190" description="" type="array&lt;mixed,string[]&gt;">
+          <tag name="return" line="195" description="" type="array&lt;mixed,string[]&gt;">
             <type>array&lt;mixed,string[]&gt;</type>
           </tag>
         </docblock>
@@ -19071,7 +19207,7 @@ for 'UTF-8'.</long-description>
     </class>
     <source>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</source>
   </file>
-  <file path="Header/AddressHeader.php" generated-path="Header.AddressHeader.html" hash="cc02aeaae4aa688e4496044f426bc0ba" package="MailMimeParser">
+  <file path="Header/AddressHeader.php" generated-path="Header.AddressHeader.html" hash="d4c7085df181daf83f0f9ee7a07a0c09" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -19236,36 +19372,24 @@ in groups.</description>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="111" package="MailMimeParser">
-        <name>getValue</name>
-        <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getValue()</full_name>
+        <name>getEmail</name>
+        <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getEmail()</full_name>
         <docblock line="111">
-          <description>Overridden to return the first email address in the header.</description>
+          <description>Same as getValue, but for clarity to match AddressPart.</description>
           <long-description></long-description>
           <tag name="return" line="111" description="" type="string">
             <type>string</type>
           </tag>
-          <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\AbstractHeader::getValue()" refers="\ZBateson\MailMimeParser\Header\AbstractHeader::getValue()" link="/classes/ZBateson.MailMimeParser.Header.AbstractHeader.html#method_getValue"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="124" package="MailMimeParser">
-        <name>getEmail</name>
-        <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getEmail()</full_name>
-        <docblock line="124">
-          <description>Same as getValue, but for clarity to match AddressPart.</description>
-          <long-description></long-description>
-          <tag name="return" line="124" description="" type="string">
-            <type>string</type>
-          </tag>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="135" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="122" package="MailMimeParser">
         <name>getPersonName</name>
         <full_name>\ZBateson\MailMimeParser\Header\AddressHeader::getPersonName()</full_name>
-        <docblock line="135">
+        <docblock line="122">
           <description>Returns the name associated with the first email address to complement
 getValue().</description>
           <long-description></long-description>
-          <tag name="return" line="135" description="" type="string">
+          <tag name="return" line="122" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -19405,7 +19529,7 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
         <inherited_from>\ZBateson\MailMimeParser\Header\AbstractHeader</inherited_from>
       </method>
     </class>
-    <source>eJytV99v2zYQftdfcQP8IAeOXeRpiOeuSddtL12LZthD42CgqZPFQSIFksoPFPnfdyQlWVYk20ErwLAs3R3vvvu+I/3Lr2VWRouzswjO4O9MGEhFjkDfJdMWVAo2Q/h6zSwaJdcfmcg/igI/M21QQ6nVf8jtnJyd/7tccJQGIbO2vFwsVEm/VKU5zpXeLuq3ZrExyXn9Y07Lw/XNb+S+iCQr0JSMjy64/hNZgnoZRZU5ZrR+r6SpCrq52hirGbfNg+WrvJubG9T3lPNJzvTLrq+SRKMx7v7VTn9oVZXBs2nOF7IywCSwYAK5MBYy7wuVEXLrW1UHuGYGm8xde8B9rnrOBXsCTkbunjqtJILSUCiNjR26FZPWa+vSMj7eB8az9rlBYgsVl8DmCRjFLAo2857ozLxb38hgIc65ypVs8/udVk+rPAdTIhep4MwKSm9GtoFThkj18PAwF2hTTymdcve5+PniYm4fbcNDVtmMYn1lLBMJ1LB7ivGcUb41SAF4wEeLkrBteBIeR98ioMuj7y4Ke880rF/Z+ts7YFoT0Cpt4uywrZ8s/DeJyZKYCJ/JzmIFt3dL//q7s2k5NZ5S3eCxtMLbAzl9QVtp6Vk6zMNg1pbgCFFAT2Ew4fsPWnPtwx8telT4I3WlleSOaLDF1jQ+ltTUBwkccVedW9/s/C0FHcAingYEnwdx/HSPWoskQQlWOX66KoCRMnbMEJJedWTqOjqGcB+IXZrHIDFoPbgB2n9YXmE8Hq0PCq2O0l5eDkXZOS1b+5RGjxsY8cTSVnT+1u1BVJqBibubdiK7S6Rk6LcpIY1lkiMNsY70+vbuqgO3uJEWViH6cs/2GTA3eGiFVk6nLEOL+Ab9S/VuMe6/noUUumRBE0+ny7HAQYmjyUf7d8Mka8W6oxUEwIX0W0m9twjJ8ypx+8s+AW3GiJO6lSd5tftDj4UnCvfl7NynZ7WhU8OeXDtgjeixh/Qh1XUBCVvWABw/pLjOKD5WoTc9Vl7A/ZTarK7QCadzjsBH2v8NPAib+TpL2iFpBGBBZTRGL6p+rwoCR1C57qyYuKMDp/HmdELHOmHFPeaj44jGh6PTxC/Rx3GjVI5MHsQlY6ZGMg5B+vD0B0lnTpqwvQ4NE8rLFcGLMvY2Xo8fXPx4OqvTncJqtYI3Q6KvC3AQH9ZjxzhlNGaaxh3eBprw1KJUaDqy7XVomKV9cAPyxzgXBnQfU4fQT1iU9ukFqtM+HCPqu31z18V0OY6LpGPgGCw39DfB9bHJdAabyrqWA53utLBPDq2CWep/Z5h8HyR1xodV2CI3lnmrQmqUDFUYxYU/FLf6G2ouFUSH6jLHgvbTJtpuvdGhdFpxn1GTkP+ihE5oup+JRxrubZpmh7gn9vo5+h+5Q3aB</source>
+    <source>eJytVt9v2zYQftdfcQP8IAeOXeRpiOeuSdttL12LZthD42CgqZPFQiIFksoPDPnfdyQlWVIs28EqwDBF3R3vvvvujr/8WmZltDg7i+AM/sqEgVTkCPRfMm1BpWAzhG/XzKJRcv2JifyTKPAL0wY1lFp9R27npOz03+WCozQImbXl5WKhSnpTleY4V3q7qL+axcYk5/XLnI6H65sPpL6IJCvQlIyPHrj+A1mCehlFlTkmtH6vpKkKWlxtjNWM22Zj+SrtZnGD+p58PkmZ3uz6Kkk0GuPWr1b6XauqDJpNcr6SlAEmgQURyIWxkHldqIyQW5+q2sA1M9h47tID7nc1UC7YE3AScmvKtJIISkOhNDZy6E5MWq2tc8t4ex8Zz9p9g8QWCi6BzRMwslkUbOY10Yl5taGQwUKcc5Ur2fr3G52eVnkOpkQuUsGZFeTejGQDpwyR6uHhYS7Qpp5SOuXud/HzxcXcPtqGh6yyGdn6xlgmEqhh9xTjOSN/a5AC8ICPFiVh2/AkbEf/RkCPR989ZPaeaVi/MvW3d8C0JqBV2tjZYVvvLPw/FZOlYiJ8JjuJFdzeLf3n/+1Ny6lxl+oEj7kVvh7w6SvaSkvP0v08DGJtCI4QBQwqDCa8v9GKa2/+aNCjhT8SV1pJ7ogGW2xF42NOTb2RwBH31L4Nxc7fktE9WMTTgODzXhw/36PWIklQglWOny4KYFQZO2YISZ86ZeoyOobwEIidm8cgMWg9uAHav1leYTxubQgKnY7SXl7us7JTWrbyKbUe1zDiiaVRdP7WzSAKzcDEraYdy+4RKQn6MSWksUxypCbWKb2hvHtqwy1uVAurYH3Zk30GzA0eOqEtp1OOoUN8gv6heLcYDz/PggtdsqCJp9PlmOFQiaPOR/3VfpK1xbqjFQTAhfSjpJ4tQvK8Stx86RPQZow4qdvyJK12PgxYeGLhvuydfXpWG7o19Mq1A9ZIPQ6QPlR1XUDCyNoDxw8JrtOKj0XoRY+FF3A/JTarK3SF07lH4CPNfwMPwmY+zpImJLUALCiMRuhF1O9VQeAICtfdFRN3deDU3lyd0LVOWHGP+Wg7ovbh6DTxRwxx3CiVI5MHccmYqZGMg5EhPMNG0umTJozXfc2E/HJB8KKMvYyvx4/Ofjyd1e5OYbVawZt9RV8H4CA+XI8d4ZRRm2kSN0zaDd2HncPkhe+ZM9hU1sUGdI3Rwj656VAwS4F2qqZBfQhsQP0Y3+pwD9Ot9mc3xEbpRnySIQqjuPC3v5ZoqdB08ezxzAVEt8cyx4IGR2Ntd95o9Z0W3BfUxNg/yaEXEbr8/4RFaZ96w2c6THQfCS9z++bOYxLsLseTLelu2yD2HP0HnR0n6A==</source>
   </file>
   <file path="Header/DateHeader.php" generated-path="Header.DateHeader.html" hash="cebd03475d37e9ebd060b7d383c3dc61" package="MailMimeParser">
     <docblock line="0">
@@ -30240,7 +30364,7 @@ processing.</long-description>
     </parse_markers>
     <source>eJyVUk1v1EAMvedX+IC0HyzJne5CtRRBDxWI7andHmZnnM1AMhPZDkJC/e94ZpNWFFWoc4gzsd/ze3bW7/umL6rlsoAlXDeeofYtgsbekECsQRqEm60R5Bj2V8a3V77Dr4YYCXqK39FKqeCEP2+9xcAIjUj/tqpir7c4kMUy0rEas1wd2L0ZL6W2h+3uQuFVEUyH3Bv7bMP9ZzROw4cYeOiQzopJes4zGGAfjmrg8gJqih2YkF6bDCsBtnj0gcFmvFZCDIqZrWdgG0MrLXeJDYPjMfXulHqwaAZpIsGNMY13MMrM6m1rmOHSTeIAf0km+oQBydvpe/G7AD1ZeDpL+PITibxzGEAiEMpAQecvgqRiOyO2SVrTJg7JQEi3aT8nh3P1MNGpiQfdvCinz1M8HxuwkPLc3mXeqdtYVOXYDwddE9RDsOJ1HEeU6/gDww61uZFIPF/kwpOjdEbu29meX89WabKrpOXuLFfc5+dT+98yhkFoQKh1uAoo/xZCUfQ/Q/eoxfPH4LKa+StJ4RklYxY2m03iXbxMyHr27/iS926cHpzYn472EGOLupjatIz/d7IT3eVLvawfvdwXfwAxqByK</source>
   </file>
-  <file path="Header/Consumer/ParameterConsumer.php" generated-path="Header.Consumer.ParameterConsumer.html" hash="7bc6e69a8a710e3e8e79c5dfafae57e8" package="MailMimeParser">
+  <file path="Header/Consumer/ParameterConsumer.php" generated-path="Header.Consumer.ParameterConsumer.html" hash="19b11a727902622bd9504f412cf7dd9c" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -30248,13 +30372,14 @@ processing.</long-description>
       <tag name="package" line="0" description="MailMimeParser"/>
     </docblock>
     <namespace-alias name="Token">\ZBateson\MailMimeParser\Header\Part\Token</namespace-alias>
+    <namespace-alias name="MimeLiteralPart">\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</namespace-alias>
     <namespace-alias name="SplitParameterToken">\ZBateson\MailMimeParser\Header\Part\SplitParameterToken</namespace-alias>
     <namespace-alias name="ArrayObject">\ArrayObject</namespace-alias>
-    <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header\Consumer" line="25" package="MailMimeParser">
+    <class final="false" abstract="false" namespace="ZBateson\MailMimeParser\Header\Consumer" line="26" package="MailMimeParser">
       <extends>\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer</extends>
       <name>ParameterConsumer</name>
       <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer</full_name>
-      <docblock line="25">
+      <docblock line="26">
         <description>Reads headers separated into parameters consisting of a main value, and
 subsequent name/value pairs - for example text/html; charset=utf-8.</description>
         <long-description>A ParameterConsumer's parts are separated by a semi-colon.  Its name/value
@@ -30262,8 +30387,8 @@ pairs are separated with an '=' character.
 
 Parts may be mime-encoded entities.  Additionally, a value can be quoted and
 comments may exist.</long-description>
-        <tag name="author" line="25" description="Zaahid Bateson"/>
-        <tag name="package" line="25" description="MailMimeParser"/>
+        <tag name="author" line="26" description="Zaahid Bateson"/>
+        <tag name="package" line="26" description="MailMimeParser"/>
         <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer" refers="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer" link="/classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html"/>
       </docblock>
       <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="30" package="MailMimeParser">
@@ -30290,33 +30415,48 @@ comments may exist.</long-description>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="32" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="33" package="MailMimeParser">
         <name>getTokenSeparators</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::getTokenSeparators()</full_name>
-        <docblock line="32">
+        <docblock line="33">
           <description>Returns semi-colon and equals char as token separators.</description>
           <long-description>The whitespace character delimits mime-encoded parts for decoding.</long-description>
-          <tag name="return" line="32" description="" type="array&lt;mixed,string&gt;">
+          <tag name="return" line="33" description="" type="array&lt;mixed,string&gt;">
             <type>array&lt;mixed,string&gt;</type>
           </tag>
           <tag name="inherited_from" description="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::getTokenSeparators()" refers="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::getTokenSeparators()" link="/classes/ZBateson.MailMimeParser.Header.Consumer.GenericConsumer.html#method_getTokenSeparators"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="46" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="49" package="MailMimeParser">
+        <name>getTokenSplitPattern</name>
+        <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::getTokenSplitPattern()</full_name>
+        <docblock line="49">
+          <description>Overridden to use a specialized regex for finding mime-encoded parts
+(RFC 2047).</description>
+          <long-description>Some implementations seem to place mime-encoded parts within quoted
+parameters, and split the mime-encoded parts across multiple split
+parameters.  The specialized regex doesn't allow double quotes inside a
+mime encoded part, so it can be "continued" in another parameter.</long-description>
+          <tag name="return" line="49" description="the regex pattern" type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="65" package="MailMimeParser">
         <name>getPartForToken</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::getPartForToken()</full_name>
-        <docblock line="46">
+        <docblock line="65">
           <description>Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
 the passed string token and returns it, unless the token is an escaped
 literal, in which case a LiteralPart is returned.</description>
           <long-description></long-description>
-          <tag name="param" line="46" description="" type="string" variable="$token">
+          <tag name="param" line="65" description="" type="string" variable="$token">
             <type>string</type>
           </tag>
-          <tag name="param" line="46" description="" type="boolean" variable="$isLiteral">
+          <tag name="param" line="65" description="" type="boolean" variable="$isLiteral">
             <type>boolean</type>
           </tag>
-          <tag name="return" line="46" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart">
+          <tag name="return" line="65" description="" type="\ZBateson\MailMimeParser\Header\Part\HeaderPart">
             <type>\ZBateson\MailMimeParser\Header\Part\HeaderPart</type>
           </tag>
         </docblock>
@@ -30331,27 +30471,27 @@ literal, in which case a LiteralPart is returned.</description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="65" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="84" package="MailMimeParser">
         <name>addToSplitPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::addToSplitPart()</full_name>
-        <docblock line="65">
+        <docblock line="84">
           <description>Adds the passed parameter with the given name and value to a
 SplitParameterToken, at the passed index. If one with the given name
 doesn't exist, it is created.</description>
           <long-description></long-description>
-          <tag name="param" line="65" description="" type="\ArrayObject" variable="$splitParts">
+          <tag name="param" line="84" description="" type="\ArrayObject" variable="$splitParts">
             <type>\ArrayObject</type>
           </tag>
-          <tag name="param" line="65" description="" type="string" variable="$name">
+          <tag name="param" line="84" description="" type="string" variable="$name">
             <type>string</type>
           </tag>
-          <tag name="param" line="65" description="" type="string" variable="$value">
+          <tag name="param" line="84" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="param" line="65" description="" type="integer" variable="$index">
+          <tag name="param" line="84" description="" type="integer" variable="$index">
             <type>integer</type>
           </tag>
-          <tag name="param" line="65" description="" type="boolean" variable="$isEncoded">
+          <tag name="param" line="84" description="" type="boolean" variable="$isEncoded">
             <type>boolean</type>
           </tag>
         </docblock>
@@ -30381,26 +30521,26 @@ doesn't exist, it is created.</description>
           <type>boolean</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="91" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="110" package="MailMimeParser">
         <name>getPartFor</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::getPartFor()</full_name>
-        <docblock line="91">
+        <docblock line="110">
           <description>Instantiates and returns either a MimeLiteralPart if $strName is empty,
 a SplitParameterToken if the parameter is a split parameter and is the
 first in a series, null if it's a split parameter but is not the first
 part in its series, or a ParameterPart is returned otherwise.</description>
           <long-description>If the part is a SplitParameterToken, it's added to the passed
 $splitParts as well with its name as a key.</long-description>
-          <tag name="param" line="91" description="" type="string" variable="$strName">
+          <tag name="param" line="110" description="" type="string" variable="$strName">
             <type>string</type>
           </tag>
-          <tag name="param" line="91" description="" type="string" variable="$strValue">
+          <tag name="param" line="110" description="" type="string" variable="$strValue">
             <type>string</type>
           </tag>
-          <tag name="param" line="91" description="" type="\ArrayObject" variable="$splitParts">
+          <tag name="param" line="110" description="" type="\ArrayObject" variable="$splitParts">
             <type>\ArrayObject</type>
           </tag>
-          <tag name="return" line="91" description="|SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart" type="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart">
+          <tag name="return" line="110" description="|SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart" type="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart">
             <type>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart</type>
           </tag>
         </docblock>
@@ -30420,32 +30560,32 @@ $splitParts as well with its name as a key.</long-description>
           <type>\ArrayObject</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="123" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="142" package="MailMimeParser">
         <name>processTokenPart</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::processTokenPart()</full_name>
-        <docblock line="123">
+        <docblock line="142">
           <description>Handles parameter separator tokens during final processing.</description>
           <long-description>If the end token is found, a new HeaderPart is assigned to the passed
 $combined array.  If an '=' character is found, $strCat is assigned to
 $strName and emptied.
 
 Returns true if the token was processed, and false otherwise.</long-description>
-          <tag name="param" line="123" description="" type="string" variable="$tokenValue">
+          <tag name="param" line="142" description="" type="string" variable="$tokenValue">
             <type>string</type>
           </tag>
-          <tag name="param" line="123" description="" type="\ArrayObject" variable="$combined">
+          <tag name="param" line="142" description="" type="\ArrayObject" variable="$combined">
             <type>\ArrayObject</type>
           </tag>
-          <tag name="param" line="123" description="" type="\ArrayObject" variable="$splitParts">
+          <tag name="param" line="142" description="" type="\ArrayObject" variable="$splitParts">
             <type>\ArrayObject</type>
           </tag>
-          <tag name="param" line="123" description="" type="string" variable="$strName">
+          <tag name="param" line="142" description="" type="string" variable="$strName">
             <type>string</type>
           </tag>
-          <tag name="param" line="123" description="" type="string" variable="$strCat">
+          <tag name="param" line="142" description="" type="string" variable="$strCat">
             <type>string</type>
           </tag>
-          <tag name="return" line="123" description="" type="boolean">
+          <tag name="return" line="142" description="" type="boolean">
             <type>boolean</type>
           </tag>
         </docblock>
@@ -30475,18 +30615,18 @@ Returns true if the token was processed, and false otherwise.</long-description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="153" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Consumer" line="172" package="MailMimeParser">
         <name>finalizeParameterParts</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::finalizeParameterParts()</full_name>
-        <docblock line="153">
+        <docblock line="172">
           <description>Loops over parts in the passed array, creating ParameterParts out of any
 parsed SplitParameterTokens, replacing them in the array.</description>
           <long-description>The method then calls filterIgnoreSpaces to filter out empty elements in
 the combined array and returns an array.</long-description>
-          <tag name="param" line="153" description="" type="\ArrayObject" variable="$combined">
+          <tag name="param" line="172" description="" type="\ArrayObject" variable="$combined">
             <type>\ArrayObject</type>
           </tag>
-          <tag name="return" line="153" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;|array">
+          <tag name="return" line="172" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;|array">
             <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;</type>
             <type>array</type>
           </tag>
@@ -30497,18 +30637,18 @@ the combined array and returns an array.</long-description>
           <type>\ArrayObject</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="174" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header\Consumer" line="193" package="MailMimeParser">
         <name>processParts</name>
         <full_name>\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer::processParts()</full_name>
-        <docblock line="174">
+        <docblock line="193">
           <description>Post processing involves creating Part\LiteralPart or Part\ParameterPart
 objects out of created Token and LiteralParts.</description>
           <long-description>The default implementation simply returns the passed array after
 filtering out null/empty parts.</long-description>
-          <tag name="param" line="174" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;" variable="$parts">
+          <tag name="param" line="193" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;" variable="$parts">
             <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;</type>
           </tag>
-          <tag name="return" line="174" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;|array">
+          <tag name="return" line="193" description="" type="array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;|array">
             <type>array&lt;mixed,\ZBateson\MailMimeParser\Header\Consumer\HeaderPart&gt;</type>
             <type>array</type>
           </tag>
@@ -31069,7 +31209,7 @@ processing.</long-description>
         <inherited_from>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</inherited_from>
       </method>
     </class>
-    <source>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</source>
+    <source>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</source>
   </file>
   <file path="Header/GenericHeader.php" generated-path="Header.GenericHeader.html" hash="bbb6cc0800b88818cea59bfcb7397a52" package="MailMimeParser">
     <docblock line="0">

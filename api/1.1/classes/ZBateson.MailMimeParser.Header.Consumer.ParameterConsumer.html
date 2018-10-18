@@ -109,6 +109,9 @@ consumer.  The returned patterns are used to split the header value into
 tokens for the consumer to parse into parts."><span class="description">Returns an array of regular expression separators specific to this
 consumer.  The returned patterns are used to split the header value into
 tokens for the consumer to parse into parts.</span><pre>getTokenSeparators()</pre></a></li>
+<li class="method protected "><a href="#method_getTokenSplitPattern" title="getTokenSplitPattern() :: Overridden to use a specialized regex for finding mime-encoded parts
+(RFC 2047)."><span class="description">Overridden to use a specialized regex for finding mime-encoded parts
+(RFC 2047).</span><pre>getTokenSplitPattern()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getTokenSplitPattern" title="getTokenSplitPattern() :: Returns a regex pattern used to split the input header string.  The
 default implementation calls getAllTokenSeparators and implodes the
 returned array with the regex OR '|' character as its glue."><span class="description">Returns a regex pattern used to split the input header string.  The
@@ -456,6 +459,21 @@ should be taken to escape special characters.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>array&lt;mixed,string&gt;</code>the array of patterns</div>
+</div></div>
+</div>
+<a id="method_getTokenSplitPattern"></a><div class="element clickable method protected method_getTokenSplitPattern " data-toggle="collapse" data-target=".method_getTokenSplitPattern .collapse" title="protected">
+<h2>Overridden to use a specialized regex for finding mime-encoded parts
+(RFC 2047).</h2>
+<pre>getTokenSplitPattern() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Some implementations seem to place mime-encoded parts within quoted
+parameters, and split the mime-encoded parts across multiple split
+parameters.  The specialized regex doesn't allow double quotes inside a
+mime encoded part, so it can be &quot;continued&quot; in another parameter.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>the regex pattern</div>
 </div></div>
 </div>
 <a id="method_getTokenSplitPattern"></a><div class="element clickable method protected method_getTokenSplitPattern inherited" data-toggle="collapse" data-target=".method_getTokenSplitPattern .collapse" title="protected">
@@ -834,7 +852,7 @@ HeaderPart objects</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-30T21:18:56+02:00.<br></footer></div>
+            generated on 2018-10-18T16:25:08+02:00.<br></footer></div>
 </div>
 </body>
 </html>

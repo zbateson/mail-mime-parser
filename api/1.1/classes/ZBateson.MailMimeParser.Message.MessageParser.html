@@ -99,6 +99,16 @@ $partBuilder-&gt;setEndBoundaryFound with the passed line until it returns
 true or the stream is at EOF."><span class="description">Reads lines from the passed $handle, calling
 $partBuilder-&gt;setEndBoundaryFound with the passed line until it returns
 true or the stream is at EOF.</span><pre>findContentBoundary()</pre></a></li>
+<li class="method private "><a href="#method_readBoundaryLine" title="readBoundaryLine() :: Reads a line of 2048 characters.  If the line is larger than that, the
+remaining characters in the line are read and
+discarded, and only the first part is returned."><span class="description">Reads a line of 2048 characters.  If the line is larger than that, the
+remaining characters in the line are read and
+discarded, and only the first part is returned.</span><pre>readBoundaryLine()</pre></a></li>
+<li class="method private "><a href="#method_readLine" title="readLine() :: Reads a line of up to 4096 characters.  If the line is larger than that,
+the remaining characters in the line are read and discarded, and only the
+first 4096 characters are returned."><span class="description">Reads a line of up to 4096 characters.  If the line is larger than that,
+the remaining characters in the line are read and discarded, and only the
+first 4096 characters are returned.</span><pre>readLine()</pre></a></li>
 <li class="method private "><a href="#method_readPartContent" title="readPartContent() :: Reads content for a single part of a MIME message."><span class="description">Reads content for a single part of a MIME message.</span><pre>readPartContent()</pre></a></li>
 </ul>
 </li>
@@ -299,6 +309,46 @@ were read.</p></div>
 </div>
 </div></div>
 </div>
+<a id="method_readBoundaryLine"></a><div class="element clickable method private method_readBoundaryLine " data-toggle="collapse" data-target=".method_readBoundaryLine .collapse" title="private">
+<h2>Reads a line of 2048 characters.  If the line is larger than that, the
+remaining characters in the line are read and
+discarded, and only the first part is returned.</h2>
+<pre>readBoundaryLine(resource $handle, integer $lineSeparatorLength<code> = 0</code>) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method is identical to readLine, except it calculates the number of
+characters that make up the line's new line characters (e.g. 2 for &quot;\r\n&quot;
+or 1 for &quot;\n&quot;).</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+<div class="subelement argument">
+<h4>$lineSeparatorLength</h4>
+<code>integer</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_readLine"></a><div class="element clickable method private method_readLine " data-toggle="collapse" data-target=".method_readLine .collapse" title="private">
+<h2>Reads a line of up to 4096 characters.  If the line is larger than that,
+the remaining characters in the line are read and discarded, and only the
+first 4096 characters are returned.</h2>
+<pre>readLine(resource $handle) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$handle</h4>
+<code>resource</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
 <a id="method_readPartContent"></a><div class="element clickable method private method_readPartContent " data-toggle="collapse" data-target=".method_readPartContent .collapse" title="private">
 <h2>Reads content for a single part of a MIME message.</h2>
 <pre>readPartContent(resource $handle, \ZBateson\MailMimeParser\Message\Part\PartBuilder $partBuilder) </pre>
@@ -363,7 +413,7 @@ the boundary.</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-09-30T21:18:55+02:00.<br></footer></div>
+            generated on 2018-10-18T16:25:07+02:00.<br></footer></div>
 </div>
 </body>
 </html>
