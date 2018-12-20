@@ -105,14 +105,10 @@ class GenericConsumer extends AbstractConsumer
         HeaderPart &$spacePart,
         HeaderPart $lastPart
     ) {
-        $count = count($parts);
-        for ($j = $curIndex; $j < $count; ++$j) {
-            $nextPart = $parts[$j];
-            if ($this->shouldAddSpace($nextPart, $lastPart)) {
-                $retParts[] = $spacePart;
-                $spacePart = null;
-                break;
-            }
+        $nextPart = $parts[$curIndex];
+        if ($this->shouldAddSpace($nextPart, $lastPart)) {
+            $retParts[] = $spacePart;
+            $spacePart = null;
         }
     }
     
@@ -131,7 +127,7 @@ class GenericConsumer extends AbstractConsumer
     private function addSpaces(array $parts, array &$retParts, $curIndex, HeaderPart &$spacePart = null)
     {
         $lastPart = end($retParts);
-        if ($spacePart !== null && $parts[$curIndex]->getValue() !== '' && $lastPart !== false) {
+        if ($spacePart !== null && $curIndex < count($parts) && $parts[$curIndex]->getValue() !== '' && $lastPart !== false) {
             $this->addSpaceToRetParts($parts, $retParts, $curIndex, $spacePart, $lastPart);
         }
     }

@@ -67,5 +67,7 @@ class ParserHeadersIntegrationTest extends TestCase
         $this->assertEquals('Andreas Müzner', $message->getHeader('Bcc')->getPersonName());
 
         $this->assertEquals('Технические работы (ERP Галактика и Отчеты ТД)', $message->getHeaderValue('Test'));
+
+        $this->assertEquals('FAMILY eCarsharing GAUTING STA-CL51E - Buchung geändert Text', $message->getHeaderValue('Subject-X'));
     }
 }

@@ -157,12 +157,12 @@ class MimeLiteralPartTest extends TestCase
 
         $part = $this->assertDecoded(
             'Hello and bonjour mi amici. Welcome!',
-            'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
+            'Hello and =?UTF-8*fr-be?Q?bonjou?= =?UTF-8*it?Q?r_mi amici?=. Welcome!'
         );
         $expectedLang = [
             [ 'lang' => null, 'value' => 'Hello and ' ],
-            [ 'lang' => 'fr-be', 'value' => 'bonjour ' ],
-            [ 'lang' => 'it', 'value' => 'mi amici' ],
+            [ 'lang' => 'fr-be', 'value' => 'bonjou' ],
+            [ 'lang' => 'it', 'value' => 'r mi amici' ],
             [ 'lang' => null, 'value' => '. Welcome!' ]
         ];
         $this->assertEquals($expectedLang, $part->getLanguageArray());

@@ -52,6 +52,12 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
 
+    public function testMultilineMimePartsWithTextAtTheEnd()
+    {
+        $header = new SubjectHeader($this->consumerService, 'Hunted-By', "Hunt=?UTF-8?Q?er_S._Th?=\r\n=?UTF-8?Q?ompson?= Jr.");
+        $this->assertEquals('Hunter S. Thompson Jr.', $header->getValue());
+    }
+
     public function testMultilineMimePartWithParentheses()
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', ' =?koi8-r?B?9MXIzsnexdPLycUg0sHCz9TZIChFUlAg58HMwcvUycvBIMkg79TexdTZIPTk?=
