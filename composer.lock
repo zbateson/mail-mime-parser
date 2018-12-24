@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4e66e3025f4c1b5f69ad3e6d1709fa6",
+    "content-hash": "014a32d28ae84952a4428574676d594e",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -762,57 +762,6 @@
                 "parser"
             ],
             "time": "2018-03-08T01:11:30+00:00"
-        },
-        {
-            "name": "evert/phpdoc-md",
-            "version": "0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/evert/phpdoc-md.git",
-                "reference": "aefe4644cb672def0043e7625d9c2bda04b310d8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/evert/phpdoc-md/zipball/aefe4644cb672def0043e7625d9c2bda04b310d8",
-                "reference": "aefe4644cb672def0043e7625d9c2bda04b310d8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.1",
-                "twig/twig": "~1.18.0"
-            },
-            "require-dev": {
-                "phpdocumentor/phpdocumentor": "~2.8.0"
-            },
-            "bin": [
-                "bin/phpdocmd"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PHPDocMD\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Evert Pot",
-                    "email": "evert@rooftopsolutions.nl",
-                    "homepage": "http://www.rooftopsolutions.nl/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP documentation generator, with markdown output",
-            "homepage": "https://github.com/evert/phpdoc-md",
-            "keywords": [
-                "markdown",
-                "php",
-                "phpdoc"
-            ],
-            "time": "2015-03-26T23:24:48+00:00"
         },
         {
             "name": "herrera-io/json",
@@ -4677,30 +4626,39 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.18.2",
+            "version": "v1.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602"
+                "reference": "730c9c4471b5152d23061feb02b03382264c8a15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e8e6575abf6102af53ec283f7f14b89e304fa602",
-                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/730c9c4471b5152d23061feb02b03382264c8a15",
+                "reference": "730c9c4471b5152d23061feb02b03382264c8a15",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.7"
+                "php": ">=5.3.3",
+                "symfony/polyfill-ctype": "^1.8"
+            },
+            "require-dev": {
+                "psr/container": "^1.0",
+                "symfony/debug": "^2.7",
+                "symfony/phpunit-bridge": "^3.4.19|^4.1.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.18-dev"
+                    "dev-master": "1.36-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
+                },
+                "psr-4": {
+                    "Twig\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4721,16 +4679,16 @@
                 },
                 {
                     "name": "Twig Team",
-                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "homepage": "https://twig.symfony.com/contributors",
                     "role": "Contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "http://twig.sensiolabs.org",
+            "homepage": "https://twig.symfony.com",
             "keywords": [
                 "templating"
             ],
-            "time": "2015-06-06T23:31:24+00:00"
+            "time": "2018-12-16T10:34:11+00:00"
         },
         {
             "name": "zendframework/zend-cache",
