@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\Part\MessagePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager;
 use ZBateson\MailMimeParser\Message\PartFilter;
@@ -69,6 +70,7 @@ class Message extends MimePart
      *
      * @param resource|string $handleOrString the resource handle to the input
      *        stream of the mime message, or a string containing a mime message
+     * @return Message
      */
     public static function from($handleOrString)
     {
@@ -80,7 +82,7 @@ class Message extends MimePart
      * Returns the text/plain part at the given index (or null if not found.)
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return MessagePart
      */
     public function getTextPart($index = 0)
     {
@@ -106,7 +108,7 @@ class Message extends MimePart
      * Returns the text/html part at the given index (or null if not found.)
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return MessagePart
      */
     public function getHtmlPart($index = 0)
     {
@@ -133,7 +135,7 @@ class Message extends MimePart
      * is set.
      *
      * @param int $index
-     * @return ZBateson\MailMimeParser\Message\Part\MessagePart
+     * @return MessagePart
      */
     public function getAttachmentPart($index)
     {
@@ -239,7 +241,7 @@ class Message extends MimePart
      *
      * @param int $index
      * @param string $charset
-     * @return resource
+     * @return StreamInterface
      */
     public function getHtmlStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
