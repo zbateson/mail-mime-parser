@@ -7,8 +7,17 @@
     "authors": [
         {
             "name": "Zaahid Bateson"
-        }
+        },
+        {
+			"name": "Contributors",
+			"homepage": "https://github.com/zbateson/mail-mime-parser/graphs/contributors"
+		}
     ],
+    "support": {
+		"issues": "https://github.com/zbateson/mail-mime-parser/issues",
+		"source": "https://github.com/zbateson/mail-mime-parser",
+		"docs": "https://mail-mime-parser.org/#usage-guide"
+	},
     "require": {
         "php": ">=5.4",
         "guzzlehttp/psr7": "^1.0",
@@ -16,10 +25,10 @@
         "zbateson/stream-decorators": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5",
+        "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5",
         "phing/phing": "^2.15.0",
         "phpdocumentor/phpdocumentor": "^2.8.0",
-        "mikey179/vfsStream": "^1.6.0"
+        "mikey179/vfsstream": "^1.6.0"
     },
     "suggest": {
         "ext-mbstring": "For best support/performance",
