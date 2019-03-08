@@ -63,104 +63,104 @@
 <li class="nav-header">
 <i title="Classes" class="icon-custom icon-class"></i> Classes</li>
 <li><a href="#Message" title="A parsed mime message with optional mime parts depending on its type.">Message</a></li>
-<li><a href="#Container" title="Dependency injection container for use by ZBateson\MailMimeParser - because a
-more complex one seems like overkill.">Container</a></li>
-<li><a href="#MessagePartStream" title="Provides a readable stream for a MessagePart.">MessagePartStream</a></li>
-<li><a href="#StreamFactory" title="Factory class for Psr7 stream decorators used in MailMimeParser.">StreamFactory</a></li>
 <li><a href="#HeaderStream" title="Psr7 stream decorator implementation providing a readable stream for a part's
 headers.">HeaderStream</a></li>
+<li><a href="#StreamFactory" title="Factory class for Psr7 stream decorators used in MailMimeParser.">StreamFactory</a></li>
+<li><a href="#MessagePartStream" title="Provides a readable stream for a MessagePart.">MessagePartStream</a></li>
+<li><a href="#IdHeader" title="Represents a Content-ID, Message-ID, In-Reply-To or References header.">IdHeader</a></li>
+<li><a href="#AddressHeader" title="Reads an address list header using the AddressBaseConsumer.">AddressHeader</a></li>
+<li><a href="#GenericHeader" title="Reads the header using GenericConsumer.">GenericHeader</a></li>
+<li><a href="#HeaderContainer" title="Maintains a collection of headers for a part.">HeaderContainer</a></li>
+<li><a href="#HeaderFactory" title="Constructs various AbstractHeader types depending on the type of header
+passed.">HeaderFactory</a></li>
+<li><a href="#SubjectHeader" title="Reads the header using a SubjectConsumer.">SubjectHeader</a></li>
+<li><a href="#ParameterHeader" title="Represents a header containing a primary value part and subsequent name/value
+parts using a ParameterConsumer.">ParameterHeader</a></li>
+<li><a href="#AbstractHeader" title="Abstract base class representing a mime email's header.">AbstractHeader</a></li>
+<li><a href="#ReceivedHeader" title="Represents a Received header.">ReceivedHeader</a></li>
+<li><a href="#DateHeader" title="Reads a DatePart value header in either RFC 2822 or RFC 822 format.">DateHeader</a></li>
+<li><a href="#ReceivedDomainPart" title="Holds extra information about a parsed Received header part, for FROM and BY
+parts, namely: ehlo name, hostname, and address.">ReceivedDomainPart</a></li>
+<li><a href="#ReceivedPart" title="Represents one parameter in a parsed 'Received' header, e.g. the FROM or VIA
+part.">ReceivedPart</a></li>
+<li><a href="#CommentPart" title="Represents a mime header comment -- text in a structured mime header
+value existing within parentheses.">CommentPart</a></li>
+<li><a href="#AddressPart" title="Holds a single address or name/address pair.">AddressPart</a></li>
+<li><a href="#ParameterPart" title="Represents a name/value pair part of a header.">ParameterPart</a></li>
+<li><a href="#HeaderPartFactory" title="Constructs and returns HeaderPart objects.">HeaderPartFactory</a></li>
+<li><a href="#AddressGroupPart" title="Holds a group of addresses, and an optional group name.">AddressGroupPart</a></li>
+<li><a href="#DatePart" title="Parses a header into a DateTime object.">DatePart</a></li>
+<li><a href="#Token" title="Holds a string value token that will require additional processing by a
+consumer prior to returning to a client.">Token</a></li>
+<li><a href="#LiteralPart" title="A literal header string part.  The value of the part is stripped of CR and LF
+characters, but otherwise not transformed or changed in any way.">LiteralPart</a></li>
+<li><a href="#MimeLiteralPart" title="Represents a single mime header part token, with the possibility of it being
+MIME-Encoded as per RFC-2047.">MimeLiteralPart</a></li>
+<li><a href="#SplitParameterToken" title="Holds a running value for an RFC-2231 split header parameter.">SplitParameterToken</a></li>
+<li><a href="#HeaderPart" title="Abstract base class representing a single part of a parsed header.">HeaderPart</a></li>
+<li><a href="#MimeLiteralPartFactory" title="Extends HeaderPartFactory to instantiate MimeLiteralParts for its newInstance
+function.">MimeLiteralPartFactory</a></li>
+<li><a href="#ConsumerService" title="Simple service provider for consumer singletons.">ConsumerService</a></li>
+<li><a href="#DomainConsumer" title='Parses a so-called "extended-domain" (from and by) part of a Received header.'>DomainConsumer</a></li>
+<li><a href="#GenericReceivedConsumer" title="Consumes simple literal strings for parts of a Received header.">GenericReceivedConsumer</a></li>
+<li><a href="#ReceivedDateConsumer" title="Parses the date portion of a Received header into a DatePart.">ReceivedDateConsumer</a></li>
+<li><a href="#IdBaseConsumer" title="Serves as a base-consumer for ID headers (like Message-ID and Content-ID).">IdBaseConsumer</a></li>
+<li><a href="#AddressBaseConsumer" title="Serves as a base-consumer for recipient/sender email address headers (like
+From and To).">AddressBaseConsumer</a></li>
+<li><a href="#DateConsumer" title="Parses a date header into a Part\DatePart taking care of comment and quoted
+parts as necessary.">DateConsumer</a></li>
+<li><a href="#ReceivedConsumer" title="Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,
+and CommentParts.">ReceivedConsumer</a></li>
+<li><a href="#AbstractConsumer" title="Abstract base class for all header token consumers.">AbstractConsumer</a></li>
+<li><a href="#GenericConsumer" title="A minimal implementation of AbstractConsumer defining a CommentConsumer and
+QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.">GenericConsumer</a></li>
+<li><a href="#AddressConsumer" title="Parses a single part of an address header.">AddressConsumer</a></li>
+<li><a href="#CommentConsumer" title="Consumes all tokens within parentheses as comments.">CommentConsumer</a></li>
+<li><a href="#SubjectConsumer" title="Extends GenericConsumer to remove its sub consumers.">SubjectConsumer</a></li>
+<li><a href="#QuotedStringConsumer" title="Represents a quoted part of a header value starting at a single quote, and
+ending at the next single quote.">QuotedStringConsumer</a></li>
+<li><a href="#ParameterConsumer" title="Reads headers separated into parameters consisting of a main value, and
+subsequent name/value pairs - for example text/html; charset=utf-8.">ParameterConsumer</a></li>
+<li><a href="#AddressGroupConsumer" title="Parses a single group of addresses (as a named-group part of an address
+header).">AddressGroupConsumer</a></li>
+<li><a href="#IdConsumer" title="Parses a single ID from an ID header.  Begins consuming on a '&lt;' char, and
+ends on a '&gt;' char.">IdConsumer</a></li>
+<li><a href="#MailMimeParser" title="Parses a MIME message into a \ZBateson\MailMimeParser\Message object.">MailMimeParser</a></li>
+<li><a href="#Container" title="Dependency injection container for use by ZBateson\MailMimeParser - because a
+more complex one seems like overkill.">Container</a></li>
+<li><a href="#MessageParser" title="Parses a mail mime message into its component parts.  To invoke, call
+MailMimeParser::parse.">MessageParser</a></li>
 <li><a href="#MimePart" title="Represents a single part of a multi-part mime message.">MimePart</a></li>
-<li><a href="#UUEncodedPart" title="A specialized NonMimePart representing a uuencoded part.">UUEncodedPart</a></li>
-<li><a href="#MimePartFactory" title="Responsible for creating MimePart instances.">MimePartFactory</a></li>
-<li><a href="#PartFactoryService" title="Responsible for creating singleton instances of MessagePartFactory and its
-subclasses.">PartFactoryService</a></li>
-<li><a href="#UUEncodedPartFactory" title="Responsible for creating UUEncodedPart instances.">UUEncodedPartFactory</a></li>
-<li><a href="#NonMimePartFactory" title="Responsible for creating NoneMimePart instances.">NonMimePartFactory</a></li>
-<li><a href="#PartStreamFilterManagerFactory" title="Responsible for creating PartStreamFilterManager instances.">PartStreamFilterManagerFactory</a></li>
-<li><a href="#MessagePartFactory" title="Abstract factory for subclasses of MessagePart.">MessagePartFactory</a></li>
-<li><a href="#PartBuilderFactory" title="Responsible for creating PartBuilder instances.">PartBuilderFactory</a></li>
 <li><a href="#PartBuilder" title="Used by MessageParser to keep information about a parsed message as an
 intermediary before creating a Message object and its MessagePart children.">PartBuilder</a></li>
+<li><a href="#MessagePart" title="Represents a single part of a message.">MessagePart</a></li>
+<li><a href="#PartFactoryService" title="Responsible for creating singleton instances of MessagePartFactory and its
+subclasses.">PartFactoryService</a></li>
+<li><a href="#NonMimePartFactory" title="Responsible for creating NoneMimePart instances.">NonMimePartFactory</a></li>
+<li><a href="#MimePartFactory" title="Responsible for creating MimePart instances.">MimePartFactory</a></li>
+<li><a href="#PartBuilderFactory" title="Responsible for creating PartBuilder instances.">PartBuilderFactory</a></li>
+<li><a href="#PartStreamFilterManagerFactory" title="Responsible for creating PartStreamFilterManager instances.">PartStreamFilterManagerFactory</a></li>
+<li><a href="#UUEncodedPartFactory" title="Responsible for creating UUEncodedPart instances.">UUEncodedPartFactory</a></li>
+<li><a href="#MessagePartFactory" title="Abstract factory for subclasses of MessagePart.">MessagePartFactory</a></li>
 <li><a href="#PartStreamFilterManager" title="Manages attached stream filters for a MessagePart's content resource handle.">PartStreamFilterManager</a></li>
+<li><a href="#ParentPart" title="A MessagePart that contains children.">ParentPart</a></li>
+<li><a href="#ParentHeaderPart" title="A parent part containing headers.">ParentHeaderPart</a></li>
 <li><a href="#NonMimePart" title="Represents part of a non-mime message.  The part could either be a plain text
 part or a uuencoded attachment and could be extended for other pre-mime
 message encoding types.">NonMimePart</a></li>
-<li><a href="#ParentPart" title="A MessagePart that contains children.">ParentPart</a></li>
-<li><a href="#MessagePart" title="Represents a single part of a message.">MessagePart</a></li>
-<li><a href="#ParentHeaderPart" title="A parent part containing headers.">ParentHeaderPart</a></li>
-<li><a href="#PartFilter" title="Provides a way to define a filter of MessagePart for use in various calls to
-add/remove MessagePart.">PartFilter</a></li>
+<li><a href="#UUEncodedPart" title="A specialized NonMimePart representing a uuencoded part.">UUEncodedPart</a></li>
+<li><a href="#MessageFactory" title="Responsible for creating Message instances.">MessageFactory</a></li>
 <li><a href="#MultipartHelper" title="Provides various routines to manipulate and create multipart messages from an
 existing message (e.g. to make space for attachments in a message, or to
 change a simple message to a multipart/alternative one, etc.">MultipartHelper</a></li>
 <li><a href="#PrivacyHelper" title="Provides routines to set or retrieve the signature part of a signed message.">PrivacyHelper</a></li>
 <li><a href="#GenericHelper" title="Provides common Message helper routines for Message manipulation.">GenericHelper</a></li>
-<li><a href="#MessageHelperService" title="Responsible for creating helper singletons.">MessageHelperService</a></li>
 <li><a href="#AbstractHelper" title="Base class for message helpers.">AbstractHelper</a></li>
-<li><a href="#MessageFactory" title="Responsible for creating Message instances.">MessageFactory</a></li>
+<li><a href="#MessageHelperService" title="Responsible for creating helper singletons.">MessageHelperService</a></li>
 <li><a href="#PartFilterFactory" title="Injectable factory class used by MimePart to construct PartFilter instances
 in a testable way.">PartFilterFactory</a></li>
-<li><a href="#MessageParser" title="Parses a mail mime message into its component parts.  To invoke, call
-MailMimeParser::parse.">MessageParser</a></li>
-<li><a href="#SubjectHeader" title="Reads the header using a SubjectConsumer.">SubjectHeader</a></li>
-<li><a href="#ParameterHeader" title="Represents a header containing a primary value part and subsequent name/value
-parts using a ParameterConsumer.">ParameterHeader</a></li>
-<li><a href="#IdHeader" title="Represents a Content-ID, Message-ID, In-Reply-To or References header.">IdHeader</a></li>
-<li><a href="#AbstractHeader" title="Abstract base class representing a mime email's header.">AbstractHeader</a></li>
-<li><a href="#ParameterPart" title="Represents a name/value pair part of a header.">ParameterPart</a></li>
-<li><a href="#AddressPart" title="Holds a single address or name/address pair.">AddressPart</a></li>
-<li><a href="#ReceivedDomainPart" title="Holds extra information about a parsed Received header part, for FROM and BY
-parts, namely: ehlo name, hostname, and address.">ReceivedDomainPart</a></li>
-<li><a href="#MimeLiteralPartFactory" title="Extends HeaderPartFactory to instantiate MimeLiteralParts for its newInstance
-function.">MimeLiteralPartFactory</a></li>
-<li><a href="#LiteralPart" title="A literal header string part.  The value of the part is stripped of CR and LF
-characters, but otherwise not transformed or changed in any way.">LiteralPart</a></li>
-<li><a href="#ReceivedPart" title="Represents one parameter in a parsed 'Received' header, e.g. the FROM or VIA
-part.">ReceivedPart</a></li>
-<li><a href="#Token" title="Holds a string value token that will require additional processing by a
-consumer prior to returning to a client.">Token</a></li>
-<li><a href="#HeaderPartFactory" title="Constructs and returns HeaderPart objects.">HeaderPartFactory</a></li>
-<li><a href="#MimeLiteralPart" title="Represents a single mime header part token, with the possibility of it being
-MIME-Encoded as per RFC-2047.">MimeLiteralPart</a></li>
-<li><a href="#AddressGroupPart" title="Holds a group of addresses, and an optional group name.">AddressGroupPart</a></li>
-<li><a href="#HeaderPart" title="Abstract base class representing a single part of a parsed header.">HeaderPart</a></li>
-<li><a href="#CommentPart" title="Represents a mime header comment -- text in a structured mime header
-value existing within parentheses.">CommentPart</a></li>
-<li><a href="#DatePart" title="Parses a header into a DateTime object.">DatePart</a></li>
-<li><a href="#SplitParameterToken" title="Holds a running value for an RFC-2231 split header parameter.">SplitParameterToken</a></li>
-<li><a href="#AddressHeader" title="Reads an address list header using the AddressBaseConsumer.">AddressHeader</a></li>
-<li><a href="#DateHeader" title="Reads a DatePart value header in either RFC 2822 or RFC 822 format.">DateHeader</a></li>
-<li><a href="#HeaderFactory" title="Constructs various AbstractHeader types depending on the type of header
-passed.">HeaderFactory</a></li>
-<li><a href="#HeaderContainer" title="Maintains a collection of headers for a part.">HeaderContainer</a></li>
-<li><a href="#ReceivedHeader" title="Represents a Received header.">ReceivedHeader</a></li>
-<li><a href="#AddressBaseConsumer" title="Serves as a base-consumer for recipient/sender email address headers (like
-From and To).">AddressBaseConsumer</a></li>
-<li><a href="#IdBaseConsumer" title="Serves as a base-consumer for ID headers (like Message-ID and Content-ID).">IdBaseConsumer</a></li>
-<li><a href="#CommentConsumer" title="Consumes all tokens within parentheses as comments.">CommentConsumer</a></li>
-<li><a href="#SubjectConsumer" title="Extends GenericConsumer to remove its sub consumers.">SubjectConsumer</a></li>
-<li><a href="#AddressGroupConsumer" title="Parses a single group of addresses (as a named-group part of an address
-header).">AddressGroupConsumer</a></li>
-<li><a href="#ConsumerService" title="Simple service provider for consumer singletons.">ConsumerService</a></li>
-<li><a href="#AddressConsumer" title="Parses a single part of an address header.">AddressConsumer</a></li>
-<li><a href="#AbstractConsumer" title="Abstract base class for all header token consumers.">AbstractConsumer</a></li>
-<li><a href="#GenericReceivedConsumer" title="Consumes simple literal strings for parts of a Received header.">GenericReceivedConsumer</a></li>
-<li><a href="#ReceivedDateConsumer" title="Parses the date portion of a Received header into a DatePart.">ReceivedDateConsumer</a></li>
-<li><a href="#DomainConsumer" title='Parses a so-called "extended-domain" (from and by) part of a Received header.'>DomainConsumer</a></li>
-<li><a href="#GenericConsumer" title="A minimal implementation of AbstractConsumer defining a CommentConsumer and
-QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.">GenericConsumer</a></li>
-<li><a href="#DateConsumer" title="Parses a date header into a Part\DatePart taking care of comment and quoted
-parts as necessary.">DateConsumer</a></li>
-<li><a href="#ReceivedConsumer" title="Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,
-and CommentParts.">ReceivedConsumer</a></li>
-<li><a href="#QuotedStringConsumer" title="Represents a quoted part of a header value starting at a single quote, and
-ending at the next single quote.">QuotedStringConsumer</a></li>
-<li><a href="#IdConsumer" title="Parses a single ID from an ID header.  Begins consuming on a '&lt;' char, and
-ends on a '&gt;' char.">IdConsumer</a></li>
-<li><a href="#ParameterConsumer" title="Reads headers separated into parameters consisting of a main value, and
-subsequent name/value pairs - for example text/html; charset=utf-8.">ParameterConsumer</a></li>
-<li><a href="#GenericHeader" title="Reads the header using GenericConsumer.">GenericHeader</a></li>
-<li><a href="#MailMimeParser" title="Parses a MIME message into a \ZBateson\MailMimeParser\Message object.">MailMimeParser</a></li>
+<li><a href="#PartFilter" title="Provides a way to define a filter of MessagePart for use in various calls to
+add/remove MessagePart.">PartFilter</a></li>
 </ul>
 </div>
 <div class="span8 package-contents">
@@ -701,7 +701,7 @@ headers.</p>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-10-18T16:25:06+02:00.<br></footer></div>
+            generated on 2019-03-07T20:06:53-08:00.<br></footer></div>
 </div>
 </body>
 </html>

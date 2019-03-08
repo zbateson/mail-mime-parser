@@ -83,6 +83,7 @@ destroyed.</span><pre>attachContentStream()</pre></a></li>
 requiring including MailMimeParser, instantiating it, and calling parse."><span class="description">Convenience method to parse a handle or string into a Message without
 requiring including MailMimeParser, instantiating it, and calling parse.</span><pre>from()</pre></a></li>
 <li class="method public "><a href="#method_getAllAttachmentParts" title="getAllAttachmentParts() :: Returns all attachment parts."><span class="description">Returns all attachment parts.</span><pre>getAllAttachmentParts()</pre></a></li>
+<li class="method public inherited"><a href="#method_getAllHeaders" title="getAllHeaders() :: Returns an array of headers in this part."><span class="description">Returns an array of headers in this part.</span><pre>getAllHeaders()</pre></a></li>
 <li class="method public inherited"><a href="#method_getAllHeadersByName" title="getAllHeadersByName() :: Returns an array of headers that match the passed name."><span class="description">Returns an array of headers that match the passed name.</span><pre>getAllHeadersByName()</pre></a></li>
 <li class="method public inherited"><a href="#method_getAllParts" title="getAllParts() :: Returns the current part, all child parts, and child parts of all
 children optionally filtering them with the provided PartFilter."><span class="description">Returns the current part, all child parts, and child parts of all
@@ -510,7 +511,7 @@ destroyed.</h2>
 <a id="method_from"></a><div class="element clickable method public method_from " data-toggle="collapse" data-target=".method_from .collapse" title="public">
 <h2>Convenience method to parse a handle or string into a Message without
 requiring including MailMimeParser, instantiating it, and calling parse.</h2>
-<pre>from(resource|string $handleOrString) </pre>
+<pre>from(resource|string $handleOrString) : \ZBateson\MailMimeParser\Message</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -519,17 +520,29 @@ requiring including MailMimeParser, instantiating it, and calling parse.</h2>
 <h4>$handleOrString</h4>
 <code>resource</code><code>string</code><p>the resource handle to the input
        stream of the mime message, or a string containing a mime message</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ZBateson\MailMimeParser\Message</code></div>
 </div></div>
 </div>
 <a id="method_getAllAttachmentParts"></a><div class="element clickable method public method_getAllAttachmentParts " data-toggle="collapse" data-target=".method_getAllAttachmentParts .collapse" title="public">
 <h2>Returns all attachment parts.</h2>
-<pre>getAllAttachmentParts() : array&lt;mixed,\ZBateson\MailMimeParser\MessagePart&gt;</pre>
+<pre>getAllAttachmentParts() : array&lt;mixed,\ZBateson\MailMimeParser\Message\Part\MessagePart&gt;</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>&quot;Attachments&quot; are any non-multipart, non-signature and any text or html
 html part witha Content-Disposition set to  'attachment'.</p></div>
 <h3>Returns</h3>
-<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\MessagePart&gt;</code></div>
+<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Message\Part\MessagePart&gt;</code></div>
+</div></div>
+</div>
+<a id="method_getAllHeaders"></a><div class="element clickable method public method_getAllHeaders inherited" data-toggle="collapse" data-target=".method_getAllHeaders .collapse" title="public">
+<h2>Returns an array of headers in this part.</h2>
+<pre>getAllHeaders() : array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractHeader&gt;</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractHeader&gt;</code></div>
 </div></div>
 </div>
 <a id="method_getAllHeadersByName"></a><div class="element clickable method public method_getAllHeadersByName inherited" data-toggle="collapse" data-target=".method_getAllHeadersByName .collapse" title="public">
@@ -593,7 +606,7 @@ exist or null otherwise.</h2>
 <a id="method_getAttachmentPart"></a><div class="element clickable method public method_getAttachmentPart " data-toggle="collapse" data-target=".method_getAttachmentPart .collapse" title="public">
 <h2>Returns the attachment part at the given 0-based index, or null if none
 is set.</h2>
-<pre>getAttachmentPart(integer $index) : \ZBateson\MailMimeParser\ZBateson\MailMimeParser\Message\Part\MessagePart</pre>
+<pre>getAttachmentPart(integer $index) : \ZBateson\MailMimeParser\Message\Part\MessagePart</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -603,7 +616,7 @@ is set.</h2>
 <code>integer</code>
 </div>
 <h3>Returns</h3>
-<div class="subelement response"><code>\ZBateson\MailMimeParser\ZBateson\MailMimeParser\Message\Part\MessagePart</code></div>
+<div class="subelement response"><code>\ZBateson\MailMimeParser\Message\Part\MessagePart</code></div>
 </div></div>
 </div>
 <a id="method_getBinaryContentResourceHandle"></a><div class="element clickable method public method_getBinaryContentResourceHandle inherited" data-toggle="collapse" data-target=".method_getBinaryContentResourceHandle .collapse" title="public">
@@ -940,7 +953,7 @@ null if the message doesn't have an inline html part.</p></div>
 </div>
 <a id="method_getHtmlPart"></a><div class="element clickable method public method_getHtmlPart " data-toggle="collapse" data-target=".method_getHtmlPart .collapse" title="public">
 <h2>Returns the text/html part at the given index (or null if not found.)</h2>
-<pre>getHtmlPart(integer $index<code> = 0</code>) : \ZBateson\MailMimeParser\Message\Part\MimePart</pre>
+<pre>getHtmlPart(integer $index<code> = 0</code>) : \ZBateson\MailMimeParser\Message\Part\MessagePart</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -950,7 +963,7 @@ null if the message doesn't have an inline html part.</p></div>
 <code>integer</code>
 </div>
 <h3>Returns</h3>
-<div class="subelement response"><code>\ZBateson\MailMimeParser\Message\Part\MimePart</code></div>
+<div class="subelement response"><code>\ZBateson\MailMimeParser\Message\Part\MessagePart</code></div>
 </div></div>
 </div>
 <a id="method_getHtmlPartCount"></a><div class="element clickable method public method_getHtmlPartCount " data-toggle="collapse" data-target=".method_getHtmlPartCount .collapse" title="public">
@@ -986,7 +999,7 @@ passed $index, or null if unavailable.</h2>
 <a id="method_getHtmlStream"></a><div class="element clickable method public method_getHtmlStream " data-toggle="collapse" data-target=".method_getHtmlStream .collapse" title="public">
 <h2>Returns a Psr7 Stream for the 'inline' text/html content at the passed
 $index, or null if unavailable.</h2>
-<pre>getHtmlStream(integer $index<code> = 0</code>, string $charset<code> = \ZBateson\MailMimeParser\MailMimeParser::DEFAULT_CHARSET</code>) : resource</pre>
+<pre>getHtmlStream(integer $index<code> = 0</code>, string $charset<code> = \ZBateson\MailMimeParser\MailMimeParser::DEFAULT_CHARSET</code>) : \Psr\Http\Message\StreamInterface</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -1000,7 +1013,7 @@ $index, or null if unavailable.</h2>
 <code>string</code>
 </div>
 <h3>Returns</h3>
-<div class="subelement response"><code>resource</code></div>
+<div class="subelement response"><code>\Psr\Http\Message\StreamInterface</code></div>
 </div></div>
 </div>
 <a id="method_getParent"></a><div class="element clickable method public method_getParent inherited" data-toggle="collapse" data-target=".method_getParent .collapse" title="public">
@@ -1199,7 +1212,7 @@ null if the message doesn't have an inline text part.</p></div>
 </div>
 <a id="method_getTextPart"></a><div class="element clickable method public method_getTextPart " data-toggle="collapse" data-target=".method_getTextPart .collapse" title="public">
 <h2>Returns the text/plain part at the given index (or null if not found.)</h2>
-<pre>getTextPart(integer $index<code> = 0</code>) : \ZBateson\MailMimeParser\Message\Part\MimePart</pre>
+<pre>getTextPart(integer $index<code> = 0</code>) : \ZBateson\MailMimeParser\Message\Part\MessagePart</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -1209,7 +1222,7 @@ null if the message doesn't have an inline text part.</p></div>
 <code>integer</code>
 </div>
 <h3>Returns</h3>
-<div class="subelement response"><code>\ZBateson\MailMimeParser\Message\Part\MimePart</code></div>
+<div class="subelement response"><code>\ZBateson\MailMimeParser\Message\Part\MessagePart</code></div>
 </div></div>
 </div>
 <a id="method_getTextPartCount"></a><div class="element clickable method public method_getTextPartCount " data-toggle="collapse" data-target=".method_getTextPartCount .collapse" title="public">
@@ -1813,7 +1826,7 @@ content and children</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-10-18T16:25:06+02:00.<br></footer></div>
+            generated on 2019-03-07T20:06:53-08:00.<br></footer></div>
 </div>
 </body>
 </html>

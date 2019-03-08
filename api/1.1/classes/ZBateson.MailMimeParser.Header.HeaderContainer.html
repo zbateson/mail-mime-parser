@@ -72,6 +72,9 @@ where more than one header with the same name exists)."><span class="description
 at the optional offset (defaulting to the first header in the collection
 where more than one header with the same name exists).</span><pre>get()</pre></a></li>
 <li class="method public "><a href="#method_getAll" title="getAll() :: Returns all headers with the passed name."><span class="description">Returns all headers with the passed name.</span><pre>getAll()</pre></a></li>
+<li class="method public "><a href="#method_getHeaderObjects" title="getHeaderObjects() :: Returns an array of AbstractHeader objects representing all headers in
+this collection."><span class="description">Returns an array of AbstractHeader objects representing all headers in
+this collection.</span><pre>getHeaderObjects()</pre></a></li>
 <li class="method public "><a href="#method_getHeaders" title="getHeaders() :: Returns an array of headers in this collection.  Each returned element in
 the array is an array with the first element set to the name, and the
 second its value:"><span class="description">Returns an array of headers in this collection.  Each returned element in
@@ -95,7 +98,9 @@ than one exists, its value is updated.</span><pre>set()</pre></a></li>
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="method private "><a href="#method_getByIndex" title="getByIndex() :: Returns the header in the headers array at the passed integer index."><span class="description">Returns the header in the headers array at the passed integer index.</span><pre>getByIndex()</pre></a></li>
+<li class="method private "><a href="#method_getByIndex" title="getByIndex() :: Returns the header in the headers array at the passed 0-based integer
+index."><span class="description">Returns the header in the headers array at the passed 0-based integer
+index.</span><pre>getByIndex()</pre></a></li>
 <li class="method private "><a href="#method_getNormalizedHeaderName" title="getNormalizedHeaderName() :: Returns the string in lower-case, and with non-alphanumeric characters
 stripped out."><span class="description">Returns the string in lower-case, and with non-alphanumeric characters
 stripped out.</span><pre>getNormalizedHeaderName()</pre></a></li>
@@ -244,6 +249,17 @@ where more than one header with the same name exists).</h2>
 <div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractHeader&gt;</code></div>
 </div></div>
 </div>
+<a id="method_getHeaderObjects"></a><div class="element clickable method public method_getHeaderObjects " data-toggle="collapse" data-target=".method_getHeaderObjects .collapse" title="public">
+<h2>Returns an array of AbstractHeader objects representing all headers in
+this collection.</h2>
+<pre>getHeaderObjects() : \ZBateson\MailMimeParser\Header\AbstractHeader</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ZBateson\MailMimeParser\Header\AbstractHeader</code></div>
+</div></div>
+</div>
 <a id="method_getHeaders"></a><div class="element clickable method public method_getHeaders " data-toggle="collapse" data-target=".method_getHeaders .collapse" title="public">
 <h2>Returns an array of headers in this collection.  Each returned element in
 the array is an array with the first element set to the name, and the
@@ -332,7 +348,8 @@ is created at the next available offset (offset is ignored when adding).</p></di
 </div></div>
 </div>
 <a id="method_getByIndex"></a><div class="element clickable method private method_getByIndex " data-toggle="collapse" data-target=".method_getByIndex .collapse" title="private">
-<h2>Returns the header in the headers array at the passed integer index.</h2>
+<h2>Returns the header in the headers array at the passed 0-based integer
+index.</h2>
 <pre>getByIndex(integer $index) : \ZBateson\MailMimeParser\Header\AbstractHeader</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -430,7 +447,7 @@ element set to the header's name, and the second its value.</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-10-18T16:25:07+02:00.<br></footer></div>
+            generated on 2019-03-07T20:06:53-08:00.<br></footer></div>
 </div>
 </body>
 </html>

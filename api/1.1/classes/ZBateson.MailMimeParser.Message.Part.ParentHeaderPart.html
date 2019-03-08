@@ -75,6 +75,7 @@ destroyed."><span class="description">Attaches the stream or resource handle for
 stream is closed when another stream is attached, or the MimePart is
 destroyed.</span><pre>attachContentStream()</pre></a></li>
 <li class="method public inherited"><a href="#method_detachContentStream" title="detachContentStream() :: Detaches and closes the content stream."><span class="description">Detaches and closes the content stream.</span><pre>detachContentStream()</pre></a></li>
+<li class="method public "><a href="#method_getAllHeaders" title="getAllHeaders() :: Returns an array of headers in this part."><span class="description">Returns an array of headers in this part.</span><pre>getAllHeaders()</pre></a></li>
 <li class="method public "><a href="#method_getAllHeadersByName" title="getAllHeadersByName() :: Returns an array of headers that match the passed name."><span class="description">Returns an array of headers that match the passed name.</span><pre>getAllHeadersByName()</pre></a></li>
 <li class="method public inherited"><a href="#method_getAllParts" title="getAllParts() :: Returns the current part, all child parts, and child parts of all
 children optionally filtering them with the provided PartFilter."><span class="description">Returns the current part, all child parts, and child parts of all
@@ -382,6 +383,16 @@ destroyed.</h2>
 <pre>detachContentStream() </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_getAllHeaders"></a><div class="element clickable method public method_getAllHeaders " data-toggle="collapse" data-target=".method_getAllHeaders .collapse" title="public">
+<h2>Returns an array of headers in this part.</h2>
+<pre>getAllHeaders() : array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractHeader&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array&lt;mixed,\ZBateson\MailMimeParser\Header\AbstractHeader&gt;</code></div>
+</div></div>
 </div>
 <a id="method_getAllHeadersByName"></a><div class="element clickable method public method_getAllHeadersByName " data-toggle="collapse" data-target=".method_getAllHeadersByName .collapse" title="public">
 <h2>Returns an array of headers that match the passed name.</h2>
@@ -1218,7 +1229,7 @@ content and children</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2018-10-18T16:25:06+02:00.<br></footer></div>
+            generated on 2019-03-07T20:06:53-08:00.<br></footer></div>
 </div>
 </body>
 </html>
