@@ -77,6 +77,16 @@ abstract class ParentHeaderPart extends ParentPart
     }
 
     /**
+     * Returns an array of headers in this part.
+     *
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
+     */
+    public function getAllHeaders()
+    {
+        return $this->headerContainer->getHeaderObjects();
+    }
+
+    /**
      * Returns an array of headers that match the passed name.
      *
      * @param string $name
@@ -191,7 +201,7 @@ abstract class ParentHeaderPart extends ParentPart
 
     /**
      * Adds a header with the given $name and $value.
-     * 
+     *
      * Note: If a header with the passed name already exists, a new header is
      * created with the same name.  This should only be used when that is
      * intentional - in most cases setRawHeader should be called.
