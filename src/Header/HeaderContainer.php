@@ -68,7 +68,7 @@ class HeaderContainer implements IteratorAggregate
      */
     private function getNormalizedHeaderName($header)
     {
-        return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+        return preg_replace('/[^a-z0-9\-]/', '', strtolower($header));
     }
 
     /**
