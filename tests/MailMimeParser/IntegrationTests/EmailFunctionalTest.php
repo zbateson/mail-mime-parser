@@ -752,6 +752,29 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
+    public function testParseEmailm0024()
+    {
+        $this->runEmailTest('m0024', [
+            'From' => [
+                'name' => 'John DOE',
+                'email' => 'blablafakeemail@provider.fr'
+            ],
+            'To' => [
+                'name' => 'list-name',
+                'email' => 'list-name@list-domain.org'
+            ],
+            'Date' => new DateTime('21 Jul 2014 17:57:01 +0200'),
+            'Subject' => 'Persil, abeilles ...',
+            'parts' => [
+                'multipart/mixed' => [
+                    'text/plain',
+                    'application/msword'
+                ]
+            ],
+            'attachments' => 1,
+        ]);
+    }
+
     public function testParseEmailm1001()
     {
         $this->runEmailTest('m1001', [
