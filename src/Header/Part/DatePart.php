@@ -41,10 +41,12 @@ class DatePart extends LiteralPart
         if ($date === false) {
             $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
         }
-        if ($date->format('Y') < 50) {
-            $date->setDate(intval($date->format('Y')) + 2000, $date->format('m'), $date->format('d'));
-        } elseif ($date->format('Y') < 100) {
-            $date->setDate(intval($date->format('Y')) + 1900, $date->format('m'), $date->format('d'));
+        if ($date !== false) {
+            if ($date->format('Y') < 50) {
+                $date->setDate(intval($date->format('Y')) + 2000, $date->format('m'), $date->format('d'));
+            } elseif ($date->format('Y') < 100) {
+                $date->setDate(intval($date->format('Y')) + 1900, $date->format('m'), $date->format('d'));
+            }
         }
         try {
             $this->date = ($date) ?: new DateTime($dateToken);
