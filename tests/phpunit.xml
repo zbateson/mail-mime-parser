@@ -25,9 +25,7 @@
     -->
     <testsuites>
         <testsuite name="Base">
-            <file>MailMimeParser/ContainerTest.php</file>
-            <file>MailMimeParser/MailMimeParserTest.php</file>
-            <file>MailMimeParser/MessageTest.php</file>
+            <directory suffix="Test.php">MailMimeParser</directory>
         </testsuite>
         <testsuite name="Message">
             <directory suffix="Test.php">MailMimeParser/Message</directory>

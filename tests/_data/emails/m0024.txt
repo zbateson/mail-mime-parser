@@ -37,10 +37,10 @@ Content-Transfer-Encoding: 7bit
 
 ------=_Part_12615_2070162380.1405958221094
 Content-Type: application/msword;  
-	name="=?UTF-8?Q?Biodiversit=C3=A9_de_semaine_en_semaine.doc?="
+	name="=?UTF-8?Q?Biodiversite_de_semaine_en_semaine.doc?="
 content-transfer-encoding: base64
 Content-Disposition: attachment; size=38078; 
-	filename="=?UTF-8?Q?Biodiversit=C3=A9_de_semaine_en_semaine.doc?="
+	filename="=?UTF-8?Q?Biodiversite_de_semaine_en_semaine.doc?="
 
 0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7/CQAGAAAAAAAAAAAAAAABAAAAMQAAAAAAAAAA
 EAAAMwAAAAEAAAD+////AAAAADAAAAD/////////////////////////////////////////////
