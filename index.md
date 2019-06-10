@@ -36,7 +36,7 @@ foreach ($to->getAllAddresses() as $addr) {
     $toEmail = $to->getEmail();
 }
 
-$attachment = $message->getAttachment(0);
+$attachment = $message->getAttachmentPart(0);
 $fname = $attachment->getFilename();
 $stream = $attachment->getContentStream();
 $attachment->saveContent('destination-file.ext');
