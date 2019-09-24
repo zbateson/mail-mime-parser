@@ -13,25 +13,25 @@ use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Consumes simple literal strings for parts of a Received header.
- * 
+ *
  * Starts consuming when the initialized $partName string is located, for
  * instance when initialized with "FROM", will start consuming on " FROM" or
  * "FROM ".
- * 
+ *
  * The consumer ends when any possible "Received" header part is found, namely
  * on one of the following tokens: from, by, via, with, id, for, or when the
  * start token for the date stamp is found, ';'.
- * 
+ *
  * The consumer allows comments in and around the consumer... although the
  * Received header specification only allows them before a part, for example,
  * technically speaking this is valid:
- * 
+ *
  * "FROM machine (host) (comment) BY machine"
- * 
+ *
  * However, this is not:
- * 
+ *
  * "FROM machine (host) BY machine WITH (comment) ESMTP"
- * 
+ *
  * The consumer will allow both.
  *
  * @author Zaahid Bateson
@@ -45,7 +45,7 @@ class GenericReceivedConsumer extends GenericConsumer
 
     /**
      * Constructor overridden to include $partName parameter.
-     * 
+     *
      * @param ConsumerService $consumerService
      * @param HeaderPartFactory $partFactory
      * @param string $partName
@@ -55,7 +55,7 @@ class GenericReceivedConsumer extends GenericConsumer
         parent::__construct($consumerService, $partFactory);
         $this->partName = $partName;
     }
-    
+
     /**
      * Returns the name of the part being parsed.
      *
@@ -123,7 +123,7 @@ class GenericReceivedConsumer extends GenericConsumer
     {
         return [
             '\s+',
-            '(\A)?\s*(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)\s+'
+            '(\A\s*)?(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)\s+'
         ];
     }
 
