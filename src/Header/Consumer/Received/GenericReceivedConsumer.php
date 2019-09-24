@@ -123,7 +123,7 @@ class GenericReceivedConsumer extends GenericConsumer
     {
         return [
             '\s+',
-            '[\A\s]*(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)\s+'
+            '(\A)?\s*(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)\s+'
         ];
     }
 
