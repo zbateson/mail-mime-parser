@@ -17,7 +17,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * are mapped as follows:
  * 
  * AddressHeader: From, To, Cc, Bcc, Sender, Reply-To, Resent-From, Resent-To,
- * Resent-Cc, Resent-Bcc, Resent-Reply-To
+ * Resent-Cc, Resent-Bcc, Resent-Reply-To, Delivered-To
  * DateHeader: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date, Reply-By
  * ParameterHeader: Content-Type, Content-Disposition
  * IdHeader: Message-ID, Content-ID, In-Reply-To, References
@@ -49,6 +49,7 @@ class HeaderFactory
             'resent-cc',
             'resent-bcc',
             'resent-reply-to',
+            'delivered-to',
         ],
         'ZBateson\MailMimeParser\Header\DateHeader' => [
             'date',
