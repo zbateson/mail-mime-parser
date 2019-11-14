@@ -611,6 +611,20 @@ class MimePartTest extends TestCase
         $this->assertFalse($part->isTextPart());
     }
 
+    public function testIsTextForBinaryCharset()
+    {
+        $header = $this->getMockedParameterHeader('Content-Type', 'image/png', 'binary');
+        $pb = $this->getMockedPartBuilder();
+        $hc = $pb->getHeaderContainer();
+        $hc->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($header);
+        $part = $this->newMimePart($pb);
+        $this->assertFalse($part->isMultiPart());
+        $this->assertFalse($part->isTextPart());
+    }
+
     public function testIsMultipartForMultipartRelated()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'multipart/related');

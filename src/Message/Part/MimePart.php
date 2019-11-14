@@ -70,7 +70,7 @@ class MimePart extends ParentHeaderPart
      */
     public function isTextPart()
     {
-        return ($this->getCharset() !== null);
+        return ($this->getCharset() !== null && strcasecmp($this->getCharset(), 'binary') !== 0);
     }
     
     /**
