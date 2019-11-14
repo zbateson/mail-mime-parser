@@ -112,7 +112,7 @@ passed.</p>
 as such.  Otherwise, a GenericHeader is instantiated and returned.  Headers
 are mapped as follows:</p>
 <p>AddressHeader: From, To, Cc, Bcc, Sender, Reply-To, Resent-From, Resent-To,
-Resent-Cc, Resent-Bcc, Resent-Reply-To
+Resent-Cc, Resent-Bcc, Resent-Reply-To, Delivered-To
 DateHeader: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date, Reply-By
 ParameterHeader: Content-Type, Content-Disposition
 IdHeader: Message-ID, Content-ID, In-Reply-To, References
@@ -216,7 +216,7 @@ that aren't mapped in $types</h2>
 <pre>$types : array&lt;mixed,string[]&gt;</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
-<div class="subelement argument"><code>array('ZBateson\MailMimeParser\Header\AddressHeader' => array('from', 'to', 'cc', 'bcc', 'sender', 'reply-to', 'resent-from', 'resent-to', 'resent-cc', 'resent-bcc', 'resent-reply-to'), 'ZBateson\MailMimeParser\Header\DateHeader' => array('date', 'resent-date', 'delivery-date', 'expires', 'expiry-date', 'reply-by'), 'ZBateson\MailMimeParser\Header\ParameterHeader' => array('content-type', 'content-disposition'), 'ZBateson\MailMimeParser\Header\SubjectHeader' => array('subject'), 'ZBateson\MailMimeParser\Header\IdHeader' => array('message-id', 'content-id', 'in-reply-to', 'references'), 'ZBateson\MailMimeParser\Header\ReceivedHeader' => array('received'))</code></div>
+<div class="subelement argument"><code>array('ZBateson\MailMimeParser\Header\AddressHeader' => array('from', 'to', 'cc', 'bcc', 'sender', 'reply-to', 'resent-from', 'resent-to', 'resent-cc', 'resent-bcc', 'resent-reply-to', 'delivered-to'), 'ZBateson\MailMimeParser\Header\DateHeader' => array('date', 'resent-date', 'delivery-date', 'expires', 'expiry-date', 'reply-by'), 'ZBateson\MailMimeParser\Header\ParameterHeader' => array('content-type', 'content-disposition'), 'ZBateson\MailMimeParser\Header\SubjectHeader' => array('subject'), 'ZBateson\MailMimeParser\Header\IdHeader' => array('message-id', 'content-id', 'in-reply-to', 'references'), 'ZBateson\MailMimeParser\Header\ReceivedHeader' => array('received'))</code></div>
 </div></div>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
@@ -228,7 +228,7 @@ that aren't mapped in $types</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2019-03-07T20:06:53-08:00.<br></footer></div>
+            generated on 2019-11-14T11:20:55-08:00.<br></footer></div>
 </div>
 </body>
 </html>
