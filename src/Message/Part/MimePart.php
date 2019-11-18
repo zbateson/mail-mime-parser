@@ -70,7 +70,7 @@ class MimePart extends ParentHeaderPart
      */
     public function isTextPart()
     {
-        return ($this->getCharset() !== null && strcasecmp($this->getCharset(), 'binary') !== 0);
+        return ($this->getCharset() !== null);
     }
     
     /**
@@ -91,13 +91,17 @@ class MimePart extends ParentHeaderPart
      * Returns the upper-cased charset of the Content-Type header's charset
      * parameter if set, ISO-8859-1 if the Content-Type is text/plain or
      * text/html and the charset parameter isn't set, or null otherwise.
+     *
+     * If the charset parameter is set to 'binary' it is ignored and considered
+     * 'not set' (returns ISO-8859-1 for text/plain, text/html or null
+     * otherwise).
      * 
      * @return string
      */
     public function getCharset()
     {
         $charset = $this->getHeaderParameter('Content-Type', 'charset');
-        if ($charset === null) {
+        if ($charset === null || strcasecmp($charset, 'binary') === 0) {
             $contentType = $this->getContentType();
             if ($contentType === 'text/plain' || $contentType === 'text/html') {
                 return 'ISO-8859-1';
