@@ -971,16 +971,16 @@ text/* and has a defined 'charset' attribute.</description>
         </docblock>
         <inherited_from>\ZBateson\MailMimeParser\Message\Part\MessagePart</inherited_from>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser" line="162" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser" line="166" package="MailMimeParser">
         <name>getPartByContentId</name>
         <full_name>\ZBateson\MailMimeParser\Message\Part\MimePart::getPartByContentId()</full_name>
-        <docblock line="162">
+        <docblock line="166">
           <description>Convenience method to find a part by its Content-ID header.</description>
           <long-description></long-description>
-          <tag name="param" line="162" description="" type="string" variable="$contentId">
+          <tag name="param" line="166" description="" type="string" variable="$contentId">
             <type>string</type>
           </tag>
-          <tag name="return" line="162" description="" type="\ZBateson\MailMimeParser\Message\Part\MessagePart">
+          <tag name="return" line="166" description="" type="\ZBateson\MailMimeParser\Message\Part\MessagePart">
             <type>\ZBateson\MailMimeParser\Message\Part\MessagePart</type>
           </tag>
         </docblock>
@@ -21302,7 +21302,7 @@ representing it.</description>
     </class>
     <source>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</source>
   </file>
-  <file path="Message/Part/MimePart.php" generated-path="Message.Part.MimePart.html" hash="cdfacbaaa268a36025d21cbcbf013a17" package="MailMimeParser">
+  <file path="Message/Part/MimePart.php" generated-path="Message.Part.MimePart.html" hash="05b3d1907b6722a2859f77fde4e1b659" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -21510,29 +21510,31 @@ defined.</long-description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="97" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="101" package="MailMimeParser">
         <name>getCharset</name>
         <full_name>\ZBateson\MailMimeParser\Message\Part\MimePart::getCharset()</full_name>
-        <docblock line="97">
+        <docblock line="101">
           <description>Returns the upper-cased charset of the Content-Type header's charset
 parameter if set, ISO-8859-1 if the Content-Type is text/plain or
 text/html and the charset parameter isn't set, or null otherwise.</description>
-          <long-description></long-description>
-          <tag name="return" line="97" description="" type="string">
+          <long-description>If the charset parameter is set to 'binary' it is ignored and considered
+'not set' (returns ISO-8859-1 for text/plain, text/html or null
+otherwise).</long-description>
+          <tag name="return" line="101" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="117" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="121" package="MailMimeParser">
         <name>getContentDisposition</name>
         <full_name>\ZBateson\MailMimeParser\Message\Part\MimePart::getContentDisposition()</full_name>
-        <docblock line="117">
+        <docblock line="121">
           <description>Returns the content's disposition, defaulting to 'inline' if not set.</description>
           <long-description></long-description>
-          <tag name="param" line="117" description="&lt;p&gt;pass to override the default returned disposition&#10;       when not set.&lt;/p&gt;" type="string" variable="$default">
+          <tag name="param" line="121" description="&lt;p&gt;pass to override the default returned disposition&#10;       when not set.&lt;/p&gt;" type="string" variable="$default">
             <type>string</type>
           </tag>
-          <tag name="return" line="117" description="" type="string">
+          <tag name="return" line="121" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -21542,17 +21544,17 @@ text/html and the charset parameter isn't set, or null otherwise.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="129" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="133" package="MailMimeParser">
         <name>getContentTransferEncoding</name>
         <full_name>\ZBateson\MailMimeParser\Message\Part\MimePart::getContentTransferEncoding()</full_name>
-        <docblock line="129">
+        <docblock line="133">
           <description>Returns the content-transfer-encoding used for this part, defaulting to
 '7bit' if not set.</description>
           <long-description></long-description>
-          <tag name="param" line="129" description="&lt;p&gt;pass to override the default when not set.&lt;/p&gt;" type="string" variable="$default">
+          <tag name="param" line="133" description="&lt;p&gt;pass to override the default when not set.&lt;/p&gt;" type="string" variable="$default">
             <type>string</type>
           </tag>
-          <tag name="return" line="129" description="" type="string">
+          <tag name="return" line="133" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -21562,29 +21564,29 @@ text/html and the charset parameter isn't set, or null otherwise.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="151" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="155" package="MailMimeParser">
         <name>getContentId</name>
         <full_name>\ZBateson\MailMimeParser\Message\Part\MimePart::getContentId()</full_name>
-        <docblock line="151">
+        <docblock line="155">
           <description>Returns the Content ID of the part.</description>
           <long-description>In MimePart, this is merely a shortcut to calling
 ``` $part-&gt;getHeaderValue('Content-ID'); ```.</long-description>
-          <tag name="return" line="151" description="" type="string|null">
+          <tag name="return" line="155" description="" type="string|null">
             <type>string</type>
             <type>null</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="162" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Message\Part" line="166" package="MailMimeParser">
         <name>getPartByContentId</name>
         <full_name>\ZBateson\MailMimeParser\Message\Part\MimePart::getPartByContentId()</full_name>
-        <docblock line="162">
+        <docblock line="166">
           <description>Convenience method to find a part by its Content-ID header.</description>
           <long-description></long-description>
-          <tag name="param" line="162" description="" type="string" variable="$contentId">
+          <tag name="param" line="166" description="" type="string" variable="$contentId">
             <type>string</type>
           </tag>
-          <tag name="return" line="162" description="" type="\ZBateson\MailMimeParser\Message\Part\MessagePart">
+          <tag name="return" line="166" description="" type="\ZBateson\MailMimeParser\Message\Part\MessagePart">
             <type>\ZBateson\MailMimeParser\Message\Part\MessagePart</type>
           </tag>
         </docblock>
@@ -22695,7 +22697,7 @@ rewound.</long-description>
         <inherited_from>\ZBateson\MailMimeParser\Message\Part\MessagePart</inherited_from>
       </method>
     </class>
-    <source>eJytWG1T20YQ/u5fcZ3xRDa1cfIh0xRimhBg4pnQdoD2QwINZ+mMriOdNHcnHLeQ397de9EbluNQ9AFsae/Z3Wef3dP59S95nPcmOzs9skMuYq7IgieMwP+cSk2yBdExIx8PqWYqE5enlCenPGW/U6mYJLnM/mah3oXFuP5NwkMmFCOx1vneZJLl8C0rZMh2M3kzcU/VZK6isfuyC+7J4fkRLJ/0BE2ZymnY6fDylClFb9glfNX7vV6htjM94YlmEha4RM9YLpliQitCieLiBlL2+VKSFonmY/M9BTySWiSf5VvivID5HNMnKV2RmN4yQsWKiCKdAzWAFMY8iQyuGpFMGrM5GNkHCMW1YsmCLLmO8TPJlgLtITC0t5+U93sBhQgzoc1TWxcTY0gFwkpGI7KQWWqQMLxzDfdSeGBrACGKKGEjxKJhCEnxOeR9yylxXOGivb0bpt9ZN2du5XuzsKwyLXQM4X2kNOYRcfSbAoYJVaqih30BlMgEA2jvIUAm8UHv3x6ByxQDLyyILqRQRMsCxIfJOQUGytZAr3KjSlMbfDDxaz3EG2kwyDzLEndvYv7nxRzERhaFCDXPBKCcIggGMhgaCxuOCWkCdCoNiiA6M1AjEDm7+ZxSHcZEujBfkAUQgMGWK533Aa4ZkkG1aFCa4BV8rTK4XP74lQejxvM+Zj4+qGpwAYm7MPEaDvfN53vzt4tGaroY28kG6qUCzGbC8BixBRcsMroURZKQDIzkkissswVrE6u0BF42UgthnzjHD6h1KFWCpR7AGrqzxZNLf3zEVZ4pjvAtqgKfYyeFGz00vCDLLRjz3MA3btdKsU0lUCOdjG4jVd5NJWJvG8PGptLQqJM8oVyM7OdYpwkqwyxiHq9OFokNt05Hygw1nLv6/yR7Ab7XtqVvrlp3WG+DIflhOrUKfvYMJQrty8I0X2c6IsGcCypXgV31fLsKQvMk2ZLJMUJDx0AbpCmLyC1NgFc3iddw84AJszGpLvMRcklhOCgcPTZjM4fK4mA5RKY9nGth76bkO0e9u24lfQcKdVcGOLtlUvKImTCslzKXZcwEeiBA1+O6vz60StdTElRJBJ1i5ukAnOjMkD1od/GfGOGg1bBlesPt5iLmXOS5r6XX7IYiQqs4I4+V+3GC5YD7IzI7/2386tXLn8cvXMM0gRoNBl3lgapOg+3VLPPh1FwoEWjr5akHddkWrXr0fRTTDZO0XYfALQpcGfACLgYVmOvSYc2T9VYppuGxsf3tN9ZY4Pq6aVNi5O6OdBgg30E7iJoMg6qYQdPrfW+NOaZUmd13i9qorqRje7W6LECGUbURlqPCvacEXCQwCgI3IEhtDD9mKviH5XSoufZ47qpPjN1H6tBmWNvnG5PDpdYxNbYfGI33iNrc+M5CjLWkQi1ggjARZhGSWeAksa9Zbn9t1cfDBT/NuX7qIj1dBS5cZscusUYZTOjtIihNNWD1DScJnAMiMP3UfEn7Mi4KUOb0wH1E8ParVrCdib3ftivNrqpG7Gs7Tr5jP/Fl9dmvEQleOHu4wrlZy/qT8Xc1bM+V8pW3bblhZBgDL8pNgnSRk9lR/TTYltRMlMexkRUoHqKYZMkKj75wjtNhoVFdIU2SSizk+vqa9BGxm7PZEYx7NPzGTnSHU3JLEc6ibQ8O64LpoA1sbpngIBg8zMPhNcKE4e0pAg7MwWi+MqfmCqz1DtfRoaEPup147UD9rcTR5nBVpV+BPtiZFRUwwP4xbWYOmJLBhhcCC5O/LtXO67sD+Nuf4H6M8q2Aap2xMD+FVFttXv48ckJDncnV+ECwpbsjs/StlHQ1aDW1JUeZXmw+wqv6xWVv72T24eL47PPs13cf/jg6Xm9vIGt1RKsq1wfmV731365qaT7QjDlWPB/5/Eup3Pf+A46Sn44=</source>
+    <source>eJytWNty2zYQfddXoDOaoeRKVvLQaWrHbuI4nmgmbju224fEbgyRkIgOCXAA0IpaO9/eXRDgTaKsOOGDzcvi7O3sLqCXv2Zx1pvs7fXIHrmKuSZznjAC/zOqDJFzYmJGPpxQw7QU1+eUJ+c8ZX9QpZkimZL/sNDsw2Jc/yrhIROakdiY7GAykRk8yVyFbF+qxcR91ZOZjsbuYR/Uk5PLU1g+6QmaMp3RsFPh9TnTmi7YNTyaw14v17uJnvHEMAULnKMXLFNMM2E0oURzsQCXvb+UpHli+Ng+p4BH0gLJe/maOC0gPkP3SUpXJKZ3jFCxIiJPZxAaQApjnkQWV4+IVFZsBkLFB4TiRrNkTpbcxHhP5FKgPBiG8sWd9nqvIBGhFMZ+LfJibQypQFjFaETmSqYWCc27NPAuhQ9FDsBEESVshFg0DMEpPgO/7zglLla46OBgwcybQs2FW/nOLiyzTHMTg3kfKI15RFz4bQLDhGpdhYd9BpTIGgNo78BApvBD778egcsmAy9MiMmV0MSoHMiHzjkGBrrIgVlllpU2N/hh4td6iFfKYpCZlIl7N7H/s3wGZCPzXISGSwEo5wiChgyGVqIwx5o0gXBqA4wgRlqoEZCcLT6l1IQxUc7M52QOAUBjy5VO+wDXDMmgWjQoRfAKvlQeXC9//MKDUeN7Hz0fH1c5uALHnZl4DYeH9v7B/u0KI7VVjOVUGOqpApGVwsYxYnMuWGR5KfIkIRKE1JJrTHMB1g6sNgrisjW0YPaZU7wWWodSOVjyAaShOltxcu6PT7nOpOYI3wpV4H3sDOFWDQ0tGOUWjP1u4Ruva6nYJRPIkc6I7kJV3h1KxN7Vhq1FZaBQJ1lCuRgV97FJE2SGXcQ8Xj1YJLaxdTzStqlh3zXf4uwV6N5Ylr64atVRaBsMyQ9HR5bBu6UDKiGRS6bGUOZIf+B0mrKI3NEEguTa6gZH19yyU0Z3iY8wMBQqXWMfKcy3TaWMNMZWSOPhXD16NWXwMiSvKz3Sd6CQRG2B5R1TikfMmlFoKX1ZxkygBgJhelop1ztQqfqIBJUTQSczeToAJUbaYA/aJfkXWjhoVV/p3nC3Joc+51nmc+kJuCWJwHsn5LEy3xswHfB+RKaXv49fvPjpl/Fzx/4mUKNaoEQ8UFU2MCvtMm9OTYUWgSm0dHZdjzedd4IgAiY/mHFB1SqAeY9v+UJIBWFA/bBN0EALePR4gWNCQAZ+iNU8tUOiqwmgoR6mtHf4jWOirN8Wgfre46MtfbxNnMAtChxv8ILkDSow1yPI/T3ah3wJ06z8PipjObSiz4Y1iwqrqlJoWNYY0oeNNYUB9XVHzdpBYzoEMPRB24hafQVV7oKm1ofeBnF0vRJ76K5WW05lWHYvQ+cF1FdUjeuyB7rdVMBFAj0ucJ2P1IbFU9qd/1i2vZpqj+eueivcfyJfCw9ru5FGS3SudbTD3TthY7dTa4hfmYixUVToObRGJkIZYTBzbJHFZtDtAlr5KTvFzzNuvneSvl8Grpxnb51jjTRY09tJ0IYawOrbmCRwWolA9GNzK/l5nOfAzKNjd4vg7Q1hsJtI8b4tV4rdVIXYN0U7+YpB6dPqvd9AEryw93CN/bXm9Uer72bY7ivlxrwtuaVlWAFPym2EdJaT6Wn9zLo27UR5aBwVBMWjHsyvZIUHdDhtmjC3Qy+kSVKRhdze3pI+InbHbHoKYwEFH5lY97U59xgJp9Gux5tNxnSEDWTumOBAGPzJAY7YEToM20KY6cXxbbayZ/sKrLU57ajQ0Bvddrx27H/McZQ5WVXuV6BrE1xTAQ3sX1tm9hisGAy8EKIw+fta7728P4a//QnObaRvBVSrjLn9waYatVn5I84ZDY1Uq/GxYEv3Rsn0tVJ0NWgVdREcbWux+Qmv6nehg4Oz6furtxefpr+9ef/n6dvN8haylkeUqnxdE7/pbX66qbm5xhl7+Hk28v6XVHno/Q8xh9PK</source>
   </file>
   <file path="Message/Part/PartBuilder.php" generated-path="Message.Part.PartBuilder.html" hash="14838fbd57c57a1e834e527ee2675576" package="MailMimeParser">
     <docblock line="0">
