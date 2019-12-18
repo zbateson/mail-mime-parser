@@ -25,12 +25,21 @@ class DatePartTest extends TestCase
 
     public function testDateString()
     {
-        $value = 'Wed, 17 May 2000 19:08:29 -0400';
-        $part = new DatePart($this->charsetConverter, $value);
-        $this->assertEquals($value, $part->getValue());
-        $date = $part->getDateTime();
-        $this->assertNotEmpty($date);
-        $this->assertEquals($value, $date->format(DateTime::RFC2822));
+        $values = [
+            ['2000-05-17T19:08:29-0400', 'Wed, 17 May 2000 19:08:29 -0400'],
+            ['2014-03-13T15:02:47+0000', 'Thu, 13 Mar 14 15:02:47 +0000'],
+            ['1999-05-06T15:02:47+0000', 'Thu, 6 May 99 15:02:47 +0000'],
+            ['1999-05-06T15:02:47+0000', 'Thu, 6 May 1999 15:02:47 UT'],
+            ['2014-03-13T15:02:47+0000', 'Thu, 13 Mar 2014 15:02:47 0000'] // Not RFC-compliant
+        ];
+
+        foreach ($values as $value) {
+            list ($expected, $raw) = $value;
+            $part = new DatePart($this->charsetConverter, $raw);
+            $this->assertEquals($raw, $part->getValue(), 'Testing ' . $raw);
+            $this->assertNotEmpty($part->getDateTime(), 'Testing ' . $raw);
+            $this->assertEquals($expected, $part->getDateTime()->format(\DateTime::ISO8601), 'Testing ' . $raw);
+        }
     }
 
     public function testInvalidDate()
