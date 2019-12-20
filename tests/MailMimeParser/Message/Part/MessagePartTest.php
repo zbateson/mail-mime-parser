@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
+use org\bovigo\vfs\vfsStream;
 use Exception;
 
 /**
@@ -18,9 +19,11 @@ class MessagePartTest extends TestCase
 {
     protected $partStreamFilterManager;
     protected $streamFactory;
+    private $vfs;
 
     protected function setUp()
     {
+        $this->vfs = vfsStream::setup('root');
         $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
@@ -83,6 +86,98 @@ class MessagePartTest extends TestCase
         $this->assertTrue($messagePart->hasContent());
         $this->assertEquals('Que tonto', $messagePart->getContentStream()->getContents());
         $this->assertEquals('Que tonto', stream_get_contents($messagePart->getContentResourceHandle()));
+    }
+
+    public function testBinaryStreamAndHandle()
+    {
+        $messagePart = $this->getMessagePart('Que tonta', 'Setup');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+        $this->partStreamFilterManager
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamFilterManager
+            ->expects($this->exactly(2))
+            ->method('getBinaryStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
+
+        $this->assertTrue($messagePart->hasContent());
+        $messagePart->method('getContentTransferEncoding')
+            ->willReturn('wubalubadub-duuuuub');
+
+        $this->assertEquals('Que tonto', $messagePart->getBinaryContentStream()->getContents());
+        $this->assertEquals('Que tonto', stream_get_contents($messagePart->getBinaryContentResourceHandle()));
+    }
+
+    public function testSaveContent()
+    {
+        $messagePart = $this->getMessagePart('Que tonta', 'Setup');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+        $this->partStreamFilterManager
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getBinaryStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
+
+        $this->assertTrue($messagePart->hasContent());
+        $messagePart->method('getContentTransferEncoding')
+            ->willReturn('wubalubadub-duuuuub');
+
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $messagePart->saveContent($content->url());
+        $this->assertEquals('Que tonto', file_get_contents($content->url()));
+    }
+
+    public function testSaveContentToStream()
+    {
+        $messagePart = $this->getMessagePart('Que tonta', 'Setup');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+        $this->partStreamFilterManager
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getBinaryStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
+
+        $this->assertTrue($messagePart->hasContent());
+        $messagePart->method('getContentTransferEncoding')
+            ->willReturn('wubalubadub-duuuuub');
+
+        $stream = Psr7\stream_for();
+        $messagePart->saveContent($stream);
+        $stream->rewind();
+
+        $this->assertEquals('Que tonto', $stream->getContents());
+    }
+
+    public function testSaveContentToResource()
+    {
+        $messagePart = $this->getMessagePart('Que tonta', 'Setup');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+        $this->partStreamFilterManager
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamFilterManager
+            ->expects($this->once())
+            ->method('getBinaryStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
+
+        $this->assertTrue($messagePart->hasContent());
+        $messagePart->method('getContentTransferEncoding')
+            ->willReturn('wubalubadub-duuuuub');
+
+        $res = StreamWrapper::getResource(Psr7\stream_for());
+        $messagePart->saveContent($res);
+        rewind($res);
+
+        $this->assertEquals('Que tonto', stream_get_contents($res));
+        fclose($res);
     }
 
     public function testDetachContentStream()
@@ -185,6 +280,18 @@ class MessagePartTest extends TestCase
 
         $this->assertEquals('Demigorgon', $str);
         $this->assertEquals('Demigorgon', $messagePart->__toString());
+    }
+
+    public function testSaveToFile()
+    {
+        $messagePart = $this->getMessagePart(
+            'Demigorgon',
+            Psr7\stream_for('other demons')
+        );
+
+        $part = vfsStream::newFile('part')->at($this->vfs);
+        $messagePart->save($part->url());
+        $this->assertEquals('Demigorgon', file_get_contents($part->url()));
     }
 
     public function testSetContentAndAttachContentStream()

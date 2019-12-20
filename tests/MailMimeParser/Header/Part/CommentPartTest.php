@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of CommentTest
@@ -18,9 +19,7 @@ class CommentPartTest extends TestCase
 
     public function setUp()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
-			->disableOriginalConstructor()
-			->getMock();
+        $this->charsetConverter = new MbWrapper();
     }
 
     public function testBasicComment()
@@ -33,10 +32,6 @@ class CommentPartTest extends TestCase
 
     public function testMimeEncoding()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with('Kilgore Trout', 'US-ASCII', 'UTF-8')
-            ->willReturn('Kilgore Trout');
         $part = new CommentPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('', $part->getValue());
         $this->assertEquals('Kilgore Trout', $part->getComment());

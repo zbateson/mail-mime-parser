@@ -28,6 +28,8 @@ class MessageFactory extends MimePartFactory
     protected $messageHelperService;
 
     /**
+     * Constructor
+     * 
      * @param StreamFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param PartFilterFactory $pf

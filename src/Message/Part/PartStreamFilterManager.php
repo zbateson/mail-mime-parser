@@ -23,16 +23,23 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 class PartStreamFilterManager
 {
     /**
-     * @var StreamInterface the content stream after attaching encoding filters
-     */
-    protected $filteredStream;
-    
-    /**
      * @var StreamInterface the underlying content stream without filters
      *      applied
      */
     protected $stream;
-    
+
+    /**
+     * @var StreamInterface the content stream after attaching transfer encoding
+     *      streams to $stream.
+     */
+    protected $decodedStream;
+
+    /**
+     * @var StreamInterface the content stream after attaching charset streams
+     *      to $binaryStream
+     */
+    protected $charsetStream;
+
     /**
      * @var array map of the active encoding filter on the current handle.
      */
@@ -57,11 +64,6 @@ class PartStreamFilterManager
     private $streamFactory;
     
     /**
-     * @var string name of stream filter handling character set conversion
-     */
-    private $charsetConversionFilter;
-    
-    /**
      * Sets up filter names used for stream_filter_append
      * 
      * @param StreamFactory $streamFactory
@@ -69,7 +71,6 @@ class PartStreamFilterManager
     public function __construct(StreamFactory $streamFactory)
     {
         $this->streamFactory = $streamFactory;
-        $this->charsetConversionFilter = '';
     }
 
     /**
@@ -82,7 +83,8 @@ class PartStreamFilterManager
     public function setStream(StreamInterface $stream = null)
     {
         $this->stream = $stream;
-        $this->filteredStream = null;
+        $this->decodedStream = null;
+        $this->charsetStream = null;
     }
     
     /**
@@ -120,22 +122,22 @@ class PartStreamFilterManager
      */
     protected function attachTransferEncodingFilter($transferEncoding)
     {
-        if ($this->filteredStream !== null) {
+        if ($this->decodedStream !== null) {
             $this->encoding['type'] = $transferEncoding;
             $assign = null;
             switch ($transferEncoding) {
                 case 'base64':
-                    $assign = $this->streamFactory->newBase64Stream($this->filteredStream);
+                    $assign = $this->streamFactory->newBase64Stream($this->decodedStream);
                     break;
                 case 'x-uuencode':
-                    $assign = $this->streamFactory->newUUStream($this->filteredStream);
+                    $assign = $this->streamFactory->newUUStream($this->decodedStream);
                     break;
                 case 'quoted-printable':
-                    $assign = $this->streamFactory->newQuotedPrintableStream($this->filteredStream);
+                    $assign = $this->streamFactory->newQuotedPrintableStream($this->decodedStream);
                     break;
             }
             if ($assign !== null) {
-                $this->filteredStream = new CachingStream($assign);
+                $this->decodedStream = new CachingStream($assign);
             }
         }
     }
@@ -149,33 +151,33 @@ class PartStreamFilterManager
      */
     protected function attachCharsetFilter($fromCharset, $toCharset)
     {
-        if ($this->filteredStream !== null) {
-            if (!empty($fromCharset) && !empty($toCharset)) {
-                $this->filteredStream = new CachingStream($this->streamFactory->newCharsetStream(
-                    $this->filteredStream,
-                    $fromCharset,
-                    $toCharset
-                ));
-            }
+        if ($this->charsetStream !== null) {
+            $this->charsetStream = new CachingStream($this->streamFactory->newCharsetStream(
+                $this->charsetStream,
+                $fromCharset,
+                $toCharset
+            ));
             $this->charset['from'] = $fromCharset;
             $this->charset['to'] = $toCharset;
         }
     }
     
     /**
-     * Closes the attached resource handle, resets mapped encoding and charset
-     * filters, and reopens the handle seeking back to the current position.
-     * 
-     * Note that closing/reopening is done because of the following differences
-     * discovered between hhvm (up to 3.18 at least) and php:
-     * 
-     *  o stream_filter_remove wasn't triggering php_user_filter's onClose
-     *    callback
-     *  o read operations performed after stream_filter_remove weren't calling
-     *    filter on php_user_filter
-     * 
-     * It seems stream_filter_remove doesn't work on hhvm, or isn't implemented
-     * in the same way -- so closing and reopening seems to solve that.
+     * Resets just the charset stream, and rewinds the decodedStream.
+     */
+    private function resetCharsetStream()
+    {
+        $this->charset = [
+            'from' => null,
+            'to' => null,
+            'filter' => null
+        ];
+        $this->decodedStream->rewind();
+        $this->charsetStream = $this->decodedStream;
+    }
+
+    /**
+     * Resets cached encoding and charset streams, and rewinds the stream.
      */
     public function reset()
     {
@@ -189,14 +191,14 @@ class PartStreamFilterManager
             'filter' => null
         ];
         $this->stream->rewind();
-        $this->filteredStream = $this->stream;
+        $this->decodedStream = $this->stream;
+        $this->charsetStream = $this->stream;
     }
     
     /**
-     * Checks what transfer-encoding decoder filters and charset conversion
-     * filters are attached on the handle, closing/reopening the handle if
-     * different, before attaching relevant filters for the passed
-     * $transferEncoding and charset arguments, and returning a StreamInterface.
+     * Checks what transfer-encoding decoder stream and charset conversion
+     * stream are currently attached on the underlying stream, and resets them
+     * if the requested arguments differ from the currently assigned ones.
      * 
      * @param string $transferEncoding
      * @param string $fromCharset the character set the content is encoded in
@@ -208,14 +210,42 @@ class PartStreamFilterManager
         if ($this->stream === null) {
             return null;
         }
-        if ($this->filteredStream === null
+        if (empty($fromCharset) || empty($toCharset)) {
+            return $this->getBinaryStream($transferEncoding);
+        }
+        if ($this->charsetStream === null
             || $this->isTransferEncodingFilterChanged($transferEncoding)
             || $this->isCharsetFilterChanged($fromCharset, $toCharset)) {
-            $this->reset();
-            $this->attachTransferEncodingFilter($transferEncoding);
+            if ($this->charsetStream === null
+                || $this->isTransferEncodingFilterChanged($transferEncoding)) {
+                $this->reset();
+                $this->attachTransferEncodingFilter($transferEncoding);
+            }
+            $this->resetCharsetStream();
             $this->attachCharsetFilter($fromCharset, $toCharset);
         }
-        $this->filteredStream->rewind();
-        return $this->filteredStream;
+        $this->charsetStream->rewind();
+        return $this->charsetStream;
+    }
+
+    /**
+     * Checks what transfer-encoding decoder stream is attached on the
+     * underlying stream, and resets it if the requested arguments differ.
+     *
+     * @param string $transferEncoding
+     * @return StreamInterface
+     */
+    public function getBinaryStream($transferEncoding)
+    {
+        if ($this->stream === null) {
+            return null;
+        }
+        if ($this->decodedStream === null
+            || $this->isTransferEncodingFilterChanged($transferEncoding)) {
+            $this->reset();
+            $this->attachTransferEncodingFilter($transferEncoding);
+        }
+        $this->decodedStream->rewind();
+        return $this->decodedStream;
     }
 }

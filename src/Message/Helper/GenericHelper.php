@@ -79,6 +79,7 @@ class GenericHelper extends AbstractHelper
      *
      * @param ParentHeaderPart $from
      * @param ParentHeaderPart $to
+     * @param bool $move
      */
     public function copyContentHeadersAndContent(ParentHeaderPart $from, ParentHeaderPart $to, $move = false)
     {
@@ -141,6 +142,7 @@ class GenericHelper extends AbstractHelper
      * replaced, and instead $replacement's type headers are copied to $message,
      * and any children below $replacement are added directly below $message.
      *
+     * @param Message $message
      * @param ParentHeaderPart $part
      * @param ParentHeaderPart $replacement
      */

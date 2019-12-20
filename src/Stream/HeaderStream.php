@@ -33,6 +33,8 @@ class HeaderStream implements StreamInterface
     protected $part;
 
     /**
+     * Constructor
+     * 
      * @param MessagePart $part
      */
     public function __construct(MessagePart $part)

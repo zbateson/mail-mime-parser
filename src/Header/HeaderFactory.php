@@ -17,9 +17,11 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * are mapped as follows:
  * 
  * AddressHeader: From, To, Cc, Bcc, Sender, Reply-To, Resent-From, Resent-To,
- * Resent-Cc, Resent-Bcc, Resent-Reply-To
+ * Resent-Cc, Resent-Bcc, Resent-Reply-To, Delivered-To
  * DateHeader: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date, Reply-By
  * ParameterHeader: Content-Type, Content-Disposition
+ * IdHeader: Message-ID, Content-ID, In-Reply-To, References
+ * ReceivedHeader: Received
  *
  * @author Zaahid Bateson
  */
@@ -47,6 +49,7 @@ class HeaderFactory
             'resent-cc',
             'resent-bcc',
             'resent-reply-to',
+            'delivered-to',
         ],
         'ZBateson\MailMimeParser\Header\DateHeader' => [
             'date',
@@ -62,6 +65,15 @@ class HeaderFactory
         ],
         'ZBateson\MailMimeParser\Header\SubjectHeader' => [
             'subject',
+        ],
+        'ZBateson\MailMimeParser\Header\IdHeader' => [
+            'message-id',
+            'content-id',
+            'in-reply-to',
+            'references'
+        ],
+        'ZBateson\MailMimeParser\Header\ReceivedHeader' => [
+            'received'
         ]
     ];
     

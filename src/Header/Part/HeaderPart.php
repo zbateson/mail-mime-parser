@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Abstract base class representing a single part of a parsed header.
@@ -21,7 +21,7 @@ abstract class HeaderPart
     protected $value;
     
     /**
-     * @var CharsetConverter $charsetConverter the charset converter used for
+     * @var MbWrapper $charsetConverter the charset converter used for
      *      converting strings in HeaderPart::convertEncoding
      */
     protected $charsetConverter;
@@ -29,9 +29,9 @@ abstract class HeaderPart
     /**
      * Sets up dependencies.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      */
-    public function __construct(CharsetConverter $charsetConverter)
+    public function __construct(MbWrapper $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
     }
@@ -97,7 +97,7 @@ abstract class HeaderPart
         if ($from !== 'UTF-8') {
             // mime header part decoding will force it.  This is necessary for
             // UTF-7 because mb_check_encoding will return true
-            if ($force || !mb_check_encoding($str, 'UTF-8')) {
+            if ($force || !($this->charsetConverter->checkEncoding($str, 'UTF-8'))) {
                 return $this->charsetConverter->convert($str, $from, 'UTF-8');
             }
         }

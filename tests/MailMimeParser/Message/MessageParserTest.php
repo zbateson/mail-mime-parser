@@ -436,10 +436,9 @@ class MessageParserTest extends TestCase
         $pba1->expects($this->once())
             ->method('getParent')
             ->willReturn($pbm);
-        $pba1->expects($this->exactly(3))
+        $pba1->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
             ->willReturnMap([
-                [$this->anything(), false],
                 [$this->anything(), false],
                 ['--balderdash', true]
             ]);
@@ -486,10 +485,6 @@ class MessageParserTest extends TestCase
         $pba3->expects($this->once())
             ->method('getParent')
             ->willReturn($pbm);
-        $pba3->expects($this->once())
-            ->method('setEndBoundaryFound')
-            ->with('')
-            ->willReturn(false);
         $pba3->expects($this->once())
             ->method('setEof');
         $pba3->expects($this->once())
@@ -821,6 +816,86 @@ class MessageParserTest extends TestCase
             ->willReturnOnConsecutiveCalls(
                 $pbm, $pbAlt, $pba1, $pba2, $pba3, $pba4, $pba5, $pba6
             );
+
+        $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
+        $message = $mp->parse(Psr7\stream_for($handle));
+        $this->assertNotNull($message);
+
+        fclose($handle);
+    }
+
+    public function testParseMimeMessageWithLongHeader()
+    {
+        $email =
+            "Subject: Money owed for services rendered\r\n"
+            . "Content-Type: text/html\r\n"
+            // Exactly 2 before the "\r\n" position
+            . "X-Long-Header-1: " . str_repeat('A', 4096 - 22) . "\r\n\tABC\r\n"
+            // Exactly 1 before the "\r\n" position
+            . "X-Long-Header-2: " . str_repeat('A', 4096 - 21) . "\r\n\tABC\r\n"
+            // Exactly before the "\r\n" position
+            . "X-Long-Header-3: " . str_repeat('A', 4096 - 20) . "\r\n\tABC\r\n"
+            // In the middle of "\r\n"
+            . "X-Long-Header-4: " . str_repeat('A', 4096 - 19) . "\r\n\tABC\r\n"
+            // Exactly at the "\r\n" position, so next readline would be empty
+            . "X-Long-Header-5: " . str_repeat('A', 4096 - 18) . "\r\n\tABC\r\n"
+            // additional characters should be dumped, in this case 1 char
+            . "X-Long-Header-6: " . str_repeat('A', 4096 - 17) . "\r\n\tABC\r\n"
+            // additional characters should be dumped, in this case 18 chars
+            . "X-Long-Header-7: " . str_repeat('A', 4096) . "\r\n\tABC\r\n"
+            . "X-Test-Header: test-value\r\n"
+            . "\r\n";
+
+        $startPos = strlen($email);
+        $email .= "Dear Albert,\r\n\r\nAfter our wonderful time together, it's unfortunate I know, but I expect payment\r\n"
+            . "for all services hereby rendered.\r\n\r\nYours faithfully,\r\nKandice Waterskyfalls";
+        $endPos = strlen($email);
+
+        $content = vfsStream::newFile('part')->at($this->vfs);
+        $content->withContent($email);
+        $handle = fopen($content->url(), 'r');
+
+        $pfs = $this->partFactoryService;
+        $pfs->method('getMessageFactory')
+            ->willReturn($this->messageFactory);
+
+        $pb = $this->getPartBuilderMock();
+        $pb->expects($this->once())
+            ->method('setStreamPartStartPos')
+            ->with(0);
+        $pb->expects($this->once())
+            ->method('canHaveHeaders')
+            ->willReturn(true);
+        $pb->expects($this->exactly(10))
+            ->method('addHeader')
+            ->withConsecutive(
+                ['Subject', 'Money owed for services rendered'],
+                ['Content-Type', 'text/html'],
+                ['X-Long-Header-1', str_repeat('A', 4096 - 22) . "\r\n\tABC"],
+                ['X-Long-Header-2', str_repeat('A', 4096 - 21) . "\r\n\tABC"],
+                ['X-Long-Header-3', str_repeat('A', 4096 - 20) . "\r\n\tABC"],
+                ['X-Long-Header-4', str_repeat('A', 4096 - 19) . "\r\n\tABC"],
+                ['X-Long-Header-5', str_repeat('A', 4096 - 18) . "\r\n\tABC"],
+                ['X-Long-Header-6', str_repeat('A', 4096 - 18) . "\r\n\tABC"],
+                ['X-Long-Header-7', str_repeat('A', 4096 - 18) . "\r\n\tABC"],
+                ['X-Test-Header', 'test-value']
+            );
+        $pb->expects($this->once())
+            ->method('getParent')
+            ->willReturn(null);
+        $pb->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+        $pb->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with($startPos);
+        $pb->expects($this->once())
+            ->method('setStreamPartAndContentEndPos')
+            ->with($endPos);
+
+        $pbf = $this->partBuilderFactory;
+        $pbf->method('newPartBuilder')
+            ->willReturn($pb);
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
         $message = $mp->parse(Psr7\stream_for($handle));

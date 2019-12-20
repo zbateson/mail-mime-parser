@@ -193,6 +193,7 @@ abstract class AbstractConsumer
      * the current consumer.
      * 
      * @param string $token the current token
+     * @return bool
      */
     abstract protected function isStartToken($token);
     
@@ -201,6 +202,7 @@ abstract class AbstractConsumer
      * current consumer.
      * 
      * @param string $token the current token
+     * @return bool
      */
     abstract protected function isEndToken($token);
     
@@ -215,8 +217,8 @@ abstract class AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
-     *         header part or null if the token should be ignored
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart|null the
+     *         constructed header part or null if the token should be ignored
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -303,8 +305,8 @@ abstract class AbstractConsumer
      * processing.
      * 
      * @param Iterator $tokens an iterator over a string of tokens
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] an array of parsed
-     *         parts
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] an array of
+     *         parsed parts
      */
     protected function parseTokensIntoParts(Iterator $tokens)
     {
@@ -320,13 +322,14 @@ abstract class AbstractConsumer
      * Performs any final processing on the array of parsed parts before
      * returning it to the consumer client.
      * 
-     * The default implementation simply returns the passed array.
+     * The default implementation simply returns the passed array after
+     * filtering out null/empty parts.
      * 
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {
-        return $parts;
+        return array_values(array_filter($parts));
     }
 }

@@ -55,6 +55,16 @@ class MessageTest extends TestCase
         return $header;
     }
 
+    protected function getMockedIdHeader($id)
+    {
+        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\IdHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMock();
+        $header->method('getId')->willReturn($id);
+        return $header;
+    }
+
     protected function getMockedPartBuilder()
     {
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')

@@ -52,6 +52,8 @@ class HeaderContainer implements IteratorAggregate
     private $nextIndex = 0;
 
     /**
+     * Constructor
+     *
      * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory)
@@ -123,7 +125,8 @@ class HeaderContainer implements IteratorAggregate
     }
 
     /**
-     * Returns the header in the headers array at the passed integer index.
+     * Returns the header in the headers array at the passed 0-based integer
+     * index.
      *
      * @param int $index
      * @return \ZBateson\MailMimeParser\Header\AbstractHeader
@@ -223,6 +226,17 @@ class HeaderContainer implements IteratorAggregate
         $i = $this->headerMap[$s][$offset];
         $this->headers[$i] = [ $name, $value ];
         $this->headerObjects[$i] = null;
+    }
+
+    /**
+     * Returns an array of AbstractHeader objects representing all headers in
+     * this collection.
+     *
+     * @return AbstractHeader
+     */
+    public function getHeaderObjects()
+    {
+        return array_filter(array_map([ $this, 'getByIndex' ], array_keys($this->headers)));
     }
 
     /**

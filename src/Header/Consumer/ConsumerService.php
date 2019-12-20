@@ -8,6 +8,9 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumer;
 
 /**
  * Simple service provider for consumer singletons.
@@ -27,11 +30,28 @@ class ConsumerService
      * GenericConsumer instances.
      */
     protected $mimeLiteralPartFactory;
+
+    /**
+     * @var Received\DomainConsumer[]|
+     *      Received\GenericReceivedConsumer[]|
+     *      Received\ReceivedDateConsumer[] an array of sub-received header
+     *      consumer instances.
+     */
+    protected $receivedConsumers = [
+        'from' => null,
+        'by' => null,
+        'via' => null,
+        'with' => null,
+        'id' => null,
+        'for' => null,
+        'date' => null
+    ];
     
     /**
      * Sets up the HeaderPartFactory member variable.
      * 
      * @param HeaderPartFactory $partFactory
+     * @param MimeLiteralPartFactory $mimeLiteralPartFactory
      */
     public function __construct(HeaderPartFactory $partFactory, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {
@@ -127,5 +147,58 @@ class ConsumerService
     public function getParameterConsumer()
     {
         return ParameterConsumer::getInstance($this, $this->partFactory);
+    }
+
+    /**
+     * Returns the consumer instance corresponding to the passed part name of a
+     * Received header.
+     *
+     * @param string $partName
+     * @return \ZBateson\MailMimeParser\Header\Consumer\Received\FromConsumer
+     */
+    public function getSubReceivedConsumer($partName)
+    {
+        if (empty($this->receivedConsumers[$partName])) {
+            $consumer = null;
+            if ($partName === 'from' || $partName === 'by') {
+                $consumer = new DomainConsumer($this, $this->partFactory, $partName);
+            } else if ($partName === 'date') {
+                $consumer = new ReceivedDateConsumer($this, $this->partFactory);
+            } else {
+                $consumer = new GenericReceivedConsumer($this, $this->partFactory, $partName);
+            }
+            $this->receivedConsumers[$partName] = $consumer;
+        }
+        return $this->receivedConsumers[$partName];
+    }
+
+    /**
+     * Returns the ReceivedConsumer singleton instance.
+     *
+     * @return \ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumer
+     */
+    public function getReceivedConsumer()
+    {
+        return ReceivedConsumer::getInstance($this, $this->partFactory);
+    }
+
+    /**
+     * Returns the IdConsumer singleton instance.
+     *
+     * @return \ZBateson\MailMimeParser\Header\Consumer\IdConsumer
+     */
+    public function getIdConsumer()
+    {
+        return IdConsumer::getInstance($this, $this->partFactory);
+    }
+
+    /**
+     * Returns the IdBaseConsumer singleton instance.
+     *
+     * @return \ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer
+     */
+    public function getIdBaseConsumer()
+    {
+        return IdBaseConsumer::getInstance($this, $this->partFactory);
     }
 }

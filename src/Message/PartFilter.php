@@ -358,7 +358,8 @@ class PartFilter
         static $map = [
             'content-type' => 'getContentType',
             'content-disposition' => 'getContentDisposition',
-            'content-transfer-encoding' => 'getContentTransferEncoding'
+            'content-transfer-encoding' => 'getContentTransferEncoding',
+            'content-id' => 'getContentId'
         ];
         $lower = strtolower($name);
         if (isset($map[$lower])) {

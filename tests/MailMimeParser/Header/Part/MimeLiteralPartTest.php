@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of MimeLiteralTest
@@ -18,9 +19,7 @@ class MimeLiteralPartTest extends TestCase
 
     public function setUp()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
-			->disableOriginalConstructor()
-			->getMock();
+        $this->charsetConverter = new MbWrapper();
     }
 
     protected function assertDecoded($expected, $encodedActual)
@@ -32,15 +31,11 @@ class MimeLiteralPartTest extends TestCase
 
     public function testBasicValue()
     {
-        $this->charsetConverter->expects($this->never())
-            ->method('convert');
         $this->assertDecoded('Step', 'Step');
     }
 
     public function testNullLanguage()
     {
-        $this->charsetConverter->expects($this->never())
-            ->method('convert');
         $part = $this->assertDecoded('Step', 'Step');
         $this->assertEquals([
             [ 'lang' => null, 'value' => 'Step' ]
@@ -49,19 +44,11 @@ class MimeLiteralPartTest extends TestCase
 
     public function testMimeEncoding()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with('Kilgore Trout', 'US-ASCII', 'UTF-8')
-            ->willReturn('Kilgore Trout');
         $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
     }
 
     public function testMimeEncodingNullLanguage()
     {
-        $this->charsetConverter->expects($this->once())
-            ->method('convert')
-            ->with('Kilgore Trout', 'US-ASCII', 'UTF-8')
-            ->willReturn('Kilgore Trout');
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals([
             [ 'lang' => null, 'value' => 'Kilgore Trout' ]
@@ -72,27 +59,6 @@ class MimeLiteralPartTest extends TestCase
     {
         $kilgore = '=?US-ASCII?Q?Kilgore_Trout?=';
         $snow = '=?US-ASCII?Q?Jon_Snow?=';
-
-        $this->charsetConverter->expects($this->exactly(7))
-            ->method('convert')
-            ->withConsecutive(
-                ['Kilgore Trout', 'US-ASCII', 'UTF-8'],
-                ['Jon Snow', 'US-ASCII', 'UTF-8'],
-                ['Kilgore Trout', 'US-ASCII', 'UTF-8'],
-                ['Jon Snow', 'US-ASCII', 'UTF-8'],
-                ['Kilgore Trout', 'US-ASCII', 'UTF-8'],
-                ['Jon Snow', 'US-ASCII', 'UTF-8'],
-                ['Jon Snow', 'US-ASCII', 'UTF-8']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'Kilgore Trout',
-                'Jon Snow',
-                'Kilgore Trout',
-                'Jon Snow',
-                'Kilgore Trout',
-                'Jon Snow',
-                'Jon Snow'
-            );
 
         $this->assertDecoded(
             ' Kilgore TroutJon Snow ',
@@ -118,10 +84,6 @@ class MimeLiteralPartTest extends TestCase
 
     public function testNonAscii()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
-            ->setMethods(['__toString'])
-            ->getMock();
-
         $this->assertDecoded(
             'κόσμε fløde',
             '=?UTF-8?B?zrrhvbnPg868zrUgZmzDuGRl?='
@@ -189,18 +151,18 @@ class MimeLiteralPartTest extends TestCase
 
     public function testLanguageParts()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+        $this->charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
             ->setMethods(['__toString'])
             ->getMock();
 
         $part = $this->assertDecoded(
             'Hello and bonjour mi amici. Welcome!',
-            'Hello and =?UTF-8*fr-be?Q?bonjour_?= =?UTF-8*it?Q?mi amici?=. Welcome!'
+            'Hello and =?UTF-8*fr-be?Q?bonjou?= =?UTF-8*it?Q?r_mi amici?=. Welcome!'
         );
         $expectedLang = [
             [ 'lang' => null, 'value' => 'Hello and ' ],
-            [ 'lang' => 'fr-be', 'value' => 'bonjour ' ],
-            [ 'lang' => 'it', 'value' => 'mi amici' ],
+            [ 'lang' => 'fr-be', 'value' => 'bonjou' ],
+            [ 'lang' => 'it', 'value' => 'r mi amici' ],
             [ 'lang' => null, 'value' => '. Welcome!' ]
         ];
         $this->assertEquals($expectedLang, $part->getLanguageArray());

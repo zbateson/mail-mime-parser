@@ -8,19 +8,13 @@ php:
     - 7.0
     - 7.1
     - 7.2
-    - hhvm
-    - hhvm-3.6
-    - hhvm-3.12
-    - hhvm-3.24
-    - hhvm-nightly
+    - 7.3
     - nightly
 matrix:
     allow_failures:
         - php: nightly
-        - php: hhvm-nightly
 
 install:
-    - if [[ "$TRAVIS_PHP_VERSION" == "hhvm" || "$TRAVIS_PHP_VERSION" == "hhvm-nightly" ]]; then composer remove --dev "phpunit/phpunit" && composer require --dev "phpunit/phpunit:5.7"; fi
     - composer update
 
 script: ./vendor/bin/phpunit -c tests/phpunit.xml

@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Represents a single mime header part token, with the possibility of it being
@@ -21,7 +21,12 @@ class MimeLiteralPart extends LiteralPart
     /**
      * @var string regex pattern matching a mime-encoded part
      */
-    const MIME_PART_PATTERN = '=\?[A-Za-z\-_0-9\*]+\?[QBqb]\?[^\?]+\?=';
+    const MIME_PART_PATTERN = '=\?[^?=]+\?[QBqb]\?[^\?]+\?=';
+
+    /**
+     * @var string regex pattern used when parsing parameterized headers
+     */
+    const MIME_PART_PATTERN_NO_QUOTES = '=\?[^\?=]+\?[QBqb]\?[^\?"]+\?=';
     
     /**
      * @var bool set to true to ignore spaces before this part
@@ -47,10 +52,10 @@ class MimeLiteralPart extends LiteralPart
      * decoded value to a member variable. Sets canIgnoreSpacesBefore and
      * canIgnoreSpacesAfter.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      * @param string $token
      */
-    public function __construct(CharsetConverter $charsetConverter, $token)
+    public function __construct(MbWrapper $charsetConverter, $token)
     {
         parent::__construct($charsetConverter);
         $this->value = $this->decodeMime($token);

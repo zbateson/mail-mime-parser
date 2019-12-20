@@ -15,7 +15,7 @@ use ZBateson\MailMimeParser\Message\MessageParser;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Dependency injection container for use by ZBateson\MailMimeParser - because a
@@ -28,22 +28,23 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
 class Container
 {
     /**
-     * @var PartBuilderFactory
+     * @var PartBuilderFactory The PartBuilderFactory instance
      */
     protected $partBuilderFactory;
     
     /**
-     * @var PartFactoryService
+     * @var PartFactoryService The PartFactoryService instance
      */
     protected $partFactoryService;
     
     /**
-     * @var PartFilterFactory
+     * @var PartFilterFactory The PartFilterFactory instance
      */
     protected $partFilterFactory;
     
     /**
-     * @var PartStreamFilterManagerFactory
+     * @var PartStreamFilterManagerFactory The PartStreamFilterManagerFactory
+     *      instance
      */
     protected $partStreamFilterManagerFactory;
     
@@ -226,13 +227,13 @@ class Container
     }
 
     /**
-     * Returns a CharsetConverter.
+     * Returns a MbWrapper.
      * 
-     * @return CharsetConverter
+     * @return MbWrapper
      */
     public function getCharsetConverter()
     {
-        return new CharsetConverter();
+        return new MbWrapper();
     }
     
     /**

@@ -17,7 +17,7 @@ use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
 class MessageHelperService
 {
     /**
-     * @var PartBuilderFactory
+     * @var PartBuilderFactory the PartBuilderFactory
      */
     private $partBuilderFactory;
 
@@ -42,6 +42,8 @@ class MessageHelperService
     private $partFactoryService;
 
     /**
+     * Constructor
+     *
      * @param PartBuilderFactory $partBuilderFactory
      */
     public function __construct(PartBuilderFactory $partBuilderFactory)

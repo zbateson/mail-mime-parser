@@ -1,6 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
+use ZBateson\MailMimeParser\Message\PartFilter;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
@@ -45,6 +46,16 @@ class MimePartTest extends TestCase
         $header->method('getRawValue')->willReturn($value);
         $header->method('getValueFor')->willReturn($parameterValue);
         $header->method('hasParameter')->willReturn(true);
+        return $header;
+    }
+
+    protected function getMockedIdHeader($id)
+    {
+        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\IdHeader')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMock();
+        $header->method('getValue')->willReturn($id);
         return $header;
     }
 
@@ -600,6 +611,20 @@ class MimePartTest extends TestCase
         $this->assertFalse($part->isTextPart());
     }
 
+    public function testIsTextForBinaryCharset()
+    {
+        $header = $this->getMockedParameterHeader('Content-Type', 'image/png', 'binary');
+        $pb = $this->getMockedPartBuilder();
+        $hc = $pb->getHeaderContainer();
+        $hc->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('Content-Type', 0)
+            ->willReturn($header);
+        $part = $this->newMimePart($pb);
+        $this->assertFalse($part->isMultiPart());
+        $this->assertFalse($part->isTextPart());
+    }
+
     public function testIsMultipartForMultipartRelated()
     {
         $header = $this->getMockedParameterHeader('Content-Type', 'multipart/related');
@@ -627,6 +652,20 @@ class MimePartTest extends TestCase
         $this->assertTrue($part->isMultiPart());
         $this->assertFalse($part->isTextPart());
     }
+
+    public function testGetContentId()
+    {
+        $header = $this->getMockedIdHeader('1337');
+        $pb = $this->getMockedPartBuilder();
+        $hc = $pb->getHeaderContainer();
+        $hc->method('get')
+            ->willReturnOnConsecutiveCalls($header, null);
+
+        $part = $this->newMimePart($pb);
+        $this->assertEquals('1337', $part->getContentId());
+        $this->assertNull($part->getContentId());
+    }
+
 
     public function testGetAllPartsByMimeType()
     {
@@ -688,5 +727,36 @@ class MimePartTest extends TestCase
 
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
         $this->assertEquals(3, $part->getCountOfPartsByMimeType('awww geez, Rick'));
+    }
+
+    public function testGetPartByContentId()
+    {
+        $pf = $this->mockPartFilterFactory;
+        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filter->expects($this->exactly(15))
+            ->method('filter')
+            ->willReturnOnConsecutiveCalls(
+                true, false, false, true, false,
+                true, false, false, true, false,
+                true, false, false, true, false
+            );
+
+        $pf->expects($this->exactly(3))
+            ->method('newFilterFromArray')
+            ->with([
+                'headers' => [
+                    PartFilter::FILTER_INCLUDE => [
+                        'Content-ID' => 'the-id'
+                    ]
+                ]
+            ])
+            ->willReturn($filter);
+
+        $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
+        $this->assertSame($part, $part->getPartByContentId('  <the-id>  '));
+        $this->assertSame($part, $part->getPartByContentId('<the-id>'));
+        $this->assertSame($part, $part->getPartByContentId('the-id'));
     }
 }

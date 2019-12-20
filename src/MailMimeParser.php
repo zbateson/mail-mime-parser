@@ -34,6 +34,9 @@ class MailMimeParser
     
     /**
      * Sets up the parser.
+     *
+     * @param Container $di pass a Container object to use it for
+     *        initialization.
      */
     public function __construct(Container $di = null)
     {

@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\Token;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use ZBateson\MailMimeParser\Header\Part\SplitParameterToken;
 use ArrayObject;
 
@@ -33,7 +34,25 @@ class ParameterConsumer extends GenericConsumer
     {
         return [';', '='];
     }
-    
+
+    /**
+     * Overridden to use a specialized regex for finding mime-encoded parts
+     * (RFC 2047).
+     *
+     * Some implementations seem to place mime-encoded parts within quoted
+     * parameters, and split the mime-encoded parts across multiple split
+     * parameters.  The specialized regex doesn't allow double quotes inside a
+     * mime encoded part, so it can be "continued" in another parameter.
+     *
+     * @return string the regex pattern
+     */
+    protected function getTokenSplitPattern()
+    {
+        $sChars = implode('|', $this->getAllTokenSeparators());
+        $mimePartPattern = MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES;
+        return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
+    }
+
     /**
      * Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
      * the passed string token and returns it, unless the token is an escaped
@@ -114,7 +133,8 @@ class ParameterConsumer extends GenericConsumer
      * Returns true if the token was processed, and false otherwise.
      * 
      * @param string $tokenValue
-     * @param array $combined
+     * @param ArrayObject $combined
+     * @param ArrayObject $splitParts
      * @param string $strName
      * @param string $strCat
      * @return boolean
@@ -131,7 +151,7 @@ class ParameterConsumer extends GenericConsumer
             $strName = '';
             $strCat = '';
             return true;
-        } elseif ($tokenValue === '=') {
+        } elseif ($tokenValue === '=' && $strCat !== '') {
             $strName = $strCat;
             $strCat = '';
             return true;

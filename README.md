@@ -2,7 +2,9 @@
 
 Testable and PSR-compliant mail mime parser alternative to PHP's imap* functions and Pear libraries for reading messages in _Internet Message Format_ [RFC 822](http://tools.ietf.org/html/rfc822) (and later revisions [RFC 2822](http://tools.ietf.org/html/rfc2822), [RFC 5322](http://tools.ietf.org/html/rfc5322)).
 
-[![Build Status](https://travis-ci.org/zbateson/MailMimeParser.svg?branch=master)](https://travis-ci.org/zbateson/MailMimeParser) [![Code Coverage](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zbateson/MailMimeParser/?branch=master)
+[![Build Status](https://travis-ci.org/zbateson/mail-mime-parser.svg?branch=master)](https://travis-ci.org/zbateson/mail-mime-parser)
+[![Code Coverage](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/?branch=master)
 [![Total Downloads](https://poser.pugx.org/zbateson/mail-mime-parser/downloads)](https://packagist.org/packages/zbateson/mail-mime-parser)
 [![Latest Stable Version](https://poser.pugx.org/zbateson/mail-mime-parser/version)](https://packagist.org/packages/zbateson/mail-mime-parser)
 
@@ -10,9 +12,7 @@ The goals of this project are to be:
 
 * Well written
 * Standards-compliant but forgiving
-* Includable via composer
 * Tested where possible
-* Minimal dependencies
 
 To include it for use in your project, please install via composer:
 
@@ -22,7 +22,9 @@ composer require zbateson/mail-mime-parser
 
 ## Requirements
 
-MailMimeParser requires PHP 5.4 or newer or HHVM.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1 and 7.2 and HHVM 3.6, 3.12, 3.24 and 'current' on travis.
+MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2 and 7.3 on travis.
+
+Please note: hhvm support has been dropped as it no longer supports 'php' as of version 4.  Previous versions of hhvm may still work, but are no longer supported.
 
 ## Usage
 
@@ -41,9 +43,17 @@ $message = \ZBateson\MailMimeParser\Message::from($string);
 
 echo $message->getHeaderValue('from');          // user@example.com
 echo $message
-    ->getHeader('from')
+    ->getHeader('from')                         // AddressHeader
     ->getPersonName();                          // Person Name
 echo $message->getHeaderValue('subject');       // The email's subject
+echo $message
+    ->getHeader('to')                           // also AddressHeader
+    ->getAddresses()[0]                         // AddressPart
+    ->getName();                                // Person Name
+echo $message
+    ->getHeader('cc')                           // also AddressHeader
+    ->getAddress()[0]                           // AddressPart
+    ->getEmail();                               // user@example.com
 
 echo $message->getTextContent();                // or getHtmlContent()
 
@@ -61,18 +71,21 @@ $dest = \GuzzleHttp\Psr7\stream_for(
 \GuzzleHttp\Psr7\copy_to_stream(
     $stream, $dest
 );
+// OR: more simply if saving or copying to another stream
+$att->saveContent('my-file.ext');               // writes to my-file.ext
+$att->saveContent($stream);                     // copies to the stream
 ```
 
 ## Documentation
 
 * [About](https://mail-mime-parser.org)
 * [Usage Guide](https://mail-mime-parser.org/#quick-usage-guide)
-* [API Reference](https://mail-mime-parser.org/api/1.0)
+* [API Reference](https://mail-mime-parser.org/api/1.1)
 
-## Upgrading to 1.0
+## Upgrading to 1.x
 
 * [Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
 
 ## License
 
-BSD licensed - please see [license agreement](https://github.com/zbateson/MailMimeParser/blob/master/LICENSE).
+BSD licensed - please see [license agreement](https://github.com/zbateson/mail-mime-parser/blob/master/LICENSE).

@@ -18,7 +18,7 @@ class SubjectHeaderTest extends TestCase
 
     protected function setUp()
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\StreamDecorators\Util\CharsetConverter')
+        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
 			->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
@@ -50,6 +50,12 @@ class SubjectHeaderTest extends TestCase
              =?US-ASCII?Q?er_S._?=
              =?US-ASCII?Q?Thompson?=');
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
+    }
+
+    public function testMultilineMimePartsWithTextAtTheEnd()
+    {
+        $header = new SubjectHeader($this->consumerService, 'Hunted-By', "Hunt=?UTF-8?Q?er_S._Th?=\r\n=?UTF-8?Q?ompson?= Jr.");
+        $this->assertEquals('Hunter S. Thompson Jr.', $header->getValue());
     }
 
     public function testMultilineMimePartWithParentheses()

@@ -30,6 +30,8 @@ class MultipartHelper extends AbstractHelper
     private $genericHelper;
 
     /**
+     * Constructor
+     * 
      * @param MimePartFactory $mimePartFactory
      * @param UUEncodedPartFactory $uuEncodedPartFactory
      * @param PartBuilderFactory $partBuilderFactory

@@ -32,7 +32,7 @@ abstract class MessagePartFactory
     protected $streamFactory;
 
     /**
-     * @static MessagePartFactory[] cached instances of MessagePartFactory
+     * @var MessagePartFactory[] cached instances of MessagePartFactory
      *      sub-classes
      */
     private static $instances = null;

@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\StreamDecorators\Util\CharsetConverter;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Constructs and returns HeaderPart objects.
@@ -16,7 +16,7 @@ use ZBateson\StreamDecorators\Util\CharsetConverter;
 class HeaderPartFactory
 {
     /**
-     * @var CharsetConverter $charsetConverter passed to HeaderPart constructors
+     * @var MbWrapper $charsetConverter passed to HeaderPart constructors
      *      for converting strings in HeaderPart::convertEncoding
      */
     protected $charsetConverter;
@@ -24,9 +24,9 @@ class HeaderPartFactory
     /**
      * Sets up dependencies.
      * 
-     * @param CharsetConverter $charsetConverter
+     * @param MbWrapper $charsetConverter
      */
-    public function __construct(CharsetConverter $charsetConverter)
+    public function __construct(MbWrapper $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
     }
@@ -146,5 +146,44 @@ class HeaderPartFactory
     public function newParameterPart($name, $value, $language = null)
     {
         return new ParameterPart($this->charsetConverter, $name, $value, $language);
+    }
+
+    /**
+     * Initializes and returns a new ReceivedPart.
+     *
+     * @param string $name
+     * @param string $value
+     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedPart
+     */
+    public function newReceivedPart($name, $value)
+    {
+        return new ReceivedPart($this->charsetConverter, $name, $value);
+    }
+
+    /**
+     * Initializes and returns a new ReceivedDomainPart.
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $ehloName
+     * @param string $hostName
+     * @param string $hostAddress
+     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart
+     */
+    public function newReceivedDomainPart(
+        $name,
+        $value,
+        $ehloName = null,
+        $hostName = null,
+        $hostAddress = null
+    ) {
+        return new ReceivedDomainPart(
+            $this->charsetConverter,
+            $name,
+            $value,
+            $ehloName,
+            $hostName,
+            $hostAddress
+        );
     }
 }
