@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
+use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory;
 
 /**
@@ -224,7 +225,7 @@ class PartBuilder
         if ($this->mimeBoundary === false) {
             $this->mimeBoundary = null;
             $contentType = $this->getContentType();
-            if ($contentType !== null) {
+            if ($contentType !== null && $contentType instanceof ParameterHeader) {
                 $this->mimeBoundary = $contentType->getValueFor('boundary');
             }
         }
