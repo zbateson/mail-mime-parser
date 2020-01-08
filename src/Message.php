@@ -417,12 +417,14 @@ class Message extends MimePart
      * @param string $mimeType
      * @param string $filename
      * @param string $disposition
+     * @param string $encoding defaults to 'base64', only applied for a mime
+     *        email
      */
-    public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment')
+    public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
     {
         $this->messageHelperService
             ->getMultipartHelper()
-            ->createAndAddPartForAttachment($this, $resource, $mimeType, $disposition, $filename);
+            ->createAndAddPartForAttachment($this, $resource, $mimeType, $disposition, $filename, $encoding);
     }
 
     /**
@@ -435,13 +437,13 @@ class Message extends MimePart
      * @param string $filename
      * @param string $disposition
      */
-    public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment')
+    public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
     {
         $handle = Psr7\stream_for(fopen($filePath, 'r'));
         if ($filename === null) {
             $filename = basename($filePath);
         }
-        $this->addAttachmentPart($handle, $mimeType, $filename, $disposition);
+        $this->addAttachmentPart($handle, $mimeType, $filename, $disposition, $encoding);
     }
 
     /**

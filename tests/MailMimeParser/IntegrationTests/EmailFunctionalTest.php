@@ -2204,6 +2204,69 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
+    public function testAddAttachmentPartQuotedPrintablem0001()
+    {
+        $handle = fopen($this->messageDir . '/m0001.txt', 'r');
+        $message = $this->parser->parse($handle);
+        fclose($handle);
+
+        $message->addAttachmentPart(
+            file_get_contents($this->messageDir . '/files/farmerandstork.txt'),
+            'text/plain',
+            'farmerandstork.txt',
+            'attachment',
+            'quoted-printable'
+        );
+
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'text' => 'HasenundFrosche.txt',
+            'attachments' => 1,
+        ];
+
+        $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/attqp_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+
+        $message->addAttachmentPartFromFile(
+            $this->messageDir . '/files/hareandtortoise.txt',
+            'text/plain',
+            'attachment',
+            '8bit'
+        );
+        $props['attachments'] = 2;
+
+        // due to what seems to be a bug in hhvm, after stream_copy_to_stream is
+        // called in MimePart::copyContentStream, the CharsetStreamFilter filter
+        // is no longer called on the stream, resulting in a failure here on the
+        // next test
+        //$this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
+
+        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att8bit_m0001", 'w+');
+        $message->save($tmpSaved);
+        rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved);
+        fclose($tmpSaved);
+        $failMessage = 'Failed while parsing saved message for second added attachment to m0001';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
     public function testAddLargeAttachmentPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');

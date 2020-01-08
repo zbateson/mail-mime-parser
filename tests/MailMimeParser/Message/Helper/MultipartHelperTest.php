@@ -546,6 +546,56 @@ class MultipartHelperTest extends TestCase
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', null);
     }
 
+    public function testCreateAndAddPartForAttachmentToMimeMessageWithDifferentEncoding()
+    {
+        $helper = $this->newMultipartHelper();
+
+        $message = $this->newMockMessage();
+        $attPart = $this->newMockMimePart();
+
+        $message->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockPartBuilderFactory->expects($this->once())
+            ->method('newPartBuilder')
+            ->with($this->mockMimePartFactory)
+            ->willReturn(
+                $partBuilder
+            );
+        $partBuilder->expects($this->exactly(3))
+            ->method('addHeader')
+            ->withConsecutive(
+                [ 'Content-Transfer-Encoding', 'quoted-printable' ],
+                [ 'Content-Type', $this->matchesRegularExpression('/^test-mime;\s+name="file.+"$/') ],
+                [ 'Content-Disposition', $this->matchesRegularExpression('/^dispo;\s+filename="file.+"$/') ]
+            );
+
+        $message->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('not-mixed');
+        $message->expects($this->once())
+            ->method('setRawHeader')
+            ->with('Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/'));
+
+        $partBuilder->expects($this->once())
+            ->method('createMessagePart')
+            ->willReturn($attPart);
+
+        $resource = 'test';
+        $attPart->expects($this->once())
+            ->method('setContent')
+            ->with($resource);
+        $message->expects($this->once())
+            ->method('addChild')
+            ->with($attPart);
+
+        $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', null, 'quoted-printable');
+    }
+
     public function testCreateAndAddPartForAttachmentToNonMimeMessage()
     {
         $helper = $this->newMultipartHelper();

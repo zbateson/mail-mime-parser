@@ -416,14 +416,38 @@ class MessageTest extends TestCase
             ->willReturn($helper);
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
-                [ $message, 'content', 'mimetype', 'attachment', $this->anything() ],
-                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png' ]
+                [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64' ],
+                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'base64' ]
             )
             ->willReturn($part);
 
         $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
         $message->addAttachmentPart('content', 'mimetype');
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline');
+    }
+
+    public function testAddAttachmentPartUsingQuotedPrintable()
+    {
+        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $message = $this->newMessage($this->getMockedPartBuilderWithChildren());
+        $part = $message->getPart(2);
+
+        $this->mockMessageHelperService->expects($this->exactly(2))
+            ->method('getMultipartHelper')
+            ->willReturn($helper);
+        $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
+            ->withConsecutive(
+                [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable' ],
+                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'quoted-printable' ]
+            )
+            ->willReturn($part);
+
+        $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
+        $message->addAttachmentPart('content', 'mimetype', null, 'attachment', 'quoted-printable');
+        $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline', 'quoted-printable');
     }
 
     public function testSigningHelperMethods()

@@ -339,9 +339,10 @@ class MultipartHelper extends AbstractHelper
      * @param string $mimeType
      * @param string $disposition
      * @param string $filename
+     * @param string $encoding
      * @return \ZBateson\MailMimeParser\Message\Part\MimePart
      */
-    public function createAndAddPartForAttachment(Message $message, $resource, $mimeType, $disposition, $filename = null)
+    public function createAndAddPartForAttachment(Message $message, $resource, $mimeType, $disposition, $filename = null, $encoding = 'base64')
     {
         if ($filename === null) {
             $filename = 'file' . uniqid();
@@ -350,7 +351,7 @@ class MultipartHelper extends AbstractHelper
         $safe = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
         if ($message->isMime()) {
             $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-            $builder->addHeader('Content-Transfer-Encoding', 'base64');
+            $builder->addHeader('Content-Transfer-Encoding', $encoding);
             if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
                 $this->setMessageAsMixed($message);
             }
