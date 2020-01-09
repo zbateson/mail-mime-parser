@@ -43,33 +43,33 @@ class HeaderFactory
             'cc',
             'bcc',
             'sender',
-            'reply-to',
-            'resent-from',
-            'resent-to',
-            'resent-cc',
-            'resent-bcc',
-            'resent-reply-to',
-            'delivered-to',
+            'replyto',
+            'resentfrom',
+            'resentto',
+            'resentcc',
+            'resentbcc',
+            'resentreplyto',
+            'deliveredto',
         ],
         'ZBateson\MailMimeParser\Header\DateHeader' => [
             'date',
-            'resent-date',
-            'delivery-date',
+            'resentdate',
+            'deliverydate',
             'expires',
-            'expiry-date',
-            'reply-by',
+            'expirydate',
+            'replyby',
         ],
         'ZBateson\MailMimeParser\Header\ParameterHeader' => [
-            'content-type',
-            'content-disposition',
+            'contenttype',
+            'contentdisposition',
         ],
         'ZBateson\MailMimeParser\Header\SubjectHeader' => [
             'subject',
         ],
         'ZBateson\MailMimeParser\Header\IdHeader' => [
-            'message-id',
-            'content-id',
-            'in-reply-to',
+            'messageid',
+            'contentid',
+            'inreplyto',
             'references'
         ],
         'ZBateson\MailMimeParser\Header\ReceivedHeader' => [
@@ -92,6 +92,18 @@ class HeaderFactory
     {
         $this->consumerService = $consumerService;
     }
+
+    /**
+     * Returns the string in lower-case, and with non-alphanumeric characters
+     * stripped out.
+     *
+     * @param string $header
+     * @return string
+     */
+    public function getNormalizedHeaderName($header)
+    {
+        return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+    }
     
     /**
      * Returns the name of an AbstractHeader class for the passed header name.
@@ -101,7 +113,7 @@ class HeaderFactory
      */
     private function getClassFor($name)
     {
-        $test = strtolower($name);
+        $test = $this->getNormalizedHeaderName($name);
         foreach ($this->types as $class => $matchers) {
             foreach ($matchers as $matcher) {
                 if ($test === $matcher) {

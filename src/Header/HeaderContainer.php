@@ -62,18 +62,6 @@ class HeaderContainer implements IteratorAggregate
     }
 
     /**
-     * Returns the string in lower-case, and with non-alphanumeric characters
-     * stripped out.
-     *
-     * @param string $header
-     * @return string
-     */
-    private function getNormalizedHeaderName($header)
-    {
-        return preg_replace('/[^a-z0-9]/', '', strtolower($header));
-    }
-
-    /**
      * Returns true if the passed header exists in this collection.
      *
      * @param string $name
@@ -82,8 +70,31 @@ class HeaderContainer implements IteratorAggregate
      */
     public function exists($name, $offset = 0)
     {
-        $s = $this->getNormalizedHeaderName($name);
+        $s = $this->headerFactory->getNormalizedHeaderName($name);
         return isset($this->headerMap[$s][$offset]);
+    }
+
+    /**
+     * Returns an array of header indexes with names that more closely match
+     * the passed $name if available: for instance if there are two headers in
+     * an email, "Content-Type" and "ContentType", and the query is for a header
+     * with the name "Content-Type", only headers that match exactly
+     * "Content-Type" would be returned.
+     *
+     * @param string $name
+     * @return int[]
+     */
+    private function getAllWithOriginalHeaderNameIfSet($name)
+    {
+        $s = $this->headerFactory->getNormalizedHeaderName($name);
+        if (isset($this->headerMap[$s])) {
+            $self = $this;
+            $filtered = array_filter($this->headerMap[$s], function ($h) use ($name, $self) {
+                return (strcasecmp($self->headers[$h][0], $name) === 0);
+            });
+            return (!empty($filtered)) ? $filtered : $this->headerMap[$s];
+        }
+        return null;
     }
 
     /**
@@ -99,9 +110,9 @@ class HeaderContainer implements IteratorAggregate
      */
     public function get($name, $offset = 0)
     {
-        $s = $this->getNormalizedHeaderName($name);
-        if (isset($this->headerMap[$s][$offset])) {
-            return $this->getByIndex($this->headerMap[$s][$offset]);
+        $a = $this->getAllWithOriginalHeaderNameIfSet($name);
+        if (!empty($a) && isset($a[$offset])) {
+            return $this->getByIndex($a[$offset]);
         }
         return null;
     }
@@ -114,14 +125,14 @@ class HeaderContainer implements IteratorAggregate
      */
     public function getAll($name)
     {
-        $s = $this->getNormalizedHeaderName($name);
-        $ret = [];
-        if (!empty($this->headerMap[$s])) {
-            foreach ($this->headerMap[$s] as $index) {
-                $ret[] = $this->getByIndex($index);
-            }
+        $a = $this->getAllWithOriginalHeaderNameIfSet($name);
+        if (!empty($a)) {
+            $self = $this;
+            return array_map(function ($index) use ($self) {
+                return $self->getByIndex($index);
+            }, $a);
         }
-        return $ret;
+        return [];
     }
 
     /**
@@ -156,7 +167,7 @@ class HeaderContainer implements IteratorAggregate
      */
     public function remove($name, $offset = 0)
     {
-        $s = $this->getNormalizedHeaderName($name);
+        $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (isset($this->headerMap[$s][$offset])) {
             $index = $this->headerMap[$s][$offset];
             array_splice($this->headerMap[$s], $offset, 1);
@@ -175,7 +186,7 @@ class HeaderContainer implements IteratorAggregate
      */
     public function removeAll($name)
     {
-        $s = $this->getNormalizedHeaderName($name);
+        $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (!empty($this->headerMap[$s])) {
             foreach ($this->headerMap[$s] as $i) {
                 unset($this->headers[$i]);
@@ -195,7 +206,7 @@ class HeaderContainer implements IteratorAggregate
      */
     public function add($name, $value)
     {
-        $s = $this->getNormalizedHeaderName($name);
+        $s = $this->headerFactory->getNormalizedHeaderName($name);
         $this->headers[$this->nextIndex] = [ $name, $value ];
         $this->headerObjects[$this->nextIndex] = null;
         if (!isset($this->headerMap[$s])) {
@@ -218,7 +229,7 @@ class HeaderContainer implements IteratorAggregate
      */
     public function set($name, $value, $offset = 0)
     {
-        $s = $this->getNormalizedHeaderName($name);
+        $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (!isset($this->headerMap[$s][$offset])) {
             $this->add($name, $value);
             return;

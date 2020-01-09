@@ -19,6 +19,7 @@ class HeaderContainerTest extends TestCase
     {
         $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
+            ->setMethodsExcept(['getNormalizedHeaderName'])
             ->getMock();
     }
 

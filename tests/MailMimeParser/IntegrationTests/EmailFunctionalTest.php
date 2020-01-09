@@ -1688,6 +1688,46 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
+    public function testParseEmailGitHub_102_01()
+    {
+        $this->runEmailTest('github-102-01', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com',
+            'text' => 'HasenundFrosche.txt',
+            'parts' => [
+                'text/plain'
+            ],
+        ]);
+    }
+
+    public function testParseEmailGitHub_102_02()
+    {
+        $this->runEmailTest('github-102-02', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Die Hasen und die Frösche (Microsoft Outlook 00)',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com',
+            'text' => 'HasenundFrosche.txt',
+            'parts' => [
+                'text/plain'
+            ],
+        ]);
+    }
+
     public function testRewriteEmailContentm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
