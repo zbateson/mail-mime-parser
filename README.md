@@ -20,6 +20,10 @@ To include it for use in your project, please install via composer:
 composer require zbateson/mail-mime-parser
 ```
 
+## Deprecation Notice (since 1.2.1)
+
+getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have all been deprecated due to #106. fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead. Note that this deprecation doesn’t apply to getBinaryContentResourceHandle or getResourceHandle.
+
 ## Requirements
 
 MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2 and 7.3 on travis.
