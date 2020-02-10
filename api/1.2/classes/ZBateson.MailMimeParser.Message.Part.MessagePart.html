@@ -37,7 +37,7 @@
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
-                <span class="label label-info">0</span></a></li>
+                <span class="label label-info">9</span></a></li>
 </ul>
 </li>
 </ul></div>
@@ -250,7 +250,7 @@ the part doesn't have a content stream.</h2>
 <pre>getBinaryContentResourceHandle() : resource | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>The method wraps a call to \MessagePart::getBinaryContentStream()
+<div class="long_description"><p>The method wraps a call to <a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getBinaryContentStream">\ZBateson\MailMimeParser\Message\Part\MessagePart::getBinaryContentStream()</a>
 and returns a resource handle for the returned Stream.</p></div>
 <h3>Returns</h3>
 <div class="subelement response">
@@ -265,7 +265,7 @@ if there's no content associated with the stream.</h2>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>This is basically the same as calling
-\MessagePart::getContentStream(), except no automatic charset
+<a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getContentStream">\ZBateson\MailMimeParser\Message\Part\MessagePart::getContentStream()</a>, except no automatic charset
 conversion is done.  Note that for non-text streams, this doesn't have an
 effect, as charset conversion is not performed in that case, and is
 useful only when:</p>
@@ -300,7 +300,7 @@ null if the part doesn't have a content stream.</h2>
 defaulting to UTF-8.</p></div>
 <table class="table table-bordered"><tr>
 <th>see</th>
-<td><a href="%5CZBateson%5CMailMimeParser%5CMessage%5CPart%5CMessagePart::getContentStream()"></a></td>
+<td><a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getContentStream">\ZBateson\MailMimeParser\Message\Part\MessagePart::getContentStream()</a></td>
 </tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
@@ -339,8 +339,15 @@ doesn't have a content stream.</h2>
 <pre>getContentResourceHandle(string $charset<code> = \ZBateson\MailMimeParser\MailMimeParser::DEFAULT_CHARSET</code>) : resource | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>The method wraps a call to \MessagePart::getContentStream() and
-returns a resource handle for the returned Stream.</p></div>
+<div class="long_description"><p>The method wraps a call to <a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getContentStream">\ZBateson\MailMimeParser\Message\Part\MessagePart::getContentStream()</a> and
+returns a resource handle for the returned Stream.</p>
+<p>Note: this method should <em>not</em> be used and has been deprecated. Instead,
+use Psr7 streams with getContentStream.  Multibyte chars will not be read
+correctly with fread.</p></div>
+<table class="table table-bordered"><tr>
+<th>deprecated</th>
+<td>since version 1.2.1</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$charset</h4>
@@ -360,8 +367,8 @@ doesn't have a content section.</h2>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>The library automatically handles decoding and charset conversion (to the
 target passed $charset) based on the part's transfer encoding as returned
-by \MessagePart::getContentTransferEncoding() and the part's
-charset as returned by \MessagePart::getCharset().  The returned
+by <a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getContentTransferEncoding">\ZBateson\MailMimeParser\Message\Part\MessagePart::getContentTransferEncoding()</a> and the part's
+charset as returned by <a href="../classes/ZBateson.MailMimeParser.Message.Part.MessagePart.html#method_getCharset">\ZBateson\MailMimeParser\Message\Part\MessagePart::getCharset()</a>.  The returned
 stream is ready to be read from directly.</p>
 <p>Note that the returned Stream is a shared object.  If called multiple
 time with the same $charset, and the value of the part's
@@ -664,8 +671,8 @@ content and children</h2>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2020-01-08T20:40:11-08:00.<br></footer></div>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.9.1</a> and<br>
+            generated on 2020-02-09T18:43:24-08:00.<br></footer></div>
 </div>
 </body>
 </html>
