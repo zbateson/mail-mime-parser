@@ -47,7 +47,7 @@ abstract class MessagePart
      * @var StreamInterface a Psr7 stream containing this part's content
      */
     protected $contentStream;
-    
+
     /**
      * @var string can be used to set an override for content's charset in cases
      *      where a user wants to set a default other than ISO-8859-1.
@@ -63,7 +63,7 @@ abstract class MessagePart
 
     /**
      * Constructor
-     * 
+     *
      * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param StreamInterface $stream
@@ -149,52 +149,52 @@ abstract class MessagePart
     /**
      * Returns true if this part's mime type is text/plain, text/html or has a
      * text/* and has a defined 'charset' attribute.
-     * 
+     *
      * @return bool
      */
     public abstract function isTextPart();
-    
+
     /**
      * Returns the mime type of the content.
-     * 
+     *
      * @return string
      */
     public abstract function getContentType();
-    
+
     /**
      * Returns the charset of the content, or null if not applicable/defined.
-     * 
+     *
      * @return string
      */
     public abstract function getCharset();
-    
+
     /**
      * Returns the content's disposition.
-     * 
+     *
      * @return string
      */
     public abstract function getContentDisposition();
-    
+
     /**
      * Returns the content-transfer-encoding used for this part.
-     * 
+     *
      * @return string
      */
     public abstract function getContentTransferEncoding();
-    
+
     /**
      * Returns a filename for the part if one is defined, or null otherwise.
-     * 
+     *
      * @return string
      */
     public function getFilename()
     {
         return null;
     }
-    
+
     /**
      * Returns true if the current part is a mime part.
-     * 
+     *
      * @return bool
      */
     public abstract function isMime();
@@ -205,11 +205,11 @@ abstract class MessagePart
      * @return string|null
      */
     public abstract function getContentId();
-    
+
     /**
      * Returns a resource handle containing this part, including any headers for
      * a MimePart, its content, and all its children.
-     * 
+     *
      * @return resource the resource handle
      */
     public function getResourceHandle()
@@ -236,15 +236,15 @@ abstract class MessagePart
      * Overrides the default character set used for reading content from content
      * streams in cases where a user knows the source charset is not what is
      * specified.
-     * 
+     *
      * If set, the returned value from MessagePart::getCharset is ignored.
-     * 
+     *
      * Note that setting an override on a Message and calling getTextStream,
      * getTextContent, getHtmlStream or getHtmlContent will not be applied to
      * those sub-parts, unless the text/html part is the Message itself.
      * Instead, Message:getTextPart() should be called, and setCharsetOverride
      * called on the returned MessagePart.
-     * 
+     *
      * @param string $charsetOverride
      * @param boolean $onlyIfNoCharset if true, $charsetOverride is used only if
      *        getCharset returns null.
@@ -263,7 +263,12 @@ abstract class MessagePart
      * The method wraps a call to {@see MessagePart::getContentStream()} and
      * returns a resource handle for the returned Stream.
      *
+     * Note: this method should *not* be used and has been deprecated. Instead,
+     * use Psr7 streams with getContentStream.  Multibyte chars will not be read
+     * correctly with fread.
+     *
      * @param string $charset
+     * @deprecated since version 1.2.1
      * @return resource|null
      */
     public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
@@ -407,7 +412,7 @@ abstract class MessagePart
     /**
      * Shortcut to reading stream content and assigning it to a string.  Returns
      * null if the part doesn't have a content stream.
-     * 
+     *
      * The returned string is encoded to the passed $charset character encoding,
      * defaulting to UTF-8.
      *

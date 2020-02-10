@@ -203,8 +203,13 @@ class Message extends MimePart
      * Returns a resource handle for the 'inline' text/plain content at the
      * passed $index, or null if unavailable.
      *
+     * Note: this method should *not* be used and has been deprecated. Instead,
+     * use Psr7 streams with getTextStream.  Multibyte chars will not be read
+     * correctly with getTextResourceHandle/fread.
+     *
      * @param int $index
      * @param string $charset
+     * @deprecated since version 1.2.1
      * @return resource
      */
     public function getTextResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
@@ -256,8 +261,13 @@ class Message extends MimePart
      * Returns a resource handle for the 'inline' text/html content at the
      * passed $index, or null if unavailable.
      *
+     * Note: this method should *not* be used and has been deprecated. Instead,
+     * use Psr7 streams with getHtmlStream.  Multibyte chars will not be read
+     * correctly with getHtmlResourceHandle/fread.
+     *
      * @param int $index
      * @param string $charset
+     * @deprecated since version 1.2.1
      * @return resource
      */
     public function getHtmlResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
