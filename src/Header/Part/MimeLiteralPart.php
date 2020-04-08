@@ -186,7 +186,7 @@ class MimeLiteralPart extends LiteralPart
      *     0 => [ 'lang' => null, 'value' => 'Hello and ' ],
      *     1 => [ 'lang' => 'fr-be', 'value' => 'bonjour ' ],
      *     3 => [ 'lang' => 'it', 'value' => 'mi amici' ],
-     *     4 => [ 'lang' => null, 'value' => ' Weolcome!' ]
+     *     4 => [ 'lang' => null, 'value' => ' Welcome!' ]
      * ]
      * ```
      * 
