@@ -190,7 +190,10 @@ class Container
     public function getHeaderFactory()
     {
         if ($this->headerFactory === null) {
-            $this->headerFactory = new HeaderFactory($this->getConsumerService());
+            $this->headerFactory = new HeaderFactory(
+                $this->getConsumerService(),
+                $this->getMimeLiteralPartFactory()
+            );
         }
         return $this->headerFactory;
     }

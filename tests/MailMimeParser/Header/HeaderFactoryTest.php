@@ -32,7 +32,7 @@ class HeaderFactoryTest extends TestCase
 			->setConstructorArgs([$pf, $mlpf])
 			->setMethods(['__toString'])
 			->getMock();
-        $this->headerFactory = new HeaderFactory($cs, $pf);
+        $this->headerFactory = new HeaderFactory($cs, $mlpf);
     }
 
     public function testAddressHeaderInstance()

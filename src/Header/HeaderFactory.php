@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Constructs various AbstractHeader types depending on the type of header
@@ -32,6 +33,12 @@ class HeaderFactory
      * AbstractConsumer singletons.
      */
     protected $consumerService;
+
+    /**
+     * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory for
+     * mime decoding.
+     */
+    protected $mimeLiteralPartFactory;
     
     /**
      * @var string[][] maps AbstractHeader types to headers. 
@@ -87,10 +94,12 @@ class HeaderFactory
      * Instantiates member variables with the passed objects.
      * 
      * @param ConsumerService $consumerService
+     * @param MimeLiteralPartFactory $mimeLiteralPartFactory
      */
-    public function __construct(ConsumerService $consumerService)
+    public function __construct(ConsumerService $consumerService, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {
         $this->consumerService = $consumerService;
+        $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
     }
 
     /**
@@ -135,6 +144,14 @@ class HeaderFactory
     public function newInstance($name, $value)
     {
         $class = $this->getClassFor($name);
+        if (is_a($class, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {
+            return new $class(
+                $this->mimeLiteralPartFactory,
+                $this->consumerService,
+                $name,
+                $value
+            );
+        }
         return new $class($this->consumerService, $name, $value);
     }
 
