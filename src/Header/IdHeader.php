@@ -17,7 +17,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * 
  * @author Zaahid Bateson
  */
-class IdHeader extends GenericHeader
+class IdHeader extends MimeEncodedHeader
 {
     /**
      * Returns an IdBaseConsumer.
