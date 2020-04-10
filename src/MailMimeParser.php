@@ -23,7 +23,9 @@ use GuzzleHttp\Psr7;
 class MailMimeParser
 {
     /**
-     * @var string defines the default charset used by MessagePart.
+     * @var string the default charset used to encode strings (or string content
+     *      like streams) returned by MailMimeParser (for e.g. the string
+     *      returned by calling $message->getTextContent()).
      */
     const DEFAULT_CHARSET = 'UTF-8';
 
