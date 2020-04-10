@@ -50,7 +50,8 @@ abstract class MessagePart
 
     /**
      * @var string can be used to set an override for content's charset in cases
-     *      where a user wants to set a default other than ISO-8859-1.
+     *      where a user knows the charset on the content is not what it claims
+     *      to be.
      */
     protected $charsetOverride;
 
