@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">8</span></a></li>
+                <span class="label label-info">14</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -92,6 +92,8 @@ In-Reply-To.</span><pre>getIds()</pre></a></li>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="property protected "><a href="#property_mimeLiteralPartFactory" title="$mimeLiteralPartFactory() :: "><span class="description">for
+mime decoding.</span><pre>$mimeLiteralPartFactory</pre></a></li>
 <li class="property protected "><a href="#property_name" title="$name() :: "><span class="description">the name of the header</span><pre>$name</pre></a></li>
 <li class="property protected "><a href="#property_parts" title="$parts() :: "><span class="description">the header's parts
 (as returned from the consumer)</span><pre>$parts</pre></a></li>
@@ -133,7 +135,7 @@ only) ID call <code>getValue()</code>.</p></div>
 </tr>
 <tr>
 <th>inherited_from</th>
-<td>\ZBateson\MailMimeParser\Header\GenericHeader</td>
+<td>\ZBateson\MailMimeParser\Header\MimeEncodedHeader</td>
 </tr>
 </table>
 <h3>
@@ -242,10 +244,6 @@ In-Reply-To.</h2>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>inherited_from</th>
-<td>\ZBateson\MailMimeParser\Header\GenericHeader::getConsumer()</td>
-</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$consumerService</h4>
@@ -285,6 +283,17 @@ In-Reply-To.</h2>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_mimeLiteralPartFactory"> </a><div class="element clickable property protected property_mimeLiteralPartFactory" data-toggle="collapse" data-target=".property_mimeLiteralPartFactory .collapse" title="protected">
+<h2>for
+mime decoding.</h2>
+<pre>$mimeLiteralPartFactory : \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_name"> </a><div class="element clickable property protected property_name" data-toggle="collapse" data-target=".property_name .collapse" title="protected">
 <h2>the name of the header</h2>
 <pre>$name : string</pre>
@@ -323,7 +332,7 @@ In-Reply-To.</h2>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.9.1</a> and<br>
-            generated on 2020-02-09T18:43:24-08:00.<br></footer></div>
+            generated on 2020-04-14T10:45:18-07:00.<br></footer></div>
 </div>
 </body>
 </html>

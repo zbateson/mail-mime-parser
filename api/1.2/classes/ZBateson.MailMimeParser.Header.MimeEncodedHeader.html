@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>MailMimeParser 1.2 » \ZBateson\MailMimeParser\Header\ParameterHeader</title>
+<title>MailMimeParser 1.2 » \ZBateson\MailMimeParser\Header\MimeEncodedHeader</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -63,6 +63,7 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
+<li class="method public "><a href="#method___construct" title="__construct() :: Includes"><span class="description">Includes</span><pre>__construct()</pre></a></li>
 <li class="method public inherited"><a href="#method___construct" title="__construct() :: Assigns the header's name and raw value, then calls getConsumer and
 setParseHeaderValue to extract a parsed value."><span class="description">Assigns the header's name and raw value, then calls getConsumer and
 setParseHeaderValue to extract a parsed value.</span><pre>__construct()</pre></a></li>
@@ -73,19 +74,14 @@ just in the form of:</span><pre>__toString()</pre></a></li>
 <li class="method public inherited"><a href="#method_getParts" title="getParts() :: Returns an array of HeaderPart objects associated with this header."><span class="description">Returns an array of HeaderPart objects associated with this header.</span><pre>getParts()</pre></a></li>
 <li class="method public inherited"><a href="#method_getRawValue" title="getRawValue() :: Returns the raw value of the header prior to any processing."><span class="description">Returns the raw value of the header prior to any processing.</span><pre>getRawValue()</pre></a></li>
 <li class="method public inherited"><a href="#method_getValue" title="getValue() :: Returns the parsed value of the header -- calls getValue on $this-&gt;part"><span class="description">Returns the parsed value of the header -- calls getValue on $this-&gt;part</span><pre>getValue()</pre></a></li>
-<li class="method public "><a href="#method_getValueFor" title="getValueFor() :: Returns the value of the parameter with the given name, or $defaultValue
-if not set."><span class="description">Returns the value of the parameter with the given name, or $defaultValue
-if not set.</span><pre>getValueFor()</pre></a></li>
-<li class="method public "><a href="#method_hasParameter" title="hasParameter() :: Returns true if a parameter exists with the passed name."><span class="description">Returns true if a parameter exists with the passed name.</span><pre>hasParameter()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="method protected "><a href="#method_getConsumer" title="getConsumer() :: Returns a ParameterConsumer."><span class="description">Returns a ParameterConsumer.</span><pre>getConsumer()</pre></a></li>
 <li class="method protected inherited"><a href="#method_getConsumer" title="getConsumer() :: Returns the header's Consumer"><span class="description">Returns the header's Consumer</span><pre>getConsumer()</pre></a></li>
-<li class="method protected "><a href="#method_setParseHeaderValue" title="setParseHeaderValue() :: Overridden to assign ParameterParts to a map of lower-case parameter
-names to ParameterParts."><span class="description">Overridden to assign ParameterParts to a map of lower-case parameter
-names to ParameterParts.</span><pre>setParseHeaderValue()</pre></a></li>
+<li class="method protected "><a href="#method_setParseHeaderValue" title="setParseHeaderValue() :: Mime-decodes the raw value if the whole raw value only consists of mime-
+encoded parts and whitespace prior to invoking the passed consumer."><span class="description">Mime-decodes the raw value if the whole raw value only consists of mime-
+encoded parts and whitespace prior to invoking the passed consumer.</span><pre>setParseHeaderValue()</pre></a></li>
 <li class="method protected inherited"><a href="#method_setParseHeaderValue" title="setParseHeaderValue() :: Calls the consumer and assigns the parsed parts to member variables."><span class="description">Calls the consumer and assigns the parsed parts to member variables.</span><pre>setParseHeaderValue()</pre></a></li>
 </ul>
 </li>
@@ -95,9 +91,9 @@ names to ParameterParts.</span><pre>setParseHeaderValue()</pre></a></li>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
+<li class="property protected "><a href="#property_mimeLiteralPartFactory" title="$mimeLiteralPartFactory() :: "><span class="description">for
+mime decoding.</span><pre>$mimeLiteralPartFactory</pre></a></li>
 <li class="property protected "><a href="#property_name" title="$name() :: "><span class="description">the name of the header</span><pre>$name</pre></a></li>
-<li class="property protected "><a href="#property_parameters" title="$parameters() :: "><span class="description">key map of
-lower-case parameter names and associated ParameterParts.</span><pre>$parameters</pre></a></li>
 <li class="property protected "><a href="#property_parts" title="$parts() :: "><span class="description">the header's parts
 (as returned from the consumer)</span><pre>$parts</pre></a></li>
 <li class="property protected "><a href="#property_rawValue" title="$rawValue() :: "><span class="description">the raw value</span><pre>$rawValue</pre></a></li>
@@ -106,7 +102,7 @@ lower-case parameter names and associated ParameterParts.</span><pre>$parameters
 </ul>
 </div>
 <div class="span8">
-<a xmlns:php="http://php.net/xsl" id="\ZBateson\MailMimeParser\Header\ParameterHeader"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
+<a xmlns:php="http://php.net/xsl" id="\ZBateson\MailMimeParser\Header\MimeEncodedHeader"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
 <li>
 <a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -118,17 +114,15 @@ lower-case parameter names and associated ParameterParts.</span><pre>$parameters
 <span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.html">Header</a>
 </li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/ZBateson.MailMimeParser.Header.ParameterHeader.html">ParameterHeader</a>
+<span class="divider">\</span><a href="../classes/ZBateson.MailMimeParser.Header.MimeEncodedHeader.html">MimeEncodedHeader</a>
 </li>
 </ul>
 <div xmlns:php="http://php.net/xsl" class="element class">
-<p class="short_description">Represents a header containing a primary value part and subsequent name/value
-parts using a ParameterConsumer.</p>
+<p class="short_description">Allows a header to be mime-encoded and be decoded with a consumer after
+decoding.</p>
 <div class="details">
-<div class="long_description"><p>The base class sets up the header's consumer, sets the name of the header and
-calls the consumer to parse the header's value.</p>
-<p>AbstractHeader::getConsumer is an abstract method that must be overridden to
-return an appropriate Consumer\AbstractConsumer type.</p></div>
+<div class="long_description"><p>The entire header's value must only consist of mime-encoded parts for this to
+apply.</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -145,6 +139,32 @@ return an appropriate Consumer\AbstractConsumer type.</p></div>
 </table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct " data-toggle="collapse" data-target=".method___construct .collapse" title="public">
+<h2>Includes</h2>
+<pre>__construct(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory $mimeLiteralPartFactory, \ZBateson\MailMimeParser\Header\Consumer\ConsumerService $consumerService, string $name, string $value) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ZBateson\MailMimeParser\Header\AbstractHeader::__construct()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$mimeLiteralPartFactory</h4></div>
+<div class="subelement argument">
+<h4>$consumerService</h4>
+<code>\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</code>
+</div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
 <a id="method___construct"></a><div class="element clickable method public method___construct inherited" data-toggle="collapse" data-target=".method___construct .collapse" title="public">
 <h2>Assigns the header's name and raw value, then calls getConsumer and
 setParseHeaderValue to extract a parsed value.</h2>
@@ -220,60 +240,6 @@ No additional processing is performed (for instance to wrap long lines.)</div>
 <div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
-<a id="method_getValueFor"></a><div class="element clickable method public method_getValueFor " data-toggle="collapse" data-target=".method_getValueFor .collapse" title="public">
-<h2>Returns the value of the parameter with the given name, or $defaultValue
-if not set.</h2>
-<pre>getValueFor(string $name, string $defaultValue<code> = null</code>) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$name</h4>
-<code>string</code>
-</div>
-<div class="subelement argument">
-<h4>$defaultValue</h4>
-<code>string</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
-</div></div>
-</div>
-<a id="method_hasParameter"></a><div class="element clickable method public method_hasParameter " data-toggle="collapse" data-target=".method_hasParameter .collapse" title="public">
-<h2>Returns true if a parameter exists with the passed name.</h2>
-<pre>hasParameter(string $name) : boolean</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$name</h4>
-<code>string</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>boolean</code></div>
-</div></div>
-</div>
-<a id="method_getConsumer"></a><div class="element clickable method protected method_getConsumer " data-toggle="collapse" data-target=".method_getConsumer .collapse" title="protected">
-<h2>Returns a ParameterConsumer.</h2>
-<pre>getConsumer(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService $consumerService) : \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>inherited_from</th>
-<td>\ZBateson\MailMimeParser\Header\AbstractHeader::getConsumer()</td>
-</tr></table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$consumerService</h4>
-<code>\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</code></div>
-</div></div>
-</div>
 <a id="method_getConsumer"></a><div class="element clickable method protected method_getConsumer inherited" data-toggle="collapse" data-target=".method_getConsumer .collapse" title="protected">
 <h2>Returns the header's Consumer</h2>
 <pre>getConsumer(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService $consumerService) : \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer</pre>
@@ -290,8 +256,8 @@ if not set.</h2>
 </div></div>
 </div>
 <a id="method_setParseHeaderValue"></a><div class="element clickable method protected method_setParseHeaderValue " data-toggle="collapse" data-target=".method_setParseHeaderValue .collapse" title="protected">
-<h2>Overridden to assign ParameterParts to a map of lower-case parameter
-names to ParameterParts.</h2>
+<h2>Mime-decodes the raw value if the whole raw value only consists of mime-
+encoded parts and whitespace prior to invoking the passed consumer.</h2>
 <pre>setParseHeaderValue(\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer $consumer) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -322,9 +288,10 @@ names to ParameterParts.</h2>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_name"> </a><div class="element clickable property protected property_name" data-toggle="collapse" data-target=".property_name .collapse" title="protected">
-<h2>the name of the header</h2>
-<pre>$name : string</pre>
+<a id="property_mimeLiteralPartFactory"> </a><div class="element clickable property protected property_mimeLiteralPartFactory" data-toggle="collapse" data-target=".property_mimeLiteralPartFactory .collapse" title="protected">
+<h2>for
+mime decoding.</h2>
+<pre>$mimeLiteralPartFactory : \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"></div>
@@ -332,13 +299,12 @@ names to ParameterParts.</h2>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="property_parameters"> </a><div class="element clickable property protected property_parameters" data-toggle="collapse" data-target=".property_parameters .collapse" title="protected">
-<h2>key map of
-lower-case parameter names and associated ParameterParts.</h2>
-<pre>$parameters : array&lt;mixed,\ZBateson\MailMimeParser\Header\Part\ParameterPart&gt;</pre>
+<a id="property_name"> </a><div class="element clickable property protected property_name" data-toggle="collapse" data-target=".property_name .collapse" title="protected">
+<h2>the name of the header</h2>
+<pre>$name : string</pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
-<div class="subelement argument"><code>array()</code></div>
+<div class="subelement argument"></div>
 </div></div>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
