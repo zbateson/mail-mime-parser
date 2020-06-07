@@ -1728,6 +1728,31 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
+    public function testParseEmailGitHub_115()
+    {
+        $this->runEmailTest('github-115', [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Heinz Müller',
+                'email' => 'mueller@example.com'
+            ],
+            'Subject' => 'Test message from Microsoft Outlook 00',
+            'text' => 'hareandtortoise.txt',
+            'attachments' => 3,
+            'parts' => [
+                'multipart/*' => [
+                    'text/plain',
+                    'image/png',
+                    'image/png',
+                    'image/png'
+                ]
+            ],
+        ]);
+    }
+
     public function testRewriteEmailContentm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');

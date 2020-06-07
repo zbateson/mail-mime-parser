@@ -30,7 +30,7 @@ class MimePart extends ParentHeaderPart
     {
         // casting to bool, preg_match returns 1 for true
         return (bool) (preg_match(
-            '~multipart/\w+~i',
+            '~multipart/.*~i',
             $this->getContentType()
         ));
     }
