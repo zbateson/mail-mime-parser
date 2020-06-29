@@ -198,6 +198,28 @@ echo $att->getContentType();
 echo $att->getContent();
 ```
 
+Example writing files to disk:
+```php
+$atts = $message->getAllAttachmentParts();
+foreach ($atts as $ind => $part) {
+    $filename = $part->getHeaderParameter(
+        'Content-Type',
+        'name',
+        $part->getHeaderParameter(
+             'Content-Disposition',
+             'filename',
+             '__unknown_file_name_' . $ind
+        )
+    );
+    
+    $out = fopen('/path/to/dir/' . $filename, 'w');
+    $str = $part->getBinaryContentResourceHandle();
+    stream_copy_to_stream($str, $out);
+    fclose($str);
+    fclose($out);
+}
+```
+
 ### Reading text and html parts
 
 As a convenient way of reading the text and HTML parts of a `Message`, use [Message::getTextStream()](api/1.2/classes/ZBateson.MailMimeParser.Message.html#method_getTextStream) and [Message::getHtmlStream()](api/1.2/classes/ZBateson.MailMimeParser.Message.html#method_getHtmlStream) or the shortcuts returning strings if you want strings directly [Message::getTextContent()](api/1.2/classes/ZBateson.MailMimeParser.Message.html#method_getTextContent) and [Message::getHtmlContent()](api/1.2/classes/ZBateson.MailMimeParser.Message.html#method_getHtmlContent)
