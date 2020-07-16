@@ -21629,7 +21629,7 @@ representing it.</description>
       </method>
     </class>
   </file>
-  <file path="Message/Part/MimePart.php" generated-path="Message.Part.MimePart.html" hash="05b3d1907b6722a2859f77fde4e1b659" package="MailMimeParser">
+  <file path="Message/Part/MimePart.php" generated-path="Message.Part.MimePart.html" hash="02b3b9f1ee3932c58ef82bd3b4865fed" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -23030,7 +23030,7 @@ rewound.</long-description>
       </method>
     </class>
   </file>
-  <file path="Message/Part/PartBuilder.php" generated-path="Message.Part.PartBuilder.html" hash="14838fbd57c57a1e834e527ee2675576" package="MailMimeParser">
+  <file path="Message/Part/PartBuilder.php" generated-path="Message.Part.PartBuilder.html" hash="6932db0c71ffdcf9ef7b9ee6fe1a58c0" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
