@@ -56,7 +56,7 @@ echo $message
     ->getName();                                // Person Name
 echo $message
     ->getHeader('cc')                           // also AddressHeader
-    ->getAddress()[0]                           // AddressPart
+    ->getAddresses()[0]                         // AddressPart
     ->getEmail();                               // user@example.com
 
 echo $message->getTextContent();                // or getHtmlContent()
