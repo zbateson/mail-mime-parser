@@ -63,11 +63,11 @@ class DatePart extends LiteralPart
     private function parseDateToken($dateToken)
     {
         try {
-    $date = new DateTime($dateToken);
-} catch (Exception $e) {
-    return false;
-}
-return $date;
+            $date = new DateTime($dateToken);
+        } catch (Exception $e) {
+            return false;
+        }
+        return $date;
     
         // First check as RFC822 which allows only 2-digit years
         $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
