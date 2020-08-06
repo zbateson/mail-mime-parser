@@ -44,7 +44,7 @@ class DatePart extends LiteralPart
             $date = $this->parseDateToken($dateToken . 'C');
         }
         // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)
-        if ($date === false && preg_match('# [0-9]{4}$#', $dateToken)) {
+        if (preg_match('# [0-9]{4}$#', $dateToken)) {
             $date = $this->parseDateToken(preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken));
         }
 
@@ -62,6 +62,13 @@ class DatePart extends LiteralPart
      */
     private function parseDateToken($dateToken)
     {
+        try {
+    $date = new DateTime($dateToken);
+} catch (Exception $e) {
+    return false;
+}
+return $date;
+    
         // First check as RFC822 which allows only 2-digit years
         $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
         if ($date === false) {
