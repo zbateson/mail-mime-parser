@@ -75,9 +75,19 @@ class SubjectHeaderTest extends TestCase
         $header = new SubjectHeader(
             $this->consumerService,
             'Actor',
-            '"Dwayne \"The Rock\"" =?US-ASCII?Q?Jackson?= (main actor)'
+            '"Dwayne \"The Rock\"" =?US-ASCII?Q?Johnson?= (main actor)'
         );
-        $this->assertEquals('"Dwayne \"The Rock\"" Jackson (main actor)', $header->getValue());
+        $this->assertEquals('"Dwayne \"The Rock\"" Johnson (main actor)', $header->getValue());
+    }
+
+    public function testQuotedMimeEncodedPart()
+    {
+        $header = new SubjectHeader(
+            $this->consumerService,
+            'Actor',
+            '"=?US-ASCII?Q?Johnson?="'
+        );
+        $this->assertEquals('"Johnson"', $header->getValue());
     }
 
     public function testCommentBetweenParts()
