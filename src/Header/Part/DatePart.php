@@ -30,27 +30,38 @@ class DatePart extends LiteralPart
      * @param MbWrapper $charsetConverter
      * @param string $token
      */
-    public function __construct(MbWrapper $charsetConverter, $token) {
-
-        // parent::__construct converts character encoding -- may cause problems
-        // sometimes.
+    public function __construct(MbWrapper $charsetConverter, $token)
+    {
         $dateToken = trim($token);
+        // parent::__construct converts character encoding -- may cause problems sometimes.
         parent::__construct($charsetConverter, $dateToken);
 
-        $date = $this->parseDateToken($dateToken);
+        // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)
+        // Won't result in an Exception, but in a valid DateTime in year `0000` - therefore we need to check this first:
+        if (preg_match('# [0-9]{4}$#', $dateToken)) {
+            try {
+                $this->date = new DateTime(preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken));
+                // $this->addParsingError('Invalid Date: "+/-" missing before timezone definition');
+            } catch (Exception $e) {
+            }
+        }
+
+        if (!isset($this->date))
+        {
+            try {
+                $this->date = new DateTime($dateToken);
+            } catch (Exception $e) {
+            }
+        }
 
         // @see https://bugs.php.net/bug.php?id=42486
-        if ($date === false && preg_match('#UT$#', $dateToken)) {
-            $date = $this->parseDateToken($dateToken . 'C');
-        }
-        // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)
-        if (preg_match('# [0-9]{4}$#', $dateToken)) {
-            $date = $this->parseDateToken(preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken));
-        }
-
-        try {
-            $this->date = ($date) ?: new DateTime($dateToken);
-        } catch (Exception $e) {
+        // TODO: Test is missing:
+        if (!isset($this->date) && preg_match('#UT$#', $dateToken)) {
+            try {
+                $this->date = new DateTime($dateToken . 'C');
+                // $this->addParsingError('Invalid Date: "C" missing from timezone "UT"'); // https://github.com/zbateson/mail-mime-parser/issues/124
+            } catch (Exception $e) {
+            }
         }
     }
 
@@ -62,13 +73,7 @@ class DatePart extends LiteralPart
      */
     private function parseDateToken($dateToken)
     {
-        try {
-            $date = new DateTime($dateToken);
-        } catch (Exception $e) {
-            return false;
-        }
-        return $date;
-    
+
         // First check as RFC822 which allows only 2-digit years
         $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
         if ($date === false) {
