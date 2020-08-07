@@ -41,13 +41,11 @@ class DatePart extends LiteralPart
         if (preg_match('# [0-9]{4}$#', $dateToken)) {
             try {
                 $this->date = new DateTime(preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken));
-                // $this->addParsingError('Invalid Date: "+/-" missing before timezone definition');
             } catch (Exception $e) {
             }
         }
 
-        if (!isset($this->date))
-        {
+        if (!isset($this->date)) {
             try {
                 $this->date = new DateTime($dateToken);
             } catch (Exception $e) {
@@ -55,11 +53,9 @@ class DatePart extends LiteralPart
         }
 
         // @see https://bugs.php.net/bug.php?id=42486
-        // TODO: Test is missing:
         if (!isset($this->date) && preg_match('#UT$#', $dateToken)) {
             try {
                 $this->date = new DateTime($dateToken . 'C');
-                // $this->addParsingError('Invalid Date: "C" missing from timezone "UT"'); // https://github.com/zbateson/mail-mime-parser/issues/124
             } catch (Exception $e) {
             }
         }
