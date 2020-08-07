@@ -66,24 +66,6 @@ class DatePart extends LiteralPart
     }
 
     /**
-     * Parse date string token
-     * @param string $dateToken Date token as string
-     *
-     * @return \DateTime|false Returns \DateTime or false on failure.
-     */
-    private function parseDateToken($dateToken)
-    {
-
-        // First check as RFC822 which allows only 2-digit years
-        $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
-        if ($date === false) {
-            $date = DateTime::createFromFormat(DateTime::RFC2822, $dateToken);
-        }
-
-        return $date;
-    }
-
-    /**
      * Returns a DateTime object or false if it can't be parsed.
      *
      * @return DateTime
