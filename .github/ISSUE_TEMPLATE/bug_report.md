@@ -8,7 +8,9 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.  Include what the expected result is, how mail-mime-parser is producing a different result, and why you think it's correct behaviour:
+A clear and concise description of what the bug is.
+
+For issues parsing emails or headers, include what the expected result is, what the actual result is, and why you think the behaviour should change:
 
 1. what do the relevant RFCs say
 2. if the problem is not described/covered by the RFC, how is a popular mail client handling it (e.g. Thunderbird, Outlook, etc...)
