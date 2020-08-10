@@ -39,17 +39,12 @@ class DatePart extends LiteralPart
         // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)
         // Won't result in an Exception, but in a valid DateTime in year `0000` - therefore we need to check this first:
         if (preg_match('# [0-9]{4}$#', $dateToken)) {
-            try {
-                $this->date = new DateTime(preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken));
-            } catch (Exception $e) {
-            }
+            $dateToken = preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken);
         }
 
-        if (!isset($this->date)) {
-            try {
-                $this->date = new DateTime($dateToken);
-            } catch (Exception $e) {
-            }
+        try {
+            $this->date = new DateTime($dateToken);
+        } catch (Exception $e) {
         }
 
         // @see https://bugs.php.net/bug.php?id=42486
