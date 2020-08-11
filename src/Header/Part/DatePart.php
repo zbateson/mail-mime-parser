@@ -30,45 +30,25 @@ class DatePart extends LiteralPart
      * @param MbWrapper $charsetConverter
      * @param string $token
      */
-    public function __construct(MbWrapper $charsetConverter, $token) {
-
-        // parent::__construct converts character encoding -- may cause problems
-        // sometimes.
+    public function __construct(MbWrapper $charsetConverter, $token)
+    {
         $dateToken = trim($token);
+        // parent::__construct converts character encoding -- may cause problems sometimes.
         parent::__construct($charsetConverter, $dateToken);
 
-        $date = $this->parseDateToken($dateToken);
-
-        // @see https://bugs.php.net/bug.php?id=42486
-        if ($date === false && preg_match('#UT$#', $dateToken)) {
-            $date = $this->parseDateToken($dateToken . 'C');
-        }
         // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)
-        if ($date === false && preg_match('# [0-9]{4}$#', $dateToken)) {
-            $date = $this->parseDateToken(preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken));
+        // Won't result in an Exception, but in a valid DateTime in year `0000` - therefore we need to check this first:
+        if (preg_match('# [0-9]{4}$#', $dateToken)) {
+            $dateToken = preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken);
+        // @see https://bugs.php.net/bug.php?id=42486
+        } elseif (preg_match('#UT$#', $dateToken)) {
+            $dateToken = $dateToken . 'C';
         }
 
         try {
-            $this->date = ($date) ?: new DateTime($dateToken);
+            $this->date = new DateTime($dateToken);
         } catch (Exception $e) {
         }
-    }
-
-    /**
-     * Parse date string token
-     * @param string $dateToken Date token as string
-     *
-     * @return \DateTime|false Returns \DateTime or false on failure.
-     */
-    private function parseDateToken($dateToken)
-    {
-        // First check as RFC822 which allows only 2-digit years
-        $date = DateTime::createFromFormat(DateTime::RFC822, $dateToken);
-        if ($date === false) {
-            $date = DateTime::createFromFormat(DateTime::RFC2822, $dateToken);
-        }
-
-        return $date;
     }
 
     /**
