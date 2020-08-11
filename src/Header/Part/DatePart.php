@@ -40,9 +40,8 @@ class DatePart extends LiteralPart
         // Won't result in an Exception, but in a valid DateTime in year `0000` - therefore we need to check this first:
         if (preg_match('# [0-9]{4}$#', $dateToken)) {
             $dateToken = preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken);
-        }
         // @see https://bugs.php.net/bug.php?id=42486
-        elseif (preg_match('#UT$#', $dateToken)) {
+        } elseif (preg_match('#UT$#', $dateToken)) {
             $dateToken = $dateToken . 'C';
         }
 
