@@ -41,18 +41,14 @@ class DatePart extends LiteralPart
         if (preg_match('# [0-9]{4}$#', $dateToken)) {
             $dateToken = preg_replace('# ([0-9]{4})$#', ' +$1', $dateToken);
         }
+        // @see https://bugs.php.net/bug.php?id=42486
+        elseif (preg_match('#UT$#', $dateToken)) {
+            $dateToken = $dateToken . 'C';
+        }
 
         try {
             $this->date = new DateTime($dateToken);
         } catch (Exception $e) {
-        }
-
-        // @see https://bugs.php.net/bug.php?id=42486
-        if (!isset($this->date) && preg_match('#UT$#', $dateToken)) {
-            try {
-                $this->date = new DateTime($dateToken . 'C');
-            } catch (Exception $e) {
-            }
         }
     }
 
