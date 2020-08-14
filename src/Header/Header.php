@@ -21,4 +21,5 @@ abstract class Header
     const IN_REPLY_TO = 'in-reply-to';
     const REFERENCES = 'references';
     const AUTO_SUBMITTED = 'auto-submitted'; // https://tools.ietf.org/html/rfc5322#section-3.6
+    const MIME_VERSION = 'mime-version'; // https://tools.ietf.org/html/rfc2045#section-4
 }
