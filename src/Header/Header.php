@@ -12,7 +12,7 @@ abstract class Header
     const TO = 'to';
     const SUBJECT = 'subject';
     const MESSAGE_ID = 'message-id';
-    const CONTENT_TYPE = '';
+    const CONTENT_TYPE = 'content-type';
     const CC = 'cc';
     const BCC = 'bcc';
     const DATE = 'date';
