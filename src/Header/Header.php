@@ -16,4 +16,8 @@ abstract class Header
     const CC = 'cc';
     const BCC = 'bcc';
     const DATE = 'date';
+    const SENDER = 'sender';
+    const REPLY_TO = 'reply-to';
+    const IN_REPLY_TO = 'in-reply-to';
+    const REFERENCES = 'references';
 }
