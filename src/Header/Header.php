@@ -20,4 +20,5 @@ abstract class Header
     const REPLY_TO = 'reply-to';
     const IN_REPLY_TO = 'in-reply-to';
     const REFERENCES = 'references';
+    const AUTO_SUBMITTED = 'auto-submitted'; // https://tools.ietf.org/html/rfc5322#section-3.6
 }
