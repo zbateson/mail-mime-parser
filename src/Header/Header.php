@@ -9,4 +9,11 @@ namespace ZBateson\MailMimeParser\Header;
 abstract class Header
 {
     const FROM = 'from';
+    const TO = 'to';
+    const SUBJECT = 'subject';
+    const MESSAGE_ID = 'message-id';
+    const CONTENT_TYPE = '';
+    const CC = 'cc';
+    const BCC = 'bcc';
+    const DATE = 'date';
 }
