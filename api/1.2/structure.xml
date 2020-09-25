@@ -4012,7 +4012,7 @@ No additional processing is performed (for instance to wrap long lines.)</long-d
       <error line="38" code="PPC:ERR-50015">Argument $value is missing from the Docblock of __construct</error>
     </parse_markers>
   </file>
-  <file path="Header/HeaderFactory.php" generated-path="Header.HeaderFactory.html" hash="918b588934dd2559a7f344502710ece4" package="MailMimeParser">
+  <file path="Header/HeaderFactory.php" generated-path="Header.HeaderFactory.html" hash="bb3e50f0d591b049218647e0049da4b2" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -4068,7 +4068,7 @@ ReceivedHeader: Received</long-description>
       <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="46" package="MailMimeParser">
         <name>$types</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::$types</full_name>
-        <default>array('ZBateson\MailMimeParser\Header\AddressHeader' =&gt; array('from', 'to', 'cc', 'bcc', 'sender', 'replyto', 'resentfrom', 'resentto', 'resentcc', 'resentbcc', 'resentreplyto', 'deliveredto'), 'ZBateson\MailMimeParser\Header\DateHeader' =&gt; array('date', 'resentdate', 'deliverydate', 'expires', 'expirydate', 'replyby'), 'ZBateson\MailMimeParser\Header\ParameterHeader' =&gt; array('contenttype', 'contentdisposition'), 'ZBateson\MailMimeParser\Header\SubjectHeader' =&gt; array('subject'), 'ZBateson\MailMimeParser\Header\IdHeader' =&gt; array('messageid', 'contentid', 'inreplyto', 'references'), 'ZBateson\MailMimeParser\Header\ReceivedHeader' =&gt; array('received'))</default>
+        <default>array('ZBateson\MailMimeParser\Header\AddressHeader' =&gt; array('from', 'to', 'cc', 'bcc', 'sender', 'replyto', 'resentfrom', 'resentto', 'resentcc', 'resentbcc', 'resentreplyto', 'returnpath', 'deliveredto'), 'ZBateson\MailMimeParser\Header\DateHeader' =&gt; array('date', 'resentdate', 'deliverydate', 'expires', 'expirydate', 'replyby'), 'ZBateson\MailMimeParser\Header\ParameterHeader' =&gt; array('contenttype', 'contentdisposition'), 'ZBateson\MailMimeParser\Header\SubjectHeader' =&gt; array('subject'), 'ZBateson\MailMimeParser\Header\IdHeader' =&gt; array('messageid', 'contentid', 'inreplyto', 'references'), 'ZBateson\MailMimeParser\Header\ReceivedHeader' =&gt; array('received'))</default>
         <docblock line="46">
           <description></description>
           <long-description></long-description>
@@ -4077,28 +4077,28 @@ ReceivedHeader: Received</long-description>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="91" package="MailMimeParser">
+      <property static="false" visibility="protected" namespace="ZBateson\MailMimeParser\Header" line="92" package="MailMimeParser">
         <name>$genericType</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::$genericType</full_name>
         <default>'ZBateson\MailMimeParser\Header\GenericHeader'</default>
-        <docblock line="91">
+        <docblock line="92">
           <description></description>
           <long-description></long-description>
-          <tag name="var" line="91" description="&lt;p&gt;Defines the generic AbstractHeader type to use for headers&#10;that aren't mapped in $types&lt;/p&gt;" type="string" variable="">
+          <tag name="var" line="92" description="&lt;p&gt;Defines the generic AbstractHeader type to use for headers&#10;that aren't mapped in $types&lt;/p&gt;" type="string" variable="">
             <type>string</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="99" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="100" package="MailMimeParser">
         <name>__construct</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::__construct()</full_name>
-        <docblock line="99">
+        <docblock line="100">
           <description>Instantiates member variables with the passed objects.</description>
           <long-description></long-description>
-          <tag name="param" line="99" description="" type="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService" variable="$consumerService">
+          <tag name="param" line="100" description="" type="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService" variable="$consumerService">
             <type>\ZBateson\MailMimeParser\Header\Consumer\ConsumerService</type>
           </tag>
-          <tag name="param" line="99" description="" type="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory" variable="$mimeLiteralPartFactory">
+          <tag name="param" line="100" description="" type="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory" variable="$mimeLiteralPartFactory">
             <type>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory</type>
           </tag>
         </docblock>
@@ -4113,17 +4113,17 @@ ReceivedHeader: Received</long-description>
           <type>\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="112" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="113" package="MailMimeParser">
         <name>getNormalizedHeaderName</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::getNormalizedHeaderName()</full_name>
-        <docblock line="112">
+        <docblock line="113">
           <description>Returns the string in lower-case, and with non-alphanumeric characters
 stripped out.</description>
           <long-description></long-description>
-          <tag name="param" line="112" description="" type="string" variable="$header">
+          <tag name="param" line="113" description="" type="string" variable="$header">
             <type>string</type>
           </tag>
-          <tag name="return" line="112" description="" type="string">
+          <tag name="return" line="113" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -4133,16 +4133,16 @@ stripped out.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header" line="123" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header" line="124" package="MailMimeParser">
         <name>getClassFor</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::getClassFor()</full_name>
-        <docblock line="123">
+        <docblock line="124">
           <description>Returns the name of an AbstractHeader class for the passed header name.</description>
           <long-description></long-description>
-          <tag name="param" line="123" description="" type="string" variable="$name">
+          <tag name="param" line="124" description="" type="string" variable="$name">
             <type>string</type>
           </tag>
-          <tag name="return" line="123" description="" type="string">
+          <tag name="return" line="124" description="" type="string">
             <type>string</type>
           </tag>
         </docblock>
@@ -4152,20 +4152,20 @@ stripped out.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="144" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="145" package="MailMimeParser">
         <name>newInstance</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::newInstance()</full_name>
-        <docblock line="144">
+        <docblock line="145">
           <description>Creates an AbstractHeader instance for the passed header name and value,
 and returns it.</description>
           <long-description></long-description>
-          <tag name="param" line="144" description="" type="string" variable="$name">
+          <tag name="param" line="145" description="" type="string" variable="$name">
             <type>string</type>
           </tag>
-          <tag name="param" line="144" description="" type="string" variable="$value">
+          <tag name="param" line="145" description="" type="string" variable="$value">
             <type>string</type>
           </tag>
-          <tag name="return" line="144" description="" type="\ZBateson\MailMimeParser\Header\AbstractHeader">
+          <tag name="return" line="145" description="" type="\ZBateson\MailMimeParser\Header\AbstractHeader">
             <type>\ZBateson\MailMimeParser\Header\AbstractHeader</type>
           </tag>
         </docblock>
@@ -4180,13 +4180,13 @@ and returns it.</description>
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="163" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header" line="164" package="MailMimeParser">
         <name>newHeaderContainer</name>
         <full_name>\ZBateson\MailMimeParser\Header\HeaderFactory::newHeaderContainer()</full_name>
-        <docblock line="163">
+        <docblock line="164">
           <description>Creates and returns a HeaderContainer.</description>
           <long-description></long-description>
-          <tag name="return" line="163" description="" type="\ZBateson\MailMimeParser\Header\HeaderContainer;">
+          <tag name="return" line="164" description="" type="\ZBateson\MailMimeParser\Header\HeaderContainer;">
             <type>\ZBateson\MailMimeParser\Header\HeaderContainer;</type>
           </tag>
         </docblock>
@@ -8551,7 +8551,7 @@ for 'UTF-8'.</long-description>
       </method>
     </class>
   </file>
-  <file path="Header/Part/DatePart.php" generated-path="Header.Part.DatePart.html" hash="6453f29854f83a493dfe28b223a0e8df" package="MailMimeParser">
+  <file path="Header/Part/DatePart.php" generated-path="Header.Part.DatePart.html" hash="cc3b693d75a512b100d542834be778fa" package="MailMimeParser">
     <docblock line="0">
       <description>This file is part of the ZBateson\MailMimeParser project.</description>
       <long-description></long-description>
@@ -8635,33 +8635,13 @@ an RFC 822 date, and failing that, tries to parse it by calling
           <type>string</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="ZBateson\MailMimeParser\Header\Part" line="63" package="MailMimeParser">
-        <name>parseDateToken</name>
-        <full_name>\ZBateson\MailMimeParser\Header\Part\DatePart::parseDateToken()</full_name>
-        <docblock line="63">
-          <description>Parse date string token</description>
-          <long-description></long-description>
-          <tag name="param" line="63" description="&lt;p&gt;Date token as string&lt;/p&gt;" type="string" variable="$dateToken">
-            <type>string</type>
-          </tag>
-          <tag name="return" line="63" description="Returns \DateTime or false on failure." type="\DateTime|false">
-            <type>\DateTime</type>
-            <type>false</type>
-          </tag>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$dateToken</name>
-          <default></default>
-          <type>string</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="79" package="MailMimeParser">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="ZBateson\MailMimeParser\Header\Part" line="59" package="MailMimeParser">
         <name>getDateTime</name>
         <full_name>\ZBateson\MailMimeParser\Header\Part\DatePart::getDateTime()</full_name>
-        <docblock line="79">
+        <docblock line="59">
           <description>Returns a DateTime object or false if it can't be parsed.</description>
           <long-description></long-description>
-          <tag name="return" line="79" description="" type="\DateTime">
+          <tag name="return" line="59" description="" type="\DateTime">
             <type>\DateTime</type>
           </tag>
         </docblock>
