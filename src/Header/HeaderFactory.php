@@ -56,6 +56,7 @@ class HeaderFactory
             'resentcc',
             'resentbcc',
             'resentreplyto',
+            'returnpath',
             'deliveredto',
         ],
         'ZBateson\MailMimeParser\Header\DateHeader' => [
