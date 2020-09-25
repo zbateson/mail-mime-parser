@@ -37,7 +37,7 @@ class HeaderFactoryTest extends TestCase
 
     public function testAddressHeaderInstance()
     {
-        $aValid = ['BCC', 'to', 'FrOM'];
+        $aValid = ['BCC', 'to', 'FrOM', 'sender', 'reply-to', 'resent-from', 'Resent-To', 'Resent-Cc', 'Resent-Bcc', 'Resent-Reply-To', 'Return-Path', 'Delivered-To'];
         $aNot = ['MESSAGE-ID', 'date', 'Subject'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
