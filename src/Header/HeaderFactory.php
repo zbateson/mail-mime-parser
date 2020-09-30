@@ -18,7 +18,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * are mapped as follows:
  * 
  * AddressHeader: From, To, Cc, Bcc, Sender, Reply-To, Resent-From, Resent-To,
- * Resent-Cc, Resent-Bcc, Resent-Reply-To, Delivered-To
+ * Resent-Cc, Resent-Bcc, Resent-Reply-To, Delivered-To, Return-Path, X-Sender
  * DateHeader: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date, Reply-By
  * ParameterHeader: Content-Type, Content-Disposition
  * IdHeader: Message-ID, Content-ID, In-Reply-To, References
@@ -58,6 +58,7 @@ class HeaderFactory
             'resentreplyto',
             'returnpath',
             'deliveredto',
+            'xsender',
         ],
         'ZBateson\MailMimeParser\Header\DateHeader' => [
             'date',
