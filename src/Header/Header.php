@@ -23,13 +23,13 @@ abstract class Header
     const DATE = self::ORIG_DATE;
     const FROM = 'From';
     const SENDER = 'Sender';
-    const REPLY_TO = 'Reply-To'; 
+    const REPLY_TO = 'Reply-To';
     const TO = 'To';
     const CC = 'Cc';
     const BCC = 'Bcc';
     const MESSAGE_ID = 'Message-ID';
     const IN_REPLY_TO = 'In-Reply-To';
-    const REFERENCES = 'References'; 
+    const REFERENCES = 'References';
     const SUBJECT = 'Subject';
     const COMMENTS = 'Comments';
     const KEYWORDS = 'Keywords';
