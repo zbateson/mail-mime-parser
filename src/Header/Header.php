@@ -19,7 +19,7 @@ abstract class Header
     const RESENT_BCC = 'Resent-Bcc';
     const RESENT_MSD_ID = 'Resent-Message-ID';
     const RESENT_MESSAGE_ID = self::RESENT_MSD_ID;
-    const ORIG_DATE = 'Date'; // orig-date
+    const ORIG_DATE = 'Date';
     const DATE = self::ORIG_DATE;
     const FROM = 'From';
     const SENDER = 'Sender';
