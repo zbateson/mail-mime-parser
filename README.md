@@ -50,6 +50,7 @@ fclose($handle);
 $message = Message::from($string);
 
 echo $message->getHeaderValue(HeaderConsts::FROM);          // user@example.com
+echo $message->getHeaderValue('from');                      // same
 echo $message
     ->getHeader(HeaderConsts::FROM)                         // AddressHeader
     ->getPersonName();                          // Person Name
