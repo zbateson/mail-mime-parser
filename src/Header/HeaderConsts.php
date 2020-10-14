@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header;
 
-abstract class Header
+abstract class HeaderConsts
 {
     // Headers according to the table at https://tools.ietf.org/html/rfc5322#section-3.6
     const RETURN_PATH = 'Return-Path';
