@@ -50,7 +50,6 @@ fclose($handle);
 $message = Message::from($string);
 
 echo $message->getHeaderValue(HeaderConsts::FROM);          // user@example.com
-echo $message->getHeaderValue('from');                      // same
 echo $message
     ->getHeader(HeaderConsts::FROM)                         // AddressHeader
     ->getPersonName();                          // Person Name
@@ -65,6 +64,8 @@ echo $message
     ->getEmail();                               // user@example.com
 
 echo $message->getTextContent();                // or getHtmlContent()
+
+echo $message->getHeader('X-Foo');              // for custom or undocumented headers
 
 $att = $message->getAttachmentPart(0);          // first attachment
 echo $att->getHeaderValue(HeaderConsts::CONTENT_TYPE);      // e.g. "text/plain"
