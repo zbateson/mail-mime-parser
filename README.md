@@ -33,36 +33,42 @@ Please note: hhvm support has been dropped as it no longer supports 'php' as of 
 ## Usage
 
 ```php
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Message;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+
 // use an instance of MailMimeParser as a class dependency
-$mailParser = new \ZBateson\MailMimeParser\MailMimeParser();
+$mailParser = new MailMimeParser();
 
 $handle = fopen('file.mime', 'r');
 // parse() accepts a string, resource or Psr7 StreamInterface
-$message = $mailParser->parse($handle);         // returns a \ZBateson\MailMimeParser\Message
+$message = $mailParser->parse($handle);         // returns `Message`
 fclose($handle);
 
 // OR: use this procedurally (Message::from also accepts a string,
 // resource or Psr7 StreamInterface
-$message = \ZBateson\MailMimeParser\Message::from($string);
+$message = Message::from($string);
 
-echo $message->getHeaderValue('from');          // user@example.com
+echo $message->getHeaderValue(HeaderConsts::FROM);          // user@example.com
 echo $message
-    ->getHeader('from')                         // AddressHeader
+    ->getHeader(HeaderConsts::FROM)                         // AddressHeader
     ->getPersonName();                          // Person Name
-echo $message->getHeaderValue('subject');       // The email's subject
+echo $message->getHeaderValue(HeaderConsts::SUBJECT);       // The email's subject
 echo $message
-    ->getHeader('to')                           // also AddressHeader
+    ->getHeader(HeaderConsts::TO)                           // also AddressHeader
     ->getAddresses()[0]                         // AddressPart
     ->getName();                                // Person Name
 echo $message
-    ->getHeader('cc')                           // also AddressHeader
+    ->getHeader(HeaderConsts::CC)                           // also AddressHeader
     ->getAddresses()[0]                         // AddressPart
     ->getEmail();                               // user@example.com
 
 echo $message->getTextContent();                // or getHtmlContent()
 
+echo $message->getHeader('X-Foo');              // for custom or undocumented headers
+
 $att = $message->getAttachmentPart(0);          // first attachment
-echo $att->getHeaderValue('Content-Type');      // e.g. "text/plain"
+echo $att->getHeaderValue(HeaderConsts::CONTENT_TYPE);      // e.g. "text/plain"
 echo $att->getHeaderParameter(                  // value of "charset" part
     'content-type',
     'charset'
