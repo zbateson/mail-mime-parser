@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>MailMimeParser 1.3 » \ZBateson\MailMimeParser\Header\HeaderConsts</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">MailMimeParser 1.3</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ZBateson.html"><i class="icon-th"></i> ZBateson</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/MailMimeParser.html"><i class="icon-folder-open"></i> MailMimeParser</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">15</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">9</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div xmlns:php="http://php.net/xsl" class="btn-toolbar">
+<div class="btn-group visibility" data-toggle="buttons-checkbox">
+<button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button>
+</div>
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+</div>
+<ul xmlns:php="http://php.net/xsl" class="side-nav nav nav-list"><li class="nav-header">
+<i title="Constants" class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_AUTO_SUBMITTED" title="AUTO_SUBMITTED() :: "><span class="description">AUTO_SUBMITTED</span><pre>AUTO_SUBMITTED</pre></a></li>
+<li class="constant  "><a href="#constant_BCC" title="BCC() :: "><span class="description">BCC</span><pre>BCC</pre></a></li>
+<li class="constant  "><a href="#constant_CC" title="CC() :: "><span class="description">CC</span><pre>CC</pre></a></li>
+<li class="constant  "><a href="#constant_COMMENTS" title="COMMENTS() :: "><span class="description">COMMENTS</span><pre>COMMENTS</pre></a></li>
+<li class="constant  "><a href="#constant_CONTENT_TYPE" title="CONTENT_TYPE() :: "><span class="description">CONTENT_TYPE</span><pre>CONTENT_TYPE</pre></a></li>
+<li class="constant  "><a href="#constant_DATE" title="DATE() :: "><span class="description">DATE</span><pre>DATE</pre></a></li>
+<li class="constant  "><a href="#constant_FROM" title="FROM() :: "><span class="description">FROM</span><pre>FROM</pre></a></li>
+<li class="constant  "><a href="#constant_IN_REPLY_TO" title="IN_REPLY_TO() :: "><span class="description">IN_REPLY_TO</span><pre>IN_REPLY_TO</pre></a></li>
+<li class="constant  "><a href="#constant_KEYWORDS" title="KEYWORDS() :: "><span class="description">KEYWORDS</span><pre>KEYWORDS</pre></a></li>
+<li class="constant  "><a href="#constant_MESSAGE_ID" title="MESSAGE_ID() :: "><span class="description">MESSAGE_ID</span><pre>MESSAGE_ID</pre></a></li>
+<li class="constant  "><a href="#constant_MIME_VERSION" title="MIME_VERSION() :: "><span class="description">MIME_VERSION</span><pre>MIME_VERSION</pre></a></li>
+<li class="constant  "><a href="#constant_ORIG_DATE" title="ORIG_DATE() :: "><span class="description">ORIG_DATE</span><pre>ORIG_DATE</pre></a></li>
+<li class="constant  "><a href="#constant_RECEIVED" title="RECEIVED() :: "><span class="description">RECEIVED</span><pre>RECEIVED</pre></a></li>
+<li class="constant  "><a href="#constant_REFERENCES" title="REFERENCES() :: "><span class="description">REFERENCES</span><pre>REFERENCES</pre></a></li>
+<li class="constant  "><a href="#constant_REPLY_TO" title="REPLY_TO() :: "><span class="description">REPLY_TO</span><pre>REPLY_TO</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_BCC" title="RESENT_BCC() :: "><span class="description">RESENT_BCC</span><pre>RESENT_BCC</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_CC" title="RESENT_CC() :: "><span class="description">RESENT_CC</span><pre>RESENT_CC</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_DATE" title="RESENT_DATE() :: "><span class="description">RESENT_DATE</span><pre>RESENT_DATE</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_FROM" title="RESENT_FROM() :: "><span class="description">RESENT_FROM</span><pre>RESENT_FROM</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_MESSAGE_ID" title="RESENT_MESSAGE_ID() :: "><span class="description">RESENT_MESSAGE_ID</span><pre>RESENT_MESSAGE_ID</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_MSD_ID" title="RESENT_MSD_ID() :: "><span class="description">RESENT_MSD_ID</span><pre>RESENT_MSD_ID</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_SENDER" title="RESENT_SENDER() :: "><span class="description">RESENT_SENDER</span><pre>RESENT_SENDER</pre></a></li>
+<li class="constant  "><a href="#constant_RESENT_TO" title="RESENT_TO() :: "><span class="description">RESENT_TO</span><pre>RESENT_TO</pre></a></li>
+<li class="constant  "><a href="#constant_RETURN_PATH" title="RETURN_PATH() :: "><span class="description">RETURN_PATH</span><pre>RETURN_PATH</pre></a></li>
+<li class="constant  "><a href="#constant_SENDER" title="SENDER() :: "><span class="description">SENDER</span><pre>SENDER</pre></a></li>
+<li class="constant  "><a href="#constant_SUBJECT" title="SUBJECT() :: "><span class="description">SUBJECT</span><pre>SUBJECT</pre></a></li>
+<li class="constant  "><a href="#constant_TO" title="TO() :: "><span class="description">TO</span><pre>TO</pre></a></li>
+</ul>
+</li></ul>
+</div>
+<div class="span8">
+<a xmlns:php="http://php.net/xsl" id="\ZBateson\MailMimeParser\Header\HeaderConsts"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
+<li>
+<a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ZBateson.html">ZBateson</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.html">MailMimeParser</a>
+</li>
+<li>
+<span class="divider">\</span><a href="../namespaces/ZBateson.MailMimeParser.Header.html">Header</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ZBateson.MailMimeParser.Header.HeaderConsts.html">HeaderConsts</a>
+</li>
+</ul>
+<div xmlns:php="http://php.net/xsl" class="element class">
+<p class="short_description"></p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/MailMimeParser.html">MailMimeParser</a></td>
+</tr></table>
+<h3>
+<i title="Constants" class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_AUTO_SUBMITTED"> </a><div class="element clickable constant  constant_AUTO_SUBMITTED" data-toggle="collapse" data-target=".constant_AUTO_SUBMITTED .collapse" title="">
+<h2>AUTO_SUBMITTED</h2>
+<pre>AUTO_SUBMITTED = 'Auto-Submitted' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_BCC"> </a><div class="element clickable constant  constant_BCC" data-toggle="collapse" data-target=".constant_BCC .collapse" title="">
+<h2>BCC</h2>
+<pre>BCC = 'Bcc' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_CC"> </a><div class="element clickable constant  constant_CC" data-toggle="collapse" data-target=".constant_CC .collapse" title="">
+<h2>CC</h2>
+<pre>CC = 'Cc' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_COMMENTS"> </a><div class="element clickable constant  constant_COMMENTS" data-toggle="collapse" data-target=".constant_COMMENTS .collapse" title="">
+<h2>COMMENTS</h2>
+<pre>COMMENTS = 'Comments' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_CONTENT_TYPE"> </a><div class="element clickable constant  constant_CONTENT_TYPE" data-toggle="collapse" data-target=".constant_CONTENT_TYPE .collapse" title="">
+<h2>CONTENT_TYPE</h2>
+<pre>CONTENT_TYPE = 'Content-Type' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_DATE"> </a><div class="element clickable constant  constant_DATE" data-toggle="collapse" data-target=".constant_DATE .collapse" title="">
+<h2>DATE</h2>
+<pre>DATE = self::ORIG_DATE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_FROM"> </a><div class="element clickable constant  constant_FROM" data-toggle="collapse" data-target=".constant_FROM .collapse" title="">
+<h2>FROM</h2>
+<pre>FROM = 'From' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_IN_REPLY_TO"> </a><div class="element clickable constant  constant_IN_REPLY_TO" data-toggle="collapse" data-target=".constant_IN_REPLY_TO .collapse" title="">
+<h2>IN_REPLY_TO</h2>
+<pre>IN_REPLY_TO = 'In-Reply-To' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_KEYWORDS"> </a><div class="element clickable constant  constant_KEYWORDS" data-toggle="collapse" data-target=".constant_KEYWORDS .collapse" title="">
+<h2>KEYWORDS</h2>
+<pre>KEYWORDS = 'Keywords' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_MESSAGE_ID"> </a><div class="element clickable constant  constant_MESSAGE_ID" data-toggle="collapse" data-target=".constant_MESSAGE_ID .collapse" title="">
+<h2>MESSAGE_ID</h2>
+<pre>MESSAGE_ID = 'Message-ID' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_MIME_VERSION"> </a><div class="element clickable constant  constant_MIME_VERSION" data-toggle="collapse" data-target=".constant_MIME_VERSION .collapse" title="">
+<h2>MIME_VERSION</h2>
+<pre>MIME_VERSION = 'MIME-Version' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_ORIG_DATE"> </a><div class="element clickable constant  constant_ORIG_DATE" data-toggle="collapse" data-target=".constant_ORIG_DATE .collapse" title="">
+<h2>ORIG_DATE</h2>
+<pre>ORIG_DATE = 'Date' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RECEIVED"> </a><div class="element clickable constant  constant_RECEIVED" data-toggle="collapse" data-target=".constant_RECEIVED .collapse" title="">
+<h2>RECEIVED</h2>
+<pre>RECEIVED = 'Received' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_REFERENCES"> </a><div class="element clickable constant  constant_REFERENCES" data-toggle="collapse" data-target=".constant_REFERENCES .collapse" title="">
+<h2>REFERENCES</h2>
+<pre>REFERENCES = 'References' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_REPLY_TO"> </a><div class="element clickable constant  constant_REPLY_TO" data-toggle="collapse" data-target=".constant_REPLY_TO .collapse" title="">
+<h2>REPLY_TO</h2>
+<pre>REPLY_TO = 'Reply-To' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_BCC"> </a><div class="element clickable constant  constant_RESENT_BCC" data-toggle="collapse" data-target=".constant_RESENT_BCC .collapse" title="">
+<h2>RESENT_BCC</h2>
+<pre>RESENT_BCC = 'Resent-Bcc' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_CC"> </a><div class="element clickable constant  constant_RESENT_CC" data-toggle="collapse" data-target=".constant_RESENT_CC .collapse" title="">
+<h2>RESENT_CC</h2>
+<pre>RESENT_CC = 'Resent-Cc' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_DATE"> </a><div class="element clickable constant  constant_RESENT_DATE" data-toggle="collapse" data-target=".constant_RESENT_DATE .collapse" title="">
+<h2>RESENT_DATE</h2>
+<pre>RESENT_DATE = 'Resent-Date' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_FROM"> </a><div class="element clickable constant  constant_RESENT_FROM" data-toggle="collapse" data-target=".constant_RESENT_FROM .collapse" title="">
+<h2>RESENT_FROM</h2>
+<pre>RESENT_FROM = 'Resent-From' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_MESSAGE_ID"> </a><div class="element clickable constant  constant_RESENT_MESSAGE_ID" data-toggle="collapse" data-target=".constant_RESENT_MESSAGE_ID .collapse" title="">
+<h2>RESENT_MESSAGE_ID</h2>
+<pre>RESENT_MESSAGE_ID = self::RESENT_MSD_ID </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_MSD_ID"> </a><div class="element clickable constant  constant_RESENT_MSD_ID" data-toggle="collapse" data-target=".constant_RESENT_MSD_ID .collapse" title="">
+<h2>RESENT_MSD_ID</h2>
+<pre>RESENT_MSD_ID = 'Resent-Message-ID' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_SENDER"> </a><div class="element clickable constant  constant_RESENT_SENDER" data-toggle="collapse" data-target=".constant_RESENT_SENDER .collapse" title="">
+<h2>RESENT_SENDER</h2>
+<pre>RESENT_SENDER = 'Resent-Sender' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RESENT_TO"> </a><div class="element clickable constant  constant_RESENT_TO" data-toggle="collapse" data-target=".constant_RESENT_TO .collapse" title="">
+<h2>RESENT_TO</h2>
+<pre>RESENT_TO = 'Resent-To' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_RETURN_PATH"> </a><div class="element clickable constant  constant_RETURN_PATH" data-toggle="collapse" data-target=".constant_RETURN_PATH .collapse" title="">
+<h2>RETURN_PATH</h2>
+<pre>RETURN_PATH = 'Return-Path' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_SENDER"> </a><div class="element clickable constant  constant_SENDER" data-toggle="collapse" data-target=".constant_SENDER .collapse" title="">
+<h2>SENDER</h2>
+<pre>SENDER = 'Sender' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_SUBJECT"> </a><div class="element clickable constant  constant_SUBJECT" data-toggle="collapse" data-target=".constant_SUBJECT .collapse" title="">
+<h2>SUBJECT</h2>
+<pre>SUBJECT = 'Subject' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_TO"> </a><div class="element clickable constant  constant_TO" data-toggle="collapse" data-target=".constant_TO .collapse" title="">
+<h2>TO</h2>
+<pre>TO = 'To' </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.9.1</a> and<br>
+            generated on 2020-10-21T16:01:03-07:00.<br></footer></div>
+</div>
+</body>
+</html>
