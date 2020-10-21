@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.4",
         "guzzlehttp/psr7": "^1.0",
-        "zbateson/mb-wrapper": "^1.0",
+        "zbateson/mb-wrapper": "^1.0.1",
         "zbateson/stream-decorators": "^1.0.4"
     },
     "require-dev": {
