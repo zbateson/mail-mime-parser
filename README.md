@@ -49,32 +49,32 @@ fclose($handle);
 // resource or Psr7 StreamInterface
 $message = Message::from($string);
 
-echo $message->getHeaderValue(HeaderConsts::FROM);          // user@example.com
+echo $message->getHeaderValue(HeaderConsts::FROM);     // user@example.com
 echo $message
-    ->getHeader(HeaderConsts::FROM)                         // AddressHeader
-    ->getPersonName();                          // Person Name
-echo $message->getHeaderValue(HeaderConsts::SUBJECT);       // The email's subject
+    ->getHeader(HeaderConsts::FROM)                    // AddressHeader
+    ->getPersonName();                                 // Person Name
+echo $message->getHeaderValue(HeaderConsts::SUBJECT);  // The email's subject
 echo $message
-    ->getHeader(HeaderConsts::TO)                           // also AddressHeader
-    ->getAddresses()[0]                         // AddressPart
-    ->getName();                                // Person Name
+    ->getHeader(HeaderConsts::TO)                      // also AddressHeader
+    ->getAddresses()[0]                                // AddressPart
+    ->getName();                                       // Person Name
 echo $message
-    ->getHeader(HeaderConsts::CC)                           // also AddressHeader
-    ->getAddresses()[0]                         // AddressPart
-    ->getEmail();                               // user@example.com
+    ->getHeader(HeaderConsts::CC)                      // also AddressHeader
+    ->getAddresses()[0]                                // AddressPart
+    ->getEmail();                                      // user@example.com
 
-echo $message->getTextContent();                // or getHtmlContent()
+echo $message->getTextContent();                       // or getHtmlContent()
 
-echo $message->getHeader('X-Foo');              // for custom or undocumented headers
+echo $message->getHeader('X-Foo');                     // for custom or undocumented headers
 
-$att = $message->getAttachmentPart(0);          // first attachment
-echo $att->getHeaderValue(HeaderConsts::CONTENT_TYPE);      // e.g. "text/plain"
-echo $att->getHeaderParameter(                  // value of "charset" part
+$att = $message->getAttachmentPart(0);                 // first attachment
+echo $att->getHeaderValue(HeaderConsts::CONTENT_TYPE); // e.g. "text/plain"
+echo $att->getHeaderParameter(                         // value of "charset" part
     'content-type',
     'charset'
 );
-echo $att->getContent();                        // get the attached file's contents
-$stream = $att->getContentStream();             // the file is decoded automatically
+echo $att->getContent();                               // get the attached file's contents
+$stream = $att->getContentStream();                    // the file is decoded automatically
 $dest = \GuzzleHttp\Psr7\stream_for(
     fopen('my-file.ext')
 );
