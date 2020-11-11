@@ -187,7 +187,7 @@ class MessageTest extends TestCase
             ->with('charset')
             ->willReturn('shabadabada...');
         $parts[3]
-            ->method('getContentResourceHandle')
+            ->method('getContentStream')
             ->with('charset')
             ->willReturn('tilkomore');
 
@@ -196,11 +196,10 @@ class MessageTest extends TestCase
         $this->assertEquals($parts[3], $message->getTextPart(1));
         $this->assertNull($message->getTextPart(2));
         $this->assertNull($message->getTextStream(2));
-        $this->assertNull($message->getTextResourceHandle(2));
         $this->assertNull($message->getTextContent(2));
         $this->assertEquals('oufa baloufa!', $message->getTextStream());
         $this->assertEquals('shabadabada...', $message->getTextContent(0, 'charset'));
-        $this->assertEquals('tilkomore', $message->getTextResourceHandle(1, 'charset'));
+        $this->assertEquals('tilkomore', $message->getTextStream(1, 'charset'));
     }
 
     public function testGetHtmlPartAndHtmlPartCount()
@@ -238,7 +237,7 @@ class MessageTest extends TestCase
             ->with('charset')
             ->willReturn('shabadabada...');
         $parts[3]
-            ->method('getContentResourceHandle')
+            ->method('getContentStream')
             ->with('charset')
             ->willReturn('tilkomore');
 
@@ -247,11 +246,10 @@ class MessageTest extends TestCase
         $this->assertEquals($parts[3], $message->getHtmlPart(1));
         $this->assertNull($message->getHtmlPart(2));
         $this->assertNull($message->getHtmlStream(2));
-        $this->assertNull($message->getHtmlResourceHandle(2));
         $this->assertNull($message->getHtmlContent(2));
         $this->assertEquals('oufa baloufa!', $message->getHtmlStream());
         $this->assertEquals('shabadabada...', $message->getHtmlContent(0, 'charset'));
-        $this->assertEquals('tilkomore', $message->getHtmlResourceHandle(1, 'charset'));
+        $this->assertEquals('tilkomore', $message->getHtmlStream(1, 'charset'));
     }
 
     public function testGetAndRemoveAttachmentParts()

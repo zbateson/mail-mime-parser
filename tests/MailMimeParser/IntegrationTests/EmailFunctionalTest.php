@@ -142,7 +142,7 @@ class EmailFunctionalTest extends TestCase
                         );
                     } else {
                         $file = file_get_contents($this->messageDir . '/files/' . $name);
-                        $handle = $attachment->getContentResourceHandle();
+                        $handle = $attachment->getBinaryContentResourceHandle();
                         $att = stream_get_contents($handle);
                         rewind($handle);
                         $equal = ($file === $att);

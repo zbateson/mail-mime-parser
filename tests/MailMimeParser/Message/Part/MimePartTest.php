@@ -538,7 +538,7 @@ class MimePartTest extends TestCase
         $part = $this->newMimePart($pb, Psr7\stream_for('habibi'), Psr7\stream_for('blah'));
         $this->assertEquals('WINGDING', $part->getCharset());
         $this->assertEquals('klingon', $part->getContentTransferEncoding());
-        $this->assertNotNull($part->getContentResourceHandle());
+        $this->assertNotNull($part->getContentStream());
     }
 
     public function testIsTextIsMultiPartForNonTextNonMultipart()

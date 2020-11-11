@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use PHPUnit\Framework\TestCase;
@@ -15,8 +16,8 @@ use Exception;
  * @covers ZBateson\MailMimeParser\Message\Part\MessagePart
  * @author Zaahid Bateson
  */
-class MessagePartTest extends TestCase
-{
+class MessagePartTest extends TestCase {
+
     protected $partStreamFilterManager;
     protected $streamFactory;
     private $vfs;
@@ -44,13 +45,14 @@ class MessagePartTest extends TestCase
                     try {
                         $contentHandle->rewind();
                     } catch (Exception $e) {
+
                     }
                     return $contentHandle;
                 });
         }
         return $this->getMockForAbstractClass(
-            'ZBateson\MailMimeParser\Message\Part\MessagePart',
-            [ $this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle ]
+                'ZBateson\MailMimeParser\Message\Part\MessagePart',
+                [$this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle]
         );
     }
 
@@ -59,7 +61,7 @@ class MessagePartTest extends TestCase
         $messagePart = $this->getMessagePart();
         $this->assertNotNull($messagePart);
         $this->assertFalse($messagePart->hasContent());
-        $this->assertNull($messagePart->getContentResourceHandle());
+        $this->assertNull($messagePart->getContentStream());
         $this->assertNull($messagePart->getContent());
         $this->assertNull($messagePart->getParent());
         $this->assertEquals('habibi', stream_get_contents($messagePart->getResourceHandle()));
@@ -69,7 +71,7 @@ class MessagePartTest extends TestCase
     {
         $messagePart = $this->getMessagePart('mucha agua');
         $this->assertFalse($messagePart->hasContent());
-        $this->assertNull($messagePart->getContentResourceHandle());
+        $this->assertNull($messagePart->getContentStream());
         $this->assertNotNull($messagePart->getResourceHandle());
         $handle = $messagePart->getResourceHandle();
         $this->assertEquals('mucha agua', stream_get_contents($handle));
@@ -85,6 +87,8 @@ class MessagePartTest extends TestCase
 
         $this->assertTrue($messagePart->hasContent());
         $this->assertEquals('Que tonto', $messagePart->getContentStream()->getContents());
+
+        $this->expectException('PHPUnit\Framework\Error\Deprecated');
         $this->assertEquals('Que tonto', stream_get_contents($messagePart->getContentResourceHandle()));
     }
 
@@ -226,14 +230,14 @@ class MessagePartTest extends TestCase
             ->willReturn($handle);
 
         $this->assertTrue($messagePart->hasContent());
-        $this->assertSame('Que tonto', stream_get_contents($messagePart->getContentResourceHandle('a-charset')));
+        $this->assertSame('Que tonto', $messagePart->getContentStream('a-charset')->getContents());
 
         fseek($handle, 0);
         $messagePart->setCharsetOverride('someCharset', true);
-        $messagePart->getContentResourceHandle('a-charset');
+        $messagePart->getContentStream('a-charset');
 
         $messagePart->setCharsetOverride('override');
-        $messagePart->getContentResourceHandle();
+        $messagePart->getContentStream();
     }
 
     public function testMarkAsChanged()
@@ -309,16 +313,16 @@ class MessagePartTest extends TestCase
             ->method('getContentStream')
             ->withConsecutive(
                 ['', 'charset', 'a-charset']
-            );
+        );
 
         $this->assertSame($ms, $part->getStream());
 
         $this->partStreamFilterManager
             ->method('setStream')
             ->withConsecutive(
-                [ $new ],
-                [ $new ]
-            );
+                [$new],
+                [$new]
+        );
 
         $part->setContent($new, 'charset');
 
@@ -332,4 +336,5 @@ class MessagePartTest extends TestCase
             ->willReturn('Much success');
         $this->assertEquals('Much success', $part->getStream());
     }
+
 }
