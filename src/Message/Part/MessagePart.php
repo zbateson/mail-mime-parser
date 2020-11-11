@@ -274,6 +274,7 @@ abstract class MessagePart
      */
     public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
     {
+        trigger_error("getContentResourceHandle is deprecated since version 1.2.1", E_USER_DEPRECATED);
         $stream = $this->getContentStream($charset);
         if ($stream !== null) {
             return StreamWrapper::getResource($stream);

@@ -214,6 +214,7 @@ class Message extends MimePart
      */
     public function getTextResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
+        trigger_error("getTextResourceHandle is deprecated since version 1.2.1", E_USER_DEPRECATED);
         $textPart = $this->getTextPart($index);
         if ($textPart !== null) {
             return $textPart->getContentResourceHandle($charset);
@@ -272,6 +273,7 @@ class Message extends MimePart
      */
     public function getHtmlResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
+        trigger_error("getHtmlResourceHandle is deprecated since version 1.2.1", E_USER_DEPRECATED);
         $htmlPart = $this->getHtmlPart($index);
         if ($htmlPart !== null) {
             return $htmlPart->getContentResourceHandle($charset);
