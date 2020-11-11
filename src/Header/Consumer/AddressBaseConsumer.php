@@ -84,6 +84,18 @@ class AddressBaseConsumer extends AbstractConsumer
     {
         return false;
     }
+
+    /**
+     * Overridden so tokens aren't handled at this level, and instead are passed
+     * on to AddressConsumer.
+     *
+     * @param Iterator $tokens
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     */
+    protected function getTokenParts(Iterator $tokens)
+    {
+        return $this->getConsumerTokenParts($tokens);
+    }
     
     /**
      * Never reached by AddressBaseConsumer. Overridden to satisfy
@@ -93,11 +105,11 @@ class AddressBaseConsumer extends AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed header
-     *         part or null if the token should be ignored
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
+     *         header part or null if the token should be ignored
      */
     protected function getPartForToken($token, $isLiteral)
     {
-        return $this->partFactory->newToken($token);
+        return null;
     }
 }

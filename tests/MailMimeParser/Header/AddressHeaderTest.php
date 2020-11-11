@@ -90,6 +90,17 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('kilgoretrout@ilium.ny.us', $addresses[0]->getEmail());
     }
 
+    public function testSingleAddressWithEscapedToken()
+    {
+        $header = new AddressHeader($this->consumerService, 'From', '\"Kool Aid\" <koolaid@dontdrinkit.com>');
+        $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
+        $this->assertEquals('"Kool Aid"', $header->getPersonName());
+        $addresses = $header->getParts();
+        $this->assertCount(1, $addresses);
+        $this->assertEquals('"Kool Aid"', $addresses[0]->getName());
+        $this->assertEquals('koolaid@dontdrinkit.com', $addresses[0]->getValue());
+    }
+
     public function testMultipleAddresses()
     {
         $header = new AddressHeader(
