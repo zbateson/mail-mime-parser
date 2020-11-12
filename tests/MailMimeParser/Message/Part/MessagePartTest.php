@@ -88,8 +88,11 @@ class MessagePartTest extends TestCase {
         $this->assertTrue($messagePart->hasContent());
         $this->assertEquals('Que tonto', $messagePart->getContentStream()->getContents());
 
-        $this->expectException('PHPUnit\Framework\Error\Deprecated');
-        $this->assertEquals('Que tonto', stream_get_contents($messagePart->getContentResourceHandle()));
+        // not available in older versions of phpunit
+        if (is_callable($this, 'expectException')) {
+            $this->expectException('PHPUnit\Framework\Error\Deprecated');
+            $this->assertEquals('Que tonto', stream_get_contents($messagePart->getContentResourceHandle()));
+        }
     }
 
     public function testBinaryStreamAndHandle()
