@@ -1,11 +1,12 @@
 From: "Doug Sauder" <doug@example.com>
 To: "Jürgen Schmürgen" <schmuergen@example.com>
-Subject: Die Hasen und die Frösche (Microsoft Outlook 00)
+Subject: Die Hasen und
+   die Frösche (Microsoft Outlook 00)
 Date: Wed, 17 May 2000 19:08:29 -0400
 Message-ID: <NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com>
 MIME-Version: 1.0
 Content-Type: text/plain;
-	charset="iso-8859-1"
+  charset="iso-8859-1"
 Content-Transfer-Encoding: 8bit
 X-Priority: 3 (Normal)
 X-MSMail-Priority: Normal

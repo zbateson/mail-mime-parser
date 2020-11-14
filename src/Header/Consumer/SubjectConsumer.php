@@ -39,6 +39,33 @@ class SubjectConsumer extends GenericConsumer
     }
 
     /**
+     * Overridden to preserve whitespace.
+     *
+     * Whitespace between two words is preserved unless the whitespace begins
+     * with a newline (\n or \r\n), in which case the entire string of
+     * whitespace is discarded, and a single space ' ' character is used in its
+     * place.
+     *
+     * @param string $token the token
+     * @param bool $isLiteral set to true if the token represents a literal -
+     *        e.g. an escaped token
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart|null the
+     *         constructed header part or null if the token should be ignored
+     */
+    protected function getPartForToken($token, $isLiteral)
+    {
+        if ($isLiteral) {
+            return $this->partFactory->newLiteralPart($token);
+        } elseif (preg_match('/^\s+$/', $token)) {
+            if (preg_match('/^[\r\n]/', $token)) {
+                return $this->partFactory->newToken(' ');
+            }
+            return $this->partFactory->newToken($token);
+        }
+        return $this->partFactory->newInstance($token);
+    }
+
+    /**
      * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
      * the current token on the iterator.
      * 

@@ -41,7 +41,7 @@ class Token extends HeaderPart
      */
     public function isSpace()
     {
-        return ($this->value === ' ');
+        return (preg_match('/^\s+$/', $this->value) === 1);
     }
     
     /**

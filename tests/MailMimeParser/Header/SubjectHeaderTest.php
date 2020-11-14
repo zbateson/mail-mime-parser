@@ -100,6 +100,26 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Dwayne (The Rock) Jackson', $header->getValue());
     }
 
+    public function testWhiteSpace()
+    {
+        $header = new SubjectHeader(
+            $this->consumerService,
+            'Actor',
+            'Dwayne  Double Spaced  Jackson'
+        );
+        $this->assertEquals('Dwayne  Double Spaced  Jackson', $header->getValue());
+    }
+
+    public function testMultilineWhiteSpace()
+    {
+        $header = new SubjectHeader(
+            $this->consumerService,
+            'Actor',
+            "Dwayne\n  Double Spaced  Jackson"
+        );
+        $this->assertEquals('Dwayne Double Spaced  Jackson', $header->getValue());
+    }
+
     public function testSubjectHeaderToString()
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
