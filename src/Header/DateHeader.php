@@ -39,4 +39,13 @@ class DateHeader extends AbstractHeader
         }
         return null;
     }
+    
+    public function getDateTimeImmutable()
+    {
+        $dateTime = $this->getDateTime();
+        if ($dateTime instanceof \DateTime) {
+            return \DateTimeImmutable::createFromMutable($dateTime);
+        }
+        return null;
+    }
 }
