@@ -89,7 +89,7 @@ $att->saveContent($stream);                     // copies to the stream
 ## Documentation
 
 * [Usage Guide](https://mail-mime-parser.org/)
-* [API Reference](https://mail-mime-parser.org/api/1.1)
+* [API Reference](https://mail-mime-parser.org/api/1.3)
 
 ## Upgrading to 1.x
 
