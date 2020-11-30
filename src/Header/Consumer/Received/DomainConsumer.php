@@ -40,6 +40,7 @@ use ZBateson\MailMimeParser\Header\Part\CommentPart;
  * @see https://tools.ietf.org/html/rfc5321#section-4.4
  * @see https://github.com/Te-k/pyreceived/blob/master/test.py
  * @author Zaahid Bateson
+ * @author Mariusz Krzaczkowski
  */
 class DomainConsumer extends GenericReceivedConsumer
 {
@@ -68,18 +69,21 @@ class DomainConsumer extends GenericReceivedConsumer
      * @return boolean
      */
     private function matchHostPart($value, &$hostname, &$address) {
-        $matches = [];
-        $pattern = '~^(?P<name>[a-z0-9\-]+\.[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr>[a-f\d\.\:]+)\])?$~i';
-        if (preg_match($pattern, $value, $matches)) {
-            if (!empty($matches['name'])) {
-                $hostname = $matches['name'];
-            }
-            if (!empty($matches['addr'])) {
-                $address = $matches['addr'];
-            }
-            return true;
-        }
-        return false;
+		$matches = [];
+		$pattern = '~^(\[(IPv[64])?(?P<addr1>[a-f\d\.\:]+)\])?\s*(?P<name>[a-z0-9\-\=]+\.[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr2>[a-f\d\.\:]+)\])?$~i';
+		if (preg_match($pattern, $value, $matches)) {
+			if (!empty($matches['name'])) {
+				$hostname = $matches['name'];
+			}
+			if (!empty($matches['addr1'])) {
+				$address = $matches['addr1'];
+			}
+			if (!empty($matches['addr2'])) {
+				$address = $matches['addr2'];
+			}
+			return true;
+		}
+		return false;
     }
 
     /**
