@@ -15,7 +15,7 @@ class PartStreamFilterManagerFactoryTest extends TestCase
 {
     protected $partStreamFilterManagerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();

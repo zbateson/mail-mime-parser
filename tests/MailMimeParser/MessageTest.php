@@ -22,7 +22,7 @@ class MessageTest extends TestCase
     private $mockMessageHelperService;
     private $vfs;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->vfs = vfsStream::setup('root');
         $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')

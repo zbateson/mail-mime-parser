@@ -15,8 +15,8 @@ class MailMimeParserTest extends TestCase
 {
     private $mockDi;
     private $mmp;
-    
-    protected function setUp()
+
+    protected function setUp(): void
     {
         $this->mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
             ->disableOriginalConstructor()
@@ -24,7 +24,7 @@ class MailMimeParserTest extends TestCase
             ->getMock();
         $this->mmp = new MailMimeParser($this->mockDi);
     }
-    
+
     public function testConstructMailMimeParser()
     {
         $this->assertNotNull($this->mmp);

@@ -16,7 +16,7 @@ class HeaderPartFactoryTest extends TestCase
 {
     private $headerPartFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $charsetConverter = new MbWrapper();
         $this->headerPartFactory = new HeaderPartFactory($charsetConverter);

@@ -23,7 +23,7 @@ class MessageParserTest extends TestCase
     protected $mimePartFactory;
     protected $vfs;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->vfs = vfsStream::setup('root');
 

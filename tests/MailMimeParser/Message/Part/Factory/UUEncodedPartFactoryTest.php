@@ -17,7 +17,7 @@ class UUEncodedPartFactoryTest extends TestCase
 {
     protected $uuEncodedPartFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();

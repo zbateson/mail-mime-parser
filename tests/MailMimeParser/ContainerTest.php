@@ -14,12 +14,12 @@ use PHPUnit\Framework\TestCase;
 class ContainerTest extends TestCase
 {
     private $di;
-    
-    protected function setUp()
+
+    protected function setUp(): void
     {
         $this->di = new Container();
     }
-    
+
     public function testNewMessageParser()
     {
         $mp = $this->di->newMessageParser();

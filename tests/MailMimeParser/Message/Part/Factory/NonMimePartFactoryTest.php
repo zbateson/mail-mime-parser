@@ -17,7 +17,7 @@ class NonMimePartFactoryTest extends TestCase
 {
     protected $nonMimePartFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();

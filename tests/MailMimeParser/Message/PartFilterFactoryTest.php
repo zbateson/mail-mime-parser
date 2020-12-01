@@ -16,7 +16,7 @@ class PartFilterFactoryTest extends TestCase
 {
     protected $partFilterFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->partFilterFactory = new PartFilterFactory();
     }

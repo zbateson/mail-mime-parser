@@ -18,7 +18,7 @@ class MimePartFactoryTest extends TestCase
     protected $mimePartFactory;
     protected $partFilterFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();

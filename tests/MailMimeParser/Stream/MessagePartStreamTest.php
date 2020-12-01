@@ -17,7 +17,7 @@ class MessagePartStreamTest extends TestCase
 {
     private $mockStreamFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()

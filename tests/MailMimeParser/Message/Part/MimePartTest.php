@@ -22,7 +22,7 @@ class MimePartTest extends TestCase
     private $mockPartFilterFactory;
     private $mockStreamFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()

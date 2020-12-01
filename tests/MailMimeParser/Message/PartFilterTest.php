@@ -47,7 +47,7 @@ class PartFilterTest extends TestCase
         return $part;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $signedPart = $this->getMockedSignedPart();

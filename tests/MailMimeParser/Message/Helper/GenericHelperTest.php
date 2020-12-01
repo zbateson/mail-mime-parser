@@ -20,7 +20,7 @@ class GenericHelperTest extends TestCase
     private $mockUUEncodedPartFactory;
     private $mockPartBuilderFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
             ->disableOriginalConstructor()

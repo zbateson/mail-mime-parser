@@ -17,7 +17,7 @@ class ReceivedPartTest extends TestCase
 {
     private $charsetConverter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->charsetConverter = new MbWrapper();
     }

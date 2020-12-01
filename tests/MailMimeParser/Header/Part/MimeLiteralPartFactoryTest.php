@@ -16,7 +16,7 @@ class MimeLiteralPartFactoryTest extends TestCase
 {
     protected $headerPartFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $charsetConverter = new MbWrapper();
         $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);

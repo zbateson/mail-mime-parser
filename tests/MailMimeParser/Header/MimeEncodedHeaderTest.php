@@ -25,7 +25,7 @@ class MimeEncodedHeaderTest extends TestCase
     protected $consumerService;
     protected $mimeLiteralPartFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

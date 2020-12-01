@@ -16,7 +16,7 @@ class PartBuilderTest extends TestCase
 {
     private $mockMessagePartFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory')
             ->disableOriginalConstructor()

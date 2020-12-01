@@ -16,7 +16,7 @@ class AddressBaseConsumerTest extends TestCase
 {
     private $addressBaseConsumer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

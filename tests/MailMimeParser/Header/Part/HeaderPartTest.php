@@ -16,7 +16,7 @@ class HeaderPartTest extends TestCase
 {
     private $abstractHeaderPartStub;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Part\HeaderPart')

@@ -15,7 +15,7 @@ class HeaderFactoryTest extends TestCase
 {
     protected $headerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
