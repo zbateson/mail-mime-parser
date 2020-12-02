@@ -10,12 +10,13 @@ php:
     - 7.2
     - 7.3
     - 7.4
+    - 8.0
     - nightly
 matrix:
     allow_failures:
         - php: nightly
 
 install:
-    - if [[ $TRAVIS_PHP_VERSION =~ ^nightly ]]; then composer update --ignore-platform-reqs; else composer update; fi
+    - if [[ $TRAVIS_PHP_VERSION =~ '^nightly' || $TRAVIS_PHP_VERSION == '8.*' ]]; then composer update --ignore-platform-reqs; else composer update; fi
 
 script: ./vendor/bin/phpunit -c tests/phpunit.xml
