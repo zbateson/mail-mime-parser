@@ -40,18 +40,14 @@ class DateHeaderTest extends TestCase
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->getValue());
         $dt = $header->getDateTime();
-        $dti = $header->getDateTimeImmutable();
         $this->assertNotNull($dt);
-        $this->assertNotNull($dti);
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $dt->format(\DateTime::RFC2822));
-        $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $dti->format(\DateTime::RFC2822));
     }
 
     public function testInvalidDate()
     {
         $header = new DateHeader($this->consumerService, 'DATE', 'This is not a date');
         $this->assertNull($header->getDateTime());
-        $this->assertNull($header->getDateTimeImmutable());
         $this->assertEquals('This is not a date', $header->getValue());
     }
 
