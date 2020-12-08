@@ -20,7 +20,7 @@ class DatePart extends LiteralPart
     /**
      * @var DateTime the parsed date, or null if the date could not be parsed
      */
-    protected $date;
+    protected $date = null;
 
     /**
      * Tries parsing the passed token as an RFC 2822 date, and failing that into
@@ -52,7 +52,7 @@ class DatePart extends LiteralPart
     }
 
     /**
-     * Returns a DateTime object or false if it can't be parsed.
+     * Returns a DateTime object or null if it can't be parsed.
      *
      * @return DateTime
      */
