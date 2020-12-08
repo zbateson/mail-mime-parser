@@ -20,7 +20,7 @@ matrix:
     - php: nightly
 
 install:
-  - if [[ $TRAVIS_PHP_VERSION == '8.*' ]]; then composer config platform.php 7.4.99; fi
-  - composer update
+  - if [[ $TRAVIS_PHP_VERSION =~ ^nightly || $TRAVIS_PHP_VERSION == 8.* ]]; then composer update --ignore-platform-reqs; else composer update; fi
 
 script: ./vendor/bin/phpunit -c tests/phpunit.xml
+
