@@ -17,7 +17,7 @@ class CommentPartTest extends TestCase
 {
     private $charsetConverter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->charsetConverter = new MbWrapper();
     }
