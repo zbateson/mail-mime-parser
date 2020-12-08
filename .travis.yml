@@ -17,9 +17,8 @@ matrix:
     - php: 5.5
       dist: trusty
   allow_failures:
-    - php:
-      - nightly
-      - 8.0
+    - php: nightly
+    - php: 8.0
 
 install:
   - if [[ $TRAVIS_PHP_VERSION =~ ^nightly || $TRAVIS_PHP_VERSION == 8.* ]]; then composer update --ignore-platform-reqs; else composer update; fi
