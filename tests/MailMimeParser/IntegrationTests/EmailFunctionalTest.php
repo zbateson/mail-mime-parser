@@ -1595,7 +1595,7 @@ class EmailFunctionalTest extends TestCase
         $str = file_get_contents($this->messageDir . '/files/blueball.png');
         $this->assertEquals(1, $message->getAttachmentCount());
         $this->assertEquals('text/rtf', $message->getAttachmentPart(0)->getHeaderValue('Content-Type'));
-        $this->assertTrue($str === $message->getAttachmentPart(0)->getContent(), 'text/rtf stream doesn\'t match binary stream');
+        $this->assertSame($message->getAttachmentPart(0)->getContent(), $str, 'text/rtf stream doesn\'t match binary stream');
 
         $props = [
             'From' => [
@@ -1622,7 +1622,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->assertEquals(1, $messageWritten->getAttachmentCount());
         $this->assertEquals('text/rtf', $messageWritten->getAttachmentPart(0)->getHeaderValue('Content-Type'));
-        $this->assertTrue($str === $messageWritten->getAttachmentPart(0)->getContent(), 'text/rtf stream doesn\'t match binary stream');
+        $this->assertSame($messageWritten->getAttachmentPart(0)->getContent(), $str, 'text/rtf stream doesn\'t match binary stream');
     }
 
     public function testParseEmailm4006()
@@ -2390,10 +2390,10 @@ class EmailFunctionalTest extends TestCase
         rewind($tmpSaved);
 
         $this->assertNotEmpty($signableContent);
-        $this->assertTrue(strpos(
+        $this->assertNotFalse(strpos(
             preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)),
             $signableContent
-        ) !== false);
+        ));
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
