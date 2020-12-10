@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -16,7 +16,7 @@ class MessageFactoryTest extends TestCase
 {
     protected $messageFactory;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();

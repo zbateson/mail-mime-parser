@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * PartBuilderFactoryTest
@@ -15,7 +15,7 @@ class PartBuilderFactoryTest extends TestCase
 {
     protected $partBuilderFactory;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()

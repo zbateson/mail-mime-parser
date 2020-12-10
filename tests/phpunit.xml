@@ -7,8 +7,7 @@
     stopOnError="false"
     stopOnFailure="false"
     stopOnIncomplete="false"
-    stopOnSkipped="false"
-    forceCoversAnnotation="true">
+    stopOnSkipped="false">
     <php>
         <const name="TEST_DATA_DIR" value="_data"/>
         <const name="TEST_OUTPUT_DIR" value="_output"/>
@@ -35,9 +34,6 @@
         </testsuite>
         <testsuite name="Stream">
             <directory suffix="Test.php">MailMimeParser/Stream</directory>
-        </testsuite>
-        <testsuite name="Util">
-            <directory suffix="Test.php">MailMimeParser/Util</directory>
         </testsuite>
         <testsuite name="Integration">
             <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>

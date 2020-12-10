@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -16,7 +16,7 @@ class PartBuilderTest extends TestCase
 {
     private $mockMessagePartFactory;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory')
             ->disableOriginalConstructor()

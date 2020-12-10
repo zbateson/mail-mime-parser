@@ -2,7 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use org\bovigo\vfs\vfsStream;
@@ -22,7 +22,7 @@ class MessagePartTest extends TestCase {
     protected $streamFactory;
     private $vfs;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->vfs = vfsStream::setup('root');
         $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')

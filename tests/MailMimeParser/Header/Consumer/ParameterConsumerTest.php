@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * Description of ParameterConsumerTest
@@ -16,7 +16,7 @@ class ParameterConsumerTest extends TestCase
 {
     private $parameterConsumer;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use ZBateson\MailMimeParser\Container;
 
 /**

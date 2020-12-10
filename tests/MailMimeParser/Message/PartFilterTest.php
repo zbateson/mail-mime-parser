@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * PartFilterTest
@@ -47,9 +47,8 @@ class PartFilterTest extends TestCase
         return $part;
     }
 
-    protected function setUp()
+    protected function legacySetUp()
     {
-        parent::setUp();
         $signedPart = $this->getMockedSignedPart();
         $signedPartParent = $signedPart->getParent();
         $this->parts = [

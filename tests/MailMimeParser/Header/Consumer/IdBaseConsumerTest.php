@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * Description of IdBaseConsumerTest
@@ -16,7 +16,7 @@ class IdBaseConsumerTest extends TestCase
 {
     private $idBaseConsumer;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

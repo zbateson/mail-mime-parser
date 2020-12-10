@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -17,7 +17,7 @@ class ParameterPartTest extends TestCase
 {
     private $charsetConverter;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->charsetConverter = new MbWrapper();
     }

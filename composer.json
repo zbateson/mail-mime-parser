@@ -25,10 +25,7 @@
         "zbateson/stream-decorators": "^1.0.4"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.8 <8.0",
-        "phing/phing": "^2.15.0",
-        "phpdocumentor/phpdocumentor": "^2.9.0",
-        "jms/serializer": "^1.1",
+        "sanmai/phpunit-legacy-adapter": "^6.3 || ^8",
         "mikey179/vfsstream": "^1.6.0"
     },
     "suggest": {

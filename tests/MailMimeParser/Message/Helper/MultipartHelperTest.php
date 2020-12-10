@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * MultipartHelperTest
@@ -19,7 +19,7 @@ class MultipartHelperTest extends TestCase
     private $mockPartBuilderFactory;
     private $mockGenericHelper;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
             ->disableOriginalConstructor()

@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * PrivacyHelperTest
@@ -21,7 +21,7 @@ class PrivacyHelperTest extends TestCase
     private $mockGenericHelper;
     private $mockMultipartHelper;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
             ->disableOriginalConstructor()

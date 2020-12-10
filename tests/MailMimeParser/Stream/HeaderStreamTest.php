@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * HeaderStreamTest

@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use ZBateson\MailMimeParser\Message\PartFilter;
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -22,7 +22,7 @@ class MimePartTest extends TestCase
     private $mockPartFilterFactory;
     private $mockStreamFactory;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
             ->disableOriginalConstructor()

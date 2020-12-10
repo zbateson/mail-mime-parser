@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 use org\bovigo\vfs\vfsStream;
 
@@ -23,7 +23,7 @@ class MessageParserTest extends TestCase
     protected $mimePartFactory;
     protected $vfs;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->vfs = vfsStream::setup('root');
 

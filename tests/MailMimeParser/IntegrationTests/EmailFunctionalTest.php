@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
@@ -25,7 +25,7 @@ class EmailFunctionalTest extends TestCase
     // tries to sign rather than verify a signature
     const USE_GPG_KEYGEN = false;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->parser = new MailMimeParser();
         $this->messageDir = dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/emails';
@@ -2443,7 +2443,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -2495,7 +2495,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -2546,7 +2546,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -2595,7 +2595,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -2644,7 +2644,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -2693,7 +2693,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);
@@ -2741,7 +2741,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $this->assertContains($signableContent, preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)));
+        $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
         $messageWritten = $this->parser->parse($tmpSaved);

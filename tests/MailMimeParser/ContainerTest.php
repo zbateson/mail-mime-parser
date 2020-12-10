@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * Description of ContainerTest
@@ -15,7 +15,7 @@ class ContainerTest extends TestCase
 {
     private $di;
     
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->di = new Container();
     }

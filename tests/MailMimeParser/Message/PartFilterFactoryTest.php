@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 
 /**
  * PartFilterFactoryTest
@@ -16,7 +16,7 @@ class PartFilterFactoryTest extends TestCase
 {
     protected $partFilterFactory;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $this->partFilterFactory = new PartFilterFactory();
     }

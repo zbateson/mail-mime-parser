@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit\Framework\TestCase;
+use LegacyPHPUnit\TestCase;
 use DateTime;
 
 /**
@@ -17,7 +17,7 @@ class ReceivedHeaderTest extends TestCase
 {
     protected $consumerService;
 
-    protected function setUp()
+    protected function legacySetUp()
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
