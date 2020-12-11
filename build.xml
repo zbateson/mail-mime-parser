@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="MailMimeParser" default="nothing">
-    
+
     <property name="version-file" value="version.txt"/>
     <loadfile property="version" file="version.txt"/>
     <propertyregex property="api-version" subject="${version}"
@@ -11,14 +11,14 @@
     <property name="api-dir" value="${clone-dir}/api/${api-version}"/>
     <property name="api-git" value="git@github.com:zbateson/mail-mime-parser.git"/>
     <property name="api-branch" value="gh-pages"/>
-    
+
     <target name="nothing" hidden="true">
         <echo>
             Used for creating a release.  Default target does nothing.
             Call phing with "-l" to see available targets.
         </echo>
     </target>
-    
+
     <target name="clone-docs" description="Clones documentation from remote">
         <echo>Cloning ${api-git} to ${clone-dir}</echo>
         <exec executable="git" logoutput="true">
@@ -31,7 +31,7 @@
             <arg path="${clone-dir}"/>
         </exec>
     </target>
-    
+
     <target name="push-docs" description="Pushes changed documentation to git remote">
         <echo>Executing "git add -A" on ${clone-dir}</echo>
         <exec executable="git" dir="${clone-dir}" logoutput="true">
@@ -49,29 +49,28 @@
             <arg value="push"/>
         </exec>
     </target>
-    
+
     <target name="generate-docs" description="Generates phpdoc API documentation">
-        
+
         <echo>Generating documentation for ${version}</echo>
         <delete dir="${api-dir}" quiet="true"/>
         <mkdir dir="${api-dir}"/>
 
         <echo>Calling phpdoc and generating XML in ${api-dir}</echo>
-        <phpdoc2 title="MailMimeParser ${api-version}"
-                 destdir="${api-dir}"
-                 template="responsive"
-                 defaultPackageName="MailMimeParser"
-                 pharlocation="./vendor/bin/phpdoc">
-            <fileset dir="./src">
-                <include name="**/*.php" />
-            </fileset>
-        </phpdoc2>
+        <exec executable="phpdoc" passthru="true" logoutput="true" checkreturn="true">
+            <arg value="run"/>
+            <arg value="-d"/>
+            <arg path="${project.basedir}/src"/>
+            <arg value="-t"/>
+            <arg path="${api-dir}"/>
+        </exec>
+
     </target>
-    
+
     <target name="cleanup-docs" description="Deletes documentation directories">
         <delete dir="${clone-dir}" quiet="true"/>
     </target>
-    
+
     <target name="release" description="Bumps the version number, then updates documentation">
         <!--
             The following IfTask must be kept inside 'release'. Using phingcall and setting a property
@@ -103,7 +102,7 @@
             </then>
         </if>
         <echo>${release-type} Release - incrememting version number</echo>
-        
+
         <version releasetype="${release-type}" file="version.txt" property="version"/>
         <propertyregex property="api-version" subject="${version}"
                        pattern="^\d+\.\d+" match="$0" defaultValue="0.0.1"
@@ -116,5 +115,5 @@
         <phingcall target="push-docs"/>
         <phingcall target="cleanup-docs"/>
     </target>
-    
+
 </project>

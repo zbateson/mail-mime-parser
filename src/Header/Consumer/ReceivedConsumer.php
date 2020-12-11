@@ -117,11 +117,7 @@ class ReceivedConsumer extends AbstractConsumer
      * as an array with a single element.
      *
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|
-     *         \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart[]|
-     *         \ZBateson\MailMimeParser\Header\Part\ReceivedPart[]|
-     *         \ZBateson\MailMimeParser\Header\Part\DatePart[]|
-     *         \ZBateson\MailMimeParser\Header\Part\CommentPart[]|array
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart[]|\ZBateson\MailMimeParser\Header\Part\ReceivedPart[]|\ZBateson\MailMimeParser\Header\Part\DatePart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]
      */
     protected function processParts(array $parts)
     {

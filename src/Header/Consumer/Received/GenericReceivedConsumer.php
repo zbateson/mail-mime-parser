@@ -133,9 +133,7 @@ class GenericReceivedConsumer extends GenericConsumer
      * elements.
      *
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|
-     *         \ZBateson\MailMimeParser\Header\Part\CommentPart[]|
-     *         array
+     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]
      */
     protected function processParts(array $parts)
     {

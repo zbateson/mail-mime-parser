@@ -88,8 +88,7 @@ class DomainConsumer extends GenericReceivedConsumer
      * CommentPart.
      *
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart[]|
-     *         \ZBateson\MailMimeParser\Header\Part\CommentPart[]array
+     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]|\ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
     protected function processParts(array $parts)
     {
