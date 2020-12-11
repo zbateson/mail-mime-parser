@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Documentation</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/zbateson.html"><abbr title="\ZBateson">ZBateson</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="namespaces/zbateson-mailmimeparser.html"><abbr title="\ZBateson\MailMimeParser">MailMimeParser</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -eight phpdocumentor-content">
+                    <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson.html">ZBateson</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser.html">MailMimeParser</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser-stream.html">Stream</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser-stream-helper.html">Helper</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    CharsetConverter
+
+    
+    
+    
+    </h2>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">18</span>
+</aside>
+
+            <p class="phpdocumentor-summary">Helper class for converting strings between charsets.</p>
+
+    <section class="phpdocumentor-description"><p>CharasetConverter tries to convert using mb_convert_encoding when possible,
+defining as many aliases as possible for supported encodings.  If not
+supported, iconv is attempted.</p>
+</section>
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">author</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>Zaahid Bateson</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+
+
+
+
+
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_iconvAliases">$iconvAliases</a>
+    <span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_mbAliases">$mbAliases</a>
+    <span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_fromCharset">$fromCharset</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_fromCharsetMbSupported">$fromCharsetMbSupported</a>
+    <span>
+                &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_toCharset">$toCharset</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_toCharsetMbSupported">$toCharsetMbSupported</a>
+    <span>
+                &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method___construct">__construct()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Constructs the charset converter with source/destination charsets.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_convert">convert()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Converts the passed string&#039;s charset from $this-&gt;fromCharset to
+$this-&gt;toCharset.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_findAliasedCharset">findAliasedCharset()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Looks up the passed $comp and $stripped strings in self::$mbAliases, and
+returns the mapped charset if applicable.  Otherwise calls
+$this-&gt;findAliasedIconvCharset.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_findAliasedIconvCharset">findAliasedIconvCharset()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Looks up the passed $comp and $stripped strings in self::$iconvAliases,
+and returns the mapped charset if applicable.  Otherwise returns $comp.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_findSupportedCharset">findSupportedCharset()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Looks up the passed $cs in mb_list_encodings, then strips non
+alpha-numeric characters and tries again, then failing that calls
+findAliasedCharset.  The method returns the charset name that should be
+used in calls to mb_convert_encoding or iconv.</dd>
+
+        </dl>
+
+
+
+        
+
+        
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_iconvAliases">
+        $iconvAliases
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_iconvAliases" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">203</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$iconvAliases</span>
+     = <span class="phpdocumentor-signature__default-value">[
+    // iconv aliases -- a lot of these may already be supported
+    &#039;BIG5HKSCS&#039; =&gt; &#039;BIG5HKSCS&#039;,
+    &#039;HKSCS&#039; =&gt; &#039;BIG5HKSCS&#039;,
+    &#039;037&#039; =&gt; &#039;CP037&#039;,
+    &#039;EBCDICCPCA&#039; =&gt; &#039;CP037&#039;,
+    &#039;EBCDICCPNL&#039; =&gt; &#039;CP037&#039;,
+    &#039;EBCDICCPUS&#039; =&gt; &#039;CP037&#039;,
+    &#039;EBCDICCPWT&#039; =&gt; &#039;CP037&#039;,
+    &#039;CSIBM037&#039; =&gt; &#039;CP037&#039;,
+    &#039;IBM037&#039; =&gt; &#039;CP037&#039;,
+    &#039;IBM039&#039; =&gt; &#039;CP037&#039;,
+    &#039;1026&#039; =&gt; &#039;CP1026&#039;,
+    &#039;CSIBM1026&#039; =&gt; &#039;CP1026&#039;,
+    &#039;IBM1026&#039; =&gt; &#039;CP1026&#039;,
+    &#039;1140&#039; =&gt; &#039;CP1140&#039;,
+    &#039;IBM1140&#039; =&gt; &#039;CP1140&#039;,
+    &#039;1250&#039; =&gt; &#039;CP1250&#039;,
+    &#039;WINDOWS1250&#039; =&gt; &#039;CP1250&#039;,
+    &#039;1253&#039; =&gt; &#039;CP1253&#039;,
+    &#039;WINDOWS1253&#039; =&gt; &#039;CP1253&#039;,
+    &#039;1256&#039; =&gt; &#039;CP1256&#039;,
+    &#039;WINDOWS1256&#039; =&gt; &#039;CP1256&#039;,
+    &#039;1257&#039; =&gt; &#039;CP1257&#039;,
+    &#039;WINDOWS1257&#039; =&gt; &#039;CP1257&#039;,
+    &#039;1258&#039; =&gt; &#039;CP1258&#039;,
+    &#039;WINDOWS1258&#039; =&gt; &#039;CP1258&#039;,
+    &#039;424&#039; =&gt; &#039;CP424&#039;,
+    &#039;CSIBM424&#039; =&gt; &#039;CP424&#039;,
+    &#039;EBCDICCPHE&#039; =&gt; &#039;CP424&#039;,
+    &#039;IBM424&#039; =&gt; &#039;CP424&#039;,
+    &#039;437&#039; =&gt; &#039;CP437&#039;,
+    &#039;CSPC8CODEPAGE437&#039; =&gt; &#039;CP437&#039;,
+    &#039;IBM437&#039; =&gt; &#039;CP437&#039;,
+    &#039;500&#039; =&gt; &#039;CP500&#039;,
+    &#039;CSIBM500&#039; =&gt; &#039;CP500&#039;,
+    &#039;EBCDICCPBE&#039; =&gt; &#039;CP500&#039;,
+    &#039;EBCDICCPCH&#039; =&gt; &#039;CP500&#039;,
+    &#039;IBM500&#039; =&gt; &#039;CP500&#039;,
+    &#039;775&#039; =&gt; &#039;CP775&#039;,
+    &#039;CSPC775BALTIC&#039; =&gt; &#039;CP775&#039;,
+    &#039;IBM775&#039; =&gt; &#039;CP775&#039;,
+    &#039;860&#039; =&gt; &#039;CP860&#039;,
+    &#039;CSIBM860&#039; =&gt; &#039;CP860&#039;,
+    &#039;IBM860&#039; =&gt; &#039;CP860&#039;,
+    &#039;861&#039; =&gt; &#039;CP861&#039;,
+    &#039;CPIS&#039; =&gt; &#039;CP861&#039;,
+    &#039;CSIBM861&#039; =&gt; &#039;CP861&#039;,
+    &#039;IBM861&#039; =&gt; &#039;CP861&#039;,
+    &#039;862&#039; =&gt; &#039;CP862&#039;,
+    &#039;CSPC862LATINHEBREW&#039; =&gt; &#039;CP862&#039;,
+    &#039;IBM862&#039; =&gt; &#039;CP862&#039;,
+    &#039;863&#039; =&gt; &#039;CP863&#039;,
+    &#039;CSIBM863&#039; =&gt; &#039;CP863&#039;,
+    &#039;IBM863&#039; =&gt; &#039;CP863&#039;,
+    &#039;864&#039; =&gt; &#039;CP864&#039;,
+    &#039;CSIBM864&#039; =&gt; &#039;CP864&#039;,
+    &#039;IBM864&#039; =&gt; &#039;CP864&#039;,
+    &#039;865&#039; =&gt; &#039;CP865&#039;,
+    &#039;CSIBM865&#039; =&gt; &#039;CP865&#039;,
+    &#039;IBM865&#039; =&gt; &#039;CP865&#039;,
+    &#039;869&#039; =&gt; &#039;CP869&#039;,
+    &#039;CPGR&#039; =&gt; &#039;CP869&#039;,
+    &#039;CSIBM869&#039; =&gt; &#039;CP869&#039;,
+    &#039;IBM869&#039; =&gt; &#039;CP869&#039;,
+    &#039;949&#039; =&gt; &#039;CP949&#039;,
+    &#039;MS949&#039; =&gt; &#039;CP949&#039;,
+    &#039;UHC&#039; =&gt; &#039;CP949&#039;,
+    &#039;ROMAN8&#039; =&gt; &#039;ROMAN8&#039;,
+    &#039;HPROMAN8&#039; =&gt; &#039;ROMAN8&#039;,
+    &#039;R8&#039; =&gt; &#039;ROMAN8&#039;,
+    &#039;CSHPROMAN8&#039; =&gt; &#039;ROMAN8&#039;,
+    &#039;ISO2022JP2&#039; =&gt; &#039;ISO2022JP2&#039;,
+    &#039;THAI&#039; =&gt; &#039;ISO885911&#039;,
+    &#039;ISO885911&#039; =&gt; &#039;ISO885911&#039;,
+    &#039;ISO8859112001&#039; =&gt; &#039;ISO885911&#039;,
+    &#039;JOHAB&#039; =&gt; &#039;CP1361&#039;,
+    &#039;MS1361&#039; =&gt; &#039;CP1361&#039;,
+    &#039;MACCYRILLIC&#039; =&gt; &#039;MACCYRILLIC&#039;,
+    &#039;CSPTCP154&#039; =&gt; &#039;PT154&#039;,
+    &#039;PTCP154&#039; =&gt; &#039;PT154&#039;,
+    &#039;CP154&#039; =&gt; &#039;PT154&#039;,
+    &#039;CYRILLICASIAN&#039; =&gt; &#039;PT154&#039;,
+    &#039;TIS620&#039; =&gt; &#039;TIS620&#039;,
+    &#039;TIS6200&#039; =&gt; &#039;TIS620&#039;,
+    &#039;TIS62025290&#039; =&gt; &#039;TIS620&#039;,
+    &#039;TIS62025291&#039; =&gt; &#039;TIS620&#039;,
+    &#039;ISOIR166&#039; =&gt; &#039;TIS620&#039;,
+]</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_mbAliases">
+        $mbAliases
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_mbAliases" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">29</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$mbAliases</span>
+     = <span class="phpdocumentor-signature__default-value">[
+    // supported but not included in mb_list_encodings for some reason...
+    &#039;CP850&#039; =&gt; &#039;CP850&#039;,
+    &#039;GB2312&#039; =&gt; &#039;GB2312&#039;,
+    // aliases
+    &#039;646&#039; =&gt; &#039;ASCII&#039;,
+    &#039;ANSIX341968&#039; =&gt; &#039;ASCII&#039;,
+    &#039;ANSIX341986&#039; =&gt; &#039;ASCII&#039;,
+    &#039;CP367&#039; =&gt; &#039;ASCII&#039;,
+    &#039;CSASCII&#039; =&gt; &#039;ASCII&#039;,
+    &#039;IBM367&#039; =&gt; &#039;ASCII&#039;,
+    &#039;ISO646US&#039; =&gt; &#039;ASCII&#039;,
+    &#039;ISO646IRV1991&#039; =&gt; &#039;ASCII&#039;,
+    &#039;ISOIR6&#039; =&gt; &#039;ASCII&#039;,
+    &#039;US&#039; =&gt; &#039;ASCII&#039;,
+    &#039;USASCII&#039; =&gt; &#039;ASCII&#039;,
+    &#039;BIG5&#039; =&gt; &#039;BIG-5&#039;,
+    &#039;BIG5TW&#039; =&gt; &#039;BIG-5&#039;,
+    &#039;CSBIG5&#039; =&gt; &#039;BIG-5&#039;,
+    &#039;1251&#039; =&gt; &#039;WINDOWS-1251&#039;,
+    &#039;CP1251&#039; =&gt; &#039;WINDOWS-1251&#039;,
+    &#039;WINDOWS1251&#039; =&gt; &#039;WINDOWS-1251&#039;,
+    &#039;1252&#039; =&gt; &#039;WINDOWS-1252&#039;,
+    &#039;CP1252&#039; =&gt; &#039;WINDOWS-1252&#039;,
+    &#039;WINDOWS1252&#039; =&gt; &#039;WINDOWS-1252&#039;,
+    &#039;WE8MSWIN1252&#039; =&gt; &#039;WINDOWS-1252&#039;,
+    &#039;1254&#039; =&gt; &#039;WINDOWS-1254&#039;,
+    &#039;CP1254&#039; =&gt; &#039;WINDOWS-1254&#039;,
+    &#039;WINDOWS1254&#039; =&gt; &#039;WINDOWS-1254&#039;,
+    &#039;1255&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;CP1255&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;ISO88598I&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;WINDOWS1255&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;850&#039; =&gt; &#039;CP850&#039;,
+    &#039;CSPC850MULTILINGUAL&#039; =&gt; &#039;CP850&#039;,
+    &#039;IBM850&#039; =&gt; &#039;CP850&#039;,
+    &#039;866&#039; =&gt; &#039;CP866&#039;,
+    &#039;CSIBM866&#039; =&gt; &#039;CP866&#039;,
+    &#039;IBM866&#039; =&gt; &#039;CP866&#039;,
+    &#039;932&#039; =&gt; &#039;CP932&#039;,
+    &#039;MS932&#039; =&gt; &#039;CP932&#039;,
+    &#039;MSKANJI&#039; =&gt; &#039;CP932&#039;,
+    &#039;950&#039; =&gt; &#039;CP950&#039;,
+    &#039;MS950&#039; =&gt; &#039;CP950&#039;,
+    &#039;EUCJP&#039; =&gt; &#039;EUC-JP&#039;,
+    &#039;UJIS&#039; =&gt; &#039;EUC-JP&#039;,
+    &#039;EUCKR&#039; =&gt; &#039;EUC-KR&#039;,
+    &#039;KOREAN&#039; =&gt; &#039;EUC-KR&#039;,
+    &#039;KSC5601&#039; =&gt; &#039;EUC-KR&#039;,
+    &#039;KSC56011987&#039; =&gt; &#039;EUC-KR&#039;,
+    &#039;KSX1001&#039; =&gt; &#039;EUC-KR&#039;,
+    &#039;GB180302000&#039; =&gt; &#039;GB18030&#039;,
+    // GB2312 not listed but supported
+    &#039;CHINESE&#039; =&gt; &#039;GB2312&#039;,
+    &#039;CSISO58GB231280&#039; =&gt; &#039;GB2312&#039;,
+    &#039;EUCCN&#039; =&gt; &#039;GB2312&#039;,
+    &#039;EUCGB2312CN&#039; =&gt; &#039;GB2312&#039;,
+    &#039;GB23121980&#039; =&gt; &#039;GB2312&#039;,
+    &#039;GB231280&#039; =&gt; &#039;GB2312&#039;,
+    &#039;ISOIR58&#039; =&gt; &#039;GB2312&#039;,
+    &#039;GBK&#039; =&gt; &#039;CP936&#039;,
+    &#039;936&#039; =&gt; &#039;CP936&#039;,
+    &#039;ms936&#039; =&gt; &#039;CP936&#039;,
+    &#039;HZGB&#039; =&gt; &#039;HZ&#039;,
+    &#039;HZGB2312&#039; =&gt; &#039;HZ&#039;,
+    &#039;CSISO2022JP&#039; =&gt; &#039;ISO-2022-JP&#039;,
+    &#039;ISO2022JP&#039; =&gt; &#039;ISO-2022-JP&#039;,
+    &#039;ISO2022JP2004&#039; =&gt; &#039;ISO-2022-JP-2004&#039;,
+    &#039;CSISO2022KR&#039; =&gt; &#039;ISO-2022-KR&#039;,
+    &#039;ISO2022KR&#039; =&gt; &#039;ISO-2022-KR&#039;,
+    &#039;CSISOLATIN6&#039; =&gt; &#039;ISO-8859-10&#039;,
+    &#039;ISO885910&#039; =&gt; &#039;ISO-8859-10&#039;,
+    &#039;ISO8859101992&#039; =&gt; &#039;ISO-8859-10&#039;,
+    &#039;ISOIR157&#039; =&gt; &#039;ISO-8859-10&#039;,
+    &#039;L6&#039; =&gt; &#039;ISO-8859-10&#039;,
+    &#039;LATIN6&#039; =&gt; &#039;ISO-8859-10&#039;,
+    &#039;ISO885913&#039; =&gt; &#039;ISO-8859-13&#039;,
+    &#039;ISO885914&#039; =&gt; &#039;ISO-8859-14&#039;,
+    &#039;ISO8859141998&#039; =&gt; &#039;ISO-8859-14&#039;,
+    &#039;ISOCELTIC&#039; =&gt; &#039;ISO-8859-14&#039;,
+    &#039;ISOIR199&#039; =&gt; &#039;ISO-8859-14&#039;,
+    &#039;L8&#039; =&gt; &#039;ISO-8859-14&#039;,
+    &#039;LATIN8&#039; =&gt; &#039;ISO-8859-14&#039;,
+    &#039;ISO885915&#039; =&gt; &#039;ISO-8859-15&#039;,
+    &#039;ISO885916&#039; =&gt; &#039;ISO-8859-16&#039;,
+    &#039;ISO8859162001&#039; =&gt; &#039;ISO-8859-16&#039;,
+    &#039;ISOIR226&#039; =&gt; &#039;ISO-8859-16&#039;,
+    &#039;L10&#039; =&gt; &#039;ISO-8859-16&#039;,
+    &#039;LATIN10&#039; =&gt; &#039;ISO-8859-16&#039;,
+    &#039;CSISOLATIN2&#039; =&gt; &#039;ISO-8859-2&#039;,
+    &#039;ISO88592&#039; =&gt; &#039;ISO-8859-2&#039;,
+    &#039;ISO885921987&#039; =&gt; &#039;ISO-8859-2&#039;,
+    &#039;ISOIR101&#039; =&gt; &#039;ISO-8859-2&#039;,
+    &#039;L2&#039; =&gt; &#039;ISO-8859-2&#039;,
+    &#039;LATIN2&#039; =&gt; &#039;ISO-8859-2&#039;,
+    &#039;CSISOLATIN3&#039; =&gt; &#039;ISO-8859-3&#039;,
+    &#039;ISO88593&#039; =&gt; &#039;ISO-8859-3&#039;,
+    &#039;ISO885931988&#039; =&gt; &#039;ISO-8859-3&#039;,
+    &#039;ISOIR109&#039; =&gt; &#039;ISO-8859-3&#039;,
+    &#039;L3&#039; =&gt; &#039;ISO-8859-3&#039;,
+    &#039;LATIN3&#039; =&gt; &#039;ISO-8859-3&#039;,
+    &#039;CSISOLATIN4&#039; =&gt; &#039;ISO-8859-4&#039;,
+    &#039;ISO88594&#039; =&gt; &#039;ISO-8859-4&#039;,
+    &#039;ISO885941988&#039; =&gt; &#039;ISO-8859-4&#039;,
+    &#039;ISOIR110&#039; =&gt; &#039;ISO-8859-4&#039;,
+    &#039;L4&#039; =&gt; &#039;ISO-8859-4&#039;,
+    &#039;LATIN4&#039; =&gt; &#039;ISO-8859-4&#039;,
+    &#039;CSISOLATINCYRILLIC&#039; =&gt; &#039;ISO-8859-5&#039;,
+    &#039;CYRILLIC&#039; =&gt; &#039;ISO-8859-5&#039;,
+    &#039;ISO88595&#039; =&gt; &#039;ISO-8859-5&#039;,
+    &#039;ISO885951988&#039; =&gt; &#039;ISO-8859-5&#039;,
+    &#039;ISOIR144&#039; =&gt; &#039;ISO-8859-5&#039;,
+    &#039;ARABIC&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;ASMO708&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;CSISOLATINARABIC&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;ECMA114&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;ISO88596&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;ISO885961987&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;ISOIR127&#039; =&gt; &#039;ISO-8859-6&#039;,
+    &#039;CSISOLATINGREEK&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;ECMA118&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;ELOT928&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;GREEK&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;GREEK8&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;ISO88597&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;ISO885971987&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;ISOIR126&#039; =&gt; &#039;ISO-8859-7&#039;,
+    &#039;CSISOLATINHEBREW&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;HEBREW&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;ISO88598&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;ISO885981988&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;ISOIR138&#039; =&gt; &#039;ISO-8859-8&#039;,
+    &#039;CSISOLATIN5&#039; =&gt; &#039;ISO-8859-9&#039;,
+    &#039;ISO88599&#039; =&gt; &#039;ISO-8859-9&#039;,
+    &#039;ISO885991989&#039; =&gt; &#039;ISO-8859-9&#039;,
+    &#039;ISOIR148&#039; =&gt; &#039;ISO-8859-9&#039;,
+    &#039;L5&#039; =&gt; &#039;ISO-8859-9&#039;,
+    &#039;LATIN5&#039; =&gt; &#039;ISO-8859-9&#039;,
+    &#039;CSKOI8R&#039; =&gt; &#039;KOI8-R&#039;,
+    &#039;KOI8R&#039; =&gt; &#039;KOI8-R&#039;,
+    &#039;8859&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;CP819&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;CSISOLATIN1&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;IBM819&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;ISO8859&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;ISO88591&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;ISO885911987&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;ISOIR100&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;L1&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;LATIN&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;LATIN1&#039; =&gt; &#039;ISO-8859-1&#039;,
+    &#039;CSSHIFTJIS&#039; =&gt; &#039;SJIS&#039;,
+    &#039;SHIFTJIS&#039; =&gt; &#039;SJIS&#039;,
+    &#039;SHIFTJIS2004&#039; =&gt; &#039;SJIS-2004&#039;,
+    &#039;SJIS2004&#039; =&gt; &#039;SJIS-2004&#039;,
+    // Microsoft charset values
+    &#039;0&#039; =&gt; &#039;WINDOWS-1252&#039;,
+    &#039;128&#039; =&gt; &#039;SJIS&#039;,
+    &#039;129&#039; =&gt; &#039;EUC-KR&#039;,
+    &#039;134&#039; =&gt; &#039;GB2312&#039;,
+    &#039;136&#039; =&gt; &#039;BIG-5&#039;,
+    &#039;161&#039; =&gt; &#039;WINDOWS-1253&#039;,
+    &#039;162&#039; =&gt; &#039;WINDOWS-1254&#039;,
+    &#039;177&#039; =&gt; &#039;WINDOWS-1255&#039;,
+    &#039;178&#039; =&gt; &#039;WINDOWS-1256&#039;,
+    &#039;186&#039; =&gt; &#039;WINDOWS-1257&#039;,
+    &#039;204&#039; =&gt; &#039;WINDOWS-1251&#039;,
+    &#039;222&#039; =&gt; &#039;WINDOWS-874&#039;,
+    &#039;238&#039; =&gt; &#039;WINDOWS-1250&#039;,
+]</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_fromCharset">
+        $fromCharset
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_fromCharset" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">296</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$fromCharset</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_fromCharsetMbSupported">
+        $fromCharsetMbSupported
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_fromCharsetMbSupported" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">307</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$fromCharsetMbSupported</span>
+     = <span class="phpdocumentor-signature__default-value">true</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_toCharset">
+        $toCharset
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_toCharset" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">301</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$toCharset</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_toCharsetMbSupported">
+        $toCharsetMbSupported
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#property_toCharsetMbSupported" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">312</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$toCharsetMbSupported</span>
+     = <span class="phpdocumentor-signature__default-value">true</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">320</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Constructs the charset converter with source/destination charsets.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$fromCharset</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$toCharset</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_convert">
+        convert()
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_convert" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">337</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Converts the passed string&#039;s charset from $this-&gt;fromCharset to
+$this-&gt;toCharset.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">convert</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$str</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>The function attempts to use mb_convert_encoding if possible, and falls
+back to iconv if not.  If the source or destination character sets aren't
+supported, a blank string is returned.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$str</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_findAliasedCharset">
+        findAliasedCharset()
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_findAliasedCharset" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">396</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Looks up the passed $comp and $stripped strings in self::$mbAliases, and
+returns the mapped charset if applicable.  Otherwise calls
+$this-&gt;findAliasedIconvCharset.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">findAliasedCharset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$comp</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stripped</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$mbSupported</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>$mbSupported is set to false if the charset is not located in
+self::$mbAliases.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$comp</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$stripped</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$mbSupported</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>the mapped charset</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_findAliasedIconvCharset">
+        findAliasedIconvCharset()
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_findAliasedIconvCharset" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">415</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Looks up the passed $comp and $stripped strings in self::$iconvAliases,
+and returns the mapped charset if applicable.  Otherwise returns $comp.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">findAliasedIconvCharset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$comp</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stripped</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$comp</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$stripped</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>the mapped charset (if mapped) or $comp otherwise</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_findSupportedCharset">
+        findSupportedCharset()
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#method_findSupportedCharset" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/Helper/CharsetConverter.php"><a href="files/stream-helper-charsetconverter.html"><abbr title="Stream/Helper/CharsetConverter.php">CharsetConverter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">366</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Looks up the passed $cs in mb_list_encodings, then strips non
+alpha-numeric characters and tries again, then failing that calls
+findAliasedCharset.  The method returns the charset name that should be
+used in calls to mb_convert_encoding or iconv.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">findSupportedCharset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$cs</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$mbSupported</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>If the charset is part of mb_list_encodings, $mbSupported is set to true.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$cs</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$mbSupported</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>the final charset name to use</p>
+</section>
+
+    
+</article>
+            </section>
+
+    </article>
+                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+            </div>
+        </div>
+        <a href="classes/ZBateson-MailMimeParser-Stream-Helper-CharsetConverter.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

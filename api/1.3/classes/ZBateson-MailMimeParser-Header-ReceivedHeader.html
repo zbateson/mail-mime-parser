@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Documentation</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/zbateson.html"><abbr title="\ZBateson">ZBateson</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="namespaces/zbateson-mailmimeparser.html"><abbr title="\ZBateson\MailMimeParser">MailMimeParser</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -eight phpdocumentor-content">
+                    <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson.html">ZBateson</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser.html">MailMimeParser</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser-header.html">Header</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    ReceivedHeader
+
+        <span class="phpdocumentor-element__extends">
+        extends <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html"><abbr title="\ZBateson\MailMimeParser\Header\ParameterHeader">ParameterHeader</abbr></a>
+    </span>
+    
+    
+    
+    </h2>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">79</span>
+</aside>
+
+            <p class="phpdocumentor-summary">Represents a Received header.</p>
+
+    <section class="phpdocumentor-description"><p>The returned header value (as returned by a call to <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getValue"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getValue()">ReceivedHeader::getValue()</abbr></a>) for a
+ReceivedHeader is the same as the raw value (as returned by a call to
+<abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getRawValue()">ReceivedHeader::getRawValue()</abbr>) since the header doesn't have a single
+'value' to extract.</p>
+<p>The parsed parts of a Received header can be accessed as parameters.  To
+check if a part exists, call <abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::hasParameter()">ReceivedHeader::hasParameter()</abbr> with the
+name of the part, for example: <code class="prettyprint">$header-&gt;hasParameter('from')</code> or
+<code class="prettyprint">$header-&gt;hasParameter('id')</code>.  The value of the part can be obtained
+by calling <abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getValueFor()">ReceivedHeader::getValueFor()</abbr>, for example
+<code class="prettyprint">$header-&gt;getValueFor('with');</code>.</p>
+<p>Additional parsing is performed on the &quot;FROM&quot; and &quot;BY&quot; parts of a received
+header in an attempt to extract the self-identified name of the server, its
+hostname, and its address (depending on what's included).  These can be
+accessed directly from the ReceivedHeader object by calling one of the
+following methods:</p>
+<p>o <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromName"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getFromName()">ReceivedHeader::getFromName()</abbr></a> -- the name portion of the FROM part
+o <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromHostname"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getFromHostname()">ReceivedHeader::getFromHostname()</abbr></a> -- the hostname of the FROM part
+o <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromAddress"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getFromAddress()">ReceivedHeader::getFromAddress()</abbr></a> -- the adddress portion of the FROM
+part
+o <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByName"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getByName()">ReceivedHeader::getByName()</abbr></a> -- same as getFromName, but for the BY
+part, and etc... below
+o <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByHostname"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getByHostname()">ReceivedHeader::getByHostname()</abbr></a>
+o <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByAddress"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getByAddress()">ReceivedHeader::getByAddress()</abbr></a></p>
+<p>The parsed parts of the FROM and BY parts are determined as follows:</p>
+<p>o Anything outside and before a parenthesized expression is considered &quot;the
+name&quot;, for example &quot;FROM AlainDeBotton&quot;, &quot;AlainDeBotton&quot; would be the name,
+but also if the name is an address, but exists outside the parenthesized
+expression, it's still considered &quot;the name&quot;.  For example:
+&quot;From [1.2.3.4]&quot;, getFromName would return &quot;[1.2.3.4]&quot;.
+o A parenthesized expression MUST match what looks like either a domain name
+on its own, or a domain name and an address.  Otherwise the parenthesized
+expression is considered a comment, and not parsed into hostname and
+address.  The rules are defined loosely because many implementations differ
+in how strictly they follow the standard.  For a domain, it's enough that
+the expression starts with any alphanumeric character and contains at least
+one '.', followed by any number of '.', '-' and alphanumeric characters.
+The address portion must be surrounded in square brackets, and contain any
+sequence of '.', ':', numbers, and characters 'a' through 'f'.  In addition
+the string 'ipv6' may start the expression (for instance, '[ipv6:::1]'
+would be valid).  A port number may also be considered valid as part of the
+address, for example: [1.2.3.4:3231].  No additional validation on the
+address is done, and so an invalid address such as '....' could be
+returned, so users using the 'address' header are encouraged to validate it
+before using it.  The square brackets are parsed out of the returned
+address, so the value returned by getFromAddress() would be &quot;2.2.2.2&quot;, not
+&quot;[2.2.2.2]&quot;.</p>
+<p>The date/time stamp can be accessed as a DateTime object by calling
+<a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getDateTime"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getDateTime()">ReceivedHeader::getDateTime()</abbr></a>.</p>
+<p>Parsed comments can be accessed by calling <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getComments"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader::getComments()">ReceivedHeader::getComments()</abbr></a>.  Some implementations may include connection
+encryption information or other details in non-standardized comments.</p>
+</section>
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">author</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>Zaahid Bateson</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+
+
+
+
+
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_comments">$comments</a>
+    <span>
+                &nbsp;: array&lt;string|int, string&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_date">$date</a>
+    <span>
+                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\DateTime">DateTime</abbr>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_name">$name</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#property_parameters">$parameters</a>
+    <span>
+                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_parts">$parts</a>
+    <span>
+                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_rawValue">$rawValue</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method___construct">__construct()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Assigns the header&#039;s name and raw value, then calls getConsumer and
+setParseHeaderValue to extract a parsed value.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method___toString">__toString()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the string representation of the header.  At the moment this is
+just in the form of:</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByAddress">getByAddress()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the address part of a parenthesized BY part.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByHostname">getByHostname()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the hostname part of a parenthesized BY part.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByName">getByName()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the name identified in the BY part of the header.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getComments">getComments()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, string&gt;    </span>
+</dt>
+<dd>Returns an array of comments parsed from the header.  If there are no
+comments in the header, an empty array is returned.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getDateTime">getDateTime()</a>
+    <span>
+                        &nbsp;: <abbr title="\DateTime">DateTime</abbr>    </span>
+</dt>
+<dd>Returns the date/time stamp for the received header.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromAddress">getFromAddress()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the address part of a parenthesized FROM part.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromHostname">getFromHostname()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the hostname part of a parenthesized FROM part.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromName">getFromName()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the name identified in the FROM part of the header.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getName">getName()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the name of the header.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getParts">getParts()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;    </span>
+</dt>
+<dd>Returns an array of HeaderPart objects associated with this header.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getRawValue">getRawValue()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the raw value of the header prior to any processing.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getValue">getValue()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the raw, unparsed header value, same as {@see
+ReceivedHeader::getRawValue()}.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#method_getValueFor">getValueFor()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the value of the parameter with the given name, or $defaultValue
+if not set.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#method_hasParameter">hasParameter()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Returns true if a parameter exists with the passed name.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getConsumer">getConsumer()</a>
+    <span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">AbstractConsumer</abbr></a>    </span>
+</dt>
+<dd>Returns a ReceivedConsumer.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_setParseHeaderValue">setParseHeaderValue()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Overridden to assign comments to $this-&gt;comments, and the DateTime to
+$this-&gt;date.</dd>
+
+        </dl>
+
+
+
+        
+
+        
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_comments">
+        $comments
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_comments" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">84</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__name">$comments</span>
+     = <span class="phpdocumentor-signature__default-value">[]</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_date">
+        $date
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_date" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">89</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\ZBateson\MailMimeParser\Header\DateTime">DateTime</abbr></span>
+    <span class="phpdocumentor-signature__name">$date</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_name">
+        $name
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_name" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">28</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$name</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_parameters">
+        $parameters
+        <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#property_parameters" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ParameterHeader.php"><a href="files/header-parameterheader.html"><abbr title="Header/ParameterHeader.php">ParameterHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">25</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__name">$parameters</span>
+     = <span class="phpdocumentor-signature__default-value">[]</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_parts">
+        $parts
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_parts" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__name">$parts</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_rawValue">
+        $rawValue
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_rawValue" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">39</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$rawValue</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">49</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Assigns the header&#039;s name and raw value, then calls getConsumer and
+setParseHeaderValue to extract a parsed value.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService">ConsumerService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$consumerService</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$consumerService</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService">ConsumerService</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___toString">
+        __toString()
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method___toString" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">131</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the string representation of the header.  At the moment this is
+just in the form of:</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__toString</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p><HeaderName>: <RawValue></p>
+<p>No additional processing is performed (for instance to wrap long lines.)</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getByAddress">
+        getByAddress()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByAddress" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">221</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the address part of a parenthesized BY part.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getByAddress</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>For example, &quot;BY name ([1.2.3.4])&quot; would return the string &quot;1.2.3.4&quot;.
+Validation of the address is not performed, and the returned value may
+not be valid.  More details on how the value is parsed and extracted can
+be found in the class description for <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader">ReceivedHeader</abbr></a>.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getByHostname">
+        getByHostname()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByHostname" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">205</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the hostname part of a parenthesized BY part.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getByHostname</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>For example, &quot;BY name (host.name)&quot; would return the string &quot;host.name&quot;.
+Validation of the hostname is not performed, and the returned value may
+not be valid.  More details on how the value is parsed and extracted can
+be found in the class description for <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader">ReceivedHeader</abbr></a>.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getByName">
+        getByName()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">189</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the name identified in the BY part of the header.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>The returned value may either be a name or an address in the form
+&quot;[1.2.3.4]&quot;.  Validation is not performed on this value, and so whatever
+exists in this position is returned -- be it contains spaces, or invalid
+characters, etc...</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getComments">
+        getComments()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getComments" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">233</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array of comments parsed from the header.  If there are no
+comments in the header, an empty array is returned.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getComments</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getDateTime">
+        getDateTime()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getDateTime" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">243</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the date/time stamp for the received header.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getDateTime</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\DateTime">DateTime</abbr></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\DateTime">DateTime</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getFromAddress">
+        getFromAddress()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromAddress" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">173</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the address part of a parenthesized FROM part.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getFromAddress</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>For example, &quot;FROM name ([1.2.3.4])&quot; would return the string &quot;1.2.3.4&quot;.
+Validation of the address is not performed, and the returned value may
+not be valid.  More details on how the value is parsed and extracted can
+be found in the class description for <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader">ReceivedHeader</abbr></a>.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getFromHostname">
+        getFromHostname()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromHostname" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">157</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the hostname part of a parenthesized FROM part.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getFromHostname</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>For example, &quot;FROM name (host.name)&quot; would return the string &quot;host.name&quot;.
+Validation of the hostname is not performed, and the returned value may
+not be valid.  More details on how the value is parsed and extracted can
+be found in the class description for <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html"><abbr title="\ZBateson\MailMimeParser\Header\ReceivedHeader">ReceivedHeader</abbr></a>.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getFromName">
+        getFromName()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">141</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the name identified in the FROM part of the header.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getFromName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>The returned value may either be a name or an address in the form
+&quot;[1.2.3.4]&quot;.  Validation is not performed on this value, and so whatever
+exists in this position is returned -- be it contains spaces, or invalid
+characters, etc...</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getName">
+        getName()
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">116</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the name of the header.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getParts">
+        getParts()
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getParts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">83</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array of HeaderPart objects associated with this header.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getParts</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getRawValue">
+        getRawValue()
+        <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getRawValue" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">106</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the raw value of the header prior to any processing.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getRawValue</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getValue">
+        getValue()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getValue" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">126</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the raw, unparsed header value, same as {@see
+ReceivedHeader::getRawValue()}.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getValue</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getValueFor">
+        getValueFor()
+        <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#method_getValueFor" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ParameterHeader.php"><a href="files/header-parameterheader.html"><abbr title="Header/ParameterHeader.php">ParameterHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">73</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the value of the parameter with the given name, or $defaultValue
+if not set.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getValueFor</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$defaultValue</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$defaultValue</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_hasParameter">
+        hasParameter()
+        <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#method_hasParameter" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ParameterHeader.php"><a href="files/header-parameterheader.html"><abbr title="Header/ParameterHeader.php">ParameterHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">60</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns true if a parameter exists with the passed name.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">hasParameter</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getConsumer">
+        getConsumer()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getConsumer" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns a ReceivedConsumer.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                <span class="phpdocumentor-signature__name">getConsumer</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService">ConsumerService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$consumerService</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">AbstractConsumer</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$consumerService</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ConsumerService">ConsumerService</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">AbstractConsumer</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setParseHeaderValue">
+        setParseHeaderValue()
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_setParseHeaderValue" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">108</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Overridden to assign comments to $this-&gt;comments, and the DateTime to
+$this-&gt;date.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                <span class="phpdocumentor-signature__name">setParseHeaderValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">AbstractConsumer</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$consumer</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$consumer</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer">AbstractConsumer</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
+    </article>
+                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+            </div>
+        </div>
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>
