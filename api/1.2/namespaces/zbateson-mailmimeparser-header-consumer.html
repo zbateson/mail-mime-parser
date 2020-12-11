@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Documentation</title>
+    <title>MailMimeParser 1.2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
@@ -19,7 +19,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Documentation</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">MailMimeParser 1.2</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -116,6 +116,11 @@ parts as necessary.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-GenericConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumer">GenericConsumer</abbr></a></dt>
         <dd>A minimal implementation of AbstractConsumer defining a CommentConsumer and
 QuotedStringConsumer as sub-consumers, and splitting tokens by whitespace.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer">IdBaseConsumer</abbr></a></dt>
+        <dd>Serves as a base-consumer for ID headers (like Message-ID and Content-ID).</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdConsumer">IdConsumer</abbr></a></dt>
+        <dd>Parses a single ID from an ID header.  Begins consuming on a &#039;&lt;&#039; char, and
+ends on a &#039;&gt;&#039; char.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer">ParameterConsumer</abbr></a></dt>
         <dd>Reads headers separated into parameters consisting of a main value, and
 subsequent name/value pairs - for example text/html; charset=utf-8.</dd>
@@ -124,11 +129,6 @@ subsequent name/value pairs - for example text/html; charset=utf-8.</dd>
 ending at the next single quote.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-SubjectConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\SubjectConsumer">SubjectConsumer</abbr></a></dt>
         <dd>Extends GenericConsumer to remove its sub consumers.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer">IdBaseConsumer</abbr></a></dt>
-        <dd>Serves as a base-consumer for ID headers (like Message-ID and Content-ID).</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdConsumer.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdConsumer">IdConsumer</abbr></a></dt>
-        <dd>Parses a single ID from an ID header.  Begins consuming on a &#039;&lt;&#039; char, and
-ends on a &#039;&gt;&#039; char.</dd>
     
     </dl>
 
