@@ -63,6 +63,7 @@
             <arg path="${project.basedir}/src"/>
             <arg value="-t"/>
             <arg path="${api-dir}"/>
+            <arg value="--title=MailMimeParser ${api-version}"/>
         </exec>
 
     </target>
