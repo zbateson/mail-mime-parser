@@ -1,7 +1,7 @@
 ### Parsing a stream
 
-To parse a mime stream using zbateson/mail-mime-parser, create a [ZBateson\MailMimeParser\MailMimeParser](api/0.4/classes/ZBateson.MailMimeParser.MailMimeParser.html) object and call `parse()`, passing it a resource handle or string. The `MailMimeParser::parse()` method returns a [ZBateson\MailMimeParser\Message](api/0.4/classes/ZBateson.MailMimeParser.Message.html) object representing the parsed mime message.
- 
+To parse a mime stream using zbateson/mail-mime-parser, create a [ZBateson\MailMimeParser\MailMimeParser](api/0.4/classes/ZBateson-MailMimeParser-MailMimeParser.html) object and call `parse()`, passing it a resource handle or string. The `MailMimeParser::parse()` method returns a [ZBateson\MailMimeParser\Message](api/0.4/classes/ZBateson-MailMimeParser-Message.html) object representing the parsed mime message.
+
 ```php
 // $resource = fopen('my-file.mime', 'r');
 // ...
@@ -11,12 +11,12 @@ $message = $parser->parse($resource);     // returns a ZBateson\MailMimeParser\M
 
 ### Message headers
 
-Headers are represented by [ZBateson\MailMimeParser\Header\AbstractHeader](api/0.4/classes/ZBateson.MailMimeParser.Header.AbstractHeader.html) and sub-classes depending on the type of header.  In general:
+Headers are represented by [ZBateson\MailMimeParser\Header\AbstractHeader](api/0.4/classes/ZBateson-MailMimeParser-Header.AbstractHeader.html) and sub-classes depending on the type of header.  In general:
 
-* [AddressHeader](api/0.4/classes/ZBateson.MailMimeParser.Header.AddressHeader.html) is returned for headers consisting of addresses and address groups (e.g. `From:`, `To:`, `Cc:`, etc...)
-* [DateHeader](api/0.4/classes/ZBateson.MailMimeParser.Header.DateHeader.html) parses header values into a `DateTime` object (e.g. a `Date:` header)
-* [ParameterHeader](api/0.4/classes/ZBateson.MailMimeParser.Header.ParameterHeader.html) represents headers consisting of multiple name/values (e.g. `Content-Type:`)
-* [GenericHeader](api/0.4/classes/ZBateson.MailMimeParser.Header.GenericHeader.html) is used for any other header
+* [AddressHeader](api/0.4/classes/ZBateson-MailMimeParser-Header.AddressHeader.html) is returned for headers consisting of addresses and address groups (e.g. `From:`, `To:`, `Cc:`, etc...)
+* [DateHeader](api/0.4/classes/ZBateson-MailMimeParser-Header.DateHeader.html) parses header values into a `DateTime` object (e.g. a `Date:` header)
+* [ParameterHeader](api/0.4/classes/ZBateson-MailMimeParser-Header.ParameterHeader.html) represents headers consisting of multiple name/values (e.g. `Content-Type:`)
+* [GenericHeader](api/0.4/classes/ZBateson-MailMimeParser-Header.GenericHeader.html) is used for any other header
 
 To retrieve an AbstractHeader object, call `Message::getHeader()`.
 
@@ -52,10 +52,10 @@ Essentially, the `\ZBateson\MailMimeParser\Message` object returned is itself a 
 All parsed mime parts, and deeper mime parts, are added to the Message as attachment parts for convenience, rather than mimic the original structure of the mime-formatted message however it's sent.
 
 The Message provides convenience methods for accessing attachment parts, and the main message body (text and/or HTML):
-* [Message::getTextPart()](api/0.4/classes/ZBateson.MailMimeParser.Message.html#method_getTextPart)
-* [Message::getHtmlPart()](api/0.4/classes/ZBateson.MailMimeParser.Message.html#method_getHtmlPart)
-* [Message::getAttachmentPart()](api/0.4/classes/ZBateson.MailMimeParser.Message.html#method_getAttachmentPart)
-* [Message::getAllAttachmentParts()](api/0.4/classes/ZBateson.MailMimeParser.Message.html#method_getAllattachmentParts)
+* [Message::getTextPart()](api/0.4/classes/ZBateson-MailMimeParser-Message.html#method_getTextPart)
+* [Message::getHtmlPart()](api/0.4/classes/ZBateson-MailMimeParser-Message.html#method_getHtmlPart)
+* [Message::getAttachmentPart()](api/0.4/classes/ZBateson-MailMimeParser-Message.html#method_getAttachmentPart)
+* [Message::getAllAttachmentParts()](api/0.4/classes/ZBateson-MailMimeParser-Message.html#method_getAllattachmentParts)
 
 The MimePart defines header functions and stream functions, e.g.
 * [MimePart::getContentResourceHandle()](ZBateson-MailMimeParser-MimePart#method_getContentResourceHandle)
@@ -73,7 +73,7 @@ echo stream_get_contents($att->getContentResourceHandle());
 
 ### Reading text and html parts
 
-As a convenient way of reading the text and HTML parts of a Message, use [Message::getTextStream()](api/0.4/classes/ZBateson.MailMimeParser.Message.html#method_getTextStream) and [Message::getHtmlStream()](api/0.4/classes/ZBateson.MailMimeParser.Message.html#method_getHtmlStream).
+As a convenient way of reading the text and HTML parts of a Message, use [Message::getTextStream()](api/0.4/classes/ZBateson-MailMimeParser-Message.html#method_getTextStream) and [Message::getHtmlStream()](api/0.4/classes/ZBateson-MailMimeParser-Message.html#method_getHtmlStream).
 
 ```php
 // $message = $parser->parse($resource);
