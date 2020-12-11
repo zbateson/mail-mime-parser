@@ -32,10 +32,8 @@ class ConsumerService
     protected $mimeLiteralPartFactory;
 
     /**
-     * @var Received\DomainConsumer[]|
-     *      Received\GenericReceivedConsumer[]|
-     *      Received\ReceivedDateConsumer[] an array of sub-received header
-     *      consumer instances.
+     * @var Received\DomainConsumer[]|Received\GenericReceivedConsumer[]|Received\ReceivedDateConsumer[]
+     *      an array of sub-received header consumer instances.
      */
     protected $receivedConsumers = [
         'from' => null,
