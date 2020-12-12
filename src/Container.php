@@ -81,12 +81,30 @@ class Container
      * @var StreamFactory
      */
     protected $streamFactory;
+
+    protected $parsers = [];
     
     /**
      * Constructs a Container - call singleton() to invoke
      */
     public function __construct()
     {
+        $this->registerSubParser(
+            '\ZBateson\MailMimeParser\Message\Parser\MimeParser',
+            '\ZBateson\MailMimeParser\Message\Parser\MultipartParser'
+        );
+        $this->registerSubParser(
+            '\ZBateson\MailMimeParser\Message\Parser\HeaderParser',
+            '\ZBateson\MailMimeParser\Message\Parser\MimeParser'
+        );
+        $this->registerSubParser(
+            '\ZBateson\MailMimeParser\Message\Parser\HeaderParser',
+            '\ZBateson\MailMimeParser\Message\Parser\NonMimeParser'
+        );
+        $this->registerSubParser(
+            '\ZBateson\MailMimeParser\Message\Parser\BaseParser',
+            '\ZBateson\MailMimeParser\Message\Parser\HeaderParser'
+        );
     }
 
     /**
@@ -104,7 +122,25 @@ class Container
         }
         return $this->$var;
     }
-    
+
+    public function getParserClass($class)
+    {
+        if (empty($this->parsers[$class])) {
+            $this->parsers[$class] = new $class(
+                $this->getPartFactoryService(),
+                $this->getPartBuilderFactory()
+            );
+        }
+        return $this->parsers[$class];
+    }
+
+    public function registerSubParser($parentClass, $class)
+    {
+        $parent = $this->getParserClass($parentClass);
+        $cls = $this->getParserClass($class);
+        $parent->addSubParser($cls);
+    }
+
     /**
      * Constructs and returns a new MessageParser object.
      * 
@@ -112,10 +148,10 @@ class Container
      */
     public function newMessageParser()
     {
-        return new MessageParser(
-            $this->getPartFactoryService(),
-            $this->getPartBuilderFactory()
+        $baseParser = $this->getParserClass(
+            '\ZBateson\MailMimeParser\Message\Parser\BaseParser'
         );
+        return new MessageParser($baseParser);
     }
     
     /**
