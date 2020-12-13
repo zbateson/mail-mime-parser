@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
+use ZBateson\MailMimeParser\Message\MessageParser;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\CachingStream;
 
@@ -34,12 +35,20 @@ class MailMimeParser
      * @var \ZBateson\MailMimeParser\Container dependency injection container
      */
     protected $di;
+
+    /**
+     * @var MessageParser for parsing messages
+     */
+    protected $messageParser;
     
     /**
      * Sets up the parser.
      *
-     * @param Container $di pass a Container object to use it for
-     *        initialization.
+     * @param Pimple\ServiceProviderInterface[] configuration classes to
+     *        override default services
+     * @param Container $di can pass a mock object for testing, not recommended
+     *        for general use (pass a ServiceProviderInterface in $providers
+     *        instead)
      */
     public function __construct(array $providers = [], Container $di = null)
     {
@@ -51,6 +60,7 @@ class MailMimeParser
             $di->register($provider);
         }
         $this->di = $di;
+        $parser = $di['\ZBateson\MailMimeParser\Message\MessageParser'];
     }
 
     /**
@@ -76,7 +86,6 @@ class MailMimeParser
         if (!$stream->isSeekable()) {
             $stream = new CachingStream($stream);
         }
-        $parser = $this->di['\ZBateson\MailMimeParser\Message\MessageParser'];
-        return $parser->parse($stream);
+        return $this->parser->parse($stream);
     }
 }
