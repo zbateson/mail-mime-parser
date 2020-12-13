@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\CachingStream;
 
 /**
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
@@ -53,29 +54,29 @@ class MailMimeParser
     }
 
     /**
-     * Parses the passed stream handle into a ZBateson\MailMimeParser\Message
-     * object and returns it.
-     * 
-     * Internally, the message is first copied to a temp stream (with php://temp
-     * which may keep it in memory or write it to disk) and its stream is used.
-     * That way if the message is too large to hold in memory it can be written
-     * to a temporary file if need be.
-     * 
+     * Parses the passed stream handle or string into a
+     * ZBateson\MailMimeParser\Message object and returns it.
+     *
+     * By default, the passed stream is in 'attached' mode, and will close when
+     * the Message is destroyed.  Pass TRUE as the second argument to keep the
+     * stream open.  In either case, the passed stream must remain open so long
+     * as the Message object exists.
+     *
      * @param resource|string $handleOrString the resource handle to the input
      *        stream of the mime message, or a string containing a mime message
+     * @param bool $detached set to true to keep the stream open
      * @return \ZBateson\MailMimeParser\Message
      */
-    public function parse($handleOrString)
+    public function parse($handleOrString, $detached = false)
     {
-        $stream = Psr7\stream_for($handleOrString);
-        $copy = Psr7\stream_for(fopen('php://temp', 'r+'));
-
-        Psr7\copy_to_stream($stream, $copy);
-        $copy->rewind();
-
-        // don't close it when $stream gets destroyed
-        $stream->detach();
+        $stream = Psr7\stream_for(
+            $handleOrString,
+            [ 'metadata' => [ 'mmp-detached-stream' => $detached ] ]
+        );
+        if (!$stream->isSeekable()) {
+            $stream = new CachingStream($stream);
+        }
         $parser = $this->di['\ZBateson\MailMimeParser\Message\MessageParser'];
-        return $parser->parse($copy);
+        return $parser->parse($stream);
     }
 }

@@ -44,6 +44,11 @@ abstract class MessagePart
     protected $stream;
 
     /**
+     * @var boolean
+     */
+    protected $detachStream;
+
+    /**
      * @var StreamInterface a Psr7 stream containing this part's content
      */
     protected $contentStream;
@@ -81,6 +86,13 @@ abstract class MessagePart
 
         $this->stream = $stream;
         $this->contentStream = $contentStream;
+        // checking now -- if the stream's underlying stream is detached or
+        // closed before this destructor is called this will cause a null
+        // error in StreamDecoratorTrait.  This might be because a stream is
+        // being closed elsewhere where it shouldn't be.
+        if ($stream !== null) {
+            $this->detachStream = $stream->getMetadata('mmp-detached-stream');
+        }
         if ($contentStream !== null) {
             $partStreamFilterManager->setStream(
                 $contentStream
@@ -94,7 +106,11 @@ abstract class MessagePart
     public function __destruct()
     {
         if ($this->stream !== null) {
-            $this->stream->close();
+            if ($this->detachStream) {
+                $this->stream->detach();
+            } else {
+                $this->stream->close();
+            }
         }
         if ($this->contentStream !== null) {
             $this->contentStream->close();
