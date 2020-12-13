@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Message;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\Parser\BaseParser;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
+use ZBateson\MailMimeParser\Message\MessageService;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -19,17 +19,6 @@ use ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService;
  */
 class MessageParser
 {
-    /**
-     * @var PartFactoryService service instance used to create MimePartFactory
-     *      objects.
-     */
-    protected $partFactoryService;
-    
-    /**
-     * @var PartBuilderFactory used to create PartBuilders
-     */
-    protected $partBuilderFactory;
-
     /**
      * @var BaseParser
      */

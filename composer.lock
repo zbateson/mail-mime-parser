@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8bff8855ff0048a8cf662c5262ebe833",
+    "content-hash": "ab90821f5de38170358b14c435ac9171",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -80,6 +80,112 @@
                 "source": "https://github.com/guzzle/psr7/tree/1.7.0"
             },
             "time": "2020-09-30T07:37:11+00:00"
+        },
+        {
+            "name": "pimple/pimple",
+            "version": "v3.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Pimple.git",
+                "reference": "21e45061c3429b1e06233475cc0e1f6fc774d5b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/21e45061c3429b1e06233475cc0e1f6fc774d5b0",
+                "reference": "21e45061c3429b1e06233475cc0e1f6fc774d5b0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "psr/container": "^1.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple, a simple Dependency Injection Container",
+            "homepage": "https://pimple.symfony.com",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "support": {
+                "source": "https://github.com/silexphp/Pimple/tree/v3.3.1"
+            },
+            "time": "2020-11-24T20:35:42+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/container/issues",
+                "source": "https://github.com/php-fig/container/tree/master"
+            },
+            "time": "2017-02-14T16:28:37+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1461,16 +1567,16 @@
         },
         {
             "name": "sanmai/phpunit-legacy-adapter",
-            "version": "8.1",
+            "version": "8.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sanmai/phpunit-legacy-adapter.git",
-                "reference": "464c7505c15c487239ac696a82097c765f38a2a1"
+                "reference": "3db58a31847d803f76cab3da14e334a2d090c067"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sanmai/phpunit-legacy-adapter/zipball/464c7505c15c487239ac696a82097c765f38a2a1",
-                "reference": "464c7505c15c487239ac696a82097c765f38a2a1",
+                "url": "https://api.github.com/repos/sanmai/phpunit-legacy-adapter/zipball/3db58a31847d803f76cab3da14e334a2d090c067",
+                "reference": "3db58a31847d803f76cab3da14e334a2d090c067",
                 "shasum": ""
             },
             "require": {
@@ -1505,9 +1611,9 @@
             "description": "PHPUnit Legacy Versions Adapter",
             "support": {
                 "issues": "https://github.com/sanmai/phpunit-legacy-adapter/issues",
-                "source": "https://github.com/sanmai/phpunit-legacy-adapter/tree/8.1"
+                "source": "https://github.com/sanmai/phpunit-legacy-adapter/tree/8.2.1"
             },
-            "time": "2020-11-12T21:18:07+00:00"
+            "time": "2020-12-11T05:43:04+00:00"
         },
         {
             "name": "sebastian/cli-parser",

@@ -40,10 +40,14 @@ class MailMimeParser
      * @param Container $di pass a Container object to use it for
      *        initialization.
      */
-    public function __construct(Container $di = null)
+    public function __construct(array $providers = [], Container $di = null)
     {
         if ($di === null) {
             $di = new Container();
+            $di->register(new DefaultProvider());
+        }
+        foreach ($providers as $provider) {
+            $di->register($provider);
         }
         $this->di = $di;
     }
@@ -71,7 +75,7 @@ class MailMimeParser
 
         // don't close it when $stream gets destroyed
         $stream->detach();
-        $parser = $this->di->newMessageParser();
+        $parser = $this->di['\ZBateson\MailMimeParser\Message\MessageParser'];
         return $parser->parse($copy);
     }
 }

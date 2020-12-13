@@ -24,7 +24,7 @@ class NonMimeParser extends AbstractParser {
             $line = trim($this->readLine($handle));
             if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
                 $part = $this->partBuilderFactory->newPartBuilder(
-                    $this->partFactoryService->getUUEncodedPartFactory()
+                    $this->messageService->getUUEncodedPartFactory()
                 );
                 $part->setStreamPartStartPos($start);
                 // 'begin' line is part of the content

@@ -27,7 +27,7 @@ class BaseParser extends AbstractParser {
     public function parseMessage(StreamInterface $stream)
     {
         $partBuilder = $this->partBuilderFactory->newPartBuilder(
-            $this->partFactoryService->getMessageFactory()
+            $this->messageService->getMessageFactory()
         );
         $this(StreamWrapper::getResource($stream), $partBuilder);
         return $partBuilder;

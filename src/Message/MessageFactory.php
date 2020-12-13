@@ -8,7 +8,7 @@ namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\Helper\MessageHelperService;
+use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
@@ -23,9 +23,9 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 class MessageFactory extends MimePartFactory
 {
     /**
-     * @var MessageHelperService helper class for message manipulation routines.
+     * @var MessageService helper class for message manipulation routines.
      */
-    protected $messageHelperService;
+    protected $messageService;
 
     /**
      * Constructor
@@ -33,16 +33,16 @@ class MessageFactory extends MimePartFactory
      * @param StreamFactory $sdf
      * @param PartStreamFilterManagerFactory $psf
      * @param PartFilterFactory $pf
-     * @param MessageHelperService $mhs
+     * @param MessageService $mhs
      */
     public function __construct(
         StreamFactory $sdf,
         PartStreamFilterManagerFactory $psf,
         PartFilterFactory $pf,
-        MessageHelperService $mhs
+        MessageService $mhs
     ) {
         parent::__construct($sdf, $psf, $pf);
-        $this->messageHelperService = $mhs;
+        $this->messageService = $mhs;
     }
 
     /**
@@ -63,7 +63,7 @@ class MessageFactory extends MimePartFactory
             $this->streamFactory,
             $this->partFilterFactory,
             $partBuilder,
-            $this->messageHelperService,
+            $this->messageService,
             $stream,
             $contentStream
         );

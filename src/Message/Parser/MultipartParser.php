@@ -19,7 +19,7 @@ class MultipartParser extends AbstractParser {
     {
         while (!$partBuilder->isParentBoundaryFound()) {
             $child = $this->partBuilderFactory->newPartBuilder(
-                $this->partFactoryService->getMimePartFactory()
+                $this->messageService->getMimePartFactory()
             );
             $partBuilder->addChild($child);
             $this->invokeBaseParser($handle, $child);
