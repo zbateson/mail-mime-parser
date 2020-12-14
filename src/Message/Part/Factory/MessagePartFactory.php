@@ -21,12 +21,6 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 abstract class MessagePartFactory
 {
     /**
-     * @var PartStreamFilterManagerFactory responsible for creating
-     *      PartStreamFilterManager instances
-     */
-    protected $partStreamFilterManagerFactory;
-
-    /**
      * @var StreamFactory the StreamFactory instance
      */
     protected $streamFactory;
@@ -41,14 +35,9 @@ abstract class MessagePartFactory
      * Initializes class dependencies.
      *
      * @param StreamFactory $streamFactory
-     * @param PartStreamFilterManagerFactory $psf
      */
-    public function __construct(
-        StreamFactory $streamFactory,
-        PartStreamFilterManagerFactory $psf
-    ) {
+    public function __construct(StreamFactory $streamFactory) {
         $this->streamFactory = $streamFactory;
-        $this->partStreamFilterManagerFactory = $psf;
     }
     
     /**
@@ -84,14 +73,12 @@ abstract class MessagePartFactory
      * Returns the singleton instance for the class.
      *
      * @param StreamFactory $sdf
-     * @param PartStreamFilterManagerFactory $psf
      * @param PartFilterFactory $pf
      * @param MessageService $ms
      * @return MessagePartFactory
      */
     public static function getInstance(
         StreamFactory $sdf,
-        PartStreamFilterManagerFactory $psf,
         PartFilterFactory $pf = null,
         MessageService $ms = null
     ) {

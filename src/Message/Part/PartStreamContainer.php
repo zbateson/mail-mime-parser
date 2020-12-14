@@ -11,22 +11,38 @@ use GuzzleHttp\Psr7\CachingStream;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Manages attached stream filters for a MessagePart's content resource handle.
- * 
- * The attached stream filters are:
- *  o Content-Transfer-Encoding filter to manage decoding from a supported
- *    encoding: quoted-printable, base64 and x-uuencode.
- *  o Charset conversion filter to convert to UTF-8
+ * Holds the stream and content stream objects for a part.
  *
- * @author Zaahid Bateson
+ * Note that streams are not explicitly closed or detached on destruction of the
+ * PartSreamContainer by design: the passed StreamInterfaces will be closed on
+ * their destruction when no references to them remain, which is useful when the
+ * streams are passed around.
+ *
+ * In addition, all the streams passed to PartStreamContainer should be wrapping
+ * a ZBateson\StreamDecorators\NonClosingStream unless attached to a part by a
+ * user, this is because MMP uses a single seekable stream for content and wraps
+ * it in ZBateson\StreamDecorators\SeekingLimitStream objects for each part.
+ *
+ * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class PartStreamFilterManager
-{
+class PartStreamContainer {
+
     /**
-     * @var StreamInterface the underlying content stream without filters
-     *      applied
+     * @var StreamFactory used to apply psr7 stream decorators to the
+     *      attached StreamInterface based on encoding.
+     */
+    protected $streamFactory;
+
+    /**
+     * @var StreamInterface a Psr7 stream containing the part's headers, content
+     *      and children
      */
     protected $stream;
+
+    /**
+     * @var StreamInterface a Psr7 stream containing this part's content
+     */
+    protected $contentStream;
 
     /**
      * @var StreamInterface the content stream after attaching transfer encoding
@@ -47,7 +63,7 @@ class PartStreamFilterManager
         'type' => null,
         'filter' => null
     ];
-    
+
     /**
      * @var array map of the active charset filter on the current handle.
      */
@@ -58,14 +74,8 @@ class PartStreamFilterManager
     ];
 
     /**
-     * @var StreamFactory used to apply psr7 stream decorators to the
-     *      attached StreamInterface based on encoding.
-     */
-    private $streamFactory;
-    
-    /**
      * Sets up filter names used for stream_filter_append
-     * 
+     *
      * @param StreamFactory $streamFactory
      */
     public function __construct(StreamFactory $streamFactory)
@@ -74,23 +84,44 @@ class PartStreamFilterManager
     }
 
     /**
-     * Sets the URL used to open the content resource handle.
-     * 
-     * The function also closes the currently attached handle if any.
-     * 
+     *
      * @param StreamInterface $stream
+     * @throws UnexpectedValueException
      */
-    public function setStream(StreamInterface $stream = null)
+    public function setStream(StreamInterface $stream)
     {
+        if ($this->stream !== null) {
+            throw new UnexpectedValueException("stream has already been set and cannot be overwritten");
+        }
         $this->stream = $stream;
+    }
+
+    public function getStream()
+    {
+        return $this->stream;
+    }
+
+    /**
+     * Returns true if there's a content stream associated with the part.
+     *
+     * @return boolean
+     */
+    public function hasContent()
+    {
+        return ($this->contentStream !== null);
+    }
+
+    public function setContentStream(StreamInterface $contentStream = null)
+    {
+        $this->contentStream = $contentStream;
         $this->decodedStream = null;
         $this->charsetStream = null;
     }
-    
+
     /**
      * Returns true if the attached stream filter used for decoding the content
      * on the current handle is different from the one passed as an argument.
-     * 
+     *
      * @param string $transferEncoding
      * @return boolean
      */
@@ -98,12 +129,12 @@ class PartStreamFilterManager
     {
         return ($transferEncoding !== $this->encoding['type']);
     }
-    
+
     /**
      * Returns true if the attached stream filter used for charset conversion on
-     * the current handle is different from the one needed based on the passed 
+     * the current handle is different from the one needed based on the passed
      * arguments.
-     * 
+     *
      * @param string $fromCharset
      * @param string $toCharset
      * @return boolean
@@ -113,11 +144,11 @@ class PartStreamFilterManager
         return ($fromCharset !== $this->charset['from']
             || $toCharset !== $this->charset['to']);
     }
-    
+
     /**
      * Attaches a decoding filter to the attached content handle, for the passed
      * $transferEncoding.
-     * 
+     *
      * @param string $transferEncoding
      */
     protected function attachTransferEncodingFilter($transferEncoding)
@@ -141,11 +172,11 @@ class PartStreamFilterManager
             }
         }
     }
-    
+
     /**
      * Attaches a charset conversion filter to the attached content handle, for
      * the passed arguments.
-     * 
+     *
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
      */
@@ -161,7 +192,7 @@ class PartStreamFilterManager
             $this->charset['to'] = $toCharset;
         }
     }
-    
+
     /**
      * Resets just the charset stream, and rewinds the decodedStream.
      */
@@ -190,16 +221,16 @@ class PartStreamFilterManager
             'to' => null,
             'filter' => null
         ];
-        $this->stream->rewind();
-        $this->decodedStream = $this->stream;
-        $this->charsetStream = $this->stream;
+        $this->contentStream->rewind();
+        $this->decodedStream = $this->contentStream;
+        $this->charsetStream = $this->contentStream;
     }
-    
+
     /**
      * Checks what transfer-encoding decoder stream and charset conversion
-     * stream are currently attached on the underlying stream, and resets them
-     * if the requested arguments differ from the currently assigned ones.
-     * 
+     * stream are currently attached on the underlying contentStream, and resets
+     * them if the requested arguments differ from the currently assigned ones.
+     *
      * @param string $transferEncoding
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
@@ -207,11 +238,11 @@ class PartStreamFilterManager
      */
     public function getContentStream($transferEncoding, $fromCharset, $toCharset)
     {
-        if ($this->stream === null) {
+        if ($this->contentStream === null) {
             return null;
         }
         if (empty($fromCharset) || empty($toCharset)) {
-            return $this->getBinaryStream($transferEncoding);
+            return $this->getBinaryContentStream($transferEncoding);
         }
         if ($this->charsetStream === null
             || $this->isTransferEncodingFilterChanged($transferEncoding)
@@ -235,9 +266,9 @@ class PartStreamFilterManager
      * @param string $transferEncoding
      * @return StreamInterface
      */
-    public function getBinaryStream($transferEncoding)
+    public function getBinaryContentStream($transferEncoding)
     {
-        if ($this->stream === null) {
+        if ($this->contentStream === null) {
             return null;
         }
         if ($this->decodedStream === null

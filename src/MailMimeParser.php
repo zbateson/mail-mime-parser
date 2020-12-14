@@ -60,7 +60,7 @@ class MailMimeParser
             $di->register($provider);
         }
         $this->di = $di;
-        $parser = $di['\ZBateson\MailMimeParser\Message\MessageParser'];
+        $this->parser = $di['\ZBateson\MailMimeParser\Message\MessageParser'];
     }
 
     /**

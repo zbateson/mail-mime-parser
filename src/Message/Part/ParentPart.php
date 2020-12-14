@@ -31,31 +31,47 @@ abstract class ParentPart extends MessagePart
     /**
      * Constructor
      * 
-     * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
-     * @param PartFilterFactory $partFilterFactory
-     * @param PartBuilder $partBuilder
-     * @param StreamInterface $stream
-     * @param StreamInterface $contentStream
+     * @param PartFilterFactory $partFilterFactory]
      */
     public function __construct(
-        PartStreamFilterManager $partStreamFilterManager,
         StreamFactory $streamFactory,
-        PartFilterFactory $partFilterFactory,
-        PartBuilder $partBuilder,
-        StreamInterface $stream = null,
-        StreamInterface $contentStream = null
+        PartFilterFactory $partFilterFactory
     ) {
-        parent::__construct($partStreamFilterManager, $streamFactory, $stream, $contentStream);
+        parent::__construct($streamFactory);
         $this->partFilterFactory = $partFilterFactory;
+    }
 
+    /**
+     *
+     * @param PartBuilder $partBuilder
+     */
+    public function initFrom(PartBuilder $partBuilder, PartStreamContainer $container)
+    {
+        parent::initFrom($partBuilder, $container);
         $pbChildren = $partBuilder->getChildren();
         if (!empty($pbChildren)) {
-            $this->children = array_map(function ($child) use ($stream) {
-                $childPart = $child->createMessagePart($stream);
-                $childPart->parent = $this;
-                return $childPart;
-            }, $pbChildren);
+            $stream = $container->getStream();
+            $this->setChildren(
+                array_map(function ($child) use ($stream) {
+                    $childPart = $child->createMessagePart($stream);
+                    $childPart->parent = $this;
+                    return $childPart;
+                }, $pbChildren),
+                true
+            );
+        }
+    }
+
+    /**
+     * 
+     * @param MessagePart[] $children
+     */
+    public function setChildren(array $children, $init = false)
+    {
+        $this->children = $children;
+        if (!$init) {
+            $this->onChange();
         }
     }
 

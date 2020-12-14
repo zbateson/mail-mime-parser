@@ -12,7 +12,6 @@ use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
 use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -49,12 +48,6 @@ class MessageService
     protected $partFilterFactory;
 
     /**
-     * @var PartStreamFilterManagerFactory the PartStreamFilterManagerFactory
-     *      instance
-     */
-    protected $partStreamFilterManagerFactory;
-
-    /**
      * @var StreamFactory the StreamFactory instance
      */
     protected $streamFactory;
@@ -67,13 +60,11 @@ class MessageService
     public function __construct(
         PartBuilderFactory $partBuilderFactory,
         PartFilterFactory $partFilterFactory,
-        StreamFactory $streamFactory,
-        PartStreamFilterManagerFactory $partStreamFilterManagerFactory
+        StreamFactory $streamFactory
     ) {
         $this->partBuilderFactory = $partBuilderFactory;
         $this->partFilterFactory = $partFilterFactory;
         $this->streamFactory = $streamFactory;
-        $this->partStreamFilterManagerFactory = $partStreamFilterManagerFactory;
     }
 
     /**
@@ -139,7 +130,6 @@ class MessageService
     {
         return MessageFactory::getInstance(
             $this->streamFactory,
-            $this->partStreamFilterManagerFactory,
             $this->partFilterFactory,
             $this
         );
@@ -154,7 +144,6 @@ class MessageService
     {
         return MimePartFactory::getInstance(
             $this->streamFactory,
-            $this->partStreamFilterManagerFactory,
             $this->partFilterFactory
         );
     }
@@ -167,8 +156,7 @@ class MessageService
     public function getNonMimePartFactory()
     {
         return NonMimePartFactory::getInstance(
-            $this->streamFactory,
-            $this->partStreamFilterManagerFactory
+            $this->streamFactory
         );
     }
 
@@ -180,8 +168,7 @@ class MessageService
     public function getUUEncodedPartFactory()
     {
         return UUEncodedPartFactory::getInstance(
-            $this->streamFactory,
-            $this->partStreamFilterManagerFactory
+            $this->streamFactory
         );
     }
 }

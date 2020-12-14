@@ -27,29 +27,27 @@ abstract class ParentHeaderPart extends ParentPart
     /**
      * Constructor
      *
-     * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
      * @param PartFilterFactory $partFilterFactory
-     * @param PartBuilder $partBuilder
-     * @param StreamInterface $stream
-     * @param StreamInterface $contentStream
      */
     public function __construct(
-        PartStreamFilterManager $partStreamFilterManager,
         StreamFactory $streamFactory,
-        PartFilterFactory $partFilterFactory,
-        PartBuilder $partBuilder,
-        StreamInterface $stream = null,
-        StreamInterface $contentStream = null
+        PartFilterFactory $partFilterFactory
     ) {
         parent::__construct(
-            $partStreamFilterManager,
             $streamFactory,
-            $partFilterFactory,
-            $partBuilder,
-            $stream,
-            $contentStream
+            $partFilterFactory
         );
+        
+    }
+
+    /**
+     *
+     * @param PartBuilder $partBuilder
+     */
+    public function initFrom(PartBuilder $partBuilder, PartStreamContainer $container)
+    {
+        parent::initFrom($partBuilder, $container);
         $this->headerContainer = $partBuilder->getHeaderContainer();
     }
 

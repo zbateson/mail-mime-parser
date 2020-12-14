@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\Part\PartStreamContainer;
 
 /**
  * Responsible for creating MimePart instances.
@@ -28,15 +29,13 @@ class MimePartFactory extends MessagePartFactory
      * Initializes dependencies.
      *
      * @param StreamFactory $sdf
-     * @param PartStreamFilterManagerFactory $psf
      * @param PartFilterFactory $pf
      */
     public function __construct(
         StreamFactory $sdf,
-        PartStreamFilterManagerFactory $psf,
         PartFilterFactory $pf
     ) {
-        parent::__construct($sdf, $psf);
+        parent::__construct($sdf);
         $this->partFilterFactory = $pf;
     }
 
@@ -49,19 +48,16 @@ class MimePartFactory extends MessagePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null)
     {
-        $partStream = null;
-        $contentStream = null;
+        $streamContainer = new PartStreamContainer($this->streamFactory);
         if ($messageStream !== null) {
-            $partStream = $this->streamFactory->getLimitedPartStream($messageStream, $partBuilder);
-            $contentStream = $this->streamFactory->getLimitedContentStream($messageStream, $partBuilder);
+            $streamContainer->setStream($this->streamFactory->getLimitedPartStream($messageStream, $partBuilder));
+            $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($messageStream, $partBuilder));
         }
-        return new MimePart(
-            $this->partStreamFilterManagerFactory->newInstance(),
+        $part = new MimePart(
             $this->streamFactory,
-            $this->partFilterFactory,
-            $partBuilder,
-            $partStream,
-            $contentStream
+            $this->partFilterFactory
         );
+        $part->initFrom($partBuilder, $streamContainer);
+        return $part;
     }
 }

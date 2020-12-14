@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory;
+use ZBateson\MailMimeParser\Message\Part\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -31,17 +31,15 @@ class MessageFactory extends MimePartFactory
      * Constructor
      * 
      * @param StreamFactory $sdf
-     * @param PartStreamFilterManagerFactory $psf
      * @param PartFilterFactory $pf
      * @param MessageService $mhs
      */
     public function __construct(
         StreamFactory $sdf,
-        PartStreamFilterManagerFactory $psf,
         PartFilterFactory $pf,
         MessageService $mhs
     ) {
-        parent::__construct($sdf, $psf, $pf);
+        parent::__construct($sdf, $pf);
         $this->messageService = $mhs;
     }
 
@@ -54,18 +52,17 @@ class MessageFactory extends MimePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, StreamInterface $stream = null)
     {
-        $contentStream = null;
+        $streamContainer = new PartStreamContainer($this->streamFactory);
         if ($stream !== null) {
-            $contentStream = $this->streamFactory->getLimitedContentStream($stream, $partBuilder);
+            $streamContainer->setStream($this->streamFactory->newNonClosingStream($stream));
+            $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($stream, $partBuilder));
         }
-        return new Message(
-            $this->partStreamFilterManagerFactory->newInstance(),
+        $message = new Message(
             $this->streamFactory,
             $this->partFilterFactory,
-            $partBuilder,
-            $this->messageService,
-            $stream,
-            $contentStream
+            $this->messageService
         );
+        $message->initMessageFrom($partBuilder, $stream, $streamContainer);
+        return $message;
     }
 }

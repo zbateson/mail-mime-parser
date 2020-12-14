@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Used by MessageParser to keep information about a parsed message as an
@@ -18,6 +19,12 @@ use ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory;
  */
 class PartBuilder
 {
+    /**
+     * @var MessagePartFactory the factory
+     *      needed for creating the Message or MessagePart for the parsed part.
+     */
+    private $messagePartFactory;
+
     /**
      * @var int The offset read start position for this part (beginning of
      * headers) in the message's stream.
@@ -43,12 +50,6 @@ class PartBuilder
      */
     private $streamContentEndPos = 0;
 
-    /**
-     * @var MessagePartFactory the factory
-     *      needed for creating the Message or MessagePart for the parsed part.
-     */
-    private $messagePartFactory;
-    
     /**
      * @var boolean set to true once the end boundary of the currently-parsed
      *      part is found.
@@ -90,6 +91,13 @@ class PartBuilder
      *      $messagePartFactory when constructing the Message and its children.
      */
     private $properties = [];
+
+    /**
+     * @var bool true if the part can have headers (i.e. a top-level part, or a
+     *      child part if the parent's end boundary hasn't been found and is not
+     *      a discardable part).
+     */
+    private $canHaveHeaders = true;
 
     /**
      * Sets up class dependencies.
@@ -164,6 +172,7 @@ class PartBuilder
     public function addChild(PartBuilder $partBuilder)
     {
         $partBuilder->parent = $this;
+        $partBuilder->canHaveHeaders = (!$this->endBoundaryFound);
         // discard parts added after the end boundary
         if (!$this->endBoundaryFound) {
             $this->children[] = $partBuilder;
@@ -303,15 +312,16 @@ class PartBuilder
     }
     
     /**
-     * Returns false if this part has a parent part in which endBoundaryFound is
-     * set to true (i.e. this isn't a discardable part following the parent's
-     * end boundary line).
+     * Returns true if the part's content contains headers.
+     *
+     * Top-level or non-discardable (i.e. parts before the end-boundary of the
+     * parent) will return true;
      * 
      * @return boolean
      */
     public function canHaveHeaders()
     {
-        return ($this->parent === null || !$this->parent->endBoundaryFound);
+        return $this->canHaveHeaders;
     }
 
     /**

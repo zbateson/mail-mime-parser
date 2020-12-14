@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -23,11 +24,6 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 abstract class MessagePart
 {
     /**
-     * @var PartStreamFilterManager manages attached filters to $contentHandle
-     */
-    protected $partStreamFilterManager;
-
-    /**
      * @var StreamFactory for creating MessagePartStream objects
      */
     protected $streamFactory;
@@ -38,20 +34,9 @@ abstract class MessagePart
     protected $parent;
 
     /**
-     * @var StreamInterface a Psr7 stream containing this part's headers,
-     *      content and children
+     * @var PartStreamContainer holds 'stream' and 'contentStream'.
      */
-    protected $stream;
-
-    /**
-     * @var boolean
-     */
-    protected $detachStream;
-
-    /**
-     * @var StreamInterface a Psr7 stream containing this part's content
-     */
-    protected $contentStream;
+    protected $partStreamContainer;
 
     /**
      * @var string can be used to set an override for content's charset in cases
@@ -61,60 +46,38 @@ abstract class MessagePart
     protected $charsetOverride;
 
     /**
-     * @var boolean set to true when a user attaches a stream manually, it's
+     * @var bool set to true when a user attaches a stream manually, it's
      *      assumed to already be decoded or to have relevant transfer encoding
      *      decorators attached already.
      */
     protected $ignoreTransferEncoding;
 
     /**
+     * @var bool set to true if the part's been changed, and the attached stream
+     *      in $partStreamContainer would no longer represent the actual content
+     *      of the part, and a MessagePartStream should be used instead.
+     */
+    protected $streamChanged;
+
+    /**
      * Constructor
      *
-     * @param PartStreamFilterManager $partStreamFilterManager
      * @param StreamFactory $streamFactory
-     * @param StreamInterface $stream
-     * @param StreamInterface $contentStream
      */
-    public function __construct(
-        PartStreamFilterManager $partStreamFilterManager,
-        StreamFactory $streamFactory,
-        StreamInterface $stream = null,
-        StreamInterface $contentStream = null
-    ) {
-        $this->partStreamFilterManager = $partStreamFilterManager;
+    public function __construct(StreamFactory $streamFactory)
+    {
         $this->streamFactory = $streamFactory;
-
-        $this->stream = $stream;
-        $this->contentStream = $contentStream;
-        // checking now -- if the stream's underlying stream is detached or
-        // closed before this destructor is called this will cause a null
-        // error in StreamDecoratorTrait.  This might be because a stream is
-        // being closed elsewhere where it shouldn't be.
-        if ($stream !== null) {
-            $this->detachStream = $stream->getMetadata('mmp-detached-stream');
-        }
-        if ($contentStream !== null) {
-            $partStreamFilterManager->setStream(
-                $contentStream
-            );
-        }
+        $this->streamChanged = true;
     }
 
     /**
-     * Overridden to close streams.
+     *
+     * @param PartBuilder $partBuilder
      */
-    public function __destruct()
+    public function initFrom(PartBuilder $partBuilder, PartStreamContainer $container)
     {
-        if ($this->stream !== null) {
-            if ($this->detachStream) {
-                $this->stream->detach();
-            } else {
-                $this->stream->close();
-            }
-        }
-        if ($this->contentStream !== null) {
-            $this->contentStream->close();
-        }
+        $this->streamChanged = ($container->getStream() === null);
+        $this->partStreamContainer = $container;
     }
 
     /**
@@ -143,14 +106,14 @@ abstract class MessagePart
      * message to a mime one, would require rewriting non-mime children to
      * insure suitable headers are written.
      *
-     * Internally, the function discards the part's stream, forcing a stream to
-     * be created when calling getStream().
+     * Internally, once a part has been marked as changed, the underlying stream
+     * used at creation is no longer used, and instead a MessagePartStream
+     * object is created which generates the stream dynamically based on the
+     * part.
      */
     public function markAsChanged()
     {
-        // the stream is not closed because $this->contentStream may still be
-        // attached to it.  GuzzleHttp will clean it up when destroyed.
-        $this->stream = null;
+        $this->streamChanged = true;
     }
 
     /**
@@ -160,7 +123,7 @@ abstract class MessagePart
      */
     public function hasContent()
     {
-        return ($this->contentStream !== null);
+        return $this->partStreamContainer->hasContent();
     }
 
     /**
@@ -242,11 +205,12 @@ abstract class MessagePart
      */
     public function getStream()
     {
-        if ($this->stream === null) {
+        if ($this->streamChanged) {
             return $this->streamFactory->newMessagePartStream($this);
         }
-        $this->stream->rewind();
-        return $this->stream;
+        $stream = $this->partStreamContainer->getStream();
+        $stream->rewind();
+        return $stream;
     }
 
     /**
@@ -336,7 +300,7 @@ abstract class MessagePart
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
             $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
-            return $this->partStreamFilterManager->getContentStream(
+            return $this->partStreamContainer->getContentStream(
                 $tr,
                 $ch,
                 $charset
@@ -368,7 +332,7 @@ abstract class MessagePart
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
-            return $this->partStreamFilterManager->getBinaryStream($tr);
+            return $this->partStreamContainer->getBinaryContentStream($tr);
         }
         return null;
     }
@@ -467,16 +431,12 @@ abstract class MessagePart
      */
     public function attachContentStream(StreamInterface $stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)
     {
-        if ($this->contentStream !== null && $this->contentStream !== $stream) {
-            $this->contentStream->close();
-        }
-        $this->contentStream = $stream;
         $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
             $this->charsetOverride = $streamCharset;
         }
         $this->ignoreTransferEncoding = true;
-        $this->partStreamFilterManager->setStream($stream);
+        $this->partStreamContainer->setContentStream($stream);
         $this->onChange();
     }
 
@@ -485,8 +445,7 @@ abstract class MessagePart
      */
     public function detachContentStream()
     {
-        $this->contentStream = null;
-        $this->partStreamFilterManager->setStream(null);
+        $this->partStreamContainer->setContentStream(null);
         $this->onChange();
     }
 

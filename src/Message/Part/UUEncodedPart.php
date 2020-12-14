@@ -30,29 +30,19 @@ class UUEncodedPart extends NonMimePart
      * @var int the unix file permission
      */
     protected $mode = null;
-    
+
     /**
      * @var string the name of the file in the uuencoding 'header'.
      */
     protected $filename = null;
-    
+
     /**
-     * Constructor
-     * 
-     * @param PartStreamFilterManager $partStreamFilterManager
-     * @param StreamFactory $streamFactory
+     *
      * @param PartBuilder $partBuilder
-     * @param StreamInterface $stream
-     * @param StreamInterface $contentStream
      */
-    public function __construct(
-        PartStreamFilterManager $partStreamFilterManager,
-        StreamFactory $streamFactory,
-        PartBuilder $partBuilder,
-        StreamInterface $stream = null,
-        StreamInterface $contentStream = null
-    ) {
-        parent::__construct($partStreamFilterManager, $streamFactory, $stream, $contentStream);
+    public function initFrom(PartBuilder $partBuilder, PartStreamContainer $container)
+    {
+        parent::initFrom($partBuilder, $container);
         $this->mode = intval($partBuilder->getProperty('mode'));
         $this->filename = $partBuilder->getProperty('filename');
     }
