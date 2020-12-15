@@ -19,26 +19,10 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  *
  * @author Zaahid Bateson
  */
-class MimePart extends ParentHeaderPart
+class MimePart extends ParentHeaderPart implements IMimePart
 {
     /**
-     * Returns true if this part's mime type is multipart/*
-     *
-     * @return bool
-     */
-    public function isMultiPart()
-    {
-        // casting to bool, preg_match returns 1 for true
-        return (bool) (preg_match(
-            '~multipart/.*~i',
-            $this->getContentType()
-        ));
-    }
-    
-    /**
-     * Returns a filename for the part if one is defined, or null otherwise.
-     * 
-     * @return string
+     * {@inheritDoc}
      */
     public function getFilename()
     {
@@ -51,7 +35,7 @@ class MimePart extends ParentHeaderPart
             )
         );
     }
-    
+
     /**
      * Returns true.
      * 
@@ -61,7 +45,7 @@ class MimePart extends ParentHeaderPart
     {
         return true;
     }
-    
+
     /**
      * Returns true if this part's mime type is text/plain, text/html or if the
      * Content-Type header defines a charset.
@@ -72,7 +56,7 @@ class MimePart extends ParentHeaderPart
     {
         return ($this->getCharset() !== null);
     }
-    
+
     /**
      * Returns the lower-cased, trimmed value of the Content-Type header.
      * 
@@ -86,7 +70,7 @@ class MimePart extends ParentHeaderPart
     {
         return trim(strtolower($this->getHeaderValue('Content-Type', $default)));
     }
-    
+
     /**
      * Returns the upper-cased charset of the Content-Type header's charset
      * parameter if set, ISO-8859-1 if the Content-Type is text/plain or
@@ -110,7 +94,7 @@ class MimePart extends ParentHeaderPart
         }
         return trim(strtoupper($charset));
     }
-    
+
     /**
      * Returns the content's disposition, defaulting to 'inline' if not set.
      *
@@ -122,7 +106,7 @@ class MimePart extends ParentHeaderPart
     {
         return strtolower($this->getHeaderValue('Content-Disposition', $default));
     }
-    
+
     /**
      * Returns the content-transfer-encoding used for this part, defaulting to
      * '7bit' if not set.
@@ -156,6 +140,21 @@ class MimePart extends ParentHeaderPart
     {
         return $this->getHeaderValue('Content-ID');
     }
+
+    /**
+     * Returns true if this part's mime type is multipart/*
+     *
+     * @return bool
+     */
+    public function isMultiPart()
+    {
+        // casting to bool, preg_match returns 1 for true
+        return (bool) (preg_match(
+            '~multipart/.*~i',
+            $this->getContentType()
+        ));
+    }
+
 
     /**
      * Convenience method to find a part by its Content-ID header.

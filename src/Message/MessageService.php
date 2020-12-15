@@ -149,18 +149,6 @@ class MessageService
     }
 
     /**
-     * Returns the NonMimePartFactory singleton instance.
-     *
-     * @return NonMimePartFactory
-     */
-    public function getNonMimePartFactory()
-    {
-        return NonMimePartFactory::getInstance(
-            $this->streamFactory
-        );
-    }
-
-    /**
      * Returns the UUEncodedPartFactory singleton instance.
      *
      * @return UUEncodedPartFactory

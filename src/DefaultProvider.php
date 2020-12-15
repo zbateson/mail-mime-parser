@@ -19,17 +19,17 @@ class DefaultProvider implements ServiceProviderInterface {
 
     public function register(Container $pimple)
     {
-        $pimple->extend('\ZBateson\MailMimeParser\Message\Parser\BaseParser', function($parser, $c) {
-            $parser->addSubParser($c['\ZBateson\MailMimeParser\Message\Parser\HeaderParser']);
+        $pimple->extend('\ZBateson\MailMimeParser\Parser\BaseParser', function($parser, $c) {
+            $parser->addSubParser($c['\ZBateson\MailMimeParser\Parser\HeaderParser']);
             return $parser;
         });
-        $pimple->extend('\ZBateson\MailMimeParser\Message\Parser\HeaderParser', function($parser, $c) {
-            $parser->addSubParser($c['\ZBateson\MailMimeParser\Message\Parser\MimeParser']);
-            $parser->addSubParser($c['\ZBateson\MailMimeParser\Message\Parser\NonMimeParser']);
+        $pimple->extend('\ZBateson\MailMimeParser\Parser\HeaderParser', function($parser, $c) {
+            $parser->addSubParser($c['\ZBateson\MailMimeParser\Parser\MimeParser']);
+            $parser->addSubParser($c['\ZBateson\MailMimeParser\Parser\NonMimeParser']);
             return $parser;
         });
-        $pimple->extend('\ZBateson\MailMimeParser\Message\Parser\MimeParser', function($parser, $c) {
-            $parser->addSubParser($c['\ZBateson\MailMimeParser\Message\Parser\MultipartParser']);
+        $pimple->extend('\ZBateson\MailMimeParser\Parser\MimeParser', function($parser, $c) {
+            $parser->addSubParser($c['\ZBateson\MailMimeParser\Parser\MultipartParser']);
             return $parser;
         });
     }

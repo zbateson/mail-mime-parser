@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Parser;
+namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 

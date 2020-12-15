@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
@@ -16,7 +15,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  *
  * @author Zaahid Bateson
  */
-abstract class ParentPart extends MessagePart
+abstract class ParentPart extends MessagePart implements IParentPart
 {
     /**
      * @var PartFilterFactory factory object responsible for create PartFilters
@@ -52,26 +51,11 @@ abstract class ParentPart extends MessagePart
         $pbChildren = $partBuilder->getChildren();
         if (!empty($pbChildren)) {
             $stream = $container->getStream();
-            $this->setChildren(
-                array_map(function ($child) use ($stream) {
-                    $childPart = $child->createMessagePart($stream);
-                    $childPart->parent = $this;
-                    return $childPart;
-                }, $pbChildren),
-                true
-            );
-        }
-    }
-
-    /**
-     * 
-     * @param MessagePart[] $children
-     */
-    public function setChildren(array $children, $init = false)
-    {
-        $this->children = $children;
-        if (!$init) {
-            $this->onChange();
+            $this->children = array_map(function ($child) use ($stream) {
+                $childPart = $child->createMessagePart($stream);
+                $childPart->parent = $this;
+                return $childPart;
+            }, $pbChildren);
         }
     }
 
@@ -243,10 +227,10 @@ abstract class ParentPart extends MessagePart
      * If the $position parameter is non-null, adds the part at the passed
      * position index.
      *
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @param int $position
      */
-    public function addChild(MessagePart $part, $position = null)
+    public function addChild(IMessagePart $part, $position = null)
     {
         if ($part !== $this) {
             $part->parent = $this;
@@ -268,10 +252,10 @@ abstract class ParentPart extends MessagePart
      * position is its index within its parent (calls removePart on its direct
      * parent).
      *
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return int or null if not found
      */
-    public function removePart(MessagePart $part)
+    public function removePart(IMessagePart $part)
     {
         $parent = $part->getParent();
         if ($this !== $parent && $parent !== null) {

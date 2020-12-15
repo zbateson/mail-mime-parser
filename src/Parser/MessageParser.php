@@ -4,12 +4,9 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Message\Parser\BaseParser;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\MessageService;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call

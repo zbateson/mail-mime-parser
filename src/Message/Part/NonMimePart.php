@@ -16,7 +16,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
  * 
  * @author Zaahid Bateson
  */
-class NonMimePart extends MessagePart
+abstract class NonMimePart extends MessagePart
 {
     /**
      * Returns true.

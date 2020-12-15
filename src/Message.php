@@ -90,12 +90,12 @@ class Message extends MimePart
     }
 
     /**
-     * Convenience method to parse a handle or string into a Message without
+     * Convenience method to parse a handle or string into an IMessage without
      * requiring including MailMimeParser, instantiating it, and calling parse.
      *
      * @param resource|string $handleOrString the resource handle to the input
      *        stream of the mime message, or a string containing a mime message
-     * @return Message
+     * @return IMessage
      */
     public static function from($handleOrString)
     {

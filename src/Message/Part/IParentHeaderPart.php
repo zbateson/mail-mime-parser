@@ -6,49 +6,12 @@
  */
 namespace ZBateson\MailMimeParser\Message\Part;
 
-use ZBateson\MailMimeParser\Header\ParameterHeader;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use ZBateson\MailMimeParser\Header\HeaderContainer;
-
 /**
- * A parent part containing headers.
+ * An IParentPart containing headers.
  *
  * @author Zaahid Bateson
  */
-abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
-{
-    /**
-     * @var HeaderContainer Contains headers for this part.
-     */
-    protected $headerContainer;
-
-    /**
-     * Constructor
-     *
-     * @param StreamFactory $streamFactory
-     * @param PartFilterFactory $partFilterFactory
-     */
-    public function __construct(
-        StreamFactory $streamFactory,
-        PartFilterFactory $partFilterFactory
-    ) {
-        parent::__construct(
-            $streamFactory,
-            $partFilterFactory
-        );
-        
-    }
-
-    /**
-     *
-     * @param PartBuilder $partBuilder
-     */
-    public function initFrom(PartBuilder $partBuilder, PartStreamContainer $container)
-    {
-        parent::initFrom($partBuilder, $container);
-        $this->headerContainer = $partBuilder->getHeaderContainer();
-    }
+interface IParentHeaderPart extends IParentPart {
 
     /**
      * Returns the AbstractHeader object for the header with the given $name.
@@ -68,20 +31,14 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      *         |\ZBateson\MailMimeParser\Header\ReceivedHeader
      *         |\ZBateson\MailMimeParser\Header\SubjectHeader
      */
-    public function getHeader($name, $offset = 0)
-    {
-        return $this->headerContainer->get($name, $offset);
-    }
+    public function getHeader($name, $offset = 0);
 
     /**
      * Returns an array of headers in this part.
      *
      * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
      */
-    public function getAllHeaders()
-    {
-        return $this->headerContainer->getHeaderObjects();
-    }
+    public function getAllHeaders();
 
     /**
      * Returns an array of headers that match the passed name.
@@ -89,10 +46,7 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      * @param string $name
      * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
      */
-    public function getAllHeadersByName($name)
-    {
-        return $this->headerContainer->getAll($name);
-    }
+    public function getAllHeadersByName($name);
 
     /**
      * Returns an array of all headers for the mime part with the first element
@@ -100,10 +54,7 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      *
      * @return string[][]
      */
-    public function getRawHeaders()
-    {
-        return $this->headerContainer->getHeaders();
-    }
+    public function getRawHeaders();
 
     /**
      * Returns an iterator to the headers in this collection.  Each returned
@@ -114,10 +65,7 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      *
      * @return \Iterator
      */
-    public function getRawHeaderIterator()
-    {
-        return $this->headerContainer->getIterator();
-    }
+    public function getRawHeaderIterator();
 
     /**
      * Returns the string value for the header with the given $name.
@@ -128,14 +76,7 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      * @param string $defaultValue
      * @return string
      */
-    public function getHeaderValue($name, $defaultValue = null)
-    {
-        $header = $this->getHeader($name);
-        if ($header !== null) {
-            return $header->getValue();
-        }
-        return $defaultValue;
-    }
+    public function getHeaderValue($name, $defaultValue = null);
 
     /**
      * Returns a parameter of the header $header, given the parameter named
@@ -151,14 +92,7 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      * @param string $defaultValue
      * @return string
      */
-    public function getHeaderParameter($header, $param, $defaultValue = null)
-    {
-        $obj = $this->getHeader($header);
-        if ($obj && $obj instanceof ParameterHeader) {
-            return $obj->getValueFor($param, $defaultValue);
-        }
-        return $defaultValue;
-    }
+    public function getHeaderParameter($header, $param, $defaultValue = null);
 
     /**
      * Adds a header with the given $name and $value.  An optional $offset may
@@ -190,11 +124,7 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      * @param string $value
      * @param int $offset
      */
-    public function setRawHeader($name, $value, $offset = 0)
-    {
-        $this->headerContainer->set($name, $value, $offset);
-        $this->onChange();
-    }
+    public function setRawHeader($name, $value, $offset = 0);
 
     /**
      * Adds a header with the given $name and $value.
@@ -209,22 +139,14 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      * @param string $name
      * @param string $value
      */
-    public function addRawHeader($name, $value)
-    {
-        $this->headerContainer->add($name, $value);
-        $this->onChange();
-    }
+    public function addRawHeader($name, $value);
 
     /**
      * Removes all headers from this part with the passed name.
      *
      * @param string $name
      */
-    public function removeHeader($name)
-    {
-        $this->headerContainer->removeAll($name);
-        $this->onChange();
-    }
+    public function removeHeader($name);
 
     /**
      * Removes a single header with the passed name (in cases where more than
@@ -232,9 +154,5 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
      *
      * @param string $name
      */
-    public function removeSingleHeader($name, $offset = 0)
-    {
-        $this->headerContainer->remove($name, $offset);
-        $this->onChange();
-    }
+    public function removeSingleHeader($name, $offset = 0);
 }

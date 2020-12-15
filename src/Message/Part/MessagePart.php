@@ -14,14 +14,12 @@ use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Represents a single part of a message.
- *
- * A MessagePart object may have any number of child parts, or may be a child
- * itself with its own parent or parents.
+ * Implements IMessagePart with a few concrete methods that can have reasonable
+ * defaults.
  *
  * @author Zaahid Bateson
  */
-abstract class MessagePart
+abstract class MessagePart implements IMessagePart
 {
     /**
      * @var StreamFactory for creating MessagePartStream objects
@@ -127,42 +125,6 @@ abstract class MessagePart
     }
 
     /**
-     * Returns true if this part's mime type is text/plain, text/html or has a
-     * text/* and has a defined 'charset' attribute.
-     *
-     * @return bool
-     */
-    public abstract function isTextPart();
-
-    /**
-     * Returns the mime type of the content.
-     *
-     * @return string
-     */
-    public abstract function getContentType();
-
-    /**
-     * Returns the charset of the content, or null if not applicable/defined.
-     *
-     * @return string
-     */
-    public abstract function getCharset();
-
-    /**
-     * Returns the content's disposition.
-     *
-     * @return string
-     */
-    public abstract function getContentDisposition();
-
-    /**
-     * Returns the content-transfer-encoding used for this part.
-     *
-     * @return string
-     */
-    public abstract function getContentTransferEncoding();
-
-    /**
      * Returns a filename for the part if one is defined, or null otherwise.
      *
      * @return string
@@ -173,24 +135,7 @@ abstract class MessagePart
     }
 
     /**
-     * Returns true if the current part is a mime part.
-     *
-     * @return bool
-     */
-    public abstract function isMime();
-
-    /**
-     * Returns the Content ID of the part, or null if not defined.
-     *
-     * @return string|null
-     */
-    public abstract function getContentId();
-
-    /**
-     * Returns a resource handle containing this part, including any headers for
-     * a MimePart, its content, and all its children.
-     *
-     * @return resource the resource handle
+     * {@inheritDoc}.
      */
     public function getResourceHandle()
     {
@@ -441,7 +386,7 @@ abstract class MessagePart
     }
 
     /**
-     * Detaches and closes the content stream.
+     * Detaches the content stream.
      */
     public function detachContentStream()
     {

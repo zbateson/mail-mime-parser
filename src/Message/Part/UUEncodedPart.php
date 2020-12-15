@@ -24,7 +24,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  * 
  * @author Zaahid Bateson
  */
-class UUEncodedPart extends NonMimePart
+class UUEncodedPart extends NonMimePart implements IUUEncodedPart
 {
     /**
      * @var int the unix file permission
@@ -48,16 +48,6 @@ class UUEncodedPart extends NonMimePart
     }
     
     /**
-     * Returns the file mode included in the uuencoded header for this part.
-     * 
-     * @return int
-     */
-    public function getUnixFileMode()
-    {
-        return $this->mode;
-    }
-    
-    /**
      * Returns the filename included in the uuencoded header for this part.
      * 
      * @return string
@@ -65,17 +55,6 @@ class UUEncodedPart extends NonMimePart
     public function getFilename()
     {
         return $this->filename;
-    }
-
-    /**
-     * Sets the unix file mode for the uuencoded header.
-     *
-     * @param int $mode
-     */
-    public function setUnixFileMode($mode)
-    {
-        $this->mode = $mode;
-        $this->onChange();
     }
 
     /**
@@ -88,7 +67,7 @@ class UUEncodedPart extends NonMimePart
         $this->filename = $filename;
         $this->onChange();
     }
-    
+
     /**
      * Returns false.
      * 
@@ -137,5 +116,26 @@ class UUEncodedPart extends NonMimePart
     public function getContentTransferEncoding()
     {
         return 'x-uuencode';
+    }
+
+    /**
+     * Returns the file mode included in the uuencoded header for this part.
+     *
+     * @return int
+     */
+    public function getUnixFileMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * Sets the unix file mode for the uuencoded header.
+     *
+     * @param int $mode
+     */
+    public function setUnixFileMode($mode)
+    {
+        $this->mode = $mode;
+        $this->onChange();
     }
 }
