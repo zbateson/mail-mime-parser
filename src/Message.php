@@ -11,8 +11,6 @@ use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\Part\MimePart;
 use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
-use ZBateson\MailMimeParser\Message\Part\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
@@ -34,19 +32,6 @@ class Message extends MimePart
     protected $messageService;
 
     /**
-     * @var StreamInterface containing the original message stream, kept
-     *      separately so it can be detached if need be, and so a reference is
-     *      maintained while the Message lives.
-     */
-    private $messageStream;
-
-    /**
-     * @var bool true if the stream should be detached when this Message is
-     *      destroyed.
-     */
-    private $detachMessageStream;
-
-    /**
      * Constructor
      *
      * @param StreamFactory $streamFactory
@@ -54,39 +39,21 @@ class Message extends MimePart
      * @param MessageService $messageService
      */
     public function __construct(
-        StreamFactory $streamFactory,
-        PartFilterFactory $partFilterFactory,
-        MessageService $messageService
+        StreamFactory $streamFactory = null,
+        PartFilterFactory $partFilterFactory = null,
+        MessageService $messageService = null
     ) {
+        if ($streamFactory === null || $partFilterFactory === null || $messageService === null) {
+            $di = MailMimeParser::getDependencyContainer();
+            $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
+            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\PartFilterFactory'];
+            $messageService = $di['\ZBateson\MailMimeParser\Message\MessageService'];
+        }
         parent::__construct(
             $streamFactory,
             $partFilterFactory
         );
         $this->messageService = $messageService;
-    }
-
-    public function __destruct()
-    {
-        if ($this->detachMessageStream) {
-            $this->messageStream->detach();
-        }
-    }
-
-    /**
-     *
-     * @param PartBuilder $partBuilder
-     */
-    public function initMessageFrom(PartBuilder $partBuilder, StreamInterface $messageStream, PartStreamContainer $container)
-    {
-        parent::initFrom($partBuilder, $container);
-        // checking now -- if the stream's underlying stream is detached or
-        // closed before this destructor is called this will cause a null
-        // error in StreamDecoratorTrait in some tests.  This might be because a
-        // stream is being closed elsewhere where it shouldn't be.
-        if ($messageStream !== null) {
-            $this->detachMessageStream = $messageStream->getMetadata('mmp-detached-stream');
-        }
-        $this->messageStream = $messageStream;
     }
 
     /**
