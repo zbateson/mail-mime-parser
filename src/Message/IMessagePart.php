@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\MailMimeParser;
 use Psr\Http\Message\StreamInterface;
+use SplSubject;
 
 /**
  * Represents a single part of a message.
@@ -17,7 +18,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @author Zaahid Bateson
  */
-interface IMessagePart {
+interface IMessagePart extends SplSubject {
 
     /**
      * Returns true if the part contains a 'body' (content).
@@ -141,8 +142,8 @@ interface IMessagePart {
      *
      * The library automatically handles decoding and charset conversion (to the
      * target passed $charset) based on the part's transfer encoding as returned
-     * by {@see MessagePart::getContentTransferEncoding()} and the part's
-     * charset as returned by {@see MessagePart::getCharset()}.  The returned
+     * by {@see IMessagePart::getContentTransferEncoding()} and the part's
+     * charset as returned by {@see IMessagePart::getCharset()}.  The returned
      * stream is ready to be read from directly.
      *
      * Note that the returned Stream is a shared object.  If called multiple
@@ -175,7 +176,7 @@ interface IMessagePart {
      * if there's no content associated with the stream.
      *
      * This is basically the same as calling
-     * {@see MessagePart::getContentStream()}, except no automatic charset
+     * {@see IMessagePart::getContentStream()}, except no automatic charset
      * conversion is done.  Note that for non-text streams, this doesn't have an
      * effect, as charset conversion is not performed in that case, and is
      * useful only when:
@@ -195,7 +196,7 @@ interface IMessagePart {
      * Returns a resource handle for the content's raw data stream, or null if
      * the part doesn't have a content stream.
      *
-     * The method wraps a call to {@see MessagePart::getBinaryContentStream()}
+     * The method wraps a call to {@see IMessagePart::getBinaryContentStream()}
      * and returns a resource handle for the returned Stream.
      *
      * @return resource|null
@@ -209,8 +210,8 @@ interface IMessagePart {
      * Note that charset conversion is not performed in this case, and the
      * contents of the part are saved in their binary format as transmitted (but
      * after any content-transfer decoding is performed).  {@see
-     * MessagePart::getBinaryContentStream()} for a more detailed description of
-     * the stream.
+     * IMessagePart::getBinaryContentStream()} for a more detailed description
+     * of the stream.
      *
      * If the passed parameter is a string, it's assumed to be a filename to
      * write to.  The file is opened in 'w+' mode, and closed before returning.
@@ -229,7 +230,7 @@ interface IMessagePart {
      * The returned string is encoded to the passed $charset character encoding,
      * defaulting to UTF-8.
      *
-     * @see MessagePart::getContentStream()
+     * @see IMessagePart::getContentStream()
      * @param string $charset
      * @return string
      */
@@ -238,7 +239,7 @@ interface IMessagePart {
     /**
      * Returns this part's parent.
      *
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return IMimePart
      */
     public function getParent();
 

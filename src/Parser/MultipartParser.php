@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Description of MultipartParser

@@ -4,16 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 /**
- * Represents part of a non-mime message.  The part could either be a plain text
- * part or a uuencoded attachment and could be extended for other pre-mime
- * message encoding types.
- * 
- * This allows clients to handle all messages as mime messages by providing a
- * Content-Type header.  NonMimePart returns text/plain.
- * 
+ * Represents part of a non-mime message.
+ *
  * @author Zaahid Bateson
  */
 abstract class NonMimePart extends MessagePart

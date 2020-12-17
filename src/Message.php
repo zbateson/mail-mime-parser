@@ -8,12 +8,13 @@ namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\Part\MimePart;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
+use ZBateson\MailMimeParser\Message\MimePart;
+use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -23,7 +24,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  *
  * @author Zaahid Bateson
  */
-class Message extends MimePart
+class Message extends MimePart implements IMessage
 {
     /**
      * @var MessageService helper class with various message manipulation
@@ -32,27 +33,29 @@ class Message extends MimePart
     protected $messageService;
 
     /**
-     * Constructor
      *
-     * @param StreamFactory $streamFactory
+     * @param array $children
+     * @param PartStreamContainer $streamContainer
+     * @param HeaderContainer $headerContainer
      * @param PartFilterFactory $partFilterFactory
      * @param MessageService $messageService
      */
     public function __construct(
-        StreamFactory $streamFactory = null,
+        array $children = [],
+        PartStreamContainer $streamContainer = null,
+        HeaderContainer $headerContainer = null,
         PartFilterFactory $partFilterFactory = null,
         MessageService $messageService = null
     ) {
-        if ($streamFactory === null || $partFilterFactory === null || $messageService === null) {
-            $di = MailMimeParser::getDependencyContainer();
-            $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
-            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\PartFilterFactory'];
-            $messageService = $di['\ZBateson\MailMimeParser\Message\MessageService'];
-        }
         parent::__construct(
-            $streamFactory,
+            $children,
+            $streamContainer,
+            $headerContainer,
             $partFilterFactory
         );
+        if ($messageService === null) {
+            $messageService = $di['\ZBateson\MailMimeParser\Message\MessageService'];
+        }
         $this->messageService = $messageService;
     }
 

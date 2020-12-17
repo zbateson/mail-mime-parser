@@ -8,8 +8,8 @@ use LegacyPHPUnit\TestCase;
  *
  * @group PartFilterFactory
  * @group Message
- * @covers ZBateson\MailMimeParser\Message\PartFilterFactory
- * @covers ZBateson\MailMimeParser\Message\PartFilter
+ * @covers ZBateson\MailMimeParser\MessageFilterFactory
+ * @covers ZBateson\MailMimeParser\MessageFilter
  * @author Zaahid Bateson
  */
 class PartFilterFactoryTest extends TestCase
@@ -25,7 +25,7 @@ class PartFilterFactoryTest extends TestCase
     {
         $pf = $this->partFilterFactory->newFilterFromContentType('text/html');
         $this->assertNotNull($pf);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\PartFilter', $pf);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\MessageFilter', $pf);
         $this->assertEquals(PartFilter::FILTER_OFF, $pf->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $pf->textpart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $pf->signedpart);
@@ -39,7 +39,7 @@ class PartFilterFactoryTest extends TestCase
     {
         $pf = $this->partFilterFactory->newFilterFromInlineContentType('text/html');
         $this->assertNotNull($pf);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\PartFilter', $pf);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\MessageFilter', $pf);
         $this->assertEquals(PartFilter::FILTER_OFF, $pf->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $pf->textpart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $pf->signedpart);
@@ -56,7 +56,7 @@ class PartFilterFactoryTest extends TestCase
     {
         $pf = $this->partFilterFactory->newFilterFromDisposition('inline', PartFilter::FILTER_EXCLUDE);
         $this->assertNotNull($pf);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\PartFilter', $pf);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\MessageFilter', $pf);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $pf->multipart);
         $this->assertEquals(PartFilter::FILTER_OFF, $pf->textpart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $pf->signedpart);
@@ -80,7 +80,7 @@ class PartFilterFactoryTest extends TestCase
             'signedpart' => PartFilter::FILTER_INCLUDE
         ]);
         $this->assertNotNull($pf);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\PartFilter', $pf);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\MessageFilter', $pf);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $pf->multipart);
         $this->assertEquals(PartFilter::FILTER_EXCLUDE, $pf->textpart);
         $this->assertEquals(PartFilter::FILTER_INCLUDE, $pf->signedpart);

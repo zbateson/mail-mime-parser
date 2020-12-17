@@ -34,7 +34,7 @@ class PartFilterFactory
     {
         return PartFilter::fromContentType($mimeType);
     }
-    
+
     /**
      * Creates an 'inline' filter for the passed mime content-type.
      * 
@@ -48,7 +48,7 @@ class PartFilterFactory
     {
         return PartFilter::fromInlineContentType($mimeType);
     }
-    
+
     /**
      * Creates a filter for the passed disposition and optional multipart
      * filter.
@@ -65,7 +65,7 @@ class PartFilterFactory
     {
         return PartFilter::fromDisposition($disposition, $multipart);
     }
-    
+
     /**
      * Constructs a PartFilter from the passed array of options and returns it.
      * 

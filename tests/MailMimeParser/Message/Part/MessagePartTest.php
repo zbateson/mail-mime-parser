@@ -1,6 +1,6 @@
 <?php
 
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
@@ -13,7 +13,7 @@ use Exception;
  *
  * @group MessagePartClass
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\MessagePart
+ * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
 class MessagePartTest extends TestCase {
@@ -25,7 +25,7 @@ class MessagePartTest extends TestCase {
     protected function legacySetUp()
     {
         $this->vfs = vfsStream::setup('root');
-        $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
         $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
@@ -51,7 +51,7 @@ class MessagePartTest extends TestCase {
                 });
         }
         return $this->getMockForAbstractClass(
-                'ZBateson\MailMimeParser\Message\Part\MessagePart',
+                'ZBateson\MailMimeParser\Message\MessagePart',
                 [$this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle]
         );
     }

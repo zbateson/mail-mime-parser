@@ -16,7 +16,7 @@ class StreamFactoryTest extends TestCase
 {
     public function testNewInstance()
     {
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $partBuilder->expects($this->once())
@@ -46,7 +46,7 @@ class StreamFactoryTest extends TestCase
         $this->assertInstanceOf('ZBateson\StreamDecorators\UUStream', $factory->newUUStream(Psr7\stream_for('test')));
         $this->assertInstanceOf('ZBateson\StreamDecorators\CharsetStream', $factory->newCharsetStream(Psr7\stream_for('test'), 'utf-8', 'utf-16'));
 
-        $mockMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        $mockMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Stream\MessagePartStream', $factory->newMessagePartStream($mockMimePart));

@@ -34,7 +34,7 @@ class MessageParser
      * and returns it.
      * 
      * @param StreamInterface $stream the stream to parse the message from
-     * @return \ZBateson\MailMimeParser\Message
+     * @return \ZBateson\MailMimeParser\IMessage
      */
     public function parse(StreamInterface $stream)
     {

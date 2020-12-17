@@ -15,8 +15,8 @@ use ZBateson\StreamDecorators\NonClosingStream;
 use ZBateson\StreamDecorators\PregReplaceFilterStream;
 use ZBateson\StreamDecorators\QuotedPrintableStream;
 use ZBateson\StreamDecorators\UUStream;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\MessagePart;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Factory class for Psr7 stream decorators used in MailMimeParser.

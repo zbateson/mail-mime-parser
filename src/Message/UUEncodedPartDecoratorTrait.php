@@ -4,12 +4,12 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Decorator;
+namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message\Part\IUUEncodedPart;
+use ZBateson\MailMimeParser\Message\IUUEncodedPart;
 
 /**
- * Description of UUEncodedPartDecoratorTrait
+ * Ferries calls to an IUUEncodedPart.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */

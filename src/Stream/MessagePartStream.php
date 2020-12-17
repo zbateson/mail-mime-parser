@@ -11,8 +11,8 @@ use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
+use ZBateson\MailMimeParser\Message\MessagePart;
+use ZBateson\MailMimeParser\Message\ParentHeaderPart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**

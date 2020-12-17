@@ -4,13 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Factory;
+namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ReflectionClass;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -101,7 +101,7 @@ abstract class MessagePartFactory
      * 
      * @param PartBuilder $partBuilder
      * @param StreamInterface $messageStream
-     * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
+     * @return \ZBateson\MailMimeParser\Message\MessagePart
      */
     public abstract function newInstance(
         PartBuilder $partBuilder,

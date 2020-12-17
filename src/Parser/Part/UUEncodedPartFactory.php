@@ -4,26 +4,26 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Factory;
+namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Message\Part\NonMimePart;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
-use ZBateson\MailMimeParser\Message\Part\PartStreamContainer;
+use ZBateson\MailMimeParser\Message\UUEncodedPart;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
- * Responsible for creating NoneMimePart instances.
+ * Responsible for creating UUEncodedPart instances.
  *
  * @author Zaahid Bateson
  */
-class NonMimePartFactory extends MessagePartFactory
+class UUEncodedPartFactory extends MessagePartFactory
 {
     /**
-     * Constructs a new NonMimePart object and returns it
+     * Constructs a new UUEncodedPart object and returns it
      * 
      * @param PartBuilder $partBuilder
      * @param StreamInterface $messageStream
-     * @return \ZBateson\MailMimeParser\Message\Part\NonMimePart
+     * @return \ZBateson\MailMimeParser\Message\NonMimePart
      */
     public function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null)
     {
@@ -32,10 +32,9 @@ class NonMimePartFactory extends MessagePartFactory
             $streamContainer->setStream($this->streamFactory->getLimitedPartStream($messageStream, $partBuilder));
             $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($messageStream, $partBuilder));
         }
-        $part = new NonMimePart(
+        $part = new UUEncodedPart(
             $this->streamFactory
         );
-        $part->initFrom($partBuilder, $streamContainer);
         return $part;
     }
 }

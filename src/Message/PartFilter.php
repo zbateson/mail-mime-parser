@@ -6,13 +6,13 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\MimePart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use InvalidArgumentException;
 
 /**
- * Provides a way to define a filter of MessagePart for use in various calls to
- * add/remove MessagePart.
+ * Provides a way to define a filter of IMessagePart for use in various calls to
+ * add/remove IMessagePart.
  * 
  * A PartFilter is defined as a set of properties in the class, set to either be
  * 'included' or 'excluded'.  The filter is simplistic in that a property
@@ -47,49 +47,49 @@ class PartFilter
      * @var int indicates a filter is not in use
      */
     const FILTER_OFF = 0;
-    
+
     /**
      * @var int an excluded filter must not be included in a part
      */
     const FILTER_EXCLUDE = 1;
-    
+
     /**
      * @var int an included filter must be included in a part
      */
     const FILTER_INCLUDE = 2;
 
     /**
-     * @var int filters based on whether MessagePart::hasContent is true
+     * @var int filters based on whether IMessagePart::hasContent is true
      */
     private $hascontent = PartFilter::FILTER_OFF;
 
     /**
-     * @var int filters based on whether MimePart::isMultiPart is true
+     * @var int filters based on whether IMimePart::isMultiPart is true
      */
     private $multipart = PartFilter::FILTER_OFF;
-    
+
     /**
-     * @var int filters based on whether MessagePart::isTextPart is true
+     * @var int filters based on whether IMessagePart::isTextPart is true
      */
     private $textpart = PartFilter::FILTER_OFF;
-    
+
     /**
      * @var int filters based on whether the parent of a part is a
      *      multipart/signed part and this part has a content-type equal to its
      *      parent's 'protocol' parameter in its content-type header
      */
     private $signedpart = PartFilter::FILTER_EXCLUDE;
-    
+
     /**
      * @var string calculated hash of the filter
      */
     private $hashCode;
-    
+
     /**
      * @var string[][] array of header rules.  The top-level contains keys of
      * FILTER_INCLUDE and/or FILTER_EXCLUDE, which contain key => value mapping
      * of header names => values to search for.  Note that when searching
-     * MimePart::getHeaderValue is used (so additional parameters need not be
+     * IMimePart::getHeaderValue is used (so additional parameters need not be
      * matched) and strcasecmp is used.
      * 
      * ```php
@@ -98,7 +98,7 @@ class PartFilter
      * ```
      */
     private $headers = [];
-    
+
     /**
      * Convenience method to filter for a specific mime type.
      * 
@@ -115,7 +115,7 @@ class PartFilter
             ]
         ]);
     }
-    
+
     /**
      * Convenience method to look for parts of a specific mime-type, and that
      * do not specifically have a Content-Disposition equal to 'attachment'.
@@ -136,7 +136,7 @@ class PartFilter
             ]
         ]);
     }
-    
+
     /**
      * Convenience method to search for parts with a specific
      * Content-Disposition, optionally including multipart parts.
@@ -156,7 +156,7 @@ class PartFilter
             ]
         ]);
     }
-    
+
     /**
      * Constructs a PartFilter, optionally instantiating member variables with
      * values in the passed array.
@@ -175,7 +175,7 @@ class PartFilter
             }
         }
     }
-    
+
     /**
      * Validates an argument passed to __set to insure it's set to a value in
      * $valid.
@@ -196,7 +196,7 @@ class PartFilter
             );
         }
     }
-    
+
     /**
      * Sets the PartFilter's headers filter to the passed array after validating
      * it.
@@ -222,7 +222,7 @@ class PartFilter
         });
         $this->headers = $headers;
     }
-    
+
     /**
      * Sets the member variable denoted by $name to the passed $value after
      * validating it.
@@ -251,7 +251,7 @@ class PartFilter
             $this->setHeaders($value);
         }
     }
-    
+
     /**
      * Returns true if the variable denoted by $name is a member variable of
      * PartFilter.
@@ -263,7 +263,7 @@ class PartFilter
     {
         return isset($this->$name);
     }
-    
+
     /**
      * Returns the value of the member variable denoted by $name
      * 
@@ -276,55 +276,43 @@ class PartFilter
     }
 
     /**
-     * Returns true if the passed MessagePart fails the filter's hascontent
-     * filter settings.
-     *
-     * @param MessagePart $part
-     * @return bool
-     */
-    private function failsHasContentFilter(MessagePart $part)
-    {
-        return ($this->hascontent === static::FILTER_EXCLUDE && $part->hasContent())
-            || ($this->hascontent === static::FILTER_INCLUDE && !$part->hasContent());
-    }
-    
-    /**
-     * Returns true if the passed MessagePart fails the filter's multipart
+     * Returns true if the passed IMessagePart fails the filter's multipart
      * filter settings.
      * 
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return bool
      */
-    private function failsMultiPartFilter(MessagePart $part)
+    private function failsMultiPartFilter(IMessagePart $part)
     {
-        if (!($part instanceof MimePart)) {
+        if (!($part instanceof IMimePart)) {
             return $this->multipart !== static::FILTER_EXCLUDE;
         }
         return ($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
             || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart());
     }
-    
+
     /**
-     * Returns true if the passed MessagePart fails the filter's textpart filter
+     * Returns true if the passed IMessagePart fails the filter's textpart filter
      * settings.
      * 
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return bool
      */
-    private function failsTextPartFilter(MessagePart $part)
+    private function failsTextPartFilter(IMessagePart $part)
     {
+        echo get_class($part), "\n";
         return ($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
             || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart());
     }
-    
+
     /**
-     * Returns true if the passed MessagePart fails the filter's signedpart
+     * Returns true if the passed IMessagePart fails the filter's signedpart
      * filter settings.
      * 
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return boolean
      */
-    private function failsSignedPartFilter(MessagePart $part)
+    private function failsSignedPartFilter(IMessagePart $part)
     {
         if ($this->signedpart === static::FILTER_OFF) {
             return false;
@@ -339,19 +327,19 @@ class PartFilter
         }
         return ($this->signedpart === static::FILTER_INCLUDE);
     }
-    
+
     /**
      * Tests a single header value against $part, and returns true if the test
      * fails.
      * 
      * @staticvar array $map
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @param int $type
      * @param string $name
      * @param string $header
      * @return boolean
      */
-    private function failsHeaderFor(MessagePart $part, $type, $name, $header)
+    private function failsHeaderFor(IMessagePart $part, $type, $name, $header)
     {
         $headerValue = null;
         
@@ -364,7 +352,7 @@ class PartFilter
         $lower = strtolower($name);
         if (isset($map[$lower])) {
             $headerValue = call_user_func([$part, $map[$lower]]);
-        } elseif (!($part instanceof MimePart)) {
+        } elseif (!($part instanceof IMimePart)) {
             return ($type === static::FILTER_INCLUDE);
         } else {
             $headerValue = $part->getHeaderValue($name);
@@ -373,15 +361,15 @@ class PartFilter
         return (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
             || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0));
     }
-    
+
     /**
-     * Returns true if the passed MessagePart fails the filter's header filter
+     * Returns true if the passed IMessagePart fails the filter's header filter
      * settings.
      * 
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return boolean
      */
-    private function failsHeaderPartFilter(MessagePart $part)
+    private function failsHeaderPartFilter(IMessagePart $part)
     {
         foreach ($this->headers as $type => $values) {
             foreach ($values as $name => $header) {
@@ -392,16 +380,16 @@ class PartFilter
         }
         return false;
     }
-    
+
     /**
-     * Determines if the passed MessagePart should be filtered out or not.
-     * If the MessagePart passes all filter tests, true is returned.  Otherwise
+     * Determines if the passed IMessagePart should be filtered out or not.
+     * If the IMessagePart passes all filter tests, true is returned.  Otherwise
      * false is returned.
      * 
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return boolean
      */
-    public function filter(MessagePart $part)
+    public function filter(IMessagePart $part)
     {
         return !($this->failsMultiPartFilter($part)
             || $this->failsTextPartFilter($part)

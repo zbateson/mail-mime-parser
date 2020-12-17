@@ -27,11 +27,11 @@ class MessageParserTest extends TestCase
     {
         $this->vfs = vfsStream::setup('root');
 
-        $this->partFactoryService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartFactoryService')
+        $this->partFactoryService = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\PartFactoryService')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory')
+        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -39,22 +39,22 @@ class MessageParserTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageFactory')
+        $this->messageFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\MessageFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->uuEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory')
+        $this->uuEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
+        $this->mimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\MimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getMimePartMock()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -64,7 +64,7 @@ class MessageParserTest extends TestCase
         if ($mimeMock === null) {
             $mimeMock = $this->getMimePartMock();
         }
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $pb->method('createMessagePart')

@@ -4,12 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
-use ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MailMimeParser\Parser\Part\MessagePartFactory;
 
 /**
  * Used by MessageParser to keep information about a parsed message as an
@@ -167,7 +166,7 @@ class PartBuilder
     /**
      * Registers the passed PartBuilder as a child of the current PartBuilder.
      * 
-     * @param \ZBateson\MailMimeParser\Message\PartBuilder $partBuilder
+     * @param \ZBateson\MailMimeParser\MessageBuilder $partBuilder
      */
     public function addChild(PartBuilder $partBuilder)
     {
@@ -182,7 +181,7 @@ class PartBuilder
     /**
      * Returns all children PartBuilder objects.
      * 
-     * @return \ZBateson\MailMimeParser\Message\PartBuilder[]
+     * @return \ZBateson\MailMimeParser\MessageBuilder[]
      */
     public function getChildren()
     {
@@ -354,10 +353,7 @@ class PartBuilder
      */
     public function getStreamContentStartOffset()
     {
-        if ($this->parent) {
-            return $this->streamContentStartPos - $this->parent->streamPartStartPos;
-        }
-        return $this->streamContentStartPos;
+        return $this->streamContentStartPos - $this->streamPartStartPos;
     }
 
     /**
@@ -420,7 +416,7 @@ class PartBuilder
      * MessagePartFactory passed in during construction.
      * 
      * @param StreamInterface $stream
-     * @return MessagePart
+     * @return IMessagePart
      */
     public function createMessagePart(StreamInterface $stream = null)
     {

@@ -1,7 +1,7 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\MessageFilter;
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 
@@ -10,10 +10,10 @@ use GuzzleHttp\Psr7;
  *
  * @group MimePart
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\MimePart
- * @covers ZBateson\MailMimeParser\Message\Part\ParentHeaderPart
- * @covers ZBateson\MailMimeParser\Message\Part\ParentPart
- * @covers ZBateson\MailMimeParser\Message\Part\MessagePart
+ * @covers ZBateson\MailMimeParser\Message\MimePart
+ * @covers ZBateson\MailMimeParser\Message\ParentHeaderPart
+ * @covers ZBateson\MailMimeParser\Message\ParentPart
+ * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
 class MimePartTest extends TestCase
@@ -24,10 +24,10 @@ class MimePartTest extends TestCase
 
     protected function legacySetUp()
     {
-        $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+        $this->mockPartFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
@@ -64,7 +64,7 @@ class MimePartTest extends TestCase
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $pb->method('getHeaderContainer')
@@ -118,7 +118,7 @@ class MimePartTest extends TestCase
     {
         $part = $this->newMimePart($this->getMockedPartBuilder());
         $this->assertNotNull($part);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\Part\MimePart', $part);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\Message\MimePart', $part);
         $this->assertTrue($part->isMime());
     }
 
@@ -375,7 +375,7 @@ class MimePartTest extends TestCase
     {
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
         $parts = $part->getAllParts();
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -393,7 +393,7 @@ class MimePartTest extends TestCase
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren());
         $parts = $part->getAllParts();
 
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -670,7 +670,7 @@ class MimePartTest extends TestCase
     public function testGetAllPartsByMimeType()
     {
         $pf = $this->mockPartFilterFactory;
-        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->getMock();
         $filter->expects($this->exactly(5))
@@ -690,7 +690,7 @@ class MimePartTest extends TestCase
     public function testGetPartByMimeType()
     {
         $pf = $this->mockPartFilterFactory;
-        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->getMock();
         $filter->expects($this->exactly(10))
@@ -713,7 +713,7 @@ class MimePartTest extends TestCase
     public function testGetCountOfPartsByMimeType()
     {
         $pf = $this->mockPartFilterFactory;
-        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->getMock();
         $filter->expects($this->exactly(5))
@@ -732,7 +732,7 @@ class MimePartTest extends TestCase
     public function testGetPartByContentId()
     {
         $pf = $this->mockPartFilterFactory;
-        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filter = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->getMock();
         $filter->expects($this->exactly(15))

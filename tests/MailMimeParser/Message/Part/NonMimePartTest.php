@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
@@ -9,14 +9,14 @@ use GuzzleHttp\Psr7;
  *
  * @group NonMimePart
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\NonMimePart
+ * @covers ZBateson\MailMimeParser\Message\NonMimePart
  * @author Zaahid Bateson
  */
 class NonMimePartTest extends TestCase
 {
     public function testInstance()
     {
-        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
         $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')

@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7\CachingStream;
@@ -86,13 +86,9 @@ class PartStreamContainer {
     /**
      *
      * @param StreamInterface $stream
-     * @throws UnexpectedValueException
      */
     public function setStream(StreamInterface $stream)
     {
-        if ($this->stream !== null) {
-            throw new UnexpectedValueException("stream has already been set and cannot be overwritten");
-        }
         $this->stream = $stream;
     }
 

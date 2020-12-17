@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
@@ -9,21 +9,21 @@ use GuzzleHttp\Psr7;
  *
  * @group UUEncodedPart
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\UUEncodedPart
+ * @covers ZBateson\MailMimeParser\Message\UUEncodedPart
  * @author Zaahid Bateson
  */
 class UUEncodedPartTest extends TestCase
 {
     public function testInstance()
     {
-        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
         $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $pb->expects($this->exactly(2))

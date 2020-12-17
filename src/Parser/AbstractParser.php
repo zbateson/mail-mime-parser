@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Description of AbstractParser

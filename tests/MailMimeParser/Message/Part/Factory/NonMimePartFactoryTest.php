@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part\Factory;
+namespace ZBateson\MailMimeParser\Parser\Part;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
@@ -9,8 +9,8 @@ use GuzzleHttp\Psr7;
  *
  * @group NonMimePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory
- * @covers ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\NonMimePartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\MessagePartFactory
  * @author Zaahid Bateson
  */
 class NonMimePartFactoryTest extends TestCase
@@ -24,10 +24,10 @@ class NonMimePartFactoryTest extends TestCase
         $mocksdf->expects($this->any())
             ->method('getLimitedPartStream')
             ->willReturn(Psr7\stream_for('test'));
-        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory')
+        $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $psfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
         $psfmFactory
@@ -39,7 +39,7 @@ class NonMimePartFactoryTest extends TestCase
 
     public function testNewInstance()
     {
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,7 +48,7 @@ class NonMimePartFactoryTest extends TestCase
             Psr7\stream_for('test')
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\Part\NonMimePart',
+            '\ZBateson\MailMimeParser\Message\NonMimePart',
             $part
         );
     }

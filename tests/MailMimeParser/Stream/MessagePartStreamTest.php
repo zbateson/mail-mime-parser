@@ -33,14 +33,14 @@ class MessagePartStreamTest extends TestCase
 
     private function newMockMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockUUEncodedPart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\UUEncodedPart')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\UUEncodedPart')
             ->disableOriginalConstructor()
             ->getMock();
     }

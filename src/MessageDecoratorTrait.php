@@ -6,15 +6,14 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\Part\Decorator\MimePartDecoratorTrait;
-use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\MimePartDecoratorTrait;
 
 /**
- * Description of MessagePartDecoratorTrait
+ * Ferries calls to an IMessagePart.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class MessageDecoratorTrait implements IMessage {
+trait MessageDecoratorTrait {
 
     use MimePartDecoratorTrait;
 

@@ -23,13 +23,13 @@ class PrivacyHelperTest extends TestCase
 
     protected function legacySetUp()
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\MimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory')
+        $this->mockPartBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockGenericHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\GenericHelper')
@@ -42,7 +42,7 @@ class PrivacyHelperTest extends TestCase
 
     private function newMockMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -136,7 +136,7 @@ class PrivacyHelperTest extends TestCase
             ->method('getSignaturePart')
             ->willReturn(null);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -182,7 +182,7 @@ class PrivacyHelperTest extends TestCase
             ->method('enforceMime')
             ->willReturn($message);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())

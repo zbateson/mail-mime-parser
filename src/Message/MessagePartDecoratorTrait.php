@@ -4,14 +4,15 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Decorator;
+namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Message\Part\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 use Psr\Http\Message\StreamInterface;
+use SplObserver;
 
 /**
- * Description of MessagePartDecoratorTrait
+ * Ferries calls to an IMessagePart.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
@@ -27,6 +28,21 @@ trait MessagePartDecoratorTrait {
         $this->part = $part;
     }
 
+    public function attach(SplObserver $observer)
+    {
+        $this->part->attach($observer);
+    }
+
+    public function detach(SplObserver $observer)
+    {
+        $this->part->detach($observer);
+    }
+
+    public function notify()
+    {
+        $this->part->notify();
+    }
+
     public function hasContent()
     {
         return $this->part->hasContent();
@@ -34,6 +50,8 @@ trait MessagePartDecoratorTrait {
 
     public function isTextPart()
     {
+        echo 'DECOR: ', get_class($this), "\n";
+        echo 'DECOR: ', get_class($this->part), "\n";
         return $this->part->isTextPart();
     }
 

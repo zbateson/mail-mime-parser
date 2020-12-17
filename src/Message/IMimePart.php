@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 /**
  * Represents a single part of a multi-part mime message.
@@ -13,7 +13,7 @@ namespace ZBateson\MailMimeParser\Message\Part;
  * itself with its own parent or parents.
  *
  * The content of the part can be read from its PartStream resource handle,
- * accessible via MessagePart::getContentResourceHandle.
+ * accessible via IMessagePart::getContentResourceHandle.
  *
  * @author Zaahid Bateson
  */
@@ -30,7 +30,7 @@ interface IMimePart extends IParentHeaderPart {
      * Convenience method to find a part by its Content-ID header.
      *
      * @param string $contentId
-     * @return MessagePart
+     * @return IMessagePart
      */
     public function getPartByContentId($contentId);
 }

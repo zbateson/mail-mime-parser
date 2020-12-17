@@ -4,12 +4,12 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Decorator;
+namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message\Part\IMimePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
- * Description of MimePartDecoratorTrait
+ * Ferries calls to an IMimePart.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
@@ -29,11 +29,11 @@ trait MimePartDecoratorTrait {
 
     public function getPartByContentId($contentId)
     {
-        return $this->getPartByContentId($contentId);
+        return $this->part->getPartByContentId($contentId);
     }
 
     public function isMultiPart()
     {
-        return $this->isMultiPart();
+        return $this->part->isMultiPart();
     }
 }

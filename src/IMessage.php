@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\Part\IMimePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -22,7 +22,7 @@ interface IMessage extends IMimePart {
      * Returns the text/plain part at the given index (or null if not found.)
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\Part\IMessagePart
+     * @return \ZBateson\MailMimeParser\Message\IMessagePart
      */
     public function getTextPart($index = 0);
 
@@ -53,7 +53,7 @@ interface IMessage extends IMimePart {
      * is set.
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\Part\IMessagePart
+     * @return \ZBateson\MailMimeParser\Message\IMessagePart
      */
     public function getAttachmentPart($index);
 
@@ -63,7 +63,7 @@ interface IMessage extends IMimePart {
      * "Attachments" are any non-multipart, non-signature and any text or html
      * html part witha Content-Disposition set to  'attachment'.
      *
-     * @return \ZBateson\MailMimeParser\Message\Part\IMessagePart[]
+     * @return \ZBateson\MailMimeParser\Message\IMessagePart[]
      */
     public function getAllAttachmentParts();
 

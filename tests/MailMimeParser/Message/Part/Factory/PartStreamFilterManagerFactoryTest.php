@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part\Factory;
+namespace ZBateson\MailMimeParser\Parser\Part;
 
 use LegacyPHPUnit\TestCase;
 
@@ -8,7 +8,7 @@ use LegacyPHPUnit\TestCase;
  *
  * @group PartStreamFilterManagerFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\PartStreamFilterManagerFactory
  * @author Zaahid Bateson
  */
 class PartStreamFilterManagerFactoryTest extends TestCase
@@ -28,7 +28,7 @@ class PartStreamFilterManagerFactoryTest extends TestCase
     {
         $manager = $this->partStreamFilterManagerFactory->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager',
+            '\ZBateson\MailMimeParser\Message\PartStreamFilterManager',
             $manager
         );
     }

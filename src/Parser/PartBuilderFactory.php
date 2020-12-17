@@ -4,10 +4,10 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Factory;
+namespace ZBateson\MailMimeParser\Parser;
 
+use ZBateson\MailMimeParser\Parser\Part\MessagePartFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 
 /**
  * Responsible for creating PartBuilder instances.
@@ -39,9 +39,9 @@ class PartBuilderFactory
     /**
      * Constructs a new PartBuilder object and returns it
      * 
-     * @param \ZBateson\MailMimeParser\Message\Part\Factory\MessagePartFactory
+     * @param \ZBateson\MailMimeParser\Parser\Part\MessagePartFactory
      *        $messagePartFactory 
-     * @return \ZBateson\MailMimeParser\Message\Part\PartBuilder
+     * @return \ZBateson\MailMimeParser\Parser\PartBuilder
      */
     public function newPartBuilder(MessagePartFactory $messagePartFactory)
     {

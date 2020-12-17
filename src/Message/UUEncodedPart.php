@@ -4,10 +4,9 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
-use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
  * A specialized NonMimePart representing a uuencoded part.
@@ -26,6 +25,24 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class UUEncodedPart extends NonMimePart implements IUUEncodedPart
 {
+    /**
+     * Constructor
+     *
+     * @param PartStreamContainer $streamContainer
+     */
+    public function __construct(PartStreamContainer $streamContainer = null)
+    {
+        if ($streamContainer === null) {
+            $di = MailMimeParser::getDependencyContainer();
+            $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer:factory'];
+            $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
+            $streamContainer->setStream($streamFactory->newMessagePartStream($this));
+        }
+        parent::__construct(
+            $streamContainer
+        );
+    }
+
     /**
      * @var int the unix file permission
      */
@@ -65,7 +82,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     public function setFilename($filename)
     {
         $this->filename = $filename;
-        $this->onChange();
+        $this->notify();
     }
 
     /**
@@ -136,6 +153,6 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     public function setUnixFileMode($mode)
     {
         $this->mode = $mode;
-        $this->onChange();
+        $this->notify();
     }
 }

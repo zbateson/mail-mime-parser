@@ -21,13 +21,13 @@ class MultipartHelperTest extends TestCase
 
     protected function legacySetUp()
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\MimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory')
+        $this->mockPartBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockGenericHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\GenericHelper')
@@ -37,7 +37,7 @@ class MultipartHelperTest extends TestCase
 
     private function newMockMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -167,7 +167,7 @@ class MultipartHelperTest extends TestCase
         $contentPart = $this->newMockMimePart();
         $newPart = $this->newMockMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -279,7 +279,7 @@ class MultipartHelperTest extends TestCase
         $parent = $this->newMockMimePart();
         $related = $this->newMockMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -335,7 +335,7 @@ class MultipartHelperTest extends TestCase
             ->willReturn(2);
 
         $related = $this->newMockMimePart();
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -365,7 +365,7 @@ class MultipartHelperTest extends TestCase
         $message = $this->newMockMessage();
         $mimePart = $this->newMockMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -413,7 +413,7 @@ class MultipartHelperTest extends TestCase
         $mimePart = $this->newMockMimePart();
         $altPart = $this->newMockMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->exactly(2))
@@ -462,7 +462,7 @@ class MultipartHelperTest extends TestCase
         $message = $this->newMockMessage();
         $mimePart = $this->newMockMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -507,7 +507,7 @@ class MultipartHelperTest extends TestCase
             ->method('isMime')
             ->willReturn(true);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -557,7 +557,7 @@ class MultipartHelperTest extends TestCase
             ->method('isMime')
             ->willReturn(true);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -607,7 +607,7 @@ class MultipartHelperTest extends TestCase
             ->method('isMime')
             ->willReturn(false);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())
@@ -674,7 +674,7 @@ class MultipartHelperTest extends TestCase
             ->method('getTextPart')
             ->willReturn(null);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartBuilderFactory->expects($this->once())

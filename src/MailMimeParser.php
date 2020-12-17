@@ -110,7 +110,7 @@ class MailMimeParser
 
     /**
      * Parses the passed stream handle or string into a
-     * ZBateson\MailMimeParser\Message object and returns it.
+     * ZBateson\MailMimeParser\IMessage object and returns it.
      *
      * By default, the passed stream is in 'attached' mode, and will close when
      * the Message is destroyed.  Pass TRUE as the second argument to keep the
@@ -120,7 +120,7 @@ class MailMimeParser
      * @param resource|string $handleOrString the resource handle to the input
      *        stream of the mime message, or a string containing a mime message
      * @param bool $detached set to true to keep the stream open
-     * @return \ZBateson\MailMimeParser\Message
+     * @return \ZBateson\MailMimeParser\IMessage
      */
     public function parse($handleOrString, $detached = false)
     {

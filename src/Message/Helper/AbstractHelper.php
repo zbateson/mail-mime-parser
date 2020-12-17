@@ -6,9 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
+use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
+use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory;
 
 /**
  * Base class for message helpers.

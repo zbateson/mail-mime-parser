@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7;
  *
  * @group MessageFactory
  * @group Message
- * @covers ZBateson\MailMimeParser\Message\MessageFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\MessageFactory
  * @author Zaahid Bateson
  */
 class MessageFactoryTest extends TestCase
@@ -20,13 +20,13 @@ class MessageFactoryTest extends TestCase
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->getMock();
-        $mockpsfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $mockpsfm = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $mockpsfmfactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory')
+        $mockpsfmfactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+        $mockFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $mockHelperService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MessageHelperService')
@@ -46,7 +46,7 @@ class MessageFactoryTest extends TestCase
 
     public function testNewInstance()
     {
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 

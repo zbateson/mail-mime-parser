@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
@@ -10,7 +10,7 @@ use ZBateson\StreamDecorators\NonClosingStream;
  *
  * @group PartStreamFilterManager
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager
+ * @covers ZBateson\MailMimeParser\Message\PartStreamFilterManager
  * @author Zaahid Bateson
  */
 class PartStreamFilterManagerTest extends TestCase

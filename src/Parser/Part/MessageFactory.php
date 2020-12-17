@@ -4,14 +4,14 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
-use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\PartStreamContainer;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -44,25 +44,29 @@ class MessageFactory extends MimePartFactory
     }
 
     /**
-     * Constructs a new Message object and returns it
+     * Constructs a new IMessage object and returns it
      *
      * @param PartBuilder $partBuilder
      * @param StreamInterface $stream
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
     public function newInstance(PartBuilder $partBuilder, StreamInterface $stream = null)
     {
         $streamContainer = new PartStreamContainer($this->streamFactory);
         if ($stream !== null) {
-            $streamContainer->setStream($this->streamFactory->newNonClosingStream($stream));
             $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($stream, $partBuilder));
         }
+        $children = $this->buildChildren($partBuilder, $stream);
+
+        $headerContainer = $partBuilder->getHeaderContainer();
         $message = new Message(
-            $this->streamFactory,
+            $children,
+            $streamContainer,
+            $headerContainer,
             $this->partFilterFactory,
             $this->messageService
         );
-        $message->initMessageFrom($partBuilder, $stream, $streamContainer);
-        return $message;
+        $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
+        return new ParsedMessage($message, $stream);
     }
 }

@@ -10,8 +10,8 @@ use ArrayIterator;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
+use ZBateson\MailMimeParser\Message\ParentHeaderPart;
+use ZBateson\MailMimeParser\Message\MessagePart;
 
 /**
  * Psr7 stream decorator implementation providing a readable stream for a part's

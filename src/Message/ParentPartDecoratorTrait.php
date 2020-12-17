@@ -4,14 +4,14 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part\Decorator;
+namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Message\Part\IMessagePart;
-use ZBateson\MailMimeParser\Message\Part\IParentPart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IParentPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
- * Description of ParentPartDecoratorTrait
+ * Ferries calls to an IParentPart.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
@@ -66,26 +66,26 @@ trait ParentPartDecoratorTrait {
 
     public function getChildParts(PartFilter $filter = null)
     {
-        return $this->getChildParts($filter);
+        return $this->part->getChildParts($filter);
     }
 
     public function getCountOfPartsByMimeType($mimeType)
     {
-        return $this->getCountOfPartsByMimeType($mimeType);
+        return $this->part->getCountOfPartsByMimeType($mimeType);
     }
 
     public function getPartByMimeType($mimeType, $index = 0)
     {
-        return $this->getPartByMimeType($mimeType, $index);
+        return $this->part->getPartByMimeType($mimeType, $index);
     }
 
     public function removeAllParts(PartFilter $filter = null)
     {
-        $this->removeAllParts($filter);
+        $this->part->removeAllParts($filter);
     }
 
-    public function removePart(MessagePart $part)
+    public function removePart(IMessagePart $part)
     {
-        return $this->removePart($part);
+        return $this->part->removePart($part);
     }
 }

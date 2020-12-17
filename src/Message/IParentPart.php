@@ -4,7 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Message\PartFilter;
 
@@ -19,13 +19,13 @@ interface IParentPart extends IMessagePart {
      * Returns the part at the given 0-based index, or null if none is set.
      *
      * Note that the first part returned is the current part itself.  This is
-     * often desirable for queries with a PartFilter, e.g. looking for a
-     * MessagePart with a specific Content-Type that may be satisfied by the
+     * often desirable for queries with a PartFilter, e.g. looking for an
+     * IMessagePart with a specific Content-Type that may be satisfied by the
      * current part.
      *
      * @param int $index
      * @param PartFilter $filter
-     * @return MessagePart
+     * @return IMessagePart
      */
     public function getPart($index, PartFilter $filter = null);
 
@@ -33,11 +33,11 @@ interface IParentPart extends IMessagePart {
      * Returns the current part, all child parts, and child parts of all
      * children optionally filtering them with the provided PartFilter.
      *
-     * The first part returned is always the current MimePart.  This is often
+     * The first part returned is always the current IMimePart.  This is often
      * desirable as it may be a valid MimePart for the provided PartFilter.
      *
      * @param PartFilter $filter an optional filter
-     * @return MessagePart[]
+     * @return IMessagePart[]
      */
     public function getAllParts(PartFilter $filter = null);
 
@@ -58,7 +58,7 @@ interface IParentPart extends IMessagePart {
      *
      * @param int $index
      * @param PartFilter $filter
-     * @return MessagePart
+     * @return IMessagePart
      */
     public function getChild($index, PartFilter $filter = null);
 
@@ -68,7 +68,7 @@ interface IParentPart extends IMessagePart {
      * If a PartFilter is provided, the PartFilter is applied before returning.
      *
      * @param PartFilter $filter
-     * @return MessagePart[]
+     * @return IMessagePart[]
      */
     public function getChildParts(PartFilter $filter = null);
 
@@ -86,7 +86,7 @@ interface IParentPart extends IMessagePart {
      *
      * @param string $mimeType
      * @param int $index
-     * @return MessagePart|null
+     * @return IMessagePart|null
      */
     public function getPartByMimeType($mimeType, $index = 0);
 
@@ -95,7 +95,7 @@ interface IParentPart extends IMessagePart {
      * exist or null otherwise.
      *
      * @param string $mimeType
-     * @return MessagePart[] or null
+     * @return IMessagePart[] or null
      */
     public function getAllPartsByMimeType($mimeType);
 

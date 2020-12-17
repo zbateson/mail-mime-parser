@@ -25,13 +25,13 @@ class MessageTest extends TestCase
     protected function legacySetUp()
     {
         $this->vfs = vfsStream::setup('root');
-        $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+        $this->mockPartFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
@@ -70,7 +70,7 @@ class MessageTest extends TestCase
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $pb->method('getHeaderContainer')
@@ -87,7 +87,7 @@ class MessageTest extends TestCase
             $this->getMockedPartBuilder()
         ];
 
-        $nestedMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        $nestedMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,7 +99,7 @@ class MessageTest extends TestCase
 
         foreach ($children as $key => $child) {
             // need to 'setMethods' because getAllNonFilteredParts is protected
-            $childMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+            $childMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getAllNonFilteredParts',
@@ -155,7 +155,7 @@ class MessageTest extends TestCase
 
     public function testGetTextPartAndTextPartCount()
     {
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -204,7 +204,7 @@ class MessageTest extends TestCase
 
     public function testGetHtmlPartAndHtmlPartCount()
     {
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -254,7 +254,7 @@ class MessageTest extends TestCase
 
     public function testGetAndRemoveAttachmentParts()
     {
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
+        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\MessageFilter')
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();

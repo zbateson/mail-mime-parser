@@ -4,26 +4,43 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message\Part;
+namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\Message\PartFilterFactory;
 
 /**
- * Represents a single part of a multi-part mime message.
- *
- * A MimePart object may have any number of child parts, or may be a child
- * itself with its own parent or parents.
- *
- * The content of the part can be read from its PartStream resource handle,
- * accessible via MessagePart::getContentResourceHandle.
+ * Default implementation of IMimePart.
  *
  * @author Zaahid Bateson
  */
 class MimePart extends ParentHeaderPart implements IMimePart
 {
-    /**
-     * {@inheritDoc}
-     */
+    public function __construct(
+        array $children = [],
+        PartStreamContainer $streamContainer = null,
+        HeaderContainer $headerContainer = null,
+        PartFilterFactory $partFilterFactory = null
+    ) {
+        if ($streamContainer === null || $headerContainer === null || $partFilterFactory === null) {
+            $di = MailMimeParser::getDependencyContainer();
+            $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer:factory'];
+            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\PartFilterFactory'];
+
+            $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer:factory'];
+            $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
+            $streamContainer->setStream($streamFactory->newMessagePartStream($this));
+        }
+        parent::__construct(
+            $streamContainer,
+            $headerContainer,
+            $partFilterFactory,
+            $children
+        );
+    }
+
     public function getFilename()
     {
         return $this->getHeaderParameter(
@@ -36,52 +53,22 @@ class MimePart extends ParentHeaderPart implements IMimePart
         );
     }
 
-    /**
-     * Returns true.
-     * 
-     * @return bool
-     */
     public function isMime()
     {
         return true;
     }
 
-    /**
-     * Returns true if this part's mime type is text/plain, text/html or if the
-     * Content-Type header defines a charset.
-     * 
-     * @return bool
-     */
     public function isTextPart()
     {
+        echo 'HERE: ', ($this->getCharset() !== null), ', ', $this->getContentType(), "\n";
         return ($this->getCharset() !== null);
     }
 
-    /**
-     * Returns the lower-cased, trimmed value of the Content-Type header.
-     * 
-     * Parses the Content-Type header, defaults to returning text/plain if not
-     * defined.
-     *
-     * @param string $default pass to override the returned value when not set
-     * @return string
-     */
     public function getContentType($default = 'text/plain')
     {
         return trim(strtolower($this->getHeaderValue('Content-Type', $default)));
     }
 
-    /**
-     * Returns the upper-cased charset of the Content-Type header's charset
-     * parameter if set, ISO-8859-1 if the Content-Type is text/plain or
-     * text/html and the charset parameter isn't set, or null otherwise.
-     *
-     * If the charset parameter is set to 'binary' it is ignored and considered
-     * 'not set' (returns ISO-8859-1 for text/plain, text/html or null
-     * otherwise).
-     * 
-     * @return string
-     */
     public function getCharset()
     {
         $charset = $this->getHeaderParameter('Content-Type', 'charset');
@@ -95,25 +82,11 @@ class MimePart extends ParentHeaderPart implements IMimePart
         return trim(strtoupper($charset));
     }
 
-    /**
-     * Returns the content's disposition, defaulting to 'inline' if not set.
-     *
-     * @param string $default pass to override the default returned disposition
-     *        when not set.
-     * @return string
-     */
     public function getContentDisposition($default = 'inline')
     {
         return strtolower($this->getHeaderValue('Content-Disposition', $default));
     }
 
-    /**
-     * Returns the content-transfer-encoding used for this part, defaulting to
-     * '7bit' if not set.
-     *
-     * @param string $default pass to override the default when not set.
-     * @return string
-     */
     public function getContentTransferEncoding($default = '7bit')
     {
         static $translated = [
@@ -128,24 +101,11 @@ class MimePart extends ParentHeaderPart implements IMimePart
         return $type;
     }
 
-    /**
-     * Returns the Content ID of the part.
-     *
-     * In MimePart, this is merely a shortcut to calling
-     * ``` $part->getHeaderValue('Content-ID'); ```.
-     * 
-     * @return string|null
-     */
     public function getContentId()
     {
         return $this->getHeaderValue('Content-ID');
     }
 
-    /**
-     * Returns true if this part's mime type is multipart/*
-     *
-     * @return bool
-     */
     public function isMultiPart()
     {
         // casting to bool, preg_match returns 1 for true
@@ -156,12 +116,6 @@ class MimePart extends ParentHeaderPart implements IMimePart
     }
 
 
-    /**
-     * Convenience method to find a part by its Content-ID header.
-     *
-     * @param string $contentId
-     * @return MessagePart
-     */
     public function getPartByContentId($contentId)
     {
         $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);

@@ -6,13 +6,13 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\Parser\Part\MessageFactory;
 use ZBateson\MailMimeParser\Message\Helper\GenericHelper;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
-use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\NonMimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
+use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
+use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
