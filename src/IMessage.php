@@ -86,21 +86,6 @@ interface IMessage extends IMimePart
     public function getTextStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET);
 
     /**
-     * Returns a resource handle for the 'inline' text/plain content at the
-     * passed $index, or null if unavailable.
-     *
-     * Note: this method should *not* be used and has been deprecated. Instead,
-     * use Psr7 streams with getTextStream.  Multibyte chars will not be read
-     * correctly with getTextResourceHandle/fread.
-     *
-     * @param int $index
-     * @param string $charset
-     * @deprecated since version 1.2.1
-     * @return resource
-     */
-    public function getTextResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET);
-
-    /**
      * Returns the content of the inline text/plain part at the given index.
      *
      * Reads the entire stream content into a string and returns it.  Returns
@@ -121,21 +106,6 @@ interface IMessage extends IMimePart
      * @return \Psr\Http\Message\StreamInterface
      */
     public function getHtmlStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET);
-
-    /**
-     * Returns a resource handle for the 'inline' text/html content at the
-     * passed $index, or null if unavailable.
-     *
-     * Note: this method should *not* be used and has been deprecated. Instead,
-     * use Psr7 streams with getHtmlStream.  Multibyte chars will not be read
-     * correctly with getHtmlResourceHandle/fread.
-     *
-     * @param int $index
-     * @param string $charset
-     * @deprecated since version 1.2.1
-     * @return resource
-     */
-    public function getHtmlResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET);
 
     /**
      * Returns the content of the inline text/html part at the given index.

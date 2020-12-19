@@ -103,12 +103,6 @@ trait MessagePartDecoratorTrait
         $this->part->setCharsetOverride($charsetOverride, $onlyIfNoCharset);
     }
 
-    public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
-    {
-        // deprecated 1.2.1 (remove it)
-        return $this->part->getContentResourceHandle($charset);
-    }
-
     public function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
     {
         return $this->part->getContentStream($charset);

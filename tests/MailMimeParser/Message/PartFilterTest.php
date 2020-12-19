@@ -25,7 +25,6 @@ class PartFilterTest extends TestCase
                 'getHeader',
                 'getHeaderValue',
                 'getHeaderParameter',
-                'getContentResourceHandle',
                 'getParent',
                 'getContentType',
                 'getContentDisposition',

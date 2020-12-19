@@ -103,16 +103,6 @@ abstract class MessagePart implements IMessagePart
         }
     }
 
-    public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET)
-    {
-        trigger_error("getContentResourceHandle is deprecated since version 1.2.1", E_USER_DEPRECATED);
-        $stream = $this->getContentStream($charset);
-        if ($stream !== null) {
-            return StreamWrapper::getResource($stream);
-        }
-        return null;
-    }
-
     public function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->hasContent()) {

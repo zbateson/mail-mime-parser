@@ -12,9 +12,6 @@ namespace ZBateson\MailMimeParser\Message;
  * An IMimePart object may have any number of child parts, or may be a child
  * itself with its own parent or parents.
  *
- * The content of the part can be read from its PartStream resource handle,
- * accessible via IMessagePart::getContentResourceHandle.
- *
  * @author Zaahid Bateson
  */
 interface IMimePart extends IParentHeaderPart

@@ -67,11 +67,6 @@ trait MessageDecoratorTrait
         return $this->part->getHtmlPartCount();
     }
 
-    public function getHtmlResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
-    {
-        return $this->part->getHtmlResourceHandle($index, $charset);
-    }
-
     public function getHtmlStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         return $this->part->getHtmlStream($index, $charset);
@@ -105,11 +100,6 @@ trait MessageDecoratorTrait
     public function getTextPartCount()
     {
         return $this->part->getTextPartCount();
-    }
-
-    public function getTextResourceHandle($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
-    {
-        return $this->part->getTextResourceHandle($index, $charset);
     }
 
     public function getTextStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)

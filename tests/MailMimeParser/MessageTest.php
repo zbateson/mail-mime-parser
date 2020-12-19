@@ -104,7 +104,6 @@ class MessageTest extends TestCase
             ->setMethods([
                 'getAllNonFilteredParts',
                 '__destruct',
-                'getContentResourceHandle',
                 'getContentStream',
                 'getContent',
                 'getStream',

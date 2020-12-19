@@ -120,23 +120,6 @@ interface IMessagePart extends SplSubject
     public function setCharsetOverride($charsetOverride, $onlyIfNoCharset = false);
 
     /**
-     * Returns a resource handle for the content's stream, or null if the part
-     * doesn't have a content stream.
-     *
-     * The method wraps a call to {@see MessagePart::getContentStream()} and
-     * returns a resource handle for the returned Stream.
-     *
-     * Note: this method should *not* be used and has been deprecated. Instead,
-     * use Psr7 streams with getContentStream.  Multibyte chars will not be read
-     * correctly with fread.
-     *
-     * @param string $charset
-     * @deprecated since version 1.2.1
-     * @return resource|null
-     */
-    public function getContentResourceHandle($charset = MailMimeParser::DEFAULT_CHARSET);
-
-    /**
      * Returns the StreamInterface for the part's content or null if the part
      * doesn't have a content section.
      *
