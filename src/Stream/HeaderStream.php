@@ -6,12 +6,14 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use ArrayIterator;
+use ZBateson\MailMimeParser\Message\ParentHeaderPart;
+use ZBateson\MailMimeParser\Message\MessagePart;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Message\ParentHeaderPart;
-use ZBateson\MailMimeParser\Message\MessagePart;
+use ArrayIterator;
+use SplObserver;
+use SplSubject;
 
 /**
  * Psr7 stream decorator implementation providing a readable stream for a part's
@@ -23,7 +25,7 @@ use ZBateson\MailMimeParser\Message\MessagePart;
  *
  * @author Zaahid Bateson
  */
-class HeaderStream implements StreamInterface
+class HeaderStream implements StreamInterface, SplObserver
 {
     use StreamDecoratorTrait;
 
@@ -32,14 +34,24 @@ class HeaderStream implements StreamInterface
      */
     protected $part;
 
-    /**
-     * Constructor
-     * 
-     * @param MessagePart $part
-     */
     public function __construct(MessagePart $part)
     {
         $this->part = $part;
+        $part->attach($this);
+    }
+
+    public function __destruct()
+    {
+        if ($this->part !== null) {
+            $this->part->detach($this);
+        }
+    }
+
+    public function update(SplSubject $subject)
+    {
+        if ($this->stream !== null) {
+            $this->stream = $this->createStream();
+        }
     }
 
     /**

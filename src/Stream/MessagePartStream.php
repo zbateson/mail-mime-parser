@@ -6,21 +6,23 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\AppendStream;
-use GuzzleHttp\Psr7\StreamDecoratorTrait;
-use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\ParentHeaderPart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\AppendStream;
+use GuzzleHttp\Psr7\StreamDecoratorTrait;
+use Psr\Http\Message\StreamInterface;
+use SplObserver;
+use SplSubject;
 
 /**
  * Provides a readable stream for a MessagePart.
  *
  * @author Zaahid Bateson
  */
-class MessagePartStream implements StreamInterface
+class MessagePartStream implements StreamInterface, SplObserver
 {
     use StreamDecoratorTrait;
 
@@ -44,6 +46,21 @@ class MessagePartStream implements StreamInterface
     {
         $this->streamFactory = $sdf;
         $this->part = $part;
+        $part->attach($this);
+    }
+
+    public function __destruct()
+    {
+        if ($this->part !== null) {
+            $this->part->detach($this);
+        }
+    }
+
+    public function update(SplSubject $subject)
+    {
+        if ($this->stream !== null) {
+            $this->stream = $this->createStream();
+        }
     }
 
     /**

@@ -15,8 +15,8 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-trait ParentPartDecoratorTrait {
-
+trait ParentPartDecoratorTrait
+{
     use MessagePartDecoratorTrait;
 
     /**

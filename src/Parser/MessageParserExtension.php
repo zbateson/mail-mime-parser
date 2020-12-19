@@ -11,6 +11,7 @@ namespace ZBateson\MailMimeParser\Message;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-interface MessageParserExtension {
+interface MessageParserExtension
+{
     
 }

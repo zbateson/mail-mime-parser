@@ -25,8 +25,8 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class PartStreamContainer {
-
+class PartStreamContainer
+{
     /**
      * @var StreamFactory used to apply psr7 stream decorators to the
      *      attached StreamInterface based on encoding.
@@ -34,27 +34,32 @@ class PartStreamContainer {
     protected $streamFactory;
 
     /**
-     * @var StreamInterface a Psr7 stream containing the part's headers, content
-     *      and children
+     * @var StreamInterface stream containing the part's headers, content and
+     *      children
      */
     protected $stream;
 
     /**
-     * @var StreamInterface a Psr7 stream containing this part's content
+     * @var StreamInterface a stream containing this part's content
      */
     protected $contentStream;
 
     /**
      * @var StreamInterface the content stream after attaching transfer encoding
-     *      streams to $stream.
+     *      streams to $contentStream.
      */
     protected $decodedStream;
 
     /**
-     * @var StreamInterface the content stream after attaching charset streams
-     *      to $binaryStream
+     * @var StreamInterface attached charset stream to $decodedStream
      */
     protected $charsetStream;
+
+    /**
+     * @var bool true if the stream should be detached when this container is
+     *      destroyed.
+     */
+    protected $detachParsedStream;
 
     /**
      * @var array map of the active encoding filter on the current handle.
@@ -83,10 +88,6 @@ class PartStreamContainer {
         $this->streamFactory = $streamFactory;
     }
 
-    /**
-     *
-     * @param StreamInterface $stream
-     */
     public function setStream(StreamInterface $stream)
     {
         $this->stream = $stream;
@@ -94,6 +95,7 @@ class PartStreamContainer {
 
     public function getStream()
     {
+        $this->stream->rewind();
         return $this->stream;
     }
 

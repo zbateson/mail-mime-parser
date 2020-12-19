@@ -10,36 +10,29 @@ use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Responsible for creating Message instances.
+ * Responsible for creating ParsedMessage instances.
  *
  * @author Zaahid Bateson
  */
-class MessageFactory extends MimePartFactory
+class ParsedMessageFactory extends ParsedMimePartFactory
 {
     /**
      * @var MessageService helper class for message manipulation routines.
      */
     protected $messageService;
 
-    /**
-     * Constructor
-     * 
-     * @param StreamFactory $sdf
-     * @param PartFilterFactory $pf
-     * @param MessageService $mhs
-     */
     public function __construct(
         StreamFactory $sdf,
+        ParsedPartStreamContainerFactory $pscf,
         PartFilterFactory $pf,
         MessageService $mhs
     ) {
-        parent::__construct($sdf, $pf);
+        parent::__construct($sdf, $pscf, $pf);
         $this->messageService = $mhs;
     }
 
@@ -52,13 +45,14 @@ class MessageFactory extends MimePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, StreamInterface $stream = null)
     {
-        $streamContainer = new PartStreamContainer($this->streamFactory);
+        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
         if ($stream !== null) {
             $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($stream, $partBuilder));
         }
-        $children = $this->buildChildren($partBuilder, $stream);
 
+        $children = $this->buildChildren($partBuilder, $stream);
         $headerContainer = $partBuilder->getHeaderContainer();
+
         $message = new Message(
             $children,
             $streamContainer,
@@ -66,7 +60,10 @@ class MessageFactory extends MimePartFactory
             $this->partFilterFactory,
             $this->messageService
         );
+
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
-        return new ParsedMessage($message, $stream);
+        $streamContainer->setParsedStream($stream);
+        $message->attach($streamContainer);
+        return $message;
     }
 }

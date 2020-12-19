@@ -11,8 +11,8 @@ namespace ZBateson\MailMimeParser\Message;
  *
  * @author Zaahid Bateson
  */
-interface IParentHeaderPart extends IParentPart {
-
+interface IParentHeaderPart extends IParentPart
+{
     /**
      * Returns the AbstractHeader object for the header with the given $name.
      * If the optional $offset is passed, and multiple headers exist with the

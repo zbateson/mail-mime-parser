@@ -13,8 +13,8 @@ use ZBateson\MailMimeParser\Message\IParentHeaderPart;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-trait ParentHeaderPartDecoratorTrait {
-
+trait ParentHeaderPartDecoratorTrait
+{
     use ParentPartDecoratorTrait;
 
     /**

@@ -4,7 +4,9 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Message\Factory;
+
+use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
  * Injectable factory class used by MimePart to construct PartFilter instances

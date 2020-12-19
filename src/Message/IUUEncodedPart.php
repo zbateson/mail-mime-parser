@@ -24,8 +24,8 @@ use Psr\Http\Message\StreamInterface;
  *
  * @author Zaahid Bateson
  */
-interface IUUEncodedPart extends IMessagePart {
-
+interface IUUEncodedPart extends IMessagePart
+{
     /**
      * Sets the filename included in the uuencoded header.
      *

@@ -53,7 +53,6 @@ abstract class MessagePart implements IMessagePart
     public function __construct(PartStreamContainer $streamContainer)
     {
         $this->partStreamContainer = $streamContainer;
-        $this->streamChanged = ($streamContainer->getStream() === null);
         $this->observers = new SplObjectStorage();
     }
 
@@ -71,6 +70,9 @@ abstract class MessagePart implements IMessagePart
     {
         foreach ($this->observers as $observer) {
             $observer->update($this);
+        }
+        if ($this->parent !== null) {
+            $this->parent->notify();
         }
     }
 
@@ -91,9 +93,7 @@ abstract class MessagePart implements IMessagePart
 
     public function getStream()
     {
-        $stream = $this->partStreamContainer->getStream();
-        $stream->rewind();
-        return $stream;
+        return $this->partStreamContainer->getStream();
     }
 
     public function setCharsetOverride($charsetOverride, $onlyIfNoCharset = false)

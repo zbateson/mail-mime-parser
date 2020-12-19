@@ -13,8 +13,8 @@ use ZBateson\MailMimeParser\Message\IUUEncodedPart;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-trait UUEncodedPartDecoratorTrait {
-
+trait UUEncodedPartDecoratorTrait
+{
     use MessagePartDecoratorTrait;
 
     /**

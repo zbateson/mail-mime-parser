@@ -13,8 +13,8 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  *
  * @author Zaahid Bateson
  */
-interface IParentPart extends IMessagePart {
-
+interface IParentPart extends IMessagePart
+{
     /**
      * Returns the part at the given 0-based index, or null if none is set.
      *

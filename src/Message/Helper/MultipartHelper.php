@@ -7,9 +7,8 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
-use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
-use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
@@ -28,21 +27,12 @@ class MultipartHelper extends AbstractHelper
      */
     private $genericHelper;
 
-    /**
-     * Constructor
-     * 
-     * @param MimePartFactory $mimePartFactory
-     * @param UUEncodedPartFactory $uuEncodedPartFactory
-     * @param PartBuilderFactory $partBuilderFactory
-     * @param GenericHelper $genericHelper
-     */
     public function __construct(
         MimePartFactory $mimePartFactory,
         UUEncodedPartFactory $uuEncodedPartFactory,
-        PartBuilderFactory $partBuilderFactory,
         GenericHelper $genericHelper
     ) {
-        parent::__construct($mimePartFactory, $uuEncodedPartFactory, $partBuilderFactory);
+        parent::__construct($mimePartFactory, $uuEncodedPartFactory);
         $this->genericHelper = $genericHelper;
     }
 
@@ -195,7 +185,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function createAlternativeContentPart(IMessage $message, IMessagePart $contentPart)
     {
-        $altPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+        $altPart = $this->mimePartFactory->newInstance();
         $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
         $message->removePart($contentPart);
         $message->addChild($altPart, 0);
@@ -260,7 +250,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function createMultipartRelatedPartForInlineChildrenOf(IMimePart $parent)
     {
-        $relatedPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+        $relatedPart = $this->mimePartFactory->newInstance();
         $this->setMimeHeaderBoundaryOnPart($relatedPart, 'multipart/related');
         foreach ($parent->getChildParts(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) as $part) {
             $parent->removePart($part);
@@ -308,12 +298,11 @@ class MultipartHelper extends AbstractHelper
      */
     public function createContentPartForMimeType(IMessage $message, $mimeType, $charset)
     {
-        $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-        $builder->addHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"");
-        $builder->addHeader('Content-Transfer-Encoding', 'quoted-printable');
-        $this->enforceMime($message);
-        $mimePart = $builder->createMessagePart();
+        $mimePart = $this->mimePartFactory->newInstance();
+        $mimePart->setRawHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"");
+        $mimePart->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
 
+        $this->enforceMime($message);
         $altPart = $this->findOtherContentPartFor($message, $mimeType);
 
         if ($altPart === $message) {
@@ -350,20 +339,17 @@ class MultipartHelper extends AbstractHelper
 
         $safe = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
         if ($message->isMime()) {
-            $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-            $builder->addHeader('Content-Transfer-Encoding', $encoding);
+            $part = $this->mimePartFactory->newInstance();
+            $part->setRawHeader('Content-Transfer-Encoding', $encoding);
             if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
                 $this->setMessageAsMixed($message);
             }
-            $builder->addHeader('Content-Type', "$mimeType;\r\n\tname=\"$safe\"");
-            $builder->addHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$safe\"");
+            $part->setRawHeader('Content-Type', "$mimeType;\r\n\tname=\"$safe\"");
+            $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$safe\"");
         } else {
-            $builder = $this->partBuilderFactory->newPartBuilder(
-                $this->uuEncodedPartFactory
-            );
-            $builder->setProperty('filename', $safe);
+            $part = $this->uuEncodedPartFactory->newInstance();
+            $part->setFilename($safe);
         }
-        $part = $builder->createMessagePart();
         $part->setContent($resource);
         $message->addChild($part);
     }

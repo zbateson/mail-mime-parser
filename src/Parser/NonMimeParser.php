@@ -6,14 +6,27 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\Part\ParsedUUEncodedPartFactory;
 
 /**
  * Description of MimeParser
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class NonMimeParser extends AbstractParser {
+class NonMimeParser extends AbstractParser
+{
+    /**
+     * @var ParsedUUEncodedPartFactory for ParsedMimePart objects
+     */
+    protected $parsedUuEncodedPartFactory;
+
+    public function __construct(
+        PartBuilderFactory $pbf,
+        ParsedUUEncodedPartFactory $f
+    ) {
+        parent::__construct($pbf);
+        $this->parsedUuEncodedPartFactory = $f;
+    }
 
     protected function parse($handle, PartBuilder $partBuilder)
     {
@@ -24,7 +37,7 @@ class NonMimeParser extends AbstractParser {
             $line = trim($this->readLine($handle));
             if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
                 $part = $this->partBuilderFactory->newPartBuilder(
-                    $this->messageService->getUUEncodedPartFactory()
+                    $this->parsedUuEncodedPartFactory
                 );
                 $part->setStreamPartStartPos($start);
                 // 'begin' line is part of the content

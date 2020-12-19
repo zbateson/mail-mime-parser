@@ -6,10 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
-use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
-use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\ParentPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
@@ -30,23 +29,13 @@ class PrivacyHelper extends AbstractHelper
      */
     private $multipartHelper;
 
-    /**
-     * Constructor
-     * 
-     * @param MimePartFactory $mimePartFactory
-     * @param UUEncodedPartFactory $uuEncodedPartFactory
-     * @param PartBuilderFactory $partBuilderFactory
-     * @param GenericHelper $genericHelper
-     * @param MultipartHelper $multipartHelper
-     */
     public function __construct(
         MimePartFactory $mimePartFactory,
         UUEncodedPartFactory $uuEncodedPartFactory,
-        PartBuilderFactory $partBuilderFactory,
         GenericHelper $genericHelper,
         MultipartHelper $multipartHelper
     ) {
-        parent::__construct($mimePartFactory, $uuEncodedPartFactory, $partBuilderFactory);
+        parent::__construct($mimePartFactory, $uuEncodedPartFactory);
         $this->genericHelper = $genericHelper;
         $this->multipartHelper = $multipartHelper;
     }
@@ -64,7 +53,7 @@ class PrivacyHelper extends AbstractHelper
     {
         if (strcasecmp($message->getContentType(), 'multipart/signed') !== 0) {
             $this->multipartHelper->enforceMime($message);
-            $messagePart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+            $messagePart = $this->mimePartFactory->newInstance();
             $this->genericHelper->movePartContentAndChildren($message, $messagePart);
             $message->addChild($messagePart);
             $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');
@@ -89,7 +78,7 @@ class PrivacyHelper extends AbstractHelper
     {
         $signedPart = $message->getSignaturePart();
         if ($signedPart === null) {
-            $signedPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+            $signedPart = $this->mimePartFactory->newInstance();
             $message->addChild($signedPart);
         }
         $signedPart->setRawHeader(

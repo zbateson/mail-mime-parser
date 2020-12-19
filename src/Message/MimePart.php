@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 
 /**
  * Default implementation of IMimePart.
@@ -27,7 +27,7 @@ class MimePart extends ParentHeaderPart implements IMimePart
         if ($streamContainer === null || $headerContainer === null || $partFilterFactory === null) {
             $di = MailMimeParser::getDependencyContainer();
             $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer:factory'];
-            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\PartFilterFactory'];
+            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\Factory\PartFilterFactory'];
 
             $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer:factory'];
             $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
@@ -60,7 +60,6 @@ class MimePart extends ParentHeaderPart implements IMimePart
 
     public function isTextPart()
     {
-        echo 'HERE: ', ($this->getCharset() !== null), ', ', $this->getContentType(), "\n";
         return ($this->getCharset() !== null);
     }
 

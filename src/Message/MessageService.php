@@ -6,14 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Parser\Part\MessageFactory;
 use ZBateson\MailMimeParser\Message\Helper\GenericHelper;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
-use ZBateson\MailMimeParser\Parser\Part\MimePartFactory;
-use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
-use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Responsible for creating helper singletons and Message parts.
@@ -22,11 +17,6 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class MessageService
 {
-    /**
-     * @var PartBuilderFactory the PartBuilderFactory
-     */
-    private $partBuilderFactory;
-
     /**
      * @var GenericHelper the GenericHelper singleton
      */
@@ -42,29 +32,14 @@ class MessageService
      */
     private $privacyHelper;
 
-        /**
-     * @var PartFilterFactory the PartFilterFactory instance
-     */
-    protected $partFilterFactory;
-
-    /**
-     * @var StreamFactory the StreamFactory instance
-     */
-    protected $streamFactory;
-
-    /**
-     * Constructor
-     *
-     * @param PartBuilderFactory $partBuilderFactory
-     */
     public function __construct(
-        PartBuilderFactory $partBuilderFactory,
-        PartFilterFactory $partFilterFactory,
-        StreamFactory $streamFactory
+        GenericHelper $genericHelper,
+        MultipartHelper $multipartHelper,
+        PrivacyHelper $privacyHelper
     ) {
-        $this->partBuilderFactory = $partBuilderFactory;
-        $this->partFilterFactory = $partFilterFactory;
-        $this->streamFactory = $streamFactory;
+        $this->genericHelper = $genericHelper;
+        $this->multipartHelper = $multipartHelper;
+        $this->privacyHelper = $privacyHelper;
     }
 
     /**
@@ -74,13 +49,6 @@ class MessageService
      */
     public function getGenericHelper()
     {
-        if ($this->genericHelper === null) {
-            $this->genericHelper = new GenericHelper(
-                $this->getMimePartFactory(),
-                $this->getUUEncodedPartFactory(),
-                $this->partBuilderFactory
-            );
-        }
         return $this->genericHelper;
     }
 
@@ -91,14 +59,6 @@ class MessageService
      */
     public function getMultipartHelper()
     {
-        if ($this->multipartHelper === null) {
-            $this->multipartHelper = new MultipartHelper(
-                $this->getMimePartFactory(),
-                $this->getUUEncodedPartFactory(),
-                $this->partBuilderFactory,
-                $this->getGenericHelper()
-            );
-        }
         return $this->multipartHelper;
     }
 
@@ -109,54 +69,6 @@ class MessageService
      */
     public function getPrivacyHelper()
     {
-        if ($this->privacyHelper === null) {
-            $this->privacyHelper = new PrivacyHelper(
-                $this->getMimePartFactory(),
-                $this->getUUEncodedPartFactory(),
-                $this->partBuilderFactory,
-                $this->getGenericHelper(),
-                $this->getMultipartHelper()
-            );
-        }
         return $this->privacyHelper;
-    }
-
-    /**
-     * Returns the MessageFactory singleton instance.
-     *
-     * @return MessageFactory
-     */
-    public function getMessageFactory()
-    {
-        return MessageFactory::getInstance(
-            $this->streamFactory,
-            $this->partFilterFactory,
-            $this
-        );
-    }
-
-    /**
-     * Returns the MimePartFactory singleton instance.
-     *
-     * @return MimePartFactory
-     */
-    public function getMimePartFactory()
-    {
-        return MimePartFactory::getInstance(
-            $this->streamFactory,
-            $this->partFilterFactory
-        );
-    }
-
-    /**
-     * Returns the UUEncodedPartFactory singleton instance.
-     *
-     * @return UUEncodedPartFactory
-     */
-    public function getUUEncodedPartFactory()
-    {
-        return UUEncodedPartFactory::getInstance(
-            $this->streamFactory
-        );
     }
 }

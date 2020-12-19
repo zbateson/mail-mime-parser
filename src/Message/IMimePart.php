@@ -17,8 +17,8 @@ namespace ZBateson\MailMimeParser\Message;
  *
  * @author Zaahid Bateson
  */
-interface IMimePart extends IParentHeaderPart {
-
+interface IMimePart extends IParentHeaderPart
+{
     /**
      * Returns true if this part's mime type is multipart/*
      *

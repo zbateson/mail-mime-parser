@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\Part\MessagePartFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
@@ -39,11 +39,11 @@ class PartBuilderFactory
     /**
      * Constructs a new PartBuilder object and returns it
      * 
-     * @param \ZBateson\MailMimeParser\Parser\Part\MessagePartFactory
+     * @param ParsedMessagePartFactory
      *        $messagePartFactory 
-     * @return \ZBateson\MailMimeParser\Parser\PartBuilder
+     * @return PartBuilder
      */
-    public function newPartBuilder(MessagePartFactory $messagePartFactory)
+    public function newPartBuilder(ParsedMessagePartFactory $messagePartFactory)
     {
         return new PartBuilder(
             $messagePartFactory,

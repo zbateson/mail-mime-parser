@@ -13,8 +13,8 @@ use ZBateson\MailMimeParser\Message\MimePartDecoratorTrait;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-trait MessageDecoratorTrait {
-
+trait MessageDecoratorTrait
+{
     use MimePartDecoratorTrait;
 
     /**

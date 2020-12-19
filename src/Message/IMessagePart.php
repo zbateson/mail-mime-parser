@@ -18,8 +18,8 @@ use SplSubject;
  *
  * @author Zaahid Bateson
  */
-interface IMessagePart extends SplSubject {
-
+interface IMessagePart extends SplSubject
+{
     /**
      * Returns true if the part contains a 'body' (content).
      *

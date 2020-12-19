@@ -54,17 +54,6 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     protected $filename = null;
 
     /**
-     *
-     * @param PartBuilder $partBuilder
-     */
-    public function initFrom(PartBuilder $partBuilder, PartStreamContainer $container)
-    {
-        parent::initFrom($partBuilder, $container);
-        $this->mode = intval($partBuilder->getProperty('mode'));
-        $this->filename = $partBuilder->getProperty('filename');
-    }
-    
-    /**
      * Returns the filename included in the uuencoded header for this part.
      * 
      * @return string

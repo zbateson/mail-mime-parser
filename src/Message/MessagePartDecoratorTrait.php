@@ -16,8 +16,8 @@ use SplObserver;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-trait MessagePartDecoratorTrait {
-
+trait MessagePartDecoratorTrait
+{
     /**
      * @var IMessagePart The underlying part to wrap.
      */
@@ -50,8 +50,6 @@ trait MessagePartDecoratorTrait {
 
     public function isTextPart()
     {
-        echo 'DECOR: ', get_class($this), "\n";
-        echo 'DECOR: ', get_class($this->part), "\n";
         return $this->part->isTextPart();
     }
 

@@ -300,7 +300,6 @@ class PartFilter
      */
     private function failsTextPartFilter(IMessagePart $part)
     {
-        echo get_class($part), "\n";
         return ($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
             || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart());
     }

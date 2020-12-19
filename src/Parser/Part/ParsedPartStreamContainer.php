@@ -1,0 +1,75 @@
+<?php
+/**
+ * This file is part of the ZBateson\MailMimeParser project.
+ *
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ */
+namespace ZBateson\MailMimeParser\Parser\Part;
+
+use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
+use SplObserver;
+use SplSubject;
+
+/**
+ * Keeps reference to the original stream a message was parsed from, using that
+ * stream as the message's stream instead of the parent's MessagePartStream
+ * unless the part changed.
+ * 
+ * The container must also be attached to its underlying part with
+ * SplSubject::attach() so the ParsedPartStreamContainer gets notified of any
+ * changes.
+ *
+ * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ */
+class ParsedPartStreamContainer extends PartStreamContainer implements SplObserver
+{
+    /**
+     * @var StreamInterface the original stream for a parsed message, used when
+     *      the message hasn't changed
+     */
+    protected $parsedStream;
+
+    /**
+     * @var bool true if the stream should be detached when this container is
+     *      destroyed.
+     */
+    protected $detachParsedStream = false;
+
+    /**
+     * @var bool true if the part changed and the parent stream should be used,
+     *      initialized to true and set to false when the parsed stream is set
+     *      in setParsedStream
+     */
+    protected $useParentStream = true;
+
+    public function __destruct()
+    {
+        if ($this->detachParsedStream && $this->parsedStream !== null) {
+            $this->parsedStream->detach();
+        }
+    }
+
+    public function setParsedStream(StreamInterface $parsedStream)
+    {
+        $this->parsedStream = $parsedStream;
+        if ($parsedStream !== null) {
+            $this->detachParsedStream = $parsedStream->getMetadata('mmp-detached-stream');
+            $this->useParentStream = false;
+        }
+    }
+
+    public function getStream()
+    {
+        if ($this->useParentStream || $this->parsedStream === null) {
+            return parent::getStream();
+        }
+        $this->parsedStream->rewind();
+        return $this->parsedStream;
+    }
+
+    public function update(SplSubject $subject)
+    {
+        $this->useParentStream = true;
+    }
+}

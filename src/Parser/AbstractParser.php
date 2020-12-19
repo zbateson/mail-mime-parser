@@ -6,23 +6,13 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Parser\PartBuilderFactory;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
-
 /**
  * Description of AbstractParser
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-abstract class AbstractParser {
-
-    /**
-     * @var MessageService service instance used to create MimePartFactory
-     *      objects.
-     */
-    protected $messageService;
-
+abstract class AbstractParser
+{
     /**
      * @var PartBuilderFactory used to create PartBuilders
      */
@@ -32,17 +22,9 @@ abstract class AbstractParser {
 
     private $parent = null;
 
-    /**
-     * Sets up the parser with its dependencies.
-     *
-     * @param MessageService $s
-     * @param PartBuilderFactory $pbf
-     */
     public function __construct(
-        MessageService $s,
         PartBuilderFactory $pbf
     ) {
-        $this->messageService = $s;
         $this->partBuilderFactory = $pbf;
     }
 

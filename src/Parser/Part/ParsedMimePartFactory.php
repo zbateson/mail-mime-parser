@@ -8,34 +8,29 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
- * Responsible for creating MimePart instances.
+ * Responsible for creating ParsedMimePart instances.
  *
  * @author Zaahid Bateson
  */
-class MimePartFactory extends MessagePartFactory
+class ParsedMimePartFactory extends ParsedMessagePartFactory
 {
     /**
      * @var PartFilterFactory an instance used for creating MimePart objects
      */
     protected $partFilterFactory;
 
-    /**
-     * Initializes dependencies.
-     *
-     * @param StreamFactory $sdf
-     * @param PartFilterFactory $pf
-     */
     public function __construct(
         StreamFactory $sdf,
+        ParsedPartStreamContainerFactory $pscf,
         PartFilterFactory $pf
     ) {
-        parent::__construct($sdf);
+        parent::__construct($sdf, $pscf);
         $this->partFilterFactory = $pf;
     }
 
@@ -71,7 +66,7 @@ class MimePartFactory extends MessagePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, StreamInterface $partStream = null)
     {
-        $streamContainer = new PartStreamContainer($this->streamFactory);
+        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
         if ($partStream !== null) {
             $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($partStream, $partBuilder));
         }
@@ -84,6 +79,8 @@ class MimePartFactory extends MessagePartFactory
             $this->partFilterFactory
         );
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
-        return new ParsedMimePart($part, $partStream);
+        $streamContainer->setParsedStream($partStream);
+        $part->attach($streamContainer);
+        return $part;
     }
 }

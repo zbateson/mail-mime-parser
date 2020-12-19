@@ -16,8 +16,8 @@ use ZBateson\MailMimeParser\Message\IMimePart;
  *
  * @author Zaahid Bateson
  */
-interface IMessage extends IMimePart {
-
+interface IMessage extends IMimePart
+{
     /**
      * Returns the text/plain part at the given index (or null if not found.)
      *
@@ -53,7 +53,8 @@ interface IMessage extends IMimePart {
      * is set.
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Message\IMessagePart
+     * @return \ZBateson\MailMimeParser\Message\IMimePart
+     *         |\ZBateson\MailMimeParser\Message\IUUEncodedPart
      */
     public function getAttachmentPart($index);
 

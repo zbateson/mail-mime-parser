@@ -110,7 +110,7 @@ class GenericHelper extends AbstractHelper
     */
     public function createNewContentPartFrom(IMimePart $part)
     {
-        $mime = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+        $mime = $this->mimePartFactory->newInstance();
         $this->copyContentHeadersAndContent($part, $mime, true);
         return $mime;
     }
@@ -137,7 +137,7 @@ class GenericHelper extends AbstractHelper
      * Replaces the $part IMimePart with $replacement.
      *
      * Essentially removes $part from its parent, and adds $replacement in its
-     * same position.  If $part is this Message, then $part can't be removed and
+     * same position.  If $part is the IMessage, then $part can't be removed and
      * replaced, and instead $replacement's type headers are copied to $message,
      * and any children below $replacement are added directly below $message.
      *

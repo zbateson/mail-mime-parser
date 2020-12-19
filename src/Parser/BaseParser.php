@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\Part\ParsedMessageFactory;
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7\StreamWrapper;
 
@@ -15,7 +15,20 @@ use GuzzleHttp\Psr7\StreamWrapper;
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class BaseParser extends AbstractParser {
+class BaseParser extends AbstractParser
+{
+    /**
+     * @var ParsedMessageFactory used to create ParsedMessage objects
+     */
+    protected $parsedMessageFactory;
+
+    public function __construct(
+        PartBuilderFactory $pbf,
+        ParsedMessageFactory $pmf
+    ) {
+        parent::__construct($pbf);
+        $this->parsedMessageFactory = $pmf;
+    }
 
     /**
      * Reads the message from the passed stream and returns a PartBuilder
@@ -27,7 +40,7 @@ class BaseParser extends AbstractParser {
     public function parseMessage(StreamInterface $stream)
     {
         $partBuilder = $this->partBuilderFactory->newPartBuilder(
-            $this->messageService->getMessageFactory()
+            $this->parsedMessageFactory
         );
         $this(StreamWrapper::getResource($stream), $partBuilder);
         return $partBuilder;

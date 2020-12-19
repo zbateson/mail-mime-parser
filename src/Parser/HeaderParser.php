@@ -6,15 +6,13 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\PartBuilder;
-
 /**
  * Description of HeaderParser
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class HeaderParser extends AbstractParser {
-
+class HeaderParser extends AbstractParser
+{
     /**
      * Ensures the header isn't empty and contains a colon separator character,
      * then splits it and calls $partBuilder->addHeader.

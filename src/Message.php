@@ -13,7 +13,7 @@ use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
@@ -32,14 +32,6 @@ class Message extends MimePart implements IMessage
      */
     protected $messageService;
 
-    /**
-     *
-     * @param array $children
-     * @param PartStreamContainer $streamContainer
-     * @param HeaderContainer $headerContainer
-     * @param PartFilterFactory $partFilterFactory
-     * @param MessageService $messageService
-     */
     public function __construct(
         array $children = [],
         PartStreamContainer $streamContainer = null,

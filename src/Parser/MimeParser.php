@@ -6,15 +6,13 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\PartBuilder;
-
 /**
  * Description of MimeParser
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class MimeParser extends AbstractParser {
-
+class MimeParser extends AbstractParser
+{
     /**
      * @var int maintains the character length of the last line separator,
      *      typically 2 for CRLF, to keep track of the correct 'end' position

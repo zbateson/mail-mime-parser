@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\ParameterHeader;
-use ZBateson\MailMimeParser\Message\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 
 /**
