@@ -14,11 +14,13 @@ use GuzzleHttp\Psr7\CachingStream;
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
  *
  * To invoke, call parse on a MailMimeParser object.
- * 
+ *
+ * ```php
  * $handle = fopen('path/to/file.txt');
  * $parser = new MailMimeParser();
  * $parser->parse($handle);
  * fclose($handle);
+ * ```
  * 
  * @author Zaahid Bateson
  */

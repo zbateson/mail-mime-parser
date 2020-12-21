@@ -7,11 +7,13 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 /**
- * Description of HeaderParser
+ * Reads headers from the input stream if {@see PartBuilder::canHaveHeaders}
+ * returns true.  isSupported returns true regardless (which is why it's
+ * "optional"), which ensures sub-parsers are called.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class HeaderParser extends AbstractParser
+class OptionalHeaderParser extends AbstractParser
 {
     /**
      * Ensures the header isn't empty and contains a colon separator character,
@@ -52,13 +54,21 @@ class HeaderParser extends AbstractParser
 
     protected function parse($handle, PartBuilder $partBuilder)
     {
-        $partBuilder->setStreamPartStartPos(ftell($handle));
         if ($partBuilder->canHaveHeaders()) {
             $this->readHeaders($handle, $partBuilder);
         }
     }
 
-    public function isSupported(PartBuilder $partBuilder)
+    /**
+     * {@inheritedDoc}
+     *
+     * Always returns true for OptionalHeaderParser so any sub-parsers are
+     * executed after.
+     *
+     * @param PartBuilder $partBuilder
+     * @return boolean
+     */
+    protected function isSupported(PartBuilder $partBuilder)
     {
         return true;
     }

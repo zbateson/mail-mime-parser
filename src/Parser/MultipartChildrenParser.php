@@ -9,11 +9,12 @@ namespace ZBateson\MailMimeParser\Parser;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMimePartFactory;
 
 /**
- * Description of MultipartParser
+ * Creates and adds PartBuilder children to a PartBuilder with a multipart mime
+ * type, invoking the base parser on each child to read it.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class MultipartParser extends AbstractParser
+class MultipartChildrenParser extends AbstractParser
 {
     /**
      * @var ParsedMimePartFactory for ParsedMimePart objects
@@ -39,7 +40,7 @@ class MultipartParser extends AbstractParser
         }
     }
 
-    public function isSupported(PartBuilder $partBuilder)
+    protected function isSupported(PartBuilder $partBuilder)
     {
         return $partBuilder->isMultiPart();
     }

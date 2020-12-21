@@ -61,7 +61,10 @@ class Message extends MimePart implements IMessage
      */
     public static function from($handleOrString)
     {
-        $mmp = new MailMimeParser();
+        static $mmp = null;
+        if ($mmp === null) {
+            $mmp = new MailMimeParser();
+        }
         return $mmp->parse($handleOrString);
     }
 

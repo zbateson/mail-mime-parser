@@ -7,11 +7,11 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 /**
- * Description of MimeParser
+ * Reads the content of a mime part.
  *
  * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
  */
-class MimeParser extends AbstractParser
+class MimeContentParser extends AbstractParser
 {
     /**
      * @var int maintains the character length of the last line separator,
@@ -23,18 +23,17 @@ class MimeParser extends AbstractParser
 
     /**
      * Reads a line of 2048 characters.  If the line is larger than that, the
-     * remaining characters in the line are read and
-     * discarded, and only the first part is returned.
+     * remaining characters in the line are read and discarded, and only the
+     * first part is returned.
      *
      * This method is identical to readLine, except it calculates the number of
      * characters that make up the line's new line characters (e.g. 2 for "\r\n"
-     * or 1 for "\n").
+     * or 1 for "\n") and stores it in $this->lastLineSeparatorLength.
      *
      * @param resource $handle
-     * @param int $lineSeparatorLength
      * @return string
      */
-    private function readBoundaryLine($handle, &$lineSeparatorLength = 0)
+    private function readBoundaryLine($handle)
     {
         $size = 2048;
         $isCut = false;
@@ -44,7 +43,7 @@ class MimeParser extends AbstractParser
             $isCut = true;
         }
         $ret = rtrim($line, "\r\n");
-        $lineSeparatorLength = strlen($line) - strlen($ret);
+        $this->lastLineSeparatorLength = strlen($line) - strlen($ret);
         return ($isCut) ? '' : $ret;
     }
 
@@ -69,7 +68,7 @@ class MimeParser extends AbstractParser
         // part of the current part
         while (!feof($handle)) {
             $endPos = ftell($handle) - $this->lastLineSeparatorLength;
-            $line = $this->readBoundaryLine($handle, $this->lastLineSeparatorLength);
+            $line = $this->readBoundaryLine($handle);
             if ($line !== '' && $partBuilder->setEndBoundaryFound($line)) {
                 $partBuilder->setStreamPartAndContentEndPos($endPos);
                 return;
@@ -88,7 +87,7 @@ class MimeParser extends AbstractParser
         $this->findContentBoundary($handle, $partBuilder);
     }
 
-    public function isSupported(PartBuilder $partBuilder)
+    protected function isSupported(PartBuilder $partBuilder)
     {
         return ($partBuilder->getParent() !== null || $partBuilder->isMime());
     }
