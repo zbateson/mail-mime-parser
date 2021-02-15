@@ -7,7 +7,14 @@
 namespace ZBateson\MailMimeParser\Message\Part;
 
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Header\AbstractHeader;
+use ZBateson\MailMimeParser\Header\AddressHeader;
+use ZBateson\MailMimeParser\Header\DateHeader;
+use ZBateson\MailMimeParser\Header\GenericHeader;
+use ZBateson\MailMimeParser\Header\IdHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Header\ReceivedHeader;
+use ZBateson\MailMimeParser\Header\SubjectHeader;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
@@ -62,14 +69,7 @@ abstract class ParentHeaderPart extends ParentPart
      *
      * @param string $name
      * @param int $offset
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
-     *         |\ZBateson\MailMimeParser\Header\AddressHeader
-     *         |\ZBateson\MailMimeParser\Header\DateHeader
-     *         |\ZBateson\MailMimeParser\Header\GenericHeader
-     *         |\ZBateson\MailMimeParser\Header\IdHeader
-     *         |\ZBateson\MailMimeParser\Header\ParameterHeader
-     *         |\ZBateson\MailMimeParser\Header\ReceivedHeader
-     *         |\ZBateson\MailMimeParser\Header\SubjectHeader
+     * @return AbstractHeader|AddressHeader|DateHeader|GenericHeader|IdHeader|ParameterHeader|ReceivedHeader|SubjectHeader
      */
     public function getHeader($name, $offset = 0)
     {
