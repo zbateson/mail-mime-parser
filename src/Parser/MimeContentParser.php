@@ -72,7 +72,7 @@ class MimeContentParser implements IContentParser
         while (!feof($handle)) {
             $endPos = ftell($handle) - $this->lastLineSeparatorLength;
             $line = $this->readBoundaryLine($handle);
-            if ($line !== '' && $partBuilder->setEndBoundaryFound($line)) {
+            if (substr($line, 0, 2) === '--' && $partBuilder->setEndBoundaryFound($line)) {
                 $partBuilder->setStreamPartAndContentEndPos($endPos);
                 return;
             }
