@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MailMimeParser\Parser\BaseParser;
 
 /**
  * Responsible for creating specialized IMessagePart instances for parts that
@@ -28,20 +29,23 @@ abstract class ParsedMessagePartFactory
      */
     protected $parsedPartStreamContainerFactory;
 
+    protected $baseParser;
+
     public function __construct(
         StreamFactory $sdf,
-        ParsedPartStreamContainerFactory $parsedPartStreamContainerFactory
+        ParsedPartStreamContainerFactory $parsedPartStreamContainerFactory,
+        BaseParser $baseParser
     ) {
         $this->streamFactory = $sdf;
         $this->parsedPartStreamContainerFactory = $parsedPartStreamContainerFactory;
+        $this->baseParser = $baseParser;
     }
 
     /**
      * Constructs a new IMessagePart object and returns it
      * 
      * @param PartBuilder $partBuilder
-     * @param StreamInterface $partStream
      * @return IMessagePart
      */
-    public abstract function newInstance(PartBuilder $partBuilder, StreamInterface $partStream = null);
+    public abstract function newInstance(PartBuilder $partBuilder);
 }

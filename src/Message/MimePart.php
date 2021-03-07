@@ -22,20 +22,23 @@ class MimePart extends ParentHeaderPart implements IMimePart
         array $children = [],
         PartStreamContainer $streamContainer = null,
         HeaderContainer $headerContainer = null,
+        PartChildrenContainer $partChildrenContainer = null,
         PartFilterFactory $partFilterFactory = null
     ) {
-        if ($streamContainer === null || $headerContainer === null || $partFilterFactory === null) {
+        if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null || $partFilterFactory === null) {
             $di = MailMimeParser::getDependencyContainer();
-            $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer:factory'];
+            $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer'];
+            $partChildrenContainer = $di['\ZBateson\MailMimeParser\Message\PartChildrenContainer'];
             $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\Factory\PartFilterFactory'];
 
-            $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer:factory'];
+            $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
             $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
             $streamContainer->setStream($streamFactory->newMessagePartStream($this));
         }
         parent::__construct(
             $streamContainer,
             $headerContainer,
+            $partChildrenContainer,
             $partFilterFactory,
             $children
         );
@@ -113,7 +116,6 @@ class MimePart extends ParentHeaderPart implements IMimePart
             $this->getContentType()
         ));
     }
-
 
     public function getPartByContentId($contentId)
     {

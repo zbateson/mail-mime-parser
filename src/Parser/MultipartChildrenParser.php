@@ -12,35 +12,58 @@ use ZBateson\MailMimeParser\Parser\Part\ParsedMimePartFactory;
  * Creates and adds PartBuilder children to a PartBuilder with a multipart mime
  * type, invoking the base parser on each child to read it.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
-class MultipartChildrenParser extends AbstractParser
+class MultipartChildrenParser implements IChildPartParser
 {
+    /**
+     * @var PartBuilderFactory
+     */
+    protected $partBuilderFactory;
+
     /**
      * @var ParsedMimePartFactory for ParsedMimePart objects
      */
     protected $parsedMimePartFactory;
 
+    /**
+     * @var BaseParser
+     */
+    protected $baseParser;
+
     public function __construct(
         PartBuilderFactory $pbf,
+        BaseParser $parser,
         ParsedMimePartFactory $f
     ) {
-        parent::__construct($pbf);
+        $this->partBuilderFactory = $pbf;
+        $this->baseParser = $parser;
         $this->parsedMimePartFactory = $f;
     }
 
-    protected function parse($handle, PartBuilder $partBuilder)
+    /**
+     * Returns true if there are more parts
+     * 
+     * @param PartBuilder $partBuilder
+     * @param ParserProxy $proxy
+     * @return boolean
+     */
+    public function parseNextChild(PartBuilder $partBuilder, ParserProxy $proxy)
     {
-        while (!$partBuilder->isParentBoundaryFound()) {
-            $child = $this->partBuilderFactory->newPartBuilder(
-                $this->parsedMimePartFactory
-            );
-            $partBuilder->addChild($child);
-            $this->invokeBaseParser($handle, $child);
+        if ($partBuilder->isParentBoundaryFound()) {
+            return false;
         }
+        $child = $this->partBuilderFactory->newPartBuilder(
+            $this->parsedMimePartFactory,
+            $partBuilder->getStream()
+        );
+        $child->setParent($partBuilder);
+        $this->baseParser->parseHeaders($child);
+        $proxy->updatePartChildren($partBuilder, $child);
+        return !$partBuilder->isParentBoundaryFound();
     }
 
-    protected function isSupported(PartBuilder $partBuilder)
+    public function canParse(PartBuilder $partBuilder)
     {
         return $partBuilder->isMultiPart();
     }

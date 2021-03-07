@@ -6,12 +6,14 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
+use ZBateson\MailMimeParser\Parser\PartBuilder;
+
 /**
  * Reads the content of a mime part.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
-class MimeContentParser extends AbstractParser
+class MimeContentParser implements IContentParser
 {
     /**
      * @var int maintains the character length of the last line separator,
@@ -59,13 +61,14 @@ class MimeContentParser extends AbstractParser
      * the passed $handle's read pos before the boundary and its line separator
      * were read.
      *
-     * @param resource $handle
      * @param PartBuilder $partBuilder
      */
-    private function findContentBoundary($handle, PartBuilder $partBuilder)
+    private function findContentBoundary(PartBuilder $partBuilder)
     {
+        $handle = $partBuilder->getMessageResourceHandle();
         // last separator before a boundary belongs to the boundary, and is not
         // part of the current part
+        $start = ftell($handle);
         while (!feof($handle)) {
             $endPos = ftell($handle) - $this->lastLineSeparatorLength;
             $line = $this->readBoundaryLine($handle);
@@ -78,17 +81,21 @@ class MimeContentParser extends AbstractParser
         $partBuilder->setEof();
     }
 
-    protected function parse($handle, PartBuilder $partBuilder)
+    public function parseContent(PartBuilder $partBuilder, ParserProxy $proxy)
     {
         if ($partBuilder->canHaveHeaders()) {
             $this->lastLineSeparatorLength = 0;
         }
-        $partBuilder->setStreamContentStartPos(ftell($handle));
-        $this->findContentBoundary($handle, $partBuilder);
+        $partBuilder->setStreamContentStartPos($partBuilder->getMessageResourceHandlePos());
+        $this->findContentBoundary($partBuilder);
+        $proxy->updatePartContent($partBuilder);
     }
 
-    protected function isSupported(PartBuilder $partBuilder)
+    public function canParse(PartBuilder $partBuilder)
     {
+        if ($partBuilder->getIsNonMimePart()) {
+            return false;
+        }
         return ($partBuilder->getParent() !== null || $partBuilder->isMime());
     }
 }

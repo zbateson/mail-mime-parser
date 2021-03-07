@@ -12,7 +12,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 /**
  * Description of PartStreamContainerFactory
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 class PartStreamContainerFactory
 {
@@ -26,7 +26,8 @@ class PartStreamContainerFactory
         $this->streamFactory = $streamFactory;
     }
 
-    public function newInstance() {
+    public function newInstance()
+    {
         return new PartStreamContainer($this->streamFactory);
     }
 }

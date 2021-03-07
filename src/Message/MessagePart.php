@@ -215,4 +215,9 @@ abstract class MessagePart implements IMessagePart
     {
         return $this->getStream()->getContents();
     }
+
+    public function setParent(IParentPart $parent)
+    {
+        $this->parent = $parent;
+    }
 }

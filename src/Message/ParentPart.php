@@ -17,70 +17,44 @@ use ZBateson\MailMimeParser\Message\PartFilter;
 abstract class ParentPart extends MessagePart implements IParentPart
 {
     /**
+     * @var PartChildrenContainer child part container
+     */
+    protected $partChildrenContainer;
+
+    /**
      * @var PartFilterFactory factory object responsible for create PartFilters
      */
     protected $partFilterFactory;
 
-    /**
-     * @var IMessagePart[] array of child parts
-     */
-    protected $children = [];
-
     public function __construct(
         PartStreamContainer $streamContainer,
+        PartChildrenContainer $partChildrenContainer,
         PartFilterFactory $partFilterFactory,
         array $children = []
     ) {
         parent::__construct($streamContainer);
+        $this->partChildrenContainer = $partChildrenContainer;
         $this->partFilterFactory = $partFilterFactory;
         foreach ($children as $child) {
             $child->parent = $this;
         }
-        $this->children = $children;
+        $this->partChildrenContainer->setChildren($children);
+        $this->partChildrenContainer->setPart($this);
     }
 
-    /**
-     * Returns all parts, including the current object, and all children below
-     * it (including children of children, etc...)
-     *
-     * @return IMessagePart[]
-     */
-    protected function getAllNonFilteredParts()
+    public function getPartChildrenContainer()
     {
-        $parts = [ $this ];
-        foreach ($this->children as $part) {
-            if ($part instanceof MimePart) {
-                $parts = array_merge(
-                    $parts,
-                    $part->getAllNonFilteredParts()
-                );
-            } else {
-                array_push($parts, $part);
-            }
-        }
-        
-        return $parts;
+        return $this->partChildrenContainer;
     }
 
     public function getPart($index, PartFilter $filter = null)
     {
-        $parts = $this->getAllParts($filter);
-        if (!isset($parts[$index])) {
-            return null;
-        }
-        return $parts[$index];
+        return $this->partChildrenContainer->getPart($index, $filter);
     }
 
     public function getAllParts(PartFilter $filter = null)
     {
-        $parts = $this->getAllNonFilteredParts();
-        if (!empty($filter)) {
-            return array_values(array_filter(
-                $parts,
-                [ $filter, 'filter' ]
-            ));
-        }
-        return $parts;
+        return $this->partChildrenContainer->getAllParts($filter);
     }
 
     public function getPartCount(PartFilter $filter = null)
@@ -90,19 +64,12 @@ abstract class ParentPart extends MessagePart implements IParentPart
 
     public function getChild($index, PartFilter $filter = null)
     {
-        $parts = $this->getChildParts($filter);
-        if (!isset($parts[$index])) {
-            return null;
-        }
-        return $parts[$index];
+        return $this->partChildrenContainer->getChild($index, $filter);
     }
 
     public function getChildParts(PartFilter $filter = null)
     {
-        if ($filter !== null) {
-            return array_values(array_filter($this->children, [ $filter, 'filter' ]));
-        }
-        return $this->children;
+        return $this->partChildrenContainer->getChildParts($filter);
     }
 
     public function getChildCount(PartFilter $filter = null)
@@ -132,12 +99,7 @@ abstract class ParentPart extends MessagePart implements IParentPart
     {
         if ($part !== $this) {
             $part->parent = $this;
-            array_splice(
-                $this->children,
-                ($position === null) ? count($this->children) : $position,
-                0,
-                [ $part ]
-            );
+            $this->partChildrenContainer->addChild($part, $position);
             $this->notify();
         }
     }
@@ -148,23 +110,16 @@ abstract class ParentPart extends MessagePart implements IParentPart
         if ($this !== $parent && $parent !== null) {
             return $parent->removePart($part);
         } else {
-            $position = array_search($part, $this->children, true);
-            if ($position !== false && is_int($position)) {
-                array_splice($this->children, $position, 1);
+            $position = $this->partChildrenContainer->removePart($part);
+            if ($position !== null) {
                 $this->notify();
-                return $position;
             }
+            return $position;
         }
-        return null;
     }
 
     public function removeAllParts(PartFilter $filter = null)
     {
-        foreach ($this->getAllParts($filter) as $part) {
-            if ($part === $this) {
-                continue;
-            }
-            $this->removePart($part);
-        }
+        $this->partChildrenContainer->removeAllParts($filter);
     }
 }

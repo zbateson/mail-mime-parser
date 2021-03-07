@@ -6,9 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use ReflectionClass;
-use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -28,7 +25,10 @@ abstract class MessagePartFactory
      */
     protected $partStreamContainerFactory;
 
-    public function __construct(StreamFactory $streamFactory, PartStreamContainerFactory $partStreamContainerFactory) {
+    public function __construct(
+        StreamFactory $streamFactory,
+        PartStreamContainerFactory $partStreamContainerFactory
+    ) {
         $this->streamFactory = $streamFactory;
         $this->partStreamContainerFactory = $partStreamContainerFactory;
     }

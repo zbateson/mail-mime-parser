@@ -13,7 +13,7 @@ use ZBateson\MailMimeParser\Message\PartFilter;
 /**
  * Ferries calls to an IParentPart.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 trait ParentPartDecoratorTrait
 {

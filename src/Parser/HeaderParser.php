@@ -11,9 +11,9 @@ namespace ZBateson\MailMimeParser\Parser;
  * returns true.  isSupported returns true regardless (which is why it's
  * "optional"), which ensures sub-parsers are called.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
-class OptionalHeaderParser extends AbstractParser
+class HeaderParser
 {
     /**
      * Ensures the header isn't empty and contains a colon separator character,
@@ -37,11 +37,12 @@ class OptionalHeaderParser extends AbstractParser
      * @param resource $handle the resource handle to read from
      * @param PartBuilder $partBuilder the current part to add headers to
      */
-    private function readHeaders($handle, PartBuilder $partBuilder)
+    private function readHeaders(PartBuilder $partBuilder)
     {
+        $handle = $partBuilder->getMessageResourceHandle();
         $header = '';
         do {
-            $line = $this->readLine($handle);
+            $line = MessageParser::readLine($handle);
             if (empty($line) || $line[0] !== "\t" && $line[0] !== ' ') {
                 $this->addRawHeaderToPart($header, $partBuilder);
                 $header = '';
@@ -52,24 +53,10 @@ class OptionalHeaderParser extends AbstractParser
         } while ($header !== '');
     }
 
-    protected function parse($handle, PartBuilder $partBuilder)
+    public function parse(PartBuilder $partBuilder)
     {
         if ($partBuilder->canHaveHeaders()) {
-            $this->readHeaders($handle, $partBuilder);
+            $this->readHeaders($partBuilder);
         }
-    }
-
-    /**
-     * {@inheritedDoc}
-     *
-     * Always returns true for OptionalHeaderParser so any sub-parsers are
-     * executed after.
-     *
-     * @param PartBuilder $partBuilder
-     * @return boolean
-     */
-    protected function isSupported(PartBuilder $partBuilder)
-    {
-        return true;
     }
 }

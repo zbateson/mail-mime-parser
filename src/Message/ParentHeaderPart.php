@@ -25,11 +25,13 @@ abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
     public function __construct(
         PartStreamContainer $streamContainer,
         HeaderContainer $headerContainer,
+        PartChildrenContainer $partChildrenContainer,
         PartFilterFactory $partFilterFactory,
         array $children
     ) {
         parent::__construct(
             $streamContainer,
+            $partChildrenContainer,
             $partFilterFactory,
             $children
         );

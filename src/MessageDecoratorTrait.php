@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Message\MimePartDecoratorTrait;
 /**
  * Ferries calls to an IMessagePart.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 trait MessageDecoratorTrait
 {

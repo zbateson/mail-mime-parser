@@ -10,6 +10,7 @@ use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\ParserProxy;
 
 /**
  * Responsible for creating ParsedUUEncodedPart instances.
@@ -22,20 +23,20 @@ class ParsedUUEncodedPartFactory extends ParsedMessagePartFactory
      * Constructs a new UUEncodedPart object and returns it
      * 
      * @param PartBuilder $partBuilder
-     * @param StreamInterface $partStream
      * @return ParsedUUEncodedPart
      */
-    public function newInstance(PartBuilder $partBuilder, StreamInterface $partStream = null)
+    public function newInstance(PartBuilder $partBuilder)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
-        if ($partStream !== null) {
-            $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($partStream, $partBuilder));
-        }
         $part = new UUEncodedPart(
             $streamContainer
         );
+
+        $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
+        $parserProxy->init($partBuilder, $streamContainer);
+
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
-        $streamContainer->setParsedStream($partStream);
+        $streamContainer->setParsedStream($partBuilder->getStream());
         $part->attach($streamContainer);
         return $part;
     }

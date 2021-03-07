@@ -23,7 +23,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  * user, this is because MMP uses a single seekable stream for content and wraps
  * it in ZBateson\StreamDecorators\SeekingLimitStream objects for each part.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 class PartStreamContainer
 {
@@ -78,11 +78,6 @@ class PartStreamContainer
         'filter' => null
     ];
 
-    /**
-     * Sets up filter names used for stream_filter_append
-     *
-     * @param StreamFactory $streamFactory
-     */
     public function __construct(StreamFactory $streamFactory)
     {
         $this->streamFactory = $streamFactory;

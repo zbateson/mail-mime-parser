@@ -4,14 +4,16 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Parser\Part;
+
+use ZBateson\MailMimeParser\Message;
 
 /**
- * Description of MessageParserExtension
+ * Description of ProxyMimePart
  *
  * @author Zaahid Bateson
  */
-interface MessageParserExtension
+class ProxyMessage extends Message
 {
     
 }

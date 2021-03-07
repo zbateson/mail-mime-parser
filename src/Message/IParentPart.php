@@ -15,6 +15,8 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  */
 interface IParentPart extends IMessagePart
 {
+    public function getPartChildrenContainer();
+
     /**
      * Returns the part at the given 0-based index, or null if none is set.
      *

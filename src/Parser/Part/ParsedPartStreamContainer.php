@@ -6,8 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
+use ZBateson\MailMimeParser\Parser\ParserProxy;
+use Psr\Http\Message\StreamInterface;
 use SplObserver;
 use SplSubject;
 
@@ -20,10 +21,15 @@ use SplSubject;
  * SplSubject::attach() so the ParsedPartStreamContainer gets notified of any
  * changes.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 class ParsedPartStreamContainer extends PartStreamContainer implements SplObserver
 {
+    /**
+     * @var ParserProxy
+     */
+    protected $parserProxy;
+
     /**
      * @var StreamInterface the original stream for a parsed message, used when
      *      the message hasn't changed
@@ -43,6 +49,23 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
      */
     protected $useParentStream = true;
 
+    /**
+     * @var bool
+     */
+    protected $partUpdated = false;
+
+    /**
+     * @var bool false if the content for the part represented by this container
+     *      has not yet been requested from the parser.
+     */
+    protected $contentParseRequested = false;
+
+    /**
+     * @var bool false if the the part represented by this container has not yet
+     *      been fully parsed.
+     */
+    protected $partParsed = false;
+
     public function __destruct()
     {
         if ($this->detachParsedStream && $this->parsedStream !== null) {
@@ -50,13 +73,45 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
         }
     }
 
+    public function setProxyParser(ParserProxy $proxy)
+    {
+        $this->parserProxy = $proxy;
+    }
+    
+    protected function requestParsedContentStream()
+    {
+        if (!$this->contentParseRequested) {
+            $this->contentParseRequested = true;
+            $this->parserProxy->readContent();
+        }
+    }
+
+    public function hasContent()
+    {
+        $this->requestParsedContentStream();
+        return parent::hasContent();
+    }
+
+    public function getContentStream($transferEncoding, $fromCharset, $toCharset)
+    {
+        $this->requestParsedContentStream();
+        return parent::getContentStream($transferEncoding, $fromCharset, $toCharset);
+    }
+
     public function setParsedStream(StreamInterface $parsedStream)
     {
         $this->parsedStream = $parsedStream;
         if ($parsedStream !== null) {
             $this->detachParsedStream = $parsedStream->getMetadata('mmp-detached-stream');
-            $this->useParentStream = false;
+            $this->useParentStream = !$this->partUpdated;
         }
+        $this->partParsed = true;
+    }
+
+    public function setParsedContentStream(StreamInterface $contentStream = null)
+    {
+        $this->contentParsed = true;
+        $this->setContentStream($contentStream);
     }
 
     public function getStream()
@@ -71,5 +126,6 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
     public function update(SplSubject $subject)
     {
         $this->useParentStream = true;
+        $this->partUpdated = true;
     }
 }

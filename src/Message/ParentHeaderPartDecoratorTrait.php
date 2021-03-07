@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Message\IParentHeaderPart;
 /**
  * Ferries calls to an IParentHeaderPart.
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 trait ParentHeaderPartDecoratorTrait
 {

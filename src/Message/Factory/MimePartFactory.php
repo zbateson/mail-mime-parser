@@ -10,7 +10,6 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
  * Responsible for creating MimePart instances.
@@ -26,6 +25,11 @@ class MimePartFactory extends MessagePartFactory
     protected $headerFactory;
 
     /**
+     * @var PartChildrenContainerFactory
+     */
+    protected $partChildrenContainerFactory;
+
+    /**
      * @var PartFilterFactory an instance used for creating MimePart objects
      */
     protected $partFilterFactory;
@@ -34,10 +38,12 @@ class MimePartFactory extends MessagePartFactory
         StreamFactory $streamFactory,
         PartStreamContainerFactory $partStreamContainerFactory,
         HeaderFactory $headerFactory,
+        PartChildrenContainerFactory $partChildrenContainerFactory,
         PartFilterFactory $partFilterFactory
     ) {
         parent::__construct($streamFactory, $partStreamContainerFactory);
         $this->headerFactory = $headerFactory;
+        $this->partChildrenContainerFactory = $partChildrenContainerFactory;
         $this->partFilterFactory = $partFilterFactory;
     }
 
@@ -54,6 +60,7 @@ class MimePartFactory extends MessagePartFactory
             [],
             $streamContainer,
             $headerContainer,
+            $this->partChildrenContainerFactory->newInstance(),
             $this->partFilterFactory
         );
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));

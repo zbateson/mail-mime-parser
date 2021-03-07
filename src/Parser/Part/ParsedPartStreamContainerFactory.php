@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 /**
  * Description of ParsedPartStreamContainerFactory
  *
- * @author Zaahid Bateson <zaahid.bateson@ubc.ca>
+ * @author Zaahid Bateson
  */
 class ParsedPartStreamContainerFactory
 {

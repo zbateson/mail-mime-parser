@@ -8,11 +8,13 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\MessageService;
+use ZBateson\MailMimeParser\Parser\BaseParser;
+use ZBateson\MailMimeParser\Parser\ParserProxy;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
+use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Responsible for creating ParsedMessage instances.
@@ -29,10 +31,12 @@ class ParsedMessageFactory extends ParsedMimePartFactory
     public function __construct(
         StreamFactory $sdf,
         ParsedPartStreamContainerFactory $pscf,
+        ParsedPartChildrenContainerFactory $ppccf,
         PartFilterFactory $pf,
+        BaseParser $baseParser,
         MessageService $mhs
     ) {
-        parent::__construct($sdf, $pscf, $pf);
+        parent::__construct($sdf, $pscf, $ppccf, $pf, $baseParser);
         $this->messageService = $mhs;
     }
 
@@ -43,26 +47,27 @@ class ParsedMessageFactory extends ParsedMimePartFactory
      * @param StreamInterface $stream
      * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function newInstance(PartBuilder $partBuilder, StreamInterface $stream = null)
+    public function newInstance(PartBuilder $partBuilder)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
-        if ($stream !== null) {
-            $streamContainer->setContentStream($this->streamFactory->getLimitedContentStream($stream, $partBuilder));
-        }
 
-        $children = $this->buildChildren($partBuilder, $stream);
         $headerContainer = $partBuilder->getHeaderContainer();
+        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance();
 
         $message = new Message(
-            $children,
+            [],
             $streamContainer,
             $headerContainer,
             $this->partFilterFactory,
+            $childrenContainer,
             $this->messageService
         );
 
+        $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
+        $parserProxy->init($partBuilder, $streamContainer, $childrenContainer);
+
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
-        $streamContainer->setParsedStream($stream);
+        $streamContainer->setParsedStream($partBuilder->getStream());
         $message->attach($streamContainer);
         return $message;
     }

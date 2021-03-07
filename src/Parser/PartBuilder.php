@@ -6,9 +6,10 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
+use GuzzleHttp\Psr7\StreamWrapper;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Used by MessageParser to keep information about a parsed message as an
@@ -28,26 +29,26 @@ class PartBuilder
      * @var int The offset read start position for this part (beginning of
      * headers) in the message's stream.
      */
-    private $streamPartStartPos = 0;
+    private $streamPartStartPos = null;
     
     /**
      * @var int The offset read end position for this part.  If the part is a
      * multipart mime part, the end position is after all of this parts
      * children.
      */
-    private $streamPartEndPos = 0;
+    private $streamPartEndPos = null;
     
     /**
      * @var int The offset read start position in the message's stream for the
      * beginning of this part's content (body).
      */
-    private $streamContentStartPos = 0;
+    private $streamContentStartPos = null;
     
     /**
      * @var int The offset read end position in the message's stream for the
      * end of this part's content (body).
      */
-    private $streamContentEndPos = 0;
+    private $streamContentEndPos = null;
 
     /**
      * @var boolean set to true once the end boundary of the currently-parsed
@@ -73,13 +74,7 @@ class PartBuilder
      * @var HeaderContainer a container for found and parsed headers.
      */
     private $headerContainer;
-    
-    /**
-     * @var PartBuilder[] an array of children found below this part for a mime
-     *      email
-     */
-    private $children = [];
-    
+
     /**
      * @var PartBuilder the parent part.
      */
@@ -99,6 +94,20 @@ class PartBuilder
     private $canHaveHeaders = true;
 
     /**
+     * @var StreamInterface the raw message input stream for a message, or null
+     *      for a part
+     */
+    private $messageStream;
+
+    /**
+     * @var resource the raw message input stream handle constructed from
+     *      $messageStream
+     */
+    private $messageHandle;
+
+    private $isNonMimePart = false;
+
+    /**
      * Sets up class dependencies.
      *
      * @param ParsedMessagePartFactory $mpf
@@ -106,10 +115,22 @@ class PartBuilder
      */
     public function __construct(
         ParsedMessagePartFactory $mpf,
-        HeaderContainer $headerContainer
+        HeaderContainer $headerContainer,
+        StreamInterface $messageStream = null
     ) {
         $this->messagePartFactory = $mpf;
         $this->headerContainer = $headerContainer;
+        $this->messageStream = $messageStream;
+        if ($messageStream !== null) {
+            $this->messageHandle = StreamWrapper::getResource($messageStream);
+        }
+    }
+
+    public function __destruct()
+    {
+        if ($this->messageHandle !== null) {
+            fclose($this->messageHandle);
+        }
     }
     
     /**
@@ -164,28 +185,13 @@ class PartBuilder
     }
     
     /**
-     * Registers the passed PartBuilder as a child of the current PartBuilder.
      * 
-     * @param \ZBateson\MailMimeParser\MessageBuilder $partBuilder
+     * @param \ZBateson\MailMimeParser\MessageBuilder $partent
      */
-    public function addChild(PartBuilder $partBuilder)
+    public function setParent(PartBuilder $parent)
     {
-        $partBuilder->parent = $this;
-        $partBuilder->canHaveHeaders = (!$this->endBoundaryFound);
-        // discard parts added after the end boundary
-        if (!$this->endBoundaryFound) {
-            $this->children[] = $partBuilder;
-        }
-    }
-    
-    /**
-     * Returns all children PartBuilder objects.
-     * 
-     * @return \ZBateson\MailMimeParser\MessageBuilder[]
-     */
-    public function getChildren()
-    {
-        return $this->children;
+        $this->parent = $parent;
+        $this->canHaveHeaders = (!$parent->endBoundaryFound);
     }
     
     /**
@@ -197,7 +203,17 @@ class PartBuilder
     {
         return $this->parent;
     }
-    
+
+    public function setIsNonMimePart($bool)
+    {
+        $this->isNonMimePart = $bool;
+    }
+
+    public function getIsNonMimePart()
+    {
+        return $this->isNonMimePart;
+    }
+
     /**
      * Returns true if either a Content-Type or Mime-Version header are defined
      * in this PartBuilder's headers.
@@ -206,6 +222,9 @@ class PartBuilder
      */
     public function isMime()
     {
+        if ($this->isNonMimePart) {
+            return false;
+        }
         return ($this->headerContainer->exists('Content-Type') ||
             $this->headerContainer->exists('Mime-Version'));
     }
@@ -296,6 +315,11 @@ class PartBuilder
     {
         return ($this->parentBoundaryFound);
     }
+
+    public function isEndBoundaryFound()
+    {
+        return ($this->endBoundaryFound);
+    }
     
     /**
      * Called once EOF is reached while reading content.  The method sets the
@@ -321,6 +345,24 @@ class PartBuilder
     public function canHaveHeaders()
     {
         return $this->canHaveHeaders;
+    }
+
+    public function getStream()
+    {
+        return $this->messageStream;
+    }
+
+    public function getMessageResourceHandle()
+    {
+        if ($this->parent) {
+            return $this->parent->getMessageResourceHandle();
+        }
+        return $this->messageHandle;
+    }
+
+    public function getMessageResourceHandlePos()
+    {
+        return ftell($this->getMessageResourceHandle());
     }
 
     /**
@@ -353,7 +395,7 @@ class PartBuilder
      */
     public function getStreamContentStartOffset()
     {
-        return $this->streamContentStartPos - $this->streamPartStartPos;
+        return $this->streamContentStartPos;
     }
 
     /**
@@ -411,18 +453,21 @@ class PartBuilder
         $this->setStreamPartEndPos($streamContentEndPos);
     }
 
+    public function isContentParsed()
+    {
+        return ($this->streamContentEndPos !== null);
+    }
+
     /**
      * Creates a MessagePart and returns it using the PartBuilder's
      * MessagePartFactory passed in during construction.
-     * 
-     * @param StreamInterface $stream
+     *
      * @return IMessagePart
      */
-    public function createMessagePart(StreamInterface $stream = null)
+    public function createMessagePart()
     {
         return $this->messagePartFactory->newInstance(
-            $this,
-            $stream
+            $this
         );
     }
 }
