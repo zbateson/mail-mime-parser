@@ -271,5 +271,5 @@ interface IMessagePart extends SplSubject
      */
     public function __toString();
 
-    public function setParent(IParentPart $parent);
+    public function setParent(IMimePart $parent);
 }

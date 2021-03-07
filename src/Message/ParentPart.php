@@ -14,7 +14,7 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  *
  * @author Zaahid Bateson
  */
-abstract class ParentPart extends MessagePart implements IParentPart
+abstract class ParentPart extends MessagePart
 {
     /**
      * @var PartChildrenContainer child part container

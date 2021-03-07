@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Parser\ParserProxy;
 use ZBateson\MailMimeParser\Message\PartFilter;
-use ZBateson\MailMimeParser\Message\IParentPart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
  * Description of ParsedPartChildrenContainer
@@ -40,7 +40,7 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
                 // read stream and children
                 $lastChild = $this->children[count($this->children) - 1];
                 $lastChild->hasContent();
-                if ($lastChild instanceof IParentPart) {
+                if ($lastChild instanceof IMimePart) {
                     $lastChild->getAllParts();
                 }
             }
@@ -67,7 +67,7 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
             ++$pos;
         }
         foreach ($this->children as $child) {
-            $container = ($child instanceof IParentPart) ? $child->getPartChildrenContainer() : null;
+            $container = ($child instanceof IMimePart) ? $child->getPartChildrenContainer() : null;
             if ($container !== null) {
                 $found = $container->getNextPart($pos, $index, $filter);
                 if ($found !== null) {
@@ -81,7 +81,7 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
             }
         }
         while (($child = $this->parseNextPart()) !== null) {
-            $container = ($child instanceof IParentPart) ? $child->getPartChildrenContainer() : null;
+            $container = ($child instanceof IMimePart) ? $child->getPartChildrenContainer() : null;
             if ($container !== null) {
                 $found = $container->getNextPart($pos, $index, $filter);
                 if ($found !== null) {

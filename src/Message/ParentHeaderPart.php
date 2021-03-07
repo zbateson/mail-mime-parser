@@ -15,7 +15,7 @@ use ZBateson\MailMimeParser\Header\HeaderContainer;
  *
  * @author Zaahid Bateson
  */
-abstract class ParentHeaderPart extends ParentPart implements IParentHeaderPart
+abstract class ParentHeaderPart extends ParentPart
 {
     /**
      * @var HeaderContainer Contains headers for this part.
