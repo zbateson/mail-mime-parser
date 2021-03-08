@@ -47,52 +47,49 @@ abstract class ParentPart extends MessagePart
         return $this->partChildrenContainer;
     }
 
-    public function getPart($index, PartFilter $filter = null)
+    public function getPart($index, $fnFilter = null)
     {
-        return $this->partChildrenContainer->getPart($index, $filter);
+        return $this->partChildrenContainer->getPart($index, $fnFilter);
     }
 
-    public function getAllParts(PartFilter $filter = null)
+    public function getAllParts($fnFilter = null)
     {
-        return $this->partChildrenContainer->getAllParts($filter);
+        return $this->partChildrenContainer->getAllParts($fnFilter);
     }
 
-    public function getPartCount(PartFilter $filter = null)
+    public function getPartCount($fnFilter = null)
     {
-        return count($this->getAllParts($filter));
+        return count($this->getAllParts($fnFilter));
     }
 
-    public function getChild($index, PartFilter $filter = null)
+    public function getChild($index, $fnFilter = null)
     {
-        return $this->partChildrenContainer->getChild($index, $filter);
+        return $this->partChildrenContainer->getChild($index, $fnFilter);
     }
 
-    public function getChildParts(PartFilter $filter = null)
+    public function getChildParts($fnFilter = null)
     {
-        return $this->partChildrenContainer->getChildParts($filter);
+        return $this->partChildrenContainer->getChildParts($fnFilter);
     }
 
-    public function getChildCount(PartFilter $filter = null)
+    public function getChildCount($fnFilter = null)
     {
-        return count($this->getChildParts($filter));
+        return count($this->getChildParts($fnFilter));
     }
 
     public function getPartByMimeType($mimeType, $index = 0)
     {
-        $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
-        return $this->getPart($index, $partFilter);
+        return $this->getPart($index, PartFilter::fromContentType($mimeType));
     }
 
     public function getAllPartsByMimeType($mimeType)
     {
-        $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
-        return $this->getAllParts($partFilter);
+        return $this->getAllParts($partFilter, PartFilter::fromContentType($mimeType));
     }
 
     public function getCountOfPartsByMimeType($mimeType)
     {
-        $partFilter = $this->partFilterFactory->newFilterFromContentType($mimeType);
-        return $this->getPartCount($partFilter);
+        return $this->getPartCount(PartFilter::fromContentType($mimeType));
     }
 
     public function addChild(IMessagePart $part, $position = null)
@@ -118,8 +115,8 @@ abstract class ParentPart extends MessagePart
         }
     }
 
-    public function removeAllParts(PartFilter $filter = null)
+    public function removeAllParts($fnFilter = null)
     {
-        $this->partChildrenContainer->removeAllParts($filter);
+        $this->partChildrenContainer->removeAllParts($fnFilter);
     }
 }

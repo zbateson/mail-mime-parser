@@ -58,9 +58,9 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         $child->setParent($this->part);
     }
 
-    protected function getNextPart(&$pos, $index, PartFilter $filter = null)
+    protected function getNextPart(&$pos, $index, $fnFilter = null)
     {
-        if ($filter === null || $filter->filter($this->part)) {
+        if ($fnFilter === null || $fnFilter($this->part)) {
             if ($index === $pos) {
                 return $this->part;
             }
@@ -69,11 +69,11 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         foreach ($this->children as $child) {
             $container = ($child instanceof IMimePart) ? $child->getPartChildrenContainer() : null;
             if ($container !== null) {
-                $found = $container->getNextPart($pos, $index, $filter);
+                $found = $container->getNextPart($pos, $index, $fnFilter);
                 if ($found !== null) {
                     return $found;
                 }
-            } elseif ($filter === null || $filter->filter($child)) {
+            } elseif ($fnFilter === null || $fnFilter($child)) {
                 if ($index === $pos) {
                     return $child;
                 }
@@ -83,11 +83,11 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         while (($child = $this->parseNextPart()) !== null) {
             $container = ($child instanceof IMimePart) ? $child->getPartChildrenContainer() : null;
             if ($container !== null) {
-                $found = $container->getNextPart($pos, $index, $filter);
+                $found = $container->getNextPart($pos, $index, $fnFilter);
                 if ($found !== null) {
                     return $found;
                 }
-            } elseif ($filter === null || $filter->filter($child)) {
+            } elseif ($fnFilter === null || $fnFilter($child)) {
                 if ($index === $pos) {
                     return $child;
                 }
@@ -97,10 +97,10 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         return null;
     }
 
-    protected function getNextChild(&$pos, $index, PartFilter $filter = null)
+    protected function getNextChild(&$pos, $index, $fnFilter = null)
     {
         foreach ($this->children as $child) {
-            if ($filter === null || $filter->filter($child)) {
+            if ($fnFilter === null || $fnFilter($child)) {
                 if ($index === $pos) {
                     return $child;
                 }
@@ -112,7 +112,7 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
             if ($child === null) {
                 return false;
             }
-            if ($filter === null || $filter->filter($child)) {
+            if ($fnFilter === null || $fnFilter($child)) {
                 if ($index === $pos) {
                     return $child;
                 }
@@ -124,40 +124,40 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         return null;
     }
 
-    public function getPart($index, PartFilter $filter = null)
+    public function getPart($index, $fnFilter = null)
     {
         if ($this->allPartsParsed) {
-            return parent::getPart($index, $filter);
+            return parent::getPart($index, $fnFilter);
         }
         $pos = 0;
-        $child = $this->getNextPart($pos, $index, $filter);
+        $child = $this->getNextPart($pos, $index, $fnFilter);
         return $child;
     }
 
-    public function getAllParts(PartFilter $filter = null)
+    public function getAllParts($fnFilter = null)
     {
         while (!$this->allPartsParsed) {
             $this->parseNextPart();
         }
-        return parent::getAllParts($filter);
+        return parent::getAllParts($fnFilter);
     }
 
-    public function getChild($index, PartFilter $filter = null)
+    public function getChild($index, $fnFilter = null)
     {
         if ($this->allPartsParsed) {
-            return parent::getChild($index, $filter);
+            return parent::getChild($index, $fnFilter);
         }
         $pos = 0;
-        $child = $this->getNextChild($pos, $index, $filter);
+        $child = $this->getNextChild($pos, $index, $fnFilter);
         return $child;
     }
 
-    public function getChildParts(PartFilter $filter = null)
+    public function getChildParts($fnFilter = null)
     {
         while (!$this->allPartsParsed) {
             $this->parseNextPart();
         }
-        return parent::getChildParts($filter);
+        return parent::getChildParts($fnFilter);
     }
 
     public function addChild(IMessagePart $part, $position = null)
@@ -176,19 +176,19 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         return parent::removePart($part);
     }
 
-    public function removeAllParts(PartFilter $filter = null)
+    public function removeAllParts($fnFilter = null)
     {
         while (!$this->allPartsParsed) {
             $this->parseNextPart();
         }
-        return parent::removeAllParts($filter);
+        return parent::removeAllParts($fnFilter);
     }
 
-    public function getIterator(PartFilter $filter = null)
+    public function getIterator($fnFilter = null)
     {
         while (!$this->allPartsParsed) {
             $this->parseNextPart();
         }
-        return parent::getIterator($filter);
+        return parent::getIterator($fnFilter);
     }
 }

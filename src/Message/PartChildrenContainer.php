@@ -62,40 +62,37 @@ class PartChildrenContainer implements IteratorAggregate
         return $parts;
     }
 
-    public function getPart($index, PartFilter $filter = null)
+    public function getPart($index, $fnFilter = null)
     {
-        $parts = $this->getAllParts($filter);
+        $parts = $this->getAllParts($fnFilter);
         if (!isset($parts[$index])) {
             return null;
         }
         return $parts[$index];
     }
 
-    public function getAllParts(PartFilter $filter = null)
+    public function getAllParts($fnFilter = null)
     {
         $parts = $this->getAllNonFilteredParts();
-        if (!empty($filter)) {
-            return array_values(array_filter(
-                $parts,
-                [ $filter, 'filter' ]
-            ));
+        if (!empty($fnFilter)) {
+            return array_values(array_filter($parts, $fnFilter));
         }
         return $parts;
     }
 
-    public function getChild($index, PartFilter $filter = null)
+    public function getChild($index, $fnFilter = null)
     {
-        $parts = $this->getChildParts($filter);
+        $parts = $this->getChildParts($fnFilter);
         if (!isset($parts[$index])) {
             return null;
         }
         return $parts[$index];
     }
 
-    public function getChildParts(PartFilter $filter = null)
+    public function getChildParts($fnFilter = null)
     {
-        if ($filter !== null) {
-            return array_values(array_filter($this->children, [ $filter, 'filter' ]));
+        if ($fnFilter !== null) {
+            return array_values(array_filter($this->children, $fnFilter));
         }
         return $this->children;
     }
@@ -121,9 +118,9 @@ class PartChildrenContainer implements IteratorAggregate
         return null;
     }
 
-    public function removeAllParts(PartFilter $filter = null)
+    public function removeAllParts($fnFilter = null)
     {
-        foreach ($this->getAllParts($filter) as $part) {
+        foreach ($this->getAllParts($fnFilter) as $part) {
             if ($part === $this) {
                 continue;
             }

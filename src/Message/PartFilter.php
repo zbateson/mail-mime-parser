@@ -43,61 +43,29 @@ use InvalidArgumentException;
  */
 class PartFilter
 {
-    /**
-     * @var int indicates a filter is not in use
-     */
-    const FILTER_OFF = 0;
+    public static function fromAttachmentFilter()
+    {
+        return function (IMessagePart $part) {
+            $type = strtolower($part->getContentType());
+            if (in_array($type, [ 'text/plain', 'text/html' ]) && strcasecmp($part->getContentDisposition(), 'inline') === 0) {
+                return false;
+            }
+            return !(($part instanceof IMimePart) && ($part->isMultiPart() || $part->isSignaturePart()));
+        };
+    }
 
-    /**
-     * @var int an excluded filter must not be included in a part
-     */
-    const FILTER_EXCLUDE = 1;
-
-    /**
-     * @var int an included filter must be included in a part
-     */
-    const FILTER_INCLUDE = 2;
-
-    /**
-     * @var int filters based on whether IMessagePart::hasContent is true
-     */
-    private $hascontent = PartFilter::FILTER_OFF;
-
-    /**
-     * @var int filters based on whether IMimePart::isMultiPart is true
-     */
-    private $multipart = PartFilter::FILTER_OFF;
-
-    /**
-     * @var int filters based on whether IMessagePart::isTextPart is true
-     */
-    private $textpart = PartFilter::FILTER_OFF;
-
-    /**
-     * @var int filters based on whether the parent of a part is a
-     *      multipart/signed part and this part has a content-type equal to its
-     *      parent's 'protocol' parameter in its content-type header
-     */
-    private $signedpart = PartFilter::FILTER_EXCLUDE;
-
-    /**
-     * @var string calculated hash of the filter
-     */
-    private $hashCode;
-
-    /**
-     * @var string[][] array of header rules.  The top-level contains keys of
-     * FILTER_INCLUDE and/or FILTER_EXCLUDE, which contain key => value mapping
-     * of header names => values to search for.  Note that when searching
-     * IMimePart::getHeaderValue is used (so additional parameters need not be
-     * matched) and strcasecmp is used.
-     * 
-     * ```php
-     * $filter = new PartFilter();
-     * $filter->headers = [ PartFilter::FILTER_INCLUDE => [ 'Content-Type' => 'text/plain' ] ];
-     * ```
-     */
-    private $headers = [];
+    public static function fromHeaderValue($name, $value, $excludeSignedParts = true)
+    {
+        return function(IMessagePart $part) use ($name, $value) {
+            if ($part instanceof IMimePart) {
+                if ($excludeSignedParts && $part->isSignaturePart()) {
+                    return false;
+                }
+                return strcasecmp($part->getHeaderValue($name), $value) === 0;
+            }
+            return false;
+        };
+    }
 
     /**
      * Convenience method to filter for a specific mime type.
@@ -107,13 +75,9 @@ class PartFilter
      */
     public static function fromContentType($mimeType)
     {
-        return new static([
-            'headers' => [
-                static::FILTER_INCLUDE => [
-                    'Content-Type' => $mimeType
-                ]
-            ]
-        ]);
+        return function(IMessagePart $part) use ($mimeType) {
+            return strcasecmp($part->getContentType(), $mimeType) === 0;
+        };
     }
 
     /**
@@ -125,16 +89,10 @@ class PartFilter
      */
     public static function fromInlineContentType($mimeType)
     {
-        return new static([
-            'headers' => [
-                static::FILTER_INCLUDE => [
-                    'Content-Type' => $mimeType
-                ],
-                static::FILTER_EXCLUDE => [
-                    'Content-Disposition' => 'attachment'
-                ]
-            ]
-        ]);
+        return function(IMessagePart $part) use ($mimeType) {
+            return strcasecmp($part->getContentType(), $mimeType) === 0
+                && strcasecmp($part->getContentDisposition(), 'attachment') !== 0;
+        };
     }
 
     /**
@@ -145,254 +103,13 @@ class PartFilter
      * @param int $multipart
      * @return PartFilter
      */
-    public static function fromDisposition($disposition, $multipart = PartFilter::FILTER_OFF)
+    public static function fromDisposition($disposition, $includeMultipart = false, $excludeSignedParts = true)
     {
-        return new static([
-            'multipart' => $multipart,
-            'headers' => [
-                static::FILTER_INCLUDE => [
-                    'Content-Disposition' => $disposition
-                ]
-            ]
-        ]);
-    }
-
-    /**
-     * Constructs a PartFilter, optionally instantiating member variables with
-     * values in the passed array.
-     * 
-     * The passed array must use keys equal to member variable names, e.g.
-     * 'multipart', 'textpart', 'signedpart' and 'headers'.
-     * 
-     * @param array $filter
-     */
-    public function __construct(array $filter = [])
-    {
-        $params = [ 'hascontent', 'multipart', 'textpart', 'signedpart', 'headers' ];
-        foreach ($params as $param) {
-            if (isset($filter[$param])) {
-                $this->__set($param, $filter[$param]);
+        return function(IMessagePart $part) use ($disposition, $includeMultipart) {
+            if (($part instanceof IMimePart) && (($excludeSignedParts && $part->isSignaturePart()) || (!$includeMultipart && $part->isMultiPart()))) {
+                return false;
             }
-        }
-    }
-
-    /**
-     * Validates an argument passed to __set to insure it's set to a value in
-     * $valid.
-     * 
-     * @param string $name Name of the member variable
-     * @param string $value The value to test
-     * @param array $valid an array of valid values
-     * @throws InvalidArgumentException
-     */
-    private function validateArgument($name, $value, array $valid)
-    {
-        if (!in_array($value, $valid)) {
-            $last = array_pop($valid);
-            throw new InvalidArgumentException(
-                '$value parameter for ' . $name . ' must be one of '
-                . join(', ', $valid) . ' or ' . $last . ' - "' . $value
-                . '" provided'
-            );
-        }
-    }
-
-    /**
-     * Sets the PartFilter's headers filter to the passed array after validating
-     * it.
-     * 
-     * @param array $headers
-     * @throws InvalidArgumentException
-     */
-    public function setHeaders(array $headers)
-    {
-        array_walk($headers, function ($v, $k) {
-            $this->validateArgument(
-                'headers',
-                $k,
-                [ static::FILTER_EXCLUDE, static::FILTER_INCLUDE ]
-            );
-            if (!is_array($v)) {
-                throw new InvalidArgumentException(
-                    '$value must be an array with keys set to FILTER_EXCLUDE, '
-                    . 'FILTER_INCLUDE and values set to an array of header '
-                    . 'name => values'
-                );
-            }
-        });
-        $this->headers = $headers;
-    }
-
-    /**
-     * Sets the member variable denoted by $name to the passed $value after
-     * validating it.
-     * 
-     * @param string $name
-     * @param int|array $value
-     * @throws InvalidArgumentException
-     */
-    public function __set($name, $value)
-    {
-        if ($name === 'hascontent' || $name === 'multipart'
-            || $name === 'textpart' || $name === 'signedpart') {
-            if (is_array($value)) {
-                throw new InvalidArgumentException('$value must be not be an array');
-            }
-            $this->validateArgument(
-                $name,
-                $value,
-                [ static::FILTER_OFF, static::FILTER_EXCLUDE, static::FILTER_INCLUDE ]
-            );
-            $this->$name = $value;
-        } elseif ($name === 'headers') {
-            if (!is_array($value)) {
-                throw new InvalidArgumentException('$value must be an array');
-            }
-            $this->setHeaders($value);
-        }
-    }
-
-    /**
-     * Returns true if the variable denoted by $name is a member variable of
-     * PartFilter.
-     * 
-     * @param string $name
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        return isset($this->$name);
-    }
-
-    /**
-     * Returns the value of the member variable denoted by $name
-     * 
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->$name;
-    }
-
-    /**
-     * Returns true if the passed IMessagePart fails the filter's multipart
-     * filter settings.
-     * 
-     * @param IMessagePart $part
-     * @return bool
-     */
-    private function failsMultiPartFilter(IMessagePart $part)
-    {
-        if (!($part instanceof IMimePart)) {
-            return $this->multipart !== static::FILTER_EXCLUDE;
-        }
-        return ($this->multipart === static::FILTER_EXCLUDE && $part->isMultiPart())
-            || ($this->multipart === static::FILTER_INCLUDE && !$part->isMultiPart());
-    }
-
-    /**
-     * Returns true if the passed IMessagePart fails the filter's textpart filter
-     * settings.
-     * 
-     * @param IMessagePart $part
-     * @return bool
-     */
-    private function failsTextPartFilter(IMessagePart $part)
-    {
-        return ($this->textpart === static::FILTER_EXCLUDE && $part->isTextPart())
-            || ($this->textpart === static::FILTER_INCLUDE && !$part->isTextPart());
-    }
-
-    /**
-     * Returns true if the passed IMessagePart fails the filter's signedpart
-     * filter settings.
-     * 
-     * @param IMessagePart $part
-     * @return boolean
-     */
-    private function failsSignedPartFilter(IMessagePart $part)
-    {
-        if ($this->signedpart === static::FILTER_OFF) {
-            return false;
-        } elseif (!$part->isMime() || $part->getParent() === null) {
-            return ($this->signedpart === static::FILTER_INCLUDE);
-        }
-        $partMimeType = $part->getContentType();
-        $parentMimeType = $part->getParent()->getContentType();
-        $parentProtocol = $part->getParent()->getHeaderParameter('Content-Type', 'protocol');
-        if (strcasecmp($parentMimeType, 'multipart/signed') === 0 && strcasecmp($partMimeType, $parentProtocol) === 0) {
-            return ($this->signedpart === static::FILTER_EXCLUDE);
-        }
-        return ($this->signedpart === static::FILTER_INCLUDE);
-    }
-
-    /**
-     * Tests a single header value against $part, and returns true if the test
-     * fails.
-     * 
-     * @staticvar array $map
-     * @param IMessagePart $part
-     * @param int $type
-     * @param string $name
-     * @param string $header
-     * @return boolean
-     */
-    private function failsHeaderFor(IMessagePart $part, $type, $name, $header)
-    {
-        $headerValue = null;
-        
-        static $map = [
-            'content-type' => 'getContentType',
-            'content-disposition' => 'getContentDisposition',
-            'content-transfer-encoding' => 'getContentTransferEncoding',
-            'content-id' => 'getContentId'
-        ];
-        $lower = strtolower($name);
-        if (isset($map[$lower])) {
-            $headerValue = call_user_func([$part, $map[$lower]]);
-        } elseif (!($part instanceof IMimePart)) {
-            return ($type === static::FILTER_INCLUDE);
-        } else {
-            $headerValue = $part->getHeaderValue($name);
-        }
-        
-        return (($type === static::FILTER_EXCLUDE && strcasecmp($headerValue, $header) === 0)
-            || ($type === static::FILTER_INCLUDE && strcasecmp($headerValue, $header) !== 0));
-    }
-
-    /**
-     * Returns true if the passed IMessagePart fails the filter's header filter
-     * settings.
-     * 
-     * @param IMessagePart $part
-     * @return boolean
-     */
-    private function failsHeaderPartFilter(IMessagePart $part)
-    {
-        foreach ($this->headers as $type => $values) {
-            foreach ($values as $name => $header) {
-                if ($this->failsHeaderFor($part, $type, $name, $header)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Determines if the passed IMessagePart should be filtered out or not.
-     * If the IMessagePart passes all filter tests, true is returned.  Otherwise
-     * false is returned.
-     * 
-     * @param IMessagePart $part
-     * @return boolean
-     */
-    public function filter(IMessagePart $part)
-    {
-        return !($this->failsMultiPartFilter($part)
-            || $this->failsTextPartFilter($part)
-            || $this->failsSignedPartFilter($part)
-            || $this->failsHeaderPartFilter($part));
+            return strcasecmp($part->getContentDisposition(), $disposition) === 0;
+        };
     }
 }

@@ -117,16 +117,20 @@ class MimePart extends ParentHeaderPart implements IMimePart
         ));
     }
 
+    public function isSignaturePart()
+    {
+        if ($this->parent === null || $this->parent->parent !== null) {
+            return false;
+        }
+        $parentMimeType = $this->parent->getContentType();
+        $secondChild = $this->parent->getChild(1);
+        return (strcasecmp($parentMimeType, 'multipart/signed') === 0 && $secondChild === $this);
+    }
+
     public function getPartByContentId($contentId)
     {
-        $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
-        $filter = $this->partFilterFactory->newFilterFromArray([
-            'headers' => [
-                PartFilter::FILTER_INCLUDE => [
-                    'Content-ID' => $sanitized
-                ]
-            ]
-        ]);
-        return $this->getPart(0, $filter);
+        return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
+            return strcasecmp($part->getContentId(), $sanitized) === 0;
+        });
     }
 }

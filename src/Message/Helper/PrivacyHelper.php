@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\ParentPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
@@ -100,11 +101,9 @@ class PrivacyHelper extends AbstractHelper
      */
     public function overwrite8bitContentEncoding(IMessage $message)
     {
-        $parts = $message->getAllParts(new PartFilter([
-            'headers' => [ PartFilter::FILTER_INCLUDE => [
-                'Content-Transfer-Encoding' => '8bit'
-            ] ]
-        ]));
+        $parts = $message->getAllParts(function(IMessagePart $part) {
+            return strcasecmp($part->getContentTransferEncoding(), '8bit') === 0;
+        });
         foreach ($parts as $part) {
             $contentType = strtolower($part->getContentType());
             if ($contentType === 'text/plain' || $contentType === 'text/html') {

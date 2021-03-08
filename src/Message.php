@@ -10,6 +10,8 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
+use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
@@ -81,7 +83,7 @@ class Message extends MimePart implements IMessage
     {
         return $this->getPart(
             $index,
-            $this->partFilterFactory->newFilterFromInlineContentType('text/plain')
+            PartFilter::fromInlineContentType('text/plain')
         );
     }
 
@@ -93,7 +95,7 @@ class Message extends MimePart implements IMessage
     public function getTextPartCount()
     {
         return $this->getPartCount(
-            $this->partFilterFactory->newFilterFromInlineContentType('text/plain')
+            PartFilter::fromInlineContentType('text/plain')
         );
     }
 
@@ -107,7 +109,7 @@ class Message extends MimePart implements IMessage
     {
         return $this->getPart(
             $index,
-            $this->partFilterFactory->newFilterFromInlineContentType('text/html')
+            PartFilter::fromInlineContentType('text/html')
         );
     }
 
@@ -119,7 +121,7 @@ class Message extends MimePart implements IMessage
     public function getHtmlPartCount()
     {
         return $this->getPartCount(
-            $this->partFilterFactory->newFilterFromInlineContentType('text/html')
+            PartFilter::fromInlineContentType('text/html')
         );
     }
 
@@ -132,37 +134,25 @@ class Message extends MimePart implements IMessage
      */
     public function getAttachmentPart($index)
     {
-        $attachments = $this->getAllAttachmentParts();
-        if (!isset($attachments[$index])) {
-            return null;
-        }
-        return $attachments[$index];
+        return $this->getPart(
+            $index,
+            PartFilter::fromAttachmentFilter()
+        );
     }
 
     /**
      * Returns all attachment parts.
      *
      * "Attachments" are any non-multipart, non-signature and any text or html
-     * html part witha Content-Disposition set to  'attachment'.
+     * html part with a Content-Disposition set to  'attachment'.
      *
      * @return MessagePart[]
      */
     public function getAllAttachmentParts()
     {
-        $parts = $this->getAllParts(
-            $this->partFilterFactory->newFilterFromArray([
-                'multipart' => PartFilter::FILTER_EXCLUDE
-            ])
+        return $this->getAllParts(
+            PartFilter::fromAttachmentFilter()
         );
-        return array_values(array_filter(
-            $parts,
-            function ($part) {
-                return !(
-                    $part->isTextPart()
-                    && $part->getContentDisposition() === 'inline'
-                );
-            }
-        ));
     }
 
     /**

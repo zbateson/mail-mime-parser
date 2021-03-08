@@ -204,14 +204,12 @@ class MultipartHelper extends AbstractHelper
      */
     public function moveAllPartsAsAttachmentsExcept(IMessage $message, IMimePart $from, $exceptMimeType)
     {
-        $parts = $from->getAllParts(new PartFilter([
-            'multipart' => PartFilter::FILTER_EXCLUDE,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Type' => $exceptMimeType
-                ]
-            ]
-        ]));
+        $parts = $from->getAllParts(function(IMessagePart $part) use ($exceptMimeType) {
+            if ($part instanceof IMimePart && $part->isMultiPart()) {
+                return false;
+            }
+            return strcasecmp($part->getContentType(), $exceptMimeType) !== 0;
+        });
         if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
             $this->setMessageAsMixed($message);
         }
@@ -252,7 +250,7 @@ class MultipartHelper extends AbstractHelper
     {
         $relatedPart = $this->mimePartFactory->newInstance();
         $this->setMimeHeaderBoundaryOnPart($relatedPart, 'multipart/related');
-        foreach ($parent->getChildParts(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) as $part) {
+        foreach ($parent->getChildParts(PartFilter::fromDisposition('inline')) as $part) {
             $parent->removePart($part);
             $relatedPart->addChild($part);
         }
@@ -280,7 +278,7 @@ class MultipartHelper extends AbstractHelper
         );
         if ($altPart !== null && $altPart->getParent() !== null && $altPart->getParent()->isMultiPart()) {
             $altPartParent = $altPart->getParent();
-            if ($altPartParent->getChildCount(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) !== 1) {
+            if ($altPartParent->getChildCount(PartFilter::fromDisposition('inline')) !== 1) {
                 $altPart = $this->createMultipartRelatedPartForInlineChildrenOf($altPartParent);
             }
         }

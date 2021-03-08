@@ -24,6 +24,14 @@ interface IMimePart extends IMessagePart
     public function isMultiPart();
 
     /**
+     * Returns true if this part is the second child of a multipart/signed
+     * message.
+     *
+     * @return bool
+     */
+    public function isSignaturePart();
+
+    /**
      * Convenience method to find a part by its Content-ID header.
      *
      * @param string $contentId
@@ -42,10 +50,10 @@ interface IMimePart extends IMessagePart
      * current part.
      *
      * @param int $index
-     * @param PartFilter $filter
+     * @param callable $fnFilter
      * @return IMessagePart
      */
-    public function getPart($index, PartFilter $filter = null);
+    public function getPart($index, $fnFilter = null);
 
     /**
      * Returns the current part, all child parts, and child parts of all
@@ -54,10 +62,10 @@ interface IMimePart extends IMessagePart
      * The first part returned is always the current IMimePart.  This is often
      * desirable as it may be a valid MimePart for the provided PartFilter.
      *
-     * @param PartFilter $filter an optional filter
+     * @param callable $fnFilter an optional filter
      * @return IMessagePart[]
      */
-    public function getAllParts(PartFilter $filter = null);
+    public function getAllParts($fnFilter = null);
 
     /**
      * Returns the total number of parts in this and all children.
@@ -65,38 +73,38 @@ interface IMimePart extends IMessagePart
      * Note that the current part is considered, so the minimum getPartCount is
      * 1 without a filter.
      *
-     * @param PartFilter $filter
+     * @param callable $fnFilter
      * @return int
      */
-    public function getPartCount(PartFilter $filter = null);
+    public function getPartCount($fnFilter = null);
 
     /**
      * Returns the direct child at the given 0-based index, or null if none is
      * set.
      *
      * @param int $index
-     * @param PartFilter $filter
+     * @param callable $fnFilter
      * @return IMessagePart
      */
-    public function getChild($index, PartFilter $filter = null);
+    public function getChild($index, $fnFilter = null);
 
     /**
      * Returns all direct child parts.
      *
-     * If a PartFilter is provided, the PartFilter is applied before returning.
+     * If a is provided, the is applied before returning.
      *
-     * @param PartFilter $filter
+     * @param callable $fnFilter
      * @return IMessagePart[]
      */
-    public function getChildParts(PartFilter $filter = null);
+    public function getChildParts($fnFilter = null);
 
     /**
      * Returns the number of direct children under this part.
      *
-     * @param PartFilter $filter
+     * @param callable $fnFilter
      * @return int
      */
-    public function getChildCount(PartFilter $filter = null);
+    public function getChildCount($fnFilter = null);
 
     /**
      * Returns the part associated with the passed mime type, at the passed
@@ -157,9 +165,9 @@ interface IMimePart extends IMessagePart
      * remove direct children like getChildParts.  Internally this function uses
      * getAllParts but the current part is filtered out if returned.
      *
-     * @param \ZBateson\MailMimeParser\Message\PartFilter $filter
+     * @param \ZBateson\MailMimeParser\Message\$fnFilter
      */
-    public function removeAllParts(PartFilter $filter = null);
+    public function removeAllParts($fnFilter = null);
 
     /**
      * Returns the AbstractHeader object for the header with the given $name.
@@ -303,6 +311,4 @@ interface IMimePart extends IMessagePart
      * @param string $name
      */
     public function removeSingleHeader($name, $offset = 0);
-
-
 }
