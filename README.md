@@ -24,7 +24,7 @@ composer require zbateson/mail-mime-parser
 
 A huge thank you to my first sponsor. <3
 
-[![SecuMailer](mail-mime-parser/tree/gh-pages/sponsors/logo-secumailer.png)](https://secumailer.com)
+[![SecuMailer](https://mail-mime-parser.org/sponsors/logo-secumailer.png)](https://secumailer.com)
 
 ## Deprecation Notice (since 1.2.1)
 
