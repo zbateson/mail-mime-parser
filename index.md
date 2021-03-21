@@ -6,6 +6,12 @@
 A stable, standards-compliant, easy-to-use email message parsing library for
 PHP.
 
+## Sponsors
+
+A huge thank you to my first sponsor. <3
+
+[![SecuMailer](sponsors/logo-secumailer.png)](https://secumailer.com)
+
 **Deprecation Notice (since 1.2.1):** getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have all been deprecated due to [#106](https://github.com/zbateson/mail-mime-parser/issues/106). fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead.  Note that this deprecation doesn't apply to getBinaryContentResourceHandle or getResourceHandle.
 
 MailMimeParser has minimal external dependencies.  It requires mbstring to be
