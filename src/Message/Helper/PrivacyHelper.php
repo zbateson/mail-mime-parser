@@ -11,7 +11,6 @@ use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\ParentPart;
-use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
  * Provides routines to set or retrieve the signature part of a signed message.
@@ -179,27 +178,5 @@ class PrivacyHelper extends AbstractHelper
             );
         }
         return null;
-    }
-
-    /**
-     * Returns the signature part of a multipart/signed message or null.
-     *
-     * The signature part is determined to always be the 2nd child of a
-     * multipart/signed message, the first being the 'body'.
-     *
-     * Using the 'protocol' parameter of the Content-Type header is unreliable
-     * in some instances (for instance a difference of x-pgp-signature versus
-     * pgp-signature).
-     *
-     * @param IMessage $message
-     * @return \ZBateson\MailMimeParser\Message\IMimePart
-     */
-    public function getSignaturePart(IMessage $message)
-    {
-        if (strcasecmp($message->getContentType(), 'multipart/signed') === 0) {
-            return $message->getChild(1);
-        } else {
-            return null;
-        }
     }
 }

@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\MessageService;
@@ -14,7 +15,6 @@ use ZBateson\MailMimeParser\Parser\BaseParser;
 use ZBateson\MailMimeParser\Parser\ParserProxy;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
-use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Responsible for creating ParsedMessage instances.
@@ -30,13 +30,14 @@ class ParsedMessageFactory extends ParsedMimePartFactory
 
     public function __construct(
         StreamFactory $sdf,
+        HeaderFactory $headerFactory,
         ParsedPartStreamContainerFactory $pscf,
         ParsedPartChildrenContainerFactory $ppccf,
         PartFilterFactory $pf,
         BaseParser $baseParser,
         MessageService $mhs
     ) {
-        parent::__construct($sdf, $pscf, $ppccf, $pf, $baseParser);
+        parent::__construct($sdf, $headerFactory, $pscf, $ppccf, $pf, $baseParser);
         $this->messageService = $mhs;
     }
 
@@ -47,15 +48,14 @@ class ParsedMessageFactory extends ParsedMimePartFactory
      * @param StreamInterface $stream
      * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function newInstance(PartBuilder $partBuilder)
+    public function newInstance(PartBuilder $partBuilder, ParsedPartChildrenContainer $parentContainer = null)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
 
-        $headerContainer = $partBuilder->getHeaderContainer();
+        $headerContainer = $this->headerFactory->newHeaderContainer($partBuilder->getHeaderContainer());
         $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance();
 
         $message = new Message(
-            [],
             $streamContainer,
             $headerContainer,
             $this->partFilterFactory,

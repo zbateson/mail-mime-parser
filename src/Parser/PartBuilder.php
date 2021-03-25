@@ -10,6 +10,7 @@ use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
 
 /**
  * Used by MessageParser to keep information about a parsed message as an
@@ -105,7 +106,10 @@ class PartBuilder
      */
     private $messageHandle;
 
-    private $isNonMimePart = false;
+    /**
+     * @var bool set to true when creating a PartBuilder for a non-mime message.
+     */
+    private $nonMimePart = false;
 
     /**
      * Sets up class dependencies.
@@ -204,14 +208,14 @@ class PartBuilder
         return $this->parent;
     }
 
-    public function setIsNonMimePart($bool)
+    public function setNonMimePart($bool)
     {
-        $this->isNonMimePart = $bool;
+        $this->nonMimePart = $bool;
     }
 
-    public function getIsNonMimePart()
+    public function isNonMimePart()
     {
-        return $this->isNonMimePart;
+        return $this->nonMimePart;
     }
 
     /**
@@ -220,11 +224,8 @@ class PartBuilder
      * 
      * @return boolean
      */
-    public function isMime()
+    public function isMimeMessagePart()
     {
-        if ($this->isNonMimePart) {
-            return false;
-        }
         return ($this->headerContainer->exists('Content-Type') ||
             $this->headerContainer->exists('Mime-Version'));
     }
@@ -372,9 +373,6 @@ class PartBuilder
      */
     public function getStreamPartStartOffset()
     {
-        if ($this->parent) {
-            return $this->streamPartStartPos - $this->parent->streamPartStartPos;
-        }
         return $this->streamPartStartPos;
     }
 
@@ -464,10 +462,11 @@ class PartBuilder
      *
      * @return IMessagePart
      */
-    public function createMessagePart()
+    public function createMessagePart(ParsedPartChildrenContainer $parentContainer = null)
     {
         return $this->messagePartFactory->newInstance(
-            $this
+            $this,
+            $parentContainer
         );
     }
 }

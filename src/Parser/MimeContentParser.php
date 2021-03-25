@@ -93,9 +93,9 @@ class MimeContentParser implements IContentParser
 
     public function canParse(PartBuilder $partBuilder)
     {
-        if ($partBuilder->getIsNonMimePart()) {
+        if ($partBuilder->isNonMimePart()) {
             return false;
         }
-        return ($partBuilder->getParent() !== null || $partBuilder->isMime());
+        return ($partBuilder->getParent() !== null || $partBuilder->isMimeMessagePart());
     }
 }

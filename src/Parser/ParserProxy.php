@@ -86,13 +86,6 @@ class ParserProxy
 
     public function updatePartChildren(PartBuilder $parent, PartBuilder $child)
     {
-        $messagePart = $child->createMessagePart();
-        if (!$parent->isEndBoundaryFound()) {
-            $this->partChildrenContainer->addParsedChild(
-                $child->createMessagePart()
-            );
-        } else {
-            $messagePart->hasContent();
-        }
+        $child->createMessagePart($this->partChildrenContainer);
     }
 }

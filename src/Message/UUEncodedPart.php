@@ -30,7 +30,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      *
      * @param PartStreamContainer $streamContainer
      */
-    public function __construct(PartStreamContainer $streamContainer = null)
+    public function __construct(IMessagePart $parent = null, PartStreamContainer $streamContainer = null)
     {
         if ($streamContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
@@ -39,7 +39,8 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
             $streamContainer->setStream($streamFactory->newMessagePartStream($this));
         }
         parent::__construct(
-            $streamContainer
+            $streamContainer,
+            $parent
         );
     }
 

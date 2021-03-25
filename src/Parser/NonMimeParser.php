@@ -43,7 +43,7 @@ class NonMimeParser implements IContentParser, IChildPartParser
             $this->parsedUuEncodedPartFactory,
             $parent->getStream()
         );
-        $part->setIsNonMimePart(true);
+        $part->setNonMimePart(true);
         $part->setStreamPartStartPos($start);
         $part->setStreamContentStartPos($this->nextPartStart);
         $part->setProperty('mode', $mode);
@@ -102,7 +102,7 @@ class NonMimeParser implements IContentParser, IChildPartParser
 
     public function canParse(PartBuilder $partBuilder)
     {
-        return (($partBuilder->getIsNonMimePart())
-            || ($partBuilder->getParent() === null && !$partBuilder->isMime()));
+        return (($partBuilder->isNonMimePart())
+            || ($partBuilder->getParent() === null && !$partBuilder->isMimeMessagePart()));
     }
 }

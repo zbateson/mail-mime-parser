@@ -1498,7 +1498,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m4002.txt', 'r');
         $message = $this->parser->parse($handle);
-        
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
         fclose($handle);

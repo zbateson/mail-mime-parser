@@ -27,13 +27,13 @@ abstract class ParentHeaderPart extends ParentPart
         HeaderContainer $headerContainer,
         PartChildrenContainer $partChildrenContainer,
         PartFilterFactory $partFilterFactory,
-        array $children
+        IMessagePart $parent = null
     ) {
         parent::__construct(
             $streamContainer,
             $partChildrenContainer,
             $partFilterFactory,
-            $children
+            $parent
         );
         $this->headerContainer = $headerContainer;
     }

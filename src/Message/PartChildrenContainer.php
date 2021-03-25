@@ -6,37 +6,34 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use IteratorAggregate;
-
 /**
  * Description of PartChildrenContainer
  *
  * @author Zaahid Bateson
  */
-class PartChildrenContainer implements IteratorAggregate
+class PartChildrenContainer
 {
     /**
-     * @var IMessagePart the container's part
+     * @var PartChildContained the container's part.
      */
-    protected $part = null;
+    protected $contained = null;
 
     /**
-     * @var IMessagePart[] array of child parts
+     * @var PartChildContained[] contained child parts.
      */
     protected $children = [];
 
     /**
      * 
-     * @param IMessagePart[] $children
      */
-    public function setChildren(array $children)
+    public function init(IMimePart $part)
     {
-        $this->children = $children;
+        $this->contained = new PartChildContained($part, $this);
     }
 
-    public function setPart(IMessagePart $part)
+    public function getPartChildContained()
     {
-        $this->part = $part;
+        return $this->contained;
     }
 
     /**
@@ -47,15 +44,15 @@ class PartChildrenContainer implements IteratorAggregate
      */
     protected function getAllNonFilteredParts()
     {
-        $parts = [ $this->part ];
-        foreach ($this->children as $part) {
-            if ($part instanceof IMimePart) {
+        $parts = [ $this->contained->getPart() ];
+        foreach ($this->children as $contained) {
+            if ($contained->getContainer() !== null) {
                 $parts = array_merge(
                     $parts,
-                    $part->getAllParts()
+                    $contained->getContainer()->getAllNonFilteredParts()
                 );
             } else {
-                array_push($parts, $part);
+                array_push($parts, $contained->getPart());
             }
         }
 
@@ -91,29 +88,35 @@ class PartChildrenContainer implements IteratorAggregate
 
     public function getChildParts($fnFilter = null)
     {
+        $mapped = array_map(
+            function ($contained) { return $contained->getPart(); },
+            $this->children
+        );
         if ($fnFilter !== null) {
-            return array_values(array_filter($this->children, $fnFilter));
+            return array_values(array_filter($mapped, $fnFilter));
         }
-        return $this->children;
+        return $mapped;
     }
 
-    public function addChild(IMessagePart $part, $position = null)
+    public function addChild(PartChildContained $contained, $position = null)
     {
         array_splice(
             $this->children,
             ($position === null) ? count($this->children) : $position,
             0,
-            [ $part ]
+            [ $contained ]
         );
     }
 
     public function removePart(IMessagePart $part)
     {
         $parent = $part->getParent();
-        $position = array_search($part, $this->children, true);
-        if ($position !== false && is_int($position)) {
-            array_splice($this->children, $position, 1);
-            return $position;
+        $position = false;
+        foreach ($this->children as $key => $child) {
+            if ($child->getPart() === $part) {
+                array_splice($this->children, $key, 1);
+                return $key;
+            }
         }
         return null;
     }
@@ -126,10 +129,5 @@ class PartChildrenContainer implements IteratorAggregate
             }
             $this->removePart($part);
         }
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->children);
     }
 }

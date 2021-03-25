@@ -270,6 +270,4 @@ interface IMessagePart extends SplSubject
      * @return string
      */
     public function __toString();
-
-    public function setParent(IMimePart $parent);
 }

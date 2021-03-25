@@ -10,8 +10,6 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\IMimePart;
-use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
@@ -36,7 +34,6 @@ class Message extends MimePart implements IMessage
     protected $messageService;
 
     public function __construct(
-        array $children = [],
         PartStreamContainer $streamContainer = null,
         HeaderContainer $headerContainer = null,
         PartFilterFactory $partFilterFactory = null,
@@ -44,7 +41,7 @@ class Message extends MimePart implements IMessage
         MessageService $messageService = null
     ) {
         parent::__construct(
-            $children,
+            null,
             $streamContainer,
             $headerContainer,
             $partChildrenContainer,
@@ -457,10 +454,11 @@ class Message extends MimePart implements IMessage
      */
     public function getSignaturePart()
     {
-        return $this
-            ->messageService
-            ->getPrivacyHelper()
-            ->getSignaturePart($this);
+        if (strcasecmp($this->getContentType(), 'multipart/signed') === 0) {
+            return $this->getChild(1);
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -50,9 +50,10 @@ abstract class MessagePart implements IMessagePart
      */
     protected $observers;
 
-    public function __construct(PartStreamContainer $streamContainer)
+    public function __construct(PartStreamContainer $streamContainer, $parent = null)
     {
         $this->partStreamContainer = $streamContainer;
+        $this->parent = $parent;
         $this->observers = new SplObjectStorage();
     }
 
@@ -214,10 +215,5 @@ abstract class MessagePart implements IMessagePart
     public function __toString()
     {
         return $this->getStream()->getContents();
-    }
-
-    public function setParent(IMimePart $parent)
-    {
-        $this->parent = $parent;
     }
 }

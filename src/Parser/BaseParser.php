@@ -67,6 +67,9 @@ class BaseParser
 
     public function parseContent(PartBuilder $partBuilder, ParserProxy $proxy)
     {
+        if ($partBuilder->isContentParsed()) {
+            return;
+        }
         foreach ($this->contentParsers as $p) {
             if ($p->canParse($partBuilder)) {
                 $p->parseContent($partBuilder, $proxy);
@@ -77,9 +80,7 @@ class BaseParser
 
     public function parseNextChild(PartBuilder $partBuilder, ParserProxy $proxy)
     {
-        if (!$partBuilder->isContentParsed()) {
-            $this->parseContent($partBuilder, $proxy);
-        }
+        $this->parseContent($partBuilder, $proxy);
         foreach ($this->childParsers as $p) {
             if ($p->canParse($partBuilder)) {
                 return $p->parseNextChild($partBuilder, $proxy);

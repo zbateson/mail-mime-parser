@@ -47,5 +47,5 @@ abstract class ParsedMessagePartFactory
      * @param PartBuilder $partBuilder
      * @return IMessagePart
      */
-    public abstract function newInstance(PartBuilder $partBuilder);
+    public abstract function newInstance(PartBuilder $partBuilder, ParsedPartChildrenContainer $parentContainer = null);
 }

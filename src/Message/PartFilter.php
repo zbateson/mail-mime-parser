@@ -56,7 +56,7 @@ class PartFilter
 
     public static function fromHeaderValue($name, $value, $excludeSignedParts = true)
     {
-        return function(IMessagePart $part) use ($name, $value) {
+        return function(IMessagePart $part) use ($name, $value, $excludeSignedParts) {
             if ($part instanceof IMimePart) {
                 if ($excludeSignedParts && $part->isSignaturePart()) {
                     return false;
@@ -105,7 +105,7 @@ class PartFilter
      */
     public static function fromDisposition($disposition, $includeMultipart = false, $excludeSignedParts = true)
     {
-        return function(IMessagePart $part) use ($disposition, $includeMultipart) {
+        return function(IMessagePart $part) use ($disposition, $includeMultipart, $excludeSignedParts) {
             if (($part instanceof IMimePart) && (($excludeSignedParts && $part->isSignaturePart()) || (!$includeMultipart && $part->isMultiPart()))) {
                 return false;
             }

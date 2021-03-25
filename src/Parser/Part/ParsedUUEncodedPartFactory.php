@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\ParserProxy;
+use ZBateson\MailMimeParser\Message\PartChildContained;
 
 /**
  * Responsible for creating ParsedUUEncodedPart instances.
@@ -25,10 +26,12 @@ class ParsedUUEncodedPartFactory extends ParsedMessagePartFactory
      * @param PartBuilder $partBuilder
      * @return ParsedUUEncodedPart
      */
-    public function newInstance(PartBuilder $partBuilder)
+    public function newInstance(PartBuilder $partBuilder, ParsedPartChildrenContainer $parentContainer = null)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
+
         $part = new UUEncodedPart(
+            ($parentContainer !== null) ? $parentContainer->getPartChildContained()->getPart() : null,
             $streamContainer
         );
 
@@ -36,8 +39,13 @@ class ParsedUUEncodedPartFactory extends ParsedMessagePartFactory
         $parserProxy->init($partBuilder, $streamContainer);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
-        $streamContainer->setParsedStream($partBuilder->getStream());
+        $streamContainer->setParsedStream($this->streamFactory->getLimitedPartStream($partBuilder->getStream(), $partBuilder));
         $part->attach($streamContainer);
+
+        if ($parentContainer !== null) {
+            $parentContainer->addParsedChild(new ParsedPartChildContained($part, null));
+        }
+
         return $part;
     }
 }

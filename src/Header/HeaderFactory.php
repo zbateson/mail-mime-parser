@@ -161,8 +161,8 @@ class HeaderFactory
      *
      * @return HeaderContainer;
      */
-    public function newHeaderContainer()
+    public function newHeaderContainer(HeaderContainer $from = null)
     {
-        return new HeaderContainer($this);
+        return new HeaderContainer($this, $from);
     }
 }

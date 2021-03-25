@@ -6,9 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
-use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 
 /**
@@ -19,7 +19,7 @@ use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 class MimePart extends ParentHeaderPart implements IMimePart
 {
     public function __construct(
-        array $children = [],
+        IMessagePart $parent = null,
         PartStreamContainer $streamContainer = null,
         HeaderContainer $headerContainer = null,
         PartChildrenContainer $partChildrenContainer = null,
@@ -40,7 +40,7 @@ class MimePart extends ParentHeaderPart implements IMimePart
             $headerContainer,
             $partChildrenContainer,
             $partFilterFactory,
-            $children
+            $parent
         );
     }
 
@@ -119,16 +119,15 @@ class MimePart extends ParentHeaderPart implements IMimePart
 
     public function isSignaturePart()
     {
-        if ($this->parent === null || $this->parent->parent !== null) {
+        if ($this->parent === null || !$this->parent instanceof IMessage) {
             return false;
         }
-        $parentMimeType = $this->parent->getContentType();
-        $secondChild = $this->parent->getChild(1);
-        return (strcasecmp($parentMimeType, 'multipart/signed') === 0 && $secondChild === $this);
+        return $this->parent->getSignaturePart() === $this;
     }
 
     public function getPartByContentId($contentId)
     {
+        $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
         return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
             return strcasecmp($part->getContentId(), $sanitized) === 0;
         });

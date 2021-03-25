@@ -43,14 +43,7 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
     protected $detachParsedStream = false;
 
     /**
-     * @var bool true if the part changed and the parent stream should be used,
-     *      initialized to true and set to false when the parsed stream is set
-     *      in setParsedStream
-     */
-    protected $useParentStream = true;
-
-    /**
-     * @var bool
+     * @var bool set to true if the part's been updated since it was created.
      */
     protected $partUpdated = false;
 
@@ -103,7 +96,6 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
         $this->parsedStream = $parsedStream;
         if ($parsedStream !== null) {
             $this->detachParsedStream = $parsedStream->getMetadata('mmp-detached-stream');
-            $this->useParentStream = !$this->partUpdated;
         }
         $this->partParsed = true;
     }
@@ -116,7 +108,7 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
 
     public function getStream()
     {
-        if ($this->useParentStream || $this->parsedStream === null) {
+        if ($this->partUpdated || $this->parsedStream === null) {
             return parent::getStream();
         }
         $this->parsedStream->rewind();
@@ -125,7 +117,6 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
 
     public function update(SplSubject $subject)
     {
-        $this->useParentStream = true;
         $this->partUpdated = true;
     }
 }

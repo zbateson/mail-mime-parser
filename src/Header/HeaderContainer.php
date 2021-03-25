@@ -56,9 +56,15 @@ class HeaderContainer implements IteratorAggregate
      *
      * @param HeaderFactory $headerFactory
      */
-    public function __construct(HeaderFactory $headerFactory)
+    public function __construct(HeaderFactory $headerFactory, HeaderContainer $clone = null)
     {
         $this->headerFactory = $headerFactory;
+        if ($clone !== null) {
+            $this->headers = $clone->headers;
+            $this->headerObjects = $clone->headerObjects;
+            $this->headerMap = $clone->headerMap;
+            $this->nextIndex = $clone->nextIndex;
+        }
     }
 
     /**

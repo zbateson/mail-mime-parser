@@ -131,9 +131,9 @@ class PartBuilderTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls(true, false, true, false, false);
 
-        $this->assertTrue($instance->isMime());
-        $this->assertTrue($instance->isMime());
-        $this->assertFalse($instance->isMime());
+        $this->assertTrue($instance->isMimeMessagePart());
+        $this->assertTrue($instance->isMimeMessagePart());
+        $this->assertFalse($instance->isMimeMessagePart());
     }
 
     public function testGetContentType()

@@ -30,16 +30,12 @@ abstract class ParentPart extends MessagePart
         PartStreamContainer $streamContainer,
         PartChildrenContainer $partChildrenContainer,
         PartFilterFactory $partFilterFactory,
-        array $children = []
+        IMessagePart $parent = null
     ) {
-        parent::__construct($streamContainer);
+        parent::__construct($streamContainer, $parent);
         $this->partChildrenContainer = $partChildrenContainer;
         $this->partFilterFactory = $partFilterFactory;
-        foreach ($children as $child) {
-            $child->parent = $this;
-        }
-        $this->partChildrenContainer->setChildren($children);
-        $this->partChildrenContainer->setPart($this);
+        $this->partChildrenContainer->init($this);
     }
 
     public function getPartChildrenContainer()
@@ -96,7 +92,10 @@ abstract class ParentPart extends MessagePart
     {
         if ($part !== $this) {
             $part->parent = $this;
-            $this->partChildrenContainer->addChild($part, $position);
+            $this->partChildrenContainer->addChild(
+                new PartChildContained($part, ($part instanceof ParentPart) ? $part->partChildrenContainer : null),
+                $position
+            );
             $this->notify();
         }
     }
