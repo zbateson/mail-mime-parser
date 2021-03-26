@@ -7,10 +7,10 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Header\HeaderContainer;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
 
 /**
  * Used by MessageParser to keep information about a parsed message as an
@@ -462,11 +462,11 @@ class PartBuilder
      *
      * @return IMessagePart
      */
-    public function createMessagePart(ParsedPartChildrenContainer $parentContainer = null)
+    public function createMessagePart(IMimePart $parent = null)
     {
         return $this->messagePartFactory->newInstance(
             $this,
-            $parentContainer
+            $parent
         );
     }
 }

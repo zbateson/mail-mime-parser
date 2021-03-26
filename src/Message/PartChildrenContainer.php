@@ -6,128 +6,81 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
+use RecursiveIterator;
+
 /**
  * Description of PartChildrenContainer
  *
  * @author Zaahid Bateson
  */
-class PartChildrenContainer
+class PartChildrenContainer implements RecursiveIterator
 {
-    /**
-     * @var PartChildContained the container's part.
-     */
-    protected $contained = null;
+    protected $children;
 
-    /**
-     * @var PartChildContained[] contained child parts.
-     */
-    protected $children = [];
+    protected $position = 0;
 
-    /**
-     * 
-     */
-    public function init(IMimePart $part)
+    public function __construct(array $children)
     {
-        $this->contained = new PartChildContained($part, $this);
+        $this->children = $children;
     }
 
-    public function getPartChildContained()
+    public function hasChildren()
     {
-        return $this->contained;
+        return ($this->current() instanceof IMultiPart
+            && $this->current()->getChildIterator() !== null);
     }
 
-    /**
-     * Returns all parts, including the current object, and all children below
-     * it (including children of children, etc...)
-     *
-     * @return IMessagePart[]
-     */
-    protected function getAllNonFilteredParts()
+    public function getChildren()
     {
-        $parts = [ $this->contained->getPart() ];
-        foreach ($this->children as $contained) {
-            if ($contained->getContainer() !== null) {
-                $parts = array_merge(
-                    $parts,
-                    $contained->getContainer()->getAllNonFilteredParts()
-                );
-            } else {
-                array_push($parts, $contained->getPart());
-            }
+        if ($this->current() instanceof IMimePart) {
+            return $this->current()->getChildIterator();
         }
-
-        return $parts;
+        return null;
     }
 
-    public function getPart($index, $fnFilter = null)
+    public function current()
     {
-        $parts = $this->getAllParts($fnFilter);
-        if (!isset($parts[$index])) {
-            return null;
-        }
-        return $parts[$index];
+        return $this->children[$this->position];
     }
 
-    public function getAllParts($fnFilter = null)
+    public function key()
     {
-        $parts = $this->getAllNonFilteredParts();
-        if (!empty($fnFilter)) {
-            return array_values(array_filter($parts, $fnFilter));
-        }
-        return $parts;
+        return $this->position;
     }
 
-    public function getChild($index, $fnFilter = null)
+    public function next()
     {
-        $parts = $this->getChildParts($fnFilter);
-        if (!isset($parts[$index])) {
-            return null;
-        }
-        return $parts[$index];
+        ++$this->position;
     }
 
-    public function getChildParts($fnFilter = null)
+    public function rewind()
     {
-        $mapped = array_map(
-            function ($contained) { return $contained->getPart(); },
-            $this->children
-        );
-        if ($fnFilter !== null) {
-            return array_values(array_filter($mapped, $fnFilter));
-        }
-        return $mapped;
+        $this->position = 0;
     }
 
-    public function addChild(PartChildContained $contained, $position = null)
+    public function valid()
+    {
+        return isset($this->children[$this->position]);
+    }
+
+    public function add(IMessagePart $part, $position = null)
     {
         array_splice(
             $this->children,
             ($position === null) ? count($this->children) : $position,
             0,
-            [ $contained ]
+            [ $part ]
         );
     }
 
-    public function removePart(IMessagePart $part)
+    public function remove(IMessagePart $part)
     {
-        $parent = $part->getParent();
-        $position = false;
         foreach ($this->children as $key => $child) {
-            if ($child->getPart() === $part) {
+            if ($child === $part) {
                 array_splice($this->children, $key, 1);
                 return $key;
             }
         }
         return null;
-    }
-
-    public function removeAllParts($fnFilter = null)
-    {
-        foreach ($this->getAllParts($fnFilter) as $part) {
-            if ($part === $this) {
-                continue;
-            }
-            $this->removePart($part);
-        }
     }
 }

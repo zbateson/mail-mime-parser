@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Parser\BaseParser;
@@ -47,5 +47,5 @@ abstract class ParsedMessagePartFactory
      * @param PartBuilder $partBuilder
      * @return IMessagePart
      */
-    public abstract function newInstance(PartBuilder $partBuilder, ParsedPartChildrenContainer $parentContainer = null);
+    public abstract function newInstance(PartBuilder $partBuilder, IMimePart $parent = null);
 }

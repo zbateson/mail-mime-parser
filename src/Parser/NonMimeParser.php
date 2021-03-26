@@ -96,7 +96,7 @@ class NonMimeParser implements IContentParser, IChildPartParser
         $this->nextPartStart = null;
         $this->nextPartMode = null;
         $this->nextPartFilename = null;
-        $proxy->updatePartChildren($partBuilder, $child);
+        $proxy->updatePartChildren($child);
         return true;
     }
 

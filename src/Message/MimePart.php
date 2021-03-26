@@ -9,39 +9,37 @@ namespace ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
-use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
+use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
  * Default implementation of IMimePart.
  *
  * @author Zaahid Bateson
  */
-class MimePart extends ParentHeaderPart implements IMimePart
+class MimePart extends MessagePart implements IMimePart
 {
+    /**
+     * @var HeaderContainer Contains headers for this part.
+     */
+    protected $headerContainer;
+
     public function __construct(
-        IMessagePart $parent = null,
+        IMimePart $parent = null,
         PartStreamContainer $streamContainer = null,
-        HeaderContainer $headerContainer = null,
-        PartChildrenContainer $partChildrenContainer = null,
-        PartFilterFactory $partFilterFactory = null
+        HeaderContainer $headerContainer = null
     ) {
-        if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null || $partFilterFactory === null) {
+        if ($streamContainer === null || $headerContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
             $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer'];
-            $partChildrenContainer = $di['\ZBateson\MailMimeParser\Message\PartChildrenContainer'];
-            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\Factory\PartFilterFactory'];
-
             $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
             $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
             $streamContainer->setStream($streamFactory->newMessagePartStream($this));
         }
         parent::__construct(
             $streamContainer,
-            $headerContainer,
-            $partChildrenContainer,
-            $partFilterFactory,
             $parent
         );
+        $this->headerContainer = $headerContainer;
     }
 
     public function getFilename()
@@ -110,11 +108,7 @@ class MimePart extends ParentHeaderPart implements IMimePart
 
     public function isMultiPart()
     {
-        // casting to bool, preg_match returns 1 for true
-        return (bool) (preg_match(
-            '~multipart/.*~i',
-            $this->getContentType()
-        ));
+        return false;
     }
 
     public function isSignaturePart()
@@ -131,5 +125,72 @@ class MimePart extends ParentHeaderPart implements IMimePart
         return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
             return strcasecmp($part->getContentId(), $sanitized) === 0;
         });
+    }
+
+    public function getHeader($name, $offset = 0)
+    {
+        return $this->headerContainer->get($name, $offset);
+    }
+
+    public function getAllHeaders()
+    {
+        return $this->headerContainer->getHeaderObjects();
+    }
+
+    public function getAllHeadersByName($name)
+    {
+        return $this->headerContainer->getAll($name);
+    }
+
+    public function getRawHeaders()
+    {
+        return $this->headerContainer->getHeaders();
+    }
+
+    public function getRawHeaderIterator()
+    {
+        return $this->headerContainer->getIterator();
+    }
+
+    public function getHeaderValue($name, $defaultValue = null)
+    {
+        $header = $this->getHeader($name);
+        if ($header !== null) {
+            return $header->getValue();
+        }
+        return $defaultValue;
+    }
+
+    public function getHeaderParameter($header, $param, $defaultValue = null)
+    {
+        $obj = $this->getHeader($header);
+        if ($obj && $obj instanceof ParameterHeader) {
+            return $obj->getValueFor($param, $defaultValue);
+        }
+        return $defaultValue;
+    }
+
+    public function setRawHeader($name, $value, $offset = 0)
+    {
+        $this->headerContainer->set($name, $value, $offset);
+        $this->notify();
+    }
+
+    public function addRawHeader($name, $value)
+    {
+        $this->headerContainer->add($name, $value);
+        $this->notify();
+    }
+
+    public function removeHeader($name)
+    {
+        $this->headerContainer->removeAll($name);
+        $this->notify();
+    }
+
+    public function removeSingleHeader($name, $offset = 0)
+    {
+        $this->headerContainer->remove($name, $offset);
+        $this->notify();
     }
 }

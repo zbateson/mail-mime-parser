@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\MimePart;
+use ZBateson\MailMimeParser\Message\MultiPart;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
@@ -25,7 +25,7 @@ use ZBateson\MailMimeParser\Message\PartStreamContainer;
  *
  * @author Zaahid Bateson
  */
-class Message extends MimePart implements IMessage
+class Message extends MultiPart implements IMessage
 {
     /**
      * @var MessageService helper class with various message manipulation
@@ -245,6 +245,17 @@ class Message extends MimePart implements IMessage
         $contentType = $this->getHeaderValue('Content-Type');
         $mimeVersion = $this->getHeaderValue('Mime-Version');
         return ($contentType !== null || $mimeVersion !== null);
+    }
+
+    /**
+     * Returns true if this part's mime type is multipart/*
+     */
+    public function isMultiPart() {
+        // casting to bool, preg_match returns 1 for true
+        return (bool) (preg_match(
+            '~multipart/.*~i',
+            $this->getContentType()
+        ));
     }
 
     /**

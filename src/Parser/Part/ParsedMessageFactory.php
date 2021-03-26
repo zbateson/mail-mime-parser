@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Parser\BaseParser;
@@ -48,7 +49,7 @@ class ParsedMessageFactory extends ParsedMimePartFactory
      * @param StreamInterface $stream
      * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function newInstance(PartBuilder $partBuilder, ParsedPartChildrenContainer $parentContainer = null)
+    public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
 
@@ -64,7 +65,8 @@ class ParsedMessageFactory extends ParsedMimePartFactory
         );
 
         $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
-        $parserProxy->init($partBuilder, $streamContainer, $childrenContainer);
+        $parserProxy->init($partBuilder, $streamContainer, $message);
+        $childrenContainer->setProxyParser($parserProxy);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
         $streamContainer->setParsedStream($partBuilder->getStream());

@@ -51,7 +51,7 @@ class MultipartChildrenParser implements IChildPartParser
     private function notifyProxy(ParserProxy $proxy, PartBuilder $parent, PartBuilder $child)
     {
         if (!$parent->isEndBoundaryFound()) {
-            $proxy->updatePartChildren($parent, $child);
+            $proxy->updatePartChildren($child);
         } else {
             // read the content
             $part = $child->createMessagePart();

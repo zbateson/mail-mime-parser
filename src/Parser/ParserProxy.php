@@ -6,10 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainer;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
-use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Description of ParserProxy
@@ -34,9 +33,9 @@ class ParserProxy
     protected $partStreamContainer;
 
     /**
-     * @var ParsedPartChildrenContainer
+     * @var IMimePart
      */
-    protected $partChildrenContainer;
+    protected $part;
 
     protected $partBuilder;
 
@@ -49,15 +48,12 @@ class ParserProxy
     public function init(
         PartBuilder $partBuilder,
         ParsedPartStreamContainer $streamContainer,
-        ParsedPartChildrenContainer $childrenContainer = null
+        IMimePart $part = null
     ) {
         $this->partStreamContainer = $streamContainer;
-        $this->partChildrenContainer = $childrenContainer;
         $this->partBuilder = $partBuilder;
+        $this->part = $part;
         $this->partStreamContainer->setProxyParser($this);
-        if ($childrenContainer !== null) {
-            $this->partChildrenContainer->setProxyParser($this);
-        }
     }
 
     public function readContent()
@@ -84,8 +80,8 @@ class ParserProxy
         return $this->baseParser->parseNextChild($this->partBuilder, $this);
     }
 
-    public function updatePartChildren(PartBuilder $parent, PartBuilder $child)
+    public function updatePartChildren(PartBuilder $child)
     {
-        $child->createMessagePart($this->partChildrenContainer);
+        $child->createMessagePart($this->part);
     }
 }

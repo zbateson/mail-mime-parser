@@ -57,7 +57,7 @@ class MimePartFactory extends MessagePartFactory
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $headerContainer = $this->headerFactory->newHeaderContainer();
         $part = new MimePart(
-            [],
+            null,
             $streamContainer,
             $headerContainer,
             $this->partChildrenContainerFactory->newInstance(),

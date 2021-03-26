@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Message\ParentPart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 
 /**
  * Provides routines to set or retrieve the signature part of a signed message.
@@ -123,7 +123,7 @@ class PrivacyHelper extends AbstractHelper
     public function ensureHtmlPartFirstForSignedMessage(IMessage $message)
     {
         $alt = $message->getPartByMimeType('multipart/alternative');
-        if ($alt !== null && $alt instanceof ParentPart) {
+        if ($alt !== null && $alt instanceof IMultiPart) {
             $cont = $this->multipartHelper->getContentPartContainerFromAlternative('text/html', $alt);
             $children = $alt->getChildParts();
             $pos = array_search($cont, $children, true);

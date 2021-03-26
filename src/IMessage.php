@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 
 /**
  * A parsed mime message with optional mime parts depending on its type.
@@ -16,7 +16,7 @@ use ZBateson\MailMimeParser\Message\IMimePart;
  *
  * @author Zaahid Bateson
  */
-interface IMessage extends IMimePart
+interface IMessage extends IMultiPart
 {
     /**
      * Returns the text/plain part at the given index (or null if not found.)

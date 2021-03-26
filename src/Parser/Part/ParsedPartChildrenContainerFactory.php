@@ -15,6 +15,6 @@ class ParsedPartChildrenContainerFactory
 {
     public function newInstance()
     {
-        return new ParsedPartChildrenContainer();
+        return new ParsedPartChildrenContainer([]);
     }
 }

@@ -70,7 +70,7 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
     {
         $this->parserProxy = $proxy;
     }
-    
+
     protected function requestParsedContentStream()
     {
         if (!$this->contentParseRequested) {

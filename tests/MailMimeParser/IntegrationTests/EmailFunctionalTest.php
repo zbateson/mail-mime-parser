@@ -4,7 +4,7 @@ namespace ZBateson\MailMimeParser\IntegrationTests;
 use LegacyPHPUnit\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 use GuzzleHttp\Psr7;
 use DateTime;
 
@@ -183,7 +183,7 @@ class EmailFunctionalTest extends TestCase
                     $curPart = next($cparts);
                 }
             } else {
-                if ($part instanceof IMimePart) {
+                if ($part instanceof IMultiPart) {
                     $this->assertEmpty($part->getChildParts(), $failMessage);
                 }
                 $this->assertEquals(
@@ -201,7 +201,7 @@ class EmailFunctionalTest extends TestCase
 
         $failMessage = 'Failed while parsing ' . $key;
         $this->runEmailTestForMessage($message, $props, $failMessage);
-
+        
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
 
         $parts = $message->getAllParts();

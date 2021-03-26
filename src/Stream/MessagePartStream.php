@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Message\MessagePart;
-use ZBateson\MailMimeParser\Message\ParentHeaderPart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\AppendStream;
@@ -32,17 +32,19 @@ class MessagePartStream implements StreamInterface, SplObserver
     protected $streamFactory;
 
     /**
-     * @var MessagePart The part to read from.
+     * @var IMessagePart The part to read from.
      */
     protected $part;
+
+    protected $appendStream = null;
 
     /**
      * Constructor
      * 
      * @param StreamFactory $sdf
-     * @param MessagePart $part
+     * @param IMessagePart $part
      */
-    public function __construct(StreamFactory $sdf, MessagePart $part)
+    public function __construct(StreamFactory $sdf, IMessagePart $part)
     {
         $this->streamFactory = $sdf;
         $this->part = $part;
@@ -58,16 +60,16 @@ class MessagePartStream implements StreamInterface, SplObserver
 
     public function update(SplSubject $subject)
     {
-        if ($this->stream !== null) {
-            $this->stream = $this->createStream();
+        if ($this->appendStream !== null) {
+            $this->appendStream = null;
         }
     }
 
     /**
      * Attaches and returns a CharsetStream decorator to the passed $stream.
      *
-     * If the current attached MessagePart doesn't specify a charset, $stream is
-     * returned as-is.
+     * If the current attached IMessagePart doesn't specify a charset, $stream
+     * is returned as-is.
      *
      * @param StreamInterface $stream
      * @return StreamInterface
@@ -144,11 +146,11 @@ class MessagePartStream implements StreamInterface, SplObserver
      * Creates an array of streams based on the attached part's mime boundary
      * and child streams.
      *
-     * @param ParentHeaderPart $part passed in because $this->part is declared
-     *        as MessagePart
+     * @param IMultiPart $part passed in because $this->part is declared
+     *        as IMessagePart
      * @return StreamInterface[]
      */
-    protected function getBoundaryAndChildStreams(ParentHeaderPart $part)
+    protected function getBoundaryAndChildStreams(IMultiPart $part)
     {
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
         if ($boundary === null) {
@@ -185,12 +187,8 @@ class MessagePartStream implements StreamInterface, SplObserver
         $content->rewind();
         $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];
 
-        /**
-         * @var ParentHeaderPart
-         */
-        $part = $this->part;
-        if ($part instanceof ParentHeaderPart && $part->getChildCount()) {
-            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($part));
+        if ($this->part instanceof IMultiPart && $this->part->getChildCount()) {
+            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
         }
 
         return $streams;
@@ -203,6 +201,9 @@ class MessagePartStream implements StreamInterface, SplObserver
      */
     protected function createStream()
     {
-        return new AppendStream($this->getStreamsArray());
+        if ($this->appendStream === null) {
+            $this->appendStream = new AppendStream($this->getStreamsArray());
+        }
+        return $this->appendStream;
     }
 }

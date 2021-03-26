@@ -6,8 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
-use ZBateson\MailMimeParser\Message\ParentHeaderPart;
-use ZBateson\MailMimeParser\Message\MessagePart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
@@ -34,7 +34,7 @@ class HeaderStream implements StreamInterface, SplObserver
      */
     protected $part;
 
-    public function __construct(MessagePart $part)
+    public function __construct(IMessagePart $part)
     {
         $this->part = $part;
         $part->attach($this);
@@ -64,7 +64,7 @@ class HeaderStream implements StreamInterface, SplObserver
      */
     private function getPartHeadersIterator()
     {
-        if ($this->part instanceof ParentHeaderPart) {
+        if ($this->part instanceof IMimePart) {
             return $this->part->getRawHeaderIterator();
         } elseif ($this->part->getParent() !== null && $this->part->getParent()->isMime()) {
             return new ArrayIterator([

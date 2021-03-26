@@ -50,11 +50,14 @@ abstract class MessagePart implements IMessagePart
      */
     protected $observers;
 
-    public function __construct(PartStreamContainer $streamContainer, $parent = null)
+    public function __construct(PartStreamContainer $streamContainer, IMimePart $parent = null)
     {
         $this->partStreamContainer = $streamContainer;
         $this->parent = $parent;
         $this->observers = new SplObjectStorage();
+        if ($parent !== null) {
+            $parent->getChildIterator()->add($this);
+        }
     }
 
     public function attach(SplObserver $observer)

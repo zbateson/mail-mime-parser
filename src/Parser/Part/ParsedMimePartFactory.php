@@ -9,7 +9,9 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\MimePart;
+use ZBateson\MailMimeParser\Message\MultiPart;
 use ZBateson\MailMimeParser\Parser\BaseParser;
 use ZBateson\MailMimeParser\Parser\ParserProxy;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
@@ -57,31 +59,39 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
      * @param PartBuilder $partBuilder
      * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function newInstance(PartBuilder $partBuilder, ParsedPartChildrenContainer $parentContainer = null)
+    public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
-        
         $headerContainer = $this->headerFactory->newHeaderContainer($partBuilder->getHeaderContainer());
-        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance();
 
-        $part = new MimePart(
-            ($parentContainer !== null) ? $parentContainer->getPartChildContained()->getPart() : null,
-            $streamContainer,
-            $headerContainer,
-            $childrenContainer,
-            $this->partFilterFactory
-        );
+        $part = null;
+        $childrenContainer = null;
+        if ($partBuilder->getMimeBoundary() !== null) {
+            $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance();
+            $part = new MultiPart(
+                $parent,
+                $streamContainer,
+                $headerContainer,
+                $childrenContainer,
+                $this->partFilterFactory
+            );
+        } else {
+            $part = new MimePart(
+                $parent,
+                $streamContainer,
+                $headerContainer
+            );
+        }
 
         $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
-        $parserProxy->init($partBuilder, $streamContainer, $childrenContainer);
+        $parserProxy->init($partBuilder, $streamContainer, $part);
+        if ($childrenContainer !== null) {
+            $childrenContainer->setProxyParser($parserProxy);
+        }
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
         $streamContainer->setParsedStream($this->streamFactory->getLimitedPartStream($partBuilder->getStream(), $partBuilder));
         $part->attach($streamContainer);
-
-        if ($parentContainer !== null) {
-            $parentContainer->addParsedChild($childrenContainer->getPartChildContained());
-        }
 
         return $part;
     }
