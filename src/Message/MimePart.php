@@ -28,17 +28,21 @@ class MimePart extends MessagePart implements IMimePart
         PartStreamContainer $streamContainer = null,
         HeaderContainer $headerContainer = null
     ) {
+        $setStream = false;
+        $di = MailMimeParser::getDependencyContainer();
         if ($streamContainer === null || $headerContainer === null) {
-            $di = MailMimeParser::getDependencyContainer();
             $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer'];
             $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
-            $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
-            $streamContainer->setStream($streamFactory->newMessagePartStream($this));
+            $setStream = true;
         }
         parent::__construct(
             $streamContainer,
             $parent
         );
+        if ($setStream) {
+            $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
+            $streamContainer->setStream($streamFactory->newMessagePartStream($this));
+        }
         $this->headerContainer = $headerContainer;
     }
 

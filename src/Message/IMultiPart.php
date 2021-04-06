@@ -17,21 +17,6 @@ namespace ZBateson\MailMimeParser\Message;
 interface IMultiPart extends IMimePart
 {
     /**
-     * Returns true
-     *
-     * @return bool
-     */
-    public function isMultiPart();
-
-    /**
-     * Returns true if this part is the second child of a multipart/signed
-     * message.
-     *
-     * @return bool
-     */
-    public function isSignaturePart();
-
-    /**
      * Convenience method to find a part by its Content-ID header.
      *
      * @param string $contentId

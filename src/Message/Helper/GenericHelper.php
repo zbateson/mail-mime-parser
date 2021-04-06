@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 
 /**
  * Provides common Message helper routines for Message manipulation.
@@ -127,9 +128,11 @@ class GenericHelper extends AbstractHelper
     public function movePartContentAndChildren(IMimePart $from, IMimePart $to)
     {
         $this->copyContentHeadersAndContent($from, $to, true);
-        foreach ($from->getChildParts() as $child) {
-            $from->removePart($child);
-            $to->addChild($child);
+        if ($from instanceof IMultiPart && $to instanceof IMultiPart) {
+            foreach ($from->getChildIterator() as $child) {
+                $from->removePart($child);
+                $to->addChild($child);
+            }
         }
     }
 
@@ -149,7 +152,7 @@ class GenericHelper extends AbstractHelper
     {
         $position = $message->removePart($replacement);
         if ($part === $message) {
-            $this->movePartContentAndChildren($replacement, $part);
+            $this->movePartContentAndChildren($replacement, $message);
             return;
         }
         $parent = $part->getParent();

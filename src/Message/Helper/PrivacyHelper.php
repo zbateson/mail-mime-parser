@@ -53,7 +53,7 @@ class PrivacyHelper extends AbstractHelper
     {
         if (strcasecmp($message->getContentType(), 'multipart/signed') !== 0) {
             $this->multipartHelper->enforceMime($message);
-            $messagePart = $this->mimePartFactory->newInstance();
+            $messagePart = new \ZBateson\MailMimeParser\Message\MultiPart();
             $this->genericHelper->movePartContentAndChildren($message, $messagePart);
             $message->addChild($messagePart);
             $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');

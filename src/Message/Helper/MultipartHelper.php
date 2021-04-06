@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -155,17 +156,15 @@ class MultipartHelper extends AbstractHelper
         if ($rmPart === false) {
             return false;
         }
-        if ($keepOtherContent) {
+        if ($keepOtherContent && $rmPart instanceof IMultiPart) {
             $this->moveAllPartsAsAttachmentsExcept($message, $rmPart, $mimeType);
             $alternativePart = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
-        } else {
-            $rmPart->removeAllParts();
         }
         $message->removePart($rmPart);
         if ($alternativePart !== null) {
-            if ($alternativePart->getChildCount() === 1) {
+            if ($alternativePart instanceof IMultiPart && $alternativePart->getChildCount() === 1) {
                 $this->genericHelper->replacePart($message, $alternativePart, $alternativePart->getChild(0));
-            } elseif ($alternativePart->getChildCount() === 0) {
+            } elseif (!($alternativePart instanceof IMultiPart) || $alternativePart->getChildCount() === 0) {
                 $message->removePart($alternativePart);
             }
         }
@@ -185,7 +184,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function createAlternativeContentPart(IMessage $message, IMessagePart $contentPart)
     {
-        $altPart = $this->mimePartFactory->newInstance();
+        $altPart = new \ZBateson\MailMimeParser\Message\MultiPart();
         $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
         $message->removePart($contentPart);
         $message->addChild($altPart, 0);
@@ -199,10 +198,10 @@ class MultipartHelper extends AbstractHelper
      * multipart/mixed message, it is set to multipart/mixed first.
      *
      * @param IMessage $message
-     * @param IMimePart $from
+     * @param IMultiPart $from
      * @param string $exceptMimeType
      */
-    public function moveAllPartsAsAttachmentsExcept(IMessage $message, IMimePart $from, $exceptMimeType)
+    public function moveAllPartsAsAttachmentsExcept(IMessage $message, IMultiPart $from, $exceptMimeType)
     {
         $parts = $from->getAllParts(function(IMessagePart $part) use ($exceptMimeType) {
             if ($part instanceof IMimePart && $part->isMultiPart()) {

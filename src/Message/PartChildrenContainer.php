@@ -19,7 +19,7 @@ class PartChildrenContainer implements RecursiveIterator
 
     protected $position = 0;
 
-    public function __construct(array $children)
+    public function __construct(array $children = [])
     {
         $this->children = $children;
     }
@@ -71,6 +71,9 @@ class PartChildrenContainer implements RecursiveIterator
             0,
             [ $part ]
         );
+        if ($position !== null && $position < $this->position) {
+            ++$this->position;
+        }
     }
 
     public function remove(IMessagePart $part)
@@ -78,6 +81,9 @@ class PartChildrenContainer implements RecursiveIterator
         foreach ($this->children as $key => $child) {
             if ($child === $part) {
                 array_splice($this->children, $key, 1);
+                if ($this->position >= $key) {
+                    --$this->position;
+                }
                 return $key;
             }
         }

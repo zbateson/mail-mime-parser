@@ -1500,6 +1500,7 @@ class EmailFunctionalTest extends TestCase
         $message = $this->parser->parse($handle);
 
         $testString = $message->getSignedMessageAsString();
+        var_dump($testString);
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
         fclose($handle);
     }
