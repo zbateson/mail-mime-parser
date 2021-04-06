@@ -70,6 +70,8 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
     protected function requestParsedContentStream()
     {
         if (!$this->contentParseRequested) {
+            // contentParseRequested must be set first before calling
+            // partBuilder->parseContent to avoid endless recursion
             $this->contentParseRequested = true;
             $this->partBuilder->parseContent();
         }
@@ -101,10 +103,10 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getContentStream($transferEncoding, $fromCharset, $toCharset);
     }
 
-    public function setParsedContentStream(StreamInterface $contentStream = null)
+    public function setContentStream(StreamInterface $contentStream = null)
     {
-        $this->contentParsed = true;
-        $this->setContentStream($contentStream);
+        $this->requestParsedContentStream();
+        parent::setContentStream($contentStream);
     }
 
     public function getStream()

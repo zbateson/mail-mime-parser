@@ -202,7 +202,7 @@ class PartBuilder
             return;
         }
         $this->baseParser->parseContent($this);
-        $this->partStreamContainer->setParsedContentStream(
+        $this->partStreamContainer->setContentStream(
             $this->streamFactory->getLimitedContentStream(
                 $this->getStream(),
                 $this
