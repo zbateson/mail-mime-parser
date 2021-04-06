@@ -15,5 +15,5 @@ interface IContentParser extends IParser
     /**
      *
      */
-    public function parseContent(PartBuilder $partBuilder, ParserProxy $proxy);
+    public function parseContent(PartBuilder $partBuilder);
 }

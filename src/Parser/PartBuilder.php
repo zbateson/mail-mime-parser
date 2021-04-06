@@ -7,8 +7,12 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Header\HeaderContainer;
-use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
+use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainer;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
 
@@ -25,6 +29,11 @@ class PartBuilder
      *      needed for creating the Message or MessagePart for the parsed part.
      */
     private $messagePartFactory;
+
+    /**
+     * @var StreamFactory
+     */
+    protected $streamFactory;
 
     /**
      * @var int The offset read start position for this part (beginning of
@@ -109,7 +118,32 @@ class PartBuilder
     /**
      * @var bool set to true when creating a PartBuilder for a non-mime message.
      */
-    private $nonMimePart = false;
+    private $isNonMimePart = false;
+
+    /**
+     * @var IMessagePart
+     */
+    private $part;
+
+    /**
+     * @var IMessagePart the last child that was added
+     */
+    private $lastAddedChild;
+
+    /**
+     * @var BaseParser
+     */
+    private $baseParser;
+
+    /**
+     * @var ParsedPartChildrenContainer
+     */
+    private $partChildrenContainer;
+
+    /**
+     * @var ParsedPartStreamContainer
+     */
+    private $partStreamContainer;
 
     /**
      * Sets up class dependencies.
@@ -119,14 +153,23 @@ class PartBuilder
      */
     public function __construct(
         ParsedMessagePartFactory $mpf,
+        StreamFactory $streamFactory,
+        BaseParser $parser,
         HeaderContainer $headerContainer,
-        StreamInterface $messageStream = null
+        StreamInterface $messageStream = null,
+        PartBuilder $parent = null
     ) {
         $this->messagePartFactory = $mpf;
         $this->headerContainer = $headerContainer;
         $this->messageStream = $messageStream;
+        $this->streamFactory = $streamFactory;
+        $this->baseParser = $parser;
         if ($messageStream !== null) {
             $this->messageHandle = StreamWrapper::getResource($messageStream);
+        }
+        if ($parent !== null) {
+            $this->parent = $parent;
+            $this->canHaveHeaders = (!$parent->endBoundaryFound);
         }
     }
 
@@ -135,6 +178,58 @@ class PartBuilder
         if ($this->messageHandle !== null) {
             fclose($this->messageHandle);
         }
+    }
+
+    public function setContainers(ParsedPartStreamContainer $streamContainer, ParsedPartChildrenContainer $childrenContainer = null)
+    {
+        $this->partStreamContainer = $streamContainer;
+        $this->partChildrenContainer = $childrenContainer;
+    }
+
+    private function ensurePreviousSiblingRead()
+    {
+        if ($this->lastAddedChild !== null) {
+            $this->lastAddedChild->hasContent();
+            if ($this->lastAddedChild instanceof IMultiPart) {
+                $this->lastAddedChild->getAllParts();
+            }
+        }
+    }
+
+    public function parseContent()
+    {
+        if ($this->isContentParsed()) {
+            return;
+        }
+        $this->baseParser->parseContent($this);
+        $this->partStreamContainer->setParsedContentStream(
+            $this->streamFactory->getLimitedContentStream(
+                $this->getStream(),
+                $this
+            )
+        );
+    }
+
+    public function parseAll()
+    {
+        $part = $this->createMessagePart();
+        $part->hasContent();
+        if ($part instanceof IMultiPart) {
+            $part->getAllParts();
+        }
+    }
+
+    public function parseNextChild()
+    {
+        $this->ensurePreviousSiblingRead();
+        $this->parseContent();
+        return $this->baseParser->parseNextChild($this);
+    }
+
+    public function addChildToContainer(IMessagePart $part)
+    {
+        $this->partChildrenContainer->add($part);
+        $this->lastAddedChild = $part;
     }
     
     /**
@@ -187,17 +282,7 @@ class PartBuilder
         }
         return $this->properties[$name];
     }
-    
-    /**
-     * 
-     * @param \ZBateson\MailMimeParser\MessageBuilder $partent
-     */
-    public function setParent(PartBuilder $parent)
-    {
-        $this->parent = $parent;
-        $this->canHaveHeaders = (!$parent->endBoundaryFound);
-    }
-    
+
     /**
      * Returns this PartBuilder's parent.
      * 
@@ -210,12 +295,12 @@ class PartBuilder
 
     public function setNonMimePart($bool)
     {
-        $this->nonMimePart = $bool;
+        $this->isNonMimePart = $bool;
     }
 
     public function isNonMimePart()
     {
-        return $this->nonMimePart;
+        return $this->isNonMimePart;
     }
 
     /**
@@ -350,12 +435,13 @@ class PartBuilder
 
     public function getStream()
     {
-        return $this->messageStream;
+        return ($this->messageStream !== null) ? $this->messageStream :
+            $this->parent->getStream();
     }
 
     public function getMessageResourceHandle()
     {
-        if ($this->parent) {
+        if ($this->messageStream === null) {
             return $this->parent->getMessageResourceHandle();
         }
         return $this->messageHandle;
@@ -462,11 +548,19 @@ class PartBuilder
      *
      * @return IMessagePart
      */
-    public function createMessagePart(IMimePart $parent = null)
+    public function createMessagePart()
     {
-        return $this->messagePartFactory->newInstance(
-            $this,
-            $parent
-        );
+        if (!$this->part) {
+            $this->part = $this->messagePartFactory->newInstance(
+                $this,
+                ($this->parent !== null) ? $this->parent->createMessagePart() : null
+            );
+            if ($this->parent !== null && !$this->parent->endBoundaryFound) {
+                // endBoundaryFound would indicate this is a discardable part
+                // after the end boundary (some mailers seem to add identifiers)
+                $this->parent->addChildToContainer($this->part);
+            }
+        }
+        return $this->part;
     }
 }

@@ -48,13 +48,11 @@ class MultipartChildrenParser implements IChildPartParser
      * @param PartBuilder $parent
      * @param PartBuilder $child
      */
-    private function notifyProxy(ParserProxy $proxy, PartBuilder $parent, PartBuilder $child)
+    private function createPart(PartBuilder $parent, PartBuilder $child)
     {
-        if (!$parent->isEndBoundaryFound()) {
-            $proxy->updatePartChildren($child);
-        } else {
-            // read the content
-            $part = $child->createMessagePart();
+        $part = $child->createMessagePart();
+        if ($parent->isEndBoundaryFound()) {
+            // read the content and discard
             $part->hasContent();
         }
     }
@@ -63,21 +61,19 @@ class MultipartChildrenParser implements IChildPartParser
      * Returns true if there are more parts
      * 
      * @param PartBuilder $partBuilder
-     * @param ParserProxy $proxy
      * @return boolean
      */
-    public function parseNextChild(PartBuilder $partBuilder, ParserProxy $proxy)
+    public function parseNextChild(PartBuilder $partBuilder)
     {
         if ($partBuilder->isParentBoundaryFound()) {
             return false;
         }
-        $child = $this->partBuilderFactory->newPartBuilder(
+        $child = $this->partBuilderFactory->newChildPartBuilder(
             $this->parsedMimePartFactory,
-            $partBuilder->getStream()
+            $partBuilder
         );
-        $child->setParent($partBuilder);
         $this->baseParser->parseHeaders($child);
-        $this->notifyProxy($proxy, $partBuilder, $child);
+        $this->createPart($partBuilder, $child);
         return !$partBuilder->isParentBoundaryFound();
     }
 

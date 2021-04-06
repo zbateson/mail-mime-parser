@@ -65,25 +65,25 @@ class BaseParser
         $this->headerParser->parse($partBuilder);
     }
 
-    public function parseContent(PartBuilder $partBuilder, ParserProxy $proxy)
+    public function parseContent(PartBuilder $partBuilder)
     {
         if ($partBuilder->isContentParsed()) {
             return;
         }
         foreach ($this->contentParsers as $p) {
             if ($p->canParse($partBuilder)) {
-                $p->parseContent($partBuilder, $proxy);
+                $p->parseContent($partBuilder);
                 return;
             }
         }
     }
 
-    public function parseNextChild(PartBuilder $partBuilder, ParserProxy $proxy)
+    public function parseNextChild(PartBuilder $partBuilder)
     {
-        $this->parseContent($partBuilder, $proxy);
+        $this->parseContent($partBuilder);
         foreach ($this->childParsers as $p) {
             if ($p->canParse($partBuilder)) {
-                return $p->parseNextChild($partBuilder, $proxy);
+                return $p->parseNextChild($partBuilder);
             }
         }
     }

@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Part;
 
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -25,7 +26,7 @@ class ParsedPartStreamContainerFactory
         $this->streamFactory = $streamFactory;
     }
 
-    public function newInstance() {
-        return new ParsedPartStreamContainer($this->streamFactory);
+    public function newInstance(PartBuilder $builder) {
+        return new ParsedPartStreamContainer($this->streamFactory, $builder);
     }
 }

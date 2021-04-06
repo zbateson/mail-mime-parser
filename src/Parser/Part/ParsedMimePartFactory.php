@@ -61,13 +61,13 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
-        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
+        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($partBuilder);
         $headerContainer = $this->headerFactory->newHeaderContainer($partBuilder->getHeaderContainer());
 
         $part = null;
         $childrenContainer = null;
         if ($partBuilder->getMimeBoundary() !== null) {
-            $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance();
+            $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($partBuilder);
             $part = new MultiPart(
                 $parent,
                 $streamContainer,
@@ -83,16 +83,9 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
             );
         }
 
-        $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
-        $parserProxy->init($partBuilder, $streamContainer, $part);
-        if ($childrenContainer !== null) {
-            $childrenContainer->setProxyParser($parserProxy);
-        }
-
+        $partBuilder->setContainers($streamContainer, $childrenContainer);
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
-        $streamContainer->setParsedStream($this->streamFactory->getLimitedPartStream($partBuilder->getStream(), $partBuilder));
         $part->attach($streamContainer);
-
         return $part;
     }
 }

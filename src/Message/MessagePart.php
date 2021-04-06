@@ -55,9 +55,6 @@ abstract class MessagePart implements IMessagePart
         $this->partStreamContainer = $streamContainer;
         $this->parent = $parent;
         $this->observers = new SplObjectStorage();
-        if ($parent !== null) {
-            $parent->getChildIterator()->add($this);
-        }
     }
 
     public function attach(SplObserver $observer)

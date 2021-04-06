@@ -39,20 +39,19 @@ class NonMimeParser implements IContentParser, IChildPartParser
 
     private function createUuEncodedChildPart(PartBuilder $parent, $start, $mode, $filename)
     {
-        $part = $this->partBuilderFactory->newPartBuilder(
+        $part = $this->partBuilderFactory->newChildPartBuilder(
             $this->parsedUuEncodedPartFactory,
-            $parent->getStream()
+            $parent
         );
         $part->setNonMimePart(true);
         $part->setStreamPartStartPos($start);
         $part->setStreamContentStartPos($this->nextPartStart);
         $part->setProperty('mode', $mode);
         $part->setProperty('filename', $filename);
-        $part->setParent($parent);
         return $part;
     }
 
-    private function parseNextPart(PartBuilder $partBuilder, ParserProxy $proxy)
+    private function parseNextPart(PartBuilder $partBuilder)
     {
         $handle = $partBuilder->getMessageResourceHandle();
         while (!feof($handle)) {
@@ -68,7 +67,7 @@ class NonMimeParser implements IContentParser, IChildPartParser
         }
     }
 
-    public function parseContent(PartBuilder $partBuilder, ParserProxy $proxy)
+    public function parseContent(PartBuilder $partBuilder)
     {
         $handle = $partBuilder->getMessageResourceHandle();
         if ($this->nextPartStart !== null || feof($handle)) {
@@ -77,11 +76,10 @@ class NonMimeParser implements IContentParser, IChildPartParser
         if ($partBuilder->getParent() === null) {
             $partBuilder->setStreamContentStartPos(ftell($handle));
         }
-        $this->parseNextPart($partBuilder, $proxy);
-        $proxy->updatePartContent($partBuilder);
+        $this->parseNextPart($partBuilder);
     }
 
-    public function parseNextChild(PartBuilder $partBuilder, ParserProxy $proxy)
+    public function parseNextChild(PartBuilder $partBuilder)
     {
         $handle = $partBuilder->getMessageResourceHandle();
         if ($this->nextPartStart === null || feof($handle)) {
@@ -96,7 +94,7 @@ class NonMimeParser implements IContentParser, IChildPartParser
         $this->nextPartStart = null;
         $this->nextPartMode = null;
         $this->nextPartFilename = null;
-        $proxy->updatePartChildren($child);
+        $child->createMessagePart();
         return true;
     }
 

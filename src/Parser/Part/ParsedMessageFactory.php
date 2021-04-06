@@ -51,10 +51,9 @@ class ParsedMessageFactory extends ParsedMimePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
-        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
-
+        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($partBuilder);
         $headerContainer = $this->headerFactory->newHeaderContainer($partBuilder->getHeaderContainer());
-        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance();
+        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($partBuilder);
 
         $message = new Message(
             $streamContainer,
@@ -64,12 +63,8 @@ class ParsedMessageFactory extends ParsedMimePartFactory
             $this->messageService
         );
 
-        $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
-        $parserProxy->init($partBuilder, $streamContainer, $message);
-        $childrenContainer->setProxyParser($parserProxy);
-
+        $partBuilder->setContainers($streamContainer, $childrenContainer);
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
-        $streamContainer->setParsedStream($partBuilder->getStream());
         $message->attach($streamContainer);
         return $message;
     }

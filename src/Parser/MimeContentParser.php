@@ -81,14 +81,13 @@ class MimeContentParser implements IContentParser
         $partBuilder->setEof();
     }
 
-    public function parseContent(PartBuilder $partBuilder, ParserProxy $proxy)
+    public function parseContent(PartBuilder $partBuilder)
     {
         if ($partBuilder->canHaveHeaders()) {
             $this->lastLineSeparatorLength = 0;
         }
         $partBuilder->setStreamContentStartPos($partBuilder->getMessageResourceHandlePos());
         $this->findContentBoundary($partBuilder);
-        $proxy->updatePartContent($partBuilder);
     }
 
     public function canParse(PartBuilder $partBuilder)

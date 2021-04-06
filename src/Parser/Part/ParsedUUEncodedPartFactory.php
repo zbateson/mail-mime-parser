@@ -26,20 +26,16 @@ class ParsedUUEncodedPartFactory extends ParsedMessagePartFactory
      */
     public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
-        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance();
+        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($partBuilder);
 
         $part = new UUEncodedPart(
             $parent,
             $streamContainer
         );
 
-        $parserProxy = new ParserProxy($this->baseParser, $this->streamFactory);
-        $parserProxy->init($partBuilder, $streamContainer, null);
-
+        $partBuilder->setContainers($streamContainer);
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
-        $streamContainer->setParsedStream($this->streamFactory->getLimitedPartStream($partBuilder->getStream(), $partBuilder));
         $part->attach($streamContainer);
-
         return $part;
     }
 }

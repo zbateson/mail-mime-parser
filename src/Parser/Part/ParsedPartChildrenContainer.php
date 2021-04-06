@@ -8,7 +8,7 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ZBateson\MailMimeParser\Message\IMultiPart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
-use ZBateson\MailMimeParser\Parser\ParserProxy;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Description of ParsedPartChildrenContainer
@@ -18,37 +18,26 @@ use ZBateson\MailMimeParser\Parser\ParserProxy;
 class ParsedPartChildrenContainer extends PartChildrenContainer
 {
     /**
-     * @var ParserProxy
+     * @var PartBuilder
      */
-    protected $parserProxy;
+    protected $partBuilder;
 
     /**
      * @var bool
      */
     private $allParsed = false;
 
-    public function setProxyParser(ParserProxy $proxy)
+    public function __construct(PartBuilder $builder)
     {
-        $this->parserProxy = $proxy;
-    }
-
-    public function next()
-    {
-        $cur = $this->current();
-        if ($cur !== null) {
-            $cur->hasContent();
-            if ($cur instanceof IMultiPart) {
-                $cur->getAllParts();
-            }
-        }
-        parent::next();
+        parent::__construct([]);
+        $this->partBuilder = $builder;
     }
 
     public function valid()
     {
         $valid = parent::valid();
         if (!$valid && !$this->allParsed) {
-            $this->allParsed = !$this->parserProxy->readNextChild();
+            $this->allParsed = !$this->partBuilder->parseNextChild();
             $valid = parent::valid();
         }
         return $valid;

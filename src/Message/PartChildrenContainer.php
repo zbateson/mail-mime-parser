@@ -40,7 +40,7 @@ class PartChildrenContainer implements RecursiveIterator
 
     public function current()
     {
-        return $this->children[$this->position];
+        return (isset($this->children[$this->position])) ? $this->children[$this->position] : null;
     }
 
     public function key()

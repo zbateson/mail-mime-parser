@@ -16,5 +16,5 @@ interface IChildPartParser extends IParser
      *
      * @return bool true if there are more children
      */
-    public function parseNextChild(PartBuilder $partBuilder, ParserProxy $proxy);
+    public function parseNextChild(PartBuilder $partBuilder);
 }
