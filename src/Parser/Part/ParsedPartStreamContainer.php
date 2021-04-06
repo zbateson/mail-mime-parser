@@ -79,9 +79,12 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
     {
         if ($this->parsedStream === null) {
             $this->partBuilder->parseAll();
-            $this->parsedStream = $partBuilder->getStream();
-            if ($parsedStream !== null) {
-                $this->detachParsedStream = $parsedStream->getMetadata('mmp-detached-stream');
+            $this->parsedStream = $this->streamFactory->getLimitedPartStream(
+                $this->partBuilder->getStream(),
+                $this->partBuilder
+            );
+            if ($this->parsedStream !== null) {
+                $this->detachParsedStream = $this->parsedStream->getMetadata('mmp-detached-stream');
             }
         }
     }
@@ -106,11 +109,14 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
 
     public function getStream()
     {
-        if ($this->partUpdated || $this->parsedStream === null) {
-            return parent::getStream();
+        if (!$this->partUpdated) {
+            $this->requestParsedStream();
+            if ($this->parsedStream !== null) {
+                $this->parsedStream->rewind();
+                return $this->parsedStream;
+            }
         }
-        $this->parsedStream->rewind();
-        return $this->parsedStream;
+        return parent::getStream();
     }
 
     public function update(SplSubject $subject)
