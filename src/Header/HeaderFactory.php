@@ -155,14 +155,4 @@ class HeaderFactory
         }
         return new $class($this->consumerService, $name, $value);
     }
-
-    /**
-     * Creates and returns a HeaderContainer.
-     *
-     * @return HeaderContainer;
-     */
-    public function newHeaderContainer(HeaderContainer $from = null)
-    {
-        return new HeaderContainer($this, $from);
-    }
 }

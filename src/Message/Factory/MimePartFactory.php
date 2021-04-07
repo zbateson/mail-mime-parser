@@ -6,9 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
-use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
 
 /**
@@ -19,32 +17,24 @@ use ZBateson\MailMimeParser\Message\MimePart;
 class MimePartFactory extends MessagePartFactory
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
-     *      instance
+     * @var HeaderContainerFactory
      */
-    protected $headerFactory;
+    protected $headerContainerFactory;
 
     /**
      * @var PartChildrenContainerFactory
      */
     protected $partChildrenContainerFactory;
 
-    /**
-     * @var PartFilterFactory an instance used for creating MimePart objects
-     */
-    protected $partFilterFactory;
-
     public function __construct(
         StreamFactory $streamFactory,
         PartStreamContainerFactory $partStreamContainerFactory,
-        HeaderFactory $headerFactory,
-        PartChildrenContainerFactory $partChildrenContainerFactory,
-        PartFilterFactory $partFilterFactory
+        HeaderContainerFactory $headerContainerFactory,
+        PartChildrenContainerFactory $partChildrenContainerFactory
     ) {
         parent::__construct($streamFactory, $partStreamContainerFactory);
-        $this->headerFactory = $headerFactory;
+        $this->headerContainerFactory = $headerContainerFactory;
         $this->partChildrenContainerFactory = $partChildrenContainerFactory;
-        $this->partFilterFactory = $partFilterFactory;
     }
 
     /**
@@ -55,13 +45,12 @@ class MimePartFactory extends MessagePartFactory
     public function newInstance()
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
-        $headerContainer = $this->headerFactory->newHeaderContainer();
+        $headerContainer = $this->headerContainerFactory->newInstance();
         $part = new MimePart(
             null,
             $streamContainer,
             $headerContainer,
-            $this->partChildrenContainerFactory->newInstance(),
-            $this->partFilterFactory
+            $this->partChildrenContainerFactory->newInstance()
         );
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
         return $part;

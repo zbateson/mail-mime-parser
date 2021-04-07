@@ -41,7 +41,7 @@ use InvalidArgumentException;
  *
  * @author Zaahid Bateson
  */
-class PartFilter
+abstract class PartFilter
 {
     public static function fromAttachmentFilter()
     {

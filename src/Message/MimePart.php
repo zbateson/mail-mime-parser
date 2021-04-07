@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Header\HeaderContainer;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
@@ -31,7 +30,7 @@ class MimePart extends MessagePart implements IMimePart
         $setStream = false;
         $di = MailMimeParser::getDependencyContainer();
         if ($streamContainer === null || $headerContainer === null) {
-            $headerContainer = $di['\ZBateson\MailMimeParser\Header\HeaderContainer'];
+            $headerContainer = $di['\ZBateson\MailMimeParser\Message\HeaderContainer'];
             $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
             $setStream = true;
         }

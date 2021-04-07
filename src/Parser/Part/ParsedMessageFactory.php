@@ -7,13 +7,11 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\IMimePart;
-use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\MessageService;
+use ZBateson\MailMimeParser\Message\Factory\HeaderContainerFactory;
 use ZBateson\MailMimeParser\Parser\BaseParser;
-use ZBateson\MailMimeParser\Parser\ParserProxy;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -31,14 +29,13 @@ class ParsedMessageFactory extends ParsedMimePartFactory
 
     public function __construct(
         StreamFactory $sdf,
-        HeaderFactory $headerFactory,
+        HeaderContainerFactory $hcf,
         ParsedPartStreamContainerFactory $pscf,
         ParsedPartChildrenContainerFactory $ppccf,
-        PartFilterFactory $pf,
         BaseParser $baseParser,
         MessageService $mhs
     ) {
-        parent::__construct($sdf, $headerFactory, $pscf, $ppccf, $pf, $baseParser);
+        parent::__construct($sdf, $hcf, $pscf, $ppccf, $baseParser);
         $this->messageService = $mhs;
     }
 
@@ -52,13 +49,12 @@ class ParsedMessageFactory extends ParsedMimePartFactory
     public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($partBuilder);
-        $headerContainer = $this->headerFactory->newHeaderContainer($partBuilder->getHeaderContainer());
+        $headerContainer = $this->headerContainerFactory->newInstance($partBuilder->getHeaderContainer());
         $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($partBuilder);
 
         $message = new Message(
             $streamContainer,
             $headerContainer,
-            $this->partFilterFactory,
             $childrenContainer,
             $this->messageService
         );

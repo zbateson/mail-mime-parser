@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Header\HeaderContainer;
+use ZBateson\MailMimeParser\Message\HeaderContainer;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMultiPart;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;

@@ -4,11 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Header;
+namespace ZBateson\MailMimeParser\Message;
 
+use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ArrayIterator;
 use IteratorAggregate;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
  * Maintains a collection of headers for a part.

@@ -8,8 +8,6 @@ namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Header\HeaderContainer;
-use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartFilter;
 use Iterator;
 use AppendIterator;
@@ -28,28 +26,18 @@ class MultiPart extends MimePart implements IMultiPart
      */
     protected $partChildrenContainer;
 
-    /**
-     * @var PartFilterFactory factory object responsible for create PartFilters
-     */
-    protected $partFilterFactory;
-
     public function __construct(
         IMimePart $parent = null,
         PartStreamContainer $streamContainer = null,
         HeaderContainer $headerContainer = null,
-        PartChildrenContainer $partChildrenContainer = null,
-        PartFilterFactory $partFilterFactory = null
+        PartChildrenContainer $partChildrenContainer = null
     ) {
         parent::__construct($parent, $streamContainer, $headerContainer);
-
-        if ($partChildrenContainer === null || $partFilterFactory === null) {
+        if ($partChildrenContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
             $partChildrenContainer = $di['\ZBateson\MailMimeParser\Message\PartChildrenContainer'];
-            $partFilterFactory = $di['\ZBateson\MailMimeParser\Message\Factory\PartFilterFactory'];
         }
-
         $this->partChildrenContainer = $partChildrenContainer;
-        $this->partFilterFactory = $partFilterFactory;
     }
 
     public function isMultiPart()

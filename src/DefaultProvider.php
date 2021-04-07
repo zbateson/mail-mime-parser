@@ -6,10 +6,9 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Header\HeaderContainer;
+use ZBateson\MailMimeParser\Message\HeaderContainer;
 use ZBateson\MailMimeParser\Parser\ParserProxy;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -26,7 +25,7 @@ class DefaultProvider implements ServiceProviderInterface {
             $factory = $pimple['\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory'];
             return $factory->newInstance();
         });
-        $pimple['\ZBateson\MailMimeParser\Header\HeaderContainer'] = $pimple->factory(function() use ($pimple) {
+        $pimple['\ZBateson\MailMimeParser\Message\HeaderContainer'] = $pimple->factory(function() use ($pimple) {
             return new HeaderContainer($pimple['\ZBateson\MailMimeParser\Header\HeaderFactory']);
         });
         $pimple['\ZBateson\MailMimeParser\Message\PartChildrenContainer'] = $pimple->factory(function() use ($pimple) {

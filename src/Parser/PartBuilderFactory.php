@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Message\Factory\HeaderContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 
@@ -23,10 +23,9 @@ use Psr\Http\Message\StreamInterface;
 class PartBuilderFactory
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\HeaderFactory the HeaderFactory
-     *      instance
+     * @var HeaderContainerFactory
      */
-    protected $headerFactory;
+    protected $headerContainerFactory;
 
     /**
      * @var BaseParser
@@ -38,17 +37,12 @@ class PartBuilderFactory
      */
     protected $streamFactory;
     
-    /**
-     * Initializes dependencies
-     * 
-     * @param HeaderFactory $headerFactory
-     */
     public function __construct(
-        HeaderFactory $headerFactory,
+        HeaderContainerFactory $headerContainerFactory,
         StreamFactory $streamFactory,
         BaseParser $parser
     ) {
-        $this->headerFactory = $headerFactory;
+        $this->headerContainerFactory = $headerContainerFactory;
         $this->streamFactory = $streamFactory;
         $this->baseParser = $parser;
     }
@@ -68,7 +62,7 @@ class PartBuilderFactory
             $messagePartFactory,
             $this->streamFactory,
             $this->baseParser,
-            $this->headerFactory->newHeaderContainer(),
+            $this->headerContainerFactory->newInstance(),
             $messageStream
         );
     }
@@ -88,7 +82,7 @@ class PartBuilderFactory
             $messagePartFactory,
             $this->streamFactory,
             $this->baseParser,
-            $this->headerFactory->newHeaderContainer(),
+            $this->headerContainerFactory->newInstance(),
             null,
             $parent
         );

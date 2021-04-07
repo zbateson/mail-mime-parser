@@ -8,13 +8,12 @@ namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Header\HeaderContainer;
+use ZBateson\MailMimeParser\Message\HeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\MultiPart;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
-use ZBateson\MailMimeParser\Message\Factory\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
@@ -36,7 +35,6 @@ class Message extends MultiPart implements IMessage
     public function __construct(
         PartStreamContainer $streamContainer = null,
         HeaderContainer $headerContainer = null,
-        PartFilterFactory $partFilterFactory = null,
         PartChildrenContainer $partChildrenContainer = null,
         MessageService $messageService = null
     ) {
@@ -44,8 +42,7 @@ class Message extends MultiPart implements IMessage
             null,
             $streamContainer,
             $headerContainer,
-            $partChildrenContainer,
-            $partFilterFactory
+            $partChildrenContainer
         );
         if ($messageService === null) {
             $messageService = $di['\ZBateson\MailMimeParser\Message\MessageService'];
