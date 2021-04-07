@@ -184,7 +184,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function createAlternativeContentPart(IMessage $message, IMessagePart $contentPart)
     {
-        $altPart = new \ZBateson\MailMimeParser\Message\MultiPart();
+        $altPart = $this->mimePartFactory->newInstance(true);
         $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
         $message->removePart($contentPart);
         $message->addChild($altPart, 0);
@@ -212,7 +212,7 @@ class MultipartHelper extends AbstractHelper
         if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
             $this->setMessageAsMixed($message);
         }
-        foreach ($parts as $part) {
+        foreach ($parts as $key => $part) {
             $from->removePart($part);
             $message->addChild($part);
         }

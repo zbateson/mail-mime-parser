@@ -61,6 +61,8 @@ class MessagePartStream implements StreamInterface, SplObserver
     public function update(SplSubject $subject)
     {
         if ($this->appendStream !== null) {
+            // unset forces recreation in StreamDecoratorTrait with a call to __get
+            unset($this->stream);
             $this->appendStream = null;
         }
     }
@@ -187,7 +189,7 @@ class MessagePartStream implements StreamInterface, SplObserver
         $content->rewind();
         $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];
 
-        if ($this->part instanceof IMultiPart && $this->part->getChildCount()) {
+        if ($this->part instanceof IMultiPart && $this->part->getChildCount() > 0) {
             $streams = array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
         }
 

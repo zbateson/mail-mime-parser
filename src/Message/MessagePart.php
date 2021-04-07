@@ -22,7 +22,7 @@ use SplObserver;
 abstract class MessagePart implements IMessagePart
 {
     /**
-     * @var IMimePart parent part
+     * @var IMultiPart parent part
      */
     protected $parent;
 

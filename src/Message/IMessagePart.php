@@ -222,7 +222,7 @@ interface IMessagePart extends SplSubject
     /**
      * Returns this part's parent.
      *
-     * @return IMimePart
+     * @return IMultiPart
      */
     public function getParent();
 

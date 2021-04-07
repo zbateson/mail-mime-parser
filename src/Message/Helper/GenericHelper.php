@@ -111,8 +111,8 @@ class GenericHelper extends AbstractHelper
     */
     public function createNewContentPartFrom(IMimePart $part)
     {
-        $mime = $this->mimePartFactory->newInstance();
-        $this->copyContentHeadersAndContent($part, $mime, true);
+        $mime = $this->mimePartFactory->newInstance($part->isMultiPart());
+        $this->movePartContentAndChildren($part, $mime, true);
         return $mime;
     }
 
@@ -157,5 +157,6 @@ class GenericHelper extends AbstractHelper
         }
         $parent = $part->getParent();
         $parent->addChild($replacement, $position);
+        $parent->removePart($part);
     }
 }
