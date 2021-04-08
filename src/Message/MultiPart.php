@@ -19,7 +19,7 @@ use RecursiveIteratorIterator;
  *
  * @author Zaahid Bateson
  */
-class MultiPart extends MimePart implements IMultiPart
+abstract class MultiPart extends MessagePart implements IMultiPart
 {
     /**
      * @var PartChildrenContainer child part container
@@ -29,10 +29,9 @@ class MultiPart extends MimePart implements IMultiPart
     public function __construct(
         IMimePart $parent = null,
         PartStreamContainer $streamContainer = null,
-        HeaderContainer $headerContainer = null,
         PartChildrenContainer $partChildrenContainer = null
     ) {
-        parent::__construct($parent, $streamContainer, $headerContainer);
+        parent::__construct($streamContainer, $parent);
         if ($partChildrenContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
             $partChildrenContainer = $di['\ZBateson\MailMimeParser\Message\PartChildrenContainer'];
@@ -42,7 +41,11 @@ class MultiPart extends MimePart implements IMultiPart
 
     public function isMultiPart()
     {
-        return true;
+        // casting to bool, preg_match returns 1 for true
+        return (bool) (preg_match(
+            '~multipart/.*~i',
+            $this->getContentType()
+        ));
     }
 
     private function getAllPartsIterator()

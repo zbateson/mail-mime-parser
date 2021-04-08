@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\HeaderContainer;
-use ZBateson\MailMimeParser\Parser\ParserProxy;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
+use ZBateson\MailMimeParser\Parser\BaseParser;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -31,11 +31,10 @@ class DefaultProvider implements ServiceProviderInterface {
         $pimple['\ZBateson\MailMimeParser\Message\PartChildrenContainer'] = $pimple->factory(function() use ($pimple) {
             return new PartChildrenContainer();
         });
-        $pimple['ZBateson\MailMimeParser\Parser\ParserProxy'] = $pimple->factory(function() use ($pimple) {
-            return new ParserProxy(
-                $pimple['\ZBateson\MailMimeParser\Parser\BaseParser'],
-                $pimple['\ZBateson\MailMimeParser\Stream\StreamFactory']
-            );
-        });
+        $baseParser = $pimple['\ZBateson\MailMimeParser\Parser\BaseParser'];
+        $baseParser->addContentParser($pimple['\ZBateson\MailMimeParser\Parser\MimeContentParser']);
+        $baseParser->addContentParser($pimple['\ZBateson\MailMimeParser\Parser\NonMimeParser']);
+        $baseParser->addChildParser($pimple['\ZBateson\MailMimeParser\Parser\MultipartChildrenParser']);
+        $baseParser->addChildParser($pimple['\ZBateson\MailMimeParser\Parser\NonMimeParser']);
     }
 }

@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MultiPart;
 use ZBateson\MailMimeParser\Message\Factory\HeaderContainerFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartChildrenContainerFactory;
 use ZBateson\MailMimeParser\Parser\BaseParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 
@@ -25,6 +26,11 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
      * @var HeaderContainerFactory
      */
     protected $headerContainerFactory;
+
+    /**
+     * @var PartChildrenContainerFactory
+     */
+    protected $partChildrenContainerFactory;
 
     /**
      * @var ParsedPartChildrenContainerFactory
@@ -54,23 +60,13 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($partBuilder);
         $headerContainer = $this->headerContainerFactory->newInstance($partBuilder->getHeaderContainer());
 
-        $part = null;
-        $childrenContainer = null;
-        if ($partBuilder->getMimeBoundary() !== null) {
-            $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($partBuilder);
-            $part = new MultiPart(
-                $parent,
-                $streamContainer,
-                $headerContainer,
-                $childrenContainer
-            );
-        } else {
-            $part = new MimePart(
-                $parent,
-                $streamContainer,
-                $headerContainer
-            );
-        }
+        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($partBuilder);
+        $part = new MimePart(
+            $parent,
+            $streamContainer,
+            $headerContainer,
+            $childrenContainer
+        );
 
         $partBuilder->setContainers($streamContainer, $childrenContainer);
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));

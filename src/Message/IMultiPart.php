@@ -14,8 +14,15 @@ namespace ZBateson\MailMimeParser\Message;
  *
  * @author Zaahid Bateson
  */
-interface IMultiPart extends IMimePart
+interface IMultiPart extends IMessagePart
 {
+    /**
+     * Returns true if this part's mime type is multipart/*
+     *
+     * @return bool
+     */
+    public function isMultiPart();
+
     /**
      * Convenience method to find a part by its Content-ID header.
      *

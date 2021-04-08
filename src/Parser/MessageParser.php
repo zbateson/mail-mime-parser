@@ -29,25 +29,18 @@ class MessageParser
     protected $partBuilderFactory;
 
     /**
-     * @var BaseParser
+     * @var HeaderParser
      */
-    protected $baseParser;
+    protected $headerParser;
 
     public function __construct(
         PartBuilderFactory $pbf,
         ParsedMessageFactory $pmf,
-        BaseParser $baseParser,
-        MimeContentParser $mimeParser,
-        MultipartChildrenParser $multipartParser,
-        NonMimeParser $nonMimeParser
+        HeaderParser $headerParser
     ) {
         $this->parsedMessageFactory = $pmf;
         $this->partBuilderFactory = $pbf;
-        $baseParser->addContentParser($mimeParser);
-        $baseParser->addContentParser($nonMimeParser);
-        $baseParser->addChildParser($multipartParser);
-        $baseParser->addChildParser($nonMimeParser);
-        $this->baseParser = $baseParser;
+        $this->headerParser = $headerParser;
     }
 
 
@@ -85,7 +78,7 @@ class MessageParser
             $this->parsedMessageFactory,
             $stream
         );
-        $this->baseParser->parseHeaders($partBuilder);
+        $this->headerParser->parse($partBuilder);
         return $partBuilder->createMessagePart();
     }
 }

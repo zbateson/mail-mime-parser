@@ -8,7 +8,7 @@ namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Message\HeaderContainer;
 use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Message\IMultiPart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
 use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainer;
@@ -171,6 +171,7 @@ class PartBuilder
             $this->parent = $parent;
             $this->canHaveHeaders = (!$parent->endBoundaryFound);
         }
+        $this->setStreamPartStartPos($this->getMessageResourceHandlePos());
     }
 
     public function __destruct()
@@ -190,7 +191,7 @@ class PartBuilder
     {
         if ($this->lastAddedChild !== null) {
             $this->lastAddedChild->hasContent();
-            if ($this->lastAddedChild instanceof IMultiPart) {
+            if ($this->lastAddedChild instanceof IMimePart) {
                 $this->lastAddedChild->getAllParts();
             }
         }
@@ -214,7 +215,7 @@ class PartBuilder
     {
         $part = $this->createMessagePart();
         $part->hasContent();
-        if ($part instanceof IMultiPart) {
+        if ($part instanceof IMimePart) {
             $part->getAllParts();
         }
     }

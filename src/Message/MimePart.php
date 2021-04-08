@@ -15,7 +15,7 @@ use ZBateson\MailMimeParser\Header\ParameterHeader;
  *
  * @author Zaahid Bateson
  */
-class MimePart extends MessagePart implements IMimePart
+class MimePart extends MultiPart implements IMimePart
 {
     /**
      * @var HeaderContainer Contains headers for this part.
@@ -25,18 +25,21 @@ class MimePart extends MessagePart implements IMimePart
     public function __construct(
         IMimePart $parent = null,
         PartStreamContainer $streamContainer = null,
-        HeaderContainer $headerContainer = null
+        HeaderContainer $headerContainer = null,
+        PartChildrenContainer $partChildrenContainer = null
     ) {
         $setStream = false;
         $di = MailMimeParser::getDependencyContainer();
-        if ($streamContainer === null || $headerContainer === null) {
+        if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null) {
             $headerContainer = $di['\ZBateson\MailMimeParser\Message\HeaderContainer'];
             $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
+            $partChildrenContainer = $di['\ZBateson\MailMimeParser\Message\PartChildrenContainer'];
             $setStream = true;
         }
         parent::__construct(
+            $parent,
             $streamContainer,
-            $parent
+            $partChildrenContainer
         );
         if ($setStream) {
             $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
@@ -107,11 +110,6 @@ class MimePart extends MessagePart implements IMimePart
     public function getContentId()
     {
         return $this->getHeaderValue('Content-ID');
-    }
-
-    public function isMultiPart()
-    {
-        return false;
     }
 
     public function isSignaturePart()

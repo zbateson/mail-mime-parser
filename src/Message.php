@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\HeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
-use ZBateson\MailMimeParser\Message\MultiPart;
+use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MessagePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
@@ -24,7 +24,7 @@ use ZBateson\MailMimeParser\Message\PartStreamContainer;
  *
  * @author Zaahid Bateson
  */
-class Message extends MultiPart implements IMessage
+class Message extends MimePart implements IMessage
 {
     /**
      * @var MessageService helper class with various message manipulation

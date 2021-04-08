@@ -27,17 +27,17 @@ class MultipartChildrenParser implements IChildPartParser
     protected $parsedMimePartFactory;
 
     /**
-     * @var BaseParser
+     * @var HeaderParser
      */
-    protected $baseParser;
+    protected $headerParser;
 
     public function __construct(
         PartBuilderFactory $pbf,
-        BaseParser $parser,
+        HeaderParser $parser,
         ParsedMimePartFactory $f
     ) {
         $this->partBuilderFactory = $pbf;
-        $this->baseParser = $parser;
+        $this->headerParser = $parser;
         $this->parsedMimePartFactory = $f;
     }
 
@@ -72,7 +72,7 @@ class MultipartChildrenParser implements IChildPartParser
             $this->parsedMimePartFactory,
             $partBuilder
         );
-        $this->baseParser->parseHeaders($child);
+        $this->headerParser->parse($child);
         $this->createPart($partBuilder, $child);
         return !$partBuilder->isParentBoundaryFound();
     }

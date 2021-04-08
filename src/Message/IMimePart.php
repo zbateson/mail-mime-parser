@@ -11,15 +11,8 @@ namespace ZBateson\MailMimeParser\Message;
  *
  * @author Zaahid Bateson
  */
-interface IMimePart extends IMessagePart
+interface IMimePart extends IMultiPart
 {
-    /**
-     * Returns false
-     *
-     * @return bool
-     */
-    public function isMultiPart();
-
     /**
      * Returns true if this part is the second child of a multipart/signed
      * message.

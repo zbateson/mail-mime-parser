@@ -43,24 +43,16 @@ class MimePartFactory extends MessagePartFactory
      *
      * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function newInstance($isMultipart = false)
+    public function newInstance()
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $headerContainer = $this->headerContainerFactory->newInstance();
-        if ($isMultipart) {
-            $part = new MultiPart(
-                null,
-                $streamContainer,
-                $headerContainer,
-                $this->partChildrenContainerFactory->newInstance()
-            );
-        } else {
-            $part = new MimePart(
-                null,
-                $streamContainer,
-                $headerContainer
-            );
-        }
+        $part = new MimePart(
+            null,
+            $streamContainer,
+            $headerContainer,
+            $this->partChildrenContainerFactory->newInstance()
+        );
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
         return $part;
     }

@@ -18,16 +18,9 @@ use ZBateson\MailMimeParser\Parser\Part\ParsedMessageFactory;
  */
 class BaseParser
 {
-    protected $headerParser;
-    
     protected $contentParsers = [];
 
     protected $childParsers = [];
-
-    public function __construct(HeaderParser $headerParser)
-    {
-        $this->headerParser = $headerParser;
-    }
 
     /**
      * Returns the array of content parsers.
@@ -44,9 +37,16 @@ class BaseParser
      *
      * @param IContentParser $parser
      */
-    public function addContentParser(IContentParser $parser)
+    public function addContentParser(IContentParser $parser, $position = null)
     {
-        $this->contentParsers[] = $parser;
+        $pos = ($position === null || $position > count($this->contentParsers) || $position < 0) ?
+            count($this->contentParsers) : $position;
+        array_splice(
+            $this->contentParsers,
+            $pos,
+            0,
+            [ $parser ]
+        );
     }
 
     /**
@@ -54,15 +54,16 @@ class BaseParser
      *
      * @param IChildPartParser $parser
      */
-    public function addChildParser(IChildPartParser $parser)
+    public function addChildParser(IChildPartParser $parser, $position = null)
     {
-        $this->childParsers[] = $parser;
-    }
-
-    public function parseHeaders(PartBuilder $partBuilder)
-    {
-        $partBuilder->setStreamPartStartPos($partBuilder->getMessageResourceHandlePos());
-        $this->headerParser->parse($partBuilder);
+        $pos = ($position === null || $position > count($this->childParsers) || $position < 0) ?
+            count($this->childParsers) : $position;
+        array_splice(
+            $this->childParsers,
+            $pos,
+            0,
+            [ $parser ]
+        );
     }
 
     public function parseContent(PartBuilder $partBuilder)

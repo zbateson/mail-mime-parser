@@ -8,7 +8,7 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Message\IMultiPart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\AppendStream;
@@ -148,11 +148,11 @@ class MessagePartStream implements StreamInterface, SplObserver
      * Creates an array of streams based on the attached part's mime boundary
      * and child streams.
      *
-     * @param IMultiPart $part passed in because $this->part is declared
+     * @param IMimePart $part passed in because $this->part is declared
      *        as IMessagePart
      * @return StreamInterface[]
      */
-    protected function getBoundaryAndChildStreams(IMultiPart $part)
+    protected function getBoundaryAndChildStreams(IMimePart $part)
     {
         $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
         if ($boundary === null) {
@@ -189,7 +189,7 @@ class MessagePartStream implements StreamInterface, SplObserver
         $content->rewind();
         $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];
 
-        if ($this->part instanceof IMultiPart && $this->part->getChildCount() > 0) {
+        if ($this->part instanceof IMimePart && $this->part->getChildCount() > 0) {
             $streams = array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
         }
 

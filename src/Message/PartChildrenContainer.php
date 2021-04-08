@@ -26,7 +26,7 @@ class PartChildrenContainer implements RecursiveIterator
 
     public function hasChildren()
     {
-        return ($this->current() instanceof IMultiPart
+        return ($this->current() instanceof IMimePart
             && $this->current()->getChildIterator() !== null);
     }
 
