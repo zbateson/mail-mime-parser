@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\HeaderContainer;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
-use ZBateson\MailMimeParser\Parser\BaseParser;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

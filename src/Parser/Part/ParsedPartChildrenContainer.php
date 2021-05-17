@@ -32,13 +32,13 @@ class ParsedPartChildrenContainer extends PartChildrenContainer
         $this->partBuilder = $builder;
     }
 
-    public function valid()
+    public function offsetExists($offset)
     {
-        $valid = parent::valid();
-        if (!$valid && !$this->allParsed) {
+        $exists = parent::offsetExists($offset);
+        while (!$exists && !$this->allParsed) {
             $this->allParsed = !$this->partBuilder->parseNextChild();
-            $valid = parent::valid();
+            $exists = parent::offsetExists($offset);
         }
-        return $valid;
+        return $exists;
     }
 }

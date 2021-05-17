@@ -294,6 +294,11 @@ class PartBuilder
         return $this->parent;
     }
 
+    public function getChild($offset)
+    {
+        return $this->partChildrenContainer[$offset];
+    }
+
     public function setNonMimePart($bool)
     {
         $this->isNonMimePart = $bool;
