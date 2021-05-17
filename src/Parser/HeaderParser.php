@@ -43,7 +43,7 @@ class HeaderParser
         $header = '';
         do {
             $line = MessageParser::readLine($handle);
-            if ($line === '' || $line[0] !== "\t" && $line[0] !== ' ') {
+            if ($line === false || $line === '' || $line[0] !== "\t" && $line[0] !== ' ') {
                 $this->addRawHeaderToPart($header, $partBuilder);
                 $header = '';
             } else {
