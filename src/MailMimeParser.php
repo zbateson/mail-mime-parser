@@ -114,10 +114,12 @@ class MailMimeParser
      * Parses the passed stream handle or string into a
      * ZBateson\MailMimeParser\IMessage object and returns it.
      *
-     * By default, the passed stream is in 'attached' mode, and will close when
-     * the Message is destroyed.  Pass TRUE as the second argument to keep the
-     * stream open.  In either case, the passed stream must remain open so long
-     * as the Message object exists.
+     * If the passed $handleOrString is a resource handle, the handle must be
+     * kept open while the Message object exists.  For that reason, the default
+     * attachment mode is 'attached', which will cause the Message object to
+     * close the passed resource handle when it's destroyed.  If the stream
+     * should remain open for other reasons and closed manually, pass TRUE as
+     * the second parameter so Message does not close the stream.
      *
      * @param resource|string $handleOrString the resource handle to the input
      *        stream of the mime message, or a string containing a mime message
