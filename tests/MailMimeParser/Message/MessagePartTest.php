@@ -18,28 +18,22 @@ use Exception;
  */
 class MessagePartTest extends TestCase {
 
-    protected $partStreamFilterManager;
-    protected $streamFactory;
+    protected $partStreamContainer;
     private $vfs;
 
     protected function legacySetUp()
     {
         $this->vfs = vfsStream::setup('root');
-        $psf = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
+        $this->partStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->partStreamFilterManager = $psf;
-        $this->streamFactory = $sf;
     }
 
-    private function getMessagePart($handle = 'habibi', $contentHandle = null)
+    private function getMessagePart($handle = 'habibi', $contentHandle = null, $parent = null)
     {
         if ($contentHandle !== null) {
             $contentHandle = Psr7\stream_for($contentHandle);
-            $this->partStreamFilterManager
+            $this->partStreamContainer
                 ->method('getContentStream')
                 ->willReturnCallback(function() use ($contentHandle) {
                     try {
@@ -50,34 +44,41 @@ class MessagePartTest extends TestCase {
                     return $contentHandle;
                 });
         }
+        if ($handle !== null) {
+            $handle = Psr7\stream_for($handle);
+            $this->partStreamContainer
+                ->method('getStream')
+                ->willReturnCallback(function() use ($handle) {
+                    try {
+                        $handle->rewind();
+                    } catch (Exception $e) {
+
+                    }
+                    return $handle;
+                });
+        }
         return $this->getMockForAbstractClass(
                 'ZBateson\MailMimeParser\Message\MessagePart',
-                [$this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle]
+                [ $this->partStreamContainer, $parent ]
         );
-    }
-
-    public function testNewInstance()
-    {
-        $messagePart = $this->getMessagePart();
-        $this->assertNotNull($messagePart);
-        $this->assertFalse($messagePart->hasContent());
-        $this->assertNull($messagePart->getContentStream());
-        $this->assertNull($messagePart->getContent());
-        $this->assertNull($messagePart->getParent());
-        $this->assertEquals('habibi', stream_get_contents($messagePart->getResourceHandle()));
     }
 
     public function testPartStreamHandle()
     {
-        $messagePart = $this->getMessagePart('mucha agua');
+        $messagePart = $this->getMessagePart();
+        $this->assertNotNull($messagePart);
+
+        $this->partStreamContainer->expects($this->atLeastOnce())->method('hasContent')->willReturn(false);
         $this->assertFalse($messagePart->hasContent());
+
         $this->assertNull($messagePart->getContentStream());
-        $this->assertNotNull($messagePart->getResourceHandle());
-        $handle = $messagePart->getResourceHandle();
-        $this->assertEquals('mucha agua', stream_get_contents($handle));
+        $this->assertNull($messagePart->getContent());
+        $this->assertNull($messagePart->getParent());
+        $this->assertEquals('habibi', stream_get_contents($messagePart->getResourceHandle()));
+        $this->assertEquals('habibi', $messagePart->getStream()->getContents());
     }
 
-    public function testContentStreamAndHandle()
+    public function testContentStreamAndCharsetOverride()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Que tonto');
         $messagePart->method('getContentTransferEncoding')
@@ -85,47 +86,58 @@ class MessagePartTest extends TestCase {
         $messagePart->method('getCharset')
             ->willReturn('wigidiwamwamwazzle');
 
-        $this->assertTrue($messagePart->hasContent());
-        $this->assertEquals('Que tonto', $messagePart->getContentStream()->getContents());
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->partStreamContainer->expects($this->exactly(2))
+            ->method('getContentStream')
+            ->withConsecutive(
+                ['wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'oooohweee!'],
+                ['wubalubadub-duuuuub', 'override', 'oooohweee!']
+            )
+            ->willReturn('Que tonto');
+
+        $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!'));
+        $messagePart->setCharsetOverride('override');
+        $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!'));
     }
 
-    public function testBinaryStreamAndHandle()
+    public function testBinaryContentStream()
     {
-        $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
-        $this->partStreamFilterManager
-            ->expects($this->never())
-            ->method('getContentStream');
-        $this->partStreamFilterManager
-            ->expects($this->exactly(2))
-            ->method('getBinaryStream')
-            ->willReturnOnConsecutiveCalls($f, $s);
+        $f = Psr7\stream_for('First');
+        $s = Psr7\stream_for('Second');
 
-        $this->assertTrue($messagePart->hasContent());
+        $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
+        
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->partStreamContainer
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamContainer
+            ->expects($this->exactly(2))
+            ->method('getBinaryContentStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
 
-        $this->assertEquals('Que tonto', $messagePart->getBinaryContentStream()->getContents());
-        $this->assertEquals('Que tonto', stream_get_contents($messagePart->getBinaryContentResourceHandle()));
+        $this->assertEquals('First', $messagePart->getBinaryContentStream()->getContents());
+        $this->assertEquals('Second', stream_get_contents($messagePart->getBinaryContentResourceHandle()));
     }
 
     public function testSaveContent()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
-        $this->partStreamFilterManager
-            ->expects($this->never())
-            ->method('getContentStream');
-        $this->partStreamFilterManager
-            ->expects($this->once())
-            ->method('getBinaryStream')
-            ->willReturnOnConsecutiveCalls($f, $s);
-
-        $this->assertTrue($messagePart->hasContent());
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->partStreamContainer
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamContainer
+            ->expects($this->once())
+            ->method('getBinaryContentStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
 
         $content = vfsStream::newFile('part')->at($this->vfs);
         $messagePart->saveContent($content->url());
@@ -135,19 +147,19 @@ class MessagePartTest extends TestCase {
     public function testSaveContentToStream()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
-        $this->partStreamFilterManager
-            ->expects($this->never())
-            ->method('getContentStream');
-        $this->partStreamFilterManager
-            ->expects($this->once())
-            ->method('getBinaryStream')
-            ->willReturnOnConsecutiveCalls($f, $s);
-
-        $this->assertTrue($messagePart->hasContent());
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+        
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->partStreamContainer
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamContainer
+            ->expects($this->once())
+            ->method('getBinaryContentStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
 
         $stream = Psr7\stream_for();
         $messagePart->saveContent($stream);
@@ -159,19 +171,19 @@ class MessagePartTest extends TestCase {
     public function testSaveContentToResource()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
-        $this->partStreamFilterManager
-            ->expects($this->never())
-            ->method('getContentStream');
-        $this->partStreamFilterManager
-            ->expects($this->once())
-            ->method('getBinaryStream')
-            ->willReturnOnConsecutiveCalls($f, $s);
-
-        $this->assertTrue($messagePart->hasContent());
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
+        $f = Psr7\stream_for('Que tonto');
+        $s = Psr7\stream_for('Que tonto');
+
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->partStreamContainer
+            ->expects($this->never())
+            ->method('getContentStream');
+        $this->partStreamContainer
+            ->expects($this->once())
+            ->method('getBinaryContentStream')
+            ->willReturnOnConsecutiveCalls($f, $s);
 
         $res = StreamWrapper::getResource(Psr7\stream_for());
         $messagePart->saveContent($res);
@@ -186,72 +198,30 @@ class MessagePartTest extends TestCase {
         $stream = Psr7\stream_for('Que tonta');
         $contentStream = Psr7\stream_for('Que tonto');
         $messagePart = $this->getMessagePart($stream, $contentStream);
-        $messagePart->method('getContentTransferEncoding')
-            ->willReturn('wubalubadub-duuuuub');
-        $messagePart->method('getCharset')
-            ->willReturn('wigidiwamwamwazzle');
 
-        $this->assertSame($stream, $messagePart->getStream());
-
-        $this->partStreamFilterManager
-            ->method('setStream')
+        $this->partStreamContainer
+            ->expects($this->once())
+            ->method('setContentStream')
             ->with(null);
 
-        $this->streamFactory
-            ->expects($this->once())
-            ->method('newMessagePartStream')
-            ->with($messagePart)
-            ->willReturn('Much success');
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $messagePart->attach($observer);
 
         $messagePart->detachContentStream();
-        $this->assertEquals('Much success', $messagePart->getStream());
     }
 
-    public function testContentStreamHandleWithCustomCharset()
+    public function testNotify()
     {
-        $messagePart = $this->getMessagePart('Que tonta', 'Que tonto');
-        $messagePart->method('getContentTransferEncoding')
-            ->willReturn('quoted-printable');
-        $messagePart->method('getCharset')
-            ->willReturn('utf-64');
-
-        $handle = StreamWrapper::getResource(Psr7\stream_for('Que tonto'));
-        $this->partStreamFilterManager
-            ->expects($this->exactly(3))
-            ->method('getContentStream')
-            ->withConsecutive(
-                ['quoted-printable', 'utf-64', 'a-charset'],
-                ['quoted-printable', 'utf-64', 'a-charset'],
-                ['quoted-printable', 'override', 'UTF-8']
-            )
-            ->willReturn($handle);
-
-        $this->assertTrue($messagePart->hasContent());
-        $this->assertSame('Que tonto', $messagePart->getContentStream('a-charset')->getContents());
-
-        fseek($handle, 0);
-        $messagePart->setCharsetOverride('someCharset', true);
-        $messagePart->getContentStream('a-charset');
-
-        $messagePart->setCharsetOverride('override');
-        $messagePart->getContentStream();
-    }
-
-    public function testMarkAsChanged()
-    {
-        $stream = Psr7\stream_for('test');
-        $messagePart = $this->getMessagePart($stream);
-        $this->assertEquals($stream, $messagePart->getStream());
-
-        $this->streamFactory
-            ->expects($this->once())
-            ->method('newMessagePartStream')
-            ->with($messagePart)
-            ->willReturn('Much success');
-
-        $messagePart->markAsChanged();
-
-        $this->assertEquals('Much success', $messagePart->getStream());
+        $messagePart = $this->getMessagePart();
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $messagePart->attach($observer);
+        $messagePart->notify();
+        $messagePart->detach($observer);
+        $messagePart->notify();
     }
 
     public function testGetFilenameReturnsNull()
@@ -263,6 +233,7 @@ class MessagePartTest extends TestCase {
     public function testGetContent()
     {
         $messagePart = $this->getMessagePart('habibi', 'sopa di agua con rocas');
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->assertEquals('sopa di agua con rocas', $messagePart->getContent());
     }
 
@@ -299,39 +270,35 @@ class MessagePartTest extends TestCase {
     {
         $ms = Psr7\stream_for('message');
         $org = Psr7\stream_for('content');
-        $part = $this->getMessagePart($ms, $org);
-        $part->method('getContentTransferEncoding')
+        $messagePart = $this->getMessagePart($ms, $org);
+        $messagePart->method('getContentTransferEncoding')
             ->willReturn('quoted-printable');
-        $part->method('getCharset')
+        $messagePart->method('getCharset')
             ->willReturn('utf-64');
 
         $new = Psr7\stream_for('updated');
-        $this->partStreamFilterManager
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->partStreamContainer
             ->method('getContentStream')
             ->withConsecutive(
                 ['', 'charset', 'a-charset']
         );
 
-        $this->assertSame($ms, $part->getStream());
+        $this->assertSame($ms, $messagePart->getStream());
 
-        $this->partStreamFilterManager
-            ->method('setStream')
-            ->withConsecutive(
-                [$new],
-                [$new]
-        );
+        $this->partStreamContainer
+            ->method('setContentStream')
+            ->with($new);
 
-        $part->setContent($new, 'charset');
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $messagePart->attach($observer);
+
+        $messagePart->setContent($new, 'charset');
 
         // actually returns $org because of method definition in getMessagePart
-        $part->getContentStream('a-charset');
-
-        $this->streamFactory
-            ->expects($this->once())
-            ->method('newMessagePartStream')
-            ->with($part)
-            ->willReturn('Much success');
-        $this->assertEquals('Much success', $part->getStream());
+        $messagePart->getContentStream('a-charset');
     }
 
 }
