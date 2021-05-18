@@ -13,12 +13,18 @@ use GuzzleHttp\Psr7\CachingStream;
 /**
  * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
  *
+ * The class sets up the Pimple dependency injection container with the ability
+ * to override and/or provide specialized provider
+ * {@see https://pimple.symfony.com/ \Pimple\ServiceProviderInterface}
+ * classes to extend default classes used by MailMimeParser.
+ *
  * To invoke, call parse on a MailMimeParser object.
  *
  * ```php
  * $handle = fopen('path/to/file.txt');
  * $parser = new MailMimeParser();
- * $parser->parse($handle);
+ * $message = $parser->parse($handle);
+ * // use $message here
  * fclose($handle);
  * ```
  * 
