@@ -28,9 +28,9 @@ abstract class NonMimePart extends MessagePart
      * 
      * @return string
      */
-    public function getContentType()
+    public function getContentType($default = 'text/plain')
     {
-        return 'text/plain';
+        return $default;
     }
     
     /**

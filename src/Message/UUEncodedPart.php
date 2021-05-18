@@ -90,7 +90,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      * 
      * @return string
      */
-    public function getContentType()
+    public function getContentType($default = 'text/plain')
     {
         return 'application/octet-stream';
     }

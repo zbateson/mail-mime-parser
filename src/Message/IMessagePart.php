@@ -40,7 +40,7 @@ interface IMessagePart extends SplSubject
      *
      * @return string
      */
-    public function getContentType();
+    public function getContentType($default = 'text/plain');
 
     /**
      * Returns the charset of the content, or null if not applicable/defined.
