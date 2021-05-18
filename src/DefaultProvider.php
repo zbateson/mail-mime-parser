@@ -17,8 +17,8 @@ use Pimple\ServiceProviderInterface;
  *
  * @author Zaahid Bateson
  */
-class DefaultProvider implements ServiceProviderInterface {
-
+class DefaultProvider implements ServiceProviderInterface
+{
     public function register(Container $pimple)
     {
         $pimple['\ZBateson\MailMimeParser\Message\PartStreamContainer'] = $pimple->factory(function() use ($pimple) {
