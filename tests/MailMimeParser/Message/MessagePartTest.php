@@ -301,4 +301,15 @@ class MessagePartTest extends TestCase {
         $messagePart->getContentStream('a-charset');
     }
 
+    public function testParentAndParentNotify()
+    {
+        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $messagePart = $this->getMessagePart('blah', 'blooh', $parent);
+
+        $this->assertSame($parent, $messagePart->getParent());
+        $parent->expects($this->once())->method('notify');
+        $messagePart->notify();
+    }
 }
