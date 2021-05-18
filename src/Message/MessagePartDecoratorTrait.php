@@ -7,7 +7,9 @@
 namespace ZBateson\MailMimeParser\Message;
 
 /**
- * Description of MessagePartDecorator
+ * Simple decorator trait defining a constructor that accepts an IMessagePart
+ * and sets $this->messagePart to the decorated part, and overrides __call to
+ * call methods on $this->messagePart.
  *
  * @author Zaahid Bateson
  */

@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Header;
+namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
 
@@ -19,7 +19,7 @@ class HeaderContainerTest extends TestCase
     {
         $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['newInstance', 'newHeaderContainer'])
+            ->setMethods(['newInstance'])
             ->getMock();
     }
 
