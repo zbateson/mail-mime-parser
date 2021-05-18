@@ -14,10 +14,20 @@ use ReflectionParameter;
 /**
  * Automatically configures classes and dependencies.
  *
+ * Sets up an automatic registration for classes when requested through
+ * Pimple by looking up the class's constructor and arguments.
+ *
  * @author Zaahid Bateson
  */
 class Container extends PimpleContainer
 {
+    /**
+     * Looks up the type of the passed ReflectionParameter and returns it as a
+     * fully qualified class name as expected by the class's auto registration.
+     *
+     * @param ReflectionParameter $param
+     * @return string
+     */
     private function getParameterClass(ReflectionParameter $param)
     {
         if (method_exists($param, 'getType')) {
@@ -31,6 +41,14 @@ class Container extends PimpleContainer
         return null;
     }
 
+    /**
+     * Returns a factory function for the passed class.
+     *
+     * The returned factory method looks up arguments and uses pimple to get an
+     * instance of those types to pass them during construction.
+     *
+     * @param string $class
+     */
     public function autoRegister($class)
     {
         $fn = function($c) use ($class) {
@@ -54,6 +72,13 @@ class Container extends PimpleContainer
         $this[$class] = $fn;
     }
 
+    /**
+     * Overridden to see if the class can be auto-registered and return true if
+     * it can.
+     * 
+     * @param string $id
+     * @return boolean
+     */
     public function offsetExists($id)
     {
         $exists = parent::offsetExists($id);
@@ -64,6 +89,14 @@ class Container extends PimpleContainer
         return $exists;
     }
 
+    /**
+     * Overridden to see if the class can be auto-registered and return an
+     * instance if it can.
+     *
+     * @param string $id
+     * @return object
+     * @throws UnknownIdentifierException
+     */
     public function offsetGet($id)
     {
         try {
@@ -77,6 +110,14 @@ class Container extends PimpleContainer
         }
     }
 
+    /**
+     * Overridden to see if the class can be auto-registered first before
+     * calling Pimple\Container::extend
+     *
+     * @param string $id
+     * @param callable $callable
+     * @return callable the wrapped $callable
+     */
     public function extend($id, $callable)
     {
         $this->offsetExists($id);

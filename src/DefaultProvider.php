@@ -12,7 +12,8 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * Description of DefaultProvider
+ * Default Pimple\ServiceProviderInterface defining classes that require
+ * factories or special configuration on initialization.
  *
  * @author Zaahid Bateson
  */
