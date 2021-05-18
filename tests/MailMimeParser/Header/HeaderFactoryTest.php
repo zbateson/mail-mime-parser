@@ -146,12 +146,4 @@ class HeaderFactoryTest extends TestCase
             $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\ReceivedHeader', $header);
         }
     }
-
-    public function testHeaderContainer()
-    {
-        $this->assertInstanceOf(
-            'ZBateson\MailMimeParser\Header\HeaderContainer',
-            $this->headerFactory->newHeaderContainer()
-        );
-    }
 }

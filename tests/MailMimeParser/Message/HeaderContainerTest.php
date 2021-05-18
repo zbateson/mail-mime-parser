@@ -6,7 +6,7 @@ use LegacyPHPUnit\TestCase;
 /**
  * Description of HeaderContainerTest
  *
- * @group Headers
+ * @group Message
  * @group HeaderContainer
  * @covers ZBateson\MailMimeParser\Header\HeaderContainer
  * @author Zaahid Bateson
