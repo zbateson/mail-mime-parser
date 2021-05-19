@@ -7,11 +7,11 @@ use LegacyPHPUnit\TestCase;
  * Description of HeaderContainerTest
  *
  * @group Message
- * @group HeaderContainer
+ * @group PartHeaderContainer
  * @covers ZBateson\MailMimeParser\Header\HeaderContainer
  * @author Zaahid Bateson
  */
-class HeaderContainerTest extends TestCase
+class PartHeaderContainerTest extends TestCase
 {
     protected $mockHeaderFactory;
 

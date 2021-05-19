@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser\Message\Factory;
 
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Message\MultiPart;
 
 /**
  * Responsible for creating MimePart instances.

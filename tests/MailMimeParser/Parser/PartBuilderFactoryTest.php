@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Parser\Part;
+namespace ZBateson\MailMimeParser\Parser;
 
 use LegacyPHPUnit\TestCase;
 
@@ -7,7 +7,7 @@ use LegacyPHPUnit\TestCase;
  * PartBuilderFactoryTest
  *
  * @group PartBuilderFactory
- * @group MessagePart
+ * @group Parser
  * @covers ZBateson\MailMimeParser\Parser\PartBuilderFactory
  * @author Zaahid Bateson
  */
