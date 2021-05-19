@@ -105,8 +105,8 @@ abstract class PartFilter
      */
     public static function fromDisposition($disposition, $includeMultipart = false, $includeSignedParts = false)
     {
-        return function(IMessagePart $part) use ($disposition, $includeMultipart, $excludeSignedParts) {
-            if (($part instanceof IMimePart) && ((!$includeSignedParts && $part->isSignaturePart()) || (!$includeMultipart && $part->isMultiPart()))) {
+        return function(IMessagePart $part) use ($disposition, $includeMultipart, $includeSignedParts) {
+            if (($part instanceof IMimePart) && ((!$includeMultipart && $part->isMultiPart()) || (!$includeSignedParts && $part->isSignaturePart()))) {
                 return false;
             }
             return strcasecmp($part->getContentDisposition(), $disposition) === 0;
