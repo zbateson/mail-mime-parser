@@ -2,7 +2,6 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7;
 
 /**
  * Description of NonMimePartTest
@@ -14,20 +13,50 @@ use GuzzleHttp\Psr7;
  */
 class NonMimePartTest extends TestCase
 {
-    public function testInstance()
+    private $nonMimePart;
+
+    protected function legacySetUp()
     {
-        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $part = new NonMimePart($mgr, $sf);
-        $this->assertTrue($part->isTextPart());
-        $this->assertFalse($part->isMime());
-        $this->assertEquals('text/plain', $part->getContentType());
-        $this->assertEquals('inline', $part->getContentDisposition());
-        $this->assertEquals('7bit', $part->getContentTransferEncoding());
-        $this->assertEquals('ISO-8859-1', $part->getCharset());
+        $this->nonMimePart = $this->getMockForAbstractClass(
+            'ZBateson\MailMimeParser\Message\NonMimePart',
+            [],
+            '',
+            false
+        );
+    }
+
+    public function testIsTextPart()
+    {
+        $this->assertTrue($this->nonMimePart->isTextPart());
+    }
+
+    public function testGetContentType()
+    {
+        $this->assertEquals('text/plain', $this->nonMimePart->getContentType());
+    }
+
+    public function testGetCharset()
+    {
+        $this->assertEquals('ISO-8859-1', $this->nonMimePart->getCharset());
+    }
+
+    public function testGetContentDisposition()
+    {
+        $this->assertEquals('inline', $this->nonMimePart->getContentDisposition());
+    }
+
+    public function testGetContentTransferEncoding()
+    {
+        $this->assertEquals('7bit', $this->nonMimePart->getContentTransferEncoding());
+    }
+
+    public function testIsMime()
+    {
+        $this->assertFalse($this->nonMimePart->isMime());
+    }
+
+    public function testGetContentId()
+    {
+        $this->assertNull($this->nonMimePart->getContentId());
     }
 }
