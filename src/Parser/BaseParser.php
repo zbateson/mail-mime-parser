@@ -6,8 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\Part\ParsedMessageFactory;
-
 /**
  * Top-level parser for parsing e-mail messages and parts.
  *

@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\ParserProxy;
 
 /**
  * Responsible for creating ParsedUUEncodedPart instances.

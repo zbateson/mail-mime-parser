@@ -121,7 +121,7 @@ interface IMultiPart extends IMessagePart
     /**
      * Returns an iterator for child parts.
      *
-     * @return \Iterator
+     * @return \RecursiveIterator
      */
     public function getChildIterator();
 
