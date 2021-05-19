@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
-use ZBateson\MailMimeParser\Message\HeaderContainer;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
@@ -32,7 +32,7 @@ class Message extends MimePart implements IMessage
 
     public function __construct(
         PartStreamContainer $streamContainer = null,
-        HeaderContainer $headerContainer = null,
+        PartHeaderContainer $headerContainer = null,
         PartChildrenContainer $partChildrenContainer = null,
         MessageService $messageService = null
     ) {

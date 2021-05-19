@@ -18,20 +18,20 @@ use ZBateson\MailMimeParser\Header\ParameterHeader;
 class MimePart extends MultiPart implements IMimePart
 {
     /**
-     * @var HeaderContainer Contains headers for this part.
+     * @var PartHeaderContainer Contains headers for this part.
      */
     protected $headerContainer;
 
     public function __construct(
         IMimePart $parent = null,
         PartStreamContainer $streamContainer = null,
-        HeaderContainer $headerContainer = null,
+        PartHeaderContainer $headerContainer = null,
         PartChildrenContainer $partChildrenContainer = null
     ) {
         $setStream = false;
         $di = MailMimeParser::getDependencyContainer();
         if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null) {
-            $headerContainer = $di['\ZBateson\MailMimeParser\Message\HeaderContainer'];
+            $headerContainer = $di['\ZBateson\MailMimeParser\Message\PartHeaderContainer'];
             $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
             $partChildrenContainer = $di['\ZBateson\MailMimeParser\Message\PartChildrenContainer'];
             $setStream = true;

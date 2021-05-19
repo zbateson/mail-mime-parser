@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7;
  * PartBuilderTest
  *
  * @group PartBuilder
- * @group MessagePart
+ * @group Parser
  * @covers ZBateson\MailMimeParser\Parser\PartBuilder
  * @author Zaahid Bateson
  */

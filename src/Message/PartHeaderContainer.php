@@ -15,7 +15,7 @@ use IteratorAggregate;
  *
  * @author Zaahid Bateson
  */
-class HeaderContainer implements IteratorAggregate
+class PartHeaderContainer implements IteratorAggregate
 {
     /**
      * @var HeaderFactory the HeaderFactory object used for created headers
@@ -56,7 +56,7 @@ class HeaderContainer implements IteratorAggregate
      *
      * @param HeaderFactory $headerFactory
      */
-    public function __construct(HeaderFactory $headerFactory, HeaderContainer $clone = null)
+    public function __construct(HeaderFactory $headerFactory, PartHeaderContainer $clone = null)
     {
         $this->headerFactory = $headerFactory;
         if ($clone !== null) {

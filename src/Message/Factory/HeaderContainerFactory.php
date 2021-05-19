@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\HeaderContainer;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
 /**
  * Description of HeaderContainerFactory
@@ -36,8 +36,8 @@ class HeaderContainerFactory
      *
      * @return HeaderContainer;
      */
-    public function newInstance(HeaderContainer $from = null)
+    public function newInstance(PartHeaderContainer $from = null)
     {
-        return new HeaderContainer($this->headerFactory, $from);
+        return new PartHeaderContainer($this->headerFactory, $from);
     }
 }

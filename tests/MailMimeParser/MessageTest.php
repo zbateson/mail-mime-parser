@@ -25,7 +25,7 @@ class MessageTest extends TestCase
         $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\HeaderContainer')
+        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')

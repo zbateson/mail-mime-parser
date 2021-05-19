@@ -25,7 +25,7 @@ class HeaderContainerTest extends TestCase
 
     public function testAddExistsGet()
     {
-        $ob = new HeaderContainer($this->mockHeaderFactory);
+        $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
         $ob->add('second', 'value');
 
@@ -59,7 +59,7 @@ class HeaderContainerTest extends TestCase
 
     public function testAddExistsGetSameName()
     {
-        $ob = new HeaderContainer($this->mockHeaderFactory);
+        $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('repeated', 'first');
         $ob->add('repeated', 'second');
         $ob->add('repeated', 'third');
@@ -104,7 +104,7 @@ class HeaderContainerTest extends TestCase
 
     public function testAddSetExistsGet()
     {
-        $ob = new HeaderContainer($this->mockHeaderFactory);
+        $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->set('first', 'value');
         $ob->set('second', 'value');
         $ob->set('third', 'value');
@@ -162,7 +162,7 @@ class HeaderContainerTest extends TestCase
 
     public function testAddRemoveGet()
     {
-        $ob = new HeaderContainer($this->mockHeaderFactory);
+        $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
         $ob->add('second', 'value');
         $ob->add('third', 'value');
@@ -215,7 +215,7 @@ class HeaderContainerTest extends TestCase
 
     public function testAddRemoveAllGet()
     {
-        $ob = new HeaderContainer($this->mockHeaderFactory);
+        $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
         $ob->add('first', 'second-first');
         $ob->add('second', 'value');

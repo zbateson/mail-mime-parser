@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\HeaderContainer;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
@@ -81,7 +81,7 @@ class PartBuilder
     private $mimeBoundary = false;
     
     /**
-     * @var HeaderContainer a container for found and parsed headers.
+     * @var PartHeaderContainer a container for found and parsed headers.
      */
     private $headerContainer;
 
@@ -149,13 +149,13 @@ class PartBuilder
      * Sets up class dependencies.
      *
      * @param ParsedMessagePartFactory $mpf
-     * @param HeaderContainer $headerContainer
+     * @param PartHeaderContainer $headerContainer
      */
     public function __construct(
         ParsedMessagePartFactory $mpf,
         StreamFactory $streamFactory,
         BaseParser $parser,
-        HeaderContainer $headerContainer,
+        PartHeaderContainer $headerContainer,
         StreamInterface $messageStream = null,
         PartBuilder $parent = null
     ) {
@@ -252,7 +252,7 @@ class PartBuilder
     /**
      * Returns the HeaderContainer object containing parsed headers.
      * 
-     * @return HeaderContainer
+     * @return PartHeaderContainer
      */
     public function getHeaderContainer()
     {
