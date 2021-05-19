@@ -18,9 +18,9 @@ use ZBateson\MailMimeParser\Message\MultiPart;
 class MimePartFactory extends MessagePartFactory
 {
     /**
-     * @var HeaderContainerFactory
+     * @var PartHeaderContainerFactory
      */
-    protected $headerContainerFactory;
+    protected $partHeaderContainerFactory;
 
     /**
      * @var PartChildrenContainerFactory
@@ -30,11 +30,11 @@ class MimePartFactory extends MessagePartFactory
     public function __construct(
         StreamFactory $streamFactory,
         PartStreamContainerFactory $partStreamContainerFactory,
-        HeaderContainerFactory $headerContainerFactory,
+        PartHeaderContainerFactory $partHeaderContainerFactory,
         PartChildrenContainerFactory $partChildrenContainerFactory
     ) {
         parent::__construct($streamFactory, $partStreamContainerFactory);
-        $this->headerContainerFactory = $headerContainerFactory;
+        $this->partHeaderContainerFactory = $partHeaderContainerFactory;
         $this->partChildrenContainerFactory = $partChildrenContainerFactory;
     }
 
@@ -46,7 +46,7 @@ class MimePartFactory extends MessagePartFactory
     public function newInstance()
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
-        $headerContainer = $this->headerContainerFactory->newInstance();
+        $headerContainer = $this->partHeaderContainerFactory->newInstance();
         $part = new MimePart(
             null,
             $streamContainer,

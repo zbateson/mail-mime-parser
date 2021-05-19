@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\MultiPart;
-use ZBateson\MailMimeParser\Message\Factory\HeaderContainerFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\Factory\PartChildrenContainerFactory;
 use ZBateson\MailMimeParser\Parser\BaseParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
@@ -23,9 +23,9 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 class ParsedMimePartFactory extends ParsedMessagePartFactory
 {
     /**
-     * @var HeaderContainerFactory
+     * @var PartHeaderContainerFactory
      */
-    protected $headerContainerFactory;
+    protected $partHeaderContainerFactory;
 
     /**
      * @var PartChildrenContainerFactory
@@ -39,13 +39,13 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
 
     public function __construct(
         StreamFactory $sdf,
-        HeaderContainerFactory $headerContainerFactory,
+        PartHeaderContainerFactory $partHeaderContainerFactory,
         ParsedPartStreamContainerFactory $pscf,
         ParsedPartChildrenContainerFactory $ppccf,
         BaseParser $baseParser
     ) {
         parent::__construct($sdf, $pscf, $baseParser);
-        $this->headerContainerFactory = $headerContainerFactory;
+        $this->partHeaderContainerFactory = $partHeaderContainerFactory;
         $this->parsedPartChildrenContainerFactory = $ppccf;
     }
 
@@ -58,7 +58,7 @@ class ParsedMimePartFactory extends ParsedMessagePartFactory
     public function newInstance(PartBuilder $partBuilder, IMimePart $parent = null)
     {
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($partBuilder);
-        $headerContainer = $this->headerContainerFactory->newInstance($partBuilder->getHeaderContainer());
+        $headerContainer = $this->partHeaderContainerFactory->newInstance($partBuilder->getHeaderContainer());
 
         $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($partBuilder);
         $part = new MimePart(

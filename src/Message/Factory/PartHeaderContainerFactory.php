@@ -10,11 +10,11 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
 /**
- * Description of HeaderContainerFactory
+ * Description of PartHeaderContainerFactory
  *
  * @author Zaahid Bateson
  */
-class HeaderContainerFactory
+class PartHeaderContainerFactory
 {
     /**
      * @var HeaderFactory the HeaderFactory passed to HeaderContainer instances.
