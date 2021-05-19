@@ -34,7 +34,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     {
         if ($streamContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
-            $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer:factory'];
+            $streamContainer = $di['\ZBateson\MailMimeParser\Message\PartStreamContainer'];
             $streamFactory = $di['\ZBateson\MailMimeParser\Stream\StreamFactory'];
             $streamContainer->setStream($streamFactory->newMessagePartStream($this));
         }

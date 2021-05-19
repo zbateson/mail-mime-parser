@@ -14,46 +14,62 @@ use GuzzleHttp\Psr7;
  */
 class UUEncodedPartTest extends TestCase
 {
-    public function testInstance()
+    private $instance;
+
+    protected function legacySetUp()
     {
-        $mgr = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamFilterManager')
+        $psc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $sf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->instance = new UUEncodedPart(null, $psc);
+    }
 
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $pb->expects($this->exactly(2))
-            ->method('getProperty')
-            ->willReturnCallback(function ($param) {
-                $return = ['filename' => 'wubalubadubduuuuuub!', 'mode' => 0666];
-                $this->assertArrayHasKey($param, $return);
-                return $return[$param];
-            });
+    public function testGetAndSetFileName()
+    {
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $this->instance->attach($observer);
 
-        $part = new UUEncodedPart(
-            $mgr,
-            $sf,
-            $pb,
-            Psr7\stream_for('Stuff')
-        );
-        $this->assertFalse($part->isTextPart());
-        $this->assertFalse($part->isMime());
-        $this->assertEquals('application/octet-stream', $part->getContentType());
-        $this->assertEquals('attachment', $part->getContentDisposition());
-        $this->assertEquals('attachment', $part->getContentDisposition());
-        $this->assertEquals('x-uuencode', $part->getContentTransferEncoding());
-        $this->assertNull($part->getCharset());
-        $this->assertEquals(0666, $part->getUnixFileMode());
-        $this->assertEquals('wubalubadubduuuuuub!', $part->getFilename());
+        $this->assertNull($this->instance->getFilename());
+        $this->instance->setFilename('arre');
+        $this->assertEquals('arre', $this->instance->getFilename());
+    }
 
-        $part->setUnixFileMode(0444);
-        $part->setFilename('wiggidywamwamwazzle!');
+    public function testGetAndUnixFileMode()
+    {
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $this->instance->attach($observer);
 
-        $this->assertEquals(0444, $part->getUnixFileMode());
-        $this->assertEquals('wiggidywamwamwazzle!', $part->getFilename());
+        $this->assertNull($this->instance->getUnixFileMode());
+        $this->instance->setUnixFileMode(0776);
+        $this->assertEquals(0776, $this->instance->getUnixFileMode());
+    }
+
+     public function testIsTextPart()
+    {
+        $this->assertFalse($this->instance->isTextPart());
+    }
+
+    public function testGetContentType()
+    {
+        $this->assertEquals('application/octet-stream', $this->instance->getContentType());
+    }
+
+    public function testGetCharset()
+    {
+        $this->assertEquals(null, $this->instance->getCharset());
+    }
+
+    public function testGetContentDisposition()
+    {
+        $this->assertEquals('attachment', $this->instance->getContentDisposition());
+    }
+
+    public function getContentTransferEncoding()
+    {
+        $this->assertEquals('x-uuencode', $this->instance->getContentTransferEncoding());
     }
 }

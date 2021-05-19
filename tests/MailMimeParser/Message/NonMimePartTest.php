@@ -13,11 +13,11 @@ use LegacyPHPUnit\TestCase;
  */
 class NonMimePartTest extends TestCase
 {
-    private $nonMimePart;
+    private $instance;
 
     protected function legacySetUp()
     {
-        $this->nonMimePart = $this->getMockForAbstractClass(
+        $this->instance = $this->getMockForAbstractClass(
             'ZBateson\MailMimeParser\Message\NonMimePart',
             [],
             '',
@@ -27,36 +27,36 @@ class NonMimePartTest extends TestCase
 
     public function testIsTextPart()
     {
-        $this->assertTrue($this->nonMimePart->isTextPart());
+        $this->assertTrue($this->instance->isTextPart());
     }
 
     public function testGetContentType()
     {
-        $this->assertEquals('text/plain', $this->nonMimePart->getContentType());
+        $this->assertEquals('text/plain', $this->instance->getContentType());
     }
 
     public function testGetCharset()
     {
-        $this->assertEquals('ISO-8859-1', $this->nonMimePart->getCharset());
+        $this->assertEquals('ISO-8859-1', $this->instance->getCharset());
     }
 
     public function testGetContentDisposition()
     {
-        $this->assertEquals('inline', $this->nonMimePart->getContentDisposition());
+        $this->assertEquals('inline', $this->instance->getContentDisposition());
     }
 
     public function testGetContentTransferEncoding()
     {
-        $this->assertEquals('7bit', $this->nonMimePart->getContentTransferEncoding());
+        $this->assertEquals('7bit', $this->instance->getContentTransferEncoding());
     }
 
     public function testIsMime()
     {
-        $this->assertFalse($this->nonMimePart->isMime());
+        $this->assertFalse($this->instance->isMime());
     }
 
     public function testGetContentId()
     {
-        $this->assertNull($this->nonMimePart->getContentId());
+        $this->assertNull($this->instance->getContentId());
     }
 }
