@@ -127,12 +127,20 @@ abstract class MultiPart extends MessagePart implements IMultiPart
 
     public function getAllPartsByMimeType($mimeType)
     {
-        return $this->getAllParts($partFilter, PartFilter::fromContentType($mimeType));
+        return $this->getAllParts(PartFilter::fromContentType($mimeType));
     }
 
     public function getCountOfPartsByMimeType($mimeType)
     {
         return $this->getPartCount(PartFilter::fromContentType($mimeType));
+    }
+
+    public function getPartByContentId($contentId)
+    {
+        $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
+        return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
+            return strcasecmp($part->getContentId(), $sanitized) === 0;
+        });
     }
 
     public function addChild(IMessagePart $part, $position = null)

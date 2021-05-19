@@ -223,12 +223,53 @@ class MultiPartTest extends TestCase
         $this->assertEquals([ $parent, $children[1] ], $parent->getAllPartsByMimeType('Ecstatic'));
     }
 
+    public function testGetPartByContentId()
+    {
+        $this->mockHeaderContainer->expects($this->atLeastOnce())
+            ->method('get')
+            ->with($this->equalToIgnoringCase('Content-Id'))
+            ->willReturn(null);
+        $matching = $this->getMockBuilder('ZBateson\MailMimeParser\Message\HeaderContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // IdHeader filters out surrounding whitespace and <> characters, but here I'm using ParameterHeader so
+        // 'bar-of-foo' must not be surrounded by either to match below
+        $matching->expects($this->atLeastOnce())
+            ->method('get')
+            ->with($this->equalToIgnoringCase('Content-Id'))
+            ->willReturn($this->getMockedParameterHeader('Content-Id', 'bar-of-foo'));
+
+        $parentContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
+            ->setMethods()
+            ->getMock();
+        $parent = $this->getMimePart($parentContainer, null);
+
+        $children = [
+            $this->getMimePart(null, null, null, $parent),
+            $this->getMimePart(null, $matching, null, $parent),
+            $this->getMimePart(null, null, null, $parent),
+            $this->getMimePart(null, null, null, $parent)
+        ];
+        $parentContainer->add($children[0]);
+        $parentContainer->add($children[1]);
+        $parentContainer->add($children[2]);
+        $parentContainer->add($children[3]);
+
+        $this->assertSame($children[1], $parent->getPartByContentId(' <bar-of-foo>   '));
+    }
+
     public function testAddChild()
     {
         $part = $this->getParentMimePart();
         // for clarity
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
+
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $part->attach($observer);
 
         $new = $this->getMimePart();
         $part->addChild($new);
@@ -247,6 +288,11 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $part->attach($observer);
+
         $this->assertEquals(0, $part->removePart($this->secondChildNested[0]));
         array_splice($this->allParts, 3, 1);
         $this->assertEquals($this->allParts, $part->getAllParts());
@@ -259,6 +305,11 @@ class MultiPartTest extends TestCase
         // for clarity
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
+
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->exactly(2))
+            ->method('update');
+        $part->attach($observer);
 
         $this->assertSame($this->children[1], $this->secondChildNested[0]->getParent());
         $part->removePart($this->secondChildNested[0]);
@@ -280,6 +331,11 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->exactly(2))
+            ->method('update');
+        $part->attach($observer);
+
         $this->assertEquals(2, $this->children[1]->getChildCount());
         $this->children[1]->removeAllParts();
         $this->assertEquals(0, $this->children[1]->getChildCount());
@@ -294,6 +350,11 @@ class MultiPartTest extends TestCase
         // for clarity
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
+
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $part->attach($observer);
 
         $rm = $this->secondChildNested[0];
         $part->removeAllParts(function ($p) use ($rm) {
@@ -312,6 +373,11 @@ class MultiPartTest extends TestCase
         // for clarity
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
+
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->exactly(count($this->allParts) - 1))
+            ->method('update');
+        $part->attach($observer);
 
         $part->removeAllParts();
         $this->assertEquals(1, $part->getPartCount());

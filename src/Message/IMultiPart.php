@@ -24,20 +24,17 @@ interface IMultiPart extends IMessagePart
     public function isMultiPart();
 
     /**
-     * Convenience method to find a part by its Content-ID header.
-     *
-     * @param string $contentId
-     * @return IMessagePart
-     */
-    public function getPartByContentId($contentId);
-
-    /**
      * Returns the part at the given 0-based index, or null if none is set.
      *
      * Note that the first part returned is the current part itself.  This is
-     * often desirable for queries with a PartFilter, e.g. looking for an
+     * often desirable for queries with a passed filter, e.g. looking for an
      * IMessagePart with a specific Content-Type that may be satisfied by the
      * current part.
+     *
+     * The passed callable must accept an {@see IMessagePart} as an argument,
+     * and return true if it should be accepted, or false to filter the part
+     * out.  Some default filters are provided by static functions returning
+     * callables in {@see PartFilter}.
      *
      * @param int $index
      * @param callable $fnFilter
@@ -49,8 +46,15 @@ interface IMultiPart extends IMessagePart
      * Returns the current part, all child parts, and child parts of all
      * children optionally filtering them with the provided PartFilter.
      *
-     * The first part returned is always the current IMimePart.  This is often
-     * desirable as it may be a valid MimePart for the provided PartFilter.
+     * Note that the first part returned is the current part itself.  This is
+     * often desirable for queries with a passed filter, e.g. looking for an
+     * IMessagePart with a specific Content-Type that may be satisfied by the
+     * current part.
+     *
+     * The passed callable must accept an {@see IMessagePart} as an argument,
+     * and return true if it should be accepted, or false to filter the part
+     * out.  Some default filters are provided by static functions returning
+     * callables in {@see PartFilter}.
      *
      * @param callable $fnFilter an optional filter
      * @return IMessagePart[]
@@ -63,6 +67,11 @@ interface IMultiPart extends IMessagePart
      * Note that the current part is considered, so the minimum getPartCount is
      * 1 without a filter.
      *
+     * The passed callable must accept an {@see IMessagePart} as an argument,
+     * and return true if it should be accepted, or false to filter the part
+     * out.  Some default filters are provided by static functions returning
+     * callables in {@see PartFilter}.
+     *
      * @param callable $fnFilter
      * @return int
      */
@@ -71,6 +80,11 @@ interface IMultiPart extends IMessagePart
     /**
      * Returns the direct child at the given 0-based index, or null if none is
      * set.
+     *
+     * The passed callable must accept an {@see IMessagePart} as an argument,
+     * and return true if it should be accepted, or false to filter the part
+     * out.  Some default filters are provided by static functions returning
+     * callables in {@see PartFilter}.
      *
      * @param int $index
      * @param callable $fnFilter
@@ -81,7 +95,10 @@ interface IMultiPart extends IMessagePart
     /**
      * Returns all direct child parts.
      *
-     * If a is provided, the is applied before returning.
+     * The passed callable must accept an {@see IMessagePart} as an argument,
+     * and return true if it should be accepted, or false to filter the part
+     * out.  Some default filters are provided by static functions returning
+     * callables in {@see PartFilter}.
      *
      * @param callable $fnFilter
      * @return IMessagePart[]
@@ -91,11 +108,21 @@ interface IMultiPart extends IMessagePart
     /**
      * Returns the number of direct children under this part.
      *
+     * The passed callable must accept an {@see IMessagePart} as an argument,
+     * and return true if it should be accepted, or false to filter the part
+     * out.  Some default filters are provided by static functions returning
+     * callables in {@see PartFilter}.
+     *
      * @param callable $fnFilter
      * @return int
      */
     public function getChildCount($fnFilter = null);
 
+    /**
+     * Returns an iterator for child parts.
+     *
+     * @return \Iterator
+     */
     public function getChildIterator();
 
     /**
@@ -124,6 +151,14 @@ interface IMultiPart extends IMessagePart
      * @return int
      */
     public function getCountOfPartsByMimeType($mimeType);
+
+    /**
+     * Convenience method to find a part by its Content-ID header.
+     *
+     * @param string $contentId
+     * @return IMessagePart
+     */
+    public function getPartByContentId($contentId);
 
     /**
      * Registers the passed part as a child of the current part.

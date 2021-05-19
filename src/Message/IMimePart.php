@@ -9,6 +9,8 @@ namespace ZBateson\MailMimeParser\Message;
 /**
  * Represents a single part of a multi-part mime message.
  *
+ * An IMimePart may contain headers, content and children.
+ *
  * @author Zaahid Bateson
  */
 interface IMimePart extends IMultiPart

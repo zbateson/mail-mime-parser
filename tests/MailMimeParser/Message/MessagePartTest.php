@@ -58,8 +58,8 @@ class MessagePartTest extends TestCase {
                 });
         }
         return $this->getMockForAbstractClass(
-                'ZBateson\MailMimeParser\Message\MessagePart',
-                [ $this->partStreamContainer, $parent ]
+            'ZBateson\MailMimeParser\Message\MessagePart',
+            [ $this->partStreamContainer, $parent ]
         );
     }
 

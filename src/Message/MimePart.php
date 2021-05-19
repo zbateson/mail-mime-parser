@@ -11,7 +11,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
- * Default implementation of IMimePart.
+ * Implementation of IMimePart.
  *
  * @author Zaahid Bateson
  */
@@ -118,14 +118,6 @@ class MimePart extends MultiPart implements IMimePart
             return false;
         }
         return $this->parent->getSignaturePart() === $this;
-    }
-
-    public function getPartByContentId($contentId)
-    {
-        $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
-        return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
-            return strcasecmp($part->getContentId(), $sanitized) === 0;
-        });
     }
 
     public function getHeader($name, $offset = 0)
