@@ -83,14 +83,28 @@ class PartStreamContainer
         $this->streamFactory = $streamFactory;
     }
 
+    /**
+     * Sets the part's stream containing the part's headers, content, and
+     * children.
+     *
+     * @param StreamInterface $stream
+     */
     public function setStream(StreamInterface $stream)
     {
         $this->stream = $stream;
     }
 
+    /**
+     * Returns the part's stream containing the part's headers, content, and
+     * children.
+     *
+     * @return StreamInterface
+     */
     public function getStream()
     {
-        $this->stream->rewind();
+        if ($this->stream !== null) {
+            $this->stream->rewind();
+        }
         return $this->stream;
     }
 
@@ -104,6 +118,22 @@ class PartStreamContainer
         return ($this->contentStream !== null);
     }
 
+    /**
+     * Attaches the passed stream as the content portion of this
+     * StreamContainer.
+     *
+     * The content stream would represent the content portion of $this->stream.
+     *
+     * If the content is overridden, $this->stream should point to a dynamic
+     * {@see ZBateson\Stream\MessagePartStream} that dynamically creates the
+     * RFC822 formatted message based on the IMessagePart this
+     * PartStreamContainer belongs to.
+     *
+     * setContentStream can be called with 'null' to indicate the IMessagePart
+     * does not contain any content.
+     *
+     * @param StreamInterface $contentStream
+     */
     public function setContentStream(StreamInterface $contentStream = null)
     {
         $this->contentStream = $contentStream;

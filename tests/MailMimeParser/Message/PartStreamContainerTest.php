@@ -3,151 +3,43 @@ namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
-use ZBateson\StreamDecorators\NonClosingStream;
 
 /**
  * PartStreamFilterManagerTest
  *
- * @group PartStreamFilterManager
+ * @group PartStreamContainer
  * @group MessagePart
  * @covers ZBateson\MailMimeParser\Message\PartStreamFilterManager
  * @author Zaahid Bateson
  */
-class PartStreamFilterManagerTest extends TestCase
+class PartStreamContainerTest extends TestCase
 {
-    private $partStreamFilterManager = null;
+    private $instance = null;
     private $mockStreamFactory = null;
 
     protected function legacySetUp()
     {
-        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
-            ->getMock();
-        $this->partStreamFilterManager = new PartStreamFilterManager($mocksdf);
-        $this->mockStreamFactory = $mocksdf;
+        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')->getMock();
+        $this->instance = new PartStreamContainer($this->mockStreamFactory);
     }
 
-    public function testAttachQuotedPrintableDecoder()
+    public function testSetAndGetStream()
     {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
-            ->willReturn($stream);
-        $this->assertNull($this->partStreamFilterManager->getContentStream('quoted-printable', null, null));
-
-        $this->partStreamFilterManager->setStream($stream);
-        $managerStream = $this->partStreamFilterManager->getContentStream('quoted-printable', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
-        $this->assertEquals('test', $managerStream->getContents());
+        $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
+        $this->assertNull($this->instance->getStream());
+        $this->instance->setStream($stream);
+        $stream->expects($this->once())->method('rewind');
+        $this->assertSame($stream, $this->instance->getStream());
     }
 
-    public function testAttachBase64Decoder()
+    public function testSetContentStreamAndHasContent()
     {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newBase64Stream')
-            ->with($stream)
-            ->willReturn($stream);
-        $this->partStreamFilterManager->setStream($stream);
-        $managerStream = $this->partStreamFilterManager->getContentStream('base64', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
-        $this->assertEquals('test', $managerStream->getContents());
-    }
-
-    public function testAttachUUEncodeDecoder()
-    {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newUUStream')
-            ->with($stream)
-            ->willReturn($stream);
-        $this->partStreamFilterManager->setStream($stream);
-        $managerStream = $this->partStreamFilterManager->getContentStream('x-uuencode', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
-        $this->assertEquals('test', $managerStream->getContents());
-    }
-
-    public function testAttachCharsetConversionDecoder()
-    {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newCharsetStream')
-            ->with($stream, 'US-ASCII', 'UTF-8')
-            ->willReturn($stream);
-        $this->partStreamFilterManager->setStream($stream);
-        $managerStream = $this->partStreamFilterManager->getContentStream(null, 'US-ASCII', 'UTF-8');
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
-        $this->assertEquals('test', $managerStream->getContents());
-    }
-
-    public function testReAttachTransferEncodingDecoder()
-    {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
-            ->willReturn($stream);
-        $stream->rewind();
-
-        $stream2 = Psr7\stream_for('test2');
-        $stream3 = Psr7\stream_for('test3');
-        $this->mockStreamFactory->expects($this->exactly(2))
-            ->method('newUUStream')
-            ->with($stream)
-            ->willReturnOnConsecutiveCalls($stream2, $stream3);
-        $this->partStreamFilterManager->setStream($stream);
-
-        $manager = $this->partStreamFilterManager;
-        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
-        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
-        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
-
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
-
-        $this->assertEquals('test3', $manager->getContentStream('x-uuencode', null, null)->getContents());
-    }
-
-    public function testReAttachCharsetConversionDecoder()
-    {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(4))
-            ->method('newCharsetStream')
-            ->withConsecutive(
-                [$stream, 'US-ASCII', 'UTF-8'],
-                [$stream, 'US-ASCII', 'WINDOWS-1252'],
-                [$stream, 'ISO-8859-1', 'WINDOWS-1252'],
-                [$stream, 'WINDOWS-1252', 'UTF-8']
-            )
-            ->willReturn($stream);
-        $this->partStreamFilterManager->setStream($stream);
-
-        $manager = $this->partStreamFilterManager;
-        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'WINDOWS-1252')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8')->getContents());
-    }
-
-    public function testAttachCharsetConversionAndTransferEncodingDecoder()
-    {
-        $stream = Psr7\stream_for('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newCharsetStream')
-            ->with($this->anything(), 'US-ASCII', 'UTF-8')
-            ->willReturn($stream);
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
-            ->willReturn($stream);
-        $this->partStreamFilterManager->setStream($stream);
-
-        $manager = $this->partStreamFilterManager;
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
+        $this->assertFalse($this->instance->hasContent());
+        $this->assertNull($this->instance->getContentStream('', '', ''));
+        $this->assertNull($this->instance->getBinaryContentStream(''));
+        $this->instance->setContentStream($stream);
+        $this->assertTrue($this->instance->hasContent());
     }
 
     public function testGetBinaryStream()
@@ -165,16 +57,140 @@ class PartStreamFilterManagerTest extends TestCase
             ->method('newUUStream')
             ->with($stream)
             ->willReturnOnConsecutiveCalls($stream2, $stream3);
-        $this->partStreamFilterManager->setStream($stream);
+        $this->instance->setContentStream($stream);
 
-        $manager = $this->partStreamFilterManager;
-        $this->assertEquals('test2', $manager->getBinaryStream('x-uuencode')->getContents());
-        $this->assertEquals('test2', $manager->getBinaryStream('x-uuencode')->getContents());
-        $this->assertEquals('test2', $manager->getBinaryStream('x-uuencode')->getContents());
+        $manager = $this->instance;
+        $this->assertEquals('test2', $manager->getBinaryContentStream('x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryContentStream('x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryContentStream('x-uuencode')->getContents());
 
-        $this->assertEquals('test', $manager->getBinaryStream('quoted-printable')->getContents());
-        $this->assertEquals('test', $manager->getBinaryStream('quoted-printable')->getContents());
+        $this->assertEquals('test', $manager->getBinaryContentStream('quoted-printable')->getContents());
+        $this->assertEquals('test', $manager->getBinaryContentStream('quoted-printable')->getContents());
 
-        $this->assertEquals('test3', $manager->getBinaryStream('x-uuencode')->getContents());
+        $this->assertEquals('test3', $manager->getBinaryContentStream('x-uuencode')->getContents());
+    }
+
+    public function testGetContentStreamWithQuotedPrintableDecoderTransferEncoding()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newQuotedPrintableStream')
+            ->with($stream)
+            ->willReturn($stream);
+        $this->assertNull($this->instance->getContentStream('quoted-printable', null, null));
+
+        $this->instance->setContentStream($stream);
+        $managerStream = $this->instance->getContentStream('quoted-printable', null, null);
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
+    }
+
+    public function testGetContentStreamWithBase64DecoderTransferEncoding()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newBase64Stream')
+            ->with($stream)
+            ->willReturn($stream);
+        $this->instance->setContentStream($stream);
+        $managerStream = $this->instance->getContentStream('base64', null, null);
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
+    }
+
+    public function testGetContentStreamWithUUDecoderTransferEncoding()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newUUStream')
+            ->with($stream)
+            ->willReturn($stream);
+        $this->instance->setContentStream($stream);
+        $managerStream = $this->instance->getContentStream('x-uuencode', null, null);
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
+    }
+
+    public function testGetContentStreamWithCharsetEncoding()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newCharsetStream')
+            ->with($stream, 'US-ASCII', 'UTF-8')
+            ->willReturn($stream);
+        $this->instance->setContentStream($stream);
+        $managerStream = $this->instance->getContentStream(null, 'US-ASCII', 'UTF-8');
+        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertEquals('test', $managerStream->getContents());
+    }
+
+    public function testGetContentStreamWithReAttachedTransferEncodingDecoder()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newQuotedPrintableStream')
+            ->with($stream)
+            ->willReturn($stream);
+        $stream->rewind();
+
+        $stream2 = Psr7\stream_for('test2');
+        $stream3 = Psr7\stream_for('test3');
+        $this->mockStreamFactory->expects($this->exactly(2))
+            ->method('newUUStream')
+            ->with($stream)
+            ->willReturnOnConsecutiveCalls($stream2, $stream3);
+        $this->instance->setContentStream($stream);
+
+        $manager = $this->instance;
+        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
+
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
+
+        $this->assertEquals('test3', $manager->getContentStream('x-uuencode', null, null)->getContents());
+    }
+
+    public function testGetContentStreamWithReAttachedCharsetConversionDecoder()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(4))
+            ->method('newCharsetStream')
+            ->withConsecutive(
+                [$stream, 'US-ASCII', 'UTF-8'],
+                [$stream, 'US-ASCII', 'WINDOWS-1252'],
+                [$stream, 'ISO-8859-1', 'WINDOWS-1252'],
+                [$stream, 'WINDOWS-1252', 'UTF-8']
+            )
+            ->willReturn($stream);
+        $this->instance->setContentStream($stream);
+
+        $manager = $this->instance;
+        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test', $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8')->getContents());
+    }
+
+    public function testGetContentStreamWithCharsetAndTransferEncoding()
+    {
+        $stream = Psr7\stream_for('test');
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newCharsetStream')
+            ->with($this->anything(), 'US-ASCII', 'UTF-8')
+            ->willReturn($stream);
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('newQuotedPrintableStream')
+            ->with($stream)
+            ->willReturn($stream);
+        $this->instance->setContentStream($stream);
+
+        $manager = $this->instance;
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
     }
 }
