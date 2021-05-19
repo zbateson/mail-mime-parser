@@ -94,37 +94,6 @@ class PrivacyHelperTest extends TestCase
         $helper->overwrite8bitContentEncoding($message);
     }
 
-    public function testEnsureHtmlPartFirstForSignedMessage()
-    {
-        $helper = $this->newPrivacyHelper();
-
-        $message = $this->newMockMessage();
-        $alt = $this->newMockMimePart();
-        $cont = $this->newMockMimePart();
-        $children = [ $this->newMockMimePart(), $cont ];
-
-        $message->expects($this->once())
-            ->method('getPartByMimeType')
-            ->with('multipart/alternative')
-            ->willReturn($alt);
-
-        $this->mockMultipartHelper->expects($this->once())
-            ->method('getContentPartContainerFromAlternative')
-            ->willReturn($cont);
-        $alt->expects($this->once())
-            ->method('getChildParts')
-            ->willReturn($children);
-
-        $alt->expects($this->once())
-            ->method('removePart')
-            ->with($children[0]);
-        $alt->expects($this->once())
-            ->method('addChild')
-            ->with($children[0]);
-
-        $helper->ensureHtmlPartFirstForSignedMessage($message);
-    }
-
     public function testSetSignature()
     {
         $helper = $this->newPrivacyHelper();
@@ -217,11 +186,6 @@ class PrivacyHelperTest extends TestCase
         $message->expects($this->once())
             ->method('getAllParts')
             ->willReturn([]);
-        // called from ensureHtmlPartFirstForSignedMessage
-        $message->expects($this->once())
-            ->method('getPartByMimeType')
-            ->with('multipart/alternative')
-            ->willReturn(null);
         // called from setSignature
         $message->expects($this->once())
             ->method('getSignaturePart')
