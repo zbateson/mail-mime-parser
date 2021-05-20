@@ -13,10 +13,6 @@ use Psr\Http\Message\StreamInterface;
 
 /**
  * Responsible for creating PartBuilder instances.
- * 
- * The PartBuilder instance must be constructed with a MessagePartFactory
- * instance to construct a MessagePart sub-class after parsing a message into
- * PartBuilder instances.
  *
  * @author Zaahid Bateson
  */
@@ -28,15 +24,15 @@ class PartBuilderFactory
     protected $partHeaderContainerFactory;
 
     /**
-     * @var BaseParser
-     */
-    private $baseParser;
-
-    /**
      * @var StreamFactory
      */
     protected $streamFactory;
     
+    /**
+     * @var BaseParser
+     */
+    protected $baseParser;
+
     public function __construct(
         PartHeaderContainerFactory $partHeaderContainerFactory,
         StreamFactory $streamFactory,
