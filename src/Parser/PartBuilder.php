@@ -17,140 +17,148 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * Used by MessageParser to keep information about a parsed message as an
- * intermediary before creating a Message object and its MessagePart children.
+ * Holds information about a part while it's being parsed, proxies calls between
+ * parsed part containers (ParsedPartChildrenContainer,
+ * ParsedPartStreamContainer) and the parser as more parts need to be parsed.
  *
+ * The class holds:
+ *  - a HeaderContainer to hold headers
+ *  - stream positions (part start/end positions, content start/end)
+ *  - parser markers, e.g. 'mimeBoundary, 'endBoundaryFound',
+ *    'parentBoundaryFound', 'canHaveHeaders', 'isNonMimePart'
+ *  - properties for UUEncoded parts (filename, mode)
+ *  - the message's psr7 stream and a resource handle created from it (held
+ *    only for a top-level PartBuilder representing the message, child
+ *    PartBuilders do not duplicate/hold a separate stream).
+ *  - ParsedPartChildrenContainer, ParsedPartStreamContainer to update children
+ *    and streams dynamically as a part is parsed.
  * @author Zaahid Bateson
  */
 class PartBuilder
 {
     /**
-     * @var MessagePartFactory the factory
-     *      needed for creating the Message or MessagePart for the parsed part.
+     * @var MessagePartFactory the factory needed for creating the Message or
+     *      MessagePart for the parsed part.
      */
-    private $messagePartFactory;
+    protected $messagePartFactory;
 
     /**
-     * @var StreamFactory
+     * @var StreamFactory Used for creating streams for IMessageParts when
+     *      creating them.
      */
     protected $streamFactory;
+
+    /**
+     * @var BaseParser Used for parsing parts as needed.
+     */
+    protected $baseParser;
 
     /**
      * @var int The offset read start position for this part (beginning of
      * headers) in the message's stream.
      */
-    private $streamPartStartPos = null;
+    protected $streamPartStartPos = null;
     
     /**
      * @var int The offset read end position for this part.  If the part is a
      * multipart mime part, the end position is after all of this parts
      * children.
      */
-    private $streamPartEndPos = null;
+    protected $streamPartEndPos = null;
     
     /**
      * @var int The offset read start position in the message's stream for the
      * beginning of this part's content (body).
      */
-    private $streamContentStartPos = null;
+    protected $streamContentStartPos = null;
     
     /**
      * @var int The offset read end position in the message's stream for the
      * end of this part's content (body).
      */
-    private $streamContentEndPos = null;
+    protected $streamContentEndPos = null;
 
     /**
      * @var boolean set to true once the end boundary of the currently-parsed
      *      part is found.
      */
-    private $endBoundaryFound = false;
+    protected $endBoundaryFound = false;
     
     /**
      * @var boolean set to true once a boundary belonging to this parent's part
      *      is found.
      */
-    private $parentBoundaryFound = false;
+    protected $parentBoundaryFound = false;
     
     /**
-     * @var boolean|null|string false if not queried for in the content-type
-     *      header of this part, null if the current part does not have a
-     *      boundary, or the value of the boundary parameter of the content-type
-     *      header if the part contains one.
+     * @var boolean|null|string FALSE if not queried for in the content-type
+     *      header of this part, NULL if the current part does not have a
+     *      boundary, and otherwise contains the value of the boundary parameter
+     *      of the content-type header if the part contains one.
      */
-    private $mimeBoundary = false;
-    
-    /**
-     * @var PartHeaderContainer a container for found and parsed headers.
-     */
-    private $headerContainer;
-
-    /**
-     * @var PartBuilder the parent part.
-     */
-    private $parent = null;
-    
-    /**
-     * @var string[] key => value pairs of properties passed on to the 
-     *      $messagePartFactory when constructing the Message and its children.
-     */
-    private $properties = [];
+    protected $mimeBoundary = false;
 
     /**
      * @var bool true if the part can have headers (i.e. a top-level part, or a
      *      child part if the parent's end boundary hasn't been found and is not
      *      a discardable part).
      */
-    private $canHaveHeaders = true;
-
-    /**
-     * @var StreamInterface the raw message input stream for a message, or null
-     *      for a part
-     */
-    private $messageStream;
-
-    /**
-     * @var resource the raw message input stream handle constructed from
-     *      $messageStream
-     */
-    private $messageHandle;
+    protected $canHaveHeaders = true;
 
     /**
      * @var bool set to true when creating a PartBuilder for a non-mime message.
      */
-    private $isNonMimePart = false;
+    protected $isNonMimePart = false;
 
     /**
-     * @var IMessagePart
+     * @var PartHeaderContainer a container for found and parsed headers.
      */
-    private $part;
+    protected $headerContainer;
 
     /**
-     * @var IMessagePart the last child that was added
+     * @var PartBuilder the parent part.
      */
-    private $lastAddedChild;
+    protected $parent = null;
+    
+    /**
+     * @var string[] key => value pairs of properties passed on to the 
+     *      $messagePartFactory when constructing the Message and its children.
+     */
+    protected $properties = [];
 
     /**
-     * @var BaseParser
+     * @var StreamInterface the raw message input stream for a message, or null
+     *      for a child part.
      */
-    private $baseParser;
+    protected $messageStream;
+
+    /**
+     * @var resource the raw message input stream handle constructed from
+     *      $messageStream or null for a child part
+     */
+    protected $messageHandle;
 
     /**
      * @var ParsedPartChildrenContainer
      */
-    private $partChildrenContainer;
+    protected $partChildrenContainer;
 
     /**
      * @var ParsedPartStreamContainer
      */
-    private $partStreamContainer;
+    protected $partStreamContainer;
 
     /**
-     * Sets up class dependencies.
-     *
-     * @param ParsedMessagePartFactory $mpf
-     * @param PartHeaderContainer $headerContainer
+     * @var IMessagePart the last child that was added maintained to ensure all
+     *      of the last added part was parsed before parsing the next part.
      */
+    private $lastAddedChild;
+
+    /**
+     * @var IMessagePart the created part from this PartBuilder.
+     */
+    private $part;
+
     public function __construct(
         ParsedMessagePartFactory $mpf,
         StreamFactory $streamFactory,
