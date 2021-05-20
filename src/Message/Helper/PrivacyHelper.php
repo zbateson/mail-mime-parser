@@ -10,7 +10,6 @@ use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
  * Provides routines to set or retrieve the signature part of a signed message.
