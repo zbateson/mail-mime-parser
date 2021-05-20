@@ -1,5 +1,5 @@
 <?php
-namespace ZBateson\MailMimeParser\Message;
+namespace ZBateson\MailMimeParser\Parser;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
@@ -14,21 +14,64 @@ use GuzzleHttp\Psr7;
  */
 class PartBuilderTest extends TestCase
 {
-    private $mockMessagePartFactory;
+    private $parsedMessagePartFactory;
+    private $streamFactory;
+    private $baseParser;
 
     protected function legacySetUp()
     {
-        $this->mockMessagePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\MessagePartFactory')
+        $this->parsedMessagePartFactory = $this->getMockForAbstractClass(
+            'ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory',
+            [],
+            '',
+            false
+        );
+        $this->streamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['newInstance'])
+            ->getMock();
+        $this->baseParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\BaseParser')
+            ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockHeaderContainer()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    private function newPartBuilder($headerContainer = null, $stream = null, $parent = null)
+    {
+        if ($stream === null && $parent === null) {
+            $stream = Psr7\stream_for('test');
+        }
+        return new PartBuilder(
+            $this->parsedMessagePartFactory,
+            $this->streamFactory,
+            $this->baseParser,
+            ($headerContainer === null) ? $this->newMockHeaderContainer() : $headerContainer,
+            $stream,
+            $parent
+        );
+    }
+
+    private function setContainers($partBuilder, $streamContainer = null, $childrenContainer = null)
+    {
+        if ($streamContainer === null) {
+            $streamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainer')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+        if ($childrenContainer === null) {
+            $childrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+        $partBuilder->setContainers(
+            $streamContainer,
+            $childrenContainer
+        );
     }
 
     public function testCanHaveHeaders()
@@ -42,18 +85,10 @@ class PartBuilderTest extends TestCase
             ->with('boundary')
             ->willReturn('Castle Black');
 
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
-
+        $hc = $this->newMockHeaderContainer();
+        $instance = $this->newPartBuilder($hc);
         $this->assertTrue($instance->canHaveHeaders());
 
-        $hc = $this->newMockHeaderContainer();
-        $parent = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
         $hc->expects($this->once())
             ->method('add')
             ->with('CONTENT-TYPE', 'kookoo-keekee');
@@ -61,44 +96,36 @@ class PartBuilderTest extends TestCase
             ->method('get')
             ->with('Content-Type')
             ->willReturn($mockHeader);
-        $parent->addHeader('CONTENT-TYPE', 'kookoo-keekee');
-        $parent->addChild($instance);
-
-        $parent->setEndBoundaryFound('--Castle Black--');
-        $this->assertFalse($instance->canHaveHeaders());
+        $instance->addHeader('CONTENT-TYPE', 'kookoo-keekee');
+        $instance->setEndBoundaryFound('--Castle Black--');
+        
+        $child = $this->newPartBuilder(null, null, $instance);
+        $this->assertFalse($child->canHaveHeaders());
     }
 
-    public function testAddChildren()
+    public function testAddChildrenToContainer()
     {
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
-        $children = [
-            new PartBuilder(
-                $this->mockMessagePartFactory,
-                $this->newMockHeaderContainer()
-            ),
-            new PartBuilder(
-                $this->mockMessagePartFactory,
-                $this->newMockHeaderContainer()
-            )
-        ];
-        foreach ($children as $child) {
-            $instance->addChild($child);
-        }
-        $this->assertEquals($children, $instance->getChildren());
-        $this->assertSame($instance, $children[0]->getParent());
-        $this->assertSame($instance, $children[1]->getParent());
+        $instance = $this->newPartBuilder();
+        $cc = $childrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer')
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $this->setContainers($instance, null, $cc);
+        $f = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+        $s = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+
+        $cc->expects($this->exactly(2))
+            ->method('add')
+            ->withConsecutive([ $f ], [ $s ]);
+
+        $instance->addChildToContainer($f);
+        $instance->addChildToContainer($s);
     }
 
     public function testAddAndGetRawHeaders()
     {
         $hc = $this->newMockHeaderContainer();
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
+        $instance = $this->newPartBuilder($hc);
         $hc->expects($this->exactly(3))
             ->method('add')
             ->withConsecutive(
@@ -116,10 +143,7 @@ class PartBuilderTest extends TestCase
     public function testIsMime()
     {
         $hc = $this->newMockHeaderContainer();
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
+        $instance = $this->newPartBuilder($hc);
         $hc->expects($this->exactly(5))
             ->method('exists')
             ->withConsecutive(
@@ -139,10 +163,7 @@ class PartBuilderTest extends TestCase
     public function testGetContentType()
     {
         $hc = $this->newMockHeaderContainer();
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
+        $instance = $this->newPartBuilder($hc);
         $hc->expects($this->once())
             ->method('get')
             ->with('Content-Type', 0)
@@ -162,10 +183,7 @@ class PartBuilderTest extends TestCase
             ->willReturn('Castle Black');
 
         $hc = $this->newMockHeaderContainer();
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
+        $instance = $this->newPartBuilder($hc);
         $hc->expects($this->once())
             ->method('get')
             ->with('Content-Type', 0)
@@ -184,10 +202,7 @@ class PartBuilderTest extends TestCase
             ->willReturnOnConsecutiveCalls('multipart/kookoo', 'text/plain');
 
         $hc = $this->newMockHeaderContainer();
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
+        $instance = $this->newPartBuilder($hc);
         $hc->expects($this->atLeastOnce())
             ->method('get')
             ->with('Content-Type', 0)
@@ -209,10 +224,7 @@ class PartBuilderTest extends TestCase
             ->willReturn('Castle Black');
 
         $hc = $this->newMockHeaderContainer();
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
+        $instance = $this->newPartBuilder($hc);
         $hc->expects($this->atLeastOnce())
             ->method('get')
             ->with('Content-Type', 0)
@@ -225,13 +237,8 @@ class PartBuilderTest extends TestCase
         $this->assertFalse($instance->isParentBoundaryFound());
         $this->assertTrue($instance->setEndBoundaryFound('--Castle Black--'));
 
-        $child = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
-        $instance->addChild($child);
+        $child = $this->newPartBuilder(null, null, $instance);
         $this->assertEquals($instance, $child->getParent());
-        $this->assertCount(0, $instance->getChildren());
         $this->assertFalse($child->canHaveHeaders());
     }
 
@@ -260,21 +267,15 @@ class PartBuilderTest extends TestCase
             ->method('get')
             ->with('Content-Type', 0)
             ->willReturn($mockHeader);
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
-
+        
         $hcp = $this->newMockHeaderContainer();
         $hcp->expects($this->atLeastOnce())
             ->method('get')
             ->with('Content-Type', 0)
             ->willReturn($mockParentHeader);
-        $parent = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hcp
-        );
-        $parent->addChild($instance);
+        $parent = $this->newPartBuilder($hcp);
+
+        $instance = $this->newPartBuilder($hc, null, $parent);
 
         $this->assertSame($parent, $instance->getParent());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -309,21 +310,15 @@ class PartBuilderTest extends TestCase
             ->method('get')
             ->with('Content-Type', 0)
             ->willReturn($mockHeader);
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hc
-        );
 
         $hcp = $this->newMockHeaderContainer();
         $hcp->expects($this->atLeastOnce())
             ->method('get')
             ->with('Content-Type', 0)
             ->willReturn($mockParentHeader);
-        $parent = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $hcp
-        );
-        $parent->addChild($instance);
+
+        $parent = $this->newPartBuilder($hcp);
+        $instance = $this->newPartBuilder($hc, null, $parent);
 
         $this->assertSame($parent, $instance->getParent());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -338,10 +333,7 @@ class PartBuilderTest extends TestCase
 
     public function testSetStreamPartPosAndGetFilename()
     {
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
+        $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(42);
         $instance->setStreamPartEndPos(84);
         $this->assertEquals(42, $instance->getStreamPartStartOffset());
@@ -350,10 +342,7 @@ class PartBuilderTest extends TestCase
 
     public function testSetStreamContentPosAndGetFilename()
     {
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
+        $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(11);
         $instance->setStreamContentStartPos(42);
         $instance->setStreamPartAndContentEndPos(84);
@@ -365,20 +354,9 @@ class PartBuilderTest extends TestCase
 
     public function testSetStreamContentPosAndGetFilenameWithParent()
     {
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
-        $parent = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
-        $super = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
-        $parent->addChild($instance);
-        $super->addChild($parent);
+        $super = $this->newPartBuilder();
+        $parent = $this->newPartBuilder(null, null, $super);
+        $instance = $this->newPartBuilder(null, null, $parent);
 
         $super->setStreamPartStartPos(0);
         $super->setStreamContentStartPos(3);
@@ -392,9 +370,9 @@ class PartBuilderTest extends TestCase
         $instance->setStreamContentStartPos(42);
         $instance->setStreamPartAndContentEndPos(84);
 
-        $this->assertEquals(42 - $parent->getStreamPartStartOffset(), $instance->getStreamContentStartOffset());
+        $this->assertEquals(42, $instance->getStreamContentStartOffset());
         $this->assertEquals(84 - 42, $instance->getStreamContentLength());
-        $this->assertEquals(22 - $parent->getStreamPartStartOffset(), $instance->getStreamPartStartOffset());
+        $this->assertEquals(22, $instance->getStreamPartStartOffset());
         $this->assertEquals(84 - 22, $instance->getStreamPartLength());
 
         $this->assertEquals(13, $parent->getStreamContentStartOffset());
@@ -410,10 +388,7 @@ class PartBuilderTest extends TestCase
 
     public function testSetAndGetProperties()
     {
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
+        $instance = $this->newPartBuilder();
         $instance->setProperty('island', 'Westeros');
         $instance->setProperty('capital', 'King\'s Landing');
         $this->assertSame('Westeros', $instance->getProperty('island'));
@@ -424,14 +399,11 @@ class PartBuilderTest extends TestCase
     public function testCreateMessagePart()
     {
         $stream = Psr7\stream_for('thingsnstuff');
-        $instance = new PartBuilder(
-            $this->mockMessagePartFactory,
-            $this->newMockHeaderContainer()
-        );
+        $instance = $this->newPartBuilder();
 
-        $this->mockMessagePartFactory->expects($this->once())
+        $this->parsedMessagePartFactory->expects($this->once())
             ->method('newInstance')
-            ->with($instance, $stream)
+            ->with($instance, null)
             ->willReturn(true);
         $this->assertTrue($instance->createMessagePart($stream));
     }
