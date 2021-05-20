@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessageFactory;
 use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -43,7 +42,6 @@ class MessageParser
         $this->headerParser = $headerParser;
     }
 
-
     /**
      * Convenience method to read a line of up to 4096 characters from the
      * passed resource handle.
@@ -53,7 +51,7 @@ class MessageParser
      * returned.
      *
      * @param resource $handle
-     * @return string
+     * @return string|bool the read line or false on EOF or on error.
      */
     public static function readLine($handle)
     {
