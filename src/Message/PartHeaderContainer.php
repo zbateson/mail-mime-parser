@@ -52,18 +52,23 @@ class PartHeaderContainer implements IteratorAggregate
     private $nextIndex = 0;
 
     /**
-     * Constructor
+     * Pass a PartHeaderContainer as the second parameter.  This is useful when
+     * creating a new MimePart with this PartHeaderContainer and the original
+     * container is needed for parsing and changes to the header in the part
+     * should not affect parsing.
      *
      * @param HeaderFactory $headerFactory
+     * @param PartHeaderContainer $cloneSource the original container to clone
+     *        from
      */
-    public function __construct(HeaderFactory $headerFactory, PartHeaderContainer $clone = null)
+    public function __construct(HeaderFactory $headerFactory, PartHeaderContainer $cloneSource = null)
     {
         $this->headerFactory = $headerFactory;
-        if ($clone !== null) {
-            $this->headers = $clone->headers;
-            $this->headerObjects = $clone->headerObjects;
-            $this->headerMap = $clone->headerMap;
-            $this->nextIndex = $clone->nextIndex;
+        if ($cloneSource !== null) {
+            $this->headers = $cloneSource->headers;
+            $this->headerObjects = $cloneSource->headerObjects;
+            $this->headerMap = $cloneSource->headerMap;
+            $this->nextIndex = $cloneSource->nextIndex;
         }
     }
 
