@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9280398ddbc40d79edf55585209de52b",
+    "content-hash": "d33c35783dbe7f4e498410e86fe0dbd4",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -467,20 +467,20 @@
         },
         {
             "name": "zbateson/stream-decorators",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/stream-decorators.git",
-                "reference": "c4d06f16ba3899b0d6d8a2942186d9dde6d9d245"
+                "reference": "3403c4323bd1cd15fe54348b031b26b064c706af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/c4d06f16ba3899b0d6d8a2942186d9dde6d9d245",
-                "reference": "c4d06f16ba3899b0d6d8a2942186d9dde6d9d245",
+                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/3403c4323bd1cd15fe54348b031b26b064c706af",
+                "reference": "3403c4323bd1cd15fe54348b031b26b064c706af",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/psr7": "^1.0.0|^2.0",
+                "guzzlehttp/psr7": "^1.7.0|^2.0",
                 "php": ">=5.4",
                 "zbateson/mb-wrapper": "^1.0.0"
             },
@@ -516,7 +516,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zbateson/stream-decorators/issues",
-                "source": "https://github.com/zbateson/stream-decorators/tree/1.0.5"
+                "source": "https://github.com/zbateson/stream-decorators/tree/1.0.6"
             },
             "funding": [
                 {
@@ -524,7 +524,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-08T18:25:20+00:00"
+            "time": "2021-07-08T19:01:59+00:00"
         }
     ],
     "packages-dev": [
