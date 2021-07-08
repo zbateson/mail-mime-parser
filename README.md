@@ -2,7 +2,7 @@
 
 Testable and PSR-compliant mail mime parser alternative to PHP's imap* functions and Pear libraries for reading messages in _Internet Message Format_ [RFC 822](http://tools.ietf.org/html/rfc822) (and later revisions [RFC 2822](http://tools.ietf.org/html/rfc2822), [RFC 5322](http://tools.ietf.org/html/rfc5322)).
 
-[![Build Status](https://travis-ci.com/zbateson/mail-mime-parser.svg?branch=master)](https://travis-ci.com/zbateson/mail-mime-parser)
+[![Build Status](https://img.shields.io/github/workflow/status/zbateson/mail-mime-parser/run-tests?label=tests)](https://github.com/zbateson/mail-mime-parser/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![Code Coverage](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/?branch=master)
 [![Total Downloads](https://poser.pugx.org/zbateson/mail-mime-parser/downloads)](//packagist.org/packages/zbateson/mail-mime-parser)
@@ -32,7 +32,7 @@ getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have 
 
 ## Requirements
 
-MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2, 7.3, 7.4 and 8.0 on travis.
+MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2, 7.3, 7.4 and 8.0.
 
 ## Usage
 
