@@ -63,10 +63,10 @@ class MailMimeParser
      */
     public function parse($handleOrString)
     {
-        $stream = Psr7\stream_for($handleOrString);
-        $copy = Psr7\stream_for(fopen('php://temp', 'r+'));
+        $stream = Psr7\Utils::streamFor($handleOrString);
+        $copy = Psr7\Utils::streamFor(fopen('php://temp', 'r+'));
 
-        Psr7\copy_to_stream($stream, $copy);
+        Psr7\Utils::copyToStream($stream, $copy);
         $copy->rewind();
 
         // don't close it when $stream gets destroyed

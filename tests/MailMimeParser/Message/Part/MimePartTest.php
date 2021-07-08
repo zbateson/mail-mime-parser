@@ -85,7 +85,7 @@ class MimePartTest extends TestCase
         $nested->method('createMessagePart')
             ->willReturn($this->newMimePart(
                 $nested,
-                Psr7\stream_for('nested')
+                Psr7\Utils::streamFor('nested')
             ));
         $children[0]->method('getChildren')
             ->willReturn([$nested]);
@@ -94,7 +94,7 @@ class MimePartTest extends TestCase
             $child->method('createMessagePart')
                 ->willReturn($this->newMimePart(
                     $child,
-                    Psr7\stream_for('child' . $key)
+                    Psr7\Utils::streamFor('child' . $key)
                 ));
         }
         $pb->method('getChildren')
@@ -139,7 +139,7 @@ class MimePartTest extends TestCase
 
     public function testCreateChildrenAndGetParts()
     {
-        $part = $this->newMimePart($this->getMockedPartBuilderWithChildren(), Psr7\stream_for('habibi'));
+        $part = $this->newMimePart($this->getMockedPartBuilderWithChildren(), Psr7\Utils::streamFor('habibi'));
         $this->assertEquals(5, $part->getPartCount());
 
         $children = $part->getChildParts();
@@ -169,7 +169,7 @@ class MimePartTest extends TestCase
 
         $pb = $this->getMockedPartBuilder();
         $hc = $pb->getHeaderContainer();
-        $ms = Psr7\stream_for('message');
+        $ms = Psr7\Utils::streamFor('message');
         $part = $this->newMimePart($pb, $ms);
 
         // make sure markAsChanged is called
@@ -244,7 +244,7 @@ class MimePartTest extends TestCase
 
     public function testOnChangeParents()
     {
-        $ms = Psr7\stream_for('parent');
+        $ms = Psr7\Utils::streamFor('parent');
         $part = $this->newMimePart($this->getMockedPartBuilderWithChildren(), $ms);
 
         $children = $part->getChildParts();
@@ -253,7 +253,7 @@ class MimePartTest extends TestCase
         $msChildren = [ $children[0]->getStream(), $children[1]->getStream(), $children[2]->getStream() ];
         $ns = $nested->getStream();
 
-        $msFirst = Psr7\stream_for('first');
+        $msFirst = Psr7\Utils::streamFor('first');
         $first = $this->newMimePart($this->getMockedPartBuilder(), $msFirst);
 
         $this->assertSame($ms, $part->getStream());
@@ -424,7 +424,7 @@ class MimePartTest extends TestCase
             ->with('Content-Disposition', 0)
             ->willReturn($header);
 
-        $part = $this->newMimePart($pb, Psr7\stream_for('habibi'));
+        $part = $this->newMimePart($pb, Psr7\Utils::streamFor('habibi'));
         $this->assertSame($header, $part->getHeader('Content-Disposition'));
         $this->assertEquals('habibi', $part->getContentDisposition());
     }
@@ -439,7 +439,7 @@ class MimePartTest extends TestCase
             ->with('Content-Transfer-Encoding', 0)
             ->willReturn($header);
 
-        $part = $this->newMimePart($pb, Psr7\stream_for('habibi'));
+        $part = $this->newMimePart($pb, Psr7\Utils::streamFor('habibi'));
         $this->assertSame($header, $part->getHeader('Content-Transfer-Encoding'));
         $this->assertEquals('x-uuencode', $part->getContentTransferEncoding());
     }
@@ -533,9 +533,9 @@ class MimePartTest extends TestCase
         $manager->expects($this->once())
             ->method('getContentStream')
             ->with('klingon', 'WINGDING', 'UTF-8')
-            ->willReturn(Psr7\stream_for('totally not null'));
+            ->willReturn(Psr7\Utils::streamFor('totally not null'));
 
-        $part = $this->newMimePart($pb, Psr7\stream_for('habibi'), Psr7\stream_for('blah'));
+        $part = $this->newMimePart($pb, Psr7\Utils::streamFor('habibi'), Psr7\Utils::streamFor('blah'));
         $this->assertEquals('WINGDING', $part->getCharset());
         $this->assertEquals('klingon', $part->getContentTransferEncoding());
         $this->assertNotNull($part->getContentStream());

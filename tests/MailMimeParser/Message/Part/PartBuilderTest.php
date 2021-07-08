@@ -423,7 +423,7 @@ class PartBuilderTest extends TestCase
 
     public function testCreateMessagePart()
     {
-        $stream = Psr7\stream_for('thingsnstuff');
+        $stream = Psr7\Utils::streamFor('thingsnstuff');
         $instance = new PartBuilder(
             $this->mockMessagePartFactory,
             $this->newMockHeaderContainer()

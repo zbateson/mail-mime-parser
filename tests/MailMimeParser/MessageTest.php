@@ -259,7 +259,7 @@ class MessageTest extends TestCase
             ->setMethods(['filter'])
             ->getMock();
 
-        $org = Psr7\stream_for('stream');
+        $org = Psr7\Utils::streamFor('stream');
         $message = $this->newMessage(
             $this->getMockedPartBuilderWithChildren(),
             $org

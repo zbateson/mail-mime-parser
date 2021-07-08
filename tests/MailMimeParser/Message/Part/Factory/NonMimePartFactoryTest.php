@@ -23,7 +23,7 @@ class NonMimePartFactoryTest extends TestCase
             ->getMock();
         $mocksdf->expects($this->any())
             ->method('getLimitedPartStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
         $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -45,7 +45,7 @@ class NonMimePartFactoryTest extends TestCase
 
         $part = $this->nonMimePartFactory->newInstance(
             $partBuilder,
-            Psr7\stream_for('test')
+            Psr7\Utils::streamFor('test')
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\NonMimePart',

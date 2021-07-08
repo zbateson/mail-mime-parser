@@ -118,7 +118,7 @@ class MessagePartStream implements StreamInterface
             $copyStream = $this->streamFactory->newNonClosingStream($stream);
             $es = $this->getTransferEncodingDecoratorForStream($copyStream);
             $cs = $this->getCharsetDecoratorForStream($es);
-            Psr7\copy_to_stream($contentStream, $cs);
+            Psr7\Utils::copyToStream($contentStream, $cs);
             $cs->close();
         }
     }
@@ -145,12 +145,12 @@ class MessagePartStream implements StreamInterface
         $streams = [];
         foreach ($part->getChildParts() as $i => $child) {
             if ($i !== 0 || $part->hasContent()) {
-                $streams[] = Psr7\stream_for("\r\n");
+                $streams[] = Psr7\Utils::streamFor("\r\n");
             }
-            $streams[] = Psr7\stream_for("--$boundary\r\n");
+            $streams[] = Psr7\Utils::streamFor("--$boundary\r\n");
             $streams[] = $child->getStream();
         }
-        $streams[] = Psr7\stream_for("\r\n--$boundary--\r\n");
+        $streams[] = Psr7\Utils::streamFor("\r\n--$boundary--\r\n");
         
         return $streams;
     }
@@ -163,7 +163,7 @@ class MessagePartStream implements StreamInterface
      */
     protected function getStreamsArray()
     {
-        $content = Psr7\stream_for();
+        $content = Psr7\Utils::streamFor();
         $this->writePartContentTo($content);
         $content->rewind();
         $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];

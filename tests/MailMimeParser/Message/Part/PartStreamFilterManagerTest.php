@@ -28,7 +28,7 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testAttachQuotedPrintableDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
@@ -43,7 +43,7 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testAttachBase64Decoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newBase64Stream')
             ->with($stream)
@@ -56,7 +56,7 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testAttachUUEncodeDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newUUStream')
             ->with($stream)
@@ -69,7 +69,7 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testAttachCharsetConversionDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
             ->with($stream, 'US-ASCII', 'UTF-8')
@@ -82,15 +82,15 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testReAttachTransferEncodingDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $stream->rewind();
 
-        $stream2 = Psr7\stream_for('test2');
-        $stream3 = Psr7\stream_for('test3');
+        $stream2 = Psr7\Utils::streamFor('test2');
+        $stream3 = Psr7\Utils::streamFor('test3');
         $this->mockStreamFactory->expects($this->exactly(2))
             ->method('newUUStream')
             ->with($stream)
@@ -110,7 +110,7 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testReAttachCharsetConversionDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(4))
             ->method('newCharsetStream')
             ->withConsecutive(
@@ -133,7 +133,7 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testAttachCharsetConversionAndTransferEncodingDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
             ->with($this->anything(), 'US-ASCII', 'UTF-8')
@@ -152,15 +152,15 @@ class PartStreamFilterManagerTest extends TestCase
 
     public function testGetBinaryStream()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $stream->rewind();
 
-        $stream2 = Psr7\stream_for('test2');
-        $stream3 = Psr7\stream_for('test3');
+        $stream2 = Psr7\Utils::streamFor('test2');
+        $stream3 = Psr7\Utils::streamFor('test3');
         $this->mockStreamFactory->expects($this->exactly(2))
             ->method('newUUStream')
             ->with($stream)

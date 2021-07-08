@@ -114,7 +114,7 @@ class GenericHelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $fromStream = Psr7\stream_for('test');
+        $fromStream = Psr7\Utils::streamFor('test');
         $from->expects($this->once())
             ->method('hasContent')
             ->willReturn(true);
@@ -218,7 +218,7 @@ class GenericHelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $toStream = Psr7\stream_for('test');
+        $toStream = Psr7\Utils::streamFor('test');
         $to->expects($this->once())
             ->method('hasContent')
             ->willReturn(true);

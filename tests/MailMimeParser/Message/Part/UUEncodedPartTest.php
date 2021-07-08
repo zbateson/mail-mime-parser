@@ -38,7 +38,7 @@ class UUEncodedPartTest extends TestCase
             $mgr,
             $sf,
             $pb,
-            Psr7\stream_for('Stuff')
+            Psr7\Utils::streamFor('Stuff')
         );
         $this->assertFalse($part->isTextPart());
         $this->assertFalse($part->isMime());

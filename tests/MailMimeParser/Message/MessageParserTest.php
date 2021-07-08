@@ -118,7 +118,7 @@ class MessageParserTest extends TestCase
             ->willReturn($pb);
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);
@@ -174,7 +174,7 @@ class MessageParserTest extends TestCase
             ->willReturn($pb);
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);
@@ -287,7 +287,7 @@ class MessageParserTest extends TestCase
             );
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);
@@ -343,7 +343,7 @@ class MessageParserTest extends TestCase
             ->willReturn($pb);
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);
@@ -503,7 +503,7 @@ class MessageParserTest extends TestCase
             );
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);
@@ -818,7 +818,7 @@ class MessageParserTest extends TestCase
             );
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);
@@ -898,7 +898,7 @@ class MessageParserTest extends TestCase
             ->willReturn($pb);
 
         $mp = new MessageParser($pfs, $pbf, $this->partStreamRegistry);
-        $message = $mp->parse(Psr7\stream_for($handle));
+        $message = $mp->parse(Psr7\Utils::streamFor($handle));
         $this->assertNotNull($message);
 
         fclose($handle);

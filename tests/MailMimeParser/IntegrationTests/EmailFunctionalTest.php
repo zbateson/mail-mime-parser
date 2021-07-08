@@ -1786,7 +1786,7 @@ class EmailFunctionalTest extends TestCase
             $att->getHeaderValue('Content-Disposition') . '; filename="greenball.png"'
         );
         $green = fopen($this->messageDir . '/files/greenball.png', 'r');
-        $att->attachContentStream(Psr7\stream_for($green));
+        $att->attachContentStream(Psr7\Utils::streamFor($green));
 
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m2004", 'w+');
         $message->save($tmpSaved);

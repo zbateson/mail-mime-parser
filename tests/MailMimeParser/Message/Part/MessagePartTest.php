@@ -38,7 +38,7 @@ class MessagePartTest extends TestCase {
     private function getMessagePart($handle = 'habibi', $contentHandle = null)
     {
         if ($contentHandle !== null) {
-            $contentHandle = Psr7\stream_for($contentHandle);
+            $contentHandle = Psr7\Utils::streamFor($contentHandle);
             $this->partStreamFilterManager
                 ->method('getContentStream')
                 ->willReturnCallback(function() use ($contentHandle) {
@@ -52,7 +52,7 @@ class MessagePartTest extends TestCase {
         }
         return $this->getMockForAbstractClass(
                 'ZBateson\MailMimeParser\Message\Part\MessagePart',
-                [$this->partStreamFilterManager, $this->streamFactory, Psr7\stream_for($handle), $contentHandle]
+                [$this->partStreamFilterManager, $this->streamFactory, Psr7\Utils::streamFor($handle), $contentHandle]
         );
     }
 
@@ -98,8 +98,8 @@ class MessagePartTest extends TestCase {
     public function testBinaryStreamAndHandle()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
         $this->partStreamFilterManager
             ->expects($this->never())
             ->method('getContentStream');
@@ -119,8 +119,8 @@ class MessagePartTest extends TestCase {
     public function testSaveContent()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
         $this->partStreamFilterManager
             ->expects($this->never())
             ->method('getContentStream');
@@ -141,8 +141,8 @@ class MessagePartTest extends TestCase {
     public function testSaveContentToStream()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
         $this->partStreamFilterManager
             ->expects($this->never())
             ->method('getContentStream');
@@ -155,7 +155,7 @@ class MessagePartTest extends TestCase {
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
 
-        $stream = Psr7\stream_for();
+        $stream = Psr7\Utils::streamFor();
         $messagePart->saveContent($stream);
         $stream->rewind();
 
@@ -165,8 +165,8 @@ class MessagePartTest extends TestCase {
     public function testSaveContentToResource()
     {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
         $this->partStreamFilterManager
             ->expects($this->never())
             ->method('getContentStream');
@@ -179,7 +179,7 @@ class MessagePartTest extends TestCase {
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
 
-        $res = StreamWrapper::getResource(Psr7\stream_for());
+        $res = StreamWrapper::getResource(Psr7\Utils::streamFor());
         $messagePart->saveContent($res);
         rewind($res);
 
@@ -189,8 +189,8 @@ class MessagePartTest extends TestCase {
 
     public function testDetachContentStream()
     {
-        $stream = Psr7\stream_for('Que tonta');
-        $contentStream = Psr7\stream_for('Que tonto');
+        $stream = Psr7\Utils::streamFor('Que tonta');
+        $contentStream = Psr7\Utils::streamFor('Que tonto');
         $messagePart = $this->getMessagePart($stream, $contentStream);
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
@@ -221,7 +221,7 @@ class MessagePartTest extends TestCase {
         $messagePart->method('getCharset')
             ->willReturn('utf-64');
 
-        $handle = StreamWrapper::getResource(Psr7\stream_for('Que tonto'));
+        $handle = StreamWrapper::getResource(Psr7\Utils::streamFor('Que tonto'));
         $this->partStreamFilterManager
             ->expects($this->exactly(3))
             ->method('getContentStream')
@@ -245,7 +245,7 @@ class MessagePartTest extends TestCase {
 
     public function testMarkAsChanged()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $messagePart = $this->getMessagePart($stream);
         $this->assertEquals($stream, $messagePart->getStream());
 
@@ -276,7 +276,7 @@ class MessagePartTest extends TestCase {
     {
         $messagePart = $this->getMessagePart(
             'Demigorgon',
-            Psr7\stream_for('other demons')
+            Psr7\Utils::streamFor('other demons')
         );
 
         $handle = fopen('php://temp', 'r+');
@@ -293,7 +293,7 @@ class MessagePartTest extends TestCase {
     {
         $messagePart = $this->getMessagePart(
             'Demigorgon',
-            Psr7\stream_for('other demons')
+            Psr7\Utils::streamFor('other demons')
         );
 
         $part = vfsStream::newFile('part')->at($this->vfs);
@@ -303,15 +303,15 @@ class MessagePartTest extends TestCase {
 
     public function testSetContentAndAttachContentStream()
     {
-        $ms = Psr7\stream_for('message');
-        $org = Psr7\stream_for('content');
+        $ms = Psr7\Utils::streamFor('message');
+        $org = Psr7\Utils::streamFor('content');
         $part = $this->getMessagePart($ms, $org);
         $part->method('getContentTransferEncoding')
             ->willReturn('quoted-printable');
         $part->method('getCharset')
             ->willReturn('utf-64');
 
-        $new = Psr7\stream_for('updated');
+        $new = Psr7\Utils::streamFor('updated');
         $this->partStreamFilterManager
             ->method('getContentStream')
             ->withConsecutive(

@@ -451,7 +451,7 @@ class Message extends MimePart
      */
     public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
     {
-        $handle = Psr7\stream_for(fopen($filePath, 'r'));
+        $handle = Psr7\Utils::streamFor(fopen($filePath, 'r'));
         if ($filename === null) {
             $filename = basename($filePath);
         }

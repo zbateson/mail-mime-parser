@@ -24,7 +24,7 @@ class MimePartFactoryTest extends TestCase
             ->getMock();
         $mocksdf->expects($this->any())
             ->method('getLimitedPartStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
         $psfmFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartStreamFilterManagerFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -49,7 +49,7 @@ class MimePartFactoryTest extends TestCase
 
         $part = $this->mimePartFactory->newInstance(
             $partBuilder,
-            Psr7\stream_for('test')
+            Psr7\Utils::streamFor('test')
         );
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\Part\MimePart',

@@ -400,8 +400,8 @@ abstract class MessagePart
             $resourceOrStream = fopen($filenameResourceOrStream, 'w+');
         }
 
-        $stream = Psr7\stream_for($resourceOrStream);
-        Psr7\copy_to_stream($this->getBinaryContentStream(), $stream);
+        $stream = Psr7\Utils::streamFor($resourceOrStream);
+        Psr7\Utils::copyToStream($this->getBinaryContentStream(), $stream);
 
         if (!is_string($filenameResourceOrStream)
             && !($filenameResourceOrStream instanceof StreamInterface)) {
@@ -482,7 +482,7 @@ abstract class MessagePart
      */
     public function setContent($resource, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $stream = Psr7\stream_for($resource);
+        $stream = Psr7\Utils::streamFor($resource);
         $this->attachContentStream($stream, $charset);
         // this->onChange called in attachContentStream
     }
@@ -507,8 +507,8 @@ abstract class MessagePart
 
         $partStream = $this->getStream();
         $partStream->rewind();
-        $stream = Psr7\stream_for($resourceOrStream);
-        Psr7\copy_to_stream($partStream, $stream);
+        $stream = Psr7\Utils::streamFor($resourceOrStream);
+        Psr7\Utils::copyToStream($partStream, $stream);
 
         if (!is_string($filenameResourceOrStream)
             && !($filenameResourceOrStream instanceof StreamInterface)) {
