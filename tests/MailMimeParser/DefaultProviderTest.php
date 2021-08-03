@@ -8,7 +8,7 @@ use LegacyPHPUnit\TestCase;
  *
  * @group DefaultProvider
  * @group Base
- * @covers ZBateson\MailMimeParser\Container
+ * @covers ZBateson\MailMimeParser\DefaultProvider
  * @author Zaahid Bateson
  */
 class DefaultProviderTest extends TestCase
@@ -25,6 +25,19 @@ class DefaultProviderTest extends TestCase
         $mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $mockDi->expects($this->exactly(3))
+            ->method('factory')
+            ->willReturn('toast');
+
+        $mockDi->expects($this->exactly(3))
+            ->method('offsetSet')
+            ->withConsecutive(
+                [ 'ZBateson\MailMimeParser\Message\PartStreamContainer', 'toast' ],
+                [ 'ZBateson\MailMimeParser\Message\PartHeaderContainer', 'toast' ],
+                [ 'ZBateson\MailMimeParser\Message\PartChildrenContainer', 'toast' ]
+            );
+
         $this->provider->register($mockDi);
         $this->assertNotNull($mockDi);
     }
