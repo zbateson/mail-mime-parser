@@ -21,14 +21,14 @@ class DefaultProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
-        $pimple['\ZBateson\MailMimeParser\Message\PartStreamContainer'] = $pimple->factory(function() use ($pimple) {
-            $factory = $pimple['\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory'];
+        $pimple['ZBateson\MailMimeParser\Message\PartStreamContainer'] = $pimple->factory(function() use ($pimple) {
+            $factory = $pimple['ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory'];
             return $factory->newInstance();
         });
-        $pimple['\ZBateson\MailMimeParser\Message\PartHeaderContainer'] = $pimple->factory(function() use ($pimple) {
+        $pimple['ZBateson\MailMimeParser\Message\PartHeaderContainer'] = $pimple->factory(function() use ($pimple) {
             return new PartHeaderContainer($pimple['\ZBateson\MailMimeParser\Header\HeaderFactory']);
         });
-        $pimple['\ZBateson\MailMimeParser\Message\PartChildrenContainer'] = $pimple->factory(function() use ($pimple) {
+        $pimple['ZBateson\MailMimeParser\Message\PartChildrenContainer'] = $pimple->factory(function() use ($pimple) {
             return new PartChildrenContainer();
         });
     }
