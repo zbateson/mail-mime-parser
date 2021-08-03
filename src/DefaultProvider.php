@@ -19,6 +19,12 @@ use Pimple\ServiceProviderInterface;
  */
 class DefaultProvider implements ServiceProviderInterface
 {
+    /**
+     * Manually registers classes that need to be instantiated with factories
+     * instead of singletons.
+     *
+     * @param Container $pimple
+     */
     public function register(Container $pimple)
     {
         $pimple['ZBateson\MailMimeParser\Message\PartStreamContainer'] = $pimple->factory(function() use ($pimple) {
