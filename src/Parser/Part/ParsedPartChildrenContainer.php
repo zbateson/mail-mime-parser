@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
  * Description of ParsedPartChildrenContainer
@@ -17,26 +17,29 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 class ParsedPartChildrenContainer extends PartChildrenContainer
 {
     /**
-     * @var PartBuilder
+     * @var ParserMimePartProxy
      */
-    protected $partBuilder;
+    protected $parserProxy;
 
     /**
      * @var bool
      */
     private $allParsed = false;
 
-    public function __construct(PartBuilder $builder)
+    public function __construct(ParserMimePartProxy $parserProxy)
     {
         parent::__construct([]);
-        $this->partBuilder = $builder;
+        $this->parserProxy = $parserProxy;
     }
 
     public function offsetExists($offset)
     {
         $exists = parent::offsetExists($offset);
         while (!$exists && !$this->allParsed) {
-            $this->allParsed = !$this->partBuilder->parseNextChild();
+            $child = $this->parserProxy->parseNextChild();
+            if ($child === null) {
+                $this->allParsed = true;
+            }
             $exists = parent::offsetExists($offset);
         }
         return $exists;

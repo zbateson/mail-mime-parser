@@ -95,7 +95,7 @@ class MailMimeParser
      *
      * @param Container $di
      */
-    public static function setDependencyContainer(Container $di)
+    public static function setDependencyContainer(Container $di = null)
     {
         static::$di = $di;
     }
@@ -107,7 +107,7 @@ class MailMimeParser
      * objects, call {@see MailMimeParser::configureDependencyContainer()}
      * before creating a MailMimeParser instance.
      */
-    public function __construct()
+    public function __construct($blah = false)
     {
         if (static::$di === null) {
             static::configureDependencyContainer();

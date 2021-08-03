@@ -33,11 +33,16 @@ class StreamFactoryTest extends TestCase
             ->method('getStreamContentStartOffset')
             ->willReturn(4);
 
+        $partBuilder->expects($this->atLeastOnce())
+            ->method('getStream')
+            ->willReturn(Psr7\stream_for('test'));
+
+
         $factory = new StreamFactory();
 
         $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedPartStream(Psr7\stream_for('test'), $partBuilder));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream(Psr7\stream_for('test'), $partBuilder));
-        $this->assertNull($factory->getLimitedContentStream(Psr7\stream_for('test'), $partBuilder));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream($partBuilder));
+        $this->assertNull($factory->getLimitedContentStream($partBuilder));
 
         $this->assertInstanceOf('ZBateson\StreamDecorators\NonClosingStream', $factory->newNonClosingStream(Psr7\stream_for('test')));
         $this->assertInstanceOf('ZBateson\StreamDecorators\ChunkSplitStream', $factory->newChunkSplitStream(Psr7\stream_for('test')));

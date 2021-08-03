@@ -26,6 +26,8 @@ class UUEncodedPartFactory extends MessagePartFactory
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $part = new UUEncodedPart(
             null,
+            null,
+            null,
             $streamContainer
         );
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));

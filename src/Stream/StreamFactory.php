@@ -46,16 +46,15 @@ class StreamFactory
      * Returns a SeekingLimitStream using $part->getStreamContentLength() and
      * $part->getStreamContentStartOffset()
      *
-     * @param StreamInterface $stream
      * @param PartBuilder $part
      * @return SeekingLimitStream
      */
-    public function getLimitedContentStream(StreamInterface $stream, PartBuilder $part)
+    public function getLimitedContentStream(PartBuilder $part)
     {
         $length = $part->getStreamContentLength();
         if ($length !== 0) {
             return $this->newLimitStream(
-                $stream,
+                $part->getStream(),
                 $part->getStreamContentLength(),
                 $part->getStreamContentStartOffset()
             );

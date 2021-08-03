@@ -4,16 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-namespace ZBateson\MailMimeParser\Parser;
+namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 /**
- * 
+ * Description of UUEncodedPartProxy
+ *
  * @author Zaahid Bateson
  */
-interface IContentParser extends IParser
+class ParserUUEncodedPartProxy extends ParserPartProxy
 {
-    /**
-     *
-     */
-    public function parseContent(PartBuilder $partBuilder);
 }

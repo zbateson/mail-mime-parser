@@ -27,7 +27,7 @@ class EmailFunctionalTest extends TestCase
 
     protected function legacySetUp()
     {
-        $this->parser = new MailMimeParser();
+        $this->parser = new MailMimeParser(true);
         $this->messageDir = dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/emails';
     }
 

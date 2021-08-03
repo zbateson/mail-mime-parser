@@ -16,7 +16,8 @@ class MessageParserTest extends TestCase
 {
     private $instance;
     private $partBuilderFactory;
-    private $parsedMessageFactory;
+    private $partHeaderContainerFactory;
+    private $parserMessageFactory;
     private $headerParser;
 
     protected function legacySetUp()
@@ -24,7 +25,10 @@ class MessageParserTest extends TestCase
         $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parsedMessageFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParsedMessageFactory')
+        $this->partHeaderContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->parserMessageFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMessageFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->headerParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\HeaderParser')
@@ -33,7 +37,8 @@ class MessageParserTest extends TestCase
 
         $this->instance = new MessageParser(
             $this->partBuilderFactory,
-            $this->parsedMessageFactory,
+            $this->partHeaderContainerFactory,
+            $this->parserMessageFactory,
             $this->headerParser
         );
     }
@@ -42,21 +47,33 @@ class MessageParserTest extends TestCase
     {
         $stream = Psr7\stream_for('test');
         $msg = $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
+
         $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+        $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->partBuilderFactory
             ->expects($this->once())
             ->method('newPartBuilder')
-            ->with($this->parsedMessageFactory, $stream)
+            ->with($stream)
             ->willReturn($pb);
+        $this->partHeaderContainerFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($hc);
         $this->headerParser
             ->expects($this->once())
             ->method('parse')
-            ->with($pb);
-        $pb->expects($this->once())
-            ->method('createMessagePart')
+            ->with($pb, $hc);
+        $this->parserMessageFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->with($pb, $hc)
             ->willReturn($msg);
+
         $this->assertSame($msg, $this->instance->parse($stream));
         $stream->close();
     }

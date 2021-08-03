@@ -6,6 +6,10 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+
 /**
  * Description of IParser
  *
@@ -14,11 +18,13 @@ namespace ZBateson\MailMimeParser\Parser;
 interface IParser
 {
     /**
-     * Returns true if the passed $partBuilder is in a state currently
-     * supported for parsing by this parser.
      *
-     * @param PartBuilder $partBuilder
-     * @return boolean
+     * @return IMessagePart|null
      */
-    public function canParse(PartBuilder $partBuilder);
+    public function parseNextChild(ParserMimePartProxy $proxy);
+
+    /**
+     *
+     */
+    public function parseContent(ParserPartProxy $proxy);
 }

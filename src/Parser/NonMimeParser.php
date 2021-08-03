@@ -6,14 +6,17 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\Part\ParsedUUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartFactory;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
 /**
  * Reads a non-mime email message with any uuencoded child parts.
  *
  * @author Zaahid Bateson
  */
-class NonMimeParser implements IContentParser, IChildPartParser
+class NonMimeParser implements IParser
 {
     /**
      * @var PartBuilderFactory
@@ -21,9 +24,9 @@ class NonMimeParser implements IContentParser, IChildPartParser
     protected $partBuilderFactory;
 
     /**
-     * @var ParsedUUEncodedPartFactory for ParsedMimePart objects
+     * @var ParserUUEncodedPartFactory for ParsedMimePart objects
      */
-    protected $parsedUuEncodedPartFactory;
+    protected $parserUuEncodedPartFactory;
 
     private $nextPartStart = null;
     private $nextPartMode = null;
@@ -31,23 +34,20 @@ class NonMimeParser implements IContentParser, IChildPartParser
 
     public function __construct(
         PartBuilderFactory $pbf,
-        ParsedUUEncodedPartFactory $f
+        ParserUUEncodedPartFactory $f,
+        IParserFactory $ipf
     ) {
         $this->partBuilderFactory = $pbf;
-        $this->parsedUuEncodedPartFactory = $f;
+        $this->parserUuEncodedPartFactory = $f;
+        $this->parserUuEncodedPartFactory->setParserFactory($ipf);
     }
 
-    private function createUuEncodedChildPart(PartBuilder $parent, $start, $mode, $filename)
+    private function createUuEncodedChildPart(ParserMimePartProxy $parent, $start, $mode, $filename)
     {
-        $part = $this->partBuilderFactory->newChildPartBuilder(
-            $this->parsedUuEncodedPartFactory,
-            $parent
-        );
-        $part->setNonMimePart(true);
-        $part->setStreamPartStartPos($start);
-        $part->setStreamContentStartPos($this->nextPartStart);
-        $part->setProperty('mode', $mode);
-        $part->setProperty('filename', $filename);
+        $pb = $this->partBuilderFactory->newChildPartBuilder($parent->getPartBuilder());
+        $part = $this->parserUuEncodedPartFactory->newInstance($pb, $mode, $filename, $parent);
+        $pb->setStreamPartStartPos($start);
+        $pb->setStreamContentStartPos($start);
         return $part;
     }
 
@@ -67,26 +67,28 @@ class NonMimeParser implements IContentParser, IChildPartParser
         }
     }
 
-    public function parseContent(PartBuilder $partBuilder)
+    public function parseContent(ParserPartProxy $proxy)
     {
+        $partBuilder = $proxy->getPartBuilder();
         $handle = $partBuilder->getMessageResourceHandle();
         if ($this->nextPartStart !== null || feof($handle)) {
             return;
         }
-        if ($partBuilder->getParent() === null) {
+        if ($proxy->getParent() === null) {
             $partBuilder->setStreamContentStartPos(ftell($handle));
         }
         $this->parseNextPart($partBuilder);
     }
 
-    public function parseNextChild(PartBuilder $partBuilder)
+    public function parseNextChild(ParserMimePartProxy $proxy)
     {
-        $handle = $partBuilder->getMessageResourceHandle();
+        $pb = $proxy->getPartBuilder();
+        $handle = $pb->getMessageResourceHandle();
         if ($this->nextPartStart === null || feof($handle)) {
-            return false;
+            return null;
         }
         $child = $this->createUuEncodedChildPart(
-            $partBuilder,
+            $proxy,
             $this->nextPartStart,
             $this->nextPartMode,
             $this->nextPartFilename
@@ -94,13 +96,6 @@ class NonMimeParser implements IContentParser, IChildPartParser
         $this->nextPartStart = null;
         $this->nextPartMode = null;
         $this->nextPartFilename = null;
-        $child->createMessagePart();
-        return true;
-    }
-
-    public function canParse(PartBuilder $partBuilder)
-    {
-        return (($partBuilder->isNonMimePart())
-            || ($partBuilder->getParent() === null && !$partBuilder->isMimeMessagePart()));
+        return $child;
     }
 }

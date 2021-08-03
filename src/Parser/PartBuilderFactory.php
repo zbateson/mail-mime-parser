@@ -7,8 +7,6 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
-use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -19,48 +17,14 @@ use Psr\Http\Message\StreamInterface;
 class PartBuilderFactory
 {
     /**
-     * @var PartHeaderContainerFactory
-     */
-    protected $partHeaderContainerFactory;
-
-    /**
-     * @var StreamFactory
-     */
-    protected $streamFactory;
-    
-    /**
-     * @var BaseParser
-     */
-    protected $baseParser;
-
-    public function __construct(
-        PartHeaderContainerFactory $partHeaderContainerFactory,
-        StreamFactory $streamFactory,
-        BaseParser $parser
-    ) {
-        $this->partHeaderContainerFactory = $partHeaderContainerFactory;
-        $this->streamFactory = $streamFactory;
-        $this->baseParser = $parser;
-    }
-    
-    /**
      * Constructs a new PartBuilder object and returns it
      * 
-     * @param ParsedMessagePartFactory $messagePartFactory
      * @param StreamInterface $messageStream
      * @return PartBuilder
      */
-    public function newPartBuilder(
-        ParsedMessagePartFactory $messagePartFactory,
-        StreamInterface $messageStream
-    ) {
-        return new PartBuilder(
-            $messagePartFactory,
-            $this->streamFactory,
-            $this->baseParser,
-            $this->partHeaderContainerFactory->newInstance(),
-            $messageStream
-        );
+    public function newPartBuilder(StreamInterface $messageStream)
+    {
+        return new PartBuilder($messageStream);
     }
 
     /**
@@ -70,15 +34,9 @@ class PartBuilderFactory
      * @param PartBuilder $parent
      * @return PartBuilder
      */
-    public function newChildPartBuilder(
-        ParsedMessagePartFactory $messagePartFactory,
-        PartBuilder $parent
-    ) {
+    public function newChildPartBuilder(PartBuilder $parent)
+    {
         return new PartBuilder(
-            $messagePartFactory,
-            $this->streamFactory,
-            $this->baseParser,
-            $this->partHeaderContainerFactory->newInstance(),
             null,
             $parent
         );

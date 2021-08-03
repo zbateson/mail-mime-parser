@@ -26,11 +26,21 @@ use ZBateson\MailMimeParser\Message\PartStreamContainer;
 class UUEncodedPart extends NonMimePart implements IUUEncodedPart
 {
     /**
+     * @var int the unix file permission
+     */
+    protected $mode = null;
+
+    /**
+     * @var string the name of the file in the uuencoding 'header'.
+     */
+    protected $filename = null;
+
+    /**
      * Constructor
      *
      * @param PartStreamContainer $streamContainer
      */
-    public function __construct(IMessagePart $parent = null, PartStreamContainer $streamContainer = null)
+    public function __construct($mode = null, $filename = null, IMessagePart $parent = null, PartStreamContainer $streamContainer = null)
     {
         if ($streamContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
@@ -42,17 +52,9 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
             $streamContainer,
             $parent
         );
+        $this->mode = $mode;
+        $this->filename = $filename;
     }
-
-    /**
-     * @var int the unix file permission
-     */
-    protected $mode = null;
-
-    /**
-     * @var string the name of the file in the uuencoding 'header'.
-     */
-    protected $filename = null;
 
     /**
      * Returns the filename included in the uuencoded header for this part.

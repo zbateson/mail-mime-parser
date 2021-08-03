@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
  * Description of ParsedPartChildrenContainerFactory
@@ -15,8 +15,8 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
  */
 class ParsedPartChildrenContainerFactory
 {
-    public function newInstance(PartBuilder $builder)
+    public function newInstance(ParserMimePartProxy $parserProxy)
     {
-        return new ParsedPartChildrenContainer($builder);
+        return new ParsedPartChildrenContainer($parserProxy);
     }
 }

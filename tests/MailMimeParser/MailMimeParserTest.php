@@ -22,6 +22,11 @@ class MailMimeParserTest extends TestCase
             ->setMethods(['offsetGet', 'offsetExists'])
             ->getMock();
     }
+
+    protected function legacyTearDown()
+    {
+        MailMimeParser::setDependencyContainer(null);
+    }
     
     public function testConstructMailMimeParser()
     {

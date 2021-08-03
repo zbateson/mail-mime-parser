@@ -7,7 +7,7 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 use SplObserver;
@@ -27,9 +27,9 @@ use SplSubject;
 class ParsedPartStreamContainer extends PartStreamContainer implements SplObserver
 {
     /**
-     * @var PartBuilder
+     * @var ParserPartProxy
      */
-    protected $partBuilder;
+    protected $parserProxy;
 
     /**
      * @var StreamInterface the original stream for a parsed message, used when
@@ -54,10 +54,10 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
      */
     protected $contentParseRequested = false;
 
-    public function __construct(StreamFactory $streamFactory, PartBuilder $builder)
+    public function __construct(StreamFactory $streamFactory, ParserPartProxy $parserProxy)
     {
         parent::__construct($streamFactory);
-        $this->partBuilder = $builder;
+        $this->parserProxy = $parserProxy;
     }
 
     public function __destruct()
@@ -70,20 +70,21 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
     protected function requestParsedContentStream()
     {
         if (!$this->contentParseRequested) {
-            // contentParseRequested must be set first before calling
-            // partBuilder->parseContent to avoid endless recursion
             $this->contentParseRequested = true;
-            $this->partBuilder->parseContent();
+            $this->parserProxy->parseContent();
+            parent::setContentStream($this->streamFactory->getLimitedContentStream(
+                $this->parserProxy->getPartBuilder()
+            ));
         }
     }
 
     protected function requestParsedStream()
     {
         if ($this->parsedStream === null) {
-            $this->partBuilder->parseAll();
+            $this->parserProxy->parseAll();
             $this->parsedStream = $this->streamFactory->getLimitedPartStream(
-                $this->partBuilder->getStream(),
-                $this->partBuilder
+                $this->parserProxy->getPartBuilder()->getStream(),
+                $this->parserProxy->getPartBuilder()
             );
             if ($this->parsedStream !== null) {
                 $this->detachParsedStream = $this->parsedStream->getMetadata('mmp-detached-stream');

@@ -31,15 +31,5 @@ class DefaultProvider implements ServiceProviderInterface
         $pimple['\ZBateson\MailMimeParser\Message\PartChildrenContainer'] = $pimple->factory(function() use ($pimple) {
             return new PartChildrenContainer();
         });
-
-        // This might need to move somewhere else. 'extend' doesn't work because BaseParser
-        // is a dependency of the other parsers, and using extend causes it to be called
-        // recursively when trying to create an instance of a parser and BaseParser
-        // is not yet registered on Pimple\Container
-        $baseParser = $pimple['\ZBateson\MailMimeParser\Parser\BaseParser'];
-        $baseParser->addContentParser($pimple['\ZBateson\MailMimeParser\Parser\MimeContentParser']);
-        $baseParser->addContentParser($pimple['\ZBateson\MailMimeParser\Parser\NonMimeParser']);
-        $baseParser->addChildParser($pimple['\ZBateson\MailMimeParser\Parser\MultipartChildrenParser']);
-        $baseParser->addChildParser($pimple['\ZBateson\MailMimeParser\Parser\NonMimeParser']);
     }
 }
