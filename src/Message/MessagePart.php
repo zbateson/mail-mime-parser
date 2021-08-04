@@ -192,11 +192,11 @@ abstract class MessagePart implements IMessagePart
         // this->notify() called in attachContentStream
     }
 
-    public function save($filenameResourceOrStream)
+    public function save($filenameResourceOrStream, $filemode = 'w+')
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (is_string($filenameResourceOrStream)) {
-            $resourceOrStream = fopen($filenameResourceOrStream, 'w+');
+            $resourceOrStream = fopen($filenameResourceOrStream, $filemode);
         }
 
         $partStream = $this->getStream();

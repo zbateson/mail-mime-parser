@@ -74,6 +74,14 @@ class Message extends MimePart implements IMessage
         return $mmp->parse($handleOrString, $attached);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * The message is considered 'mime' if it has either a Content-Type or
+     * Mime-Version header defined.
+     *
+     * @return bool
+     */
     public function isMime()
     {
         $contentType = $this->getHeaderValue('Content-Type');
