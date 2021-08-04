@@ -63,7 +63,31 @@ class MessagePartTest extends TestCase {
         );
     }
 
-    public function testPartStreamHandle()
+    public function testNotify()
+    {
+        $messagePart = $this->getMessagePart();
+        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer->expects($this->once())
+            ->method('update');
+        $messagePart->attach($observer);
+        $messagePart->notify();
+        $messagePart->detach($observer);
+        $messagePart->notify();
+    }
+
+    public function testParentAndParentNotify()
+    {
+        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $messagePart = $this->getMessagePart('blah', 'blooh', $parent);
+
+        $this->assertSame($parent, $messagePart->getParent());
+        $parent->expects($this->once())->method('notify');
+        $messagePart->notify();
+    }
+
+    public function testStreams()
     {
         $messagePart = $this->getMessagePart();
         $this->assertNotNull($messagePart);
@@ -76,6 +100,19 @@ class MessagePartTest extends TestCase {
         $this->assertNull($messagePart->getParent());
         $this->assertEquals('habibi', stream_get_contents($messagePart->getResourceHandle()));
         $this->assertEquals('habibi', $messagePart->getStream()->getContents());
+    }
+
+    public function testGetFilenameReturnsNull()
+    {
+        $messagePart = $this->getMessagePart();
+        $this->assertNull($messagePart->getFilename());
+    }
+
+    public function testGetContent()
+    {
+        $messagePart = $this->getMessagePart('habibi', 'sopa di agua con rocas');
+        $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $this->assertEquals('sopa di agua con rocas', $messagePart->getContent());
     }
 
     public function testContentStreamAndCharsetOverride()
@@ -212,60 +249,6 @@ class MessagePartTest extends TestCase {
         $messagePart->detachContentStream();
     }
 
-    public function testNotify()
-    {
-        $messagePart = $this->getMessagePart();
-        $observer = $this->getMockForAbstractClass('SplObserver');
-        $observer->expects($this->once())
-            ->method('update');
-        $messagePart->attach($observer);
-        $messagePart->notify();
-        $messagePart->detach($observer);
-        $messagePart->notify();
-    }
-
-    public function testGetFilenameReturnsNull()
-    {
-        $messagePart = $this->getMessagePart();
-        $this->assertNull($messagePart->getFilename());
-    }
-
-    public function testGetContent()
-    {
-        $messagePart = $this->getMessagePart('habibi', 'sopa di agua con rocas');
-        $this->partStreamContainer->method('hasContent')->willReturn(true);
-        $this->assertEquals('sopa di agua con rocas', $messagePart->getContent());
-    }
-
-    public function testSaveAndToString()
-    {
-        $messagePart = $this->getMessagePart(
-            'Demigorgon',
-            Psr7\stream_for('other demons')
-        );
-
-        $handle = fopen('php://temp', 'r+');
-        $messagePart->save($handle);
-        rewind($handle);
-        $str = stream_get_contents($handle);
-        fclose($handle);
-
-        $this->assertEquals('Demigorgon', $str);
-        $this->assertEquals('Demigorgon', $messagePart->__toString());
-    }
-
-    public function testSaveToFile()
-    {
-        $messagePart = $this->getMessagePart(
-            'Demigorgon',
-            Psr7\stream_for('other demons')
-        );
-
-        $part = vfsStream::newFile('part')->at($this->vfs);
-        $messagePart->save($part->url());
-        $this->assertEquals('Demigorgon', file_get_contents($part->url()));
-    }
-
     public function testSetContentAndAttachContentStream()
     {
         $ms = Psr7\stream_for('message');
@@ -301,15 +284,32 @@ class MessagePartTest extends TestCase {
         $messagePart->getContentStream('a-charset');
     }
 
-    public function testParentAndParentNotify()
+    public function testSaveAndToString()
     {
-        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $messagePart = $this->getMessagePart('blah', 'blooh', $parent);
+        $messagePart = $this->getMessagePart(
+            'Demigorgon',
+            Psr7\stream_for('other demons')
+        );
 
-        $this->assertSame($parent, $messagePart->getParent());
-        $parent->expects($this->once())->method('notify');
-        $messagePart->notify();
+        $handle = fopen('php://temp', 'r+');
+        $messagePart->save($handle);
+        rewind($handle);
+        $str = stream_get_contents($handle);
+        fclose($handle);
+
+        $this->assertEquals('Demigorgon', $str);
+        $this->assertEquals('Demigorgon', $messagePart->__toString());
+    }
+
+    public function testSaveToFile()
+    {
+        $messagePart = $this->getMessagePart(
+            'Demigorgon',
+            Psr7\stream_for('other demons')
+        );
+
+        $part = vfsStream::newFile('part')->at($this->vfs);
+        $messagePart->save($part->url());
+        $this->assertEquals('Demigorgon', file_get_contents($part->url()));
     }
 }
