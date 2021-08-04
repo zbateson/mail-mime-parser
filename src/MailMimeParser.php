@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\CachingStream;
 
 /**
- * Parses a MIME message into a \ZBateson\MailMimeParser\Message object.
+ * Parses a MIME message into an {@see IMessage} object.
  *
  * The class sets up the Pimple dependency injection container with the ability
  * to override and/or provide specialized provider
@@ -21,13 +21,11 @@ use GuzzleHttp\Psr7\CachingStream;
  * To invoke, call parse on a MailMimeParser object.
  *
  * ```php
- * $handle = fopen('path/to/file.txt');
  * $parser = new MailMimeParser();
- * $message = $parser->parse($handle);
+ * $message = $parser->parse(fopen('path/to/file.txt'));
  * // use $message here
- * fclose($handle);
  * ```
- * 
+ *
  * @author Zaahid Bateson
  */
 class MailMimeParser
@@ -107,7 +105,7 @@ class MailMimeParser
      * objects, call {@see MailMimeParser::configureDependencyContainer()}
      * before creating a MailMimeParser instance.
      */
-    public function __construct($blah = false)
+    public function __construct()
     {
         if (static::$di === null) {
             static::configureDependencyContainer();
@@ -117,8 +115,8 @@ class MailMimeParser
     }
 
     /**
-     * Parses the passed stream handle or string into a
-     * ZBateson\MailMimeParser\IMessage object and returns it.
+     * Parses the passed stream handle or string into an {@see IMessage} object
+     * and returns it.
      *
      * If the passed $handleOrString is a resource handle, the handle must be
      * kept open while the Message object exists.  For that reason, the default
