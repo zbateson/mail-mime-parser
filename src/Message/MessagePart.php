@@ -14,8 +14,7 @@ use SplObjectStorage;
 use SplObserver;
 
 /**
- * Implements IMessagePart with a few concrete methods that can have reasonable
- * defaults.
+ * Most basic representation of a single mime part.
  *
  * @author Zaahid Bateson
  */
@@ -27,7 +26,7 @@ abstract class MessagePart implements IMessagePart
     protected $parent;
 
     /**
-     * @var PartStreamContainer holds 'stream' and 'contentStream'.
+     * @var PartStreamContainer holds 'stream' and 'content stream'.
      */
     protected $partStreamContainer;
 
@@ -46,7 +45,8 @@ abstract class MessagePart implements IMessagePart
     protected $ignoreTransferEncoding;
 
     /**
-     * SplObjectStorage attached observers
+     * @var SplObjectStorage attached observers that need to be notified of
+     *      modifications to this part.
      */
     protected $observers;
 
@@ -85,16 +85,6 @@ abstract class MessagePart implements IMessagePart
     public function getFilename()
     {
         return null;
-    }
-
-    public function getResourceHandle()
-    {
-        return StreamWrapper::getResource($this->getStream());
-    }
-
-    public function getStream()
-    {
-        return $this->partStreamContainer->getStream();
     }
 
     public function setCharsetOverride($charsetOverride, $onlyIfNoCharset = false)
@@ -190,6 +180,16 @@ abstract class MessagePart implements IMessagePart
         $stream = Psr7\stream_for($resource);
         $this->attachContentStream($stream, $charset);
         // this->notify() called in attachContentStream
+    }
+
+    public function getResourceHandle()
+    {
+        return StreamWrapper::getResource($this->getStream());
+    }
+
+    public function getStream()
+    {
+        return $this->partStreamContainer->getStream();
     }
 
     public function save($filenameResourceOrStream, $filemode = 'w+')
