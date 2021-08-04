@@ -18,7 +18,7 @@ class PartBuilderTest extends TestCase
     {
         if ($stream === null && $parent === null) {
             $stream = Psr7\stream_for('test');
-        } else if ($parent !== null) {
+        } elseif ($parent !== null) {
             $stream = null;
         }
         return new PartBuilder(

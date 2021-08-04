@@ -160,7 +160,7 @@ class ConsumerService
             $consumer = null;
             if ($partName === 'from' || $partName === 'by') {
                 $consumer = new DomainConsumer($this, $this->partFactory, $partName);
-            } else if ($partName === 'date') {
+            } elseif ($partName === 'date') {
                 $consumer = new ReceivedDateConsumer($this, $this->partFactory);
             } else {
                 $consumer = new GenericReceivedConsumer($this, $this->partFactory, $partName);
