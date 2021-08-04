@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser;
 use Pimple\Container as PimpleContainer;
 use Pimple\Exception\UnknownIdentifierException;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionParameter;
 
 /**
@@ -25,8 +26,10 @@ class Container extends PimpleContainer
      * Looks up the type of the passed ReflectionParameter and returns it as a
      * fully qualified class name as expected by the class's auto registration.
      *
+     * Null is returned for built-in types.
+     *
      * @param ReflectionParameter $param
-     * @return string
+     * @return string|null
      */
     private function getParameterClass(ReflectionParameter $param)
     {
@@ -60,7 +63,7 @@ class Container extends PimpleContainer
                 $argClass = $this->getParameterClass($arg);
                 if (!empty($c[$name])) {
                     $ap[] = $c[$name];
-                } else if ($argClass !== null && !empty($c[$argClass])) {
+                } elseif ($argClass !== null && !empty($c[$argClass])) {
                     $ap[] = $c[$argClass];
                 } else {
                     $ap[] = null;
