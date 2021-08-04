@@ -2,7 +2,6 @@
 namespace ZBateson\MailMimeParser;
 
 use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
@@ -108,7 +107,6 @@ class MessageTest extends TestCase
             $this->getChildrenContainerWithChildren()
         );
         $this->mockHeaderContainer->method('get')->willReturn($this->getMockedParameterHeader('Content-Type', 'meep'));
-
 
         $parts = $message->getAllParts();
         $parts[1]->method('getContentType')
