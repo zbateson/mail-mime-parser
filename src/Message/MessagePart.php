@@ -77,6 +77,11 @@ abstract class MessagePart implements IMessagePart
         }
     }
 
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
     public function hasContent()
     {
         return $this->partStreamContainer->hasContent();
@@ -151,11 +156,6 @@ abstract class MessagePart implements IMessagePart
             return $stream->getContents();
         }
         return null;
-    }
-
-    public function getParent()
-    {
-        return $this->parent;
     }
 
     public function attachContentStream(StreamInterface $stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)

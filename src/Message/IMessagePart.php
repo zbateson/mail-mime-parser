@@ -25,6 +25,13 @@ use SplSubject;
 interface IMessagePart extends SplSubject
 {
     /**
+     * Returns this part's parent.
+     *
+     * @return IMimePart
+     */
+    public function getParent();
+
+    /**
      * Returns true if the part contains a 'body' (content).
      *
      * @return boolean
@@ -235,13 +242,6 @@ interface IMessagePart extends SplSubject
      * @return string
      */
     public function getContent($charset = MailMimeParser::DEFAULT_CHARSET);
-
-    /**
-     * Returns this part's parent.
-     *
-     * @return IMimePart
-     */
-    public function getParent();
 
     /**
      * Attaches the stream or resource handle for the part's content.  The
