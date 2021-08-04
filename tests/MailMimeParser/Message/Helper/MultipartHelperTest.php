@@ -208,7 +208,7 @@ class MultipartHelperTest extends TestCase
             ->method('addChild')
             ->withConsecutive([ $atts[0] ], [ $atts[1] ]);
 
-        $helper->moveAllPartsAsAttachmentsExcept($message, $from, 'test');
+        $helper->moveAllNonMultiPartsToMessageExcept($message, $from, 'test');
     }
 
     public function testEnforceMimeWithAttachments()

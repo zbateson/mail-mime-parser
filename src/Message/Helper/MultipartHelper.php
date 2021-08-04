@@ -156,7 +156,7 @@ class MultipartHelper extends AbstractHelper
             return false;
         }
         if ($keepOtherContent && $rmPart->getChildCount() > 0) {
-            $this->moveAllPartsAsAttachmentsExcept($message, $rmPart, $mimeType);
+            $this->moveAllNonMultiPartsToMessageExcept($message, $rmPart, $mimeType);
             $alternativePart = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         }
         $message->removePart($rmPart);
@@ -200,7 +200,7 @@ class MultipartHelper extends AbstractHelper
      * @param IMimePart $from
      * @param string $exceptMimeType
      */
-    public function moveAllPartsAsAttachmentsExcept(IMessage $message, IMimePart $from, $exceptMimeType)
+    public function moveAllNonMultiPartsToMessageExcept(IMessage $message, IMimePart $from, $exceptMimeType)
     {
         $parts = $from->getAllParts(function(IMessagePart $part) use ($exceptMimeType) {
             if ($part instanceof IMimePart && $part->isMultiPart()) {

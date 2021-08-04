@@ -15,7 +15,7 @@ use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
- * A mime email message with optional mime parts depending on its type.
+ * An email message.
  *
  * The message could represent a simple text email, a multipart message with
  * children, or a non-mime message containing UUEncoded parts.
@@ -56,21 +56,29 @@ class Message extends MimePart implements IMessage
      * kept open while the Message object exists.  For that reason, the default
      * attachment mode is 'attached', which will cause the Message object to
      * close the passed resource handle when it's destroyed.  If the stream
-     * should remain open for other reasons and closed manually, pass TRUE as
-     * the second parameter so Message does not close the stream.
+     * should remain open for other reasons and closed manually, pass FALSE as
+     * the second parameter so the Message object does not close the stream.
      *
      * @param resource|string $handleOrString the resource handle to the input
-     *        stream of the mime message, or a string containing a mime message
-     * @param bool $detached set to true to keep the stream open
+     *        stream of the mime message, or a string containing a mime message.
+     * @param bool $attached set to false to keep the stream open when the
+     *        returned IMessage is destroyed.
      * @return IMessage
      */
-    public static function from($handleOrString, $detached = false)
+    public static function from($handleOrString, $attached = true)
     {
         static $mmp = null;
         if ($mmp === null) {
             $mmp = new MailMimeParser();
         }
-        return $mmp->parse($handleOrString);
+        return $mmp->parse($handleOrString, $attached);
+    }
+
+    public function isMime()
+    {
+        $contentType = $this->getHeaderValue('Content-Type');
+        $mimeVersion = $this->getHeaderValue('Mime-Version');
+        return ($contentType !== null || $mimeVersion !== null);
     }
 
     public function getTextPart($index = 0)
@@ -101,26 +109,6 @@ class Message extends MimePart implements IMessage
         return $this->getPartCount(
             PartFilter::fromInlineContentType('text/html')
         );
-    }
-
-    public function getAttachmentPart($index)
-    {
-        return $this->getPart(
-            $index,
-            PartFilter::fromAttachmentFilter()
-        );
-    }
-
-    public function getAllAttachmentParts()
-    {
-        return $this->getAllParts(
-            PartFilter::fromAttachmentFilter()
-        );
-    }
-
-    public function getAttachmentCount()
-    {
-        return count($this->getAllAttachmentParts());
     }
 
     public function getTextStream($index = 0, $charset = MailMimeParser::DEFAULT_CHARSET)
@@ -159,13 +147,6 @@ class Message extends MimePart implements IMessage
         return null;
     }
 
-    public function isMime()
-    {
-        $contentType = $this->getHeaderValue('Content-Type');
-        $mimeVersion = $this->getHeaderValue('Mime-Version');
-        return ($contentType !== null || $mimeVersion !== null);
-    }
-
     public function setTextPart($resource, $charset = 'UTF-8')
     {
         $this->messageService
@@ -193,12 +174,12 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function removeAllTextParts($keepOtherPartsAsAttachments = true)
+    public function removeAllTextParts($moveRelatedPartsBelowMessage = true)
     {
         return $this->messageService
             ->getMultipartHelper()
             ->removeAllContentPartsByMimeType(
-                $this, 'text/plain', $keepOtherPartsAsAttachments
+                $this, 'text/plain', $moveRelatedPartsBelowMessage
             );
     }
 
@@ -211,13 +192,33 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function removeAllHtmlParts($keepOtherPartsAsAttachments = true)
+    public function removeAllHtmlParts($moveRelatedPartsBelowMessage = true)
     {
         return $this->messageService
             ->getMultipartHelper()
             ->removeAllContentPartsByMimeType(
-                $this, 'text/html', $keepOtherPartsAsAttachments
+                $this, 'text/html', $moveRelatedPartsBelowMessage
             );
+    }
+
+    public function getAttachmentPart($index)
+    {
+        return $this->getPart(
+            $index,
+            PartFilter::fromAttachmentFilter()
+        );
+    }
+
+    public function getAllAttachmentParts()
+    {
+        return $this->getAllParts(
+            PartFilter::fromAttachmentFilter()
+        );
+    }
+
+    public function getAttachmentCount()
+    {
+        return count($this->getAllAttachmentParts());
     }
 
     public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')

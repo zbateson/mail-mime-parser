@@ -35,7 +35,8 @@ abstract class PartFilter
             if (in_array($type, [ 'text/plain', 'text/html' ]) && strcasecmp($part->getContentDisposition(), 'inline') === 0) {
                 return false;
             }
-            return !(($part instanceof IMimePart) && ($part->isMultiPart() || $part->isSignaturePart()));
+            return !(($part instanceof IMimePart)
+                && ($part->isMultiPart() || $part->isSignaturePart()));
         };
     }
 

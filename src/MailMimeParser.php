@@ -124,19 +124,20 @@ class MailMimeParser
      * kept open while the Message object exists.  For that reason, the default
      * attachment mode is 'attached', which will cause the Message object to
      * close the passed resource handle when it's destroyed.  If the stream
-     * should remain open for other reasons and closed manually, pass TRUE as
-     * the second parameter so Message does not close the stream.
+     * should remain open for other reasons and closed manually, pass FALSE as
+     * the second parameter so the Message object does not close the stream.
      *
      * @param resource|string $handleOrString the resource handle to the input
-     *        stream of the mime message, or a string containing a mime message
-     * @param bool $detached set to true to keep the stream open
+     *        stream of the mime message, or a string containing a mime message.
+     * @param bool $attached set to false to keep the stream open when the
+     *        returned IMessage is destroyed.
      * @return \ZBateson\MailMimeParser\IMessage
      */
-    public function parse($handleOrString, $detached = false)
+    public function parse($handleOrString, $attached = true)
     {
         $stream = Psr7\stream_for(
             $handleOrString,
-            [ 'metadata' => [ 'mmp-detached-stream' => $detached ] ]
+            [ 'metadata' => [ 'mmp-detached-stream' => !$attached ] ]
         );
         if (!$stream->isSeekable()) {
             $stream = new CachingStream($stream);
