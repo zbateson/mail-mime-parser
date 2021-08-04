@@ -112,6 +112,12 @@ class MimePart extends MultiPart implements IMimePart
         return $this->getHeaderValue('Content-ID');
     }
 
+    /**
+     * Returns true if this part's parent is an IMessage, and is the same part
+     * returned by {@see IMessage::getSignaturePart()}.
+     *
+     * @return bool
+     */
     public function isSignaturePart()
     {
         if ($this->parent === null || !$this->parent instanceof IMessage) {

@@ -11,7 +11,7 @@ use Psr\Http\Message\StreamInterface;
 use SplSubject;
 
 /**
- * An interface representing a single mime part.
+ * An interface representing a single part of an email.
  *
  * The base type for a message or any child part of a message.  The part may
  * contain content, have a parent, and identify the type of content (e.g.

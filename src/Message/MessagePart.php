@@ -14,7 +14,7 @@ use SplObjectStorage;
 use SplObserver;
 
 /**
- * Most basic representation of a single mime part.
+ * Most basic representation of a single part of an email.
  *
  * @author Zaahid Bateson
  */
