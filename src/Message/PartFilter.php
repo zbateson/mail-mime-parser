@@ -47,9 +47,10 @@ abstract class PartFilter
      * By default signed parts are excluded. Pass FALSE to the third parameter
      * to include them.
      *
-     * @param string $name the header name to look up
-     * @param string $value the value to match
-     * @param bool $excludeSignedParts
+     * @param string $name The header name to look up
+     * @param string $value The value to match
+     * @param bool $excludeSignedParts Optional signed parts exclusion (defaults
+     *        to true).
      * @return callable
      */
     public static function fromHeaderValue($name, $value, $excludeSignedParts = true)
@@ -69,7 +70,7 @@ abstract class PartFilter
      * Includes only parts that match the passed $mimeType in the return value
      * of a call to 'getContentType()'.
      * 
-     * @param string $mimeType
+     * @param string $mimeType Mime type of parts to find.
      * @return callable
      */
     public static function fromContentType($mimeType)
@@ -83,7 +84,7 @@ abstract class PartFilter
      * Returns parts matching $mimeType that do not have a Content-Disposition
      * set to 'attachment'.
      *
-     * @param string $mimeType
+     * @param string $mimeType Mime type of parts to find.
      * @return callable
      */
     public static function fromInlineContentType($mimeType)
@@ -99,10 +100,12 @@ abstract class PartFilter
      * IMessagePart::getContentDisposition()), optionally including
      * multipart parts and signed parts.
      * 
-     * @param string $disposition
-     * @param bool $includeMultipart
-     * @param bool $includeSignedParts
-     * @return type
+     * @param string $disposition The disposition to find.
+     * @param bool $includeMultipart Optionally include multipart parts by
+     *        passing true (defaults to false).
+     * @param bool $includeSignedParts Optionally include signed parts (defaults
+     *        to false).
+     * @return callable
      */
     public static function fromDisposition($disposition, $includeMultipart = false, $includeSignedParts = false)
     {

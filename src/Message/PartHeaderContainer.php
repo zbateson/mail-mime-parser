@@ -40,7 +40,7 @@ class PartHeaderContainer implements IteratorAggregate
      * @var array Maps header names by their "normalized" (lower-cased,
      *      non-alphanumeric characters stripped) name to an array of indexes in
      *      the $headers array.  For example:
-     *      $headerMap['contenttype] = [ 1, 4 ]
+     *      $headerMap['contenttype'] = [ 1, 4 ]
      *      would indicate that the headers in $headers[1] and $headers[4] are
      *      both headers with the name 'Content-Type' or 'contENTtype'.
      */
@@ -93,7 +93,7 @@ class PartHeaderContainer implements IteratorAggregate
      * "Content-Type" would be returned.
      *
      * @param string $name
-     * @return int[]
+     * @return int[]|null
      */
     private function getAllWithOriginalHeaderNameIfSet($name)
     {
@@ -111,13 +111,14 @@ class PartHeaderContainer implements IteratorAggregate
     /**
      * Returns the AbstractHeader object for the header with the given $name and
      * at the optional offset (defaulting to the first header in the collection
-     * where more than one header with the same name exists).
+     * where more than one header with the same name exists), or null if one
+     * doesn't exist.
      *
      * Note that mime headers aren't case sensitive.
      *
      * @param string $name
      * @param int $offset
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader|null
      */
     public function get($name, $offset = 0)
     {
@@ -148,10 +149,10 @@ class PartHeaderContainer implements IteratorAggregate
 
     /**
      * Returns the header in the headers array at the passed 0-based integer
-     * index.
+     * index or null if one doesn't exist.
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
+     * @return \ZBateson\MailMimeParser\Header\AbstractHeader|null
      */
     private function getByIndex($index)
     {
@@ -174,7 +175,7 @@ class PartHeaderContainer implements IteratorAggregate
      *
      * @param string $name
      * @param int $offset
-     * @return boolean
+     * @return boolean if a header was removed.
      */
     public function remove($name, $offset = 0)
     {
@@ -193,7 +194,7 @@ class PartHeaderContainer implements IteratorAggregate
      * Removes all headers that match the passed name.
      *
      * @param string $name
-     * @return boolean
+     * @return boolean true if one or more headers were removed.
      */
     public function removeAll($name)
     {
@@ -254,7 +255,7 @@ class PartHeaderContainer implements IteratorAggregate
      * Returns an array of AbstractHeader objects representing all headers in
      * this collection.
      *
-     * @return AbstractHeader
+     * @return AbstractHeader[]
      */
     public function getHeaderObjects()
     {

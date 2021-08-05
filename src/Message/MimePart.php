@@ -11,7 +11,9 @@ use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
- * Implementation of IMimePart.
+ * A mime email message part.
+ *
+ * A MIME part may contain any combination of headers, content and children.
  *
  * @author Zaahid Bateson
  */

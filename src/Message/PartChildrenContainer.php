@@ -35,8 +35,8 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
 
     /**
      * Returns true if the current element is an IMultiPart and doesn't return
-     * null for {@see IMultiPart::getChildIterator}.  Note that the iterator may
-     * still be empty.
+     * null for {@see IMultiPart::getChildIterator()}.  Note that the iterator
+     * may still be empty.
      * 
      * @return bool
      */
@@ -48,9 +48,9 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
 
     /**
      * If the current element points to an IMultiPart, its child iterator is
-     * returned by calling {@see IMultiPart::getChildIterator}.
+     * returned by calling {@see IMultiPart::getChildIterator()}.
      *
-     * @return RecursiveIterator|null
+     * @return RecursiveIterator|null the iterator
      */
     public function getChildren()
     {
@@ -91,8 +91,9 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      * If position is not passed or null, the part is added to the end, as the
      * last child in the container.
      *
-     * @param IMessagePart $part
-     * @param int $position
+     * @param IMessagePart $part The part to add
+     * @param int $position An optional index position (0-based) to add the
+     *        child at.
      */
     public function add(IMessagePart $part, $position = null)
     {
@@ -108,8 +109,8 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
     /**
      * Removes the passed part, and returns the integer position it occupied.
      *
-     * @param IMessagePart $part
-     * @return type
+     * @param IMessagePart $part The part to remove.
+     * @return int the 0-based position it previously occupied.
      */
     public function remove(IMessagePart $part)
     {
@@ -136,7 +137,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
     {
         if (!$value instanceof IMessagePart) {
             throw new InvalidArgumentException(
-                get_class($value) . ' is not a \ZBateson\MailMimeParser\Message\IMessagePart'
+                get_class($value) . ' is not a ZBateson\MailMimeParser\Message\IMessagePart'
             );
         }
         $index = ($offset === null) ? count($this->children) : $offset;

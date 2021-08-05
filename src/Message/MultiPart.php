@@ -15,7 +15,7 @@ use ArrayIterator;
 use RecursiveIteratorIterator;
 
 /**
- * A MultiPart mime part.
+ * A message part that contains children.
  *
  * @author Zaahid Bateson
  */

@@ -22,7 +22,7 @@ abstract class NonMimePart extends MessagePart
     {
         return true;
     }
-    
+
     /**
      * Returns text/plain
      * 
@@ -32,7 +32,7 @@ abstract class NonMimePart extends MessagePart
     {
         return $default;
     }
-    
+
     /**
      * Returns ISO-8859-1
      * 
@@ -42,7 +42,7 @@ abstract class NonMimePart extends MessagePart
     {
         return 'ISO-8859-1';
     }
-    
+
     /**
      * Returns 'inline'.
      * 
@@ -52,7 +52,7 @@ abstract class NonMimePart extends MessagePart
     {
         return 'inline';
     }
-    
+
     /**
      * Returns '7bit'.
      * 
@@ -62,7 +62,7 @@ abstract class NonMimePart extends MessagePart
     {
         return '7bit';
     }
-    
+
     /**
      * Returns false.
      * 

@@ -71,7 +71,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     {
         return false;
     }
-    
+
     /**
      * Returns 'application/octet-stream'.
      * 
@@ -81,7 +81,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     {
         return 'application/octet-stream';
     }
-    
+
     /**
      * Returns null
      * 
@@ -91,7 +91,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     {
         return null;
     }
-    
+
     /**
      * Returns 'attachment'.
      * 
@@ -101,7 +101,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     {
         return 'attachment';
     }
-    
+
     /**
      * Returns 'x-uuencode'.
      * 

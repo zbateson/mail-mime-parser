@@ -102,9 +102,9 @@ class PartStreamContainer
      */
     public function getStream()
     {
-        if ($this->stream !== null) {
-            $this->stream->rewind();
-        }
+        // error out if called before setStream, getStream should never return
+        // null.
+        $this->stream->rewind();
         return $this->stream;
     }
 
@@ -254,7 +254,7 @@ class PartStreamContainer
      * stream are currently attached on the underlying contentStream, and resets
      * them if the requested arguments differ from the currently assigned ones.
      *
-     * @param string $transferEncoding
+     * @param string $transferEncoding the transfer encoding
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
      * @return StreamInterface

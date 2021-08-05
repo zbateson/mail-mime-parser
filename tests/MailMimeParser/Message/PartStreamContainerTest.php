@@ -26,7 +26,6 @@ class PartStreamContainerTest extends TestCase
     public function testSetAndGetStream()
     {
         $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
-        $this->assertNull($this->instance->getStream());
         $this->instance->setStream($stream);
         $stream->expects($this->once())->method('rewind');
         $this->assertSame($stream, $this->instance->getStream());
