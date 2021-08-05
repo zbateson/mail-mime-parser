@@ -217,7 +217,8 @@ class MimePartTest extends TestCase
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')->setMethods()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageService')->disableOriginalConstructor()->getMock()
+                $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')->disableOriginalConstructor()->getMock()
             ])
             ->setMethods([ 'getSignaturePart' ])
             ->getMock();

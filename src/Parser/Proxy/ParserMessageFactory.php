@@ -9,9 +9,10 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\MessageService;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
+use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
+use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
 use ZBateson\MailMimeParser\Parser\MimeParserFactory;
 use ZBateson\MailMimeParser\Parser\NonMimeParserFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainerFactory;
@@ -48,14 +49,19 @@ class ParserMessageFactory
     protected $parsedPartChildrenContainerFactory;
 
     /**
-     * @var MessageService helper class for message manipulation routines.
-     */
-    protected $messageService;
-
-    /**
      * @var ZBateson\MailMimeParser\Parser\IParserFactory[]
      */
     protected $parserFactories;
+
+    /**
+     * @var MultipartHelper
+     */
+    private $multipartHelper;
+
+    /**
+     * @var PrivacyHelper
+     */
+    private $privacyHelper;
 
     public function __construct(
         StreamFactory $sdf,
@@ -64,14 +70,16 @@ class ParserMessageFactory
         ParsedPartChildrenContainerFactory $ppccf,
         MimeParserFactory $mpf,
         NonMimeParserFactory $nmpf,
-        MessageService $mhs
+        MultipartHelper $multipartHelper,
+        PrivacyHelper $privacyHelper
     ) {
         $this->streamFactory = $sdf;
         $this->partHeaderContainerFactory = $phcf;
         $this->parsedPartStreamContainerFactory = $pscf;
         $this->parsedPartChildrenContainerFactory = $ppccf;
         $this->parserFactories = [ $mpf, $nmpf ];
-        $this->messageService = $mhs;
+        $this->multipartHelper = $multipartHelper;
+        $this->privacyHelper = $privacyHelper;
     }
 
     public function prependMessageParser(IParser $parser)
@@ -109,7 +117,8 @@ class ParserMessageFactory
             $streamContainer,
             $headerContainer,
             $childrenContainer,
-            $this->messageService
+            $this->multipartHelper,
+            $this->privacyHelper
         );
         $parserProxy->setPart($message);
         $parserProxy->setParsedPartStreamContainer($streamContainer);

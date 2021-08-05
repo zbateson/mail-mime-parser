@@ -17,7 +17,8 @@ class MessageTest extends TestCase
     private $mockPartStreamContainer;
     private $mockHeaderContainer;
     private $mockPartChildrenContainer;
-    private $mockMessageService;
+    private $mockMultipartHelper;
+    private $mockPrivacyHelper;
     
     protected function legacySetUp()
     {
@@ -30,7 +31,10 @@ class MessageTest extends TestCase
         $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockMessageService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageService')
+        $this->mockMultipartHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockPrivacyHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -90,7 +94,8 @@ class MessageTest extends TestCase
             $this->mockPartStreamContainer,
             $this->mockHeaderContainer,
             ($childrenContainer) ? $childrenContainer : $this->mockPartChildrenContainer,
-            $this->mockMessageService
+            $this->mockMultipartHelper,
+            $this->mockPrivacyHelper
         );
     }
 
@@ -241,15 +246,9 @@ class MessageTest extends TestCase
 
     public function testSetAndRemoveHtmlPart()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
 
-        $this->mockMessageService
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->once())->method('setContentPartForMimeType')
             ->with($message, 'text/html', 'content', 'charset');
         $helper->expects($this->once())->method('removePartByMimeType')
@@ -264,15 +263,9 @@ class MessageTest extends TestCase
 
     public function testSetAndRemoveTextPart()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
 
-        $this->mockMessageService
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->once())->method('setContentPartForMimeType')
             ->with($message, 'text/plain', 'content', 'charset');
         $helper->expects($this->once())->method('removePartByMimeType')
@@ -287,16 +280,10 @@ class MessageTest extends TestCase
 
     public function testAddAttachmentPart()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
         $part = $message->getPart(2);
 
-        $this->mockMessageService
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
                 [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64' ],
@@ -311,16 +298,10 @@ class MessageTest extends TestCase
 
     public function testAddAttachmentPartUsingQuotedPrintable()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
         $part = $message->getPart(2);
 
-        $this->mockMessageService
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
                 [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable' ],
@@ -335,14 +316,7 @@ class MessageTest extends TestCase
 
     public function testSigningHelperMethods()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mockMessageService->expects($this->exactly(4))
-            ->method('getPrivacyHelper')
-            ->willReturn($helper);
-
+        $helper = $this->mockPrivacyHelper;
         $message = $this->newMessage();
 
         $helper->expects($this->once())
