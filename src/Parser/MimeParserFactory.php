@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartFactory;
@@ -62,7 +63,7 @@ class MimeParserFactory implements IParserFactory
 
     public function canParse(PartHeaderContainer $messageHeaders)
     {
-        return ($messageHeaders->exists('Content-Type') ||
-            $messageHeaders->exists('Mime-Version'));
+        return ($messageHeaders->exists(HeaderConsts::CONTENT_TYPE) ||
+            $messageHeaders->exists(HeaderConsts::MIME_VERSION));
     }
 }

@@ -27,14 +27,18 @@ interface IHeader
     public function getParts();
 
     /**
-     * Returns the parsed value of the header -- calls getValue on $this->part
+     * Returns the parsed 'value' of the header.
+     *
+     * For headers that contain multiple parts, like address headers (To, From)
+     * or parameter headers (Content-Type), the 'value' is the value of the
+     * first parsed part.
      *
      * @return string
      */
     public function getValue();
 
     /**
-     * Returns the raw value of the header prior to any processing.
+     * Returns the raw value of the header.
      *
      * @return string
      */

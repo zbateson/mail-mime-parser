@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
@@ -154,7 +155,7 @@ class MessagePartStream implements StreamInterface, SplObserver
      */
     protected function getBoundaryAndChildStreams(IMimePart $part)
     {
-        $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
+        $boundary = $part->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'boundary');
         if ($boundary === null) {
             return array_map(
                 function ($child) {

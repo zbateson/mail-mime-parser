@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
@@ -62,10 +63,10 @@ class MimePart extends MultiPart implements IMimePart
     public function getFilename()
     {
         return $this->getHeaderParameter(
-            'Content-Disposition',
+            HeaderConsts::CONTENT_DISPOSITION,
             'filename',
             $this->getHeaderParameter(
-                'Content-Type',
+                HeaderConsts::CONTENT_TYPE,
                 'name'
             )
         );
@@ -123,7 +124,7 @@ class MimePart extends MultiPart implements IMimePart
      */
     public function getContentType($default = 'text/plain')
     {
-        return strtolower($this->getHeaderValue('Content-Type', $default));
+        return strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TYPE, $default));
     }
 
     /**
@@ -139,7 +140,7 @@ class MimePart extends MultiPart implements IMimePart
      */
     public function getCharset()
     {
-        $charset = $this->getHeaderParameter('Content-Type', 'charset');
+        $charset = $this->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'charset');
         if ($charset === null || strcasecmp($charset, 'binary') === 0) {
             $contentType = $this->getContentType();
             if ($contentType === 'text/plain' || $contentType === 'text/html') {
@@ -165,7 +166,7 @@ class MimePart extends MultiPart implements IMimePart
      */
     public function getContentDisposition($default = 'inline')
     {
-        $value = strtolower($this->getHeaderValue('Content-Disposition'));
+        $value = strtolower($this->getHeaderValue(HeaderConsts::CONTENT_DISPOSITION));
         if ($value === null || !in_array($value, [ 'inline', 'attachment' ])) {
             return $default;
         }
@@ -194,7 +195,7 @@ class MimePart extends MultiPart implements IMimePart
             'uue' => 'x-uuencode',
             'uuencode' => 'x-uuencode'
         ];
-        $type = strtolower($this->getHeaderValue('Content-Transfer-Encoding', $default));
+        $type = strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TRANSFER_ENCODING, $default));
         if (isset($translated[$type])) {
             return $translated[$type];
         }
@@ -210,7 +211,7 @@ class MimePart extends MultiPart implements IMimePart
      */
     public function getContentId()
     {
-        return $this->getHeaderValue('Content-ID');
+        return $this->getHeaderValue(HeaderConsts::CONTENT_ID);
     }
 
     /**

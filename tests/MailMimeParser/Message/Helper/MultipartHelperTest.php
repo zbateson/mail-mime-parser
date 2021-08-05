@@ -231,7 +231,7 @@ class MultipartHelperTest extends TestCase
             ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/') ],
-                [ 'Mime-Version', '1.0' ]
+                [ 'MIME-Version', '1.0' ]
             );
 
         $helper->enforceMime($message);
@@ -254,7 +254,7 @@ class MultipartHelperTest extends TestCase
             ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', "text/plain;\r\n\tcharset=\"iso-8859-1\"" ],
-                [ 'Mime-Version', '1.0' ]
+                [ 'MIME-Version', '1.0' ]
             );
 
         $helper->enforceMime($message);

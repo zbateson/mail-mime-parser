@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use GuzzleHttp\Psr7;
@@ -68,9 +69,9 @@ class HeaderStream implements StreamInterface, SplObserver
             return $this->part->getRawHeaderIterator();
         } elseif ($this->part->getParent() !== null && $this->part->getParent()->isMime()) {
             return new ArrayIterator([
-                [ 'Content-Type', $this->part->getContentType() ],
-                [ 'Content-Disposition', $this->part->getContentDisposition() ],
-                [ 'Content-Transfer-Encoding', $this->part->getContentTransferEncoding() ]
+                [ HeaderConsts::CONTENT_TYPE, $this->part->getContentType() ],
+                [ HeaderConsts::CONTENT_DISPOSITION, $this->part->getContentDisposition() ],
+                [ HeaderConsts::CONTENT_TRANSFER_ENCODING, $this->part->getContentTransferEncoding() ]
             ]);
         }
         return new ArrayIterator();

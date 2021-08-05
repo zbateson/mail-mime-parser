@@ -109,7 +109,7 @@ class ParserMessageFactory
         // changes to headers by the user can't affect parsing which could come
         // after a change to headers is made by the user on the Part
         $copied = $this->partHeaderContainerFactory->newInstance($headerContainer);
-        $parserProxy = new ParserMessageProxy($copied, $partBuilder, $this->getMessageParser($headerContainer));
+        $parserProxy = new ParserMimePartProxy($copied, $partBuilder, $this->getMessageParser($headerContainer));
         $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($parserProxy);
         $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($parserProxy);
 

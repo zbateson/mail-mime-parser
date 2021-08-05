@@ -239,7 +239,7 @@ class MessageTest extends TestCase
     {
         $hf = $this->mockHeaderContainer;
         $this->mockHeaderContainer->method('get')
-            ->willReturnMap([ [ 'Content-Type', 0, null ], [ 'Mime-Version', 0, $this->getMockedParameterHeader('Mime-Version', '4.3') ] ]);
+            ->willReturnMap([ [ 'Content-Type', 0, null ], [ 'MIME-Version', 0, $this->getMockedParameterHeader('MIME-Version', '4.3') ] ]);
         $message = $this->newMessage();
         $this->assertTrue($message->isMime());
     }

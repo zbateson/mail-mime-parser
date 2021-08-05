@@ -12,8 +12,8 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 /**
  * Abstract base class representing a mime email's header.
  *
- * The base class sets up the header's consumer, sets the name of the header and
- * calls the consumer to parse the header's value.
+ * The base class sets up the header's consumer for parsing, sets the name of
+ * the header, and calls the consumer to parse the header's value.
  *
  * AbstractHeader::getConsumer is an abstract method that must be overridden to
  * return an appropriate Consumer\AbstractConsumer type.
@@ -28,8 +28,7 @@ abstract class AbstractHeader implements IHeader
     protected $name;
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the header's parts
-     * (as returned from the consumer)
+     * @var IHeaderPart[] the header's parts (as returned from the consumer)
      */
     protected $parts;
 
@@ -42,9 +41,9 @@ abstract class AbstractHeader implements IHeader
      * Assigns the header's name and raw value, then calls getConsumer and
      * setParseHeaderValue to extract a parsed value.
      *
-     * @param ConsumerService $consumerService
-     * @param string $name
-     * @param string $value
+     * @param ConsumerService $consumerService For parsing the value.
+     * @param string $name Name of the header.
+     * @param string $value Value of the header.
      */
     public function __construct(ConsumerService $consumerService, $name, $value)
     {
@@ -59,7 +58,7 @@ abstract class AbstractHeader implements IHeader
      * Returns the header's Consumer
      *
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return AbstractConsumer
      */
     abstract protected function getConsumer(ConsumerService $consumerService);
 

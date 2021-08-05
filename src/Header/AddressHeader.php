@@ -12,26 +12,27 @@ use ZBateson\MailMimeParser\Header\Part\AddressPart;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 
 /**
- * Reads an address list header using the AddressBaseConsumer.
+ * A header containing one or more email addresses and/or groups of addresses.
  * 
- * An address list may consist of one or more addresses and address groups.
- * Each address separated by a comma, and each group separated by a semi-colon.
+ * An address is separated by a comma, and each group separated by a semi-colon.
+ * The AddressHeader provides a complete list of all addresses referenced in a
+ * header including any addresses in groups, in addition to being able to access
+ * the groups separately if needed.
  * 
- * For full specifications, see https://www.ietf.org/rfc/rfc2822.txt
+ * For full specifications, see {@link https://www.ietf.org/rfc/rfc2822.txt}
  *
  * @author Zaahid Bateson
  */
 class AddressHeader extends AbstractHeader
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\AddressPart[] array of
-     * addresses 
+     * @var AddressPart[] array of addresses, included all addresses contained
+     *      in groups.
      */
     protected $addresses = [];
     
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\AddressGroupPart[] array of
-     * address groups
+     * @var AddressGroupPart[] array of address groups (lists).
      */
     protected $groups = [];
     
@@ -65,10 +66,10 @@ class AddressHeader extends AbstractHeader
     }
     
     /**
-     * Returns all address parts in the header including all addresses that are
-     * in groups.
+     * Returns all address parts in the header including any addresses that are
+     * in groups (lists).
      * 
-     * @return \ZBateson\MailMimeParser\Header\Part\AddressPart[]
+     * @return AddressPart[] The addresses.
      */
     public function getAddresses()
     {
@@ -76,9 +77,9 @@ class AddressHeader extends AbstractHeader
     }
     
     /**
-     * Returns all group parts in the header.
+     * Returns all group parts (lists) in the header.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Part\AddressGroupPart[]
+     * @return AddressGroupPart[]
      */
     public function getGroups()
     {
@@ -104,9 +105,9 @@ class AddressHeader extends AbstractHeader
     }
 
     /**
-     * Same as getValue, but for clarity to match AddressPart.
+     * Returns the first email address in the header.
      *
-     * @return string
+     * @return string The email address
      */
     public function getEmail()
     {
@@ -115,9 +116,9 @@ class AddressHeader extends AbstractHeader
 
     /**
      * Returns the name associated with the first email address to complement
-     * getValue().
+     * getValue()/getEmail() if one is set, or null if not.
      * 
-     * @return string
+     * @return string|null The person name.
      */
     public function getPersonName()
     {

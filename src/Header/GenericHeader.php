@@ -22,7 +22,7 @@ class GenericHeader extends AbstractHeader
      * Returns a GenericConsumer.
      * 
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {

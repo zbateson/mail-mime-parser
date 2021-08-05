@@ -6,8 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
@@ -105,7 +105,7 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     public function getContentType()
     {
-        return $this->headerContainer->get('Content-Type');
+        return $this->headerContainer->get(HeaderConsts::CONTENT_TYPE);
     }
 
     /**

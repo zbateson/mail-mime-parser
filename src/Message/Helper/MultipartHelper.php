@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
@@ -59,7 +60,7 @@ class MultipartHelper extends AbstractHelper
     public function setMimeHeaderBoundaryOnPart(IMimePart $part, $mimeType)
     {
         $part->setRawHeader(
-            'Content-Type',
+            HeaderConsts::CONTENT_TYPE,
             "$mimeType;\r\n\tboundary=\""
                 . $this->getUniqueBoundary($mimeType) . '"'
         );
@@ -231,9 +232,9 @@ class MultipartHelper extends AbstractHelper
             if ($message->getAttachmentCount()) {
                 $this->setMessageAsMixed($message);
             } else {
-                $message->setRawHeader('Content-Type', "text/plain;\r\n\tcharset=\"iso-8859-1\"");
+                $message->setRawHeader(HeaderConsts::CONTENT_TYPE, "text/plain;\r\n\tcharset=\"iso-8859-1\"");
             }
-            $message->setRawHeader('Mime-Version', '1.0');
+            $message->setRawHeader(HeaderConsts::MIME_VERSION, '1.0');
         }
     }
 
@@ -295,8 +296,8 @@ class MultipartHelper extends AbstractHelper
     public function createContentPartForMimeType(IMessage $message, $mimeType, $charset)
     {
         $mimePart = $this->mimePartFactory->newInstance();
-        $mimePart->setRawHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"");
-        $mimePart->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
+        $mimePart->setRawHeader(HeaderConsts::CONTENT_TYPE, "$mimeType;\r\n\tcharset=\"$charset\"");
+        $mimePart->setRawHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING, 'quoted-printable');
 
         $this->enforceMime($message);
         $altPart = $this->findOtherContentPartFor($message, $mimeType);
@@ -336,12 +337,12 @@ class MultipartHelper extends AbstractHelper
         $safe = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
         if ($message->isMime()) {
             $part = $this->mimePartFactory->newInstance();
-            $part->setRawHeader('Content-Transfer-Encoding', $encoding);
+            $part->setRawHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING, $encoding);
             if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
                 $this->setMessageAsMixed($message);
             }
-            $part->setRawHeader('Content-Type', "$mimeType;\r\n\tname=\"$safe\"");
-            $part->setRawHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$safe\"");
+            $part->setRawHeader(HeaderConsts::CONTENT_TYPE, "$mimeType;\r\n\tname=\"$safe\"");
+            $part->setRawHeader(HeaderConsts::CONTENT_DISPOSITION, "$disposition;\r\n\tfilename=\"$safe\"");
         } else {
             $part = $this->uuEncodedPartFactory->newInstance();
             $part->setFilename($safe);
@@ -416,7 +417,7 @@ class MultipartHelper extends AbstractHelper
             $part = $this->createContentPartForMimeType($message, $mimeType, $charset);
         } else {
             $contentType = $part->getContentType();
-            $part->setRawHeader('Content-Type', "$contentType;\r\n\tcharset=\"$charset\"");
+            $part->setRawHeader(HeaderConsts::CONTENT_TYPE, "$contentType;\r\n\tcharset=\"$charset\"");
         }
         $part->setContent($stringOrHandle);
     }

@@ -73,6 +73,23 @@ class GenericHelperTest extends TestCase
         $helper = $this->newGenericHelper();
         $part = $this->newMockIMimePart();
 
+        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+                'Content-Location', 'Content-Features', 'Content-Alternative',
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+        $aHeaders = [];
+        foreach ($names as $name) {
+            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $mock->method('getName')->willReturn($name);
+            $aHeaders[] = $mock;
+        }
+
+        $part->expects($this->once())
+            ->method('getAllHeaders')
+            ->willReturn($aHeaders);
+
         $part->expects($this->exactly(12))
             ->method('removeHeader')
             ->withConsecutive(
@@ -84,7 +101,7 @@ class GenericHelperTest extends TestCase
                 [ 'Content-Language' ],
                 [ 'Content-Base' ],
                 [ 'Content-Location' ],
-                [ 'Content-features' ],
+                [ 'Content-Features' ],
                 [ 'Content-Alternative' ],
                 [ 'Content-MD5' ],
                 [ 'Content-Duration' ]
@@ -102,9 +119,20 @@ class GenericHelperTest extends TestCase
         $from = $this->newMockIMimePart();
         $to = $this->newMockIMimePart();
 
-        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+                'Content-Location', 'Content-Features', 'Content-Alternative',
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+        $aHeaders = [];
+        $returnMap = [];
+        foreach ($names as $name) {
+            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $mock->method('getName')->willReturn($name);
+            $aHeaders[] = $mock;
+            $returnMap[] = [ $name, $mock ];
+        }
 
         $fromStream = Psr7\stream_for('test');
         $from->expects($this->once())
@@ -114,26 +142,10 @@ class GenericHelperTest extends TestCase
             ->method('getContentStream')
             ->willReturn($fromStream);
 
-        $from->expects($this->exactly(13))
-            ->method('getHeader')
-            ->withConsecutive(
-                [ 'Content-Type' ],
-                [ 'Content-Type' ],
-                [ 'Content-Transfer-Encoding' ],
-                [ 'Content-Disposition' ],
-                [ 'Content-ID' ],
-                [ 'Content-Description' ],
-                [ 'Content-Language' ],
-                [ 'Content-Base' ],
-                [ 'Content-Location' ],
-                [ 'Content-features' ],
-                [ 'Content-Alternative' ],
-                [ 'Content-MD5' ],
-                [ 'Content-Duration' ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $mockHeader, $mockHeader, null
-            );
+        $from->method('getHeader')
+            ->willReturnMap($returnMap);
+        $from->method('getAllHeaders')
+            ->willReturn($aHeaders);
 
         $to->expects($this->once())
             ->method('attachContentStream')
@@ -152,6 +164,21 @@ class GenericHelperTest extends TestCase
         $from = $this->newMockIMimePart();
         $to = $this->newMockIMimePart();
 
+        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+                'Content-Location', 'Content-Features', 'Content-Alternative',
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+        $aHeaders = [];
+        $returnMap = [];
+        foreach ($names as $name) {
+            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $mock->method('getName')->willReturn($name);
+            $aHeaders[] = $mock;
+            $returnMap[] = [ $name, $mock ];
+        }
+
         $mockPart = $this->newMockIMimePart();
         $this->mockMimePartFactory
             ->expects($this->once())
@@ -162,24 +189,10 @@ class GenericHelperTest extends TestCase
             ->method('hasContent')
             ->willReturn(false);
 
-        $from->expects($this->exactly(13))
-            ->method('getHeader')
-            ->withConsecutive(
-                [ 'Content-Type' ],
-                [ 'Content-Type' ],
-                [ 'Content-Transfer-Encoding' ],
-                [ 'Content-Disposition' ],
-                [ 'Content-ID' ],
-                [ 'Content-Description' ],
-                [ 'Content-Language' ],
-                [ 'Content-Base' ],
-                [ 'Content-Location' ],
-                [ 'Content-features' ],
-                [ 'Content-Alternative' ],
-                [ 'Content-MD5' ],
-                [ 'Content-Duration' ]
-            )
-            ->willReturn(null);
+        $from->method('getHeader')
+            ->willReturnMap($returnMap);
+        $from->method('getAllHeaders')
+            ->willReturn($aHeaders);
 
         $to->expects($this->never())
             ->method('attachContentStream');
@@ -199,9 +212,20 @@ class GenericHelperTest extends TestCase
         $child1 = $this->newMockIMimePart();
         $child2 = $this->newMockIMimePart();
 
-        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+                'Content-Location', 'Content-Features', 'Content-Alternative',
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+        $aHeaders = [];
+        $returnMap = [];
+        foreach ($names as $name) {
+            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $mock->method('getName')->willReturn($name);
+            $aHeaders[] = $mock;
+            $returnMap[] = [ $name, $mock ];
+        }
 
         $toStream = Psr7\stream_for('test');
         $to->expects($this->once())
@@ -222,26 +246,10 @@ class GenericHelperTest extends TestCase
             ->method('removePart')
             ->withConsecutive([$to]);
 
-        $to->expects($this->exactly(13))
-            ->method('getHeader')
-            ->withConsecutive(
-                [ 'Content-Type' ],
-                [ 'Content-Type' ],
-                [ 'Content-Transfer-Encoding' ],
-                [ 'Content-Disposition' ],
-                [ 'Content-ID' ],
-                [ 'Content-Description' ],
-                [ 'Content-Language' ],
-                [ 'Content-Base' ],
-                [ 'Content-Location' ],
-                [ 'Content-features' ],
-                [ 'Content-Alternative' ],
-                [ 'Content-MD5' ],
-                [ 'Content-Duration' ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $mockHeader, $mockHeader, null
-            );
+        $to->method('getHeader')
+            ->willReturnMap($returnMap);
+        $to->method('getAllHeaders')
+            ->willReturn($aHeaders);
 
         $from->expects($this->once())
             ->method('attachContentStream')

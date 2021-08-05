@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
@@ -87,14 +88,14 @@ class Message extends MimePart implements IMessage
      * Returns true if the current part is a mime part.
      *
      * The message is considered 'mime' if it has either a Content-Type or
-     * Mime-Version header defined.
+     * MIME-Version header defined.
      *
      * @return bool
      */
     public function isMime()
     {
-        $contentType = $this->getHeaderValue('Content-Type');
-        $mimeVersion = $this->getHeaderValue('Mime-Version');
+        $contentType = $this->getHeaderValue(HeaderConsts::CONTENT_TYPE);
+        $mimeVersion = $this->getHeaderValue(HeaderConsts::MIME_VERSION);
         return ($contentType !== null || $mimeVersion !== null);
     }
 

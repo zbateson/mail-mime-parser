@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
@@ -57,7 +58,7 @@ class PrivacyHelper extends AbstractHelper
             $message->addChild($messagePart);
             $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');
             $message->setRawHeader(
-                'Content-Type',
+                HeaderConsts::CONTENT_TYPE,
                 "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
             );
         }
@@ -81,8 +82,8 @@ class PrivacyHelper extends AbstractHelper
             $message->addChild($signedPart);
         }
         $signedPart->setRawHeader(
-            'Content-Type',
-            $message->getHeaderParameter('Content-Type', 'protocol')
+            HeaderConsts::CONTENT_TYPE,
+            $message->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'protocol')
         );
         $signedPart->setContent($body);
     }
@@ -104,11 +105,12 @@ class PrivacyHelper extends AbstractHelper
         });
         foreach ($parts as $part) {
             $contentType = strtolower($part->getContentType());
-            if ($contentType === 'text/plain' || $contentType === 'text/html') {
-                $part->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
-            } else {
-                $part->setRawHeader('Content-Transfer-Encoding', 'base64');
-            }
+            $part->setRawHeader(
+                HeaderConsts::CONTENT_TRANSFER_ENCODING,
+                ($contentType === 'text/plain' || $contentType === 'text/html') ?
+                'quoted-printable' :
+                'base64'
+            );
         }
     }
 
