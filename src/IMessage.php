@@ -317,6 +317,9 @@ interface IMessage extends IMimePart
      * Adds an attachment part for the passed raw data string, handle, or stream
      * and given parameters.
      *
+     * Note that $disposition must be one of 'inline' or 'attachment', and will
+     * default to 'attachment' if a different value is passed.
+     *
      * @param string|resource|\Psr\Http\Message\StreamInterface $resource the
      *        part's content
      * @param string $mimeType the mime-type of the attachment
@@ -332,6 +335,9 @@ interface IMessage extends IMimePart
      *
      * Essentially creates a psr7 stream and calls
      * {@see IMessage::addAttachmentPart}.
+     *
+     * Note that $disposition must be one of 'inline' or 'attachment', and will
+     * default to 'attachment' if a different value is passed.
      *
      * @param string $filePath file to attach
      * @param string $mimeType the mime-type of the attachment

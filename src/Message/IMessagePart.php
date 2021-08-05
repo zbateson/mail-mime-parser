@@ -27,23 +27,19 @@ interface IMessagePart extends SplSubject
     /**
      * Returns this part's parent.
      *
-     * @return IMimePart
+     * @return IMimePart the parent part
      */
     public function getParent();
 
     /**
      * Returns true if the part contains a 'body' (content).
      *
-     * @return boolean
+     * @return bool
      */
     public function hasContent();
 
     /**
-     * Returns true if this part's mime type is text/plain, text/html or matches
-     * text/* and has a defined 'charset' attribute.
-     *
-     * The requirement for 'charset' is because some text/* parts are not plain
-     * text, for e.g. text/rtf is a binary type.
+     * Returns true if the content of this part is plain text.
      *
      * @return bool
      */
@@ -54,36 +50,41 @@ interface IMessagePart extends SplSubject
      *
      * @param $default Optional override for the default return value of
      *        'text/plain.
-     * @return string
+     * @return string the mime type
      */
     public function getContentType($default = 'text/plain');
 
     /**
      * Returns the charset of the content, or null if not applicable/defined.
      *
-     * @return string|null
+     * @return string|null the charset
      */
     public function getCharset();
 
     /**
-     * Returns the content's disposition, or null if not applicable/defined.
+     * Returns the content's disposition, or returns the value of $default if
+     * not defined.
      *
-     * @return string|null
+     * @param $default Optional default value to return if not
+     *        applicable/defined
+     * @return string|null the disposition.
      */
-    public function getContentDisposition();
+    public function getContentDisposition($default = null);
 
     /**
-     * Returns the content-transfer-encoding used for this part, or null if not
-     * applicable/defined.
+     * Returns the content transfer encoding used to encode the content on this
+     * part, or the value of $default if not defined.
      *
-     * @return string|null
+     * @param $default Optional default value to return if not
+     *        applicable/defined
+     * @return string|null the transfer encoding defined for the part.
      */
-    public function getContentTransferEncoding();
+    public function getContentTransferEncoding($default = null);
 
     /**
      * Returns a filename for the part if one is defined, or null otherwise.
      *
-     * @return string|null
+     * @return string|null the file name
      */
     public function getFilename();
 
@@ -97,7 +98,7 @@ interface IMessagePart extends SplSubject
     /**
      * Returns the Content ID of the part, or null if not defined.
      *
-     * @return string|null
+     * @return string|null the content ID.
      */
     public function getContentId();
 
@@ -163,7 +164,7 @@ interface IMessagePart extends SplSubject
      *      content and ignore the charset returned from calling
      *      IMessagePart::getCharset() when reading.
      * @param string $charset Optional charset for the returned stream.
-     * @return StreamInterface
+     * @return StreamInterface|null the stream
      */
     public function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET);
 
@@ -188,7 +189,7 @@ interface IMessagePart extends SplSubject
      * @see IMessagePart::getBinaryContentResourceHandle() to get a resource
      *      handle instead.
      * @see IMessagePart::saveContent() to save the binary contents to file.
-     * @return StreamInterface
+     * @return StreamInterface|null the stream
      */
     public function getBinaryContentStream();
 
@@ -201,7 +202,7 @@ interface IMessagePart extends SplSubject
      *
      * @see IMessagePart::getBinaryContentStream() to get a stream instead.
      * @see IMessagePart::saveContent() to save the binary contents to file.
-     * @return resource|null
+     * @return resource|null the resource
      */
     public function getBinaryContentResourceHandle();
 
@@ -239,7 +240,7 @@ interface IMessagePart extends SplSubject
      *
      * @see IMessagePart::getContentStream()
      * @param string $charset the target charset for the returned string
-     * @return string
+     * @return string|null the content
      */
     public function getContent($charset = MailMimeParser::DEFAULT_CHARSET);
 

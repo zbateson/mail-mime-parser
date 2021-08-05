@@ -6,9 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MailMimeParser;
-use Psr\Http\Message\StreamInterface;
-
 /**
  * Represents a plain-text uuencoded part.
  *

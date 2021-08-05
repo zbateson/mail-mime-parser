@@ -88,11 +88,11 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     }
     
     /**
-     * Returns text/plain
+     * Returns 'application/octet-stream'.
      * 
      * @return string
      */
-    public function getContentType($default = 'text/plain')
+    public function getContentType($default = 'application/octet-stream')
     {
         return 'application/octet-stream';
     }
@@ -108,11 +108,11 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     }
     
     /**
-     * Returns 'inline'.
+     * Returns 'attachment'.
      * 
      * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition($default = 'attachment')
     {
         return 'attachment';
     }
@@ -122,7 +122,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      * 
      * @return string
      */
-    public function getContentTransferEncoding()
+    public function getContentTransferEncoding($default = 'x-uuencode')
     {
         return 'x-uuencode';
     }

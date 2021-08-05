@@ -18,7 +18,7 @@ use ZBateson\MailMimeParser\Header\ParameterHeader;
 class MimePart extends MultiPart implements IMimePart
 {
     /**
-     * @var PartHeaderContainer Contains headers for this part.
+     * @var PartHeaderContainer Container for this part's headers.
      */
     protected $headerContainer;
 
@@ -48,6 +48,15 @@ class MimePart extends MultiPart implements IMimePart
         $this->headerContainer = $headerContainer;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Uses the 'filename' parameter of the Content-Disposition header if it
+     * exists, or the 'name' parameter of the 'Content-Type' header if it
+     * doesn't.
+     *
+     * @return string|null the file name of the part or null.
+     */
     public function getFilename()
     {
         return $this->getHeaderParameter(
@@ -60,21 +69,63 @@ class MimePart extends MultiPart implements IMimePart
         );
     }
 
+    /**
+     * Returns true.
+     *
+     * @return bool
+     */
     public function isMime()
     {
         return true;
     }
 
+    /**
+     * Returns true if this part has a defined 'charset' on its Content-Type
+     * header.
+     *
+     * This may result in some false positives if charset is set on a part that
+     * is not plain text which has been seen.  If a part is known to be binary,
+     * it's better to use {@see IMessagePart::getBinaryContentStream()} to
+     * avoid issues, or to call {@see IMessagePart::saveContent()} directly if
+     * saving a part's content.
+     *
+     * @return bool
+     */
     public function isTextPart()
     {
         return ($this->getCharset() !== null);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Looks at the part's Content-Type header and returns its value if set, or
+     * defaults to 'text/plain'.
+     *
+     * Note that the returned value is converted to lower case, and may not be
+     * identical to calling {@see MimePart::getHeaderValue('Content-Type')} in
+     * some cases.
+     *
+     * @param string $default Optional default value to specify a default other
+     *        than text/plain if needed.
+     * @return string the mime type
+     */
     public function getContentType($default = 'text/plain')
     {
-        return trim(strtolower($this->getHeaderValue('Content-Type', $default)));
+        return strtolower($this->getHeaderValue('Content-Type', $default));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Looks for a 'charset' parameter under the 'Content-Type' header of this
+     * part and returns it if set, defaulting to 'ISO-8859-1' if the
+     * Content-Type header exists and is of type text/plain or text/html.
+     *
+     * Note that the returned value is also converted to upper case.
+     *
+     * @return string|null the charset
+     */
     public function getCharset()
     {
         $charset = $this->getHeaderParameter('Content-Type', 'charset');
@@ -85,14 +136,44 @@ class MimePart extends MultiPart implements IMimePart
             }
             return null;
         }
-        return trim(strtoupper($charset));
+        return strtoupper($charset);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Looks at the 'Content-Disposition' header, which should only contain
+     * either 'inline' or 'attachment'.  If the header is not one of those
+     * values, $default is returned, which defaults to 'inline' unless passed
+     * something else.
+     *
+     * @param string $default Optional default value if not set or does not
+     *        match 'inline' or 'attachment'.
+     * @return string the content disposition
+     */
     public function getContentDisposition($default = 'inline')
     {
-        return strtolower($this->getHeaderValue('Content-Disposition', $default));
+        $value = strtolower($this->getHeaderValue('Content-Disposition'));
+        if ($value === null || !in_array($value, [ 'inline', 'attachment' ])) {
+            return $default;
+        }
+        return $value;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Looks up and returns the value of the 'Content-Transfer-Encoding' header
+     * if set, defaulting to '7bit' if an alternate $default param is not
+     * passed.
+     *
+     * The returned value is always lowercase, and header values of 'x-uue',
+     * 'uue' and 'uuencode' will return 'x-uuencode' instead.
+     *
+     * @param string $default Optional default value to return if the header
+     *        isn't set.
+     * @return string the content transfer encoding.
+     */
     public function getContentTransferEncoding($default = '7bit')
     {
         static $translated = [
@@ -107,6 +188,13 @@ class MimePart extends MultiPart implements IMimePart
         return $type;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Looks up and returns the value of the 'Content-ID' header.
+     *
+     * @return string|null the content ID or null if not defined.
+     */
     public function getContentId()
     {
         return $this->getHeaderValue('Content-ID');

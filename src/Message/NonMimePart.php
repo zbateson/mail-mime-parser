@@ -48,7 +48,7 @@ abstract class NonMimePart extends MessagePart
      * 
      * @return string
      */
-    public function getContentDisposition()
+    public function getContentDisposition($default = 'inline')
     {
         return 'inline';
     }
@@ -58,7 +58,7 @@ abstract class NonMimePart extends MessagePart
      * 
      * @return string
      */
-    public function getContentTransferEncoding()
+    public function getContentTransferEncoding($default = '7bit')
     {
         return '7bit';
     }

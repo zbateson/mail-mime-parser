@@ -233,7 +233,14 @@ class Message extends MimePart implements IMessage
     {
         $this->messageService
             ->getMultipartHelper()
-            ->createAndAddPartForAttachment($this, $resource, $mimeType, $disposition, $filename, $encoding);
+            ->createAndAddPartForAttachment(
+                $this,
+                $resource,
+                $mimeType,
+                (strcasecmp($disposition, 'inline') === 0) ? 'inline' : 'attachment',
+                $filename,
+                $encoding
+            );
     }
 
     public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
