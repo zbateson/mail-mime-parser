@@ -5,15 +5,15 @@ use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
- * UUEncodedPartFactoryTest
+ * IUUEncodedPartFactoryTest
  *
- * @group UUEncodedPartFactory
+ * @group IUUEncodedPartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Parser\Part\UUEncodedPartFactory
- * @covers ZBateson\MailMimeParser\Parser\Part\MessagePartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\IUUEncodedPartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\IMessagePartFactory
  * @author Zaahid Bateson
  */
-class UUEncodedPartFactoryTest extends TestCase
+class IUUEncodedPartFactoryTest extends TestCase
 {
     private function getMockForFactoryExpectsOnce($factoryCls, $obCls)
     {
@@ -39,7 +39,7 @@ class UUEncodedPartFactoryTest extends TestCase
             ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Message\UUEncodedPart'))
             ->willReturn(Psr7\stream_for('test'));
 
-        $instance = new UUEncodedPartFactory($sdf, $psc);
+        $instance = new IUUEncodedPartFactory($sdf, $psc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\UUEncodedPart',

@@ -33,7 +33,7 @@ class MimeParserFactory implements IParserFactory
     protected $headerParser;
 
     /**
-     * @var ParsedMimePartFactory for ParsedMimePart objects
+     * @var ParserMimePartFactory for ParserMimePart objects
      */
     protected $parserMimePartFactory;
 

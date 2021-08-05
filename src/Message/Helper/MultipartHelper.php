@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
@@ -28,8 +28,8 @@ class MultipartHelper extends AbstractHelper
     private $genericHelper;
 
     public function __construct(
-        MimePartFactory $mimePartFactory,
-        UUEncodedPartFactory $uuEncodedPartFactory,
+        IMimePartFactory $mimePartFactory,
+        IUUEncodedPartFactory $uuEncodedPartFactory,
         GenericHelper $genericHelper
     ) {
         parent::__construct($mimePartFactory, $uuEncodedPartFactory);

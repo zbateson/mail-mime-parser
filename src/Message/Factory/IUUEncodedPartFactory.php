@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 
 /**
@@ -14,7 +13,7 @@ use ZBateson\MailMimeParser\Message\UUEncodedPart;
  *
  * @author Zaahid Bateson
  */
-class UUEncodedPartFactory extends MessagePartFactory
+class IUUEncodedPartFactory extends IMessagePartFactory
 {
     /**
      * Constructs a new UUEncodedPart object and returns it

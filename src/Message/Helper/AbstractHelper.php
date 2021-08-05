@@ -6,8 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 
 /**
  * Base class for message helpers.
@@ -17,18 +17,18 @@ use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
 abstract class AbstractHelper
 {
     /**
-     * @var MimePartFactory to create parts for attachments/content
+     * @var IMimePartFactory to create parts for attachments/content
      */
     protected $mimePartFactory;
 
     /**
-     * @var UUEncodedPartFactory to create parts for attachments
+     * @var IUUEncodedPartFactory to create parts for attachments
      */
     protected $uuEncodedPartFactory;
 
     public function __construct(
-        MimePartFactory $mimePartFactory,
-        UUEncodedPartFactory $uuEncodedPartFactory
+        IMimePartFactory $mimePartFactory,
+        IUUEncodedPartFactory $uuEncodedPartFactory
     ) {
         $this->mimePartFactory = $mimePartFactory;
         $this->uuEncodedPartFactory = $uuEncodedPartFactory;

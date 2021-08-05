@@ -5,15 +5,15 @@ use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
- * MimePartFactoryTest
+ * IMimePartFactoryTest
  *
- * @group MimePartFactory
+ * @group IMimePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Parser\Part\MimePartFactory
- * @covers ZBateson\MailMimeParser\Parser\Part\MessagePartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\IMimePartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Part\IMessagePartFactory
  * @author Zaahid Bateson
  */
-class MimePartFactoryTest extends TestCase
+class IMimePartFactoryTest extends TestCase
 {
     private function getMockForFactoryExpectsOnce($factoryCls, $obCls)
     {
@@ -41,7 +41,7 @@ class MimePartFactoryTest extends TestCase
             ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Message\MimePart'))
             ->willReturn(Psr7\stream_for('test'));
 
-        $instance = new MimePartFactory($sdf, $psc, $phc, $pcc);
+        $instance = new IMimePartFactory($sdf, $psc, $phc, $pcc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Message\MimePart',

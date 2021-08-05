@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\Message\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 
 /**
@@ -29,8 +29,8 @@ class PrivacyHelper extends AbstractHelper
     private $multipartHelper;
 
     public function __construct(
-        MimePartFactory $mimePartFactory,
-        UUEncodedPartFactory $uuEncodedPartFactory,
+        IMimePartFactory $mimePartFactory,
+        IUUEncodedPartFactory $uuEncodedPartFactory,
         GenericHelper $genericHelper,
         MultipartHelper $multipartHelper
     ) {

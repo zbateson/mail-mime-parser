@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\Part\ParsedMessagePartFactory;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -30,7 +29,6 @@ class PartBuilderFactory
     /**
      * Constructs a new PartBuilder object and returns it
      *
-     * @param ParsedMessagePartFactory $messagePartFactory
      * @param PartBuilder $parent
      * @return PartBuilder
      */

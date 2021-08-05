@@ -9,11 +9,11 @@ namespace ZBateson\MailMimeParser\Message\Factory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Abstract factory for subclasses of MessagePart.
+ * Abstract factory for subclasses of IMessagePart.
  *
  * @author Zaahid Bateson
  */
-abstract class MessagePartFactory
+abstract class IMessagePartFactory
 {
     /**
      * @var StreamFactory
@@ -34,7 +34,7 @@ abstract class MessagePartFactory
     }
 
     /**
-     * Constructs a new MessagePart object and returns it
+     * Constructs a new IMessagePart object and returns it
      * 
      * @return \ZBateson\MailMimeParser\Message\IMessagePart
      */

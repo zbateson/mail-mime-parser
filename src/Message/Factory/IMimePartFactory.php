@@ -10,11 +10,11 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
 
 /**
- * Responsible for creating MimePart instances.
+ * Responsible for creating IMimePart instances.
  *
  * @author Zaahid Bateson
  */
-class MimePartFactory extends MessagePartFactory
+class IMimePartFactory extends IMessagePartFactory
 {
     /**
      * @var PartHeaderContainerFactory

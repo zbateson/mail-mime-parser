@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
@@ -36,7 +35,7 @@ class MimeParser implements IParser
     protected $headerParser;
 
     /**
-     * @var ParsedMimePartFactory for ParsedMimePart objects
+     * @var ParserMimePartFactory for ParsedMimePart objects
      */
     protected $parserMimePartFactory;
 

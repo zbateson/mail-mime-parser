@@ -9,7 +9,7 @@ use org\bovigo\vfs\vfsStream;
 use Exception;
 
 /**
- * MessagePartFactoryTest
+ * MessagePartTest
  *
  * @group MessagePartClass
  * @group MessagePart

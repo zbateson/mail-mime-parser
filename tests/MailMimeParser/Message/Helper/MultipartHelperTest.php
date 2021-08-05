@@ -20,10 +20,10 @@ class MultipartHelperTest extends TestCase
 
     protected function legacySetUp()
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\MimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\UUEncodedPartFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockGenericHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\GenericHelper')
