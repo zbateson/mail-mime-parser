@@ -47,7 +47,7 @@ class MailMimeParserTest extends TestCase
         $this->mockDi
             ->expects($this->once())
             ->method('offsetGet')
-            ->with('\ZBateson\MailMimeParser\Parser\MessageParser')
+            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())
@@ -69,7 +69,7 @@ class MailMimeParserTest extends TestCase
         $this->mockDi
             ->expects($this->once())
             ->method('offsetGet')
-            ->with('\ZBateson\MailMimeParser\Parser\MessageParser')
+            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())
