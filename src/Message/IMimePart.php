@@ -30,7 +30,8 @@ interface IMimePart extends IMultiPart
     public function isSignaturePart();
 
     /**
-     * Returns the AbstractHeader object for the header with the given $name.
+     * Returns the IHeader object for the header with the given $name.
+     *
      * If the optional $offset is passed, and multiple headers exist with the
      * same name, the one at the passed offset is returned.
      *
@@ -54,15 +55,7 @@ interface IMimePart extends IMultiPart
      * @param string $name The name of the header to retrieve.
      * @param int $offset Optional offset if there are multiple headers with the
      *        given name.
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
-     *         |\ZBateson\MailMimeParser\Header\AddressHeader
-     *         |\ZBateson\MailMimeParser\Header\DateHeader
-     *         |\ZBateson\MailMimeParser\Header\GenericHeader
-     *         |\ZBateson\MailMimeParser\Header\IdHeader
-     *         |\ZBateson\MailMimeParser\Header\ParameterHeader
-     *         |\ZBateson\MailMimeParser\Header\ReceivedHeader
-     *         |\ZBateson\MailMimeParser\Header\SubjectHeader
-     *         |null the header object
+     * @return \ZBateson\MailMimeParser\Header\IHeader|null the header object
      */
     public function getHeader($name, $offset = 0);
 
@@ -80,8 +73,8 @@ interface IMimePart extends IMultiPart
      *      array of raw headers in this part.
      * @see IMimePart::getRawHeaderIterator() to retrieve an iterator traversing
      *      a two-dimensional string[] array of raw headers.
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader[] an array of
-     *         header objects
+     * @return \ZBateson\MailMimeParser\Header\IHeader[] an array of header
+     *         objects
      */
     public function getAllHeaders();
 
@@ -100,8 +93,8 @@ interface IMimePart extends IMultiPart
      * @see IMimePart::getRawHeaderIterator() to retrieve an iterator traversing
      *      a two-dimensional string[] array of raw headers.
      * @param string $name
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]|null an array of
-     *         header objects
+     * @return \ZBateson\MailMimeParser\Header\IHeader[] an array of header
+     *         objects
      */
     public function getAllHeadersByName($name);
 
@@ -222,12 +215,12 @@ interface IMimePart extends IMultiPart
      *      ->getValue();                               // 'second'
      * ```
      *
-     * A new {@see \ZBateson\MailMimeParser\Header\AbstractHeader} object is
-     * created from the passed value.  No processing on the passed string is
-     * performed, and so the passed name and value must be formatted correctly
-     * according to related RFCs.  In particular, be careful to encode non-ascii
-     * data, to keep lines under 998 characters in length, and to follow any
-     * special formatting required for the type of header.
+     * A new {@see \ZBateson\MailMimeParser\Header\IHeader} object is created
+     * from the passed value.  No processing on the passed string is performed,
+     * and so the passed name and value must be formatted correctly according to
+     * related RFCs.  In particular, be careful to encode non-ascii data, to
+     * keep lines under 998 characters in length, and to follow any special
+     * formatting required for the type of header.
      *
      * @see IMimePart::addRawHeader() Adds a header to the part regardless of
      *      whether or not a header with that name already exists.
@@ -250,12 +243,12 @@ interface IMimePart extends IMultiPart
      * intentional - in most cases {@see IMimePart::setRawHeader()} should be
      * called instead.
      *
-     * A new {@see \ZBateson\MailMimeParser\Header\AbstractHeader} object is
-     * created from the passed value.  No processing on the passed string is
-     * performed, and so the passed name and value must be formatted correctly
-     * according to related RFCs.  In particular, be careful to encode non-ascii
-     * data, to keep lines under 998 characters in length, and to follow any
-     * special formatting required for the type of header.
+     * A new {@see \ZBateson\MailMimeParser\Header\IHeader} object is created
+     * from the passed value.  No processing on the passed string is performed,
+     * and so the passed name and value must be formatted correctly according to
+     * related RFCs.  In particular, be careful to encode non-ascii data, to
+     * keep lines under 998 characters in length, and to follow any special
+     * formatting required for the type of header.
      *
      * @see IMimePart::setRawHeader() Sets a header, potentially overwriting one
      *      if it already exists.

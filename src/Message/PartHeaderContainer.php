@@ -29,10 +29,10 @@ class PartHeaderContainer implements IteratorAggregate
     private $headers = [];
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\AbstractHeader[] Each element is an
-     *      AbstractHeader representing the header at the same index in the
-     *      $headers array.  If an AbstractHeader has not been constructed for
-     *      the header at that index, the element would be set to null.
+     * @var \ZBateson\MailMimeParser\Header\IHeader[] Each element is an IHeader
+     *      representing the header at the same index in the $headers array.  If
+     *      an IHeader has not been constructed for the header at that index,
+     *      the element would be set to null.
      */
     private $headerObjects = [];
 
@@ -109,16 +109,17 @@ class PartHeaderContainer implements IteratorAggregate
     }
 
     /**
-     * Returns the AbstractHeader object for the header with the given $name and
-     * at the optional offset (defaulting to the first header in the collection
-     * where more than one header with the same name exists), or null if one
-     * doesn't exist.
+     * Returns the IHeader object for the header with the given $name, or null
+     * if none exist.
+     * 
+     * An optional offset can be provided, which defaults to the first header in
+     * the collection when more than one header with the same name exists.
      *
      * Note that mime headers aren't case sensitive.
      *
      * @param string $name
      * @param int $offset
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader|null
+     * @return \ZBateson\MailMimeParser\Header\IHeader|null
      */
     public function get($name, $offset = 0)
     {
@@ -133,7 +134,7 @@ class PartHeaderContainer implements IteratorAggregate
      * Returns all headers with the passed name.
      *
      * @param string $name
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader[]
+     * @return \ZBateson\MailMimeParser\Header\IHeader[]
      */
     public function getAll($name)
     {
@@ -152,7 +153,7 @@ class PartHeaderContainer implements IteratorAggregate
      * index or null if one doesn't exist.
      *
      * @param int $index
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader|null
+     * @return \ZBateson\MailMimeParser\Header\IHeader|null
      */
     private function getByIndex($index)
     {
@@ -252,10 +253,10 @@ class PartHeaderContainer implements IteratorAggregate
     }
 
     /**
-     * Returns an array of AbstractHeader objects representing all headers in
-     * this collection.
+     * Returns an array of IHeader objects representing all headers in this
+     * collection.
      *
-     * @return AbstractHeader[]
+     * @return IHeader[]
      */
     public function getHeaderObjects()
     {

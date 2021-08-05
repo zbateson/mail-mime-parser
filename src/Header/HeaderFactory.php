@@ -10,8 +10,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
- * Constructs various AbstractHeader types depending on the type of header
- * passed.
+ * Constructs various IHeader types depending on the type of header passed.
  * 
  * If the passed header resolves to a specific defined header type, it is parsed
  * as such.  Otherwise, a GenericHeader is instantiated and returned.  Headers
@@ -30,18 +29,18 @@ class HeaderFactory
 {
     /**
      * @var ConsumerService the passed ConsumerService providing
-     * AbstractConsumer singletons.
+     *      AbstractConsumer singletons.
      */
     protected $consumerService;
 
     /**
      * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory for
-     * mime decoding.
+     *      mime decoding.
      */
     protected $mimeLiteralPartFactory;
     
     /**
-     * @var string[][] maps AbstractHeader types to headers. 
+     * @var string[][] maps IHeader types to headers.
      */
     protected $types = [
         'ZBateson\MailMimeParser\Header\AddressHeader' => [
@@ -86,8 +85,8 @@ class HeaderFactory
     ];
     
     /**
-     * @var string Defines the generic AbstractHeader type to use for headers
-     * that aren't mapped in $types
+     * @var string Defines the generic IHeader type to use for headers that
+     *      aren't mapped in $types
      */
     protected $genericType = 'ZBateson\MailMimeParser\Header\GenericHeader';
     
@@ -116,7 +115,7 @@ class HeaderFactory
     }
     
     /**
-     * Returns the name of an AbstractHeader class for the passed header name.
+     * Returns the name of an IHeader class for the passed header name.
      * 
      * @param string $name
      * @return string
@@ -135,12 +134,12 @@ class HeaderFactory
     }
     
     /**
-     * Creates an AbstractHeader instance for the passed header name and value,
-     * and returns it.
+     * Creates an IHeader instance for the passed header name and value, and
+     * returns it.
      * 
      * @param string $name
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\AbstractHeader
+     * @return IHeader
      */
     public function newInstance($name, $value)
     {

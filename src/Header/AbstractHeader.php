@@ -20,7 +20,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  *
  * @author Zaahid Bateson
  */
-abstract class AbstractHeader
+abstract class AbstractHeader implements IHeader
 {
     /**
      * @var string the name of the header
@@ -75,21 +75,11 @@ abstract class AbstractHeader
         $this->parts = $consumer($this->rawValue);
     }
 
-    /**
-     * Returns an array of HeaderPart objects associated with this header.
-     *
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
-     */
     public function getParts()
     {
         return $this->parts;
     }
 
-    /**
-     * Returns the parsed value of the header -- calls getValue on $this->part
-     *
-     * @return string
-     */
     public function getValue()
     {
         if (!empty($this->parts)) {
@@ -98,36 +88,16 @@ abstract class AbstractHeader
         return null;
     }
 
-    /**
-     * Returns the raw value of the header prior to any processing.
-     *
-     * @return string
-     */
     public function getRawValue()
     {
         return $this->rawValue;
     }
 
-    /**
-     * Returns the name of the header.
-     *
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * Returns the string representation of the header.  At the moment this is
-     * just in the form of:
-     *
-     * <HeaderName>: <RawValue>
-     *
-     * No additional processing is performed (for instance to wrap long lines.)
-     *
-     * @return string
-     */
     public function __toString()
     {
         return "{$this->name}: {$this->rawValue}";
