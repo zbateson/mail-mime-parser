@@ -39,15 +39,6 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         $this->partChildrenContainer = $partChildrenContainer;
     }
 
-    public function isMultiPart()
-    {
-        // casting to bool, preg_match returns 1 for true
-        return (bool) (preg_match(
-            '~multipart/.*~i',
-            $this->getContentType()
-        ));
-    }
-
     private function getAllPartsIterator()
     {
         $iter = new AppendIterator();
@@ -168,11 +159,15 @@ abstract class MultiPart extends MessagePart implements IMultiPart
 
     public function removeAllParts($fnFilter = null)
     {
-        foreach ($this->getAllParts($fnFilter) as $part) {
+        $parts = $this->getAllParts($fnFilter);
+        $count = count($parts);
+        foreach ($parts as $part) {
             if ($part === $this) {
+                --$count;
                 continue;
             }
             $this->removePart($part);
         }
+        return $count;
     }
 }

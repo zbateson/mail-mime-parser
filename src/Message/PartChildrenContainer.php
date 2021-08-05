@@ -50,7 +50,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      * If the current element points to an IMultiPart, its child iterator is
      * returned by calling {@see IMultiPart::getChildIterator}.
      *
-     * @return \RecursiveIterator
+     * @return RecursiveIterator|null
      */
     public function getChildren()
     {

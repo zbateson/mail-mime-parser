@@ -16,6 +16,13 @@ namespace ZBateson\MailMimeParser\Message;
 interface IMimePart extends IMultiPart
 {
     /**
+     * Returns true if this part's content type matches multipart/*
+     *
+     * @return bool
+     */
+    public function isMultiPart();
+
+    /**
      * Returns true if this part is the 'signature' part of a signed message.
      *
      * @return bool

@@ -49,7 +49,7 @@ class MimePart extends MultiPart implements IMimePart
     }
 
     /**
-     * {@inheritDoc}
+     * Returns a filename for the part if one is defined, or null otherwise.
      *
      * Uses the 'filename' parameter of the Content-Disposition header if it
      * exists, or the 'name' parameter of the 'Content-Type' header if it
@@ -79,6 +79,15 @@ class MimePart extends MultiPart implements IMimePart
         return true;
     }
 
+    public function isMultiPart()
+    {
+        // casting to bool, preg_match returns 1 for true
+        return (bool) (preg_match(
+            '~multipart/.*~i',
+            $this->getContentType()
+        ));
+    }
+
     /**
      * Returns true if this part has a defined 'charset' on its Content-Type
      * header.
@@ -97,7 +106,7 @@ class MimePart extends MultiPart implements IMimePart
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the mime type of the content, or $default if one is not set.
      *
      * Looks at the part's Content-Type header and returns its value if set, or
      * defaults to 'text/plain'.
@@ -116,7 +125,7 @@ class MimePart extends MultiPart implements IMimePart
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the charset of the content, or null if not applicable/defined.
      *
      * Looks for a 'charset' parameter under the 'Content-Type' header of this
      * part and returns it if set, defaulting to 'ISO-8859-1' if the
@@ -140,7 +149,8 @@ class MimePart extends MultiPart implements IMimePart
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the content's disposition, or returns the value of $default if
+     * not defined.
      *
      * Looks at the 'Content-Disposition' header, which should only contain
      * either 'inline' or 'attachment'.  If the header is not one of those
@@ -161,7 +171,8 @@ class MimePart extends MultiPart implements IMimePart
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the content transfer encoding used to encode the content on this
+     * part, or the value of $default if not defined.
      *
      * Looks up and returns the value of the 'Content-Transfer-Encoding' header
      * if set, defaulting to '7bit' if an alternate $default param is not
@@ -189,7 +200,7 @@ class MimePart extends MultiPart implements IMimePart
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the Content ID of the part, or null if not defined.
      *
      * Looks up and returns the value of the 'Content-ID' header.
      *

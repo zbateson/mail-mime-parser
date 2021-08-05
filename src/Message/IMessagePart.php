@@ -82,6 +82,13 @@ interface IMessagePart extends SplSubject
     public function getContentTransferEncoding($default = null);
 
     /**
+     * Returns the Content ID of the part, or null if not defined.
+     *
+     * @return string|null the content ID.
+     */
+    public function getContentId();
+
+    /**
      * Returns a filename for the part if one is defined, or null otherwise.
      *
      * @return string|null the file name
@@ -94,13 +101,6 @@ interface IMessagePart extends SplSubject
      * @return bool
      */
     public function isMime();
-
-    /**
-     * Returns the Content ID of the part, or null if not defined.
-     *
-     * @return string|null the content ID.
-     */
-    public function getContentId();
 
     /**
      * Overrides the default character set used for reading content from content
@@ -127,9 +127,11 @@ interface IMessagePart extends SplSubject
 
     /**
      * Returns the StreamInterface for the part's content or null if the part
-     * doesn't have a content section.  To get a stream without charset
-     * conversion if you know the part is binary, call
-     * {@see self::getBinaryContentStream()} instead.
+     * doesn't have a content section.
+     * 
+     * To get a stream without charset conversion if you know the part's content
+     * contains a binary stream, call {@see self::getBinaryContentStream()}
+     * instead.
      *
      * The library automatically handles decoding and charset conversion (to the
      * target passed $charset) based on the part's transfer encoding as returned

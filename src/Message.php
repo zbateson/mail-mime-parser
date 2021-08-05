@@ -75,7 +75,7 @@ class Message extends MimePart implements IMessage
     }
 
     /**
-     * {@inheritDoc}
+     * Returns true if the current part is a mime part.
      *
      * The message is considered 'mime' if it has either a Content-Type or
      * Mime-Version header defined.
