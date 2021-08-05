@@ -9,18 +9,8 @@ namespace ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 
 /**
- * A specialized NonMimePart representing a uuencoded part.
- * 
- * This represents part of a message that is not a mime message.  A multi-part
- * mime message may have a part with a Content-Transfer-Encoding of x-uuencode
- * but that would be represented by a normal MimePart.
- * 
- * UUEncodedPart extends NonMimePart to return a Content-Transfer-Encoding of
- * x-uuencode, a Content-Type of application-octet-stream, and a
- * Content-Disposition of 'attachment'.  It also expects a mode and filename to
- * initialize it, and adds 'filename' parts to the Content-Disposition and
- * 'name' to Content-Type.
- * 
+ * Implementation of a non-mime message's uuencoded attachment part.
+ *
  * @author Zaahid Bateson
  */
 class UUEncodedPart extends NonMimePart implements IUUEncodedPart
@@ -35,12 +25,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      */
     protected $filename = null;
 
-    /**
-     * Constructor
-     *
-     * @param PartStreamContainer $streamContainer
-     */
-    public function __construct($mode = null, $filename = null, IMessagePart $parent = null, PartStreamContainer $streamContainer = null)
+    public function __construct($mode = null, $filename = null, IMimePart $parent = null, PartStreamContainer $streamContainer = null)
     {
         if ($streamContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
@@ -57,8 +42,9 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     }
 
     /**
-     * Returns the filename included in the uuencoded header for this part.
-     * 
+     * Returns the filename included in the uuencoded 'begin' line for this
+     * part.
+     *
      * @return string
      */
     public function getFilename()
@@ -66,11 +52,6 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         return $this->filename;
     }
 
-    /**
-     * Sets the filename included in the uuencoded header.
-     *
-     * @param string $filename
-     */
     public function setFilename($filename)
     {
         $this->filename = $filename;
@@ -79,6 +60,10 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
 
     /**
      * Returns false.
+     * 
+     * Although the part may be plain text, there is no reliable way of
+     * determining its type since uuencoded 'begin' lines only include a file
+     * name and no mime type.  The file name's extension may be a hint.
      * 
      * @return bool
      */
@@ -127,21 +112,11 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         return 'x-uuencode';
     }
 
-    /**
-     * Returns the file mode included in the uuencoded header for this part.
-     *
-     * @return int
-     */
     public function getUnixFileMode()
     {
         return $this->mode;
     }
 
-    /**
-     * Sets the unix file mode for the uuencoded header.
-     *
-     * @param int $mode
-     */
     public function setUnixFileMode($mode)
     {
         $this->mode = $mode;
