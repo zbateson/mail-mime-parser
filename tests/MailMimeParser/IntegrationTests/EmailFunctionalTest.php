@@ -2308,17 +2308,14 @@ class EmailFunctionalTest extends TestCase
         $message->addAttachmentPartFromFile(
             $this->messageDir . '/files/hareandtortoise.txt',
             'text/plain',
+            'hareandtortoise.txt',
             'attachment',
             '8bit'
         );
         $props['attachments'] = 2;
         fclose($tmpSaved);
 
-        // due to what seems to be a bug in hhvm, after stream_copy_to_stream is
-        // called in MimePart::copyContentStream, the CharsetStreamFilter filter
-        // is no longer called on the stream, resulting in a failure here on the
-        // next test
-        //$this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
+        $this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
 
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att8bit_m0001", 'w+');
         $message->save($tmpSaved);
