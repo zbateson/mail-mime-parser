@@ -49,7 +49,7 @@ abstract class HeaderConsts
     const CONTENT_LANGUAGE = 'Content-Language';
     const CONTENT_BASE = 'Content-Base';
     const CONTENT_LOCATION = 'Content-Location';
-    const CONTENT_FEATURES = 'Content-Features';
+    const CONTENT_FEATURES = 'Content-features';
     const CONTENT_ALTERNATIVE = 'Content-Alternative';
     const CONTENT_MD5 = 'Content-MD5';
     const CONTENT_DURATION = 'Content-Duration';

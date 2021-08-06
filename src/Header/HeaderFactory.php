@@ -16,12 +16,15 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  * as such.  Otherwise, a GenericHeader is instantiated and returned.  Headers
  * are mapped as follows:
  * 
- * AddressHeader: From, To, Cc, Bcc, Sender, Reply-To, Resent-From, Resent-To,
- * Resent-Cc, Resent-Bcc, Resent-Reply-To, Delivered-To, Return-Path
- * DateHeader: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date, Reply-By
- * ParameterHeader: Content-Type, Content-Disposition
- * IdHeader: Message-ID, Content-ID, In-Reply-To, References
- * ReceivedHeader: Received
+ *  - {@see AddressHeader}: From, To, Cc, Bcc, Sender, Reply-To, Resent-From,
+ *    Resent-To, Resent-Cc, Resent-Bcc, Resent-Reply-To, Return-Path,
+ *    Delivered-To
+ *  - {@see DateHeader}: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date,
+ *    Reply-By
+ *  - {@see ParameterHeader}: Content-Type, Content-Disposition
+ *  - {@see SubjectHeader}: Subject
+ *  - {@see IdHeader}: Message-ID, Content-ID, In-Reply-To, References
+ *  - {@see ReceivedHeader}: Received
  *
  * @author Zaahid Bateson
  */
@@ -34,8 +37,7 @@ class HeaderFactory
     protected $consumerService;
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory for
-     *      mime decoding.
+     * @var MimeLiteralPartFactory for mime decoding.
      */
     protected $mimeLiteralPartFactory;
     
