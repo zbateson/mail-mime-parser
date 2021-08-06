@@ -76,7 +76,7 @@ class GenericHelperTest extends TestCase
         $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
                 'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
                 'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
         $aHeaders = [];
         foreach ($names as $name) {
             $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
@@ -122,7 +122,7 @@ class GenericHelperTest extends TestCase
         $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
                 'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
                 'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
@@ -167,7 +167,7 @@ class GenericHelperTest extends TestCase
         $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
                 'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
                 'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
@@ -215,7 +215,7 @@ class GenericHelperTest extends TestCase
         $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
                 'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
                 'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Another-One' ];
+                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {

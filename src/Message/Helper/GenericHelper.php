@@ -8,6 +8,7 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\IMimePart;
 
@@ -18,6 +19,25 @@ use ZBateson\MailMimeParser\Message\IMimePart;
  */
 class GenericHelper extends AbstractHelper
 {
+    /**
+     * @var string[] non mime content fields that are not related to the content
+     *      of a part.
+     */
+    private static $nonMimeContentFields = [ 'contentreturn', 'contentidentifier' ];
+
+    /**
+     * Returns true if the passed header's name is a Content-* header other than
+     * one defined in the static $nonMimeContentFields
+     *
+     * @param IHeader $header
+     * @param string $exceptions
+     */
+    private function isMimeContentField(IHeader $header, array $exceptions = [])
+    {
+        return (stripos($header->getName(), 'Content') === 0
+            && !in_array(strtolower(str_replace('-', '', $header->getName())), array_merge(static::$nonMimeContentFields, $exceptions)));
+    }
+
     /**
      * Copies the passed $header from $from, to $to or sets the header to
      * $default if it doesn't exist in $from.
@@ -39,13 +59,16 @@ class GenericHelper extends AbstractHelper
     /**
      * Removes Content-* headers from the passed part, then detaches its content
      * stream.
+     *
+     * An exception is made for the obsolete Content-Return header, which isn't
+     * isn't a MIME content field and so isn't removed.
      * 
      * @param IMimePart $part
      */
     public function removeContentHeadersAndContent(IMimePart $part)
     {
         foreach ($part->getAllHeaders() as $header) {
-            if (stripos($header->getName(), 'Content') === 0) {
+            if ($this->isMimeContentField($header)) {
                 $part->removeHeader($header->getName());
             }
         }
@@ -57,6 +80,9 @@ class GenericHelper extends AbstractHelper
      * the Content-Type header isn't defined in $from, defaults to text/plain
      * with utf-8 and quoted-printable as its Content-Transfer-Encoding.
      *
+     * An exception is made for the obsolete Content-Return header, which isn't
+     * isn't a MIME content field and so isn't copied.
+     *
      * @param IMimePart $from
      * @param IMimePart $to
      * @param bool $move
@@ -64,18 +90,13 @@ class GenericHelper extends AbstractHelper
     public function copyContentHeadersAndContent(IMimePart $from, IMimePart $to, $move = false)
     {
         $this->copyHeader($from, $to, HeaderConsts::CONTENT_TYPE, 'text/plain; charset=utf-8');
-        $typeHeader = $from->getHeader(HeaderConsts::CONTENT_TYPE);
-        $encodingHeader = $from->getHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING);
-        if ($typeHeader === null) {
+        if ($from->getHeader(HeaderConsts::CONTENT_TYPE) === null) {
             $this->copyHeader($from, $to, HeaderConsts::CONTENT_TRANSFER_ENCODING, 'quoted-printable');
         } else {
             $this->copyHeader($from, $to, HeaderConsts::CONTENT_TRANSFER_ENCODING);
         }
         foreach ($from->getAllHeaders() as $header) {
-            if ($header === $typeHeader || $header === $encodingHeader) {
-                continue;
-            }
-            if (stripos($header->getName(), 'Content') === 0) {
+            if ($this->isMimeContentField($header, [ 'contenttype', 'contenttransferencoding' ])) {
                 $this->copyHeader($from, $to, $header->getName());
             }
         }
