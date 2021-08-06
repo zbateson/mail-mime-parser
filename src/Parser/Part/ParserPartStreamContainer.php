@@ -71,7 +71,8 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
     }
 
     /**
-     * Requests content from the parser if not previously requested.
+     * Requests content from the parser if not previously requested, and call
+     * PartStreamContainer::setContentStream().
      */
     protected function requestParsedContentStream()
     {
@@ -94,11 +95,10 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         if ($this->parsedStream === null) {
             $this->parserProxy->parseAll();
             $this->parsedStream = $this->streamFactory->getLimitedPartStream(
-                $this->parserProxy->getPartBuilder()->getStream(),
                 $this->parserProxy->getPartBuilder()
             );
             if ($this->parsedStream !== null) {
-                $this->detachParsedStream = $this->parsedStream->getMetadata('mmp-detached-stream');
+                $this->detachParsedStream = ($this->parsedStream->getMetadata('mmp-detached-stream') === true);
             }
         }
     }
@@ -115,16 +115,25 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getContentStream($transferEncoding, $fromCharset, $toCharset);
     }
 
+    public function getBinaryContentStream($transferEncoding)
+    {
+        $this->requestParsedContentStream();
+        return parent::getBinaryContentStream($transferEncoding);
+    }
+
     public function setContentStream(StreamInterface $contentStream = null)
     {
+        // has to be overridden because requestParsedContentStream calls
+        // parent::setContentStream as well, so needs to be parsed before
+        // overriding the contentStream with a manual 'set'.
         $this->requestParsedContentStream();
         parent::setContentStream($contentStream);
     }
 
     public function getStream()
     {
+        $this->requestParsedStream();
         if (!$this->partUpdated) {
-            $this->requestParsedStream();
             if ($this->parsedStream !== null) {
                 $this->parsedStream->rewind();
                 return $this->parsedStream;
