@@ -65,6 +65,16 @@ class ParserPartProxy
     }
 
     /**
+     * Returns the IMessagePart associated with this proxy.
+     *
+     * @return IMessagePart the part.
+     */
+    public function getPart()
+    {
+        return $this->part;
+    }
+
+    /**
      * Sets the associated ParserPartStreamContainer.
      *
      * @param ParserPartStreamContainer $parserPartStreamContainer
@@ -96,16 +106,6 @@ class ParserPartProxy
     public function parseAll()
     {
         $this->parseContent();
-    }
-
-    /**
-     * Returns the IMessagePart associated with this proxy.
-     *
-     * @return IMessagePart the part.
-     */
-    public function getPart()
-    {
-        return $this->part;
     }
 
     /**
