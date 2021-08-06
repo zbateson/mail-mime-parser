@@ -26,7 +26,7 @@ class NonMimeParser implements IParser
     /**
      * @var ParserUUEncodedPartFactory for ParsedMimePart objects
      */
-    protected $parserUuEncodedPartFactory;
+    protected $parserUUEncodedPartFactory;
 
     private $nextPartStart = null;
     private $nextPartMode = null;
@@ -34,18 +34,16 @@ class NonMimeParser implements IParser
 
     public function __construct(
         PartBuilderFactory $pbf,
-        ParserUUEncodedPartFactory $f,
-        IParserFactory $ipf
+        ParserUUEncodedPartFactory $f
     ) {
         $this->partBuilderFactory = $pbf;
-        $this->parserUuEncodedPartFactory = $f;
-        $this->parserUuEncodedPartFactory->setParserFactory($ipf);
+        $this->parserUUEncodedPartFactory = $f;
     }
 
     private function createUuEncodedChildPart(ParserMimePartProxy $parent, $start, $mode, $filename)
     {
         $pb = $this->partBuilderFactory->newChildPartBuilder($parent->getPartBuilder());
-        $part = $this->parserUuEncodedPartFactory->newInstance($pb, $mode, $filename, $parent);
+        $part = $this->parserUUEncodedPartFactory->newInstance($pb, $mode, $filename, $parent);
         $pb->setStreamPartStartPos($start);
         $pb->setStreamContentStartPos($start);
         return $part;
@@ -74,7 +72,7 @@ class NonMimeParser implements IParser
         if ($this->nextPartStart !== null || feof($handle)) {
             return;
         }
-        if ($proxy->getParent() === null) {
+        if ($partBuilder->getStreamContentStartPos() === null) {
             $partBuilder->setStreamContentStartPos(ftell($handle));
         }
         $this->parseNextPart($partBuilder);

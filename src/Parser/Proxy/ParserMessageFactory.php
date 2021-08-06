@@ -13,6 +13,7 @@ use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
+use ZBateson\MailMimeParser\Parser\IParserFactory;
 use ZBateson\MailMimeParser\Parser\MimeParserFactory;
 use ZBateson\MailMimeParser\Parser\NonMimeParserFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
@@ -22,13 +23,13 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * Responsible for creating ParsedMessage instances.
+ * Responsible for creating proxied IMessage instances.
  *
  * @author Zaahid Bateson
  */
 class ParserMessageFactory
 {
-        /**
+    /**
      * @var StreamFactory the StreamFactory instance
      */
     protected $streamFactory;
@@ -49,7 +50,7 @@ class ParserMessageFactory
     protected $parserPartChildrenContainerFactory;
 
     /**
-     * @var ZBateson\MailMimeParser\Parser\IParserFactory[]
+     * @var IParserFactory[]
      */
     protected $parserFactories;
 
@@ -82,12 +83,24 @@ class ParserMessageFactory
         $this->privacyHelper = $privacyHelper;
     }
 
-    public function prependMessageParser(IParser $parser)
+    /**
+     * Adds an IParserFactory at the highest priority (up front).
+     *
+     * @param IParserFactory $pf
+     */
+    public function prependMessageParserFactory(IParserFactory $pf)
     {
-        array_unshift($this->parsers, $parser);
+        array_unshift($this->parserFactories, $pf);
     }
 
-    protected function getMessageParser(PartHeaderContainer $container)
+    /**
+     * Loops through registered IParserFactories and returns a parser that can
+     * parse a part for the passed headers.
+     *
+     * @param PartHeaderContainer $container
+     * @return IParser
+     */
+    protected function getIParser(PartHeaderContainer $container)
     {
         foreach ($this->parserFactories as $pf) {
             if ($pf->canParse($container)) {
@@ -101,7 +114,7 @@ class ParserMessageFactory
      * Constructs a new IMessage object and returns it
      *
      * @param PartBuilder $partBuilder
-     * @param StreamInterface $stream
+     * @param PartHeaderContainer $headerContainer
      * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
     public function newInstance(PartBuilder $partBuilder, PartHeaderContainer $headerContainer)
@@ -109,7 +122,7 @@ class ParserMessageFactory
         // changes to headers by the user can't affect parsing which could come
         // after a change to headers is made by the user on the Part
         $copied = $this->partHeaderContainerFactory->newInstance($headerContainer);
-        $parserProxy = new ParserMimePartProxy($copied, $partBuilder, $this->getMessageParser($headerContainer));
+        $parserProxy = new ParserMimePartProxy($copied, $partBuilder, $this->getIParser($headerContainer));
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
         $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 

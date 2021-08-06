@@ -25,21 +25,21 @@ class NonMimeParserFactory implements IParserFactory
     /**
      * @var ParserUUEncodedPartFactory for ParsedMimePart objects
      */
-    protected $parserUuEncodedPartFactory;
+    protected $parserUUEncodedPartFactory;
 
     public function __construct(
         PartBuilderFactory $pbf,
         ParserUUEncodedPartFactory $f
     ) {
         $this->partBuilderFactory = $pbf;
-        $this->parserUuEncodedPartFactory = $f;
+        $this->parserUUEncodedPartFactory = $f;
     }
 
     public function newInstance()
     {
         return new NonMimeParser(
             $this->partBuilderFactory,
-            $this->parserUuEncodedPartFactory,
+            $this->parserUUEncodedPartFactory,
             $this
         );
     }

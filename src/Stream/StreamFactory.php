@@ -27,7 +27,7 @@ class StreamFactory
 {
     /**
      * Returns a SeekingLimitStream using $part->getStreamPartLength() and
-     * $part->getStreamPartStartOffset()
+     * $part->getStreamPartStartPos()
      *
      * @param PartBuilder $part
      * @return SeekingLimitStream
@@ -37,13 +37,13 @@ class StreamFactory
         return $this->newLimitStream(
             $part->getStream(),
             $part->getStreamPartLength(),
-            $part->getStreamPartStartOffset()
+            $part->getStreamPartStartPos()
         );
     }
 
     /**
      * Returns a SeekingLimitStream using $part->getStreamContentLength() and
-     * $part->getStreamContentStartOffset()
+     * $part->getStreamContentStartPos()
      *
      * @param PartBuilder $part
      * @return SeekingLimitStream
@@ -55,7 +55,7 @@ class StreamFactory
             return $this->newLimitStream(
                 $part->getStream(),
                 $part->getStreamContentLength(),
-                $part->getStreamContentStartOffset()
+                $part->getStreamContentStartPos()
             );
         }
         return null;

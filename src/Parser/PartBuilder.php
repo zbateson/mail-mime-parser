@@ -109,7 +109,7 @@ class PartBuilder
      *
      * @return int
      */
-    public function getStreamPartStartOffset()
+    public function getStreamPartStartPos()
     {
         return $this->streamPartStartPos;
     }
@@ -129,7 +129,7 @@ class PartBuilder
      *
      * @return int
      */
-    public function getStreamContentStartOffset()
+    public function getStreamContentStartPos()
     {
         return $this->streamContentStartPos;
     }

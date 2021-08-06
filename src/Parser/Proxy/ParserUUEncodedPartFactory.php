@@ -7,13 +7,12 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
-use ZBateson\MailMimeParser\Parser\IParserFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Responsible for creating ParsedUUEncodedPart instances.
+ * Responsible for creating proxied IUUEncodedPart instances.
  *
  * @author Zaahid Bateson
  */
@@ -29,11 +28,6 @@ class ParserUUEncodedPartFactory
      */
     protected $parserPartStreamContainerFactory;
 
-    /**
-     * @var IParserFactory
-     */
-    protected $parserFactory;
-
     public function __construct(
         StreamFactory $sdf,
         ParserPartStreamContainerFactory $parserPartStreamContainerFactory
@@ -42,20 +36,16 @@ class ParserUUEncodedPartFactory
         $this->parserPartStreamContainerFactory = $parserPartStreamContainerFactory;
     }
 
-    public function setParserFactory(IParserFactory $parserFactory)
-    {
-        $this->parserFactory = $parserFactory;
-    }
-
     /**
-     * Constructs a new IUUEncodedPart object and returns it
+     * Constructs a new IUUEncodedPart object attached to a parser proxy, and
+     * returns it
      * 
      * @param PartBuilder $partBuilder
      * @return IUUEncodedPart
      */
     public function newInstance(PartBuilder $partBuilder, $mode, $filename, ParserMimePartProxy $parent)
     {
-        $parserProxy = new ParserUUEncodedPartProxy($partBuilder, $parent->getParser(), $parent);
+        $parserProxy = new ParserPartProxy($partBuilder, null, $parent);
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
 
         $part = new UUEncodedPart(

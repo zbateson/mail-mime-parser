@@ -32,7 +32,7 @@ class PartBuilderTest extends TestCase
         $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(42);
         $instance->setStreamPartEndPos(84);
-        $this->assertEquals(42, $instance->getStreamPartStartOffset());
+        $this->assertEquals(42, $instance->getStreamPartStartPos());
         $this->assertEquals(42, $instance->getStreamPartLength());
     }
 
@@ -42,9 +42,9 @@ class PartBuilderTest extends TestCase
         $instance->setStreamPartStartPos(11);
         $instance->setStreamContentStartPos(42);
         $instance->setStreamPartAndContentEndPos(84);
-        $this->assertEquals(11, $instance->getStreamPartStartOffset());
+        $this->assertEquals(11, $instance->getStreamPartStartPos());
         $this->assertEquals(84 - 11, $instance->getStreamPartLength());
-        $this->assertEquals(42, $instance->getStreamContentStartOffset());
+        $this->assertEquals(42, $instance->getStreamContentStartPos());
         $this->assertEquals(84 - 42, $instance->getStreamContentLength());
     }
 
@@ -66,19 +66,19 @@ class PartBuilderTest extends TestCase
         $instance->setStreamContentStartPos(42);
         $instance->setStreamPartAndContentEndPos(84);
 
-        $this->assertEquals(42, $instance->getStreamContentStartOffset());
+        $this->assertEquals(42, $instance->getStreamContentStartPos());
         $this->assertEquals(84 - 42, $instance->getStreamContentLength());
-        $this->assertEquals(22, $instance->getStreamPartStartOffset());
+        $this->assertEquals(22, $instance->getStreamPartStartPos());
         $this->assertEquals(84 - 22, $instance->getStreamPartLength());
 
-        $this->assertEquals(13, $parent->getStreamContentStartOffset());
+        $this->assertEquals(13, $parent->getStreamContentStartPos());
         $this->assertEquals(20 - 13, $parent->getStreamContentLength());
-        $this->assertEquals(11, $parent->getStreamPartStartOffset());
+        $this->assertEquals(11, $parent->getStreamPartStartPos());
         $this->assertEquals(84 - 11, $parent->getStreamPartLength());
 
-        $this->assertEquals(3, $super->getStreamContentStartOffset());
+        $this->assertEquals(3, $super->getStreamContentStartPos());
         $this->assertEquals(0, $super->getStreamContentLength());
-        $this->assertEquals(0, $super->getStreamPartStartOffset());
+        $this->assertEquals(0, $super->getStreamPartStartPos());
         $this->assertEquals(84, $super->getStreamPartLength());
     }
 }

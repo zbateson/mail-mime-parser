@@ -13,14 +13,14 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer;
 
 /**
- * Description of MimePartProxy
+ * A bi-directional parser-to-part proxy for IMimeParts.
  *
  * @author Zaahid Bateson
  */
 class ParserMimePartProxy extends ParserPartProxy
 {
     /**
-     * @var PartHeaderContainer
+     * @var PartHeaderContainer The parsed part's headers.
      */
     protected $headerContainer;
 
@@ -44,39 +44,64 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     protected $mimeBoundary = false;
 
+    /**
+     * @var IMessagePart Reference to the last child added to this part.
+     */
     protected $lastAddedChild = null;
 
+    /**
+     * @var ParserPartChildrenContainer The part's children container.
+     */
     protected $parserPartChildrenContainer = null;
 
     public function __construct(
         PartHeaderContainer $headerContainer,
         PartBuilder $partBuilder,
-        IParser $parser,
-        ParserPartProxy $parent = null
+        IParser $childParser,
+        ParserMimePartProxy $parent = null
     ) {
-        parent::__construct($partBuilder, $parser, $parent);
+        parent::__construct($partBuilder, $childParser, $parent);
         $this->headerContainer = $headerContainer;
     }
 
+    /**
+     * Sets up the ParserPartChildrenContainer dependency for this part.
+     *
+     * @param ParserPartChildrenContainer $parserPartChildrenContainer the child
+     *        container.
+     */
     public function setParserPartChildrenContainer(ParserPartChildrenContainer $parserPartChildrenContainer)
     {
         $this->parserPartChildrenContainer = $parserPartChildrenContainer;
     }
 
-    protected function ensureLastChildRead()
+    /**
+     * Ensures that the last child added to this part is fully parsed (content
+     * and children).
+     */
+    protected function ensureLastChildParsed()
     {
         if ($this->lastAddedChild !== null) {
             $this->lastAddedChild->parseAll();
         }
     }
 
+    /**
+     * Parses the next child of this part and returns it, or null if there are
+     * no more children to parse.
+     *
+     * @return IMessagePart|null
+     */
     public function parseNextChild()
     {
-        $this->ensureLastChildRead();
+        $this->ensureLastChildParsed();
         $this->parseContent();
-        return $this->parser->parseNextChild($this);
+        return $this->childParser->parseNextChild($this);
     }
 
+    /**
+     * Parses all content and children for this part.
+     */
     public function parseAll()
     {
         $this->parseContent();
@@ -86,12 +111,22 @@ class ParserMimePartProxy extends ParserPartProxy
         } while ($child !== null);
     }
 
+    /**
+     * Adds the part from the passed ParserPartProxy to the child container.
+     *
+     * @param ParserPartProxy $child The child to add.
+     */
     public function addChild(ParserPartProxy $child)
     {
         $this->parserPartChildrenContainer->add($child->getPart());
         $this->lastAddedChild = $child;
     }
 
+    /**
+     * Returns this part's PartHeaderContainer.
+     *
+     * @return PartHeaderContainer the container
+     */
     public function getHeaderContainer()
     {
         return $this->headerContainer;
@@ -99,7 +134,7 @@ class ParserMimePartProxy extends ParserPartProxy
 
     /**
      * Returns a ParameterHeader representing the parsed Content-Type header for
-     * this PartBuilder.
+     * this part.
      *
      * @return \ZBateson\MailMimeParser\Header\ParameterHeader
      */
@@ -127,33 +162,14 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
-     * Returns true if this part's content-type is multipart/*
+     * Returns true if the passed $line of read input matches this part's mime
+     * boundary, or any of its parent's mime boundaries for a multipart message.
      *
-     * @return boolean
-     */
-    public function isMultiPart()
-    {
-        $contentType = $this->getContentType();
-        if ($contentType !== null) {
-            // casting to bool, preg_match returns 1 for true
-            return (bool) (preg_match(
-                '~multipart/.*~i',
-                $contentType->getValue()
-            ));
-        }
-        return false;
-    }
-
-    /**
-     * Returns true if the passed $line of read input matches this PartBuilder's
-     * mime boundary, or any of its parent's mime boundaries for a multipart
-     * message.
-     *
-     * If the passed $line is the ending boundary for the current PartBuilder,
+     * If the passed $line is the ending boundary for the current part,
      * $this->isEndBoundaryFound will return true after.
      *
      * @param string $line
-     * @return boolean
+     * @return bool
      */
     public function setEndBoundaryFound($line)
     {
@@ -173,11 +189,11 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
-     * Returns true if MessageParser passed an input line to setEndBoundary that
+     * Returns true if the parser passed an input line to setEndBoundary that
      * matches a parent's mime boundary, and the following input belongs to a
      * new part under its parent.
      *
-     * @return boolean
+     * @return bool
      */
     public function isParentBoundaryFound()
     {
@@ -185,8 +201,9 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
+     * Returns true if an end boundary was found for this part.
      *
-     * @return type
+     * @return bool
      */
     public function isEndBoundaryFound()
     {
@@ -195,8 +212,8 @@ class ParserMimePartProxy extends ParserPartProxy
 
     /**
      * Called once EOF is reached while reading content.  The method sets the
-     * flag used by PartBuilder::isParentBoundaryFound to true on this part and
-     * all parent PartBuilders.
+     * flag used by isParentBoundaryFound() to true on this part and all parent
+     * parts.
      */
     public function setEof()
     {
