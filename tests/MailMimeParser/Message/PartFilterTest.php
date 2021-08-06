@@ -8,7 +8,7 @@ use LegacyPHPUnit\TestCase;
  *
  * @group PartFilter
  * @group Message
- * @covers ZBateson\MailMimeParser\MessageFilter
+ * @covers ZBateson\MailMimeParser\PartFilter
  * @author Zaahid Bateson
  */
 class PartFilterTest extends TestCase

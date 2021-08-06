@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7;
  *
  * @group PartStreamContainer
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\PartStreamFilterManager
+ * @covers ZBateson\MailMimeParser\Message\PartStreamContainer
  * @author Zaahid Bateson
  */
 class PartStreamContainerTest extends TestCase

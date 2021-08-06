@@ -8,7 +8,7 @@ use LegacyPHPUnit\TestCase;
  *
  * @group Message
  * @group PartHeaderContainer
- * @covers ZBateson\MailMimeParser\Header\HeaderContainer
+ * @covers ZBateson\MailMimeParser\Message\PartHeaderContainer
  * @author Zaahid Bateson
  */
 class PartHeaderContainerTest extends TestCase
