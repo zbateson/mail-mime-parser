@@ -35,7 +35,7 @@ interface IMimePart extends IMultiPart
      * If the optional $offset is passed, and multiple headers exist with the
      * same name, the one at the passed offset is returned.
      *
-     * Note that mime headers aren't case sensitive.
+     * Note that mime headers aren't case sensitive, and the '-' character is
      *
      * If a header with the given $name and $offset doesn't exist, null is
      * returned.

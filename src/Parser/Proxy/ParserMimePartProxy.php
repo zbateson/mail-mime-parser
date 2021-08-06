@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainer;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer;
 
 /**
  * Description of MimePartProxy
@@ -46,7 +46,7 @@ class ParserMimePartProxy extends ParserPartProxy
 
     protected $lastAddedChild = null;
 
-    protected $parsedPartChildrenContainer = null;
+    protected $parserPartChildrenContainer = null;
 
     public function __construct(
         PartHeaderContainer $headerContainer,
@@ -58,9 +58,9 @@ class ParserMimePartProxy extends ParserPartProxy
         $this->headerContainer = $headerContainer;
     }
 
-    public function setParsedPartChildrenContainer(ParsedPartChildrenContainer $parsedPartChildrenContainer)
+    public function setParserPartChildrenContainer(ParserPartChildrenContainer $parserPartChildrenContainer)
     {
-        $this->parsedPartChildrenContainer = $parsedPartChildrenContainer;
+        $this->parserPartChildrenContainer = $parserPartChildrenContainer;
     }
 
     protected function ensureLastChildRead()
@@ -88,7 +88,7 @@ class ParserMimePartProxy extends ParserPartProxy
 
     public function addChild(ParserPartProxy $child)
     {
-        $this->parsedPartChildrenContainer->add($child->getPart());
+        $this->parserPartChildrenContainer->add($child->getPart());
         $this->lastAddedChild = $child;
     }
 

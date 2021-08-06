@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainer;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer;
 
 /**
  * Description of ProxyPart
@@ -23,7 +23,7 @@ abstract class ParserPartProxy
     protected $parent;
 
     protected $part;
-    protected $parsedPartStreamContainer;
+    protected $parserPartStreamContainer;
 
     public function __construct(
         PartBuilder $partBuilder,
@@ -40,9 +40,9 @@ abstract class ParserPartProxy
         $this->part = $part;
     }
 
-    public function setParsedPartStreamContainer($parsedPartStreamContainer)
+    public function setParserPartStreamContainer($parserPartStreamContainer)
     {
-        $this->parsedPartStreamContainer = $parsedPartStreamContainer;
+        $this->parserPartStreamContainer = $parserPartStreamContainer;
     }
 
     public function getParser()

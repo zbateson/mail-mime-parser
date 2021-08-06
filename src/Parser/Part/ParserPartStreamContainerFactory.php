@@ -10,11 +10,11 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Description of ParsedPartStreamContainerFactory
+ * Creates ParserPartStreamContainer instances.
  *
  * @author Zaahid Bateson
  */
-class ParsedPartStreamContainerFactory
+class ParserPartStreamContainerFactory
 {
     /**
      * @var StreamFactory
@@ -27,6 +27,6 @@ class ParsedPartStreamContainerFactory
     }
 
     public function newInstance(ParserPartProxy $parserProxy) {
-        return new ParsedPartStreamContainer($this->streamFactory, $parserProxy);
+        return new ParserPartStreamContainer($this->streamFactory, $parserProxy);
     }
 }

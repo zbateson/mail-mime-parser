@@ -11,8 +11,8 @@ use Psr\Http\Message\StreamInterface;
 
 /**
  * Holds information about a part while it's being parsed, proxies calls between
- * parsed part containers (ParsedPartChildrenContainer,
- * ParsedPartStreamContainer) and the parser as more parts need to be parsed.
+ * parsed part containers (ParserPartChildrenContainer,
+ * ParserPartStreamContainer) and the parser as more parts need to be parsed.
  *
  * The class holds:
  *  - a HeaderContainer to hold headers
@@ -23,7 +23,7 @@ use Psr\Http\Message\StreamInterface;
  *  - the message's psr7 stream and a resource handle created from it (held
  *    only for a top-level PartBuilder representing the message, child
  *    PartBuilders do not duplicate/hold a separate stream).
- *  - ParsedPartChildrenContainer, ParsedPartStreamContainer to update children
+ *  - ParserPartChildrenContainer, ParserPartStreamContainer to update children
  *    and streams dynamically as a part is parsed.
  * @author Zaahid Bateson
  */

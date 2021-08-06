@@ -14,17 +14,20 @@ use SplObserver;
 use SplSubject;
 
 /**
+ * A part stream container that proxies requests for content streams to a parser
+ * to read the content.
+ *
  * Keeps reference to the original stream a message was parsed from, using that
  * stream as the message's stream instead of the parent's MessagePartStream
  * unless the part changed.
  * 
  * The container must also be attached to its underlying part with
- * SplSubject::attach() so the ParsedPartStreamContainer gets notified of any
+ * SplSubject::attach() so the ParserPartStreamContainer gets notified of any
  * changes.
  *
  * @author Zaahid Bateson
  */
-class ParsedPartStreamContainer extends PartStreamContainer implements SplObserver
+class ParserPartStreamContainer extends PartStreamContainer implements SplObserver
 {
     /**
      * @var ParserPartProxy
@@ -67,6 +70,9 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
         }
     }
 
+    /**
+     * Requests content from the parser if not previously requested.
+     */
     protected function requestParsedContentStream()
     {
         if (!$this->contentParseRequested) {
@@ -78,6 +84,11 @@ class ParsedPartStreamContainer extends PartStreamContainer implements SplObserv
         }
     }
 
+    /**
+     * Ensures the parser has parsed the entire part, and sets
+     * $this->parsedStream to the original parsed stream (or a limited part of
+     * it corresponding to the current part this stream container belongs to).
+     */
     protected function requestParsedStream()
     {
         if ($this->parsedStream === null) {

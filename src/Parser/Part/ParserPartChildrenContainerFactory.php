@@ -9,14 +9,14 @@ namespace ZBateson\MailMimeParser\Parser\Part;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
- * Description of ParsedPartChildrenContainerFactory
+ * Creates ParserPartChildrenContainer instances.
  *
  * @author Zaahid Bateson
  */
-class ParsedPartChildrenContainerFactory
+class ParserPartChildrenContainerFactory
 {
     public function newInstance(ParserMimePartProxy $parserProxy)
     {
-        return new ParsedPartChildrenContainer($parserProxy);
+        return new ParserPartChildrenContainer($parserProxy);
     }
 }

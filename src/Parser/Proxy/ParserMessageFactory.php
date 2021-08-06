@@ -15,8 +15,8 @@ use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
 use ZBateson\MailMimeParser\Parser\MimeParserFactory;
 use ZBateson\MailMimeParser\Parser\NonMimeParserFactory;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainerFactory;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
@@ -39,14 +39,14 @@ class ParserMessageFactory
     protected $partHeaderContainerFactory;
 
     /**
-     * @var ParsedPartStreamContainerFactory
+     * @var ParserPartStreamContainerFactory
      */
-    protected $parsedPartStreamContainerFactory;
+    protected $parserPartStreamContainerFactory;
 
     /**
-     * @var ParsedPartChildrenContainerFactory
+     * @var ParserPartChildrenContainerFactory
      */
-    protected $parsedPartChildrenContainerFactory;
+    protected $parserPartChildrenContainerFactory;
 
     /**
      * @var ZBateson\MailMimeParser\Parser\IParserFactory[]
@@ -66,8 +66,8 @@ class ParserMessageFactory
     public function __construct(
         StreamFactory $sdf,
         PartHeaderContainerFactory $phcf,
-        ParsedPartStreamContainerFactory $pscf,
-        ParsedPartChildrenContainerFactory $ppccf,
+        ParserPartStreamContainerFactory $pscf,
+        ParserPartChildrenContainerFactory $ppccf,
         MimeParserFactory $mpf,
         NonMimeParserFactory $nmpf,
         MultipartHelper $multipartHelper,
@@ -75,8 +75,8 @@ class ParserMessageFactory
     ) {
         $this->streamFactory = $sdf;
         $this->partHeaderContainerFactory = $phcf;
-        $this->parsedPartStreamContainerFactory = $pscf;
-        $this->parsedPartChildrenContainerFactory = $ppccf;
+        $this->parserPartStreamContainerFactory = $pscf;
+        $this->parserPartChildrenContainerFactory = $ppccf;
         $this->parserFactories = [ $mpf, $nmpf ];
         $this->multipartHelper = $multipartHelper;
         $this->privacyHelper = $privacyHelper;
@@ -110,8 +110,8 @@ class ParserMessageFactory
         // after a change to headers is made by the user on the Part
         $copied = $this->partHeaderContainerFactory->newInstance($headerContainer);
         $parserProxy = new ParserMimePartProxy($copied, $partBuilder, $this->getMessageParser($headerContainer));
-        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($parserProxy);
-        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($parserProxy);
+        $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
+        $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 
         $message = new Message(
             $streamContainer,
@@ -121,8 +121,8 @@ class ParserMessageFactory
             $this->privacyHelper
         );
         $parserProxy->setPart($message);
-        $parserProxy->setParsedPartStreamContainer($streamContainer);
-        $parserProxy->setParsedPartChildrenContainer($childrenContainer);
+        $parserProxy->setParserPartStreamContainer($streamContainer);
+        $parserProxy->setParserPartChildrenContainer($childrenContainer);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
         $message->attach($streamContainer);

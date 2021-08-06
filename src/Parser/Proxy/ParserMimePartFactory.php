@@ -12,8 +12,8 @@ use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\IParserFactory;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainerFactory;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartChildrenContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
 
 /**
  * Responsible for creating ParsedMimePart instances.
@@ -28,9 +28,9 @@ class ParserMimePartFactory
     protected $streamFactory;
 
     /**
-     * @var ParsedPartStreamContainerFactory
+     * @var ParserPartStreamContainerFactory
      */
-    protected $parsedPartStreamContainerFactory;
+    protected $parserPartStreamContainerFactory;
 
     /**
      * @var PartHeaderContainerFactory
@@ -43,9 +43,9 @@ class ParserMimePartFactory
     protected $partChildrenContainerFactory;
 
     /**
-     * @var ParsedPartChildrenContainerFactory
+     * @var ParserPartChildrenContainerFactory
      */
-    protected $parsedPartChildrenContainerFactory;
+    protected $parserPartChildrenContainerFactory;
 
     /**
      * @var IParserFactory
@@ -55,13 +55,13 @@ class ParserMimePartFactory
     public function __construct(
         StreamFactory $sdf,
         PartHeaderContainerFactory $phcf,
-        ParsedPartStreamContainerFactory $pscf,
-        ParsedPartChildrenContainerFactory $ppccf
+        ParserPartStreamContainerFactory $pscf,
+        ParserPartChildrenContainerFactory $ppccf
     ) {
         $this->streamFactory = $sdf;
         $this->partHeaderContainerFactory = $phcf;
-        $this->parsedPartStreamContainerFactory = $pscf;
-        $this->parsedPartChildrenContainerFactory = $ppccf;
+        $this->parserPartStreamContainerFactory = $pscf;
+        $this->parserPartChildrenContainerFactory = $ppccf;
     }
 
     public function setParserFactory(IParserFactory $parserFactory)
@@ -95,8 +95,8 @@ class ParserMimePartFactory
         // after a change to headers is made by the user on the Part
         $copied = $this->partHeaderContainerFactory->newInstance($headerContainer);
         $parserProxy = $this->newParserMimePartProxy($partBuilder, $copied, $parent);
-        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($parserProxy);
-        $childrenContainer = $this->parsedPartChildrenContainerFactory->newInstance($parserProxy);
+        $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
+        $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 
         $part = new MimePart(
             $parent->getPart(),
@@ -105,8 +105,8 @@ class ParserMimePartFactory
             $childrenContainer
         );
         $parserProxy->setPart($part);
-        $parserProxy->setParsedPartStreamContainer($streamContainer);
-        $parserProxy->setParsedPartChildrenContainer($childrenContainer);
+        $parserProxy->setParserPartStreamContainer($streamContainer);
+        $parserProxy->setParserPartChildrenContainer($childrenContainer);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
         $part->attach($streamContainer);

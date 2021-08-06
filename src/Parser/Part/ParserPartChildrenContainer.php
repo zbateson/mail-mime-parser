@@ -10,19 +10,22 @@ use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
- * Description of ParsedPartChildrenContainer
+ * A child container that proxies calls to a parser when attempting to access
+ * child parts.
  *
  * @author Zaahid Bateson
  */
-class ParsedPartChildrenContainer extends PartChildrenContainer
+class ParserPartChildrenContainer extends PartChildrenContainer
 {
     /**
-     * @var ParserMimePartProxy
+     * @var ParserMimePartProxy The parser to proxy requests to when trying to
+     *      get child parts.
      */
     protected $parserProxy;
 
     /**
-     * @var bool
+     * @var bool Set to true once all parts have been parsed, and requests to
+     *      the proxy won't result in any more child parts.
      */
     private $allParsed = false;
 

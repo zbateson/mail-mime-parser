@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 use ZBateson\MailMimeParser\Parser\IParserFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\Part\ParsedPartStreamContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -25,9 +25,9 @@ class ParserUUEncodedPartFactory
     protected $streamFactory;
 
     /**
-     * @var ParsedPartStreamContainerFactory
+     * @var ParserPartStreamContainerFactory
      */
-    protected $parsedPartStreamContainerFactory;
+    protected $parserPartStreamContainerFactory;
 
     /**
      * @var IParserFactory
@@ -36,10 +36,10 @@ class ParserUUEncodedPartFactory
 
     public function __construct(
         StreamFactory $sdf,
-        ParsedPartStreamContainerFactory $parsedPartStreamContainerFactory
+        ParserPartStreamContainerFactory $parserPartStreamContainerFactory
     ) {
         $this->streamFactory = $sdf;
-        $this->parsedPartStreamContainerFactory = $parsedPartStreamContainerFactory;
+        $this->parserPartStreamContainerFactory = $parserPartStreamContainerFactory;
     }
 
     public function setParserFactory(IParserFactory $parserFactory)
@@ -56,7 +56,7 @@ class ParserUUEncodedPartFactory
     public function newInstance(PartBuilder $partBuilder, $mode, $filename, ParserMimePartProxy $parent)
     {
         $parserProxy = new ParserUUEncodedPartProxy($partBuilder, $parent->getParser(), $parent);
-        $streamContainer = $this->parsedPartStreamContainerFactory->newInstance($parserProxy);
+        $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
 
         $part = new UUEncodedPart(
             $mode,
@@ -65,7 +65,7 @@ class ParserUUEncodedPartFactory
             $streamContainer
         );
         $parserProxy->setPart($part);
-        $parserProxy->setParsedPartStreamContainer($streamContainer);
+        $parserProxy->setParserPartStreamContainer($streamContainer);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
         $part->attach($streamContainer);
