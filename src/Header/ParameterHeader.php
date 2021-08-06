@@ -12,15 +12,15 @@ use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
  * Represents a header containing a primary value part and subsequent name/value
- * parts using a ParameterConsumer.
+ * pairs.  This is used by 'Content-Type' and 'Content-Disposition' headers.
  * 
  * @author Zaahid Bateson
  */
 class ParameterHeader extends AbstractHeader
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\ParameterPart[] key map of
-     * lower-case parameter names and associated ParameterParts.
+     * @var ParameterPart[] key map of lower-case parameter names and associated
+     *      ParameterParts.
      */
     protected $parameters = [];
     
@@ -28,7 +28,7 @@ class ParameterHeader extends AbstractHeader
      * Returns a ParameterConsumer.
      * 
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
@@ -54,7 +54,7 @@ class ParameterHeader extends AbstractHeader
     /**
      * Returns true if a parameter exists with the passed name.
      * 
-     * @param string $name
+     * @param string $name The parameter to look up.
      * @return boolean
      */
     public function hasParameter($name)
@@ -66,9 +66,10 @@ class ParameterHeader extends AbstractHeader
      * Returns the value of the parameter with the given name, or $defaultValue
      * if not set.
      * 
-     * @param string $name
-     * @param string $defaultValue
-     * @return string
+     * @param string $name The parameter to retrieve.
+     * @param string $defaultValue Optional default value (defaulting to null if
+     *        not provided).
+     * @return string|null The parameter's value.
      */
     public function getValueFor($name, $defaultValue = null)
     {

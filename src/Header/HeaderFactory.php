@@ -108,8 +108,8 @@ class HeaderFactory
      * Returns the string in lower-case, and with non-alphanumeric characters
      * stripped out.
      *
-     * @param string $header
-     * @return string
+     * @param string $header The header name
+     * @return string The normalized header name
      */
     public function getNormalizedHeaderName($header)
     {
@@ -119,8 +119,8 @@ class HeaderFactory
     /**
      * Returns the name of an IHeader class for the passed header name.
      * 
-     * @param string $name
-     * @return string
+     * @param string $name The header name.
+     * @return string The Fully Qualified class name.
      */
     private function getClassFor($name)
     {
@@ -139,9 +139,9 @@ class HeaderFactory
      * Creates an IHeader instance for the passed header name and value, and
      * returns it.
      * 
-     * @param string $name
-     * @param string $value
-     * @return IHeader
+     * @param string $name The header name.
+     * @param string $value The header value.
+     * @return IHeader The created header object.
      */
     public function newInstance($name, $value)
     {

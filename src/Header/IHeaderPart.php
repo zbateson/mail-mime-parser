@@ -19,14 +19,14 @@ interface IHeaderPart
     /**
      * Returns the part's value.
      *
-     * @return string the value of the part
+     * @return string The value of the part
      */
     public function getValue();
 
     /**
      * Returns the value of the part (which is a string).
      *
-     * @return string the value
+     * @return string The value
      */
     public function __toString();
 }

@@ -23,18 +23,10 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 abstract class MimeEncodedHeader extends AbstractHeader
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory for
-     * mime decoding.
+     * @var MimeLiteralPartFactory for mime decoding.
      */
     protected $mimeLiteralPartFactory;
 
-    /**
-     * Includes
-     *
-     * @param ConsumerService $consumerService
-     * @param string $name
-     * @param string $value
-     */
     public function __construct(
         MimeLiteralPartFactory $mimeLiteralPartFactory,
         ConsumerService $consumerService,

@@ -9,10 +9,10 @@ namespace ZBateson\MailMimeParser\Header;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
- * Reads the header using GenericConsumer.
+ * Reads a generic header.
  * 
- * Header's may contain mime-encoded parts, quoted parts, and comments.
- * GenericConsumer returns a single part value.
+ * Header's may contain mime-encoded parts, quoted parts, and comments.  The
+ * parsed value is parsed into a single IHeaderPart.
  *
  * @author Zaahid Bateson
  */

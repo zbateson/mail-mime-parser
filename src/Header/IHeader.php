@@ -22,7 +22,7 @@ interface IHeader
      * Returns an array of IHeaderPart objects the header's value has been
      * parsed into.
      *
-     * @return IHeaderPart[]
+     * @return IHeaderPart[] The array of parts.
      */
     public function getParts();
 
@@ -33,21 +33,21 @@ interface IHeader
      * or parameter headers (Content-Type), the 'value' is the value of the
      * first parsed part.
      *
-     * @return string
+     * @return string The value
      */
     public function getValue();
 
     /**
      * Returns the raw value of the header.
      *
-     * @return string
+     * @return string The raw value.
      */
     public function getRawValue();
 
     /**
      * Returns the name of the header.
      *
-     * @return string
+     * @return string The name.
      */
     public function getName();
 
@@ -56,7 +56,7 @@ interface IHeader
      *
      * i.e.: '<HeaderName>: <RawValue>'
      *
-     * @return string
+     * @return string The string representation.
      */
     public function __toString();
 }
