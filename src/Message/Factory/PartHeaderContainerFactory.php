@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
 /**
- * Description of PartHeaderContainerFactory
+ * Creates PartHeaderContainer instances.
  *
  * @author Zaahid Bateson
  */

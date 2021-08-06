@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Factory;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
- * Description of PartChildrenContainerFactory
+ * Creates PartChildrenContainer instances.
  *
  * @author Zaahid Bateson
  */

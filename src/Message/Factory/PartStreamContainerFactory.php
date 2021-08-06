@@ -10,7 +10,7 @@ use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Description of PartStreamContainerFactory
+ * Creates PartStreamContainer instances.
  *
  * @author Zaahid Bateson
  */
