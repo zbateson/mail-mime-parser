@@ -57,11 +57,14 @@ class ReceivedConsumer extends AbstractConsumer
     }
 
     /**
-     * Returns two {@see Received/DomainConsumer} instances, with FROM and BY as
-     * part names, and 4 {@see Received/GenericReceivedConsumer} instances for
-     * VIA, WITH, ID, and FOR part names, and
-     * 1 {@see Received/ReceivedDateConsumer} for the date/time stamp, and one
-     * {@see CommentConsumer} to consume any comments.
+     * Returns sub-consumers for a received consumer.
+     * 
+     * - 2 {@see Received/DomainConsumer} instances, with FROM and BY as part
+     *   names.
+     * - 4 {@see Received/GenericReceivedConsumer} instances for VIA, WITH, ID,
+     *   and FOR part names.
+     * - 1 {@see Received/ReceivedDateConsumer} for the date/time stamp.
+     * - 1 {@see CommentConsumer} to consume any comments.
      * 
      * @return AbstractConsumer[] the sub-consumers
      */
@@ -116,8 +119,8 @@ class ReceivedConsumer extends AbstractConsumer
      * Overridden to combine all part values into a single string and return it
      * as an array with a single element.
      *
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart[]|\ZBateson\MailMimeParser\Header\Part\ReceivedPart[]|\ZBateson\MailMimeParser\Header\Part\DatePart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function processParts(array $parts)
     {

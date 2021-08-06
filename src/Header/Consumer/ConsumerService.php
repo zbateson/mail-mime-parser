@@ -27,7 +27,7 @@ class ConsumerService
     
     /**
      * @var \ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory used for
-     * GenericConsumer instances.
+     *      GenericConsumer instances.
      */
     protected $mimeLiteralPartFactory;
 
@@ -45,12 +45,6 @@ class ConsumerService
         'date' => null
     ];
     
-    /**
-     * Sets up the HeaderPartFactory member variable.
-     * 
-     * @param HeaderPartFactory $partFactory
-     * @param MimeLiteralPartFactory $mimeLiteralPartFactory
-     */
     public function __construct(HeaderPartFactory $partFactory, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {
         $this->partFactory = $partFactory;
@@ -60,7 +54,7 @@ class ConsumerService
     /**
      * Returns the AddressBaseConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumer
+     * @return AddressBaseConsumer
      */
     public function getAddressBaseConsumer()
     {
@@ -70,7 +64,7 @@ class ConsumerService
     /**
      * Returns the AddressConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AddressConsumer
+     * @return AddressConsumer
      */
     public function getAddressConsumer()
     {
@@ -80,7 +74,7 @@ class ConsumerService
     /**
      * Returns the AddressGroupConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer
+     * @return AddressGroupConsumer
      */
     public function getAddressGroupConsumer()
     {
@@ -90,7 +84,7 @@ class ConsumerService
     /**
      * Returns the CommentConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
+     * @return CommentConsumer
      */
     public function getCommentConsumer()
     {
@@ -100,7 +94,7 @@ class ConsumerService
     /**
      * Returns the GenericConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\GenericConsumer
+     * @return GenericConsumer
      */
     public function getGenericConsumer()
     {
@@ -110,7 +104,7 @@ class ConsumerService
     /**
      * Returns the SubjectConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\SubjectConsumer
+     * @return SubjectConsumer
      */
     public function getSubjectConsumer()
     {
@@ -120,7 +114,7 @@ class ConsumerService
     /**
      * Returns the QuotedStringConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+     * @return QuotedStringConsumer
      */
     public function getQuotedStringConsumer()
     {
@@ -130,7 +124,7 @@ class ConsumerService
     /**
      * Returns the DateConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\DateConsumer
+     * @return DateConsumer
      */
     public function getDateConsumer()
     {
@@ -140,7 +134,7 @@ class ConsumerService
     /**
      * Returns the ParameterConsumer singleton instance.
      * 
-     * @return \ZBateson\MailMimeParser\Header\Consumer\ParameterConsumer
+     * @return ParameterConsumer
      */
     public function getParameterConsumer()
     {
@@ -152,7 +146,7 @@ class ConsumerService
      * Received header.
      *
      * @param string $partName
-     * @return \ZBateson\MailMimeParser\Header\Consumer\Received\FromConsumer
+     * @return AbstractConsumer
      */
     public function getSubReceivedConsumer($partName)
     {
@@ -173,7 +167,7 @@ class ConsumerService
     /**
      * Returns the ReceivedConsumer singleton instance.
      *
-     * @return \ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumer
+     * @return ReceivedConsumer
      */
     public function getReceivedConsumer()
     {
@@ -183,7 +177,7 @@ class ConsumerService
     /**
      * Returns the IdConsumer singleton instance.
      *
-     * @return \ZBateson\MailMimeParser\Header\Consumer\IdConsumer
+     * @return IdConsumer
      */
     public function getIdConsumer()
     {
@@ -193,7 +187,7 @@ class ConsumerService
     /**
      * Returns the IdBaseConsumer singleton instance.
      *
-     * @return \ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumer
+     * @return IdBaseConsumer
      */
     public function getIdBaseConsumer()
     {

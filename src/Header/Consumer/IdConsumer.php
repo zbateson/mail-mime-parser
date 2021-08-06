@@ -22,7 +22,7 @@ class IdConsumer extends GenericConsumer
      */
     public function getTokenSeparators()
     {
-        return ['\s+', '<', '>'];
+        return [ '\s+', '<', '>' ];
     }
     
     /**

@@ -38,8 +38,9 @@ class GenericConsumer extends AbstractConsumer
     
     /**
      * Returns the regex '\s+' (whitespace) pattern matcher as a token marker so
-     * the header value is split along whitespace characters.  GenericConsumer
-     * filters out whitespace-only tokens from getPartForToken.
+     * the header value is split along whitespace characters.
+     *
+     * GenericConsumer filters out whitespace-only tokens from getPartForToken.
      * 
      * The whitespace character delimits mime-encoded parts for decoding.
      * 
@@ -79,8 +80,8 @@ class GenericConsumer extends AbstractConsumer
      * Returns true if a space should be added based on the passed last and next
      * parts.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $nextPart
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
+     * @param HeaderPart $nextPart
+     * @param HeaderPart $lastPart
      * @return bool
      */
     private function shouldAddSpace(HeaderPart $nextPart, HeaderPart $lastPart)
@@ -92,11 +93,11 @@ class GenericConsumer extends AbstractConsumer
      * Loops over the $parts array from the current position, checks if the
      * space should be added, then adds it to $retParts and returns.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $retParts
+     * @param HeaderPart[] $parts
+     * @param HeaderPart[] $retParts
      * @param int $curIndex
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $lastPart
+     * @param HeaderPart $spacePart
+     * @param HeaderPart $lastPart
      */
     private function addSpaceToRetParts(
         array $parts,
@@ -119,10 +120,10 @@ class GenericConsumer extends AbstractConsumer
      * Never adds a space if it's the first part, otherwise only add it if
      * either part isn't set to ignore the space
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $retParts
+     * @param HeaderPart[] $parts
+     * @param HeaderPart[] $retParts
      * @param int $curIndex
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart $spacePart
+     * @param HeaderPart $spacePart
      */
     private function addSpaces(array $parts, array &$retParts, $curIndex, HeaderPart &$spacePart = null)
     {
@@ -151,8 +152,8 @@ class GenericConsumer extends AbstractConsumer
      * processParts, and if needed by an implementing class that overrides
      * processParts, must be specifically called.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param HeaderPart[] $parts
+     * @return HeaderPart[]
      */
     protected function filterIgnoredSpaces(array $parts)
     {
@@ -176,9 +177,11 @@ class GenericConsumer extends AbstractConsumer
     /**
      * Overridden to combine all part values into a single string and return it
      * as an array with a single element.
-     * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\LiteralPart[]|array
+     *
+     * The returned IHeaderParts are all LiteralParts.
+     *
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function processParts(array $parts)
     {
