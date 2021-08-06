@@ -8,8 +8,6 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\IParser;
-use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer;
 
 /**
  * Description of ProxyPart

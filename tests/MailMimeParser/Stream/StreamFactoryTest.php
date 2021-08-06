@@ -40,7 +40,7 @@ class StreamFactoryTest extends TestCase
 
         $factory = new StreamFactory();
 
-        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedPartStream(Psr7\stream_for('test'), $partBuilder));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedPartStream($partBuilder));
         $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream($partBuilder));
         $this->assertNull($factory->getLimitedContentStream($partBuilder));
 
