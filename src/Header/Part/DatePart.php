@@ -25,7 +25,7 @@ class DatePart extends LiteralPart
     /**
      * Tries parsing the passed token as an RFC 2822 date, and failing that into
      * an RFC 822 date, and failing that, tries to parse it by calling
-     * ``` new DateTime($value) ```.
+     * new DateTime($value).
      *
      * @param MbWrapper $charsetConverter
      * @param string $token

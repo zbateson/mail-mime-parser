@@ -46,7 +46,7 @@ class AddressPart extends ParameterPart
     /**
      * Returns the email address.
      * 
-     * @return string
+     * @return string The email address.
      */
     public function getEmail()
     {
