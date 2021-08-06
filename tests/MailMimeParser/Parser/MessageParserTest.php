@@ -54,6 +54,9 @@ class MessageParserTest extends TestCase
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
+        $proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->partBuilderFactory
             ->expects($this->once())
@@ -72,6 +75,9 @@ class MessageParserTest extends TestCase
             ->expects($this->once())
             ->method('newInstance')
             ->with($pb, $hc)
+            ->willReturn($proxy);
+        $proxy->expects($this->once())
+            ->method('getPart')
             ->willReturn($msg);
 
         $this->assertSame($msg, $this->instance->parse($stream));

@@ -39,9 +39,11 @@ class ParserPartChildrenContainer extends PartChildrenContainer
     {
         $exists = parent::offsetExists($offset);
         while (!$exists && !$this->allParsed) {
-            $child = $this->parserProxy->parseNextChild();
+            $child = $this->parserProxy->popNextChild();
             if ($child === null) {
                 $this->allParsed = true;
+            } else {
+                $this->add($child);
             }
             $exists = parent::offsetExists($offset);
         }

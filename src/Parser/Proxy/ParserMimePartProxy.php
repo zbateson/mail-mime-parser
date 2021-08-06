@@ -10,7 +10,6 @@ use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer;
 
 /**
  * A bi-directional parser-to-part proxy for IMimeParts.
@@ -37,7 +36,7 @@ class ParserMimePartProxy extends ParserPartProxy
     protected $parentBoundaryFound = false;
 
     /**
-     * @var boolean|null|string FALSE if not queried for in the content-type
+     * @var bool|null|string FALSE if not queried for in the content-type
      *      header of this part, NULL if the current part does not have a
      *      boundary, and otherwise contains the value of the boundary parameter
      *      of the content-type header if the part contains one.
@@ -45,14 +44,20 @@ class ParserMimePartProxy extends ParserPartProxy
     protected $mimeBoundary = false;
 
     /**
-     * @var IMessagePart Reference to the last child added to this part.
+     * @var bool true once all children of this part have been parsed.
      */
-    protected $lastAddedChild = null;
+    protected $allChildrenParsed = false;
 
     /**
-     * @var ParserPartChildrenContainer The part's children container.
+     * @var ParserPartProxy[] Parsed children used as 'first-in-first-out'
+     *      stack as children are parsed.
      */
-    protected $parserPartChildrenContainer = null;
+    protected $children = [];
+
+    /**
+     * @var ParserPartProxy Reference to the last child added to this part.
+     */
+    protected $lastAddedChild = null;
 
     public function __construct(
         PartHeaderContainer $headerContainer,
@@ -62,17 +67,6 @@ class ParserMimePartProxy extends ParserPartProxy
     ) {
         parent::__construct($partBuilder, $childParser, $parent);
         $this->headerContainer = $headerContainer;
-    }
-
-    /**
-     * Sets up the ParserPartChildrenContainer dependency for this part.
-     *
-     * @param ParserPartChildrenContainer $parserPartChildrenContainer the child
-     *        container.
-     */
-    public function setParserPartChildrenContainer(ParserPartChildrenContainer $parserPartChildrenContainer)
-    {
-        $this->parserPartChildrenContainer = $parserPartChildrenContainer;
     }
 
     /**
@@ -87,16 +81,37 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
-     * Parses the next child of this part and returns it, or null if there are
-     * no more children to parse.
-     *
-     * @return IMessagePart|null
+     * Parses the next child of this part and adds it to the children list.
      */
-    public function parseNextChild()
+    protected function parseNextChild()
     {
-        $this->ensureLastChildParsed();
+        if ($this->allChildrenParsed) {
+            return;
+        }
         $this->parseContent();
-        return $this->childParser->parseNextChild($this);
+        $this->ensureLastChildParsed();
+        $next = $this->childParser->parseNextChild($this);
+        if ($next !== null) {
+            array_push($this->children, $next);
+            $this->lastAddedChild = $next;
+        } else {
+            $this->allChildrenParsed = true;
+        }
+    }
+
+    /**
+     * Returns the next child part if one exists, removing it from the internal
+     * list of children, or null otherwise.
+     *
+     * @return IMessagePart|null the child part.
+     */
+    public function popNextChild()
+    {
+        if (empty($this->children)) {
+            $this->parseNextChild();
+        }
+        $proxy = array_shift($this->children);
+        return ($proxy !== null) ? $proxy->getPart() : null;
     }
 
     /**
@@ -106,20 +121,9 @@ class ParserMimePartProxy extends ParserPartProxy
     {
         $this->parseContent();
         $child = null;
-        do {
-            $child = $this->parseNextChild();
-        } while ($child !== null);
-    }
-
-    /**
-     * Adds the part from the passed ParserPartProxy to the child container.
-     *
-     * @param ParserPartProxy $child The child to add.
-     */
-    public function addChild(ParserPartProxy $child)
-    {
-        $this->parserPartChildrenContainer->add($child->getPart());
-        $this->lastAddedChild = $child;
+        while (!$this->allChildrenParsed) {
+            $this->parseNextChild();
+        }
     }
 
     /**

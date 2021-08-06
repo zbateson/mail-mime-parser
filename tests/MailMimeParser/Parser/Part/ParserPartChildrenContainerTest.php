@@ -27,21 +27,24 @@ class ParserPartChildrenContainerTest extends TestCase
     public function testOffsetExistsCallsProxyOnceAfterReturningNull()
     {
         $this->proxy->expects($this->once())
-            ->method('parseNextChild')
+            ->method('popNextChild')
             ->willReturn(null);
         $this->assertFalse($this->instance->offsetExists(0));
-        // doesn't call parseNextChildAgain
+        // doesn't call popNextChildAgain
         $this->assertFalse($this->instance->offsetExists(0));
     }
 
     public function testOffsetExistsCallsProxyTwiceAfterNotReturningNull()
     {
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\IMessagePart')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->proxy->expects($this->exactly(2))
-            ->method('parseNextChild')
-            ->willReturnOnConsecutiveCalls('test', null);
-        $this->assertFalse($this->instance->offsetExists(0));
-        $this->assertFalse($this->instance->offsetExists(0));
-        // doesn't call parseNextChildAgain
-        $this->assertFalse($this->instance->offsetExists(0));
+            ->method('popNextChild')
+            ->willReturnOnConsecutiveCalls($part, null);
+        $this->assertTrue($this->instance->offsetExists(0));
+        $this->assertFalse($this->instance->offsetExists(1));
+        // doesn't call popNextChildAgain
+        $this->assertFalse($this->instance->offsetExists(1));
     }
 }

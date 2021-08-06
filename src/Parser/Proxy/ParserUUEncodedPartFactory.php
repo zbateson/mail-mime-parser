@@ -41,7 +41,7 @@ class ParserUUEncodedPartFactory
      * returns it
      * 
      * @param PartBuilder $partBuilder
-     * @return IUUEncodedPart
+     * @return ParserPartProxy
      */
     public function newInstance(PartBuilder $partBuilder, $mode, $filename, ParserMimePartProxy $parent)
     {
@@ -55,12 +55,9 @@ class ParserUUEncodedPartFactory
             $streamContainer
         );
         $parserProxy->setPart($part);
-        $parserProxy->setParserPartStreamContainer($streamContainer);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($part));
         $part->attach($streamContainer);
-
-        $parent->addChild($parserProxy);
-        return $part;
+        return $parserProxy;
     }
 }

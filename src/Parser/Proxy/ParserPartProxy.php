@@ -38,12 +38,6 @@ class ParserPartProxy
      */
     protected $parent;
 
-    /**
-     * @var ParserPartStreamContainer The ParserPartStreamContainer used by the
-     *      part.
-     */
-    protected $parserPartStreamContainer;
-
     public function __construct(
         PartBuilder $partBuilder,
         IParser $childParser = null,
@@ -72,16 +66,6 @@ class ParserPartProxy
     public function getPart()
     {
         return $this->part;
-    }
-
-    /**
-     * Sets the associated ParserPartStreamContainer.
-     *
-     * @param ParserPartStreamContainer $parserPartStreamContainer
-     */
-    public function setParserPartStreamContainer(ParserPartStreamContainer $parserPartStreamContainer)
-    {
-        $this->parserPartStreamContainer = $parserPartStreamContainer;
     }
 
     /**

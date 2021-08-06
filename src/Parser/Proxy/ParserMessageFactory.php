@@ -115,7 +115,7 @@ class ParserMessageFactory
      *
      * @param PartBuilder $partBuilder
      * @param PartHeaderContainer $headerContainer
-     * @return \ZBateson\MailMimeParser\Message\IMimePart
+     * @return ParserMimePartProxy
      */
     public function newInstance(PartBuilder $partBuilder, PartHeaderContainer $headerContainer)
     {
@@ -134,12 +134,10 @@ class ParserMessageFactory
             $this->privacyHelper
         );
         $parserProxy->setPart($message);
-        $parserProxy->setParserPartStreamContainer($streamContainer);
-        $parserProxy->setParserPartChildrenContainer($childrenContainer);
 
         $streamContainer->setStream($this->streamFactory->newMessagePartStream($message));
         $message->attach($streamContainer);
-        return $message;
+        return $parserProxy;
     }
 
 }

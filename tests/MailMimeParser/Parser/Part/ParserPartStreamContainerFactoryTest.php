@@ -33,7 +33,7 @@ class ParserPartStreamContainerFactoryTest extends TestCase
         );
         // make sure proxy is attached
         $this->proxy->expects($this->once())
-            ->method('parseNextChild')
+            ->method('popNextChild')
             ->willReturn(null);
         $ob->offsetExists(0);
     }
