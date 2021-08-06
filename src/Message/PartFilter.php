@@ -10,8 +10,8 @@ use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
- * Collection of static methods that return callables for common IMessagePart
- * filters.
+ * Collection of static methods that return callables for common IMultiPart
+ * child filters.
  *
  * @author Zaahid Bateson
  */
