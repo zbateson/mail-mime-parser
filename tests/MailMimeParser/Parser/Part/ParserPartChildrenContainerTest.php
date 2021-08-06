@@ -30,7 +30,7 @@ class ParserPartChildrenContainerTest extends TestCase
             ->method('popNextChild')
             ->willReturn(null);
         $this->assertFalse($this->instance->offsetExists(0));
-        // doesn't call popNextChildAgain
+        // doesn't call popNextChild again
         $this->assertFalse($this->instance->offsetExists(0));
     }
 
@@ -44,7 +44,7 @@ class ParserPartChildrenContainerTest extends TestCase
             ->willReturnOnConsecutiveCalls($part, null);
         $this->assertTrue($this->instance->offsetExists(0));
         $this->assertFalse($this->instance->offsetExists(1));
-        // doesn't call popNextChildAgain
+        // doesn't call popNextChild again
         $this->assertFalse($this->instance->offsetExists(1));
     }
 }
