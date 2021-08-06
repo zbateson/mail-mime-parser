@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser;
 use Pimple\Container as PimpleContainer;
 use Pimple\Exception\UnknownIdentifierException;
 use ReflectionClass;
-use ReflectionException;
 use ReflectionParameter;
 
 /**

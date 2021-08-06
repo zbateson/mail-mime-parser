@@ -58,8 +58,7 @@ class MailMimeParser
     }
 
     /**
-     * (Re)creates the container using the default provider, DefaultProvider,
-     * and any additional providers passed in $providers.
+     * (Re)creates the container using the passed providers.
      *
      * This is necessary if configuration needs to be reset to parse emails
      * differently.
@@ -72,13 +71,12 @@ class MailMimeParser
      * in a non-static context separately, so care should be taken when
      * reconfiguring the parser.
      *
-     * @param array $providers
+     * @param \Pimple\ServiceProviderInterface[] $providers
      */
     public static function configureDependencyContainer(array $providers = [])
     {
         static::$di = new Container();
         $di = static::$di;
-        $di->register(new DefaultProvider());
         foreach ($providers as $provider) {
             $di->register($provider);
         }
