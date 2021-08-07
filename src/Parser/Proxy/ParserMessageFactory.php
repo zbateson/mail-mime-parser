@@ -20,10 +20,10 @@ use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
-use Psr\Http\Message\StreamInterface;
 
 /**
- * Responsible for creating proxied IMessage instances.
+ * Responsible for creating proxied IMessage instances wrapped in a
+ * ParserMimePartProxy.
  *
  * @author Zaahid Bateson
  */

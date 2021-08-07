@@ -16,7 +16,8 @@ use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
 
 /**
- * Responsible for creating proxied IMimePart instances.
+ * Responsible for creating proxied IMimePart instances wrapped in a
+ * ParserMimePartProxy.
  *
  * @author Zaahid Bateson
  */

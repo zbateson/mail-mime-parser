@@ -12,7 +12,8 @@ use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
- * Responsible for creating proxied IUUEncodedPart instances.
+ * Responsible for creating proxied IUUEncodedPart instances wrapped in a
+ * ParserPartProxy.
  *
  * @author Zaahid Bateson
  */
