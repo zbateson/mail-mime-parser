@@ -71,7 +71,7 @@ class ParserMimePartFactory
     }
 
     /**
-     * Constructs a new MimePart object and returns it
+     * Constructs a new ParserMimePartProxy wrapping an IMimePart object
      *
      * @param PartBuilder $partBuilder
      * @param PartHeaderContainer $headerContainer

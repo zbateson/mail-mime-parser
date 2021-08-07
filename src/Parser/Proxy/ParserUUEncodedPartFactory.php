@@ -38,8 +38,7 @@ class ParserUUEncodedPartFactory
     }
 
     /**
-     * Constructs a new IUUEncodedPart object attached to a parser proxy, and
-     * returns it
+     * Constructs a new ParserPartProxy wrapping an IUUEncoded object.
      * 
      * @param PartBuilder $partBuilder
      * @return ParserPartProxy

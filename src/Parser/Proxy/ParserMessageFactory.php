@@ -111,7 +111,7 @@ class ParserMessageFactory
     }
 
     /**
-     * Constructs a new IMessage object and returns it
+     * Constructs a new ParserMimePartProxy wrapping an IMessage object.
      *
      * @param PartBuilder $partBuilder
      * @param PartHeaderContainer $headerContainer
