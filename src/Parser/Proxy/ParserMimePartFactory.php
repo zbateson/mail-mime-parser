@@ -71,18 +71,6 @@ class ParserMimePartFactory
     }
 
     /**
-     *
-     * @param PartBuilder $partBuilder
-     * @param PartHeaderContainer $headerContainer
-     * @param ParserMimePartProxy $parent
-     * @return \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy
-     */
-    public function newParserMimePartProxy(PartBuilder $partBuilder, PartHeaderContainer $headerContainer, ParserMimePartProxy $parent)
-    {
-        return new ParserMimePartProxy($headerContainer, $partBuilder, $this->parserFactory->newInstance(), $parent);
-    }
-
-    /**
      * Constructs a new MimePart object and returns it
      *
      * @param PartBuilder $partBuilder
@@ -95,7 +83,7 @@ class ParserMimePartFactory
         // changes to headers by the user can't affect parsing which could come
         // after a change to headers is made by the user on the Part
         $copied = $this->partHeaderContainerFactory->newInstance($headerContainer);
-        $parserProxy = $this->newParserMimePartProxy($partBuilder, $copied, $parent);
+        $parserProxy = new ParserMimePartProxy($copied, $partBuilder, $this->parserFactory->newInstance(), $parent);
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
         $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 

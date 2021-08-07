@@ -141,7 +141,7 @@ class MimeParser implements IParser
             return $this->parserMimePartFactory->newInstance($child, $headerContainer, $parentProxy);
         } else {
             // reads content past an end boundary if there is any
-            $parserProxy = $this->parserMimePartFactory->newParserMimePartProxy($child, $headerContainer, $parentProxy);
+            $parserProxy = $this->parserMimePartFactory->newInstance($child, $headerContainer, $parentProxy);
             $this->parseContent($parserProxy);
             return null;
         }
@@ -151,7 +151,7 @@ class MimeParser implements IParser
      * Returns true if there are more parts
      *
      * @param PartBuilder $partBuilder
-     * @return IMimePart
+     * @return ParserPartProxy
      */
     public function parseNextChild(ParserMimePartProxy $proxy)
     {
