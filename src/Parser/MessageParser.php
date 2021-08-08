@@ -82,7 +82,10 @@ class MessageParser
     {
         $partBuilder = $this->partBuilderFactory->newPartBuilder($stream);
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
-        $this->headerParser->parse($partBuilder, $headerContainer);
+        $this->headerParser->parse(
+            $partBuilder->getMessageResourceHandle(),
+            $headerContainer
+        );
         $proxy = $this->parserMessageFactory->newInstance(
             $partBuilder,
             $headerContainer

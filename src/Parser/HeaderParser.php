@@ -9,9 +9,7 @@ namespace ZBateson\MailMimeParser\Parser;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
 /**
- * Reads headers from the input stream if {@see PartBuilder::canHaveHeaders}
- * returns true.  isSupported returns true regardless (which is why it's
- * "optional"), which ensures sub-parsers are called.
+ * Reads headers from an input stream, adding them to a PartHeaderContainer.
  *
  * @author Zaahid Bateson
  */
@@ -38,9 +36,8 @@ class HeaderParser
      *
      * @param PartBuilder $partBuilder the current part to add headers to
      */
-    public function parse(PartBuilder $partBuilder, PartHeaderContainer $container)
+    public function parse($handle, PartHeaderContainer $container)
     {
-        $handle = $partBuilder->getMessageResourceHandle();
         $header = '';
         do {
             $line = MessageParser::readLine($handle);

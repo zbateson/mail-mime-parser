@@ -67,10 +67,13 @@ class MessageParserTest extends TestCase
             ->expects($this->once())
             ->method('newInstance')
             ->willReturn($hc);
+        $pb->expects($this->once())
+            ->method('getMessageResourceHandle')
+            ->willReturn('test');
         $this->headerParser
             ->expects($this->once())
             ->method('parse')
-            ->with($pb, $hc);
+            ->with('test', $hc);
         $this->parserMessageFactory
             ->expects($this->once())
             ->method('newInstance')

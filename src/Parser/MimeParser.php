@@ -137,7 +137,10 @@ class MimeParser implements IParser
     {
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
         if (!$parentProxy->isEndBoundaryFound()) {
-            $this->headerParser->parse($child, $headerContainer);
+            $this->headerParser->parse(
+                $child->getMessageResourceHandle(),
+                $headerContainer
+            );
             return $this->parserMimePartFactory->newInstance($child, $headerContainer, $parentProxy);
         } else {
             // reads content past an end boundary if there is any
