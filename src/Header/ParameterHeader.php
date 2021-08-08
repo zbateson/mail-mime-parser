@@ -11,8 +11,22 @@ use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
- * Represents a header containing a primary value part and subsequent name/value
- * pairs.  This is used by 'Content-Type' and 'Content-Disposition' headers.
+ * Represents a header containing an optional main value part and subsequent
+ * name/value pairs.
+ *
+ * If header doesn't contain a non-parameterized 'main' value part, 'getValue()'
+ * will return the value of the first parameter.
+ *
+ * For example: 'Content-Type: text/html; charset=utf-8; name=test.ext'
+ *
+ * The 'text/html' portion is considered the 'main' value, and 'charset' and
+ * 'name' are added as parameterized name/value pairs.
+ *
+ * With the Autocrypt header, there is no main value portion, for example:
+ * 'Autocrypt: addr=zb@example.com; keydata=b64-data'
+ *
+ * In that example, calling ```php $header->getValue() ``` would return
+ * 'zb@example.com', as would calling ```php $header->getValueFor('addr'); ```.
  * 
  * @author Zaahid Bateson
  */

@@ -13,8 +13,8 @@ use ZBateson\MailMimeParser\Header\Part\SplitParameterToken;
 use ArrayObject;
 
 /**
- * Reads headers separated into parameters consisting of a main value, and
- * subsequent name/value pairs - for example text/html; charset=utf-8.
+ * Reads headers separated into parameters consisting of an optional main value,
+ * and subsequent name/value pairs - for example text/html; charset=utf-8.
  * 
  * A ParameterConsumer's parts are separated by a semi-colon.  Its name/value
  * pairs are separated with an '=' character.

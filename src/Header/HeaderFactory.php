@@ -21,7 +21,8 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *    Delivered-To
  *  - {@see DateHeader}: Date, Resent-Date, Delivery-Date, Expires, Expiry-Date,
  *    Reply-By
- *  - {@see ParameterHeader}: Content-Type, Content-Disposition
+ *  - {@see ParameterHeader}: Content-Type, Content-Disposition, Received-SPF,
+ *    Authentication-Results, DKIM-Signature, Autocrypt
  *  - {@see SubjectHeader}: Subject
  *  - {@see IdHeader}: Message-ID, Content-ID, In-Reply-To, References
  *  - {@see ReceivedHeader}: Received
@@ -71,6 +72,10 @@ class HeaderFactory
         'ZBateson\MailMimeParser\Header\ParameterHeader' => [
             'contenttype',
             'contentdisposition',
+            'receivedspf',
+            'authenticationresults',
+            'dkimsignature',
+            'autocrypt',
         ],
         'ZBateson\MailMimeParser\Header\SubjectHeader' => [
             'subject',

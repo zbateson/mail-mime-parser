@@ -57,6 +57,14 @@ class ParameterHeaderTest extends TestCase
         $this->assertEquals('42', $header->getValueFor('answer-to-everything'));
     }
 
+    public function testParsingHeaderWithNoValue()
+    {
+        $header = new ParameterHeader($this->consumerService, 'Autocrypt', 'addr=brosif@example.com; keydata=example');
+        $this->assertEquals('brosif@example.com', $header->getValue());
+        $this->assertEquals('brosif@example.com', $header->getValueFor('addr'));
+        $this->assertEquals('example', $header->getValueFor('keydata'));
+    }
+
     public function testDefaultParameterValue()
     {
         $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
