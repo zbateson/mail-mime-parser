@@ -69,7 +69,7 @@ class HeaderFactoryTest extends TestCase
 
     public function testGenericHeaderInstance()
     {
-        $aValid = ['X-Generic-Header', 'Authentication-Results'];
+        $aValid = ['X-Generic-Header', 'Some-Other-Header'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'References', 'Received'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
