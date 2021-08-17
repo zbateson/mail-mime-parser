@@ -8,6 +8,9 @@ namespace ZBateson\MailMimeParser\Parser;
 
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 
 /**
  * Holds information about a part while it's being parsed, proxies calls between
@@ -55,6 +58,11 @@ class PartBuilder
     protected $streamContentEndPos = null;
 
     /**
+     * @var PartHeaderContainer The parsed part's headers.
+     */
+    protected $headerContainer;
+
+    /**
      * @var StreamInterface the raw message input stream for a message, or null
      *      for a child part.
      */
@@ -66,10 +74,14 @@ class PartBuilder
      */
     protected $messageHandle = null;
 
+    /**
+     * @var ParserPartProxy
+     */
     private $parent = null;
 
-    public function __construct(StreamInterface $messageStream = null, PartBuilder $parent = null)
+    public function __construct(PartHeaderContainer $headerContainer, StreamInterface $messageStream = null, ParserPartProxy $parent = null)
     {
+        $this->headerContainer = $headerContainer;
         $this->messageStream = $messageStream;
         $this->parent = $parent;
         if ($messageStream !== null) {
@@ -83,6 +95,25 @@ class PartBuilder
         if ($this->messageHandle) {
             fclose($this->messageHandle);
         }
+    }
+
+    /**
+     *
+     * @return ParserPartProxy
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Returns this part's PartHeaderContainer.
+     *
+     * @return PartHeaderContainer the container
+     */
+    public function getHeaderContainer()
+    {
+        return $this->headerContainer;
     }
 
     public function getStream()
@@ -192,5 +223,14 @@ class PartBuilder
     public function isContentParsed()
     {
         return ($this->streamContentEndPos !== null);
+    }
+
+    public function isMime()
+    {
+        if ($this->getParent() !== null) {
+            return $this->getParent()->isMime();
+        }
+        return ($this->headerContainer->exists(HeaderConsts::CONTENT_TYPE) ||
+            $this->headerContainer->exists(HeaderConsts::MIME_VERSION));
     }
 }

@@ -6,14 +6,14 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
+use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\IParserFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Responsible for creating proxied IMimePart instances wrapped in a
@@ -21,7 +21,7 @@ use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
  *
  * @author Zaahid Bateson
  */
-class ParserMimePartFactory
+class ParserMimePartProxyFactory extends ParserPartProxyFactory
 {
     /**
      * @var StreamFactory the StreamFactory instance
@@ -39,19 +39,9 @@ class ParserMimePartFactory
     protected $partHeaderContainerFactory;
 
     /**
-     * @var PartChildrenContainerFactory
-     */
-    protected $partChildrenContainerFactory;
-
-    /**
      * @var ParserPartChildrenContainerFactory
      */
     protected $parserPartChildrenContainerFactory;
-
-    /**
-     * @var IParserFactory
-     */
-    protected $parserFactory;
 
     public function __construct(
         StreamFactory $sdf,
@@ -65,11 +55,6 @@ class ParserMimePartFactory
         $this->parserPartChildrenContainerFactory = $ppccf;
     }
 
-    public function setParserFactory(IParserFactory $parserFactory)
-    {
-        $this->parserFactory = $parserFactory;
-    }
-
     /**
      * Constructs a new ParserMimePartProxy wrapping an IMimePart object
      *
@@ -78,17 +63,16 @@ class ParserMimePartFactory
      * @param ParserMimePartProxy $parent
      * @return ParserMimePartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, PartHeaderContainer $headerContainer, ParserMimePartProxy $parent)
+    public function newInstance(PartBuilder $partBuilder, IParser $parser)
     {
-        // changes to headers by the user can't affect parsing which could come
-        // after a change to headers is made by the user on the Part
-        $copied = $this->partHeaderContainerFactory->newInstance($headerContainer);
-        $parserProxy = new ParserMimePartProxy($copied, $partBuilder, $this->parserFactory->newInstance(), $parent);
+        $parserProxy = new ParserMimePartProxy($partBuilder, $parser);
+
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
+        $headerContainer = $this->partHeaderContainerFactory->newInstance($parserProxy->getHeaderContainer());
         $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 
         $part = new MimePart(
-            $parent->getPart(),
+            $partBuilder->getParent()->getPart(),
             $streamContainer,
             $headerContainer,
             $childrenContainer

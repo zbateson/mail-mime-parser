@@ -6,17 +6,19 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartFactory;
+use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartFactory;
 
 /**
  * Reads a non-mime email message with any uuencoded child parts.
  *
  * @author Zaahid Bateson
  */
-class NonMimeParser implements IParser
+class NonMimeParser extends AbstractParser
 {
     /**
      * @var PartBuilderFactory
@@ -24,76 +26,74 @@ class NonMimeParser implements IParser
     protected $partBuilderFactory;
 
     /**
-     * @var ParserUUEncodedPartFactory for ParsedMimePart objects
+     * @var UUEncodedPartHeaderContainerFactory
      */
-    protected $parserUUEncodedPartFactory;
-
-    private $nextPartStart = null;
-    private $nextPartMode = null;
-    private $nextPartFilename = null;
+    protected $partHeaderContainerFactory;
 
     public function __construct(
+        ParserNonMimeMessageProxyFactory $pnmmpf,
+        ParserUUEncodedPartFactory $pupf,
         PartBuilderFactory $pbf,
-        ParserUUEncodedPartFactory $f
+        UUEncodedPartHeaderContainerFactory $uephcf
     ) {
+        parent::__construct($pnmmpf, $pupf);
         $this->partBuilderFactory = $pbf;
-        $this->parserUUEncodedPartFactory = $f;
+        $this->partHeaderContainerFactory = $uephcf;
     }
 
-    private function createUuEncodedChildPart(ParserMimePartProxy $parent, $start, $mode, $filename)
+    public function canParse(PartBuilder $part)
     {
-        $pb = $this->partBuilderFactory->newChildPartBuilder($parent->getPartBuilder());
-        $part = $this->parserUUEncodedPartFactory->newInstance($pb, $mode, $filename, $parent);
-        $pb->setStreamPartStartPos($start);
-        $pb->setStreamContentStartPos($start);
-        return $part;
+        return true;
     }
 
-    private function parseNextPart(PartBuilder $partBuilder)
+    private function createUuEncodedChildPart(ParserNonMimeMessageProxy $parent)
     {
-        $handle = $partBuilder->getMessageResourceHandle();
+        $hc = $this->partHeaderContainerFactory->newInstance($parent->getNextPartMode(), $parent->getNextPartFilename());
+        $pb = $this->partBuilderFactory->newChildPartBuilder($hc, $parent);
+        $proxy = $this->parserManager->createParserProxyFor($pb);
+        $pb->setStreamPartStartPos($parent->getNextPartStart());
+        $pb->setStreamContentStartPos($parent->getNextPartStart());
+        return $proxy;
+    }
+
+    private function parseNextPart(ParserPartProxy $proxy)
+    {
+        $handle = $proxy->getMessageResourceHandle();
         while (!feof($handle)) {
             $start = ftell($handle);
             $line = trim(MessageParser::readLine($handle));
             if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
-                $this->nextPartStart = $start;
-                $this->nextPartMode = $matches[1];
-                $this->nextPartFilename = $matches[2];
+                $proxy->setNextPartStart($start);
+                $proxy->setNextPartMode($matches[1]);
+                $proxy->setNextPartFilename($matches[2]);
                 return;
             }
-            $partBuilder->setStreamPartAndContentEndPos(ftell($handle));
+            $proxy->setStreamPartAndContentEndPos(ftell($handle));
         }
     }
 
     public function parseContent(ParserPartProxy $proxy)
     {
-        $partBuilder = $proxy->getPartBuilder();
-        $handle = $partBuilder->getMessageResourceHandle();
-        if ($this->nextPartStart !== null || feof($handle)) {
+        $handle = $proxy->getMessageResourceHandle();
+        if ($proxy->getNextPartStart() !== null || feof($handle)) {
             return;
         }
-        if ($partBuilder->getStreamContentStartPos() === null) {
-            $partBuilder->setStreamContentStartPos(ftell($handle));
+        if ($proxy->getStreamContentStartPos() === null) {
+            $proxy->setStreamContentStartPos(ftell($handle));
         }
-        $this->parseNextPart($partBuilder);
+        $this->parseNextPart($proxy);
     }
 
     public function parseNextChild(ParserMimePartProxy $proxy)
     {
-        $pb = $proxy->getPartBuilder();
-        $handle = $pb->getMessageResourceHandle();
-        if ($this->nextPartStart === null || feof($handle)) {
+        $handle = $proxy->getMessageResourceHandle();
+        if ($proxy->getNextPartStart() === null || feof($handle)) {
             return null;
         }
         $child = $this->createUuEncodedChildPart(
-            $proxy,
-            $this->nextPartStart,
-            $this->nextPartMode,
-            $this->nextPartFilename
+            $proxy
         );
-        $this->nextPartStart = null;
-        $this->nextPartMode = null;
-        $this->nextPartFilename = null;
+        $proxy->clearNextPart();
         return $child;
     }
 }

@@ -80,7 +80,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
             $this->contentParseRequested = true;
             $this->parserProxy->parseContent();
             parent::setContentStream($this->streamFactory->getLimitedContentStream(
-                $this->parserProxy->getPartBuilder()
+                $this->parserProxy
             ));
         }
     }
@@ -95,7 +95,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         if ($this->parsedStream === null) {
             $this->parserProxy->parseAll();
             $this->parsedStream = $this->streamFactory->getLimitedPartStream(
-                $this->parserProxy->getPartBuilder()
+                $this->parserProxy
             );
             if ($this->parsedStream !== null) {
                 $this->detachParsedStream = ($this->parsedStream->getMetadata('mmp-detached-stream') === true);

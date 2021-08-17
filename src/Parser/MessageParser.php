@@ -24,9 +24,9 @@ class MessageParser
     protected $partHeaderContainerFactory;
 
     /**
-     * @var ParserMessageFactory
+     * @var ParserManager
      */
-    protected $parserMessageFactory;
+    protected $parserManager;
 
     /**
      * @var PartBuilderFactory
@@ -41,12 +41,12 @@ class MessageParser
     public function __construct(
         PartBuilderFactory $pbf,
         PartHeaderContainerFactory $phcf,
-        ParserMessageFactory $pmf,
+        ParserManager $pm,
         HeaderParser $hp
     ) {
         $this->partBuilderFactory = $pbf;
         $this->partHeaderContainerFactory = $phcf;
-        $this->parserMessageFactory = $pmf;
+        $this->parserManager = $pm;
         $this->headerParser = $hp;
     }
 
@@ -80,16 +80,13 @@ class MessageParser
      */
     public function parse(StreamInterface $stream)
     {
-        $partBuilder = $this->partBuilderFactory->newPartBuilder($stream);
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
+        $partBuilder = $this->partBuilderFactory->newPartBuilder($headerContainer, $stream);
         $this->headerParser->parse(
             $partBuilder->getMessageResourceHandle(),
             $headerContainer
         );
-        $proxy = $this->parserMessageFactory->newInstance(
-            $partBuilder,
-            $headerContainer
-        );
+        $proxy = $this->parserManager->createParserProxyFor($partBuilder);
         return $proxy->getPart();
     }
 }

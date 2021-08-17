@@ -7,9 +7,6 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use ZBateson\MailMimeParser\Parser\IParser;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * A bi-directional parser-to-part proxy for IMimeParts.
@@ -18,11 +15,6 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
  */
 class ParserMimePartProxy extends ParserPartProxy
 {
-    /**
-     * @var PartHeaderContainer The parsed part's headers.
-     */
-    protected $headerContainer;
-
     /**
      * @var boolean set to true once the end boundary of the currently-parsed
      *      part is found.
@@ -59,16 +51,6 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     protected $lastAddedChild = null;
 
-    public function __construct(
-        PartHeaderContainer $headerContainer,
-        PartBuilder $partBuilder,
-        IParser $childParser,
-        ParserMimePartProxy $parent = null
-    ) {
-        parent::__construct($partBuilder, $childParser, $parent);
-        $this->headerContainer = $headerContainer;
-    }
-
     /**
      * Ensures that the last child added to this part is fully parsed (content
      * and children).
@@ -90,7 +72,7 @@ class ParserMimePartProxy extends ParserPartProxy
         }
         $this->parseContent();
         $this->ensureLastChildParsed();
-        $next = $this->childParser->parseNextChild($this);
+        $next = $this->parser->parseNextChild($this);
         if ($next !== null) {
             array_push($this->children, $next);
             $this->lastAddedChild = $next;
@@ -127,16 +109,6 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
-     * Returns this part's PartHeaderContainer.
-     *
-     * @return PartHeaderContainer the container
-     */
-    public function getHeaderContainer()
-    {
-        return $this->headerContainer;
-    }
-
-    /**
      * Returns a ParameterHeader representing the parsed Content-Type header for
      * this part.
      *
@@ -144,7 +116,7 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     public function getContentType()
     {
-        return $this->headerContainer->get(HeaderConsts::CONTENT_TYPE);
+        return $this->getHeaderContainer()->get(HeaderConsts::CONTENT_TYPE);
     }
 
     /**
@@ -178,7 +150,7 @@ class ParserMimePartProxy extends ParserPartProxy
     public function setEndBoundaryFound($line)
     {
         $boundary = $this->getMimeBoundary();
-        if ($this->parent !== null && $this->parent->setEndBoundaryFound($line)) {
+        if ($this->getParent() !== null && $this->getParent()->setEndBoundaryFound($line)) {
             $this->parentBoundaryFound = true;
             return true;
         } elseif ($boundary !== null) {
@@ -222,8 +194,18 @@ class ParserMimePartProxy extends ParserPartProxy
     public function setEof()
     {
         $this->parentBoundaryFound = true;
-        if ($this->parent !== null) {
-            $this->parent->parentBoundaryFound = true;
+        if ($this->getParent() !== null) {
+            $this->getParent()->setEof();
         }
+    }
+
+    public function setLastLineEndingLength($length)
+    {
+        $this->getParent()->setLastLineEndingLength($length);
+    }
+
+    public function getLastLineEndingLength()
+    {
+        return $this->getParent()->getLastLineEndingLength();
     }
 }

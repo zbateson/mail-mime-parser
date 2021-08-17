@@ -9,43 +9,38 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer;
+use ZBateson\MailMimeParser\Parser\PartBuilderDecoratorTrait;
 
 /**
  * Base bi-directional proxy between a parser and a MessagePart.
  *
  * @author Zaahid Bateson
  */
-class ParserPartProxy
+abstract class ParserPartProxy extends PartBuilder
 {
+    use PartBuilderDecoratorTrait;
+
     /**
      * @var IMessagePart The part.
      */
     protected $part;
-    
+
     /**
      * @var IParser|null The parser.
      */
-    protected $childParser;
+    protected $parser;
 
     /**
      * @var PartBuilder The part's PartBuilder.
      */
     protected $partBuilder;
 
-    /**
-     * @var ParserPartProxy The parent parser proxy for this part.
-     */
-    protected $parent;
-
     public function __construct(
         PartBuilder $partBuilder,
-        IParser $childParser = null,
-        ParserMimePartProxy $parent = null
+        IParser $parser
     ) {
         $this->partBuilder = $partBuilder;
-        $this->childParser = $childParser;
-        $this->parent = $parent;
+        $this->parser = $parser;
     }
 
     /**
@@ -78,9 +73,8 @@ class ParserPartProxy
      */
     public function parseContent()
     {
-        if (!$this->partBuilder->isContentParsed()) {
-            $parser = ($this->parent === null) ? $this->childParser : $this->parent->childParser;
-            $parser->parseContent($this);
+        if (!$this->isContentParsed()) {
+            $this->parser->parseContent($this);
         }
     }
 
@@ -90,15 +84,5 @@ class ParserPartProxy
     public function parseAll()
     {
         $this->parseContent();
-    }
-
-    /**
-     * Returns the PartBuilder for this part.
-     *
-     * @return PartBuilder the associated PartBuilder.
-     */
-    public function getPartBuilder()
-    {
-        return $this->partBuilder;
     }
 }

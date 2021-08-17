@@ -6,25 +6,30 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
- * Description of IParser
+ * Interface defining a message part parser.
  *
  * @author Zaahid Bateson
  */
 interface IParser
 {
-    /**
-     *
-     * @return IMessagePart|null
-     */
-    public function parseNextChild(ParserMimePartProxy $proxy);
+    public function setParserManager(ParserManager $pm);
+    public function canParse(PartBuilder $part);
+    public function getParserMessageProxyFactory();
+    public function getParserPartProxyFactory();
 
     /**
      *
      */
     public function parseContent(ParserPartProxy $proxy);
+
+    /**
+     * Parses
+     *
+     * @return IMessagePart|null
+     */
+    public function parseNextChild(ParserMimePartProxy $proxy);
 }

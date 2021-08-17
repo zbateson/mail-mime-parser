@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -21,20 +23,21 @@ class PartBuilderFactory
      * @param StreamInterface $messageStream
      * @return PartBuilder
      */
-    public function newPartBuilder(StreamInterface $messageStream)
+    public function newPartBuilder(PartHeaderContainer $headerContainer, StreamInterface $messageStream)
     {
-        return new PartBuilder($messageStream);
+        return new PartBuilder($headerContainer, $messageStream);
     }
 
     /**
      * Constructs a new PartBuilder object and returns it
      *
-     * @param PartBuilder $parent
+     * @param ParserPartProxy $parent
      * @return PartBuilder
      */
-    public function newChildPartBuilder(PartBuilder $parent)
+    public function newChildPartBuilder(PartHeaderContainer $headerContainer, ParserPartProxy $parent)
     {
         return new PartBuilder(
+            $headerContainer,
             null,
             $parent
         );
