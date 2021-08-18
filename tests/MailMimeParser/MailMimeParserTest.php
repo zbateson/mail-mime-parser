@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser;
 
 use LegacyPHPUnit\TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * Description of MailMimeParserTest
@@ -57,7 +58,33 @@ class MailMimeParserTest extends TestCase
         MailMimeParser::setDependencyContainer($this->mockDi);
         $mmp = new MailMimeParser();
 
-        $ret = $mmp->parse($handle);
+        $ret = $mmp->parse($handle, true);
+        $this->assertEquals('test', $ret);
+    }
+
+    public function testParseFromStream()
+    {
+        $handle = fopen('php://memory', 'r+');
+        fwrite($handle, 'This is a test');
+        rewind($handle);
+
+        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockDi
+            ->expects($this->once())
+            ->method('offsetGet')
+            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->willReturn($mockParser);
+        $mockParser
+            ->expects($this->once())
+            ->method('parse')
+            ->willReturn('test');
+
+        MailMimeParser::setDependencyContainer($this->mockDi);
+        $mmp = new MailMimeParser();
+
+        $ret = $mmp->parse(Psr7\stream_for($handle), true);
         $this->assertEquals('test', $ret);
     }
 
@@ -79,7 +106,7 @@ class MailMimeParserTest extends TestCase
         MailMimeParser::setDependencyContainer($this->mockDi);
         $mmp = new MailMimeParser();
 
-        $ret = $mmp->parse('This is a test');
+        $ret = $mmp->parse('This is a test', false);
         $this->assertEquals('test', $ret);
     }
 }

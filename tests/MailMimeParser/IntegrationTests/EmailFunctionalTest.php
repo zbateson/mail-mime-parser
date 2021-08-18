@@ -197,7 +197,7 @@ class EmailFunctionalTest extends TestCase
 
     private function runEmailTest($key, array $props) {
         $handle = fopen($this->messageDir . '/' . $key . '.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $failMessage = 'Failed while parsing ' . $key;
         $this->runEmailTestForMessage($message, $props, $failMessage);
@@ -212,11 +212,9 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for ' . $key;
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($handle);
-        fclose($tmpSaved);
     }
 
     private function getSignatureForContent($signableContent)
@@ -584,7 +582,7 @@ class EmailFunctionalTest extends TestCase
     public function testGetAttachmentByContentIdFromEmailm0016()
     {
         $handle = fopen($this->messageDir . '/m0016.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $part = $message->getPartByContentId('823504223@17052000-0f8d');
         $this->assertNotNull($part);
@@ -595,7 +593,6 @@ class EmailFunctionalTest extends TestCase
         $this->assertNotNull($other);
         $this->assertEquals('823504223@17052000-0f94', $other->getContentId());
         $this->assertEquals('redball.png', $other->getFilename());
-        fclose($handle);
     }
 
     public function testParseEmailm0017()
@@ -1032,11 +1029,10 @@ class EmailFunctionalTest extends TestCase
             'text' => 'hareandtortoise.txt'
         ]);
         $handle = fopen($this->messageDir . '/m1015.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $stream = $message->getTextStream(1);
         $this->assertTextContentTypeEquals('HasenundFrosche.txt', $stream);
-        fclose($handle);
     }
 
     public function testParseEmailm1016()
@@ -1054,11 +1050,10 @@ class EmailFunctionalTest extends TestCase
             'text' => 'hareandtortoise.txt',
         ]);
         $handle = fopen($this->messageDir . '/m1016.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $stream = $message->getTextStream(1);
         $str = $this->assertTextContentTypeEquals('farmerandstork.txt', $stream);
-        fclose($handle);
     }
 
     public function testParseEmailm2001()
@@ -1448,7 +1443,7 @@ class EmailFunctionalTest extends TestCase
     public function testParseFromStringm0001()
     {
         $str = file_get_contents($this->messageDir . '/m0001.txt');
-        $message = Message::from($str);
+        $message = Message::from($str, false);
         $this->runEmailTestForMessage($message, [
             'From' => [
                 'name' => 'Doug Sauder',
@@ -1466,7 +1461,7 @@ class EmailFunctionalTest extends TestCase
     public function testVerifySignedEmailm4001()
     {
         $handle = fopen($this->messageDir . '/m4001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, false);
         
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
@@ -1497,11 +1492,10 @@ class EmailFunctionalTest extends TestCase
     public function testVerifySignedEmailm4002()
     {
         $handle = fopen($this->messageDir . '/m4002.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
-        fclose($handle);
     }
 
     public function testParseEmailm4002()
@@ -1528,12 +1522,11 @@ class EmailFunctionalTest extends TestCase
 
     public function testVerifySignedEmailm4003()
     {
-        $handle = fopen($this->messageDir . '/m4003.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $stream = Psr7\stream_for(fopen($this->messageDir . '/m4003.txt', 'r'));
+        $message = $this->parser->parse($stream, true);
         
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
-        fclose($handle);
     }
 
     public function testParseEmailm4003()
@@ -1561,11 +1554,10 @@ class EmailFunctionalTest extends TestCase
     public function testVerifySignedEmailm4004()
     {
         $handle = fopen($this->messageDir . '/m4004.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
-        fclose($handle);
     }
 
     public function testParseEmailm4004()
@@ -1593,7 +1585,7 @@ class EmailFunctionalTest extends TestCase
     public function testParseEmailm4005()
     {
         $handle = fopen($this->messageDir . '/m4005.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $str = file_get_contents($this->messageDir . '/files/blueball.png');
         $this->assertEquals(1, $message->getAttachmentCount());
@@ -1618,15 +1610,13 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for adding a large attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
 
         $this->assertEquals(1, $messageWritten->getAttachmentCount());
         $this->assertEquals('text/rtf', $messageWritten->getAttachmentPart(0)->getHeaderValue('Content-Type'));
         $this->assertSame($messageWritten->getAttachmentPart(0)->getContent(), $str, 'text/rtf stream doesn\'t match binary stream');
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testParseEmailm4006()
@@ -1664,11 +1654,10 @@ class EmailFunctionalTest extends TestCase
     public function testVerifySignedEmailm4008()
     {
         $handle = fopen($this->messageDir . '/m4008.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
-        fclose($handle);
     }
 
     public function testParseEmailm4008()
@@ -1760,7 +1749,7 @@ class EmailFunctionalTest extends TestCase
     public function testRewriteEmailContentm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $content = $message->getTextPart();
         $content->setRawHeader('Content-Type', "text/html;\r\n\tcharset=\"iso-8859-1\"");
@@ -1771,16 +1760,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
         
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $c2 = $messageWritten->getHtmlPart();
         $this->assertEquals($test, $c2->getContent());
-        fclose($tmpSaved);
     }
 
     public function testRewriteEmailAttachmentm2004()
     {
         $handle = fopen($this->messageDir . '/m2004.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $att = $message->getAttachmentPart(0);
         $att->setRawHeader(
@@ -1794,21 +1782,19 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $a2 = $messageWritten->getAttachmentPart(0);
         $this->assertEquals('greenball.png', $a2->getHeaderParameter('Content-Disposition', 'filename'));
         $this->assertEquals(
             file_get_contents($this->messageDir . '/files/greenball.png'),
             $a2->getContent()
         );
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testRemoveAttachmentPartm0013()
     {
         $handle = fopen($this->messageDir . '/m0013.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $props = [
             'From' => [
@@ -1832,13 +1818,12 @@ class EmailFunctionalTest extends TestCase
         $att = $message->getAttachmentPart(0);
         $this->assertEquals('redball.png', $att->getHeaderParameter('Content-Disposition', 'filename'));
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0013');
-        fclose($handle);
     }
 
     public function testRemoveContentPartsm0014()
     {
         $handle = fopen($this->messageDir . '/m0014.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $message->removeTextPart();
 
@@ -1860,13 +1845,12 @@ class EmailFunctionalTest extends TestCase
         unset($test1['text']);
         $this->assertNull($message->getTextPart());
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0014');
-        fclose($handle);
     }
 
     public function testRemoveTextPartm0020()
     {
         $handle = fopen($this->messageDir . '/m0020.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $props = [
             'From' => [
@@ -1894,17 +1878,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for rm_m0020';
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testRemoveAllHtmlPartsm0020()
     {
         $handle = fopen($this->messageDir . '/m0020.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $props = [
             'From' => [
@@ -1932,17 +1914,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for rmh_m0020';
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testRemoveHtmlPartm0020()
     {
         $handle = fopen($this->messageDir . '/m0020.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $props = [
             'From' => [
@@ -1982,7 +1962,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for rmho_m0020';
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
 
@@ -1997,20 +1977,18 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved2);
         rewind($tmpSaved2);
 
-        $messageWritten2 = $this->parser->parse($tmpSaved2);
+        $messageWritten2 = $this->parser->parse($tmpSaved2, true);
         $failMessage = 'Failed while parsing saved message for rmha_m0020';
         $this->runEmailTestForMessage($messageWritten2, $test1, $failMessage);
 
         $this->assertNotNull($messageWritten->getHtmlPart());
         $this->assertEquals($secondContent, $messageWritten->getHtmlContent());
-        fclose($tmpSaved);
-        fclose($tmpSaved2);
     }
 
     public function testAddHtmlPartRemoveTextPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $str = $message->getTextContent();
         $message->setHtmlPart($str, 'utf8');
@@ -2040,17 +2018,16 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
     }
 
 
     public function testRemoveContentAndAttachmentPartsm0015()
     {
         $handle = fopen($this->messageDir . '/m0015.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $message->removeHtmlPart();
         $this->assertNull($message->getHtmlPart());
@@ -2085,18 +2062,16 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for m0015';
         $this->assertNull($messageWritten->getHtmlPart());
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testAddHtmlContentPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $this->assertNull($message->getHtmlPart());
         $this->assertNotNull($message->getTextPart());
@@ -2124,17 +2099,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testAddTextAndHtmlContentPartm0013()
     {
         $handle = fopen($this->messageDir . '/m0013.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getTextPart());
@@ -2164,17 +2137,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0013';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testAddTextAndHtmlContentPartm0018()
     {
         $handle = fopen($this->messageDir . '/m0018.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $this->assertNull($message->getHtmlPart());
         $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
@@ -2204,18 +2175,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testAddAttachmentPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $message->addAttachmentPart(
             file_get_contents($this->messageDir . '/files/blueball.png'),
@@ -2243,7 +2211,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
 
@@ -2252,26 +2220,22 @@ class EmailFunctionalTest extends TestCase
             'image/png'
         );
         $props['attachments'] = 2;
-        fclose($tmpSaved);
 
         $this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
 
-        $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att2_m0001", 'w+');
-        $message->save($tmpSaved);
-        rewind($tmpSaved);
+        $tmpSaved2 = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/att2_m0001", 'w+');
+        $message->save($tmpSaved2);
+        rewind($tmpSaved2);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved2, true);
         $failMessage = 'Failed while parsing saved message for second added attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        
-        fclose($handle);
     }
 
     public function testAddAttachmentPartQuotedPrintablem0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $message->addAttachmentPart(
             file_get_contents($this->messageDir . '/files/farmerandstork.txt'),
@@ -2301,7 +2265,7 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
 
@@ -2313,7 +2277,6 @@ class EmailFunctionalTest extends TestCase
             '8bit'
         );
         $props['attachments'] = 2;
-        fclose($tmpSaved);
 
         $this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
 
@@ -2321,18 +2284,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for second added attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-
-        fclose($handle);
     }
 
     public function testAddLargeAttachmentPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $message->addAttachmentPartFromFile(
             $this->messageDir . '/files/bin-bashy.jpg',
@@ -2358,17 +2318,15 @@ class EmailFunctionalTest extends TestCase
         $message->save($tmpSaved);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for adding a large attachment to m0001';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartm0001()
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $this->assertNull($message->getHtmlPart());
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
@@ -2392,7 +2350,7 @@ class EmailFunctionalTest extends TestCase
         ));
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0001';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2417,14 +2375,12 @@ class EmailFunctionalTest extends TestCase
             ]
         ];
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartm0014()
     {
         $handle = fopen($this->messageDir . '/m0014.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
 
@@ -2442,7 +2398,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0014';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2468,14 +2424,12 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartm0015()
     {
         $handle = fopen($this->messageDir . '/m0015.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
 
@@ -2494,7 +2448,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0015';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2521,14 +2475,12 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartm0018()
     {
         $handle = fopen($this->messageDir . '/m0018.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $this->assertNull($message->getHtmlPart());
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
@@ -2545,7 +2497,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m0018';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2570,14 +2522,12 @@ class EmailFunctionalTest extends TestCase
             ]
         ];
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartm0019()
     {
         $handle = fopen($this->messageDir . '/m0019.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $this->assertNotNull($message->getHtmlPart());
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
@@ -2594,7 +2544,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to signed part sig_m0019';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2620,14 +2570,12 @@ class EmailFunctionalTest extends TestCase
             ]
         ];
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartm1005()
     {
         $handle = fopen($this->messageDir . '/m1005.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         $signableContent = $message->getSignedMessageAsString();
@@ -2643,7 +2591,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for added HTML content to m1005';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2669,14 +2617,12 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartForEmailm4006()
     {
         $handle = fopen($this->messageDir . '/m4006.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
 
@@ -2692,7 +2638,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for m4006';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2717,14 +2663,12 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testCreateSignedPartForEmailm4007()
     {
         $handle = fopen($this->messageDir . '/m4007.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
 
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
 
@@ -2740,7 +2684,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTrue(strpos(preg_replace('/\r\n|\r|\n/', "\r\n", stream_get_contents($tmpSaved)), $signableContent) !== false);
         rewind($tmpSaved);
 
-        $messageWritten = $this->parser->parse($tmpSaved);
+        $messageWritten = $this->parser->parse($tmpSaved, true);
         $failMessage = 'Failed while parsing saved message for m4007';
 
         $testString = $messageWritten->getSignedMessageAsString();
@@ -2766,19 +2710,15 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
-        fclose($tmpSaved);
-        fclose($handle);
     }
 
     public function testReadEmailWithLongHeader()
     {
         $handle = fopen($this->messageDir . '/m0009.txt', 'r');
-        $message = $this->parser->parse($handle);
+        $message = $this->parser->parse($handle, true);
         
         $this->assertEquals('Normal', $message->getHeaderValue('Importance'));
         $this->assertNotEmpty($message->getHeaderValue('X-Test-Long-Header'));
         $this->assertEquals('A-OK', $message->getHeaderValue('X-Test-Next-Header'));
-
-        fclose($handle);
     }
 }

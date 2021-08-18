@@ -62,26 +62,27 @@ class Message extends MimePart implements IMessage
      * Convenience method to parse a handle or string into an IMessage without
      * requiring including MailMimeParser, instantiating it, and calling parse.
      *
-     * If the passed $handleOrString is a resource handle, the handle must be
-     * kept open while the Message object exists.  For that reason, the default
-     * attachment mode is 'attached', which will cause the Message object to
-     * close the passed resource handle when it's destroyed.  If the stream
-     * should remain open for other reasons and closed manually, pass FALSE as
-     * the second parameter so the Message object does not close the stream.
+     * If the passed $resource is a resource handle or StreamInterface, the
+     * resource must remain open while the returned IMessage object exists.
+     * Pass true as the second argument to have the resource attached to the
+     * IMessage and closed for you when it's destroyed, or pass false to
+     * manually close it if it should remain open after the IMessage object is
+     * destroyed.
      *
-     * @param resource|string $handleOrString the resource handle to the input
-     *        stream of the mime message, or a string containing a mime message.
-     * @param bool $attached set to false to keep the stream open when the
-     *        returned IMessage is destroyed.
+     * @param resource|StreamInterface|string $resource The resource handle to
+     *        the input stream of the mime message, or a string containing a
+     *        mime message.
+     * @param bool $attached pass true to have it attached to the returned
+     *        IMessage and destroyed with it.
      * @return IMessage
      */
-    public static function from($handleOrString, $attached = true)
+    public static function from($resource, $attached)
     {
         static $mmp = null;
         if ($mmp === null) {
             $mmp = new MailMimeParser();
         }
-        return $mmp->parse($handleOrString, $attached);
+        return $mmp->parse($resource, $attached);
     }
 
     /**
