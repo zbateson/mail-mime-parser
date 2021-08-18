@@ -17,7 +17,7 @@ class MessageParserTest extends TestCase
     private $instance;
     private $partBuilderFactory;
     private $partHeaderContainerFactory;
-    private $parserMessageFactory;
+    private $parserManager;
     private $headerParser;
 
     protected function legacySetUp()
@@ -28,7 +28,7 @@ class MessageParserTest extends TestCase
         $this->partHeaderContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parserMessageFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMessageFactory')
+        $this->parserManager = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\ParserManager')
             ->disableOriginalConstructor()
             ->getMock();
         $this->headerParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\HeaderParser')
@@ -38,7 +38,7 @@ class MessageParserTest extends TestCase
         $this->instance = new MessageParser(
             $this->partBuilderFactory,
             $this->partHeaderContainerFactory,
-            $this->parserMessageFactory,
+            $this->parserManager,
             $this->headerParser
         );
     }
@@ -58,15 +58,15 @@ class MessageParserTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partBuilderFactory
-            ->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($stream)
-            ->willReturn($pb);
         $this->partHeaderContainerFactory
             ->expects($this->once())
             ->method('newInstance')
             ->willReturn($hc);
+        $this->partBuilderFactory
+            ->expects($this->once())
+            ->method('newPartBuilder')
+            ->with($hc, $stream)
+            ->willReturn($pb);
         $pb->expects($this->once())
             ->method('getMessageResourceHandle')
             ->willReturn('test');
@@ -74,10 +74,10 @@ class MessageParserTest extends TestCase
             ->expects($this->once())
             ->method('parse')
             ->with('test', $hc);
-        $this->parserMessageFactory
+        $this->parserManager
             ->expects($this->once())
-            ->method('newInstance')
-            ->with($pb, $hc)
+            ->method('createParserProxyFor')
+            ->with($pb)
             ->willReturn($proxy);
         $proxy->expects($this->once())
             ->method('getPart')

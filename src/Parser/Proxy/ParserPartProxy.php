@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\PartBuilderDecoratorTrait;
 
 /**
  * Base bi-directional proxy between a parser and a MessagePart.
@@ -18,8 +17,6 @@ use ZBateson\MailMimeParser\Parser\PartBuilderDecoratorTrait;
  */
 abstract class ParserPartProxy extends PartBuilder
 {
-    use PartBuilderDecoratorTrait;
-
     /**
      * @var IMessagePart The part.
      */
@@ -84,5 +81,80 @@ abstract class ParserPartProxy extends PartBuilder
     public function parseAll()
     {
         $this->parseContent();
+    }
+
+    public function getParent()
+    {
+        return $this->partBuilder->getParent();
+    }
+
+    public function getHeaderContainer()
+    {
+        return $this->partBuilder->getHeaderContainer();
+    }
+
+     public function getStream()
+    {
+        return $this->partBuilder->getStream();
+    }
+
+    public function getMessageResourceHandle()
+    {
+        return $this->partBuilder->getMessageResourceHandle();
+    }
+
+    public function getMessageResourceHandlePos()
+    {
+        return $this->partBuilder->getMessageResourceHandlePos();
+    }
+
+    public function getStreamPartStartPos()
+    {
+        return $this->partBuilder->getStreamPartStartPos();
+    }
+
+    public function getStreamPartLength()
+    {
+        return $this->partBuilder->getStreamPartLength();
+    }
+
+    public function getStreamContentStartPos()
+    {
+        return $this->partBuilder->getStreamContentStartPos();
+    }
+
+    public function getStreamContentLength()
+    {
+        return $this->partBuilder->getStreamContentLength();
+    }
+
+    public function setStreamPartStartPos($streamPartStartPos)
+    {
+        $this->partBuilder->setStreamPartStartPos($streamPartStartPos);
+    }
+
+    public function setStreamPartEndPos($streamPartEndPos)
+    {
+        $this->partBuilder->setStreamPartEndPos($streamPartEndPos);
+    }
+
+    public function setStreamContentStartPos($streamContentStartPos)
+    {
+        $this->partBuilder->setStreamContentStartPos($streamContentStartPos);
+    }
+
+    public function setStreamPartAndContentEndPos($streamContentEndPos)
+    {
+        $this->partBuilder->setStreamPartAndContentEndPos($streamContentEndPos);
+    }
+
+    public function isContentParsed()
+    {
+        return $this->partBuilder->isContentParsed();
+    }
+
+    public function isMime()
+    {
+        return $this->partBuilder->isMime();
     }
 }

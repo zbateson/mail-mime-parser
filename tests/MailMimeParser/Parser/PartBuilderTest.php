@@ -3,6 +3,7 @@ namespace ZBateson\MailMimeParser\Parser;
 
 use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\StreamWrapper;
 
 /**
  * PartBuilderTest
@@ -14,6 +15,15 @@ use GuzzleHttp\Psr7;
  */
 class PartBuilderTest extends TestCase
 {
+    private $headerContainer;
+
+    protected function legacySetUp()
+    {
+        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     private function newPartBuilder($stream = null, $parent = null)
     {
         if ($stream === null && $parent === null) {
@@ -22,9 +32,16 @@ class PartBuilderTest extends TestCase
             $stream = null;
         }
         return new PartBuilder(
+            $this->headerContainer,
             $stream,
             $parent
         );
+    }
+
+    public function testGetHeaderContainer()
+    {
+        $instance = $this->newPartBuilder();
+        $this->assertSame($this->headerContainer, $instance->getHeaderContainer());
     }
 
     public function testSetStreamPartPosAndGetFilename()
@@ -50,17 +67,20 @@ class PartBuilderTest extends TestCase
 
     public function testSetStreamContentPosAndGetFilenameWithParent()
     {
-        $super = $this->newPartBuilder();
-        $parent = $this->newPartBuilder(null, $super);
+        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getMessageResourceHandle', 'setStreamPartEndPos' ])
+            ->getMockForAbstractClass();
+
+        $stream = Psr7\stream_for('test');
+        $parent->expects($this->once())
+            ->method('getMessageResourceHandle')
+            ->willReturn(StreamWrapper::getResource($stream));
+        $parent->expects($this->once())
+            ->method('setStreamPartEndPos')
+            ->with(84);
+
         $instance = $this->newPartBuilder(null, $parent);
-
-        $super->setStreamPartStartPos(0);
-        $super->setStreamContentStartPos(3);
-        $super->setStreamPartAndContentEndPos(3);
-
-        $parent->setStreamPartStartPos(11);
-        $parent->setStreamContentStartPos(13);
-        $parent->setStreamPartAndContentEndPos(20);
 
         $instance->setStreamPartStartPos(22);
         $instance->setStreamContentStartPos(42);
@@ -70,15 +90,5 @@ class PartBuilderTest extends TestCase
         $this->assertEquals(84 - 42, $instance->getStreamContentLength());
         $this->assertEquals(22, $instance->getStreamPartStartPos());
         $this->assertEquals(84 - 22, $instance->getStreamPartLength());
-
-        $this->assertEquals(13, $parent->getStreamContentStartPos());
-        $this->assertEquals(20 - 13, $parent->getStreamContentLength());
-        $this->assertEquals(11, $parent->getStreamPartStartPos());
-        $this->assertEquals(84 - 11, $parent->getStreamPartLength());
-
-        $this->assertEquals(3, $super->getStreamContentStartPos());
-        $this->assertEquals(0, $super->getStreamContentLength());
-        $this->assertEquals(0, $super->getStreamPartStartPos());
-        $this->assertEquals(84, $super->getStreamPartLength());
     }
 }

@@ -9,13 +9,14 @@ use LegacyPHPUnit\TestCase;
  * @group Parser
  * @group ParserMimePartProxy
  * @covers ZBateson\MailMimeParser\Parser\Part\ParserMimePartProxy
+ * @covers ZBateson\MailMimeParser\Parser\Part\ParserPartProxy
  * @author Zaahid Bateson
  */
 class ParserMimePartProxyTest extends TestCase
 {
     private $headerContainer;
     private $partBuilder;
-    private $childParser;
+    private $parser;
     private $parentParser;
     private $parent;
 
@@ -24,10 +25,10 @@ class ParserMimePartProxyTest extends TestCase
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor();
         $this->headerContainer = $hc->getMock();
-        $pbm = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
-            ->disableOriginalConstructor();
-        $this->partBuilder = $pbm->getMock();
-        $this->childParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\IParser')
+        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->parser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\IParser')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->parentParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\IParser')
@@ -35,17 +36,63 @@ class ParserMimePartProxyTest extends TestCase
             ->getMockForAbstractClass();
         
         $this->parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+            ->disableOriginalConstructor()
+            ->getMock();
+        /*
             ->setConstructorArgs([
                 $hc->getMock(),
                 $pbm->getMock(),
                 $this->parentParser,
                 null
-            ])->getMock();
+            ])->getMock();*/
+    }
+
+
+    public function testSetGetPart()
+    {
+        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\IMessagePart')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
+        $instance->setPart($part);
+        $this->assertSame($part, $instance->getPart());
+    }
+
+    public function testParseContent()
+    {
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
+        $this->partBuilder
+            ->expects($this->any())
+            ->method('isContentParsed')
+            ->willReturnOnConsecutiveCalls(false, true);
+        $this->parser
+            ->expects($this->once())
+            ->method('parseContent')
+            ->with($instance);
+
+        $instance->parseContent();
+        $instance->parseContent();
+    }
+
+    public function testParseAllParsesContent()
+    {
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
+
+        $this->partBuilder
+            ->expects($this->any())
+            ->method('isContentParsed')
+            ->willReturnOnConsecutiveCalls(false, true, true);
+        $this->parser
+            ->expects($this->once())
+            ->method('parseContent');
+
+        $instance->parseAll();
+        $instance->parseAll();
     }
 
     public function testPopNextChild()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser, $this->parent);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
@@ -63,7 +110,7 @@ class ParserMimePartProxyTest extends TestCase
         $second->expects($this->any())->method('getPart')->willReturn('second');
         $third->expects($this->any())->method('getPart')->willReturn('third');
 
-        $this->childParser
+        $this->parser
             ->expects($this->exactly(4))
             ->method('parseNextChild')
             ->willReturnOnConsecutiveCalls($first, $second, $third, null);
@@ -77,16 +124,16 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testPopNextChildParsesContent()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
             ->willReturnOnConsecutiveCalls(false, true);
-        $this->childParser
+        $this->parser
             ->expects($this->once())
             ->method('parseContent')
             ->with($instance);
-        $this->childParser
+        $this->parser
             ->expects($this->once())
             ->method('parseNextChild')
             ->willReturn(null);
@@ -97,7 +144,7 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testParseAllParsesContentAndChildren()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser, $this->parent);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
@@ -112,7 +159,7 @@ class ParserMimePartProxyTest extends TestCase
         $first->expects($this->once())->method('parseAll');
         $second->expects($this->once())->method('parseAll');
         
-        $this->childParser
+        $this->parser
             ->expects($this->exactly(4))
             ->method('parseNextChild')
             ->willReturnOnConsecutiveCalls($first, $second, $third, null);
@@ -122,7 +169,7 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testPopChildrenAfterParseAll()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser, $this->parent);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
@@ -140,7 +187,7 @@ class ParserMimePartProxyTest extends TestCase
         $second->expects($this->any())->method('getPart')->willReturn('second');
         $third->expects($this->any())->method('getPart')->willReturn('third');
 
-        $this->childParser
+        $this->parser
             ->expects($this->exactly(4))
             ->method('parseNextChild')
             ->willReturnOnConsecutiveCalls($first, $second, $third, null);
@@ -155,13 +202,19 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testGetHeaderContainer()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
+        $this->partBuilder->expects($this->once())
+            ->method('getHeaderContainer')
+            ->willReturn($this->headerContainer);
         $this->assertSame($this->headerContainer, $instance->getHeaderContainer());
     }
 
     public function testGetContentType()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
+        $this->partBuilder->expects($this->once())
+            ->method('getHeaderContainer')
+            ->willReturn($this->headerContainer);
         $this->headerContainer->expects($this->any())
             ->method('get')
             ->with($this->equalToIgnoringCase('Content-Type'))
@@ -171,7 +224,7 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testGetMimeBoundary()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
         $h = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
             ->disableOriginalConstructor()
@@ -186,26 +239,36 @@ class ParserMimePartProxyTest extends TestCase
             ->method('getValueFor')
             ->with($this->equalToIgnoringCase('boundary'))
             ->willReturn('Personal Space');
+
+        $this->partBuilder->expects($this->once())
+            ->method('getHeaderContainer')
+            ->willReturn($this->headerContainer);
+
         $this->assertSame('Personal Space', $instance->getMimeBoundary());
         $this->assertSame('Personal Space', $instance->getMimeBoundary());
     }
 
     public function testGetNullMimeBoundary()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
         $this->headerContainer
             ->expects($this->any())
             ->method('get')
             ->with($this->equalToIgnoringCase('Content-Type'))
             ->willReturn(null);
+
+        $this->partBuilder->expects($this->once())
+            ->method('getHeaderContainer')
+            ->willReturn($this->headerContainer);
+
         $this->assertNull($instance->getMimeBoundary());
         $this->assertNull($instance->getMimeBoundary());
     }
 
     public function testSetEndBoundaryFound()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
         $h = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
             ->disableOriginalConstructor()
@@ -219,6 +282,10 @@ class ParserMimePartProxyTest extends TestCase
             ->method('getValueFor')
             ->with($this->equalToIgnoringCase('boundary'))
             ->willReturn('Personal Space');
+
+        $this->partBuilder->expects($this->any())
+            ->method('getHeaderContainer')
+            ->willReturn($this->headerContainer);
 
         $this->assertFalse($instance->isEndBoundaryFound());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -232,17 +299,19 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testSetEndBoundaryFoundWithParentBoundary()
     {
-        $instance = new ParserMimePartProxy($this->headerContainer, $this->partBuilder, $this->childParser, $this->parent);
+        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
         $this->headerContainer
             ->expects($this->any())
             ->method('get')
             ->with($this->equalToIgnoringCase('Content-Type'))
             ->willReturn(null);
+        $this->partBuilder->method('getHeaderContainer')->willReturn($this->headerContainer);
 
         $this->parent->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
             ->willReturnOnConsecutiveCalls(false, true);
+        $this->partBuilder->method('getParent')->willReturn($this->parent);
 
         $this->assertFalse($instance->isEndBoundaryFound());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -254,16 +323,17 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testSetEof()
     {
+        $parentPb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
         $parent = new ParserMimePartProxy(
-            $this->headerContainer,
-            $this->partBuilder,
-            $this->childParser
+            $parentPb,
+            $this->parentParser
         );
+        $this->partBuilder->method('getParent')->willReturn($parent);
         $instance = new ParserMimePartProxy(
-            $this->headerContainer,
             $this->partBuilder,
-            $this->childParser,
-            $parent
+            $this->parser
         );
         
         $this->assertFalse($parent->isParentBoundaryFound());

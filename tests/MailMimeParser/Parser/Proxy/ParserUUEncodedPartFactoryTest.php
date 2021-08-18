@@ -16,10 +16,12 @@ class ParserUUEncodedPartFactoryTest extends TestCase
 {
     private $instance;
     private $streamFactory;
+    private $headerContainer;
     private $partStreamContainerFactory;
 
     private $partBuilder;
     private $partStreamContainer;
+    private $parser;
     private $parent;
 
     protected function legacySetUp()
@@ -37,6 +39,12 @@ class ParserUUEncodedPartFactoryTest extends TestCase
         $this->partStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->parser = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Parser\IParser');
         
         $this->parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
             ->disableOriginalConstructor()
@@ -62,11 +70,28 @@ class ParserUUEncodedPartFactoryTest extends TestCase
         $this->partStreamContainer->expects($this->once())
             ->method('setStream')
             ->with($stream);
-        $this->parent->expects($this->once())
+        $this->parent->expects($this->atLeastOnce())
             ->method('getPart')
             ->willReturn($this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart'));
 
-        $ob = $this->instance->newInstance($this->partBuilder, 0644, 'test-file.ext', $this->parent);
+        $this->partBuilder
+            ->expects($this->atLeastOnce())
+            ->method('getParent')
+            ->willReturn($this->parent);
+        $this->partBuilder
+            ->expects($this->atLeastOnce())
+            ->method('getHeaderContainer')
+            ->willReturn($this->headerContainer);
+        $this->headerContainer
+            ->expects($this->atLeastOnce())
+            ->method('getUnixFileMode')
+            ->willReturn(0644);
+        $this->headerContainer
+            ->expects($this->atLeastOnce())
+            ->method('getFilename')
+            ->willReturn('test-file.ext');
+
+        $ob = $this->instance->newInstance($this->partBuilder, $this->parser);
         $this->assertInstanceOf(
             '\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy',
             $ob
