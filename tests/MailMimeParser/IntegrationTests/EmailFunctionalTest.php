@@ -5,7 +5,7 @@ use LegacyPHPUnit\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\IMimePart;
-use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Utils;
 use DateTime;
 
 /**
@@ -1522,7 +1522,7 @@ class EmailFunctionalTest extends TestCase
 
     public function testVerifySignedEmailm4003()
     {
-        $stream = Psr7\stream_for(fopen($this->messageDir . '/m4003.txt', 'r'));
+        $stream = Utils::streamFor(fopen($this->messageDir . '/m4003.txt', 'r'));
         $message = $this->parser->parse($stream, true);
         
         $testString = $message->getSignedMessageAsString();
@@ -1776,7 +1776,7 @@ class EmailFunctionalTest extends TestCase
             $att->getHeaderValue('Content-Disposition') . '; filename="greenball.png"'
         );
         $green = fopen($this->messageDir . '/files/greenball.png', 'r');
-        $att->attachContentStream(Psr7\stream_for($green));
+        $att->attachContentStream(Utils::streamFor($green));
 
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m2004", 'w+');
         $message->save($tmpSaved);

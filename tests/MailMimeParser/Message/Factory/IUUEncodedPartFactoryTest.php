@@ -37,7 +37,7 @@ class IUUEncodedPartFactoryTest extends TestCase
         $sdf->expects($this->once())
             ->method('newMessagePartStream')
             ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Message\UUEncodedPart'))
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
 
         $instance = new IUUEncodedPartFactory($sdf, $psc);
         $part = $instance->newInstance();

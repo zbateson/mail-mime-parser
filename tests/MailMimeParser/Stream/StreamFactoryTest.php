@@ -35,7 +35,7 @@ class StreamFactoryTest extends TestCase
 
         $partBuilder->expects($this->atLeastOnce())
             ->method('getStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
 
 
         $factory = new StreamFactory();
@@ -44,12 +44,12 @@ class StreamFactoryTest extends TestCase
         $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream($partBuilder));
         $this->assertNull($factory->getLimitedContentStream($partBuilder));
 
-        $this->assertInstanceOf('ZBateson\StreamDecorators\NonClosingStream', $factory->newNonClosingStream(Psr7\stream_for('test')));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\ChunkSplitStream', $factory->newChunkSplitStream(Psr7\stream_for('test')));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\Base64Stream', $factory->newBase64Stream(Psr7\stream_for('test')));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\QuotedPrintableStream', $factory->newQuotedPrintableStream(Psr7\stream_for('test')));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\UUStream', $factory->newUUStream(Psr7\stream_for('test')));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\CharsetStream', $factory->newCharsetStream(Psr7\stream_for('test'), 'utf-8', 'utf-16'));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\NonClosingStream', $factory->newNonClosingStream(Psr7\Utils::streamFor('test')));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\ChunkSplitStream', $factory->newChunkSplitStream(Psr7\Utils::streamFor('test')));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\Base64Stream', $factory->newBase64Stream(Psr7\Utils::streamFor('test')));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\QuotedPrintableStream', $factory->newQuotedPrintableStream(Psr7\Utils::streamFor('test')));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\UUStream', $factory->newUUStream(Psr7\Utils::streamFor('test')));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\CharsetStream', $factory->newCharsetStream(Psr7\Utils::streamFor('test'), 'utf-8', 'utf-16'));
 
         $mockMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()

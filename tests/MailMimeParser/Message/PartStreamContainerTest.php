@@ -43,15 +43,15 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetBinaryStream()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $stream->rewind();
 
-        $stream2 = Psr7\stream_for('test2');
-        $stream3 = Psr7\stream_for('test3');
+        $stream2 = Psr7\Utils::streamFor('test2');
+        $stream3 = Psr7\Utils::streamFor('test3');
         $this->mockStreamFactory->expects($this->exactly(2))
             ->method('newUUStream')
             ->with($stream)
@@ -71,7 +71,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithQuotedPrintableDecoderTransferEncoding()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
@@ -86,7 +86,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithBase64DecoderTransferEncoding()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newBase64Stream')
             ->with($stream)
@@ -99,7 +99,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithUUDecoderTransferEncoding()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newUUStream')
             ->with($stream)
@@ -112,7 +112,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithCharsetEncoding()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
             ->with($stream, 'US-ASCII', 'UTF-8')
@@ -125,15 +125,15 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithReAttachedTransferEncodingDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newQuotedPrintableStream')
             ->with($stream)
             ->willReturn($stream);
         $stream->rewind();
 
-        $stream2 = Psr7\stream_for('test2');
-        $stream3 = Psr7\stream_for('test3');
+        $stream2 = Psr7\Utils::streamFor('test2');
+        $stream3 = Psr7\Utils::streamFor('test3');
         $this->mockStreamFactory->expects($this->exactly(2))
             ->method('newUUStream')
             ->with($stream)
@@ -153,7 +153,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithReAttachedCharsetConversionDecoder()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(4))
             ->method('newCharsetStream')
             ->withConsecutive(
@@ -176,7 +176,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testGetContentStreamWithCharsetAndTransferEncoding()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
             ->with($this->anything(), 'US-ASCII', 'UTF-8')

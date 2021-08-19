@@ -240,7 +240,7 @@ class PrivacyHelperTest extends TestCase
             ->willReturnOnConsecutiveCalls(null, $part);
         $part->expects($this->once())
             ->method('getStream')
-            ->willReturn(Psr7\stream_for("test\rwith\nnew\r\nlines"));
+            ->willReturn(Psr7\Utils::streamFor("test\rwith\nnew\r\nlines"));
 
         $this->assertNull($helper->getSignedMessageAsString($message));
         $this->assertEquals("test\r\nwith\r\nnew\r\nlines", $helper->getSignedMessageAsString($message));

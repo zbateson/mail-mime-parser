@@ -52,7 +52,7 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
@@ -80,7 +80,7 @@ class MessagePartStreamTest extends TestCase
 
         $testContents .= 'test';
 
-        $hs = Psr7\stream_for('hs');
+        $hs = Psr7\Utils::streamFor('hs');
         $this->mockStreamFactory->expects($this->once())
             ->method('newHeaderStream')
             ->with($message)
@@ -108,10 +108,10 @@ class MessagePartStreamTest extends TestCase
             ->willReturn(2);
         $child1->expects($this->once())
             ->method('getStream')
-            ->willReturn(Psr7\stream_for('c1'));
+            ->willReturn(Psr7\Utils::streamFor('c1'));
         $child2->expects($this->once())
             ->method('getStream')
-            ->willReturn(Psr7\stream_for('c2'));
+            ->willReturn(Psr7\Utils::streamFor('c2'));
 
         $testContents .= 'c1';
         $testContents .= "\r\n--ze-boundary\r\n";
@@ -129,7 +129,7 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
@@ -157,7 +157,7 @@ class MessagePartStreamTest extends TestCase
 
         $testContents .= 'test';
 
-        $hs = Psr7\stream_for('hs');
+        $hs = Psr7\Utils::streamFor('hs');
         $this->mockStreamFactory->expects($this->once())
             ->method('newHeaderStream')
             ->with($message)
@@ -176,7 +176,7 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
@@ -212,7 +212,7 @@ class MessagePartStreamTest extends TestCase
 
         $testContents .= 'test';
 
-        $hs = Psr7\stream_for('hs');
+        $hs = Psr7\Utils::streamFor('hs');
         $this->mockStreamFactory->expects($this->once())
             ->method('newHeaderStream')
             ->with($message)
@@ -235,10 +235,10 @@ class MessagePartStreamTest extends TestCase
             ->willReturn(2);
         $child1->expects($this->once())
             ->method('getStream')
-            ->willReturn(Psr7\stream_for('c1'));
+            ->willReturn(Psr7\Utils::streamFor('c1'));
         $child2->expects($this->once())
             ->method('getStream')
-            ->willReturn(Psr7\stream_for('c2'));
+            ->willReturn(Psr7\Utils::streamFor('c2'));
 
         $testContents .= 'c1';
         $testContents .= 'c2';
@@ -254,7 +254,7 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\stream_for('test'));
+            ->willReturn(Psr7\Utils::streamFor('test'));
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
@@ -280,7 +280,7 @@ class MessagePartStreamTest extends TestCase
 
         $testContents .= 'test';
 
-        $hs = Psr7\stream_for('hs');
+        $hs = Psr7\Utils::streamFor('hs');
         $this->mockStreamFactory->expects($this->once())
             ->method('newHeaderStream')
             ->with($message)

@@ -45,7 +45,7 @@ class MessageParserTest extends TestCase
 
     public function testParse()
     {
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $msg = $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
 
         $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
@@ -89,7 +89,7 @@ class MessageParserTest extends TestCase
 
     public function testReadLine()
     {
-        $stream = Psr7\stream_for(
+        $stream = Psr7\Utils::streamFor(
             "This is a string\n"
             . "with multiple lines,\n"
             . "multiple lines..."
@@ -106,7 +106,7 @@ class MessageParserTest extends TestCase
     {
         $checkDiscarded = str_repeat('a', 4096);
         $checkLarger = $checkDiscarded . $checkDiscarded;
-        $stream = Psr7\stream_for(
+        $stream = Psr7\Utils::streamFor(
             $checkDiscarded . "\n"
             . $checkLarger . "\n"
             . 'last line'

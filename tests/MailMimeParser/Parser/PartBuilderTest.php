@@ -27,7 +27,7 @@ class PartBuilderTest extends TestCase
     private function newPartBuilder($stream = null, $parent = null)
     {
         if ($stream === null && $parent === null) {
-            $stream = Psr7\stream_for('test');
+            $stream = Psr7\Utils::streamFor('test');
         } elseif ($parent !== null) {
             $stream = null;
         }
@@ -72,7 +72,7 @@ class PartBuilderTest extends TestCase
             ->setMethods([ 'getMessageResourceHandle', 'setStreamPartEndPos' ])
             ->getMockForAbstractClass();
 
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $parent->expects($this->once())
             ->method('getMessageResourceHandle')
             ->willReturn(StreamWrapper::getResource($stream));

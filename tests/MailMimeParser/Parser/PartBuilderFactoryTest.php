@@ -27,7 +27,7 @@ class PartBuilderFactoryTest extends TestCase
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $stream = Psr7\stream_for('test');
+        $stream = Psr7\Utils::streamFor('test');
         $partBuilder = $this->instance->newPartBuilder(
             $hc,
             $stream

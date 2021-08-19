@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser;
 
 use ZBateson\MailMimeParser\Message\MessageParser;
-use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\CachingStream;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -133,7 +133,7 @@ class MailMimeParser
      */
     public function parse($resource, $attached)
     {
-        $stream = Psr7\stream_for(
+        $stream = Utils::streamFor(
             $resource,
             [ 'metadata' => [ 'mmp-detached-stream' => ($attached !== true) ] ]
         );

@@ -32,7 +32,7 @@ class MessagePartTest extends TestCase {
     private function getMessagePart($handle = 'habibi', $contentHandle = null, $parent = null)
     {
         if ($contentHandle !== null) {
-            $contentHandle = Psr7\stream_for($contentHandle);
+            $contentHandle = Psr7\Utils::streamFor($contentHandle);
             $this->partStreamContainer
                 ->method('getContentStream')
                 ->willReturnCallback(function() use ($contentHandle) {
@@ -45,7 +45,7 @@ class MessagePartTest extends TestCase {
                 });
         }
         if ($handle !== null) {
-            $handle = Psr7\stream_for($handle);
+            $handle = Psr7\Utils::streamFor($handle);
             $this->partStreamContainer
                 ->method('getStream')
                 ->willReturnCallback(function() use ($handle) {
@@ -139,8 +139,8 @@ class MessagePartTest extends TestCase {
 
     public function testBinaryContentStream()
     {
-        $f = Psr7\stream_for('First');
-        $s = Psr7\stream_for('Second');
+        $f = Psr7\Utils::streamFor('First');
+        $s = Psr7\Utils::streamFor('Second');
 
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
@@ -164,8 +164,8 @@ class MessagePartTest extends TestCase {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
@@ -186,9 +186,9 @@ class MessagePartTest extends TestCase {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
-        
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
+
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
             ->expects($this->never())
@@ -198,7 +198,7 @@ class MessagePartTest extends TestCase {
             ->method('getBinaryContentStream')
             ->willReturnOnConsecutiveCalls($f, $s);
 
-        $stream = Psr7\stream_for();
+        $stream = Psr7\Utils::streamFor();
         $messagePart->saveContent($stream);
         $stream->rewind();
 
@@ -210,8 +210,8 @@ class MessagePartTest extends TestCase {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        $f = Psr7\stream_for('Que tonto');
-        $s = Psr7\stream_for('Que tonto');
+        $f = Psr7\Utils::streamFor('Que tonto');
+        $s = Psr7\Utils::streamFor('Que tonto');
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
@@ -222,7 +222,7 @@ class MessagePartTest extends TestCase {
             ->method('getBinaryContentStream')
             ->willReturnOnConsecutiveCalls($f, $s);
 
-        $res = StreamWrapper::getResource(Psr7\stream_for());
+        $res = StreamWrapper::getResource(Psr7\Utils::streamFor());
         $messagePart->saveContent($res);
         rewind($res);
 
@@ -232,8 +232,8 @@ class MessagePartTest extends TestCase {
 
     public function testDetachContentStream()
     {
-        $stream = Psr7\stream_for('Que tonta');
-        $contentStream = Psr7\stream_for('Que tonto');
+        $stream = Psr7\Utils::streamFor('Que tonta');
+        $contentStream = Psr7\Utils::streamFor('Que tonto');
         $messagePart = $this->getMessagePart($stream, $contentStream);
 
         $this->partStreamContainer
@@ -251,15 +251,15 @@ class MessagePartTest extends TestCase {
 
     public function testSetContentAndAttachContentStream()
     {
-        $ms = Psr7\stream_for('message');
-        $org = Psr7\stream_for('content');
+        $ms = Psr7\Utils::streamFor('message');
+        $org = Psr7\Utils::streamFor('content');
         $messagePart = $this->getMessagePart($ms, $org);
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('quoted-printable');
         $messagePart->method('getCharset')
             ->willReturn('utf-64');
 
-        $new = Psr7\stream_for('updated');
+        $new = Psr7\Utils::streamFor('updated');
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
             ->method('getContentStream')
@@ -288,7 +288,7 @@ class MessagePartTest extends TestCase {
     {
         $messagePart = $this->getMessagePart(
             'Demigorgon',
-            Psr7\stream_for('other demons')
+            Psr7\Utils::streamFor('other demons')
         );
 
         $handle = fopen('php://temp', 'r+');
@@ -305,7 +305,7 @@ class MessagePartTest extends TestCase {
     {
         $messagePart = $this->getMessagePart(
             'Demigorgon',
-            Psr7\stream_for('other demons')
+            Psr7\Utils::streamFor('other demons')
         );
 
         $part = vfsStream::newFile('part')->at($this->vfs);

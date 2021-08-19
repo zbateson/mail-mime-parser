@@ -6,10 +6,10 @@
  */
 namespace ZBateson\MailMimeParser\Message;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\StreamWrapper;
-use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
+use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\StreamInterface;
 use SplObjectStorage;
 use SplObserver;
 
@@ -138,8 +138,8 @@ abstract class MessagePart implements IMessagePart
             $resourceOrStream = fopen($filenameResourceOrStream, 'w+');
         }
 
-        $stream = Psr7\stream_for($resourceOrStream);
-        Psr7\copy_to_stream($this->getBinaryContentStream(), $stream);
+        $stream = Utils::streamFor($resourceOrStream);
+        Utils::copyToStream($this->getBinaryContentStream(), $stream);
 
         if (!is_string($filenameResourceOrStream)
             && !($filenameResourceOrStream instanceof StreamInterface)) {
@@ -177,7 +177,7 @@ abstract class MessagePart implements IMessagePart
 
     public function setContent($resource, $charset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $stream = Psr7\stream_for($resource);
+        $stream = Utils::streamFor($resource);
         $this->attachContentStream($stream, $charset);
         // this->notify() called in attachContentStream
     }
@@ -201,8 +201,8 @@ abstract class MessagePart implements IMessagePart
 
         $partStream = $this->getStream();
         $partStream->rewind();
-        $stream = Psr7\stream_for($resourceOrStream);
-        Psr7\copy_to_stream($partStream, $stream);
+        $stream = Utils::streamFor($resourceOrStream);
+        Utils::copyToStream($partStream, $stream);
 
         if (!is_string($filenameResourceOrStream)
             && !($filenameResourceOrStream instanceof StreamInterface)) {

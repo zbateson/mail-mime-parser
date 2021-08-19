@@ -2,7 +2,7 @@
 
 Testable and PSR-compliant mail mime parser alternative to PHP's imap* functions and Pear libraries for reading messages in _Internet Message Format_ [RFC 822](http://tools.ietf.org/html/rfc822) (and later revisions [RFC 2822](http://tools.ietf.org/html/rfc2822), [RFC 5322](http://tools.ietf.org/html/rfc5322)).
 
-[![Build Status](https://travis-ci.com/zbateson/mail-mime-parser.svg?branch=master)](https://travis-ci.com/zbateson/mail-mime-parser)
+[![Build Status](https://github.com/zbateson/mail-mime-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/zbateson/mail-mime-parser/actions/workflows/tests.yml)
 [![Code Coverage](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zbateson/mail-mime-parser/?branch=master)
 [![Total Downloads](https://poser.pugx.org/zbateson/mail-mime-parser/downloads)](//packagist.org/packages/zbateson/mail-mime-parser)
@@ -20,13 +20,19 @@ To include it for use in your project, please install via composer:
 composer require zbateson/mail-mime-parser
 ```
 
+## Sponsors
+
+A huge thank you to my first sponsor. <3
+
+[![SecuMailer](https://mail-mime-parser.org/sponsors/logo-secumailer.png)](https://secumailer.com)
+
 ## Deprecation Notice (since 1.2.1)
 
 getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have all been deprecated due to #106. fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead. Note that this deprecation doesn’t apply to getBinaryContentResourceHandle or getResourceHandle.
 
 ## Requirements
 
-MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2, 7.3, 7.4 and 8.0 on travis.
+MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2, 7.3, 7.4 and 8.0.
 
 ## Usage
 

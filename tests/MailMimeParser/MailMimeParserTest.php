@@ -84,7 +84,7 @@ class MailMimeParserTest extends TestCase
         MailMimeParser::setDependencyContainer($this->mockDi);
         $mmp = new MailMimeParser();
 
-        $ret = $mmp->parse(Psr7\stream_for($handle), true);
+        $ret = $mmp->parse(Psr7\Utils::streamFor($handle), true);
         $this->assertEquals('test', $ret);
     }
 
