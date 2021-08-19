@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use LegacyPHPUnit\TestCase;
+use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
  * Description of MultiPartTest
@@ -17,7 +18,7 @@ class MultiPartTest extends TestCase
 {
     private $mockPartStreamContainer;
     private $mockHeaderContainer;
-    private $mockPartChildrenContainer;
+    private $partChildrenContainer;
 
     private $allParts;
     private $children;
@@ -31,21 +32,15 @@ class MultiPartTest extends TestCase
         $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
-            ->setMethods()
-            ->getMock();
+        $this->partChildrenContainer = new PartChildrenContainer();
     }
 
     private function getParentMimePart()
     {
-        $parentContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
-            ->setMethods()
-            ->getMock();
+        $parentContainer = new PartChildrenContainer();
         $parent = $this->getMimePart($parentContainer);
 
-        $nestedContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
-            ->setMethods()
-            ->getMock();
+        $nestedContainer = new PartChildrenContainer();
 
         $nested = $this->getMimePart($nestedContainer, null, null, $parent);
         $this->children = [
@@ -80,7 +75,7 @@ class MultiPartTest extends TestCase
     private function getMimePart($childrenContainer = null, $headerContainer = null, $streamContainer = null, $parent = null)
     {
         if ($childrenContainer === null) {
-            $childrenContainer = $this->mockPartChildrenContainer;
+            $childrenContainer = $this->partChildrenContainer;
         }
         if ($headerContainer === null) {
             $headerContainer = $this->mockHeaderContainer;
@@ -201,9 +196,7 @@ class MultiPartTest extends TestCase
             ->with($this->equalTo('Content-Type'))
             ->willReturn($this->getMockedParameterHeader('Content-Type', 'Ecstatic'));
 
-        $parentContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
-            ->setMethods()
-            ->getMock();
+        $parentContainer = new PartChildrenContainer();
         $parent = $this->getMimePart($parentContainer, $matching);
 
         $children = [
@@ -240,9 +233,7 @@ class MultiPartTest extends TestCase
             ->with($this->equalTo('Content-ID'))
             ->willReturn($this->getMockedParameterHeader('Content-ID', 'bar-of-foo'));
 
-        $parentContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
-            ->setMethods()
-            ->getMock();
+        $parentContainer = new PartChildrenContainer();
         $parent = $this->getMimePart($parentContainer, null);
 
         $children = [

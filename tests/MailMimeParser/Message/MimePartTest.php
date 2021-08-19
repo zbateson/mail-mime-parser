@@ -21,10 +21,6 @@ class MimePartTest extends TestCase
     private $mockHeaderContainer;
     private $mockPartChildrenContainer;
 
-    private $allParts;
-    private $children;
-    private $secondChildNested;
-
     protected function legacySetUp()
     {
         $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
@@ -34,7 +30,6 @@ class MimePartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
-            ->setMethods()
             ->getMock();
     }
 
@@ -216,7 +211,7 @@ class MimePartTest extends TestCase
             ->setConstructorArgs([
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')->setMethods()->getMock(),
+                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')->getMock(),
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')->disableOriginalConstructor()->getMock()
             ])
