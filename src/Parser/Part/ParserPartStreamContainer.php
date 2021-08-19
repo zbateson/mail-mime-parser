@@ -17,20 +17,21 @@ use SplSubject;
  * A part stream container that proxies requests for content streams to a parser
  * to read the content.
  *
- * Keeps reference to the original stream a message was parsed from, using that
- * stream as the message's stream instead of the parent's MessagePartStream
+ * Keeps reference to the original stream a part was parsed from, using that
+ * stream as the part's stream instead of the PartStreamContainer's
+ * MessagePartStream (which dynamically creates a stream from an IMessagePart)
  * unless the part changed.
  * 
- * The container must also be attached to its underlying part with
- * SplSubject::attach() so the ParserPartStreamContainer gets notified of any
- * changes.
+ * The ParserPartStreamContainer must also be attached to its underlying part
+ * with SplSubject::attach() so the ParserPartStreamContainer gets notified of
+ * any changes.
  *
  * @author Zaahid Bateson
  */
 class ParserPartStreamContainer extends PartStreamContainer implements SplObserver
 {
     /**
-     * @var ParserPartProxy
+     * @var ParserPartProxy The parser proxy to ferry requests to on-demand.
      */
     protected $parserProxy;
 
@@ -42,7 +43,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
 
     /**
      * @var bool true if the stream should be detached when this container is
-     *      destroyed.
+     *      destroyed (thereby not closing the stream).
      */
     protected $detachParsedStream = false;
 
@@ -71,7 +72,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
     }
 
     /**
-     * Requests content from the parser if not previously requested, and call
+     * Requests content from the parser if not previously requested, and calls
      * PartStreamContainer::setContentStream().
      */
     protected function requestParsedContentStream()

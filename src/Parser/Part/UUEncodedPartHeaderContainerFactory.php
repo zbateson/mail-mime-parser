@@ -17,7 +17,7 @@ class UUEncodedPartHeaderContainerFactory
 {
     /**
      * @var HeaderFactory the HeaderFactory passed to
-     * UUEncodedPartHeaderContainer instances.
+     *      UUEncodedPartHeaderContainer instances.
      */
     protected $headerFactory;
 

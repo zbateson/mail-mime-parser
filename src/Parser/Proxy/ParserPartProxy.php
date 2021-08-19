@@ -11,7 +11,11 @@ use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
- * Base bi-directional proxy between a parser and a MessagePart.
+ * Proxy between a MessagePart and a Parser.
+ *
+ * ParserPartProxy objects are responsible for ferrying requests from message
+ * parts to a proxy as they're requested, and for maintaining state information
+ * for a parser as necessary.
  *
  * @author Zaahid Bateson
  */
@@ -23,7 +27,7 @@ abstract class ParserPartProxy extends PartBuilder
     protected $part;
 
     /**
-     * @var IParser|null The parser.
+     * @var IParser The parser.
      */
     protected $parser;
 

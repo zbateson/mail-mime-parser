@@ -21,7 +21,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Responsible for creating proxied IMessage instances wrapped in a
- * ParserMimePartProxy.
+ * ParserMessageProxy.
  *
  * @author Zaahid Bateson
  */
@@ -51,11 +51,12 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
     }
 
     /**
-     * Constructs a new ParserMessageProxy wrapping an IMessage object.
+     * Constructs a new ParserMessageProxy wrapping an IMessage object that will
+     * dynamically parse a message's content and parts as they're requested.
      *
      * @param PartBuilder $partBuilder
-     * @param PartHeaderContainer $headerContainer
-     * @return ParserMimePartProxy
+     * @param IParser $parser
+     * @return ParserMessageProxy
      */
     public function newInstance(PartBuilder $partBuilder, IParser $parser)
     {

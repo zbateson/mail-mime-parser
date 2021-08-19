@@ -6,10 +6,9 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Header\HeaderConsts;
-
 /**
- * A bi-directional parser-to-part proxy for IMessage.
+ * A bi-directional parser-to-part proxy for IMessage objects created by
+ * MimeParser.
  *
  * @author Zaahid Bateson
  */

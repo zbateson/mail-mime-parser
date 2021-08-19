@@ -1,11 +1,9 @@
 <?php
-
 /**
  * This file is part of the ZBateson\MailMimeParser project.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
-
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message;
@@ -15,17 +13,17 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Responsible for creating proxied IMessage instances wrapped in a
- * ParserMimePartProxy.
+ * ParserNonMimeMessageProxy for NonMimeParser.
  *
  * @author Zaahid Bateson
  */
 class ParserNonMimeMessageProxyFactory extends ParserMessageProxyFactory
 {
     /**
-     * Constructs a new ParserMessageProxy wrapping an IMessage object.
+     * Constructs a new ParserNonMimeMessageProxy wrapping an IMessage object.
      *
      * @param PartBuilder $partBuilder
-     * @param PartHeaderContainer $headerContainer
+     * @param IParser $parser
      * @return ParserMimePartProxy
      */
     public function newInstance(PartBuilder $partBuilder, IParser $parser)

@@ -23,7 +23,9 @@ use Psr\Http\Message\StreamInterface;
  *
  * ```php
  * $parser = new MailMimeParser();
- * $message = $parser->parse(fopen('path/to/file.txt'));
+ * // the resource is attached due to the second parameter being true and will
+ * // be closed when the returned IMessage is destroyed
+ * $message = $parser->parse(fopen('path/to/file.txt'), true);
  * // use $message here
  * ```
  *

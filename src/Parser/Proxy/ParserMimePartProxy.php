@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 
 /**
- * A bi-directional parser-to-part proxy for IMimeParts.
+ * A bi-directional parser-to-part proxy for MimeParser and IMimeParts.
  *
  * @author Zaahid Bateson
  */
@@ -41,7 +41,7 @@ class ParserMimePartProxy extends ParserPartProxy
     protected $allChildrenParsed = false;
 
     /**
-     * @var ParserPartProxy[] Parsed children used as 'first-in-first-out'
+     * @var ParserPartProxy[] Parsed children used as a 'first-in-first-out'
      *      stack as children are parsed.
      */
     protected $children = [];
@@ -63,7 +63,8 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
-     * Parses the next child of this part and adds it to the children list.
+     * Parses the next child of this part and adds it to the 'stack' of
+     * children.
      */
     protected function parseNextChild()
     {
@@ -82,8 +83,9 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
-     * Returns the next child part if one exists, removing it from the internal
-     * list of children, or null otherwise.
+     * Returns the next child part if one exists, popping it from the internal
+     * 'stack' of children, attempting to parse a new one if the stack is empty,
+     * and returning null if there are no more children.
      *
      * @return IMessagePart|null the child part.
      */
@@ -199,11 +201,33 @@ class ParserMimePartProxy extends ParserPartProxy
         }
     }
 
+    /**
+     * Sets the length of the last line ending read by MimeParser (e.g. 2 for
+     * '\r\n', or 1 for '\n').
+     *
+     * The line ending may not belong specifically to this part, so
+     * ParserMimePartProxy simply calls setLastLineEndingLength on its parent,
+     * which must eventually reach a ParserMessageProxy which actually stores
+     * the length.
+     *
+     * @param int $length
+     */
     public function setLastLineEndingLength($length)
     {
         $this->getParent()->setLastLineEndingLength($length);
     }
 
+    /**
+     * Returns the length of the last line ending read by MimeParser (e.g. 2 for
+     * '\r\n', or 1 for '\n').
+     *
+     * The line ending may not belong specifically to this part, so
+     * ParserMimePartProxy simply calls getLastLineEndingLength on its parent,
+     * which must eventually reach a ParserMessageProxy which actually keeps
+     * the length and returns it.
+     *
+     * @return int the length of the last line ending read
+     */
     public function getLastLineEndingLength()
     {
         return $this->getParent()->getLastLineEndingLength();
