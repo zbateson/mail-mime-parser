@@ -141,14 +141,14 @@ class MimeParser extends AbstractParser
      * a part, $this->parseContent is called immediately to parse it and discard
      * it, and null is returned.
      *
+     * @param ParserMimePartProxy $parent
      * @param PartHeaderContainer $headerContainer
      * @param PartBuilder $child
      * @return ParserPartProxy|null
      */
-    private function createPart(PartHeaderContainer $headerContainer, PartBuilder $child)
+    private function createPart(ParserMimePartProxy $parent, PartHeaderContainer $headerContainer, PartBuilder $child)
     {
-        $parentProxy = $child->getParent();
-        if ($parentProxy === null || !$parentProxy->isEndBoundaryFound()) {
+        if (!$parent->isEndBoundaryFound()) {
             $this->headerParser->parse(
                 $child->getMessageResourceHandle(),
                 $headerContainer
@@ -170,6 +170,6 @@ class MimeParser extends AbstractParser
         }
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
         $child = $this->partBuilderFactory->newChildPartBuilder($headerContainer, $proxy);
-        return $this->createPart($headerContainer, $child);
+        return $this->createPart($proxy, $headerContainer, $child);
     }
 }
