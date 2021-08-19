@@ -38,7 +38,7 @@ class Container extends PimpleContainer
                 return method_exists($type, 'getName') ? $type->getName() : (string) $type;
             }
         } elseif ($param->getClass() !== null) {
-            return $param->getClass();
+            return $param->getClass()->getName();
         }
         return null;
     }
