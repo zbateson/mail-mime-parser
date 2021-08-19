@@ -111,7 +111,7 @@ class MultiPartTest extends TestCase
 
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('Content-Type', 'bleek/blorp'),
                 $this->getMockedParameterHeader('Content-Type', 'multipart/mixed'),
@@ -191,14 +191,14 @@ class MultiPartTest extends TestCase
     {
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn($this->getMockedParameterHeader('Content-Type', 'Smiling'));
         $matching = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
         $matching->expects($this->atLeastOnce())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn($this->getMockedParameterHeader('Content-Type', 'Ecstatic'));
 
         $parentContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
@@ -227,7 +227,7 @@ class MultiPartTest extends TestCase
     {
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Id'))
+            ->with($this->equalTo('Content-ID'))
             ->willReturn(null);
         $matching = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
@@ -237,8 +237,8 @@ class MultiPartTest extends TestCase
         // 'bar-of-foo' must not be surrounded by either to match below
         $matching->expects($this->atLeastOnce())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Id'))
-            ->willReturn($this->getMockedParameterHeader('Content-Id', 'bar-of-foo'));
+            ->with($this->equalTo('Content-ID'))
+            ->willReturn($this->getMockedParameterHeader('Content-ID', 'bar-of-foo'));
 
         $parentContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
             ->setMethods()

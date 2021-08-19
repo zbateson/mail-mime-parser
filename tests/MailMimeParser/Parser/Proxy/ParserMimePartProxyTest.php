@@ -217,7 +217,7 @@ class ParserMimePartProxyTest extends TestCase
             ->willReturn($this->headerContainer);
         $this->headerContainer->expects($this->any())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn('Fruity');
         $this->assertSame('Fruity', $instance->getContentType());
     }
@@ -232,12 +232,12 @@ class ParserMimePartProxyTest extends TestCase
         $this->headerContainer
             ->expects($this->any())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn($h);
 
         $h->expects($this->any())
             ->method('getValueFor')
-            ->with($this->equalToIgnoringCase('boundary'))
+            ->with($this->equalTo('boundary'))
             ->willReturn('Personal Space');
 
         $this->partBuilder->expects($this->once())
@@ -255,7 +255,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->headerContainer
             ->expects($this->any())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn(null);
 
         $this->partBuilder->expects($this->once())
@@ -276,11 +276,11 @@ class ParserMimePartProxyTest extends TestCase
         $this->headerContainer
             ->expects($this->any())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn($h);
         $h->expects($this->any())
             ->method('getValueFor')
-            ->with($this->equalToIgnoringCase('boundary'))
+            ->with($this->equalTo('boundary'))
             ->willReturn('Personal Space');
 
         $this->partBuilder->expects($this->any())
@@ -304,7 +304,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->headerContainer
             ->expects($this->any())
             ->method('get')
-            ->with($this->equalToIgnoringCase('Content-Type'))
+            ->with($this->equalTo('Content-Type'))
             ->willReturn(null);
         $this->partBuilder->method('getHeaderContainer')->willReturn($this->headerContainer);
 

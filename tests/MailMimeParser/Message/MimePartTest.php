@@ -82,12 +82,12 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
             ->withConsecutive(
-                [ $this->equalToIgnoringCase('Content-Type'), 0 ],
-                [ $this->equalToIgnoringCase('Content-Disposition'), 0 ],
-                [ $this->equalToIgnoringCase('Content-Type'), 0 ],
-                [ $this->equalToIgnoringCase('Content-Disposition'), 0 ],
-                [ $this->equalToIgnoringCase('Content-Type'), 0 ],
-                [ $this->equalToIgnoringCase('Content-Disposition'), 0 ]
+                [ $this->equalTo('Content-Type'), 0 ],
+                [ $this->equalTo('Content-Disposition'), 0 ],
+                [ $this->equalTo('Content-Type'), 0 ],
+                [ $this->equalTo('Content-Disposition'), 0 ],
+                [ $this->equalTo('Content-Type'), 0 ],
+                [ $this->equalTo('Content-Disposition'), 0 ]
             )
             ->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('Content-Type', 'blah-blooh', null),
