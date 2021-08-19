@@ -26,9 +26,29 @@ A huge thank you to my first sponsor. <3
 
 [![SecuMailer](https://mail-mime-parser.org/sponsors/logo-secumailer.png)](https://secumailer.com)
 
-## Deprecation Notice (since 1.2.1)
+## Removal Notice (since 2.0.0)
 
-getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have all been deprecated due to #106. fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead. Note that this deprecation doesn’t apply to getBinaryContentResourceHandle or getResourceHandle.
+getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have all been deprecated in 1.2.1 and removed in 2.0.0. fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead. Note that getBinaryContentResourceHandle and getResourceHandle are still available.
+
+## Change in 2.0
+
+Starting in 2.0, the passed resource handle or stream must remain open while the returned message object is still in use.
+
+Old code:
+```php
+$handle = fopen('file.mime', 'r');
+$message = $mailParser->parse($handle);         // returns `Message`
+fclose($handle);
+```
+
+New code:
+```php
+// attaches the resource handle to the returned `IMessage` if the second parameter
+// is true.  The resource handle is closed when the IMessage is destroyed.
+$message = $mailParser->parse(fopen('file.mime', 'r'), true);
+```
+
+For a more complete list of changes, please visit the [2.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-2.0).
 
 ## Requirements
 
@@ -46,8 +66,9 @@ $mailParser = new MailMimeParser();
 
 $handle = fopen('file.mime', 'r');
 // parse() accepts a string, resource or Psr7 StreamInterface
-$message = $mailParser->parse($handle);         // returns `Message`
-fclose($handle);
+// pass `true` as the second argument to attach the passed $handle and close
+// it when the IMessage is destroyed.
+$message = $mailParser->parse($handle, false);         // returns `IMessage`
 
 // OR: use this procedurally (Message::from also accepts a string,
 // resource or Psr7 StreamInterface
@@ -88,16 +109,21 @@ $dest = \GuzzleHttp\Psr7\stream_for(
 // OR: more simply if saving or copying to another stream
 $att->saveContent('my-file.ext');               // writes to my-file.ext
 $att->saveContent($stream);                     // copies to the stream
+
+// close only when $message is no longer being used.
+fclose($handle);
+
 ```
 
 ## Documentation
 
 * [Usage Guide](https://mail-mime-parser.org/)
-* [API Reference](https://mail-mime-parser.org/api/1.3)
+* [API Reference](https://mail-mime-parser.org/api/2.0)
 
-## Upgrading to 1.x
+## Upgrading to 1.x or 2.x
 
 * [Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
+* [Upgrade Guide](https://mail-mime-parser.org/upgrade-2.0)
 
 ## License
 
