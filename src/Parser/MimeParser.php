@@ -14,48 +14,56 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
 /**
- * Reads the content of a mime part.
+ * Parses content and children of MIME parts.
  *
  * @author Zaahid Bateson
  */
 class MimeParser extends AbstractParser
 {
     /**
-     * @var PartBuilderFactory
-     */
-    protected $partBuilderFactory;
-
-    /**
-     * @var PartHeaderContainerFactory
+     * @var PartHeaderContainerFactory Factory service for creating
+     *      PartHeaderContainers for headers.
      */
     protected $partHeaderContainerFactory;
 
     /**
-     * @var HeaderParser
+     * @var HeaderParser The HeaderParser service.
      */
     protected $headerParser;
 
     public function __construct(
         ParserMessageProxyFactory $parserMessageProxyFactory,
         ParserMimePartProxyFactory $parserMimePartProxyFactory,
-        PartBuilderFactory $pbf,
-        PartHeaderContainerFactory $phcf,
-        HeaderParser $hp
+        PartBuilderFactory $partBuilderFactory,
+        PartHeaderContainerFactory $partHeaderContainerFactory,
+        HeaderParser $headerParser
     ) {
-        parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory);
-        $this->partBuilderFactory = $pbf;
-        $this->partHeaderContainerFactory = $phcf;
-        $this->headerParser = $hp;
+        parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory, $partBuilderFactory);
+        $this->partHeaderContainerFactory = $partHeaderContainerFactory;
+        $this->headerParser = $headerParser;
     }
 
+    /**
+     * Returns true if the passed PartBuilder::isMime() method returns true.
+     *
+     * @param PartBuilder $part
+     * @return bool
+     */
     public function canParse(PartBuilder $part)
     {
         return $part->isMime();
     }
 
     /**
+     * Reads up to 2048 bytes of input from the passed resource handle,
+     * discarding portions of a line that are longer than that, and returning
+     * the read portions of the line.
      * 
+     * The method also calls $proxy->setLastLineEndingLength which is used in
+     * findContentBoundary() to set the exact end byte of a part.
+     *
      * @param resource $handle
+     * @param ParserMimePartProxy $proxy
      * @return string
      */
     private function readBoundaryLine($handle, ParserMimePartProxy $proxy)
@@ -73,12 +81,15 @@ class MimeParser extends AbstractParser
     }
 
     /**
-     * Reads lines from the passed $handle, calling
+     * Reads 2048-byte lines from the passed $handle, calling
      * $partBuilder->setEndBoundaryFound with the passed line until it returns
      * true or the stream is at EOF.
      *
      * setEndBoundaryFound returns true if the passed line matches a boundary
      * for the $partBuilder itself or any of its parents.
+     *
+     * Lines longer than 2048 bytes are returned as single lines of 2048 bytes,
+     * the longer line is not returned separately but is simply discarded.
      *
      * Once a boundary is found, setStreamPartAndContentEndPos is called with
      * the passed $handle's read pos before the boundary and its line separator
@@ -110,11 +121,29 @@ class MimeParser extends AbstractParser
     }
 
     /**
-     * Checks if the new child part is just content past the end boundary
+     * Calls the header parser to fill the passed $headerContainer, then calls
+     * $this->parserManager->createParserProxyFor($child);
      *
-     * @param ParserProxy $proxy
-     * @param PartBuilder $parent
+     * The method first checks though if the 'part' represents hidden content
+     * passed a MIME end boundary, which some messages like to include, for
+     * instance:
+     *
+     * ```
+     * --outer-boundary--
+     * --boundary
+     * content
+     * --boundary--
+     * some hidden information
+     * --outer-boundary--
+     * ```
+     *
+     * In this case, $this->parserPartProxyFactory is called directly to create
+     * a part, $this->parseContent is called immediately to parse it and discard
+     * it, and null is returned.
+     *
+     * @param PartHeaderContainer $headerContainer
      * @param PartBuilder $child
+     * @return ParserPartProxy|null
      */
     private function createPart(PartHeaderContainer $headerContainer, PartBuilder $child)
     {
@@ -134,12 +163,6 @@ class MimeParser extends AbstractParser
         }
     }
 
-    /**
-     * Returns true if there are more parts
-     *
-     * @param PartBuilder $partBuilder
-     * @return ParserPartProxy
-     */
     public function parseNextChild(ParserMimePartProxy $proxy)
     {
         if ($proxy->isParentBoundaryFound()) {

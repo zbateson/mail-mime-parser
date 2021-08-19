@@ -18,8 +18,9 @@ use Psr\Http\Message\StreamInterface;
 class PartBuilderFactory
 {
     /**
-     * Constructs a new PartBuilder object and returns it
-     * 
+     * Constructs a top-level (message) PartBuilder object and returns it
+     *
+     * @param PartHeaderContainer $headerContainer
      * @param StreamInterface $messageStream
      * @return PartBuilder
      */
@@ -29,8 +30,10 @@ class PartBuilderFactory
     }
 
     /**
-     * Constructs a new PartBuilder object and returns it
+     * Constructs a child PartBuilder object with the passed $parent as its
+     * parent, and returns it
      *
+     * @param PartHeaderContainer $headerContainer
      * @param ParserPartProxy $parent
      * @return PartBuilder
      */

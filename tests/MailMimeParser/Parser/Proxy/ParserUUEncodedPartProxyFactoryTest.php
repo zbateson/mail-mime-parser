@@ -5,14 +5,14 @@ use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7\Utils;
 
 /**
- * ParserUUEncodedPartFactoryTest
+ * ParserUUEncodedPartProxyFactoryTest
  *
- * @group ParserUUEncodedPartFactory
+ * @group ParserUUEncodedPartProxyFactory
  * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartFactory
+ * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory
  * @author Zaahid Bateson
  */
-class ParserUUEncodedPartFactoryTest extends TestCase
+class ParserUUEncodedPartProxyFactoryTest extends TestCase
 {
     private $instance;
     private $streamFactory;
@@ -50,7 +50,7 @@ class ParserUUEncodedPartFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->instance = new ParserUUEncodedPartFactory(
+        $this->instance = new ParserUUEncodedPartProxyFactory(
             $this->streamFactory,
             $this->partStreamContainerFactory
         );

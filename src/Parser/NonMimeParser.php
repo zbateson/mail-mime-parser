@@ -11,42 +11,54 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartFactory;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory;
 
 /**
- * Reads a non-mime email message with any uuencoded child parts.
+ * Parses content for non-mime messages and uu-encoded child parts.
  *
  * @author Zaahid Bateson
  */
 class NonMimeParser extends AbstractParser
 {
     /**
-     * @var PartBuilderFactory
-     */
-    protected $partBuilderFactory;
-
-    /**
      * @var UUEncodedPartHeaderContainerFactory
      */
     protected $partHeaderContainerFactory;
 
     public function __construct(
-        ParserNonMimeMessageProxyFactory $pnmmpf,
-        ParserUUEncodedPartFactory $pupf,
-        PartBuilderFactory $pbf,
-        UUEncodedPartHeaderContainerFactory $uephcf
+        ParserNonMimeMessageProxyFactory $parserNonMimeMessageProxyFactory,
+        ParserUUEncodedPartProxyFactory $parserUuEncodedPartProxyFactory,
+        PartBuilderFactory $partBuilderFactory,
+        UUEncodedPartHeaderContainerFactory $uuEncodedPartHeaderContainerFactory
     ) {
-        parent::__construct($pnmmpf, $pupf);
-        $this->partBuilderFactory = $pbf;
-        $this->partHeaderContainerFactory = $uephcf;
+        parent::__construct($parserNonMimeMessageProxyFactory, $parserUuEncodedPartProxyFactory, $partBuilderFactory);
+        $this->partHeaderContainerFactory = $uuEncodedPartHeaderContainerFactory;
     }
 
+    /**
+     * Always returns true, and should therefore be the last parser reached by
+     * a ParserManager.
+     *
+     * @param PartBuilder $part
+     * @return bool
+     */
     public function canParse(PartBuilder $part)
     {
         return true;
     }
 
-    private function createUuEncodedChildPart(ParserNonMimeMessageProxy $parent)
+    /**
+     * Creates a UUEncodedPartHeaderContainer attached to a PartBuilder, and
+     * calls $this->parserManager->createParserProxyFor().
+     *
+     * It also sets the PartBuilder's stream part start pos and content start
+     * pos to that of $parent->getNextParStart() (since a 'begin' line is read
+     * prior to another child being created, see parseNextPart()).
+     *
+     * @param ParserNonMimeMessageProxy $parent
+     * @return ParserPartProxy
+     */
+    private function createPart(ParserNonMimeMessageProxy $parent)
     {
         $hc = $this->partHeaderContainerFactory->newInstance($parent->getNextPartMode(), $parent->getNextPartFilename());
         $pb = $this->partBuilderFactory->newChildPartBuilder($hc, $parent);
@@ -56,6 +68,13 @@ class NonMimeParser extends AbstractParser
         return $proxy;
     }
 
+    /**
+     * Reads content from the passed ParserPartProxy's stream till a uu-encoded
+     * 'begin' line is found, setting $proxy->setStreamPartContentAndEndPos() to
+     * the last byte read before the begin line.
+     *
+     * @param ParserNonMimeMessageProxy|ParserUUEncodedPartProxy $proxy
+     */
     private function parseNextPart(ParserPartProxy $proxy)
     {
         $handle = $proxy->getMessageResourceHandle();
@@ -90,7 +109,7 @@ class NonMimeParser extends AbstractParser
         if ($proxy->getNextPartStart() === null || feof($handle)) {
             return null;
         }
-        $child = $this->createUuEncodedChildPart(
+        $child = $this->createPart(
             $proxy
         );
         $proxy->clearNextPart();

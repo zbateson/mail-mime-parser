@@ -6,48 +6,71 @@
  */
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
 /**
- * Description of ParserManager
+ * Manages a prioritized list of IParser objects for parsing messages and parts
+ * and creating proxied parts.
+ *
+ * The default ParserManager sets up a MimeParser in priority 0, and a
+ * NonMimeParser in priority 1.
  *
  * @author Zaahid Bateson
  */
 class ParserManager
 {
     /**
-     * @var IParser[]
+     * @var IParser[] List of parsers in order of priority (0 is highest
+     *      priority).
      */
     protected $parsers = [];
 
     public function __construct(MimeParser $mimeParser, NonMimeParser $nonMimeParser)
     {
-        $this->parsers = [ $mimeParser, $nonMimeParser ];
-        $mimeParser->setParserManager($this);
-        $nonMimeParser->setParserManager($this);
+        $this->setParsers([ $mimeParser, $nonMimeParser ]);
     }
 
+    /**
+     * Overrides the internal prioritized list of parses with the passed list,
+     * calling $parser->setParserManager($this) on each one.
+     *
+     * @param array $parsers
+     */
     public function setParsers(array $parsers)
     {
+        foreach ($parsers as $parser) {
+            $parser->setParserManager($this);
+        }
         $this->parsers = $parsers;
     }
 
     /**
-     * Adds an IParser at the highest priority (up front).
+     * Adds an IParser at the highest priority (up front), calling
+     * $parser->setParserManager($this) on it.
      *
-     * @param IParser $pf
+     * @param IParser $parser The parser to add.
      */
     public function prependParser(IParser $parser)
     {
+        $parser->setParserManager($this);
         array_unshift($this->parsers, $parser);
     }
 
     /**
-     * Loops through registered IParsers and returns a parser that can
-     * parse a part for the passed headers.
+     * Creates a ParserPartProxy for the passed $partBuilder using a compatible
+     * IParser.
+     * 
+     * Loops through registered IParsers calling 'canParse()' on each with the
+     * passed PartBuilder, then calling either 'getParserMessageProxyFactory()'
+     * or 'getParserPartProxyFactory()' depending on if the PartBuilder has a
+     * parent, and finally calling 'newInstance' on the returned
+     * ParserPartProxyFactory passing it the IParser, and returning the new
+     * ParserPartProxy instance that was created.
      *
-     * @param PartHeaderContainer $container
-     * @return IParser
+     * @param PartBuilder $partBuilder The PartBuilder to wrap in a proxy with
+     *        an IParser
+     * @return ParserPartProxy The created ParserPartProxy tied to a new
+     *         IMessagePart and associated IParser.
      */
     public function createParserProxyFor(PartBuilder $partBuilder)
     {

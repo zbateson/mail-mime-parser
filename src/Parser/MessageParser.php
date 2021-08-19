@@ -7,7 +7,6 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserMessageFactory;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -19,22 +18,25 @@ use Psr\Http\Message\StreamInterface;
 class MessageParser
 {
     /**
-     * @var PartHeaderContainerFactory
+     * @var PartHeaderContainerFactory To create a container to read the
+     *      message's headers into.
      */
     protected $partHeaderContainerFactory;
 
     /**
-     * @var ParserManager
+     * @var ParserManager To figure out what parser is responsible for parsing a
+     *      message.
      */
     protected $parserManager;
 
     /**
-     * @var PartBuilderFactory
+     * @var PartBuilderFactory To create a PartBuilder representing this
+     *      message, and to pass it to ParserManager.
      */
     protected $partBuilderFactory;
 
     /**
-     * @var HeaderParser
+     * @var HeaderParser To parse the headers into a PartHeaderContainer.
      */
     protected $headerParser;
 
@@ -72,7 +74,7 @@ class MessageParser
     }
     
     /**
-     * Parses the passed stream into a {@see ZBateson\MailMimeParser\IMessage}
+     * Parses the passed stream into an {@see ZBateson\MailMimeParser\IMessage}
      * object and returns it.
      * 
      * @param StreamInterface $stream the stream to parse the message from

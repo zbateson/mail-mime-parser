@@ -14,11 +14,11 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Responsible for creating proxied IUUEncodedPart instances wrapped in a
- * ParserPartProxy.
+ * ParserUUEncodedPartProxy and used by NonMimeParser.
  *
  * @author Zaahid Bateson
  */
-class ParserUUEncodedPartFactory extends ParserPartProxyFactory
+class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
 {
     /**
      * @var StreamFactory the StreamFactory instance
@@ -39,7 +39,7 @@ class ParserUUEncodedPartFactory extends ParserPartProxyFactory
     }
 
     /**
-     * Constructs a new ParserPartProxy wrapping an IUUEncoded object.
+     * Constructs a new ParserUUEncodedPartProxy wrapping an IUUEncoded object.
      * 
      * @param PartBuilder $partBuilder
      * @return ParserPartProxy

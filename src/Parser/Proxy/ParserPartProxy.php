@@ -24,7 +24,7 @@ abstract class ParserPartProxy extends PartBuilder
     /**
      * @var IMessagePart The part.
      */
-    protected $part;
+    private $part;
 
     /**
      * @var IParser The parser.
@@ -65,12 +65,12 @@ abstract class ParserPartProxy extends PartBuilder
     }
 
     /**
-     * Parses this part's content (if not already parsed).
+     * Requests the parser to parse this part's content, and call
+     * setStreamContentStartPos/EndPos to setup this part's boundaries within
+     * the main message's raw stream.
      *
-     * If the part has a parent, parseContent() will use
-     * $this->parent->childParser, which is the matching type of parser for the
-     * given part.  Otherwise, if it's the top-level part (Message), then
-     * $this->childParser is used.
+     * The method first checks to see if the content has already been parsed,
+     * and is safe to call multiple times.
      */
     public function parseContent()
     {
@@ -80,8 +80,11 @@ abstract class ParserPartProxy extends PartBuilder
     }
 
     /**
-     * Parses the associated part's content and children.
-     */
+     * Parses everything under this part.
+     *
+     * For ParserPartProxy, this is just content, but sub-classes may override
+     * this to parse all children as well for example.
+.     */
     public function parseAll()
     {
         $this->parseContent();

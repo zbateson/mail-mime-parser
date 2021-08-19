@@ -10,17 +10,17 @@ use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
- * Responsible for creating proxied IUUEncodedPart instances wrapped in a
- * ParserPartProxy.
+ * Base class for factories creating ParserPartProxy classes.
  *
  * @author Zaahid Bateson
  */
 abstract class ParserPartProxyFactory
 {
     /**
-     * Constructs a new ParserPartProxy wrapping an IUUEncoded object.
+     * Constructs a new ParserPartProxy wrapping an IMessagePart object.
      * 
      * @param PartBuilder $partBuilder
+     * @param IParser $parser
      * @return ParserPartProxy
      */
     abstract public function newInstance(PartBuilder $partBuilder, IParser $parser);
