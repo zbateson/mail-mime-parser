@@ -48,11 +48,10 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
     {
         $parserProxy = new ParserUUEncodedPartProxy($partBuilder, $parser);
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
-        $headerContainer = $partBuilder->getHeaderContainer();
 
         $part = new UUEncodedPart(
-            $headerContainer->getUnixFileMode(),
-            $headerContainer->getFileName(),
+            $parserProxy->getUnixFileMode(),
+            $parserProxy->getFileName(),
             $partBuilder->getParent()->getPart(),
             $streamContainer
         );

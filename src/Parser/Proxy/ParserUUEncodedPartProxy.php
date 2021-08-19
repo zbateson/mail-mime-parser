@@ -6,8 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer;
-
 /**
  * A bi-directional parser-to-part proxy for NonMimeParser and IUUEncodedParts.
  *
@@ -15,12 +13,6 @@ use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer;
  */
 class ParserUUEncodedPartProxy extends ParserPartProxy
 {
-    /**
-     * @var UUEncodedPartHeaderContainer Referencing properties in the 'begin'
-     *      line of a uu-encoded part.
-     */
-    protected $headerContainer;
-
     /**
      * Returns the next part's start position within the message's raw stream,
      * or null if not set, not discovered, or there are no more parts under this
@@ -117,7 +109,7 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      */
     public function getUnixFileMode()
     {
-        return $this->headerContainer->getUnixFileMode();
+        return $this->getHeaderContainer()->getUnixFileMode();
     }
 
     /**
@@ -128,6 +120,6 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      */
     public function getFilename()
     {
-        return $this->headerContainer->getFilename();
+        return $this->getHeaderContainer()->getFilename();
     }
 }
