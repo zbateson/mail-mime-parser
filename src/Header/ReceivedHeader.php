@@ -10,6 +10,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
+use DateTime;
 
 /**
  * Represents a Received header.

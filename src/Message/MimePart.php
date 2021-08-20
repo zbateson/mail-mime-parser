@@ -166,11 +166,11 @@ class MimePart extends MultiPart implements IMimePart
      */
     public function getContentDisposition($default = 'inline')
     {
-        $value = strtolower($this->getHeaderValue(HeaderConsts::CONTENT_DISPOSITION));
+        $value = $this->getHeaderValue(HeaderConsts::CONTENT_DISPOSITION);
         if ($value === null || !in_array($value, [ 'inline', 'attachment' ])) {
             return $default;
         }
-        return $value;
+        return strtolower($value);
     }
 
     /**

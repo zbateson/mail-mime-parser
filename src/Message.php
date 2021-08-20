@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use GuzzleHttp\Psr7;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\MimePart;
@@ -15,6 +14,8 @@ use ZBateson\MailMimeParser\Message\PartFilter;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
+use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Psr7;
 
 /**
  * An email message.
@@ -51,6 +52,7 @@ class Message extends MimePart implements IMessage
             $partChildrenContainer
         );
         if ($multipartHelper === null || $privacyHelper === null) {
+            $di = MailMimeParser::getDependencyContainer();
             $multipartHelper = $di['ZBateson\MailMimeParser\Message\Helper\MultipartHelper'];
             $privacyHelper = $di['ZBateson\MailMimeParser\Message\Helper\PrivacyHelper'];
         }

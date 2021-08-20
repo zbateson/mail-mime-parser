@@ -53,7 +53,7 @@ class Container extends PimpleContainer
      */
     public function autoRegister($class)
     {
-        $fn = function($c) use ($class) {
+        $fn = function ($c) use ($class) {
             $ref = new ReflectionClass($class);
             $cargs = ($ref->getConstructor() !== null) ? $ref->getConstructor()->getParameters() : [];
             $ap = [];

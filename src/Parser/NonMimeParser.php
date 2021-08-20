@@ -11,6 +11,7 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory;
 
 /**

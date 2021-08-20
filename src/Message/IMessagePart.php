@@ -48,7 +48,7 @@ interface IMessagePart extends SplSubject
     /**
      * Returns the mime type of the content, or $default if one is not set.
      *
-     * @param $default Optional override for the default return value of
+     * @param string $default Optional override for the default return value of
      *        'text/plain.
      * @return string the mime type
      */
@@ -230,7 +230,7 @@ interface IMessagePart extends SplSubject
      *      binary stream.
      * @see IMessagePart::getBinaryContentResourceHandle() to get the content as
      *      a resource handle.
-     * @param string|resource|Stream $filenameResourceOrStream
+     * @param string|resource|StreamInterface $filenameResourceOrStream
      */
     public function saveContent($filenameResourceOrStream);
 

@@ -35,7 +35,7 @@ class GenericHelper extends AbstractHelper
     private function isMimeContentField(IHeader $header, array $exceptions = [])
     {
         return (stripos($header->getName(), 'Content') === 0
-            && !in_array(strtolower(str_replace('-', '', $header->getName())), array_merge(static::$nonMimeContentFields, $exceptions)));
+            && !in_array(strtolower(str_replace('-', '', $header->getName())), array_merge(self::$nonMimeContentFields, $exceptions)));
     }
 
     /**
@@ -114,7 +114,7 @@ class GenericHelper extends AbstractHelper
      * mime message).
      *
      * @param IMimePart $part
-     * @return MimePart the newly-created MimePart
+     * @return IMimePart the newly-created IMimePart
     */
     public function createNewContentPartFrom(IMimePart $part)
     {

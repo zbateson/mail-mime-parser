@@ -7,6 +7,7 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 
 /**
  * A bi-directional parser-to-part proxy for MimeParser and IMimeParts.

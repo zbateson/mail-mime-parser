@@ -94,7 +94,7 @@ class PartFilterTest extends TestCase
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'attoochment', 'attachment', 'blah');
         $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));
-        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));
         $this->assertFalse($callback($part));
     }

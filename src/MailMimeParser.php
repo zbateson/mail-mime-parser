@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\MessageParser;
+use ZBateson\MailMimeParser\Parser\MessageParser;
 use GuzzleHttp\Psr7\CachingStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
@@ -112,7 +112,7 @@ class MailMimeParser
             static::configureDependencyContainer();
         }
         $di = static::$di;
-        $this->parser = $di['ZBateson\MailMimeParser\Parser\MessageParser'];
+        $this->messageParser = $di['ZBateson\MailMimeParser\Parser\MessageParser'];
     }
 
     /**
@@ -142,6 +142,6 @@ class MailMimeParser
         if (!$stream->isSeekable()) {
             $stream = new CachingStream($stream);
         }
-        return $this->parser->parse($stream);
+        return $this->messageParser->parse($stream);
     }
 }

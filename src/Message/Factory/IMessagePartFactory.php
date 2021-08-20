@@ -38,5 +38,5 @@ abstract class IMessagePartFactory
      * 
      * @return \ZBateson\MailMimeParser\Message\IMessagePart
      */
-    public abstract function newInstance();
+    abstract public function newInstance();
 }

@@ -31,7 +31,7 @@ class HeaderStream implements StreamInterface, SplObserver
     use StreamDecoratorTrait;
 
     /**
-     * @var MessagePart the part to read from.
+     * @var IMessagePart the part to read from.
      */
     protected $part;
 

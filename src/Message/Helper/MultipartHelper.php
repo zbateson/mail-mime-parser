@@ -203,7 +203,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function moveAllNonMultiPartsToMessageExcept(IMessage $message, IMimePart $from, $exceptMimeType)
     {
-        $parts = $from->getAllParts(function(IMessagePart $part) use ($exceptMimeType) {
+        $parts = $from->getAllParts(function (IMessagePart $part) use ($exceptMimeType) {
             if ($part instanceof IMimePart && $part->isMultiPart()) {
                 return false;
             }
@@ -266,8 +266,7 @@ class MultipartHelper extends AbstractHelper
      *
      * @param IMessage $message
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\MimeType or null if not
-     *         found
+     * @return IMimePart or null if not found
      */
     public function findOtherContentPartFor(IMessage $message, $mimeType)
     {

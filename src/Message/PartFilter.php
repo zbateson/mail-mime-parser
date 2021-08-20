@@ -31,8 +31,9 @@ abstract class PartFilter
     public static function fromAttachmentFilter()
     {
         return function (IMessagePart $part) {
-            $type = strtolower($part->getContentType());
-            if (in_array($type, [ 'text/plain', 'text/html' ]) && strcasecmp($part->getContentDisposition(), 'inline') === 0) {
+            $type = $part->getContentType();
+            $disp = $part->getContentDisposition();
+            if (in_array($type, [ 'text/plain', 'text/html' ]) && $disp !== null && strcasecmp($disp, 'inline') === 0) {
                 return false;
             }
             return !(($part instanceof IMimePart)
@@ -55,12 +56,12 @@ abstract class PartFilter
      */
     public static function fromHeaderValue($name, $value, $excludeSignedParts = true)
     {
-        return function(IMessagePart $part) use ($name, $value, $excludeSignedParts) {
+        return function (IMessagePart $part) use ($name, $value, $excludeSignedParts) {
             if ($part instanceof IMimePart) {
                 if ($excludeSignedParts && $part->isSignaturePart()) {
                     return false;
                 }
-                return strcasecmp($part->getHeaderValue($name), $value) === 0;
+                return (strcasecmp($part->getHeaderValue($name, ''), $value) === 0);
             }
             return false;
         };
@@ -75,7 +76,7 @@ abstract class PartFilter
      */
     public static function fromContentType($mimeType)
     {
-        return function(IMessagePart $part) use ($mimeType) {
+        return function (IMessagePart $part) use ($mimeType) {
             return strcasecmp($part->getContentType(), $mimeType) === 0;
         };
     }
@@ -89,9 +90,10 @@ abstract class PartFilter
      */
     public static function fromInlineContentType($mimeType)
     {
-        return function(IMessagePart $part) use ($mimeType) {
-            return strcasecmp($part->getContentType(), $mimeType) === 0
-                && strcasecmp($part->getContentDisposition(), 'attachment') !== 0;
+        return function (IMessagePart $part) use ($mimeType) {
+            $disp = $part->getContentDisposition();
+            return (strcasecmp($part->getContentType(), $mimeType) === 0) && ($disp === null
+                || strcasecmp($disp, 'attachment') !== 0);
         };
     }
 
@@ -109,11 +111,12 @@ abstract class PartFilter
      */
     public static function fromDisposition($disposition, $includeMultipart = false, $includeSignedParts = false)
     {
-        return function(IMessagePart $part) use ($disposition, $includeMultipart, $includeSignedParts) {
+        return function (IMessagePart $part) use ($disposition, $includeMultipart, $includeSignedParts) {
             if (($part instanceof IMimePart) && ((!$includeMultipart && $part->isMultiPart()) || (!$includeSignedParts && $part->isSignaturePart()))) {
                 return false;
             }
-            return strcasecmp($part->getContentDisposition(), $disposition) === 0;
+            $disp = $part->getContentDisposition();
+            return ($disp !== null && strcasecmp($disp, $disposition) === 0);
         };
     }
 }

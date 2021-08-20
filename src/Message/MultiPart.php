@@ -130,7 +130,8 @@ abstract class MultiPart extends MessagePart implements IMultiPart
     {
         $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
         return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
-            return strcasecmp($part->getContentId(), $sanitized) === 0;
+            $cid = $part->getContentId();
+            return ($cid !== null && strcasecmp($cid, $sanitized) === 0);
         });
     }
 

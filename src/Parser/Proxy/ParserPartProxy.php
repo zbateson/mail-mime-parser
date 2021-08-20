@@ -100,7 +100,7 @@ abstract class ParserPartProxy extends PartBuilder
         return $this->partBuilder->getHeaderContainer();
     }
 
-     public function getStream()
+    public function getStream()
     {
         return $this->partBuilder->getStream();
     }
