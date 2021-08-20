@@ -34,7 +34,7 @@ class UUEncodedPartHeaderContainerFactory
     /**
      * Creates and returns a UUEncodedPartHeaderContainer.
      *
-     * @return UUEncodedPartHeaderContainer;
+     * @return UUEncodedPartHeaderContainer
      */
     public function newInstance($mode, $filename)
     {

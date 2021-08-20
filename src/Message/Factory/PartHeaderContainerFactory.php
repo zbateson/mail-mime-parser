@@ -34,7 +34,7 @@ class PartHeaderContainerFactory
     /**
      * Creates and returns a PartHeaderContainer.
      *
-     * @return PartHeaderContainer;
+     * @return PartHeaderContainer
      */
     public function newInstance(PartHeaderContainer $from = null)
     {
