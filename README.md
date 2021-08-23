@@ -14,7 +14,7 @@ The goals of this project are to be:
 * Standards-compliant but forgiving
 * Tested where possible
 
-To include it for use in your project, install via composer:
+To include it for use in your project, install it via composer:
 
 ```
 composer require zbateson/mail-mime-parser
