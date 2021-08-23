@@ -22,7 +22,7 @@ composer require zbateson/mail-mime-parser
 
 ## Sponsors
 
-[![SecuMailer](sponsors/logo-secumailer.png)](https://secumailer.com)
+[![SecuMailer](https://mail-mime-parser.org/sponsors/logo-secumailer.png)](https://secumailer.com)
 
 A huge thank you to [all my sponsors](https://github.com/sponsors/zbateson). <3
 
