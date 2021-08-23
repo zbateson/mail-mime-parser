@@ -16,6 +16,8 @@ Lastly, the `\ZBateson\MailMimeParser\Message\Part` namespace no longer exists, 
 - `ZBateson\MailMimeParser\Message\Part\NonMimePart` -> `ZBateson\MailMimeParser\Message\NonMimePart`
 - `ZBateson\MailMimeParser\Message\Part\UUEncodedPart` -> `ZBateson\MailMimeParser\Message\UUEncodedPart`
 
+For a list of changes, [visit the 2.0 release page on github](https://github.com/zbateson/mail-mime-parser/releases/tag/2.0.0).
+
 ### Message::from() / MailMimeParser::parse()
 
 An additional parameter needs to be passed to ``` Message::from() ``` and ``` MailMimeParser::parse() ``` specifying whether the passed resource should be 'attached' and closed when the returned IMessage object is destroyed, or kept open and closed manually after the message is parsed and the returned IMessage destroyed.
