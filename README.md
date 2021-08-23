@@ -14,7 +14,7 @@ The goals of this project are to be:
 * Standards-compliant but forgiving
 * Tested where possible
 
-To include it for use in your project, please install via composer:
+To include it for use in your project, install via composer:
 
 ```
 composer require zbateson/mail-mime-parser
@@ -22,22 +22,26 @@ composer require zbateson/mail-mime-parser
 
 ## Sponsors
 
-A huge thank you to my first sponsor. <3
+[![SecuMailer](sponsors/logo-secumailer.png)](https://secumailer.com)
 
-[![SecuMailer](https://mail-mime-parser.org/sponsors/logo-secumailer.png)](https://secumailer.com)
+A huge thank you to [all my sponsors](https://github.com/sponsors/zbateson). <3
+
+If this project's helped you, please consider [sponsoring me](https://github.com/sponsors/zbateson).
 
 ## Removal Notice (since 2.0.0)
 
-getContentResourceHandle, getTextResourceHandle, and getHtmlResourceHandle have all been deprecated in 1.2.1 and removed in 2.0.0. fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead. Note that getBinaryContentResourceHandle and getResourceHandle are still available.
+`getContentResourceHandle`, `getTextResourceHandle`, and `getHtmlResourceHandle` have all been deprecated in 1.2.1 and removed in 2.0.0. fread() will only return a single byte of a multibyte char, and so will cause potentially unexpected results/warnings in some cases, and psr7 streams should be used instead. Note that `getBinaryContentResourceHandle` and `getResourceHandle` are still available.
 
 ## Change in 2.0
 
-Starting in 2.0, the passed resource handle or stream must remain open while the returned message object is still in use.
+Upgrade to 2.0 to take advantage of the new on-demand parser which parses parts of a message as they're requested.  This means reading only the headers from a larger message is as fast as a smaller message because the whole message is no longer parsed (similarly reading just the content and not a message's large attachments is also much faster.)
+
+Because of the on-demand parsing, starting in 2.0, the passed resource handle or stream must remain open while the returned message object is still in use.
 
 Old code:
 ```php
 $handle = fopen('file.mime', 'r');
-$message = $mailParser->parse($handle);         // returns `Message`
+$message = $mailParser->parse($handle);         // returns `IMessage`
 fclose($handle);
 ```
 
@@ -122,8 +126,8 @@ fclose($handle);
 
 ## Upgrading to 1.x or 2.x
 
-* [Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
-* [Upgrade Guide](https://mail-mime-parser.org/upgrade-2.0)
+* [1.x Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
+* [2.x Upgrade Guide](https://mail-mime-parser.org/upgrade-2.0)
 
 ## License
 
