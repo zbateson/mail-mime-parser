@@ -207,10 +207,10 @@ $charset = $parameterHeader->getValueFor('charset', 'us-ascii');
 
 ### Message parts (text, html and other attachments)
 
-Essentially, the [\ZBateson\MailMimeParser\IMessage](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html) object returned is itself a sub-class of [\ZBateson\MailMimeParser\Message\Part\IMimePart](api/2.0/classes/ZBateson-MailMimeParser-Message.IMimePart.html).  An IMessage can contain IMimePart children (which in turn could contain their own children).
+Essentially, the [\ZBateson\MailMimeParser\IMessage](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html) object returned is itself a sub-class of [\ZBateson\MailMimeParser\Message\Part\IMimePart](api/2.0/classes/ZBateson-MailMimeParser-Message-IMimePart.html).  An IMessage can contain IMimePart children (which in turn could contain their own children).
 
 Internally, IMessage maintains the structure of its parsed parts.  Most users will only be interested in text parts (plain or html) and attachments.  The following methods help you do just that:
-* [IMessage::getTextStream()](api/2.0/classes/ZBateson-MailMimeParser-IMessMailMimeParserage.html#method_getTextStream)
+* [IMessage::getTextStream()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextStream)
 * [IMessage::getTextContent()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextContent)
 * [IMessage::getHtmlStream()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlStream)
 * [IMessage::getHtmlContent()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlContent)
@@ -218,11 +218,11 @@ Internally, IMessage maintains the structure of its parsed parts.  Most users wi
 * [IMessage::getAllAttachmentParts()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getAllAttachmentParts)
 
 `IMessagePart` (the base class of all parts of a message) defines useful stream and content functions, e.g.:
-* [IMessagePart::getContentStream()](api/2.0/classes/ZBateson-MailMimeParser-Message.IMessagePart.html#method_getContentStream)
-* [IMessagePart::getContentType()](api/2.0/classes/ZBateson-MailMimeParser-Message.IMessagePart.html#method_getContentType)
-* [IMessagePart::getFilename()](api/2.0/classes/ZBateson-MailMimeParser-Message.IMessagePart.html#method_getFilename)
-* [IMessagePart::getCharset()](api/2.0/classes/ZBateson-MailMimeParser-Message.IMessagePart.html#method_getCharset)
-* [IMessagePart::saveContent()](api/2.0/classes/ZBateson-MailMimeParser-Message.IMessagePart.html#method_saveContent)
+* [IMessagePart::getContentStream()](api/2.0/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentStream)
+* [IMessagePart::getContentType()](api/2.0/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentType)
+* [IMessagePart::getFilename()](api/2.0/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getFilename)
+* [IMessagePart::getCharset()](api/2.0/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getCharset)
+* [IMessagePart::saveContent()](api/2.0/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_saveContent)
 
 Example:
 ```php
