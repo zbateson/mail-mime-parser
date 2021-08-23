@@ -13,6 +13,7 @@ Lastly, the `\ZBateson\MailMimeParser\Message\Part` namespace no longer exists, 
 - `ZBateson\MailMimeParser\Message\Part\MessagePart` -> `ZBateson\MailMimeParser\Message\MessagePart`
 - `ZBateson\MailMimeParser\Message\Part\MimePart` -> `ZBateson\MailMimeParser\Message\MimePart`
 - `ZBateson\MailMimeParser\Message\Part\ParentHeaderPart` -> `ZBateson\MailMimeParser\Message\MultiPart`
+- `ZBateson\MailMimeParser\Message\Part\ParentPart` -> deleted
 - `ZBateson\MailMimeParser\Message\Part\NonMimePart` -> `ZBateson\MailMimeParser\Message\NonMimePart`
 - `ZBateson\MailMimeParser\Message\Part\UUEncodedPart` -> `ZBateson\MailMimeParser\Message\UUEncodedPart`
 
