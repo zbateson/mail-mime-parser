@@ -1,4 +1,4 @@
-[About](#) - [Sponsors](/#sponsors) - [Basics](#basics-introduction) - [Usage Guide](#usage-guide) - [API Documentation](api/2.0) -
+[About](#) - [Sponsors](/#sponsors) - [Basics](#basicsintroduction) - [Usage Guide](#usage-guide) - [API Documentation](api/2.0) -
 [Upgrading to 2.0](upgrade-2.0) - [Contributors](#contributors)
 
 # zbateson/mail-mime-parser

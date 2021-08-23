@@ -2,11 +2,19 @@
 
 # Upgrading to 2.0
 
-Most of the changes in 2.0 are internal and shouldn't affect most users.  The main change is with how the parser works -- parsing on-demand as parts of a message are requested rather than parsing the whole message at once.
+Most of the changes in 2.0 are internal and shouldn't affect users.  The main change is with how the parser works -- parsing on-demand as parts of a message are requested rather than parsing the whole message at once.
 
 Most users will only need to change how the parser is called.  Whereas previously the stream would be read from and parsed immediately, now a reference to the resource is kept with the message so the on-demand parser can work.
 
-Other changes include the return types for message parts (now using interfaces), header functions now return IHeader, part filtering now uses a callback, PartFilter provides some static functions that return filtering callbacks, and ParentPart and ParentHeaderPart have been removed (change in hierarchical structure.) 
+Other changes include the return types for message parts (now using interfaces), header functions now return IHeader, part filtering now uses a callback, PartFilter provides some static functions that return filtering callbacks, and ParentPart and ParentHeaderPart have been removed (change in hierarchical structure.)
+
+Lastly, the `\ZBateson\MailMimeParser\Message\Part` namespace no longer exists, and classes under it have been moved up a level:
+
+- `ZBateson\MailMimeParser\Message\Part\MessagePart` -> `ZBateson\MailMimeParser\Message\MessagePart`
+- `ZBateson\MailMimeParser\Message\Part\MimePart` -> `ZBateson\MailMimeParser\Message\MimePart`
+- `ZBateson\MailMimeParser\Message\Part\ParentHeaderPart` -> `ZBateson\MailMimeParser\Message\MultiPart`
+- `ZBateson\MailMimeParser\Message\Part\NonMimePart` -> `ZBateson\MailMimeParser\Message\NonMimePart`
+- `ZBateson\MailMimeParser\Message\Part\UUEncodedPart` -> `ZBateson\MailMimeParser\Message\UUEncodedPart`
 
 ### Message::from() / MailMimeParser::parse()
 
@@ -31,7 +39,7 @@ will have no effect.
 
 ### IMessage, IMimePart, IMultiPart, IUUEncodedPart, IMessagePart
 
-These interfaces are used as return types instead of Message, MimePart, ParentHeaderPart, UUEncodedPart, and MessagePart.  Although those classes, with the exception of ParentHeaderPart (now MultiPart), still exist and are still the classes returned, the interfaces are preferred because modules extending the parser's functionality may return different types.
+These interfaces are used as return types instead of Message, MimePart, ParentHeaderPart, UUEncodedPart, and MessagePart.  Although those classes, with the exception of ParentHeaderPart (now MultiPart), still exist and are still the classes returned, they have been moved to a higher-level namespace (ZBateson\MailMimeParser\Message instead of ZBateson\MailMimeParser\Message\Part), and the interfaces are preferred because modules extending the parser's functionality may return different types.
 
 ### IHeader
 
