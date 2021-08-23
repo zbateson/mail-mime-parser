@@ -58,7 +58,7 @@ manipulation routines.
 ```php
 use ZBateson\MailMimeParser\Message;
 
-$message = Message::parse($handleOrStreamOrString);
+$message = Message::parse($handleOrStreamOrString, true);
 $subject = $message->getHeaderValue('Subject');
 $text = $message->getTextContent();
 $html = $message->getHtmlContent();
@@ -145,11 +145,11 @@ use ZBateson\MailMimeParser\Message;
 $parser = new MailMimeParser();
 
 // parse() returns an IMessage
-$message = $parser->parse($resource);
+$message = $parser->parse($resource, true);
 
 // alternatively:
 // $string = 'an email message to load';
-$message = Message::from($string);
+$message = Message::from($string, false);
 ```
 
 ### Message headers
@@ -169,7 +169,7 @@ and sub-classes, depending on the type of header being parsed.  In general terms
 To retrieve an IHeader object, call `IMessage::getHeader()` from a [ZBateson\MailMimeParser\IMessage](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html) object.
 
 ```php
-// $message = $parser->parse($resource);
+// $message = $parser->parse($resource, true);
 // ...
 
 // getHeader('To') returns a ZBateson\MailMimeParser\Header\AddressHeader
@@ -226,7 +226,7 @@ Internally, IMessage maintains the structure of its parsed parts.  Most users wi
 
 Example:
 ```php
-// $message = $parser->parse($resource);
+// $message = $parser->parse($resource, true);
 // ...
 $att = $message->getAttachmentPart(0);
 echo $att->getContentType();
@@ -260,7 +260,7 @@ foreach ($atts as $ind => $part) {
 As a convenient way of reading the text and HTML parts of an `IMessage`, use [IMessage::getTextStream()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextStream) and [IMessage::getHtmlStream()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlStream) or the shortcuts returning strings if you want strings directly [IMessage::getTextContent()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextContent) and [IMessage::getHtmlContent()](api/2.0/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlContent)
 
 ```php
-// $message = $parser->parse($resource);
+// $message = $parser->parse($resource, true);
 // ...
 $txtStream = $message->getTextStream();
 echo $txtStream->getContents();
