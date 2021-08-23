@@ -8,341 +8,154 @@ use LegacyPHPUnit\TestCase;
  *
  * @group PartFilter
  * @group Message
- * @covers ZBateson\MailMimeParser\Message\PartFilter
+ * @covers ZBateson\MailMimeParser\PartFilter
  * @author Zaahid Bateson
  */
 class PartFilterTest extends TestCase
 {
-    private $parts = [];
-
-    protected function getMockedPartWithContentType($mimeType, $disposition = null, $isText = false)
+    public function testAttachmentFilter()
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
-            ->disableOriginalConstructor()
-            ->setMethods([
-                '__destruct',
-                'setRawHeader',
-                'getHeader',
-                'getHeaderValue',
-                'getHeaderParameter',
-                'getContentResourceHandle',
-                'getParent',
-                'getContentType',
-                'getContentDisposition',
-                'isTextPart',
-            ])
-            ->getMock();
-        $part->method('getContentType')->willReturn($mimeType);
-        $part->method('getContentDisposition')->willReturn($disposition);
-        $part->method('isTextPart')->willReturn($isText);
-        return $part;
+        $callback = PartFilter::fromAttachmentFilter();
+
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/plain', 'text/html', 'text/html', 'blah');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'inline', 'attachment', 'blah');
+
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertTrue($callback($part));
+
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'blah');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('attachment', 'attachment', 'blah');
+        $part->method('isMultiPart')->willReturnOnConsecutiveCalls(true, false, false);
+        $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(true, false);
+        $this->assertFalse($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
     }
 
-    protected function getMockedSignedPart()
+    public function testHeaderValueFilterWithMessagePart()
     {
-        $parent = $this->getMockedPartWithContentType('multipart/signed');
-        $parent->method('getHeaderParameter')->willReturn('signed/part');
-        $part = $this->getMockedPartWithContentType('signed/part');
-        $part->method('getParent')->willReturn($parent);
-        return $part;
+        $callback = PartFilter::fromHeaderValue('detective', 'peralta');
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+        $this->assertFalse($callback($part));
     }
 
-    protected function legacySetUp()
+    public function testHeaderValueFilterWithSignaturePart()
     {
-        $signedPart = $this->getMockedSignedPart();
-        $signedPartParent = $signedPart->getParent();
-        $this->parts = [
-            $this->getMockedPartWithContentType('text/html', null, true),
-            $this->getMockedPartWithContentType('multipart/alternative', 'inline'),
-            $this->getMockedPartWithContentType('text/html', 'inline', true),
-            $this->getMockedPartWithContentType('text/plain', 'attachment', true),
-            $this->getMockedPartWithContentType('text/html', 'attachment', true),
-            $this->getMockedPartWithContentType('multipart/relative'),
-            $signedPartParent,
-            $signedPart
-        ];
+        $callback = PartFilter::fromHeaderValue('detective', 'peralta');
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->expects($this->once())->method('isSignaturePart')->willReturn(true);
+        $part->expects($this->never())->method('getHeaderValue');
+        $this->assertFalse($callback($part));
     }
 
-    public function testFromContentType()
+    public function testHeaderValueFilterWithMimePart()
     {
+        $callback = PartFilter::fromHeaderValue('detective', 'peralta');
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(false, false, false, true, false, true);
+        $part->method('getHeaderValue')->with('detective')->willReturnOnConsecutiveCalls(
+            'PERAlta', 'peralta', 'HOLT!',
+            'PERAlta', 'peralta', 'HOLT!'
+        );
+        $this->assertTrue($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
 
-        $filter = PartFilter::fromContentType('text/html');
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $this->assertArrayHasKey(PartFilter::FILTER_INCLUDE, $filter->headers);
-        $this->assertArrayHasKey('Content-Type', $filter->headers[PartFilter::FILTER_INCLUDE]);
-        $this->assertEquals('text/html', $filter->headers[PartFilter::FILTER_INCLUDE]['Content-Type']);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(3, $filtered);
-        $this->assertSame($this->parts[0], $filtered[0]);
-        $this->assertSame($this->parts[2], $filtered[1]);
-        $this->assertSame($this->parts[4], $filtered[2]);
+        $callback = PartFilter::fromHeaderValue('detective', 'peralta', false);
+        $this->assertTrue($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
     }
 
-    public function testFromInlineContentType()
+    public function testContentTypeFilter()
     {
-        $filter = PartFilter::fromInlineContentType('text/html');
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $this->assertArrayHasKey(PartFilter::FILTER_INCLUDE, $filter->headers);
-        $this->assertArrayHasKey(PartFilter::FILTER_EXCLUDE, $filter->headers);
-        $this->assertArrayHasKey('Content-Type', $filter->headers[PartFilter::FILTER_INCLUDE]);
-        $this->assertArrayHasKey('Content-Disposition', $filter->headers[PartFilter::FILTER_EXCLUDE]);
-        $this->assertEquals('text/html', $filter->headers[PartFilter::FILTER_INCLUDE]['Content-Type']);
-        $this->assertEquals('attachment', $filter->headers[PartFilter::FILTER_EXCLUDE]['Content-Disposition']);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(2, $filtered);
-        $this->assertSame($this->parts[0], $filtered[0]);
-        $this->assertSame($this->parts[2], $filtered[1]);
+        $callback = PartFilter::fromContentType('text/plain');
+
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah');
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertFalse($callback($part));
     }
 
-    public function testFromNonExistentContentType()
+    public function testInlineContentTypeFilter()
     {
+        $callback = PartFilter::fromInlineContentType('text/plain');
 
-        $filter = PartFilter::fromContentType('doesnot/exist');
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $this->assertArrayHasKey(PartFilter::FILTER_INCLUDE, $filter->headers);
-        $this->assertArrayHasKey('Content-Type', $filter->headers[PartFilter::FILTER_INCLUDE]);
-        $this->assertEquals('doesnot/exist', $filter->headers[PartFilter::FILTER_INCLUDE]['Content-Type']);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertEmpty($filtered);
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'attoochment', 'attachment', 'blah');
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertFalse($callback($part));
     }
 
-    public function testFromDispositionAttachment()
+    public function testDispositionFilter()
     {
-        $filter = PartFilter::fromDisposition('attachment');
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(2, $filtered);
-        $this->assertSame($this->parts[3], $filtered[0]);
-        $this->assertSame($this->parts[4], $filtered[1]);
+        $callback = PartFilter::fromDisposition('needy');
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMessagePart');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'noodly', 'NEEDY', 'attachment', 'needy');
+        $this->assertFalse($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
     }
 
-    public function testFromDispositionInline()
+    public function testDispositionFilterNoMultiOrSignedParts()
     {
-        $filter = PartFilter::fromDisposition('inline');
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(2, $filtered);
-        $this->assertSame($this->parts[1], $filtered[0]);
-        $this->assertSame($this->parts[2], $filtered[1]);
+        $callback = PartFilter::fromDisposition('needy');
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('needy', 'needy', 'needy');
+        $part->method('isMultiPart')->willReturnOnConsecutiveCalls(true, false, false);
+        $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(true, false);
+        $this->assertFalse($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
     }
 
-    public function testFromDispositionInlineExcludeMultiPart()
+    public function testDispositionFilterWithMultiParts()
     {
-        $filter = PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(1, $filtered);
-        $this->assertSame($this->parts[2], $filtered[0]);
+        $callback = PartFilter::fromDisposition('greedy', true);
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('greedy', 'greedy', 'greedy');
+        $part->expects($this->never())->method('isMultiPart');
+        $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(false, true, false);
+        $this->assertTrue($callback($part));
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
     }
 
-    public function testFromDispositionInlineIncludeMultiPart()
+    public function testDispositionFilterWithSignatureParts()
     {
-        $filter = PartFilter::fromDisposition('inline', PartFilter::FILTER_INCLUDE);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(1, $filtered);
-        $this->assertSame($this->parts[1], $filtered[0]);
+        $callback = PartFilter::fromDisposition('seedy', false, true);
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('seedy', 'seedy', 'seedy');
+        $part->method('isMultiPart')->willReturnOnConsecutiveCalls(true, false, false);
+        $part->expects($this->never())->method('isSignaturePart');
+        $this->assertFalse($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertTrue($callback($part));
     }
 
-    public function testForNonExistentDisposition()
+    public function testDispositionFilterWithMultiAndSignatureParts()
     {
-        $filter = PartFilter::fromDisposition('unreal');
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertEmpty($filtered);
-    }
-
-    public function testMultiPartFilterInclude()
-    {
-        $filter = new PartFilter([
-            'multipart' => PartFilter::FILTER_INCLUDE,
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(3, $filtered);
-        $this->assertSame($this->parts[1], $filtered[0]);
-        $this->assertSame($this->parts[5], $filtered[1]);
-        $this->assertSame($this->parts[6], $filtered[2]);
-    }
-
-    public function testMultiPartFilterExcludeWithHeaderExcludeFilter()
-    {
-        $filter = new PartFilter([
-            'multipart' => PartFilter::FILTER_EXCLUDE,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Type' => 'text/html'
-                ]
-            ]
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(1, $filtered);
-        $this->assertSame($this->parts[3], $filtered[0]);
-    }
-
-    public function testMultiPartFilterIncludeWithHeaderExcludeFilter()
-    {
-        $filter = new PartFilter([
-            'multipart' => PartFilter::FILTER_INCLUDE,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Type' => 'multipart/alternative'
-                ]
-            ]
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(2, $filtered);
-        $this->assertSame($this->parts[5], $filtered[0]);
-        $this->assertSame($this->parts[6], $filtered[1]);
-    }
-
-    public function testTextPartFilterInclude()
-    {
-        $filter = new PartFilter([
-            'textpart' => PartFilter::FILTER_INCLUDE,
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(4, $filtered);
-        $this->assertSame($this->parts[0], $filtered[0]);
-        $this->assertSame($this->parts[2], $filtered[1]);
-        $this->assertSame($this->parts[3], $filtered[2]);
-        $this->assertSame($this->parts[4], $filtered[3]);
-    }
-
-    public function testTextPartFilterExcludeWithHeaderExcludeFilter()
-    {
-        $filter = new PartFilter([
-            'textpart' => PartFilter::FILTER_EXCLUDE,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Type' => 'multipart/relative'
-                ]
-            ]
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(2, $filtered);
-        $this->assertSame($this->parts[1], $filtered[0]);
-        $this->assertSame($this->parts[6], $filtered[1]);
-    }
-
-    public function testTextPartFilterIncludeWithHeaderExcludeFilter()
-    {
-        $filter = new PartFilter([
-            'textpart' => PartFilter::FILTER_INCLUDE,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Type' => 'text/html'
-                ]
-            ]
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_EXCLUDE, $filter->signedpart);
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(1, $filtered);
-        $this->assertSame($this->parts[3], $filtered[0]);
-    }
-
-    public function testSignedPartFilterInclude()
-    {
-        $filter = new PartFilter([
-            'signedpart' => PartFilter::FILTER_INCLUDE,
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_INCLUDE, $filter->signedpart);
-
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(1, $filtered);
-        $this->assertSame($this->parts[7], $filtered[0]);
-    }
-
-    public function testSignedPartFilterOffWithDispositionExclude()
-    {
-        $filter = new PartFilter([
-            'signedpart' => PartFilter::FILTER_OFF,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Disposition' => 'inline',
-                ]
-            ]
-        ]);
-        $this->assertNotNull($filter);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Message\PartFilter', $filter);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->multipart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->textpart);
-        $this->assertEquals(PartFilter::FILTER_OFF, $filter->signedpart);
-
-        $filtered = array_values(array_filter($this->parts, [ $filter, 'filter' ]));
-        $this->assertCount(6, $filtered);
-        $this->assertSame($this->parts[0], $filtered[0]);
-        $this->assertSame($this->parts[3], $filtered[1]);
-        $this->assertSame($this->parts[4], $filtered[2]);
-        $this->assertSame($this->parts[5], $filtered[3]);
-        $this->assertSame($this->parts[6], $filtered[4]);
-        $this->assertSame($this->parts[7], $filtered[5]);
+        $callback = PartFilter::fromDisposition('seedy', true, true);
+        $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('seedy', 'seedy', 'seedy');
+        $part->expects($this->never())->method('isMultiPart');
+        $part->expects($this->never())->method('isSignaturePart');
+        $this->assertTrue($callback($part));
+        $this->assertTrue($callback($part));
+        $this->assertTrue($callback($part));
     }
 }

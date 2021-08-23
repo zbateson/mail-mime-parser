@@ -90,7 +90,7 @@ class AddressBaseConsumer extends AbstractConsumer
      * on to AddressConsumer.
      *
      * @param Iterator $tokens
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
     protected function getTokenParts(Iterator $tokens)
     {

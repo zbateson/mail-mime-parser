@@ -7,8 +7,8 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 /**
- * Represents a quoted part of a header value starting at a single quote, and
- * ending at the next single quote.
+ * Represents a quoted part of a header value starting at a double quote, and
+ * ending at the next double quote.
  * 
  * A quoted-pair part in a header is a literal.  There are no sub-consumers for
  * it and a Part\LiteralPart is returned.
@@ -69,12 +69,12 @@ class QuotedStringConsumer extends GenericConsumer
     }
     
     /**
-     * Constructs a Part\LiteralPart and returns it.
+     * Constructs a LiteralPart and returns it.
      * 
      * @param string $token
      * @param bool $isLiteral not used - everything in a quoted string is a
      *        literal
-     * @return \ZBateson\MailMimeParser\Header\Part\LiteralPart
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
     protected function getPartForToken($token, $isLiteral)
     {

@@ -16,28 +16,33 @@ class StreamFactoryTest extends TestCase
 {
     public function testNewInstance()
     {
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
+        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $partBuilder->expects($this->once())
             ->method('getStreamPartLength')
             ->willReturn(0);
         $partBuilder->expects($this->once())
-            ->method('getStreamPartStartOffset')
+            ->method('getStreamPartStartPos')
             ->willReturn(10);
 
         $partBuilder->expects($this->exactly(3))
             ->method('getStreamContentLength')
             ->willReturnOnConsecutiveCalls(2, 2, 0);
         $partBuilder->expects($this->once())
-            ->method('getStreamContentStartOffset')
+            ->method('getStreamPartStartPos')
             ->willReturn(4);
+
+        $partBuilder->expects($this->atLeastOnce())
+            ->method('getStream')
+            ->willReturn(Psr7\Utils::streamFor('test'));
+
 
         $factory = new StreamFactory();
 
-        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedPartStream(Psr7\Utils::streamFor('test'), $partBuilder));
-        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream(Psr7\Utils::streamFor('test'), $partBuilder));
-        $this->assertNull($factory->getLimitedContentStream(Psr7\Utils::streamFor('test'), $partBuilder));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedPartStream($partBuilder));
+        $this->assertInstanceOf('ZBateson\StreamDecorators\SeekingLimitStream', $factory->getLimitedContentStream($partBuilder));
+        $this->assertNull($factory->getLimitedContentStream($partBuilder));
 
         $this->assertInstanceOf('ZBateson\StreamDecorators\NonClosingStream', $factory->newNonClosingStream(Psr7\Utils::streamFor('test')));
         $this->assertInstanceOf('ZBateson\StreamDecorators\ChunkSplitStream', $factory->newChunkSplitStream(Psr7\Utils::streamFor('test')));
@@ -46,7 +51,7 @@ class StreamFactoryTest extends TestCase
         $this->assertInstanceOf('ZBateson\StreamDecorators\UUStream', $factory->newUUStream(Psr7\Utils::streamFor('test')));
         $this->assertInstanceOf('ZBateson\StreamDecorators\CharsetStream', $factory->newCharsetStream(Psr7\Utils::streamFor('test'), 'utf-8', 'utf-16'));
 
-        $mockMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
+        $mockMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
             ->disableOriginalConstructor()
             ->getMock();
         $this->assertInstanceOf('ZBateson\MailMimeParser\Stream\MessagePartStream', $factory->newMessagePartStream($mockMimePart));

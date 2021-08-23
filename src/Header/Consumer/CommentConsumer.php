@@ -13,15 +13,14 @@ use Iterator;
 /**
  * Consumes all tokens within parentheses as comments.
  * 
- * Parenthetical comments in mime-headers can be nested within one
- * another.  The outer-level continues after an inner-comment ends.
- * Additionally, quoted-literals may exist with comments as well meaning
- * a parenthesis inside a quoted string would not begin or end a comment
- * section.
+ * Parenthetical comments in mime-headers can be nested within one another.  The
+ * outer-level continues after an inner-comment ends.  Additionally,
+ * quoted-literals may exist with comments as well meaning a parenthesis inside
+ * a quoted string would not begin or end a comment section.
  * 
- * In order to satisfy these specifications, CommentConsumer inherits
- * from GenericConsumer which defines CommentConsumer and
- * QuotedStringConsumer as sub-consumers.
+ * In order to satisfy these specifications, CommentConsumer inherits from
+ * GenericConsumer which defines CommentConsumer and QuotedStringConsumer as
+ * sub-consumers.
  * 
  * Examples:
  * X-Mime-Header: Some value (comment)
@@ -41,7 +40,7 @@ class CommentConsumer extends GenericConsumer
      */
     protected function getTokenSeparators()
     {
-        return ['\(', '\)'];
+        return [ '\(', '\)' ];
     }
     
     /**
@@ -67,13 +66,14 @@ class CommentConsumer extends GenericConsumer
     }
     
     /**
-     * Instantiates and returns Part\Token objects.  Tokens from this
-     * and sub-consumers are combined into a Part\CommentPart in
-     * combineParts.
+     * Instantiates and returns Part\Token objects.
+     * 
+     * Tokens from this and sub-consumers are combined into a Part\CommentPart
+     * in processParts.
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -100,8 +100,8 @@ class CommentConsumer extends GenericConsumer
      * generated parts from tokens.  The Part\CommentPart is returned in an
      * array.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
     protected function processParts(array $parts)
     {
@@ -116,6 +116,6 @@ class CommentConsumer extends GenericConsumer
                 $comment .= $part->getValue();
             }
         }
-        return [$this->partFactory->newCommentPart($comment)];
+        return [ $this->partFactory->newCommentPart($comment) ];
     }
 }

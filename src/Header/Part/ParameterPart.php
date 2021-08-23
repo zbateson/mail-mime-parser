@@ -53,7 +53,7 @@ class ParameterPart extends MimeLiteralPart
     /**
      * Returns the name of the parameter.
      * 
-     * @return string
+     * @return string The name.
      */
     public function getName()
     {
@@ -64,7 +64,7 @@ class ParameterPart extends MimeLiteralPart
      * Returns the RFC-1766 (or subset) language tag, if the parameter is a
      * split RFC-2231 part with a language tag set.
      * 
-     * @return string
+     * @return string the language
      */
     public function getLanguage()
     {

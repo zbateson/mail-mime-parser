@@ -26,11 +26,14 @@
         <testsuite name="Base">
             <directory suffix="Test.php">MailMimeParser</directory>
         </testsuite>
+        <testsuite name="Header">
+            <directory suffix="Test.php">MailMimeParser/Header</directory>
+        </testsuite>
         <testsuite name="Message">
             <directory suffix="Test.php">MailMimeParser/Message</directory>
         </testsuite>
-        <testsuite name="Header">
-            <directory suffix="Test.php">MailMimeParser/Header</directory>
+        <testsuite name="Parser">
+            <directory suffix="Test.php">MailMimeParser/Parser</directory>
         </testsuite>
         <testsuite name="Stream">
             <directory suffix="Test.php">MailMimeParser/Stream</directory>

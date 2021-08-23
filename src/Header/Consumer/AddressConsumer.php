@@ -6,7 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPart;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 
@@ -35,9 +35,9 @@ class AddressConsumer extends AbstractConsumer
 {
     /**
      * Returns the following as sub-consumers:
-     *  - \ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer
-     *  - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
-     *  - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
+     *  - {@see AddressGroupConsumer}
+     *  - {@see CommentConsumer}
+     *  - {@see QuotedStringConsumer}
      * 
      * @return AbstractConsumer[] the sub-consumers
      */
@@ -59,16 +59,14 @@ class AddressConsumer extends AbstractConsumer
      */
     public function getTokenSeparators()
     {
-        return ['<', '>', ',', ';', '\s+'];
+        return [ '<', '>', ',', ';', '\s+' ];
     }
     
     /**
      * Returns true for commas and semi-colons.
      * 
      * Although the semi-colon is not strictly the end token of an
-     * AddressConsumer, it could end a parent AddressGroupConsumer. I can't
-     * think of a valid scenario where this would be an issue, but additional
-     * thought may be needed (and documented here).
+     * AddressConsumer, it could end a parent AddressGroupConsumer.
      * 
      * @param string $token
      * @return boolean false
@@ -94,11 +92,11 @@ class AddressConsumer extends AbstractConsumer
      * part (less than/greater than characters) and either appends the value of
      * the part to the passed $strValue, or sets up $strName
      * 
-     * @param HeaderPart $part
+     * @param IHeaderPart $part
      * @param string $strName
      * @param string $strValue
      */
-    private function processSinglePart(HeaderPart $part, &$strName, &$strValue)
+    private function processSinglePart(IHeaderPart $part, &$strName, &$strValue)
     {
         $pValue = $part->getValue();
         if ($part instanceof Token) {
@@ -118,14 +116,15 @@ class AddressConsumer extends AbstractConsumer
      * 
      * AddressConsumer's implementation looks for tokens representing the
      * beginning of an address part, to create a Part\AddressPart out of a
-     * name/address pair, or assign the name part to a parsed Part\AddressGroupPart
-     * returned from its AddressGroupConsumer sub-consumer.
+     * name/address pair, or assign the name part to a parsed
+     * Part\AddressGroupPart returned from its AddressGroupConsumer
+     * sub-consumer.
      * 
      * The returned array consists of a single element - either a
      * Part\AddressPart or a Part\AddressGroupPart.
      * 
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
     protected function processParts(array $parts)
     {
@@ -142,6 +141,6 @@ class AddressConsumer extends AbstractConsumer
             }
             $this->processSinglePart($part, $strName, $strValue);
         }
-        return [$this->partFactory->newAddressPart($strName, $strValue)];
+        return [ $this->partFactory->newAddressPart($strName, $strValue) ];
     }
 }

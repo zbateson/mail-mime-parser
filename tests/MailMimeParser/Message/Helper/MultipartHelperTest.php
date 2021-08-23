@@ -16,18 +16,14 @@ class MultipartHelperTest extends TestCase
 {
     private $mockMimePartFactory;
     private $mockUUEncodedPartFactory;
-    private $mockPartBuilderFactory;
     private $mockGenericHelper;
 
     protected function legacySetUp()
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockGenericHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\GenericHelper')
@@ -35,18 +31,19 @@ class MultipartHelperTest extends TestCase
             ->getMock();
     }
 
-    private function newMockMimePart()
+    private function newMockIMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
     }
 
-    private function newMockMessage()
+    private function newMockIUUEncodedPart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IUUEncodedPart');
+    }
+
+    private function newMockIMessage()
+    {
+        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
     }
 
     private function newMultipartHelper()
@@ -54,7 +51,6 @@ class MultipartHelperTest extends TestCase
         return new MultipartHelper(
             $this->mockMimePartFactory,
             $this->mockUUEncodedPartFactory,
-            $this->mockPartBuilderFactory,
             $this->mockGenericHelper
         );
     }
@@ -78,7 +74,7 @@ class MultipartHelperTest extends TestCase
     public function testSetMimeHeaderBoundaryOnPart()
     {
         $helper = $this->newMultipartHelper();
-        $part = $this->newMockMimePart();
+        $part = $this->newMockIMimePart();
 
         $part->expects($this->once())
             ->method('setRawHeader')
@@ -91,10 +87,10 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $atts = [ $this->newMockMimePart(), $this->newMockMimePart() ];
+        $message = $this->newMockIMessage();
+        $atts = [ $this->newMockIMimePart(), $this->newMockIMimePart() ];
 
-        $part = $this->newMockMimePart();
+        $part = $this->newMockIMimePart();
 
         $message->expects($this->once())
             ->method('hasContent')
@@ -112,7 +108,7 @@ class MultipartHelperTest extends TestCase
 
         foreach ($atts as $att) {
             $att->expects($this->once())
-                ->method('markAsChanged');
+                ->method('notify');
         }
 
         $helper->setMessageAsMixed($message);
@@ -122,8 +118,8 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $part = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $part = $this->newMockIMimePart();
 
         $message->expects($this->once())
             ->method('hasContent')
@@ -143,10 +139,10 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $parent = $this->newMockMimePart();
-        $child1 = $this->newMockMimePart();
-        $child2 = $this->newMockMimePart();
-        $child3 = $this->newMockMimePart();
+        $parent = $this->newMockIMimePart();
+        $child1 = $this->newMockIMimePart();
+        $child2 = $this->newMockIMimePart();
+        $child3 = $this->newMockIMimePart();
 
         $child3->method('getParent')->willReturn($child2);
         $child2->method('getParent')->willReturn($child1);
@@ -163,21 +159,13 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $contentPart = $this->newMockMimePart();
-        $newPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $contentPart = $this->newMockIMimePart();
+        $newPart = $this->newMockIMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
             ->willReturn($newPart);
 
         $message->expects($this->once())
@@ -197,10 +185,10 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $from = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $from = $this->newMockIMimePart();
 
-        $atts = [ $this->newMockMimePart(), $this->newMockMimePart() ];
+        $atts = [ $this->newMockIMimePart(), $this->newMockIMimePart() ];
 
         $from->expects($this->once())
             ->method('getAllParts')
@@ -220,15 +208,15 @@ class MultipartHelperTest extends TestCase
             ->method('addChild')
             ->withConsecutive([ $atts[0] ], [ $atts[1] ]);
 
-        $helper->moveAllPartsAsAttachmentsExcept($message, $from, 'test');
+        $helper->moveAllNonMultiPartsToMessageExcept($message, $from, 'test');
     }
 
     public function testEnforceMimeWithAttachments()
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $atts = [ $this->newMockMimePart(), $this->newMockMimePart() ];
+        $message = $this->newMockIMessage();
+        $atts = [ $this->newMockIMimePart(), $this->newMockIMimePart() ];
 
         $message->expects($this->once())
             ->method('isMime')
@@ -243,7 +231,7 @@ class MultipartHelperTest extends TestCase
             ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/') ],
-                [ 'Mime-Version', '1.0' ]
+                [ 'MIME-Version', '1.0' ]
             );
 
         $helper->enforceMime($message);
@@ -253,7 +241,7 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
+        $message = $this->newMockIMessage();
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(false);
@@ -266,7 +254,7 @@ class MultipartHelperTest extends TestCase
             ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', "text/plain;\r\n\tcharset=\"iso-8859-1\"" ],
-                [ 'Mime-Version', '1.0' ]
+                [ 'MIME-Version', '1.0' ]
             );
 
         $helper->enforceMime($message);
@@ -276,27 +264,19 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $parent = $this->newMockMimePart();
-        $related = $this->newMockMimePart();
+        $parent = $this->newMockIMimePart();
+        $related = $this->newMockIMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
             ->willReturn($related);
 
         $related->expects($this->once())
             ->method('setRawHeader')
             ->with('Content-Type', $this->matchesRegularExpression('/^multipart\/related;/'));
 
-        $children = [ $this->newMockMimePart(), $this->newMockMimePart() ];
+        $children = [ $this->newMockIMimePart(), $this->newMockIMimePart() ];
         $parent->expects($this->once())
             ->method('getChildParts')
             ->willReturn($children);
@@ -317,8 +297,8 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $altPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $altPart = $this->newMockIMimePart();
 
         $message->expects($this->once())
             ->method('getPart')
@@ -334,23 +314,15 @@ class MultipartHelperTest extends TestCase
             ->method('getChildCount')
             ->willReturn(2);
 
-        $related = $this->newMockMimePart();
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
+        $related = $this->newMockIMimePart();
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
             ->willReturn($related);
 
         $message->expects($this->once())
             ->method('getChildParts')
-            ->willReturn([ $this->newMockMimePart() ]);
+            ->willReturn([ $this->newMockIMimePart() ]);
 
         $helper->findOtherContentPartFor($message, 'text/html');
     }
@@ -362,27 +334,20 @@ class MultipartHelperTest extends TestCase
         $mimeType = 'test/test';
         $charset = 'test0r';
 
-        $message = $this->newMockMessage();
-        $mimePart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $mimePart = $this->newMockIMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->exactly(2))
-            ->method('addHeader')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($mimePart);
+
+        $mimePart->expects($this->exactly(2))
+            ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"" ],
                 [ 'Content-Transfer-Encoding', 'quoted-printable' ]
             );
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
-            ->willReturn($mimePart);
 
         $message->expects($this->once())
             ->method('isMime')
@@ -409,35 +374,27 @@ class MultipartHelperTest extends TestCase
         $mimeType = 'test/test';
         $charset = 'test0r';
 
-        $message = $this->newMockMessage();
-        $mimePart = $this->newMockMimePart();
-        $altPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $mimePart = $this->newMockIMimePart();
+        $altPart = $this->newMockIMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->exactly(2))
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->exactly(2))
-            ->method('addHeader')
+        $this->mockMimePartFactory
+            ->expects($this->exactly(2))
+            ->method('newInstance')
+            ->willReturnOnConsecutiveCalls($mimePart, $altPart);
+        $mimePart->expects($this->exactly(2))
+            ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"" ],
                 [ 'Content-Transfer-Encoding', 'quoted-printable' ]
             );
-        $partBuilder->expects($this->exactly(2))
-            ->method('createMessagePart')
-            ->willReturnOnConsecutiveCalls($mimePart, $altPart);
-
+        
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
 
         // variation: content is in separate part
-        $contentPart = $this->newMockMimePart();
+        $contentPart = $this->newMockIMimePart();
         $message->expects($this->once())
             ->method('getPart')
             ->willReturn($contentPart);
@@ -459,28 +416,20 @@ class MultipartHelperTest extends TestCase
         $mimeType = 'test/test';
         $charset = 'test0r';
 
-        $message = $this->newMockMessage();
-        $mimePart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $mimePart = $this->newMockIMimePart();
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->exactly(2))
-            ->method('addHeader')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($mimePart);
+        $mimePart->expects($this->exactly(2))
+            ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"" ],
                 [ 'Content-Transfer-Encoding', 'quoted-printable' ]
             );
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
-            ->willReturn($mimePart);
-
+        
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
@@ -500,24 +449,19 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $attPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $attPart = $this->newMockIMimePart();
 
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->exactly(3))
-            ->method('addHeader')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($attPart);
+        $attPart->expects($this->exactly(3))
+            ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Transfer-Encoding', 'base64' ],
                 [ 'Content-Type', $this->matchesRegularExpression('/^test-mime;\s+name="file.+"$/') ],
@@ -530,10 +474,6 @@ class MultipartHelperTest extends TestCase
         $message->expects($this->once())
             ->method('setRawHeader')
             ->with('Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/'));
-
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
-            ->willReturn($attPart);
 
         $resource = 'test';
         $attPart->expects($this->once())
@@ -550,24 +490,19 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $attPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $attPart = $this->newMockIMimePart();
 
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->exactly(3))
-            ->method('addHeader')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($attPart);
+        $attPart->expects($this->exactly(3))
+            ->method('setRawHeader')
             ->withConsecutive(
                 [ 'Content-Transfer-Encoding', 'quoted-printable' ],
                 [ 'Content-Type', $this->matchesRegularExpression('/^test-mime;\s+name="file.+"$/') ],
@@ -580,10 +515,6 @@ class MultipartHelperTest extends TestCase
         $message->expects($this->once())
             ->method('setRawHeader')
             ->with('Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/'));
-
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
-            ->willReturn($attPart);
 
         $resource = 'test';
         $attPart->expects($this->once())
@@ -600,37 +531,28 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $attPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $uuPart = $this->newMockIUUEncodedPart();
 
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(false);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockUUEncodedPartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->once())
-            ->method('setProperty')
-            ->with('filename', 'test-file');
-
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
-            ->willReturn($attPart);
+        $this->mockUUEncodedPartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($uuPart);
+        $uuPart->expects($this->once())
+            ->method('setFilename')
+            ->with('test-file');
 
         $resource = 'test';
-        $attPart->expects($this->once())
+        $uuPart->expects($this->once())
             ->method('setContent')
             ->with($resource);
         $message->expects($this->once())
             ->method('addChild')
-            ->with($attPart);
+            ->with($uuPart);
 
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', 'test-file');
     }
@@ -639,8 +561,8 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $contPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $contPart = $this->newMockIMimePart();
         $contentType = 'text/html';
         $charset = 'test-ee';
 
@@ -665,8 +587,8 @@ class MultipartHelperTest extends TestCase
     {
         $helper = $this->newMultipartHelper();
 
-        $message = $this->newMockMessage();
-        $contPart = $this->newMockMimePart();
+        $message = $this->newMockIMessage();
+        $contPart = $this->newMockIMimePart();
         $contentType = 'test0r';
         $charset = 'test-ee';
 
@@ -674,17 +596,9 @@ class MultipartHelperTest extends TestCase
             ->method('getTextPart')
             ->willReturn(null);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPartBuilderFactory->expects($this->once())
-            ->method('newPartBuilder')
-            ->with($this->mockMimePartFactory)
-            ->willReturn(
-                $partBuilder
-            );
-        $partBuilder->expects($this->once())
-            ->method('createMessagePart')
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
             ->willReturn($contPart);
 
         $contPart->expects($this->once())

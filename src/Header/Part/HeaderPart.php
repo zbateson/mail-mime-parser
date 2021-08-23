@@ -6,6 +6,7 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -13,7 +14,7 @@ use ZBateson\MbWrapper\MbWrapper;
  *
  * @author Zaahid Bateson
  */
-abstract class HeaderPart
+abstract class HeaderPart implements IHeaderPart
 {
     /**
      * @var string the value of the part

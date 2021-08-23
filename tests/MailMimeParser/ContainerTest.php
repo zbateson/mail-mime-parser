@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser;
 
 use LegacyPHPUnit\TestCase;
+use Pimple\Exception\UnknownIdentifierException;
 
 /**
  * Description of ContainerTest
@@ -13,50 +14,40 @@ use LegacyPHPUnit\TestCase;
  */
 class ContainerTest extends TestCase
 {
-    private $di;
+    private $container;
     
     protected function legacySetUp()
     {
-        $this->di = new Container();
+        $this->container = new Container();
     }
     
-    public function testNewMessageParser()
+    public function testSetAndGet()
     {
-        $mp = $this->di->newMessageParser();
-        $this->assertNotNull($mp);
+        $this->container['test'] = 'toost';
+        $this->assertSame('toost', $this->container['test']);
     }
 
-    public function testGetCharsetConverter()
+    public function testAutoRegister()
     {
-        $m = $this->di->getCharsetConverter('ISO-8859-1', 'UTF-8');
-        $this->assertNotNull($m);
+        $this->assertFalse($this->container->offsetExists('blah'));
+        $this->assertTrue($this->container->offsetExists('ArrayObject'));
+        $this->assertInstanceOf('SplFixedArray', $this->container->offsetGet('SplFixedArray'));
+        $thrown = false;
+        try {
+            $this->container->offsetGet('Arooo');
+        } catch (UnknownIdentifierException $ex) {
+            $thrown = true;
+        }
+        $this->assertTrue($thrown);
     }
 
-    public function testGetHeaderFactory()
+    public function testAutoRegisterParams()
     {
-        $singleton = $this->di->getHeaderFactory();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $this->di->getHeaderFactory());
-    }
-
-    public function testGetHeaderPartFactory()
-    {
-        $singleton = $this->di->getHeaderPartFactory();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $this->di->getHeaderPartFactory());
-    }
-
-    public function testGetMimeLiteralPartFactory()
-    {
-        $singleton = $this->di->getMimeLiteralPartFactory();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $this->di->getMimeLiteralPartFactory());
-    }
-
-    public function testGetConsumerService()
-    {
-        $singleton = $this->di->getConsumerService();
-        $this->assertNotNull($singleton);
-        $this->assertSame($singleton, $this->di->getConsumerService());
+        $this->container['secondArg'] = 'Aha!';
+        $ob = $this->container['ZBateson\MailMimeParser\ContainerTestClass'];
+        $this->assertNotNull($ob);
+        $this->assertInstanceOf('ZBateson\MailMimeParser\ContainerTestClass', $ob);
+        $this->assertInstanceOf('SplFixedArray', $ob->firstArg);
+        $this->assertSame('Aha!', $ob->secondArg);
     }
 }

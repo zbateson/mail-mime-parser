@@ -6,18 +6,19 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Constructs and returns HeaderPart objects.
+ * Constructs and returns IHeaderPart objects.
  *
  * @author Zaahid Bateson
  */
 class HeaderPartFactory
 {
     /**
-     * @var MbWrapper $charsetConverter passed to HeaderPart constructors
-     *      for converting strings in HeaderPart::convertEncoding
+     * @var MbWrapper $charsetConverter passed to IHeaderPart constructors
+     *      for converting strings in IHeaderPart::convertEncoding
      */
     protected $charsetConverter;
     
@@ -32,13 +33,13 @@ class HeaderPartFactory
     }
     
     /**
-     * Creates and returns a default HeaderPart for this factory, allowing
-     * subclass factories for specialized HeaderParts.
+     * Creates and returns a default IHeaderPart for this factory, allowing
+     * subclass factories for specialized IHeaderParts.
      * 
      * The default implementation returns a new Token.
      * 
      * @param string $value
-     * @return HeaderPart
+     * @return IHeaderPart
      */
     public function newInstance($value)
     {
@@ -49,7 +50,7 @@ class HeaderPartFactory
      * Initializes and returns a new Token.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\Token
+     * @return Token
      */
     public function newToken($value)
     {
@@ -71,7 +72,7 @@ class HeaderPartFactory
      * Initializes and returns a new LiteralPart.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\LiteralPart
+     * @return LiteralPart
      */
     public function newLiteralPart($value)
     {
@@ -82,7 +83,7 @@ class HeaderPartFactory
      * Initializes and returns a new MimeLiteralPart.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
+     * @return MimeLiteralPart
      */
     public function newMimeLiteralPart($value)
     {
@@ -93,7 +94,7 @@ class HeaderPartFactory
      * Initializes and returns a new CommentPart.
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\CommentPart
+     * @return CommentPart
      */
     public function newCommentPart($value)
     {
@@ -105,7 +106,7 @@ class HeaderPartFactory
      * 
      * @param string $name
      * @param string $email
-     * @return \ZBateson\MailMimeParser\Header\Part\AddressPart
+     * @return AddressPart
      */
     public function newAddressPart($name, $email)
     {
@@ -117,7 +118,7 @@ class HeaderPartFactory
      * 
      * @param array $addresses
      * @param string $name
-     * @return \ZBateson\MailMimeParser\Header\Part\AddressGroupPart
+     * @return AddressGroupPart
      */
     public function newAddressGroupPart(array $addresses, $name = '')
     {
@@ -128,7 +129,7 @@ class HeaderPartFactory
      * Initializes and returns a new DatePart
      * 
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\DatePart
+     * @return DatePart
      */
     public function newDatePart($value)
     {
@@ -141,7 +142,7 @@ class HeaderPartFactory
      * @param string $name
      * @param string $value
      * @param string $language
-     * @return \ZBateson\MailMimeParser\Header\Part\ParameterPart
+     * @return ParameterPart
      */
     public function newParameterPart($name, $value, $language = null)
     {
@@ -153,7 +154,7 @@ class HeaderPartFactory
      *
      * @param string $name
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedPart
+     * @return ReceivedPart
      */
     public function newReceivedPart($name, $value)
     {
@@ -168,7 +169,7 @@ class HeaderPartFactory
      * @param string $ehloName
      * @param string $hostName
      * @param string $hostAddress
-     * @return \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart
+     * @return ReceivedDomainPart
      */
     public function newReceivedDomainPart(
         $name,

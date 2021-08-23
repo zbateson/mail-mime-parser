@@ -9,7 +9,10 @@ namespace ZBateson\MailMimeParser\Header;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
- * Reads the header using a SubjectConsumer.
+ * Reads a subject header.
+ *
+ * The subject header is unique in that it doesn't include comments or quoted
+ * parts.
  *
  * @author Zaahid Bateson
  */
@@ -19,7 +22,7 @@ class SubjectHeader extends AbstractHeader
      * Returns a SubjectConsumer.
      * 
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {

@@ -6,14 +6,15 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use ZBateson\MailMimeParser\Header\Part\SplitParameterToken;
 use ArrayObject;
 
 /**
- * Reads headers separated into parameters consisting of a main value, and
- * subsequent name/value pairs - for example text/html; charset=utf-8.
+ * Reads headers separated into parameters consisting of an optional main value,
+ * and subsequent name/value pairs - for example text/html; charset=utf-8.
  * 
  * A ParameterConsumer's parts are separated by a semi-colon.  Its name/value
  * pairs are separated with an '=' character.
@@ -60,7 +61,7 @@ class ParameterConsumer extends GenericConsumer
      * 
      * @param string $token
      * @param bool $isLiteral
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -80,11 +81,12 @@ class ParameterConsumer extends GenericConsumer
      * @param string $value
      * @param int $index
      * @param boolean $isEncoded
-     */
+     * @return SplitParameterToken
+    */
     private function addToSplitPart(ArrayObject $splitParts, $name, $value, $index, $isEncoded)
     {
         $ret = null;
-        if (!isset($splitParts[trim($name)])) {
+        if (!isset($splitParts[$name])) {
             $ret = $this->partFactory->newSplitParameterToken($name);
             $splitParts[$name] = $ret;
         }
@@ -104,8 +106,7 @@ class ParameterConsumer extends GenericConsumer
      * @param string $strName
      * @param string $strValue
      * @param ArrayObject $splitParts
-     * @return \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
-     *         |SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart
+     * @return MimeLiteralPart|SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart
      */
     private function getPartFor($strName, $strValue, ArrayObject $splitParts)
     {
@@ -126,7 +127,7 @@ class ParameterConsumer extends GenericConsumer
     /**
      * Handles parameter separator tokens during final processing.
      * 
-     * If the end token is found, a new HeaderPart is assigned to the passed
+     * If the end token is found, a new IHeaderPart is assigned to the passed
      * $combined array.  If an '=' character is found, $strCat is assigned to
      * $strName and emptied.
      * 
@@ -167,7 +168,7 @@ class ParameterConsumer extends GenericConsumer
      * the combined array and returns an array.
      * 
      * @param ArrayObject $combined
-     * @return HeaderPart[]|array
+     * @return IHeaderPart[]|array
      */
     private function finalizeParameterParts(ArrayObject $combined)
     {
@@ -187,8 +188,8 @@ class ParameterConsumer extends GenericConsumer
      * Post processing involves creating Part\LiteralPart or Part\ParameterPart
      * objects out of created Token and LiteralParts.
      * 
-     * @param HeaderPart[] $parts
-     * @return HeaderPart[]|array
+     * @param IHeaderPart[] $parts The parsed parts.
+     * @return IHeaderPart[] Array of resulting final parts.
      */
     protected function processParts(array $parts)
     {

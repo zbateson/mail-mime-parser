@@ -2,8 +2,7 @@
 namespace ZBateson\MailMimeParser;
 
 use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7;
-use org\bovigo\vfs\vfsStream;
+use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
  * Description of MessageTest
@@ -15,29 +14,27 @@ use org\bovigo\vfs\vfsStream;
  */
 class MessageTest extends TestCase
 {
-    private $mockPartStreamFilterManager;
-    private $mockHeaderFactory;
-    private $mockPartFilterFactory;
-    private $mockStreamFactory;
-    private $mockMessageHelperService;
-    private $vfs;
-
+    private $mockPartStreamContainer;
+    private $mockHeaderContainer;
+    private $mockPartChildrenContainer;
+    private $mockMultipartHelper;
+    private $mockPrivacyHelper;
+    
     protected function legacySetUp()
     {
-        $this->vfs = vfsStream::setup('root');
-        $this->mockPartStreamFilterManager = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartStreamFilterManager')
+        $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartFilterFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilterFactory')
+        $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $this->mockMultipartHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockMessageHelperService = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MessageHelperService')
+        $this->mockPrivacyHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -65,119 +62,66 @@ class MessageTest extends TestCase
         return $header;
     }
 
-    protected function getMockedPartBuilder()
+    protected function getMockedIMimePart()
     {
-        $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderContainer')
-            ->disableOriginalConstructor()
+        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\IMimePart')
             ->getMock();
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $pb->method('getHeaderContainer')
-            ->willReturn($hc);
-        return $pb;
     }
 
-    protected function getMockedPartBuilderWithChildren()
+    protected function getChildrenContainerWithChildren()
     {
-        $pb = $this->getMockedPartBuilder();
         $children = [
-            $this->getMockedPartBuilder(),
-            $this->getMockedPartBuilder(),
-            $this->getMockedPartBuilder()
+            $this->getMockedIMimePart(),
+            $this->getMockedIMimePart(),
+            $this->getMockedIMimePart()
         ];
 
-        $nestedMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $nested = $this->getMockedPartBuilder();
-        $nested->method('createMessagePart')
-            ->willReturn($nestedMimePart);
-        $children[0]->method('getChildren')
+        $nested = $this->getMockedIMimePart();
+        $children[0]->method('getChildParts')
             ->willReturn([$nested]);
+        $children[0]->method('getAllParts')
+            ->willReturn([$children[0], $nested]);
+        $children[0]->method('getChildIterator')
+            ->willReturn(new \RecursiveArrayIterator([$nested]));
 
-        foreach ($children as $key => $child) {
-            // need to 'setMethods' because getAllNonFilteredParts is protected
-            $childMimePart = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Part\MimePart')
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getAllNonFilteredParts',
-                '__destruct',
-                'getContentResourceHandle',
-                'getContentStream',
-                'getContent',
-                'getStream',
-                'isTextPart',
-                'getHeaderValue'
-            ])
-            ->getMock();
-
-            if ($key === 0) {
-                $childMimePart->expects($this->any())
-                    ->method('getAllNonFilteredParts')
-                    ->willReturn([$childMimePart, $nestedMimePart]);
-            } else {
-                $childMimePart
-                    ->method('getAllNonFilteredParts')
-                    ->willReturn([$childMimePart]);
-            }
-
-            $child->method('createMessagePart')
-                ->willReturn($childMimePart);
-        }
-        $pb->method('getChildren')
-            ->willReturn($children);
-        return $pb;
+        $pc = new PartChildrenContainer($children);
+        return $pc;
     }
 
-    private function newMessage($partBuilder, $stream = null, $contentStream = null)
+    private function newMessage($childrenContainer = null)
     {
         return new Message(
-            $this->mockPartStreamFilterManager,
-            $this->mockStreamFactory,
-            $this->mockPartFilterFactory,
-            $partBuilder,
-            $this->mockMessageHelperService,
-            $stream,
-            $stream
+            $this->mockPartStreamContainer,
+            $this->mockHeaderContainer,
+            ($childrenContainer) ? $childrenContainer : $this->mockPartChildrenContainer,
+            $this->mockMultipartHelper,
+            $this->mockPrivacyHelper
         );
     }
 
     public function testInstance()
     {
-        $message = $this->newMessage(
-            $this->getMockedPartBuilder()
-        );
+        $message = $this->newMessage();
         $this->assertNotNull($message);
         $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $message);
     }
 
     public function testGetTextPartAndTextPartCount()
     {
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
-            ->disableOriginalConstructor()
-            ->setMethods(['filter'])
-            ->getMock();
-
         $message = $this->newMessage(
-            $this->getMockedPartBuilderWithChildren()
+            $this->getChildrenContainerWithChildren()
         );
+        $this->mockHeaderContainer->method('get')->willReturn($this->getMockedParameterHeader('Content-Type', 'meep'));
+
         $parts = $message->getAllParts();
-        $filterMock
-            ->method('filter')
-            ->willReturnMap(
-                [
-                    [ $parts[0], false ],
-                    [ $parts[1], true ],
-                    [ $parts[2], false ],
-                    [ $parts[3], true ],
-                    [ $parts[4], false ],
-                ]
-            );
-        $this->mockPartFilterFactory
-            ->method('newFilterFromInlineContentType')
-            ->willReturn($filterMock);
+        $parts[1]->method('getContentType')
+            ->willReturn('text/plain');
+        $parts[2]->method('getContentType')
+            ->willReturn('bloo');
+        $parts[3]->method('getContentType')
+            ->willReturn('text/plain');
+        $parts[4]->method('getContentType')
+            ->willReturn('Wheeep');
 
         $parts[1]->expects($this->once())
             ->method('getContentStream')
@@ -192,8 +136,8 @@ class MessageTest extends TestCase
             ->willReturn('tilkomore');
 
         $this->assertEquals(2, $message->getTextPartCount());
-        $this->assertEquals($parts[1], $message->getTextPart());
-        $this->assertEquals($parts[3], $message->getTextPart(1));
+        $this->assertSame($parts[1], $message->getTextPart());
+        $this->assertSame($parts[3], $message->getTextPart(1));
         $this->assertNull($message->getTextPart(2));
         $this->assertNull($message->getTextStream(2));
         $this->assertNull($message->getTextContent(2));
@@ -204,30 +148,20 @@ class MessageTest extends TestCase
 
     public function testGetHtmlPartAndHtmlPartCount()
     {
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
-            ->disableOriginalConstructor()
-            ->setMethods(['filter'])
-            ->getMock();
-
         $message = $this->newMessage(
-            $this->getMockedPartBuilderWithChildren()
+            $this->getChildrenContainerWithChildren()
         );
-        $parts = $message->getAllParts();
+        $this->mockHeaderContainer->method('get')->willReturn($this->getMockedParameterHeader('Content-Type', 'meep'));
 
-        $filterMock
-            ->method('filter')
-            ->willReturnMap(
-                [
-                    [ $parts[0], false ],
-                    [ $parts[1], true ],
-                    [ $parts[2], false ],
-                    [ $parts[3], true ],
-                    [ $parts[4], false ],
-                ]
-            );
-        $this->mockPartFilterFactory
-            ->method('newFilterFromInlineContentType')
-            ->willReturn($filterMock);
+        $parts = $message->getAllParts();
+        $parts[1]->method('getContentType')
+            ->willReturn('text/html');
+        $parts[2]->method('getContentType')
+            ->willReturn('bloo');
+        $parts[3]->method('getContentType')
+            ->willReturn('text/html');
+        $parts[4]->method('getContentType')
+            ->willReturn('Wheeep');
 
         $parts[1]->expects($this->once())
             ->method('getContentStream')
@@ -254,58 +188,34 @@ class MessageTest extends TestCase
 
     public function testGetAndRemoveAttachmentParts()
     {
-        $filterMock = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartFilter')
-            ->disableOriginalConstructor()
-            ->setMethods(['filter'])
-            ->getMock();
-
-        $org = Psr7\Utils::streamFor('stream');
         $message = $this->newMessage(
-            $this->getMockedPartBuilderWithChildren(),
-            $org
+            $this->getChildrenContainerWithChildren()
         );
-
-        // make sure MessagePart::markAsChanged is called
-        $this->assertEquals($org, $message->getStream());
+        $this->mockHeaderContainer->method('get')->willReturn($this->getMockedParameterHeader('Content-Type', 'multipart/mixed'));
 
         $parts = $message->getAllParts();
-        $filterMock
-            ->method('filter')
-            ->willReturnMap(
-                [
-                    [ $parts[0], false ],
-                    [ $parts[1], true ],
-                    [ $parts[2], false ],
-                    [ $parts[3], true ],
-                    [ $parts[4], false ],
-                ]
-            );
-        $this->mockPartFilterFactory
-            ->method('newFilterFromArray')
-            ->willReturn($filterMock);
+        $parts[1]->method('getContentType')
+            ->willReturn('text/html');
+        $parts[2]->method('getContentType')
+            ->willReturn('text/plain');
+        $parts[3]->method('getContentType')
+            ->willReturn('text/plain');
+        $parts[4]->method('getContentType')
+            ->willReturn('text/plain');
 
-        $parts[1]->method('isTextPart')
-            ->willReturn(true);
-        $parts[1]->method('getHeaderValue')
-            ->with('Content-Disposition', 'inline')
+        $parts[1]->method('getContentDisposition')
             ->willReturn('attachment');
-        $parts[3]->method('isTextPart')
-            ->willReturn(true);
-        $parts[3]->method('getHeaderValue')
-            ->with('Content-Disposition', 'inline')
+        $parts[2]->method('getContentDisposition')
             ->willReturn('inline');
+        $parts[3]->method('isMultiPart')->willReturn(true);
+        $parts[4]->method('isSignaturePart')->willReturn(true);
 
         $this->assertEquals(1, $message->getAttachmentCount());
         $this->assertEquals([$parts[1]], $message->getAllAttachmentParts());
         $this->assertEquals($parts[1], $message->getAttachmentPart(0));
         $this->assertNull($message->getAttachmentPart(1));
 
-        $this->mockStreamFactory->expects($this->once())
-            ->method('newMessagePartStream')
-            ->willReturn('changed');
-
         $message->removeAttachmentPart(0);
-        $this->assertEquals('changed', $message->getStream());
 
         $this->assertEquals(0, $message->getAttachmentCount());
         $this->assertEquals(null, $message->getAttachmentPart(0));
@@ -313,58 +223,32 @@ class MessageTest extends TestCase
 
     public function testIsNotMime()
     {
-        $message = $this->newMessage(
-            $this->getMockedPartBuilder()
-        );
+        $message = $this->newMessage();
         $this->assertFalse($message->isMime());
     }
 
     public function testIsMimeWithContentType()
     {
-        $header = $this->getMockedParameterHeader('Content-Type', 'text/html', 'utf-8');
+        $this->mockHeaderContainer->method('get')->willReturn($this->getMockedParameterHeader('Content-Type', 'text/html', 'utf-8'));
 
-        $pb = $this->getMockedPartBuilder();
-        $pb->method('getContentType')
-            ->willReturn($header);
-        $hc = $pb->getHeaderContainer();
-        $hc->method('get')
-            ->willReturnMap([ [ 'Content-Type', 0, $header ] ]);
-
-        $message = $this->newMessage(
-            $pb
-        );
+        $message = $this->newMessage();
         $this->assertTrue($message->isMime());
     }
 
     public function testIsMimeWithMimeVersion()
     {
-        $hf = $this->mockHeaderFactory;
-        $header = $this->getMockedParameterHeader('Mime-Version', '4.3');
-        $hf->method('newInstance')
-            ->willReturn($header);
-
-        $pb = $this->getMockedPartBuilder();
-        $hc = $pb->getHeaderContainer();
-        $hc->method('get')
-            ->willReturnMap([ [ 'Mime-Version', 0, $header ] ]);
-
-        $message = $this->newMessage(
-            $pb
-        );
+        $hf = $this->mockHeaderContainer;
+        $this->mockHeaderContainer->method('get')
+            ->willReturnMap([ [ 'Content-Type', 0, null ], [ 'MIME-Version', 0, $this->getMockedParameterHeader('MIME-Version', '4.3') ] ]);
+        $message = $this->newMessage();
         $this->assertTrue($message->isMime());
     }
 
     public function testSetAndRemoveHtmlPart()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helper = $this->mockMultipartHelper;
+        $message = $this->newMessage();
 
-        $message = $this->newMessage($this->getMockedPartBuilder());
-
-        $this->mockMessageHelperService->expects($this->exactly(3))
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->once())->method('setContentPartForMimeType')
             ->with($message, 'text/html', 'content', 'charset');
         $helper->expects($this->once())->method('removePartByMimeType')
@@ -379,15 +263,9 @@ class MessageTest extends TestCase
 
     public function testSetAndRemoveTextPart()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helper = $this->mockMultipartHelper;
+        $message = $this->newMessage();
 
-        $message = $this->newMessage($this->getMockedPartBuilder());
-
-        $this->mockMessageHelperService->expects($this->exactly(3))
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->once())->method('setContentPartForMimeType')
             ->with($message, 'text/plain', 'content', 'charset');
         $helper->expects($this->once())->method('removePartByMimeType')
@@ -402,16 +280,10 @@ class MessageTest extends TestCase
 
     public function testAddAttachmentPart()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $message = $this->newMessage($this->getMockedPartBuilderWithChildren());
+        $helper = $this->mockMultipartHelper;
+        $message = $this->newMessage();
         $part = $message->getPart(2);
 
-        $this->mockMessageHelperService->expects($this->exactly(2))
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
                 [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64' ],
@@ -426,16 +298,10 @@ class MessageTest extends TestCase
 
     public function testAddAttachmentPartUsingQuotedPrintable()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $message = $this->newMessage($this->getMockedPartBuilderWithChildren());
+        $helper = $this->mockMultipartHelper;
+        $message = $this->newMessage();
         $part = $message->getPart(2);
 
-        $this->mockMessageHelperService->expects($this->exactly(2))
-            ->method('getMultipartHelper')
-            ->willReturn($helper);
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
                 [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable' ],
@@ -450,15 +316,8 @@ class MessageTest extends TestCase
 
     public function testSigningHelperMethods()
     {
-        $helper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mockMessageHelperService->expects($this->exactly(4))
-            ->method('getPrivacyHelper')
-            ->willReturn($helper);
-
-        $message = $this->newMessage($this->getMockedPartBuilder());
+        $helper = $this->mockPrivacyHelper;
+        $message = $this->newMessage();
 
         $helper->expects($this->once())
             ->method('getSignedMessageAsString')

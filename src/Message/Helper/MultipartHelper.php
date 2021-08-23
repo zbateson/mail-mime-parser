@@ -6,13 +6,12 @@
  */
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\MimePart;
-use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -29,21 +28,12 @@ class MultipartHelper extends AbstractHelper
      */
     private $genericHelper;
 
-    /**
-     * Constructor
-     * 
-     * @param MimePartFactory $mimePartFactory
-     * @param UUEncodedPartFactory $uuEncodedPartFactory
-     * @param PartBuilderFactory $partBuilderFactory
-     * @param GenericHelper $genericHelper
-     */
     public function __construct(
-        MimePartFactory $mimePartFactory,
-        UUEncodedPartFactory $uuEncodedPartFactory,
-        PartBuilderFactory $partBuilderFactory,
+        IMimePartFactory $mimePartFactory,
+        IUUEncodedPartFactory $uuEncodedPartFactory,
         GenericHelper $genericHelper
     ) {
-        parent::__construct($mimePartFactory, $uuEncodedPartFactory, $partBuilderFactory);
+        parent::__construct($mimePartFactory, $uuEncodedPartFactory);
         $this->genericHelper = $genericHelper;
     }
 
@@ -57,23 +47,24 @@ class MultipartHelper extends AbstractHelper
     public function getUniqueBoundary($mimeType)
     {
         $type = ltrim(strtoupper(preg_replace('/^(multipart\/(.{3}).*|.*)$/i', '$2-', $mimeType)), '-');
-        return uniqid('----=MMP-' . $type . '.', true);
+        return uniqid('----=MMP-' . $type . '-', true);
     }
 
     /**
      * Creates a unique mime boundary and assigns it to the passed part's
      * Content-Type header with the passed mime type.
      *
-     * @param ParentHeaderPart $part
+     * @param IMimePart $part
      * @param string $mimeType
      */
-    public function setMimeHeaderBoundaryOnPart(ParentHeaderPart $part, $mimeType)
+    public function setMimeHeaderBoundaryOnPart(IMimePart $part, $mimeType)
     {
         $part->setRawHeader(
-            'Content-Type',
+            HeaderConsts::CONTENT_TYPE,
             "$mimeType;\r\n\tboundary=\""
                 . $this->getUniqueBoundary($mimeType) . '"'
         );
+        $part->notify();
     }
 
     /**
@@ -83,9 +74,9 @@ class MultipartHelper extends AbstractHelper
      * the message.  The message's content and content headers are moved to the
      * new part.
      *
-     * @param Message $message
+     * @param IMessage $message
      */
-    public function setMessageAsMixed(Message $message)
+    public function setMessageAsMixed(IMessage $message)
     {
         if ($message->hasContent()) {
             $part = $this->genericHelper->createNewContentPartFrom($message);
@@ -95,7 +86,7 @@ class MultipartHelper extends AbstractHelper
         $atts = $message->getAllAttachmentParts();
         if (!empty($atts)) {
             foreach ($atts as $att) {
-                $att->markAsChanged();
+                $att->notify();
             }
         }
     }
@@ -107,9 +98,9 @@ class MultipartHelper extends AbstractHelper
      * the message.  The message's content and content headers are moved to the
      * new part.
      *
-     * @param Message $message
+     * @param IMessage $message
      */
-    public function setMessageAsAlternative(Message $message)
+    public function setMessageAsAlternative(IMessage $message)
     {
         if ($message->hasContent()) {
             $part = $this->genericHelper->createNewContentPartFrom($message);
@@ -127,11 +118,11 @@ class MultipartHelper extends AbstractHelper
      * the whole mixed/related part should be removed.
      *
      * @param string $mimeType the content-type to find below $alternativePart
-     * @param ParentHeaderPart $alternativePart The multipart/alternative part to look
+     * @param IMimePart $alternativePart The multipart/alternative part to look
      *        under
-     * @return boolean|MimePart false if a part is not found
+     * @return boolean|IMimePart false if a part is not found
      */
-    public function getContentPartContainerFromAlternative($mimeType, ParentHeaderPart $alternativePart)
+    public function getContentPartContainerFromAlternative($mimeType, IMimePart $alternativePart)
     {
         $part = $alternativePart->getPart(0, PartFilter::fromInlineContentType($mimeType));
         $contPart = null;
@@ -153,23 +144,21 @@ class MultipartHelper extends AbstractHelper
      * removed, and parts of different content-types can optionally be moved to
      * the main message part.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $mimeType
-     * @param ParentHeaderPart $alternativePart
+     * @param IMimePart $alternativePart
      * @param bool $keepOtherContent
      * @return bool
      */
-    public function removeAllContentPartsFromAlternative(Message $message, $mimeType, ParentHeaderPart $alternativePart, $keepOtherContent)
+    public function removeAllContentPartsFromAlternative(IMessage $message, $mimeType, IMimePart $alternativePart, $keepOtherContent)
     {
         $rmPart = $this->getContentPartContainerFromAlternative($mimeType, $alternativePart);
         if ($rmPart === false) {
             return false;
         }
-        if ($keepOtherContent) {
-            $this->moveAllPartsAsAttachmentsExcept($message, $rmPart, $mimeType);
+        if ($keepOtherContent && $rmPart->getChildCount() > 0) {
+            $this->moveAllNonMultiPartsToMessageExcept($message, $rmPart, $mimeType);
             $alternativePart = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
-        } else {
-            $rmPart->removeAllParts();
         }
         $message->removePart($rmPart);
         if ($alternativePart !== null) {
@@ -189,13 +178,13 @@ class MultipartHelper extends AbstractHelper
      * Creates a new mime part as a multipart/alternative and assigns the passed
      * $contentPart as a part below it before returning it.
      *
-     * @param Message $message
-     * @param MessagePart $contentPart
-     * @return MimePart the alternative part
+     * @param IMessage $message
+     * @param IMessagePart $contentPart
+     * @return IMimePart the alternative part
      */
-    public function createAlternativeContentPart(Message $message, MessagePart $contentPart)
+    public function createAlternativeContentPart(IMessage $message, IMessagePart $contentPart)
     {
-        $altPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+        $altPart = $this->mimePartFactory->newInstance();
         $this->setMimeHeaderBoundaryOnPart($altPart, 'multipart/alternative');
         $message->removePart($contentPart);
         $message->addChild($altPart, 0);
@@ -208,24 +197,22 @@ class MultipartHelper extends AbstractHelper
      * content-type equal to $exceptMimeType.  If the message is not a
      * multipart/mixed message, it is set to multipart/mixed first.
      *
-     * @param Message $message
-     * @param ParentHeaderPart $from
+     * @param IMessage $message
+     * @param IMimePart $from
      * @param string $exceptMimeType
      */
-    public function moveAllPartsAsAttachmentsExcept(Message $message, ParentHeaderPart $from, $exceptMimeType)
+    public function moveAllNonMultiPartsToMessageExcept(IMessage $message, IMimePart $from, $exceptMimeType)
     {
-        $parts = $from->getAllParts(new PartFilter([
-            'multipart' => PartFilter::FILTER_EXCLUDE,
-            'headers' => [
-                PartFilter::FILTER_EXCLUDE => [
-                    'Content-Type' => $exceptMimeType
-                ]
-            ]
-        ]));
+        $parts = $from->getAllParts(function (IMessagePart $part) use ($exceptMimeType) {
+            if ($part instanceof IMimePart && $part->isMultiPart()) {
+                return false;
+            }
+            return strcasecmp($part->getContentType(), $exceptMimeType) !== 0;
+        });
         if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
             $this->setMessageAsMixed($message);
         }
-        foreach ($parts as $part) {
+        foreach ($parts as $key => $part) {
             $from->removePart($part);
             $message->addChild($part);
         }
@@ -237,17 +224,17 @@ class MultipartHelper extends AbstractHelper
      * up the message as a multipart/mixed message and creates a separate
      * content part.
      *
-     * @param Message $message
+     * @param IMessage $message
      */
-    public function enforceMime(Message $message)
+    public function enforceMime(IMessage $message)
     {
         if (!$message->isMime()) {
             if ($message->getAttachmentCount()) {
                 $this->setMessageAsMixed($message);
             } else {
-                $message->setRawHeader('Content-Type', "text/plain;\r\n\tcharset=\"iso-8859-1\"");
+                $message->setRawHeader(HeaderConsts::CONTENT_TYPE, "text/plain;\r\n\tcharset=\"iso-8859-1\"");
             }
-            $message->setRawHeader('Mime-Version', '1.0');
+            $message->setRawHeader(HeaderConsts::MIME_VERSION, '1.0');
         }
     }
 
@@ -255,14 +242,14 @@ class MultipartHelper extends AbstractHelper
      * Creates a multipart/related part out of 'inline' children of $parent and
      * returns it.
      *
-     * @param ParentHeaderPart $parent
-     * @return MimePart
+     * @param IMimePart $parent
+     * @return IMimePart
      */
-    public function createMultipartRelatedPartForInlineChildrenOf(ParentHeaderPart $parent)
+    public function createMultipartRelatedPartForInlineChildrenOf(IMimePart $parent)
     {
-        $relatedPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+        $relatedPart = $this->mimePartFactory->newInstance();
         $this->setMimeHeaderBoundaryOnPart($relatedPart, 'multipart/related');
-        foreach ($parent->getChildParts(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) as $part) {
+        foreach ($parent->getChildParts(PartFilter::fromDisposition('inline')) as $part) {
             $parent->removePart($part);
             $relatedPart->addChild($part);
         }
@@ -277,12 +264,11 @@ class MultipartHelper extends AbstractHelper
      * If the passed $mimeType is text/plain, searches for a text/html part.
      * Otherwise searches for a text/plain part to return.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $mimeType
-     * @return \ZBateson\MailMimeParser\Message\Part\MimeType or null if not
-     *         found
+     * @return IMimePart or null if not found
      */
-    public function findOtherContentPartFor(Message $message, $mimeType)
+    public function findOtherContentPartFor(IMessage $message, $mimeType)
     {
         $altPart = $message->getPart(
             0,
@@ -290,7 +276,7 @@ class MultipartHelper extends AbstractHelper
         );
         if ($altPart !== null && $altPart->getParent() !== null && $altPart->getParent()->isMultiPart()) {
             $altPartParent = $altPart->getParent();
-            if ($altPartParent->getChildCount(PartFilter::fromDisposition('inline', PartFilter::FILTER_EXCLUDE)) !== 1) {
+            if ($altPartParent->getChildCount(PartFilter::fromDisposition('inline')) !== 1) {
                 $altPart = $this->createMultipartRelatedPartForInlineChildrenOf($altPartParent);
             }
         }
@@ -301,19 +287,18 @@ class MultipartHelper extends AbstractHelper
      * Creates a new content part for the passed mimeType and charset, making
      * space by creating a multipart/alternative if needed
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $mimeType
      * @param string $charset
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function createContentPartForMimeType(Message $message, $mimeType, $charset)
+    public function createContentPartForMimeType(IMessage $message, $mimeType, $charset)
     {
-        $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-        $builder->addHeader('Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"");
-        $builder->addHeader('Content-Transfer-Encoding', 'quoted-printable');
-        $this->enforceMime($message);
-        $mimePart = $builder->createMessagePart();
+        $mimePart = $this->mimePartFactory->newInstance();
+        $mimePart->setRawHeader(HeaderConsts::CONTENT_TYPE, "$mimeType;\r\n\tcharset=\"$charset\"");
+        $mimePart->setRawHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING, 'quoted-printable');
 
+        $this->enforceMime($message);
         $altPart = $this->findOtherContentPartFor($message, $mimeType);
 
         if ($altPart === $message) {
@@ -330,19 +315,19 @@ class MultipartHelper extends AbstractHelper
     }
 
     /**
-     * Creates and adds a MimePart for the passed content and options as an
+     * Creates and adds a IMimePart for the passed content and options as an
      * attachment.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string|resource|Psr\Http\Message\StreamInterface\StreamInterface
      *        $resource
      * @param string $mimeType
      * @param string $disposition
      * @param string $filename
      * @param string $encoding
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
+     * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function createAndAddPartForAttachment(Message $message, $resource, $mimeType, $disposition, $filename = null, $encoding = 'base64')
+    public function createAndAddPartForAttachment(IMessage $message, $resource, $mimeType, $disposition, $filename = null, $encoding = 'base64')
     {
         if ($filename === null) {
             $filename = 'file' . uniqid();
@@ -350,20 +335,17 @@ class MultipartHelper extends AbstractHelper
 
         $safe = iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
         if ($message->isMime()) {
-            $builder = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory);
-            $builder->addHeader('Content-Transfer-Encoding', $encoding);
+            $part = $this->mimePartFactory->newInstance();
+            $part->setRawHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING, $encoding);
             if (strcasecmp($message->getContentType(), 'multipart/mixed') !== 0) {
                 $this->setMessageAsMixed($message);
             }
-            $builder->addHeader('Content-Type', "$mimeType;\r\n\tname=\"$safe\"");
-            $builder->addHeader('Content-Disposition', "$disposition;\r\n\tfilename=\"$safe\"");
+            $part->setRawHeader(HeaderConsts::CONTENT_TYPE, "$mimeType;\r\n\tname=\"$safe\"");
+            $part->setRawHeader(HeaderConsts::CONTENT_DISPOSITION, "$disposition;\r\n\tfilename=\"$safe\"");
         } else {
-            $builder = $this->partBuilderFactory->newPartBuilder(
-                $this->uuEncodedPartFactory
-            );
-            $builder->setProperty('filename', $safe);
+            $part = $this->uuEncodedPartFactory->newInstance();
+            $part->setFilename($safe);
         }
-        $part = $builder->createMessagePart();
         $part->setContent($resource);
         $message->addChild($part);
     }
@@ -377,12 +359,12 @@ class MultipartHelper extends AbstractHelper
      * the alternative part is replaced by the remaining content part,
      * optionally keeping other parts if $keepOtherContent is set to true.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $mimeType
      * @param bool $keepOtherContent
      * @return boolean true on success
      */
-    public function removeAllContentPartsByMimeType(Message $message, $mimeType, $keepOtherContent = false)
+    public function removeAllContentPartsByMimeType(IMessage $message, $mimeType, $keepOtherContent = false)
     {
         $alt = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         if ($alt !== null) {
@@ -396,12 +378,12 @@ class MultipartHelper extends AbstractHelper
      * Removes the 'inline' part with the passed contentType, at the given index
      * defaulting to the first
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $mimeType
      * @param int $index
      * @return boolean true on success
      */
-    public function removePartByMimeType(Message $message, $mimeType, $index = 0)
+    public function removePartByMimeType(IMessage $message, $mimeType, $index = 0)
     {
         $parts = $message->getAllParts(PartFilter::fromInlineContentType($mimeType));
         $alt = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
@@ -422,19 +404,19 @@ class MultipartHelper extends AbstractHelper
      * Either creates a mime part or sets the existing mime part with the passed
      * mimeType to $strongOrHandle.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $mimeType
      * @param string|resource $stringOrHandle
      * @param string $charset
      */
-    public function setContentPartForMimeType(Message $message, $mimeType, $stringOrHandle, $charset)
+    public function setContentPartForMimeType(IMessage $message, $mimeType, $stringOrHandle, $charset)
     {
         $part = ($mimeType === 'text/html') ? $message->getHtmlPart() : $message->getTextPart();
         if ($part === null) {
             $part = $this->createContentPartForMimeType($message, $mimeType, $charset);
         } else {
             $contentType = $part->getContentType();
-            $part->setRawHeader('Content-Type', "$contentType;\r\n\tcharset=\"$charset\"");
+            $part->setRawHeader(HeaderConsts::CONTENT_TYPE, "$contentType;\r\n\tcharset=\"$charset\"");
         }
         $part->setContent($stringOrHandle);
     }

@@ -11,16 +11,30 @@ use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
- * Represents a header containing a primary value part and subsequent name/value
- * parts using a ParameterConsumer.
+ * Represents a header containing an optional main value part and subsequent
+ * name/value pairs.
+ *
+ * If header doesn't contain a non-parameterized 'main' value part, 'getValue()'
+ * will return the value of the first parameter.
+ *
+ * For example: 'Content-Type: text/html; charset=utf-8; name=test.ext'
+ *
+ * The 'text/html' portion is considered the 'main' value, and 'charset' and
+ * 'name' are added as parameterized name/value pairs.
+ *
+ * With the Autocrypt header, there is no main value portion, for example:
+ * 'Autocrypt: addr=zb@example.com; keydata=b64-data'
+ *
+ * In that example, calling ```php $header->getValue() ``` would return
+ * 'zb@example.com', as would calling ```php $header->getValueFor('addr'); ```.
  * 
  * @author Zaahid Bateson
  */
 class ParameterHeader extends AbstractHeader
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\ParameterPart[] key map of
-     * lower-case parameter names and associated ParameterParts.
+     * @var ParameterPart[] key map of lower-case parameter names and associated
+     *      ParameterParts.
      */
     protected $parameters = [];
     
@@ -28,7 +42,7 @@ class ParameterHeader extends AbstractHeader
      * Returns a ParameterConsumer.
      * 
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
@@ -54,7 +68,7 @@ class ParameterHeader extends AbstractHeader
     /**
      * Returns true if a parameter exists with the passed name.
      * 
-     * @param string $name
+     * @param string $name The parameter to look up.
      * @return boolean
      */
     public function hasParameter($name)
@@ -66,9 +80,10 @@ class ParameterHeader extends AbstractHeader
      * Returns the value of the parameter with the given name, or $defaultValue
      * if not set.
      * 
-     * @param string $name
-     * @param string $defaultValue
-     * @return string
+     * @param string $name The parameter to retrieve.
+     * @param string $defaultValue Optional default value (defaulting to null if
+     *        not provided).
+     * @return string|null The parameter's value.
      */
     public function getValueFor($name, $defaultValue = null)
     {

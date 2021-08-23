@@ -15,8 +15,8 @@ use ZBateson\StreamDecorators\NonClosingStream;
 use ZBateson\StreamDecorators\PregReplaceFilterStream;
 use ZBateson\StreamDecorators\QuotedPrintableStream;
 use ZBateson\StreamDecorators\UUStream;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\PartBuilder;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Factory class for Psr7 stream decorators used in MailMimeParser.
@@ -27,37 +27,35 @@ class StreamFactory
 {
     /**
      * Returns a SeekingLimitStream using $part->getStreamPartLength() and
-     * $part->getStreamPartStartOffset()
+     * $part->getStreamPartStartPos()
      *
-     * @param StreamInterface $stream
      * @param PartBuilder $part
      * @return SeekingLimitStream
      */
-    public function getLimitedPartStream(StreamInterface $stream, PartBuilder $part)
+    public function getLimitedPartStream(PartBuilder $part)
     {
         return $this->newLimitStream(
-            $stream,
+            $part->getStream(),
             $part->getStreamPartLength(),
-            $part->getStreamPartStartOffset()
+            $part->getStreamPartStartPos()
         );
     }
 
     /**
      * Returns a SeekingLimitStream using $part->getStreamContentLength() and
-     * $part->getStreamContentStartOffset()
+     * $part->getStreamContentStartPos()
      *
-     * @param StreamInterface $stream
      * @param PartBuilder $part
      * @return SeekingLimitStream
      */
-    public function getLimitedContentStream(StreamInterface $stream, PartBuilder $part)
+    public function getLimitedContentStream(PartBuilder $part)
     {
         $length = $part->getStreamContentLength();
         if ($length !== 0) {
             return $this->newLimitStream(
-                $stream,
+                $part->getStream(),
                 $part->getStreamContentLength(),
-                $part->getStreamContentStartOffset()
+                $part->getStreamContentStartPos()
             );
         }
         return null;
@@ -155,10 +153,10 @@ class StreamFactory
     /**
      * Creates and returns a MessagePartStream
      *
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return MessagePartStream
      */
-    public function newMessagePartStream(MessagePart $part)
+    public function newMessagePartStream(IMessagePart $part)
     {
         return new MessagePartStream($this, $part);
     }
@@ -166,10 +164,10 @@ class StreamFactory
     /**
      * Creates and returns a HeaderStream
      *
-     * @param MessagePart $part
+     * @param IMessagePart $part
      * @return HeaderStream
      */
-    public function newHeaderStream(MessagePart $part)
+    public function newHeaderStream(IMessagePart $part)
     {
         return new HeaderStream($part);
     }

@@ -12,8 +12,8 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * Represents a Content-ID, Message-ID, In-Reply-To or References header.
  *
  * For a multi-id header like In-Reply-To or References, all IDs can be
- * retrieved by calling ``` getIds() ```.  Otherwise, to retrieve the first (or
- * only) ID call ``` getValue() ```.
+ * retrieved by calling {@see IdHeader::getIds()}.  Otherwise, to retrieve the
+ * first (or only) ID call {@see IdHeader::getValue()}.
  * 
  * @author Zaahid Bateson
  */
@@ -23,7 +23,7 @@ class IdHeader extends MimeEncodedHeader
      * Returns an IdBaseConsumer.
      *
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
@@ -31,9 +31,9 @@ class IdHeader extends MimeEncodedHeader
     }
 
     /**
-     * Synonym for getValue().
+     * Returns the ID. Synonymous to calling getValue().
      *
-     * @return string|null
+     * @return string|null The ID
      */
     public function getId()
     {
@@ -44,7 +44,7 @@ class IdHeader extends MimeEncodedHeader
      * Returns all IDs parsed for a multi-id header like References or
      * In-Reply-To.
      * 
-     * @return string[]
+     * @return string[] An array of IDs
      */
     public function getIds()
     {

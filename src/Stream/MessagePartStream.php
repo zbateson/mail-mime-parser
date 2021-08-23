@@ -6,21 +6,24 @@
  */
 namespace ZBateson\MailMimeParser\Stream;
 
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Message\Part\MessagePart;
-use ZBateson\MailMimeParser\Message\Part\ParentHeaderPart;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
+use SplObserver;
+use SplSubject;
 
 /**
  * Provides a readable stream for a MessagePart.
  *
  * @author Zaahid Bateson
  */
-class MessagePartStream implements StreamInterface
+class MessagePartStream implements StreamInterface, SplObserver
 {
     use StreamDecoratorTrait;
 
@@ -30,27 +33,46 @@ class MessagePartStream implements StreamInterface
     protected $streamFactory;
 
     /**
-     * @var MessagePart The part to read from.
+     * @var IMessagePart The part to read from.
      */
     protected $part;
+
+    protected $appendStream = null;
 
     /**
      * Constructor
      * 
      * @param StreamFactory $sdf
-     * @param MessagePart $part
+     * @param IMessagePart $part
      */
-    public function __construct(StreamFactory $sdf, MessagePart $part)
+    public function __construct(StreamFactory $sdf, IMessagePart $part)
     {
         $this->streamFactory = $sdf;
         $this->part = $part;
+        $part->attach($this);
+    }
+
+    public function __destruct()
+    {
+        if ($this->part !== null) {
+            $this->part->detach($this);
+        }
+    }
+
+    public function update(SplSubject $subject)
+    {
+        if ($this->appendStream !== null) {
+            // unset forces recreation in StreamDecoratorTrait with a call to __get
+            unset($this->stream);
+            $this->appendStream = null;
+        }
     }
 
     /**
      * Attaches and returns a CharsetStream decorator to the passed $stream.
      *
-     * If the current attached MessagePart doesn't specify a charset, $stream is
-     * returned as-is.
+     * If the current attached IMessagePart doesn't specify a charset, $stream
+     * is returned as-is.
      *
      * @param StreamInterface $stream
      * @return StreamInterface
@@ -127,13 +149,13 @@ class MessagePartStream implements StreamInterface
      * Creates an array of streams based on the attached part's mime boundary
      * and child streams.
      *
-     * @param ParentHeaderPart $part passed in because $this->part is declared
-     *        as MessagePart
+     * @param IMimePart $part passed in because $this->part is declared
+     *        as IMessagePart
      * @return StreamInterface[]
      */
-    protected function getBoundaryAndChildStreams(ParentHeaderPart $part)
+    protected function getBoundaryAndChildStreams(IMimePart $part)
     {
-        $boundary = $part->getHeaderParameter('Content-Type', 'boundary');
+        $boundary = $part->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'boundary');
         if ($boundary === null) {
             return array_map(
                 function ($child) {
@@ -168,12 +190,8 @@ class MessagePartStream implements StreamInterface
         $content->rewind();
         $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];
 
-        /**
-         * @var ParentHeaderPart
-         */
-        $part = $this->part;
-        if ($part instanceof ParentHeaderPart && $part->getChildCount()) {
-            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($part));
+        if ($this->part instanceof IMimePart && $this->part->getChildCount() > 0) {
+            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
         }
 
         return $streams;
@@ -186,6 +204,9 @@ class MessagePartStream implements StreamInterface
      */
     protected function createStream()
     {
-        return new AppendStream($this->getStreamsArray());
+        if ($this->appendStream === null) {
+            $this->appendStream = new AppendStream($this->getStreamsArray());
+        }
+        return $this->appendStream;
     }
 }

@@ -63,11 +63,13 @@ class ReceivedDomainPart extends ReceivedPart
 
     /**
      * Returns the name used to identify the server in the first part of the
-     * extended-domain line.  Note that this is not necessarily the name used in
-     * the EHLO line to an SMTP server, since implementations differ so much,
-     * not much can be guaranteed except the position it was parsed in.
+     * extended-domain line.
      *
-     * @return string
+     * Note that this is not necessarily the name used in the EHLO line to an
+     * SMTP server, since implementations differ so much, not much can be
+     * guaranteed except the position it was parsed in.
+     *
+     * @return string|null The name
      */
     public function getEhloName()
     {
@@ -78,7 +80,7 @@ class ReceivedDomainPart extends ReceivedPart
      * Returns the hostname of the server, or whatever string in the hostname
      * position when parsing (but never an address).
      *
-     * @return string
+     * @return string|null
      */
     public function getHostname()
     {
@@ -89,7 +91,7 @@ class ReceivedDomainPart extends ReceivedPart
      * Returns the address of the server, or whatever string that looks like an
      * address in the address position when parsing (but never a hostname).
      *
-     * @return string
+     * @return string|null
      */
     public function getAddress()
     {

@@ -12,8 +12,8 @@ use ZBateson\MbWrapper\MbWrapper;
  * Holds a group of addresses, and an optional group name.
  * 
  * Because AddressGroupConsumer is only called once a colon (":") character is
- * found, an AddressGroupPart is initially constructed without a $name.  Once it is
- * returned to AddressConsumer, a new AddressGroupPart is created out of
+ * found, an AddressGroupPart is initially constructed without a $name.  Once it
+ * is returned to AddressConsumer, a new AddressGroupPart is created out of
  * AddressGroupConsumer's AddressGroupPart.
  *
  * @author Zaahid Bateson
@@ -42,7 +42,7 @@ class AddressGroupPart extends MimeLiteralPart
     /**
      * Return the AddressGroupPart's array of addresses.
      * 
-     * @return AddressPart[]
+     * @return AddressPart[] An array of address parts.
      */
     public function getAddresses()
     {
@@ -52,8 +52,8 @@ class AddressGroupPart extends MimeLiteralPart
     /**
      * Returns the AddressPart at the passed index or null.
      * 
-     * @param int $index
-     * @return Address
+     * @param int $index The 0-based index.
+     * @return AddressPart|null The address.
      */
     public function getAddress($index)
     {
@@ -66,7 +66,7 @@ class AddressGroupPart extends MimeLiteralPart
     /**
      * Returns the name of the group
      * 
-     * @return string
+     * @return string The name
      */
     public function getName()
     {

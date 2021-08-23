@@ -21,9 +21,9 @@ class IdBaseConsumer extends AbstractConsumer
 {
     /**
      * Returns the following as sub-consumers:
-     *  - \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer
-     *  - \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer
-     *  - \ZBateson\MailMimeParser\Header\Consumer\IdConsumer
+     *  - {@see CommentConsumer}
+     *  - {@see QuotedStringConsumer}
+     *  - {@see IdConsumer}
      *
      * @return AbstractConsumer[] the sub-consumers
      */
@@ -39,7 +39,7 @@ class IdBaseConsumer extends AbstractConsumer
     /**
      * Returns '\s+' as a whitespace separator.
      * 
-     * @return string[] an array of regex pattern matchers
+     * @return string[] an array of regex pattern matchers.
      */
     protected function getTokenSeparators()
     {
@@ -77,8 +77,8 @@ class IdBaseConsumer extends AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart|null the
-     *         constructed header part or null if the token should be ignored
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null the constructed
+     *         header part or null if the token should be ignored
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -91,8 +91,8 @@ class IdBaseConsumer extends AbstractConsumer
     /**
      * Overridden to filter out any found CommentPart objects.
      *
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function processParts(array $parts)
     {

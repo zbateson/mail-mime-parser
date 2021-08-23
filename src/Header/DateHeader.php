@@ -8,7 +8,6 @@ namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
-
 use DateTimeImmutable;
 
 /**
@@ -22,7 +21,7 @@ class DateHeader extends AbstractHeader
      * Returns a DateConsumer.
      * 
      * @param ConsumerService $consumerService
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
+     * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
@@ -33,7 +32,7 @@ class DateHeader extends AbstractHeader
      * Convenience method returning the part's DateTime object, or null if the
      * date could not be parsed.
      * 
-     * @return \DateTime
+     * @return \DateTime|null The parsed DateTime object.
      */
     public function getDateTime()
     {
@@ -47,7 +46,7 @@ class DateHeader extends AbstractHeader
      * Returns a DateTimeImmutable for the part's DateTime object, or null if
      * the date could not be parsed.
      *
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable|null The parsed DateTimeImmutable object.
      */
     public function getDateTimeImmutable()
     {

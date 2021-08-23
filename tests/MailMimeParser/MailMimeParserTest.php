@@ -2,6 +2,7 @@
 namespace ZBateson\MailMimeParser;
 
 use LegacyPHPUnit\TestCase;
+use GuzzleHttp\Psr7;
 
 /**
  * Description of MailMimeParserTest
@@ -14,20 +15,25 @@ use LegacyPHPUnit\TestCase;
 class MailMimeParserTest extends TestCase
 {
     private $mockDi;
-    private $mmp;
     
     protected function legacySetUp()
     {
         $this->mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
             ->disableOriginalConstructor()
-            ->setMethods(['newMessageParser'])
+            ->setMethods(['offsetGet', 'offsetExists'])
             ->getMock();
-        $this->mmp = new MailMimeParser($this->mockDi);
+    }
+
+    protected function legacyTearDown()
+    {
+        MailMimeParser::setDependencyContainer(null);
     }
     
     public function testConstructMailMimeParser()
     {
-        $this->assertNotNull($this->mmp);
+        MailMimeParser::setDependencyContainer($this->mockDi);
+        $mmp = new MailMimeParser();
+        $this->assertNotNull($mmp);
     }
 
     public function testParseFromHandle()
@@ -36,37 +42,71 @@ class MailMimeParserTest extends TestCase
         fwrite($handle, 'This is a test');
         rewind($handle);
 
-        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageParser')
+        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockDi
             ->expects($this->once())
-            ->method('newMessageParser')
+            ->method('offsetGet')
+            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())
             ->method('parse')
             ->willReturn('test');
 
-        $ret = $this->mmp->parse($handle);
+        MailMimeParser::setDependencyContainer($this->mockDi);
+        $mmp = new MailMimeParser();
+
+        $ret = $mmp->parse($handle, true);
+        $this->assertEquals('test', $ret);
+    }
+
+    public function testParseFromStream()
+    {
+        $handle = fopen('php://memory', 'r+');
+        fwrite($handle, 'This is a test');
+        rewind($handle);
+
+        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockDi
+            ->expects($this->once())
+            ->method('offsetGet')
+            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->willReturn($mockParser);
+        $mockParser
+            ->expects($this->once())
+            ->method('parse')
+            ->willReturn('test');
+
+        MailMimeParser::setDependencyContainer($this->mockDi);
+        $mmp = new MailMimeParser();
+
+        $ret = $mmp->parse(Psr7\Utils::streamFor($handle), true);
         $this->assertEquals('test', $ret);
     }
 
     public function testParseFromString()
     {
-        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MessageParser')
+        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockDi
             ->expects($this->once())
-            ->method('newMessageParser')
+            ->method('offsetGet')
+            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())
             ->method('parse')
             ->willReturn('test');
 
-        $ret = $this->mmp->parse('This is a test');
+        MailMimeParser::setDependencyContainer($this->mockDi);
+        $mmp = new MailMimeParser();
+
+        $ret = $mmp->parse('This is a test', false);
         $this->assertEquals('test', $ret);
     }
 }

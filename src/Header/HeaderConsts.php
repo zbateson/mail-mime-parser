@@ -6,6 +6,11 @@
  */
 namespace ZBateson\MailMimeParser\Header;
 
+/**
+ * List of header name constants.
+ *
+ * @author Thomas Landauer
+ */
 abstract class HeaderConsts
 {
     // Headers according to the table at https://tools.ietf.org/html/rfc5322#section-3.6
@@ -33,8 +38,22 @@ abstract class HeaderConsts
     const SUBJECT = 'Subject';
     const COMMENTS = 'Comments';
     const KEYWORDS = 'Keywords';
-    
-    const MIME_VERSION = 'MIME-Version'; // https://tools.ietf.org/html/rfc2045#section-4
-    const CONTENT_TYPE = 'Content-Type'; // https://tools.ietf.org/html/rfc2045#section-5
-    const AUTO_SUBMITTED = 'Auto-Submitted'; // https://tools.ietf.org/html/rfc3834#section-5
+
+    // https://datatracker.ietf.org/doc/html/rfc4021#section-2.2
+    const MIME_VERSION = 'MIME-Version';
+    const CONTENT_TYPE = 'Content-Type';
+    const CONTENT_TRANSFER_ENCODING = 'Content-Transfer-Encoding';
+    const CONTENT_ID = 'Content-ID';
+    const CONTENT_DESCRIPTION = 'Content-Description';
+    const CONTENT_DISPOSITION = 'Content-Disposition';
+    const CONTENT_LANGUAGE = 'Content-Language';
+    const CONTENT_BASE = 'Content-Base';
+    const CONTENT_LOCATION = 'Content-Location';
+    const CONTENT_FEATURES = 'Content-features';
+    const CONTENT_ALTERNATIVE = 'Content-Alternative';
+    const CONTENT_MD5 = 'Content-MD5';
+    const CONTENT_DURATION = 'Content-Duration';
+
+    // https://datatracker.ietf.org/doc/html/rfc3834
+    const AUTO_SUBMITTED = 'Auto-Submitted';
 }

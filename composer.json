@@ -22,10 +22,11 @@
         "php": ">=5.4",
         "guzzlehttp/psr7": "^1.7.0|^2.0",
         "zbateson/mb-wrapper": "^1.0.1",
-        "zbateson/stream-decorators": "^1.0.6"
+        "zbateson/stream-decorators": "^1.0.6",
+        "pimple/pimple": "^3.0"
     },
     "require-dev": {
-        "sanmai/phpunit-legacy-adapter": "^6.3 || ^8",
+        "sanmai/phpunit-legacy-adapter": "^6.3 || ^8.2",
         "mikey179/vfsstream": "^1.6.0"
     },
     "suggest": {

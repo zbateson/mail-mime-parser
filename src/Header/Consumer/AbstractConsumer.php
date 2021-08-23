@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use ArrayIterator;
@@ -24,23 +23,15 @@ use NoRewindIterator;
 abstract class AbstractConsumer
 {
     /**
-     * @var \ZBateson\MailMimeParser\Header\Consumer\ConsumerService used to
-     *      get consumer instances for sub-consumers
+     * @var ConsumerService used to get consumer instances for sub-consumers.
      */
     protected $consumerService;
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory used to construct
-     * HeaderPart objects
+     * @var HeaderPartFactory used to construct IHeaderPart objects
      */
     protected $partFactory;
 
-    /**
-     * Initializes the instance.
-     *
-     * @param ConsumerService $consumerService
-     * @param HeaderPartFactory $partFactory
-     */
     public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
     {
         $this->consumerService = $consumerService;
@@ -67,7 +58,7 @@ abstract class AbstractConsumer
      * Invokes parsing of a header's value into header parts.
      *
      * @param string $value the raw header value
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the array of parsed
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] the array of parsed
      *         parts
      */
     public function __invoke($value)
@@ -79,11 +70,13 @@ abstract class AbstractConsumer
     }
 
     /**
+     * Returns an array of sub-consumers.
+     *
      * Called during construction to set up the list of sub-consumers that will
      * take control from this consumer should a token match a sub-consumer's
      * start token.
      *
-     * @return AbstractConsumer[] the array of consumers
+     * @return AbstractConsumer[] Array of sub-consumers
      */
     abstract protected function getSubConsumers();
 
@@ -93,7 +86,7 @@ abstract class AbstractConsumer
      * Loops into the sub-consumers (and their sub-consumers, etc...) finding
      * all unique consumers, and returns them in an array.
      *
-     * @return \ZBateson\MailMimeParser\Header\AbstractConsumer[]
+     * @return AbstractConsumer[] Array of unique consumers.
      */
     protected function getAllConsumers()
     {
@@ -111,13 +104,13 @@ abstract class AbstractConsumer
     }
 
     /**
-     * Called by __invoke to parse the raw header value into header parts.
+     * Parses the raw header value into header parts.
      *
      * Calls splitTokens to split the value into token part strings, then calls
      * parseParts to parse the returned array.
      *
      * @param string $value
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] the array of parsed
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] the array of parsed
      *         parts
      */
     private function parseRawValue($value)
@@ -128,22 +121,24 @@ abstract class AbstractConsumer
 
     /**
      * Returns an array of regular expression separators specific to this
-     * consumer.  The returned patterns are used to split the header value into
-     * tokens for the consumer to parse into parts.
+     * consumer.
+     * 
+     * The returned patterns are used to split the header value into tokens for
+     * the consumer to parse into parts.
      *
      * Each array element makes part of a generated regular expression that is
      * used in a call to preg_split().  RegEx patterns can be used, and care
      * should be taken to escape special characters.
      *
-     * @return string[] the array of patterns
+     * @return string[] Array of regex patterns.
      */
     abstract protected function getTokenSeparators();
 
     /**
      * Returns a list of regular expression markers for this consumer and all
-     * sub-consumers by calling 'getTokenSeparators'..
+     * sub-consumers by calling getTokenSeparators().
      *
-     * @return string[] an array of regular expression markers
+     * @return string[] Array of regular expression markers.
      */
     protected function getAllTokenSeparators()
     {
@@ -156,8 +151,10 @@ abstract class AbstractConsumer
     }
 
     /**
-     * Returns a regex pattern used to split the input header string.  The
-     * default implementation calls getAllTokenSeparators and implodes the
+     * Returns a regex pattern used to split the input header string.
+     * 
+     * The default implementation calls
+     * {@see AbstractConsumer::getAllTokenSeparators()} and implodes the
      * returned array with the regex OR '|' character as its glue.
      *
      * @return string the regex pattern
@@ -172,8 +169,9 @@ abstract class AbstractConsumer
     /**
      * Returns an array of split tokens from the input string.
      *
-     * The method calls preg_split using getTokenSplitPattern.  The split
-     * array will not contain any empty parts and will contain the markers.
+     * The method calls preg_split using
+     * {@see AbstractConsumer::getTokenSplitPattern()}.  The split array will
+     * not contain any empty parts and will contain the markers.
      *
      * @param string $rawValue the raw string
      * @return array the array of tokens
@@ -192,7 +190,7 @@ abstract class AbstractConsumer
      * Returns true if the passed string token marks the beginning marker for
      * the current consumer.
      *
-     * @param string $token the current token
+     * @param string $token The current token
      * @return bool
      */
     abstract protected function isStartToken($token);
@@ -201,15 +199,15 @@ abstract class AbstractConsumer
      * Returns true if the passed string token marks the end marker for the
      * current consumer.
      *
-     * @param string $token the current token
+     * @param string $token The current token
      * @return bool
      */
     abstract protected function isEndToken($token);
 
     /**
-     * Constructs and returns a \ZBateson\MailMimeParser\Header\Part\HeaderPart
-     * for the passed string token.  If the token should be ignored, the
-     * function must return null.
+     * Constructs and returns an IHeaderPart for the passed string token.
+     *
+     * If the token should be ignored, the function must return null.
      *
      * The default created part uses the instance's partFactory->newInstance
      * method.
@@ -217,8 +215,8 @@ abstract class AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart|null the
-     *         constructed header part or null if the token should be ignored
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null The constructed
+     *         header part or null if the token should be ignored.
      */
     protected function getPartForToken($token, $isLiteral)
     {
@@ -233,11 +231,13 @@ abstract class AbstractConsumer
     /**
      * Iterates through this consumer's sub-consumers checking if the current
      * token triggers a sub-consumer's start token and passes control onto that
-     * sub-consumer's parseTokenIntoParts.  If no sub-consumer is responsible
-     * for the current token, calls getPartForToken and returns it in an array.
+     * sub-consumer's parseTokenIntoParts().
+     *
+     * If no sub-consumer is responsible for the current token, calls
+     * {@see AbstractConsumer::getPartForToken()} and returns it in an array.
      *
      * @param Iterator $tokens
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function getConsumerTokenParts(Iterator $tokens)
     {
@@ -249,24 +249,24 @@ abstract class AbstractConsumer
                 return $consumer->parseTokensIntoParts($tokens);
             }
         }
-        return [$this->getPartForToken($token, false)];
+        return [ $this->getPartForToken($token, false) ];
     }
 
     /**
-     * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
-     * the current token on the iterator.
+     * Returns an array of IHeaderPart for the current token on the iterator.
      *
      * If the current token is a start token from a sub-consumer, the sub-
-     * consumer's parseTokensIntoParts method is called.
+     * consumer's {@see AbstractConsumer::parseTokensIntoParts()} method is
+     * called.
      *
-     * @param Iterator $tokens
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     * @param Iterator $tokens The token iterator.
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function getTokenParts(Iterator $tokens)
     {
         $token = $tokens->current();
         if (strlen($token) === 2 && $token[0] === '\\') {
-            return [$this->getPartForToken(substr($token, 1), true)];
+            return [ $this->getPartForToken(substr($token, 1), true) ];
         }
         return $this->getConsumerTokenParts($tokens);
     }
@@ -279,8 +279,8 @@ abstract class AbstractConsumer
      * advance on the end token of the current consumer, allowing the end token
      * to be passed up to a higher-level consumer.
      *
-     * @param Iterator $tokens
-     * @param bool $isStartToken
+     * @param Iterator $tokens The token iterator.
+     * @param bool $isStartToken true for the start token.
      */
     protected function advanceToNextToken(Iterator $tokens, $isStartToken)
     {
@@ -291,7 +291,7 @@ abstract class AbstractConsumer
 
     /**
      * Iterates over the passed token Iterator and returns an array of parsed
-     * \ZBateson\MailMimeParser\Header\Part\HeaderPart objects.
+     * IHeaderPart objects.
      *
      * The method checks each token to see if the token matches a sub-consumer's
      * start token, or if it matches the current consumer's end token to stop
@@ -304,8 +304,8 @@ abstract class AbstractConsumer
      * the array is passed to AbstractConsumer::processParts for any final
      * processing.
      *
-     * @param Iterator $tokens an iterator over a string of tokens
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[] an array of
+     * @param Iterator $tokens An iterator over a string of tokens
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] An array of
      *         parsed parts
      */
     protected function parseTokensIntoParts(Iterator $tokens)
@@ -325,8 +325,10 @@ abstract class AbstractConsumer
      * The default implementation simply returns the passed array after
      * filtering out null/empty parts.
      *
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts The parsed
+     *        parts.
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] Array of resulting
+     *         final parts.
      */
     protected function processParts(array $parts)
     {

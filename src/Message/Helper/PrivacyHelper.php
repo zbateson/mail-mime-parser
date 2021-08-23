@@ -6,12 +6,11 @@
  */
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\Part\Factory\MimePartFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\PartBuilderFactory;
-use ZBateson\MailMimeParser\Message\Part\Factory\UUEncodedPartFactory;
-use ZBateson\MailMimeParser\Message\Part\ParentPart;
-use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
+use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 
 /**
  * Provides routines to set or retrieve the signature part of a signed message.
@@ -30,23 +29,13 @@ class PrivacyHelper extends AbstractHelper
      */
     private $multipartHelper;
 
-    /**
-     * Constructor
-     * 
-     * @param MimePartFactory $mimePartFactory
-     * @param UUEncodedPartFactory $uuEncodedPartFactory
-     * @param PartBuilderFactory $partBuilderFactory
-     * @param GenericHelper $genericHelper
-     * @param MultipartHelper $multipartHelper
-     */
     public function __construct(
-        MimePartFactory $mimePartFactory,
-        UUEncodedPartFactory $uuEncodedPartFactory,
-        PartBuilderFactory $partBuilderFactory,
+        IMimePartFactory $mimePartFactory,
+        IUUEncodedPartFactory $uuEncodedPartFactory,
         GenericHelper $genericHelper,
         MultipartHelper $multipartHelper
     ) {
-        parent::__construct($mimePartFactory, $uuEncodedPartFactory, $partBuilderFactory);
+        parent::__construct($mimePartFactory, $uuEncodedPartFactory);
         $this->genericHelper = $genericHelper;
         $this->multipartHelper = $multipartHelper;
     }
@@ -56,20 +45,20 @@ class PrivacyHelper extends AbstractHelper
      * below it with content headers, content and children copied from the
      * message.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $micalg
      * @param string $protocol
      */
-    public function setMessageAsMultipartSigned(Message $message, $micalg, $protocol)
+    public function setMessageAsMultipartSigned(IMessage $message, $micalg, $protocol)
     {
         if (strcasecmp($message->getContentType(), 'multipart/signed') !== 0) {
             $this->multipartHelper->enforceMime($message);
-            $messagePart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+            $messagePart = $this->mimePartFactory->newInstance();
             $this->genericHelper->movePartContentAndChildren($message, $messagePart);
             $message->addChild($messagePart);
             $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');
             $message->setRawHeader(
-                'Content-Type',
+                HeaderConsts::CONTENT_TYPE,
                 "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""
             );
         }
@@ -82,19 +71,19 @@ class PrivacyHelper extends AbstractHelper
      * Sets the signature of the message to $body, creating a signature part if
      * one doesn't exist.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @param string $body
      */
-    public function setSignature(Message $message, $body)
+    public function setSignature(IMessage $message, $body)
     {
         $signedPart = $message->getSignaturePart();
         if ($signedPart === null) {
-            $signedPart = $this->partBuilderFactory->newPartBuilder($this->mimePartFactory)->createMessagePart();
+            $signedPart = $this->mimePartFactory->newInstance();
             $message->addChild($signedPart);
         }
         $signedPart->setRawHeader(
-            'Content-Type',
-            $message->getHeaderParameter('Content-Type', 'protocol')
+            HeaderConsts::CONTENT_TYPE,
+            $message->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'protocol')
         );
         $signedPart->setContent($body);
     }
@@ -107,22 +96,21 @@ class PrivacyHelper extends AbstractHelper
      * Used for multipart/signed messages which doesn't support 8bit transfer
      * encodings.
      *
-     * @param Message $message
+     * @param IMessage $message
      */
-    public function overwrite8bitContentEncoding(Message $message)
+    public function overwrite8bitContentEncoding(IMessage $message)
     {
-        $parts = $message->getAllParts(new PartFilter([
-            'headers' => [ PartFilter::FILTER_INCLUDE => [
-                'Content-Transfer-Encoding' => '8bit'
-            ] ]
-        ]));
+        $parts = $message->getAllParts(function (IMessagePart $part) {
+            return strcasecmp($part->getContentTransferEncoding(), '8bit') === 0;
+        });
         foreach ($parts as $part) {
             $contentType = strtolower($part->getContentType());
-            if ($contentType === 'text/plain' || $contentType === 'text/html') {
-                $part->setRawHeader('Content-Transfer-Encoding', 'quoted-printable');
-            } else {
-                $part->setRawHeader('Content-Transfer-Encoding', 'base64');
-            }
+            $part->setRawHeader(
+                HeaderConsts::CONTENT_TRANSFER_ENCODING,
+                ($contentType === 'text/plain' || $contentType === 'text/html') ?
+                'quoted-printable' :
+                'base64'
+            );
         }
     }
 
@@ -131,12 +119,12 @@ class PrivacyHelper extends AbstractHelper
      * message as some clients seem to prefer the first content part if the
      * client doesn't understand multipart/signed.
      *
-     * @param Message $message
+     * @param IMessage $message
      */
-    public function ensureHtmlPartFirstForSignedMessage(Message $message)
+    public function ensureHtmlPartFirstForSignedMessage(IMessage $message)
     {
         $alt = $message->getPartByMimeType('multipart/alternative');
-        if ($alt !== null && $alt instanceof ParentPart) {
+        if ($alt !== null && $alt->getChildCount() > 0) {
             $cont = $this->multipartHelper->getContentPartContainerFromAlternative('text/html', $alt);
             $children = $alt->getChildParts();
             $pos = array_search($cont, $children, true);
@@ -158,11 +146,11 @@ class PrivacyHelper extends AbstractHelper
      * Note that unlike getSignedMessageAsString, getSignedMessageStream doesn't
      * replace new lines.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @return \Psr\Http\Message\StreamInterface or null if the message doesn't
      *         have any children
      */
-    public function getSignedMessageStream(Message $message)
+    public function getSignedMessageStream(IMessage $message)
     {
         $child = $message->getChild(0);
         if ($child !== null) {
@@ -177,10 +165,10 @@ class PrivacyHelper extends AbstractHelper
      *
      * Non-CRLF new lines are replaced to always be CRLF.
      *
-     * @param Message $message
+     * @param IMessage $message
      * @return string or null if the message doesn't have any children
      */
-    public function getSignedMessageAsString(Message $message)
+    public function getSignedMessageAsString(IMessage $message)
     {
         $stream = $this->getSignedMessageStream($message);
         if ($stream !== null) {
@@ -191,27 +179,5 @@ class PrivacyHelper extends AbstractHelper
             );
         }
         return null;
-    }
-
-    /**
-     * Returns the signature part of a multipart/signed message or null.
-     *
-     * The signature part is determined to always be the 2nd child of a
-     * multipart/signed message, the first being the 'body'.
-     *
-     * Using the 'protocol' parameter of the Content-Type header is unreliable
-     * in some instances (for instance a difference of x-pgp-signature versus
-     * pgp-signature).
-     *
-     * @param Message $message
-     * @return \ZBateson\MailMimeParser\Message\Part\MimePart
-     */
-    public function getSignaturePart(Message $message)
-    {
-        if (strcasecmp($message->getContentType(), 'multipart/signed') === 0) {
-            return $message->getChild(1);
-        } else {
-            return null;
-        }
     }
 }

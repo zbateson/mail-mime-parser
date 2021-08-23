@@ -6,7 +6,6 @@
  */
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -15,7 +14,7 @@ use ZBateson\MbWrapper\MbWrapper;
  * 
  * A Token is meant to hold a value for further processing -- for instance when
  * consuming an address list header (like From or To) -- before it's known what
- * type of HeaderPart it is (could be an email address, could be a name, or
+ * type of IHeaderPart it is (could be an email address, could be a name, or
  * could be a group.)
  *
  * @author Zaahid Bateson
