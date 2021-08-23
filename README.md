@@ -41,7 +41,7 @@ Because of the on-demand parsing, starting in 2.0, the passed resource handle or
 Old code:
 ```php
 $handle = fopen('file.mime', 'r');
-$message = $mailParser->parse($handle);         // returns `IMessage`
+$message = $mailParser->parse($handle);         // returned `Message`
 fclose($handle);
 ```
 
