@@ -65,7 +65,7 @@ interface IMessagePart extends SplSubject
      * Returns the content's disposition, or returns the value of $default if
      * not defined.
      *
-     * @param $default Optional default value to return if not
+     * @param string $default Optional default value to return if not
      *        applicable/defined
      * @return string|null the disposition.
      */

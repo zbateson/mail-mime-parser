@@ -105,7 +105,6 @@ class ParserMimePartProxy extends ParserPartProxy
     public function parseAll()
     {
         $this->parseContent();
-        $child = null;
         while (!$this->allChildrenParsed) {
             $this->parseNextChild();
         }
