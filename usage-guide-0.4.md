@@ -1,3 +1,5 @@
+[Home](/) - [Sponsors](/#sponsors) - [API Documentation](api/2.0) - [Upgrading to 2.0](upgrade-2.0) - [Contributors](/#contributors)
+
 ### Parsing a stream
 
 To parse a mime stream using zbateson/mail-mime-parser, create a [ZBateson\MailMimeParser\MailMimeParser](api/0.4/classes/ZBateson-MailMimeParser-MailMimeParser.html) object and call `parse()`, passing it a resource handle or string. The `MailMimeParser::parse()` method returns a [ZBateson\MailMimeParser\Message](api/0.4/classes/ZBateson-MailMimeParser-Message.html) object representing the parsed mime message.
