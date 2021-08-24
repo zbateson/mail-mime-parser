@@ -76,7 +76,8 @@ $message = $mailParser->parse($handle, false);         // returns `IMessage`
 
 // OR: use this procedurally (Message::from also accepts a string,
 // resource or Psr7 StreamInterface
-$message = Message::from($string);
+// true or false as second parameter doesn't matter in this case.
+$message = Message::from($string, false);
 
 echo $message->getHeaderValue(HeaderConsts::FROM);     // user@example.com
 echo $message
