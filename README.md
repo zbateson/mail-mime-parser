@@ -72,7 +72,7 @@ $handle = fopen('file.mime', 'r');
 // parse() accepts a string, resource or Psr7 StreamInterface
 // pass `true` as the second argument to attach the passed $handle and close
 // it when the IMessage is destroyed.
-$message = $mailParser->parse($handle, false);         // returns `IMessage`
+$string = $mailParser->parse($handle, false);         // returns `IMessage`
 
 // OR: use this procedurally (Message::from also accepts a string,
 // resource or Psr7 StreamInterface
