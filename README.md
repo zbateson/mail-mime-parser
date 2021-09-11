@@ -76,7 +76,7 @@ $message = $mailParser->parse($handle, false);         // returns `IMessage`
 
 // OR: use this procedurally (Message::from also accepts a string,
 // resource or Psr7 StreamInterface
-// true or false as second parameter doesn't matter in this case.
+// true or false as second parameter doesn't matter if passing a string.
 $string = "Content-Type: text/plain\r\nSubject: Test\r\n\r\nMessage";
 $message = Message::from($string, false);
 
