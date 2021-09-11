@@ -68,15 +68,16 @@ use ZBateson\MailMimeParser\Header\HeaderConsts;
 // use an instance of MailMimeParser as a class dependency
 $mailParser = new MailMimeParser();
 
-$handle = fopen('file.mime', 'r');
 // parse() accepts a string, resource or Psr7 StreamInterface
 // pass `true` as the second argument to attach the passed $handle and close
-// it when the IMessage is destroyed.
+// it when the returned IMessage is destroyed.
+$handle = fopen('file.mime', 'r');
 $message = $mailParser->parse($handle, false);         // returns `IMessage`
 
 // OR: use this procedurally (Message::from also accepts a string,
 // resource or Psr7 StreamInterface
 // true or false as second parameter doesn't matter in this case.
+$string = "Content-Type: text/plain\r\nSubject: Test\r\n\r\nMessage";
 $message = Message::from($string, false);
 
 echo $message->getHeaderValue(HeaderConsts::FROM);     // user@example.com
