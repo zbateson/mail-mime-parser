@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-    bootstrap="./bootstrap.php"
-    colors="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    stopOnError="false"
-    stopOnFailure="false"
-    stopOnIncomplete="false"
-    stopOnSkipped="false">
-    <php>
-        <const name="TEST_DATA_DIR" value="_data"/>
-        <const name="TEST_OUTPUT_DIR" value="_output"/>
-    </php>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../src/</directory>
-        </whitelist>
-    </filter>
-    <!--
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        bootstrap="./bootstrap.php"
+        colors="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">../src/</directory>
+    </include>
+  </coverage>
+  <php>
+    <const name="TEST_DATA_DIR" value="_data"/>
+    <const name="TEST_OUTPUT_DIR" value="_output"/>
+  </php>
+  <!--
     Files specified in order for code coverage reporting - for example, Container
     as a singleton instance only gets constructed once, and for coverage to be
     reported correctly, needs to be the first class tested.
     -->
-    <testsuites>
-        <testsuite name="Base">
-            <directory suffix="Test.php">MailMimeParser</directory>
-        </testsuite>
-        <testsuite name="Header">
-            <directory suffix="Test.php">MailMimeParser/Header</directory>
-        </testsuite>
-        <testsuite name="Message">
-            <directory suffix="Test.php">MailMimeParser/Message</directory>
-        </testsuite>
-        <testsuite name="Parser">
-            <directory suffix="Test.php">MailMimeParser/Parser</directory>
-        </testsuite>
-        <testsuite name="Stream">
-            <directory suffix="Test.php">MailMimeParser/Stream</directory>
-        </testsuite>
-        <testsuite name="Integration">
-            <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>
-        </testsuite>
-    </testsuites>
+  <testsuites>
+    <testsuite name="Base">
+      <directory suffix="Test.php">MailMimeParser</directory>
+    </testsuite>
+    <testsuite name="Header">
+      <directory suffix="Test.php">MailMimeParser/Header</directory>
+    </testsuite>
+    <testsuite name="Message">
+      <directory suffix="Test.php">MailMimeParser/Message</directory>
+    </testsuite>
+    <testsuite name="Parser">
+      <directory suffix="Test.php">MailMimeParser/Parser</directory>
+    </testsuite>
+    <testsuite name="Stream">
+      <directory suffix="Test.php">MailMimeParser/Stream</directory>
+    </testsuite>
+    <testsuite name="Integration">
+      <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
