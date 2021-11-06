@@ -116,7 +116,7 @@ class MimeLiteralPartTest extends TestCase
             '=?ISO-2022-JP?B?GyRCOnkbKEI=?='
         );
         $this->assertDecoded(
-            '﻿这也不会,那也不会',
+            '这也不会,那也不会',
             '=?UTF-32?B?//4AANmPAABfTgAADU4AABpPAAAsAAAAo5AAAF9OAAANTgAAGk8AAA==?='
         );
         $this->assertDecoded(
