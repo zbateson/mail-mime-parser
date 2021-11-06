@@ -117,7 +117,7 @@ class ParameterConsumer extends GenericConsumer
                 $matches[1],
                 $strValue,
                 $matches[2],
-                (empty($matches[2]) || !empty($matches[3]))
+                (($matches[2] === '') || !empty($matches[3]))
             );
         }
         return $this->partFactory->newParameterPart($strName, $strValue);

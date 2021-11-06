@@ -200,6 +200,15 @@ class ParameterConsumerTest extends TestCase
         $this->assertCount(2, $ret);
         $this->assertEquals('TS Eliot', $ret[1]->getValue());
     }
+    
+    public function testSplitHeaderWithQuotedValueContainingDoubleApos()
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
+            . 'That\'s \'gotta\' hurt"');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('That\'s \'gotta\' hurt', $ret[1]->getValue());
+    }
 
     public function testSplitHeaderWithSplitRfc2047()
     {
