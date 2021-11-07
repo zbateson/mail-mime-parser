@@ -117,7 +117,7 @@ class MimeLiteralPartTest extends TestCase
         );
         $this->assertDecoded(
             '这也不会,那也不会',
-            '=?UTF-32?B?//4AANmPAABfTgAADU4AABpPAAAsAAAAo5AAAF9OAAANTgAAGk8AAA==?='
+            '=?UTF-32?B?AACP2QAATl8AAE4NAABPGgAAACwAAJCjAABOXwAATg0AAE8a?='
         );
         $this->assertDecoded(
             'セミオーダー感覚で選ぶ、ジャケット',
