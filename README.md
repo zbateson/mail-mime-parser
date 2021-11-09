@@ -124,7 +124,7 @@ fclose($handle);
 ## Documentation
 
 * [Usage Guide](https://mail-mime-parser.org/)
-* [API Reference](https://mail-mime-parser.org/api/2.0)
+* [API Reference](https://mail-mime-parser.org/api/2.1)
 
 ## Upgrading to 1.x or 2.x
 
