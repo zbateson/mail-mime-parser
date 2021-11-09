@@ -82,6 +82,16 @@ class ConsumerService
     }
     
     /**
+     * Returns the AddressEmailConsumer singleton instance.
+     * 
+     * @return AddressEmailConsumer
+     */
+    public function getAddressEmailConsumer()
+    {
+        return AddressEmailConsumer::getInstance($this, $this->partFactory);
+    }
+    
+    /**
      * Returns the CommentConsumer singleton instance.
      * 
      * @return CommentConsumer

@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
+use ZBateson\MailMimeParser\Header\Part\AddressPart;
 
 /**
  * Parses a single part of an address header.
@@ -45,21 +46,21 @@ class AddressConsumer extends AbstractConsumer
     {
         return [
             $this->consumerService->getAddressGroupConsumer(),
+            $this->consumerService->getAddressEmailConsumer(),
             $this->consumerService->getCommentConsumer(),
             $this->consumerService->getQuotedStringConsumer(),
         ];
     }
     
     /**
-     * Overridden to return patterns matching the beginning part of an address
-     * in a name/address part ("<" and ">" chars), end tokens ("," and ";"), and
+     * Overridden to return patterns matching end tokens ("," and ";"), and
      * whitespace.
      * 
      * @return string[] the patterns
      */
     public function getTokenSeparators()
     {
-        return [ '<', '>', ',', ';', '\s+' ];
+        return [ ',', ';', '\s+' ];
     }
     
     /**
@@ -129,18 +130,22 @@ class AddressConsumer extends AbstractConsumer
     protected function processParts(array $parts)
     {
         $strName = '';
-        $strValue = '';
+        $strEmail = '';
         foreach ($parts as $part) {
             if ($part instanceof AddressGroupPart) {
                 return [
                     $this->partFactory->newAddressGroupPart(
                         $part->getAddresses(),
-                        $strValue
+                        $strEmail
                     )
                 ];
+            } elseif ($part instanceof AddressPart) {
+                $strName = $strEmail;
+                $strEmail = $part->getEmail();
+                break;
             }
-            $this->processSinglePart($part, $strName, $strValue);
+            $strEmail .= $part->getValue();
         }
-        return [ $this->partFactory->newAddressPart($strName, $strValue) ];
+        return [ $this->partFactory->newAddressPart($strName, $strEmail) ];
     }
 }

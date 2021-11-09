@@ -45,6 +45,13 @@ class ConsumerServiceTest extends TestCase
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Consumer\AddressConsumer', $consumer);
     }
+    
+    public function testGetAddressEmailConsumer()
+    {
+        $consumer = $this->consumerService->getAddressEmailConsumer();
+        $this->assertNotNull($consumer);
+        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumer', $consumer);
+    }
 
     public function testGetAddressGroupConsumer()
     {

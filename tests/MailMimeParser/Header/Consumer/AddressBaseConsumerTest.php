@@ -61,6 +61,20 @@ class AddressBaseConsumerTest extends TestCase
         $this->assertEquals('Brute', $ret[2]->getName());
         $this->assertEquals('brute@isThatHisName.com', $ret[2]->getEmail());
     }
+    
+    public function testConsumeNamesAndAddressesWithFunnyChars()
+    {
+        $emails = '"Popeye the Sailor" <Popeye@TheSailorMan.com>, "Olive" <Olive@Oil.com:>, Brute <brute@isThatHisName.com,>, NotCute <notcute@address.com;>';
+        $ret = $this->addressBaseConsumer->__invoke($emails);
+        $this->assertNotEmpty($ret);
+        $this->assertCount(4, $ret);
+
+        $this->assertEquals('Popeye@TheSailorMan.com', $ret[0]->getEmail());
+        $this->assertEquals('Olive@Oil.com:', $ret[1]->getEmail());
+        $this->assertEquals('Brute', $ret[2]->getName());
+        $this->assertEquals('brute@isThatHisName.com,', $ret[2]->getEmail());
+        $this->assertEquals('notcute@address.com;', $ret[3]->getEmail());
+    }
 
     public function testConsumeAddressAndGroup()
     {
