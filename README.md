@@ -56,7 +56,7 @@ For a more complete list of changes, please visit the [2.0 Upgrade Guide](https:
 
 ## Requirements
 
-MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2, 7.3, 7.4 and 8.0.
+MailMimeParser requires PHP 5.4 or newer.  Tested on PHP 5.4, 5.5, 5.6, 7, 7.1, 7.2, 7.3, 7.4, 8.0 and 8.1.
 
 ## Usage
 
