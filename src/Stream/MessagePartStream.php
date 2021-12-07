@@ -41,7 +41,7 @@ class MessagePartStream implements StreamInterface, SplObserver
 
     /**
      * Constructor
-     * 
+     *
      * @param StreamFactory $sdf
      * @param IMessagePart $part
      */
@@ -59,6 +59,7 @@ class MessagePartStream implements StreamInterface, SplObserver
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function update(SplSubject $subject)
     {
         if ($this->appendStream !== null) {
@@ -89,7 +90,7 @@ class MessagePartStream implements StreamInterface, SplObserver
         }
         return $stream;
     }
-    
+
     /**
      * Attaches and returns a transfer encoding stream decorator to the passed
      * $stream.
@@ -173,7 +174,7 @@ class MessagePartStream implements StreamInterface, SplObserver
             $streams[] = $child->getStream();
         }
         $streams[] = Psr7\Utils::streamFor("\r\n--$boundary--\r\n");
-        
+
         return $streams;
     }
 

@@ -21,7 +21,7 @@ use SplSubject;
  * stream as the part's stream instead of the PartStreamContainer's
  * MessagePartStream (which dynamically creates a stream from an IMessagePart)
  * unless the part changed.
- * 
+ *
  * The ParserPartStreamContainer must also be attached to its underlying part
  * with SplSubject::attach() so the ParserPartStreamContainer gets notified of
  * any changes.
@@ -143,6 +143,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getStream();
     }
 
+    #[\ReturnTypeWillChange]
     public function update(SplSubject $subject)
     {
         $this->partUpdated = true;
