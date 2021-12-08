@@ -37,9 +37,10 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      * Returns true if the current element is an IMultiPart and doesn't return
      * null for {@see IMultiPart::getChildIterator()}.  Note that the iterator
      * may still be empty.
-     * 
+     *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function hasChildren()
     {
         return ($this->current() instanceof IMultiPart
@@ -52,6 +53,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      *
      * @return RecursiveIterator|null the iterator
      */
+    #[\ReturnTypeWillChange]
     public function getChildren()
     {
         if ($this->current() instanceof IMultiPart) {
@@ -60,26 +62,31 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         return null;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->offsetGet($this->position);
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->position;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->position = 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->offsetExists($this->position);
@@ -112,6 +119,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      * @param IMessagePart $part The part to remove.
      * @return int the 0-based position it previously occupied.
      */
+    #[\ReturnTypeWillChange]
     public function remove(IMessagePart $part)
     {
         foreach ($this->children as $key => $child) {
@@ -123,16 +131,19 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         return null;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->children[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->children[$offset] : null;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (!$value instanceof IMessagePart) {
@@ -147,6 +158,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         array_splice($this->children, $offset, 1);

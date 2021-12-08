@@ -111,7 +111,7 @@ class PartHeaderContainer implements IteratorAggregate
     /**
      * Returns the IHeader object for the header with the given $name, or null
      * if none exist.
-     * 
+     *
      * An optional offset can be provided, which defaults to the first header in
      * the collection when more than one header with the same name exists.
      *
@@ -290,6 +290,7 @@ class PartHeaderContainer implements IteratorAggregate
      *
      * @return ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->getHeaders());
