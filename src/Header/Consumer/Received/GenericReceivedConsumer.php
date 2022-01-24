@@ -88,7 +88,7 @@ class GenericReceivedConsumer extends GenericConsumer
      */
     protected function isStartToken($token)
     {
-        $pattern = '/^\s*(' . preg_quote($this->getPartName(), '/') . ')\s*$/i';
+        $pattern = '/^' . preg_quote($this->getPartName(), '/') . '$/i';
         return (preg_match($pattern, $token) === 1);
     }
 
@@ -96,7 +96,6 @@ class GenericReceivedConsumer extends GenericConsumer
      * Returns true if the token matches (case-insensitively) any of the
      * following, with optional surrounding whitespace:
      *
-     * o from
      * o by
      * o via
      * o with
@@ -109,7 +108,7 @@ class GenericReceivedConsumer extends GenericConsumer
      */
     protected function isEndToken($token)
     {
-        return (preg_match('/^\s*(from|by|via|with|id|for|;)\s*$/i', $token) === 1);
+        return (preg_match('/^(by|via|with|id|for|;)$/i', $token) === 1);
     }
 
     /**
@@ -123,7 +122,7 @@ class GenericReceivedConsumer extends GenericConsumer
     {
         return [
             '\s+',
-            '(\A\s*)?(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)\s+'
+            '(\A\s*|\s+)(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)(?=\s+)'
         ];
     }
 
