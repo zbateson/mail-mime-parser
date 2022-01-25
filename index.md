@@ -1,4 +1,4 @@
-[About](#) - [Sponsors](/#sponsors) - [Basics](#basicsintroduction) - [Usage Guide](#usage-guide) - [API Documentation](api/2.1) -
+[About](#) - [Sponsors](/#sponsors) - [Basics](#basicsintroduction) - [Usage Guide](#usage-guide) - [API Documentation](api/2.2) -
 [Upgrading to 2.0](upgrade-2.0) - [Contributors](#contributors)
 
 # zbateson/mail-mime-parser
@@ -126,14 +126,14 @@ There are numerous advantages over other libraries:
 ### Parsing an email
 
 To parse an email using zbateson/mail-mime-parser, pass a
-[ZBateson\MailMimeParser\MailMimeParser](api/2.1/classes/ZBateson-MailMimeParser-MailMimeParser.html)
+[ZBateson\MailMimeParser\MailMimeParser](api/2.2/classes/ZBateson-MailMimeParser-MailMimeParser.html)
 object as a dependency to your class, and call
-[parse()](api/2.1/classes/ZBateson-MailMimeParser-MailMimeParser.html#method_parse).
+[parse()](api/2.2/classes/ZBateson-MailMimeParser-MailMimeParser.html#method_parse).
 The `parse()` method accepts a string, resource handle, or Psr7 StreamInterface
 stream.
 
 Alternatively for procedural/non dependency injected usage, calling
-[Message::from()](api/2.1/classes/ZBateson-MailMimeParser-Message.html#method_from)
+[Message::from()](api/2.2/classes/ZBateson-MailMimeParser-Message.html#method_from)
 may be easier.  It accepts the same arguments as `parse()`.
 
 ```php
@@ -155,18 +155,18 @@ $message = Message::from($string, false);
 ### Message headers
 
 Headers are represented by
-[ZBateson\MailMimeParser\Header\IHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-IHeader.html)
+[ZBateson\MailMimeParser\Header\IHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-IHeader.html)
 and sub-classes, depending on the type of header being parsed.  In general terms:
 
-* [AddressHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-AddressHeader.html) is returned for headers consisting of addresses and address groups (e.g. `From:`, `To:`, `Cc:`, etc...)
-* [DateHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-DateHeader.html) parses header values into a `DateTime` object (e.g. a `Date:` header)
-* [ParameterHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-ParameterHeader.html) represents headers consisting of multiple name/values (e.g. `Content-Type:`)
-* [IdHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-IdHeader.html) for ID headers, like `Message-ID`, `Content-ID`, `In-Reply-To` and `Reference`
-* [ReceivedHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html) for `Received` header parsing
-* [SubjectHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-SubjectHeader.html) for `Subject` headers (basically just mime-header decoding)
-* [GenericHeader](api/2.1/classes/ZBateson-MailMimeParser-Header-GenericHeader.html) is used for any other header
+* [AddressHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-AddressHeader.html) is returned for headers consisting of addresses and address groups (e.g. `From:`, `To:`, `Cc:`, etc...)
+* [DateHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-DateHeader.html) parses header values into a `DateTime` object (e.g. a `Date:` header)
+* [ParameterHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-ParameterHeader.html) represents headers consisting of multiple name/values (e.g. `Content-Type:`)
+* [IdHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-IdHeader.html) for ID headers, like `Message-ID`, `Content-ID`, `In-Reply-To` and `Reference`
+* [ReceivedHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html) for `Received` header parsing
+* [SubjectHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-SubjectHeader.html) for `Subject` headers (basically just mime-header decoding)
+* [GenericHeader](api/2.2/classes/ZBateson-MailMimeParser-Header-GenericHeader.html) is used for any other header
 
-To retrieve an IHeader object, call `IMessage::getHeader()` from a [ZBateson\MailMimeParser\IMessage](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html) object.
+To retrieve an IHeader object, call `IMessage::getHeader()` from a [ZBateson\MailMimeParser\IMessage](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html) object.
 
 ```php
 // $message = $parser->parse($resource, true);
@@ -207,22 +207,22 @@ $charset = $parameterHeader->getValueFor('charset', 'us-ascii');
 
 ### Message parts (text, html and other attachments)
 
-Essentially, the [\ZBateson\MailMimeParser\IMessage](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html) object returned is itself a sub-class of [\ZBateson\MailMimeParser\Message\Part\IMimePart](api/2.1/classes/ZBateson-MailMimeParser-Message-IMimePart.html).  An IMessage can contain IMimePart children (which in turn could contain their own children).
+Essentially, the [\ZBateson\MailMimeParser\IMessage](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html) object returned is itself a sub-class of [\ZBateson\MailMimeParser\Message\Part\IMimePart](api/2.2/classes/ZBateson-MailMimeParser-Message-IMimePart.html).  An IMessage can contain IMimePart children (which in turn could contain their own children).
 
 Internally, IMessage maintains the structure of its parsed parts.  Most users will only be interested in text parts (plain or html) and attachments.  The following methods help you do just that:
-* [IMessage::getTextStream()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextStream)
-* [IMessage::getTextContent()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextContent)
-* [IMessage::getHtmlStream()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlStream)
-* [IMessage::getHtmlContent()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlContent)
-* [IMessage::getAttachmentPart()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getAttachmentPart)
-* [IMessage::getAllAttachmentParts()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getAllAttachmentParts)
+* [IMessage::getTextStream()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextStream)
+* [IMessage::getTextContent()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextContent)
+* [IMessage::getHtmlStream()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlStream)
+* [IMessage::getHtmlContent()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlContent)
+* [IMessage::getAttachmentPart()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getAttachmentPart)
+* [IMessage::getAllAttachmentParts()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getAllAttachmentParts)
 
 `IMessagePart` (the base class of all parts of a message) defines useful stream and content functions, e.g.:
-* [IMessagePart::getContentStream()](api/2.1/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentStream)
-* [IMessagePart::getContentType()](api/2.1/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentType)
-* [IMessagePart::getFilename()](api/2.1/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getFilename)
-* [IMessagePart::getCharset()](api/2.1/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getCharset)
-* [IMessagePart::saveContent()](api/2.1/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_saveContent)
+* [IMessagePart::getContentStream()](api/2.2/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentStream)
+* [IMessagePart::getContentType()](api/2.2/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentType)
+* [IMessagePart::getFilename()](api/2.2/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getFilename)
+* [IMessagePart::getCharset()](api/2.2/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getCharset)
+* [IMessagePart::saveContent()](api/2.2/classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_saveContent)
 
 Example:
 ```php
@@ -257,7 +257,7 @@ foreach ($atts as $ind => $part) {
 
 ### Reading text and html parts
 
-As a convenient way of reading the text and HTML parts of an `IMessage`, use [IMessage::getTextStream()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextStream) and [IMessage::getHtmlStream()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlStream) or the shortcuts returning strings if you want strings directly [IMessage::getTextContent()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextContent) and [IMessage::getHtmlContent()](api/2.1/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlContent)
+As a convenient way of reading the text and HTML parts of an `IMessage`, use [IMessage::getTextStream()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextStream) and [IMessage::getHtmlStream()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlStream) or the shortcuts returning strings if you want strings directly [IMessage::getTextContent()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getTextContent) and [IMessage::getHtmlContent()](api/2.2/classes/ZBateson-MailMimeParser-IMessage.html#method_getHtmlContent)
 
 ```php
 // $message = $parser->parse($resource, true);
@@ -274,7 +274,8 @@ echo $message->getHtmlContent();
 ```
 
 ## API Documentation
-* [Current (2.1)](api/2.1)
+* [Current (2.1)](api/2.2)
+* [2.1](api/2.1)
 * [2.0](api/2.0)
 * [1.3](api/1.3)
 * [1.2](api/1.2)
