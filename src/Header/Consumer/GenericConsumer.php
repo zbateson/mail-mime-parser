@@ -40,10 +40,6 @@ class GenericConsumer extends AbstractConsumer
      * Returns the regex '\s+' (whitespace) pattern matcher as a token marker so
      * the header value is split along whitespace characters.
      *
-     * GenericConsumer filters out whitespace-only tokens from getPartForToken.
-     * 
-     * The whitespace character delimits mime-encoded parts for decoding.
-     * 
      * @return string[] an array of regex pattern matchers
      */
     protected function getTokenSeparators()

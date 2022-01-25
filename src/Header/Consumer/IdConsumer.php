@@ -43,4 +43,21 @@ class IdConsumer extends GenericConsumer
     {
         return ($token === '<');
     }
+
+    /**
+     * Returns null for whitespace, and LiteralPart for anything else.
+     *
+     * @param string $token the token
+     * @param bool $isLiteral set to true if the token represents a literal -
+     *        e.g. an escaped token
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null the constructed
+     *         header part or null if the token should be ignored
+     */
+    protected function getPartForToken($token, $isLiteral)
+    {
+        if (preg_match('/^\s+$/', $token)) {
+            return null;
+        }
+        return $this->partFactory->newLiteralPart($token);
+    }
 }

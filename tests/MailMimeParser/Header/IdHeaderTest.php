@@ -99,4 +99,31 @@ class IdHeaderTest extends TestCase
             $header->getIds()
         );
     }
+    
+    public function testReferencesHeader()
+    {
+        $header = new IdHeader(
+            $this->mimeLiteralPartFactory,
+            $this->consumerService,
+            'References',
+            '=?us-ascii?Q?' . "\r\n"
+            . '<86c6f658-a49a-709a-5089-75c73560128b@local.test>_'
+            . '<7afxgxia=5F2336078@local.test>_<504FD9' . "\r\n"
+            . 'B2-E05?= =?us-ascii?Q?6-4971-A722-953664BEFB5F@local.test>?=' . "\r\n"
+            . '<2786730_7afxgxia@local.test>'
+        );
+        $this->assertEquals(
+            '86c6f658-a49a-709a-5089-75c73560128b@local.test',
+            $header->getValue()
+        );
+        $this->assertEquals(
+            [
+                '86c6f658-a49a-709a-5089-75c73560128b@local.test',
+                '7afxgxia_2336078@local.test',
+                '504FD9B2-E056-4971-A722-953664BEFB5F@local.test',
+                '2786730_7afxgxia@local.test'
+            ],
+            $header->getIds()
+        );
+    }
 }

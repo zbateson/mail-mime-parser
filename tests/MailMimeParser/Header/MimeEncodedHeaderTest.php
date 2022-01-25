@@ -67,16 +67,16 @@ class MimeEncodedHeaderTest extends TestCase
             'Test',
             "=?US-ASCII?Q?Kilgore_?= =?US-ASCII?Q?Tro?=\r\n =?US-ASCII?Q?ut?="
         );
-        $this->assertEquals('Kilgore Trout', $header->getValue());
+        $this->assertEquals('Kilgore  Tro ut', $header->getValue());
     }
 
-    public function testNotDecodedWhenMixed()
+    public function testDecodeWhenMixed()
     {
         $t = "=?US-ASCII?Q?Kilgore_?= TEST =?US-ASCII?Q?Tro?= =?US-ASCII?Q?ut?=";
         $header = $this->newMimeEncodedHeader(
             'Test',
             $t
         );
-        $this->assertEquals($t, $header->getValue());
+        $this->assertEquals('Kilgore  TEST Tro ut', $header->getValue());
     }
 }

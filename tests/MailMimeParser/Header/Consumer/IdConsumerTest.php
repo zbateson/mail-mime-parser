@@ -53,7 +53,7 @@ class IdConsumerTest extends TestCase
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
 
-        $this->assertEquals('An id without an end', $ret[0]->getValue());
+        $this->assertEquals('Anidwithoutanend', $ret[0]->getValue());
     }
 
     public function testConsumeIdWithComments()
@@ -63,6 +63,6 @@ class IdConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\LiteralPart', $ret[0]);
-        $this->assertEquals('first quoted', $ret[0]->getValue());
+        $this->assertEquals('firstquoted', $ret[0]->getValue());
     }
 }
