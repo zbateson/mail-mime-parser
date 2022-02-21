@@ -125,7 +125,7 @@ class MimeLiteralPart extends LiteralPart
      */
     private function decodeSplitPart($entity)
     {
-        if (preg_match('/^=\?([A-Za-z\-_0-9]+)\*?([A-Za-z\-_0-9]+)?\?([QBqb])\?([^\?]+)\?=$/', $entity, $matches)) {
+        if (preg_match('/^=\?([A-Za-z\-_0-9]+)\*?([A-Za-z\-_0-9]+)?\?([QBqb])\?([^\?]*)\?=$/', $entity, $matches)) {
             return $this->decodeMatchedEntity($matches);
         }
         $decoded = $this->convertEncoding($entity);
