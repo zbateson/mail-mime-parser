@@ -47,6 +47,13 @@ class MimeLiteralPartTest extends TestCase
         $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
     }
 
+    public function testDecodeEmpty()
+    {
+        $this->assertDecoded('', '=?US-ASCII?Q??=');
+        $this->assertDecoded('', '=?utf-8?Q??=');
+    }
+
+
     public function testMimeEncodingNullLanguage()
     {
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
