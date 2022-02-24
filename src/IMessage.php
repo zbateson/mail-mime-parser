@@ -184,7 +184,7 @@ interface IMessage extends IMimePart
      * @param string $contentTypeCharset the charset to use as the text/html
      *        part's content-type header charset value.
      */
-    public function setHtmlPart($resource, $charset = 'UTF-8');
+    public function setHtmlPart($resource, $contentTypeCharset = 'UTF-8');
 
     /**
      * Removes the text/plain part of the message at the passed index if one
