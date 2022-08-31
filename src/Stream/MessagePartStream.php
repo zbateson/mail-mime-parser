@@ -59,6 +59,9 @@ class MessagePartStream implements StreamInterface, SplObserver
         }
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function update(SplSubject $subject)
     {

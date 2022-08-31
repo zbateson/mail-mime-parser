@@ -131,18 +131,27 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         return null;
     }
 
+    /**
+     * @return bool
+     */
     #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->children[$offset]);
     }
 
+    /**
+     * @return mixed
+     */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->children[$offset] : null;
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
@@ -158,6 +167,9 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         }
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {

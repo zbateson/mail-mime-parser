@@ -143,6 +143,9 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getStream();
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function update(SplSubject $subject)
     {
