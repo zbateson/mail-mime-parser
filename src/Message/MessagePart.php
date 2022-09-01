@@ -57,18 +57,27 @@ abstract class MessagePart implements IMessagePart
         $this->observers = new SplObjectStorage();
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function attach(SplObserver $observer)
     {
         $this->observers->attach($observer);
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function detach(SplObserver $observer)
     {
         $this->observers->detach($observer);
     }
 
+    /**
+     * @return void
+     */
     #[\ReturnTypeWillChange]
     public function notify()
     {
