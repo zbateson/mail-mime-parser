@@ -48,6 +48,10 @@ class HeaderStream implements StreamInterface, SplObserver
         }
     }
 
+    /**
+     * @return void
+     */
+    #[\ReturnTypeWillChange]
     public function update(SplSubject $subject)
     {
         if ($this->stream !== null) {
