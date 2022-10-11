@@ -257,7 +257,7 @@ class MimePart extends MultiPart implements IMimePart
     {
         $header = $this->getHeader($name);
         if ($header !== null) {
-            return $header->getValue();
+            return $header->getValue() ?? $defaultValue;
         }
         return $defaultValue;
     }
