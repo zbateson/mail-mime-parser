@@ -6,10 +6,10 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
+use ZBateson\MailMimeParser\Header\Part\LiteralPart;
 
 /**
  * Parses a single part of an address header.
@@ -87,31 +87,7 @@ class AddressConsumer extends AbstractConsumer
     {
         return true;
     }
-    
-    /**
-     * Checks if the passed part represents the beginning or end of an address
-     * part (less than/greater than characters) and either appends the value of
-     * the part to the passed $strValue, or sets up $strName
-     * 
-     * @param IHeaderPart $part
-     * @param string $strName
-     * @param string $strValue
-     */
-    private function processSinglePart(IHeaderPart $part, &$strName, &$strValue)
-    {
-        $pValue = $part->getValue();
-        if ($part instanceof Token) {
-            if ($pValue === '<') {
-                $strName = $strValue;
-                $strValue = '';
-                return;
-            } elseif ($pValue === '>') {
-                return;
-            }
-        }
-        $strValue .= $pValue;
-    }
-    
+
     /**
      * Performs final processing on parsed parts.
      * 
@@ -136,16 +112,18 @@ class AddressConsumer extends AbstractConsumer
                 return [
                     $this->partFactory->newAddressGroupPart(
                         $part->getAddresses(),
-                        $strEmail
+                        $strName
                     )
                 ];
             } elseif ($part instanceof AddressPart) {
-                $strName = $strEmail;
-                $strEmail = $part->getEmail();
-                break;
+                return [ $this->partFactory->newAddressPart($strName, $part->getEmail()) ];
+            } elseif ((($part instanceof LiteralPart) && !($part instanceof CommentPart)) && $part->getValue() !== '') {
+                $strEmail .= '"' . preg_replace('/(["\\\])/', "\\\\$1", $part->getValue()) . '"';
+            } else {
+                $strEmail .= preg_replace('/\s+/', '', $part->getValue());
             }
-            $strEmail .= $part->getValue();
+            $strName .= $part->getValue();
         }
-        return [ $this->partFactory->newAddressPart($strName, $strEmail) ];
+        return [ $this->partFactory->newAddressPart('', $strEmail) ];
     }
 }

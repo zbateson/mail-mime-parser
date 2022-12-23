@@ -49,6 +49,13 @@ class AddressConsumerTest extends TestCase
         $this->assertEquals($email, $address->getEmail());
     }
 
+    public function testConsumeEmailWithSpaces()
+    {
+        $email = "Max\n\t  .Payne@AddressUnknown.com";
+        $ret = $this->addressConsumer->__invoke($email);
+        $this->assertEquals('Max.Payne@AddressUnknown.com', $ret[0]->getEmail());
+    }
+
     public function testConsumeEmailName()
     {
         $email = 'Max Payne <Max.Payne@AddressUnknown.com>';
@@ -91,16 +98,28 @@ class AddressConsumerTest extends TestCase
 
     public function testConsumeEmailWithQuotes()
     {
-        // can't remember any longer if this is how it should be handled
-        // need to review RFC
-        $email = 'Max"(imum).Payne (comment)"@AddressUnknown.com';
+        $email = 'Max"(imum)..Payne (not a comment)"@AddressUnknown.com';
         $ret = $this->addressConsumer->__invoke($email);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
-        $this->assertEquals('Max(imum).Payne(comment)@AddressUnknown.com', $address->getEmail());
+        $this->assertEquals('Max"(imum)..Payne (not a comment)"@AddressUnknown.com', $address->getEmail());
+    }
+
+    public function testConsumeQuotedEmailLocalPartWithSpaces()
+    {
+        $email = "\"Max\n\t  .Payne\"@AddressUnknown.com";
+        $ret = $this->addressConsumer->__invoke($email);
+        $this->assertEquals("\"Max\t  .Payne\"@AddressUnknown.com", $ret[0]->getEmail());
+    }
+
+    public function testConsumeVeryStrangeQuotedEmailLocalPart()
+    {
+        $email = '"very.(),:;<>[]\"  .VERY.\"very@\\\\ \"very\".unusual"@strange.example.com';
+        $ret = $this->addressConsumer->__invoke($email);
+        $this->assertEquals($email, $ret[0]->getEmail());
     }
 
     public function testConsumeAddressGroup()

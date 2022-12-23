@@ -6,6 +6,8 @@
  */
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\LiteralPart;
+
 /**
  * Parses the Address portion of an email address header, for an address part
  * that contains both a name and an email address, e.g. "name" <email@tld.com>.
@@ -78,7 +80,13 @@ class AddressEmailConsumer extends AbstractConsumer
     {
         $strEmail = '';
         foreach ($parts as $p) {
-            $strEmail .= $p->getValue();
+            $val = $p->getValue();
+            if ((($p instanceof LiteralPart) && !($p instanceof CommentPart)) && $val !== '') {
+                $val = '"' . preg_replace('/(["\\\])/', "\\\\$1", $val) . '"';
+            } else {
+                $val = preg_replace('/\s+/', '', $val);
+            }
+            $strEmail .= $val;
         }
         return [ $this->partFactory->newAddressPart('', $strEmail) ];
     }

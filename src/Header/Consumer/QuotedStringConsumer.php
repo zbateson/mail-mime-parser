@@ -69,6 +69,18 @@ class QuotedStringConsumer extends GenericConsumer
     }
     
     /**
+     * No ignored spaces in a quoted part.  Returns the passed $parts param
+     * as-is.
+     *
+     * @param array $parts
+     * @return array
+     */
+    protected function filterIgnoredSpaces(array $parts)
+    {
+        return $parts;
+    }
+
+    /**
      * Constructs a LiteralPart and returns it.
      * 
      * @param string $token

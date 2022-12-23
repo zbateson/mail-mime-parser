@@ -79,6 +79,7 @@ class AddressHeaderTest extends TestCase
 
     public function testComplexSingleAddress()
     {
+        // the domain is invalid here
         $header = new AddressHeader(
             $this->consumerService,
             'From',
@@ -87,7 +88,7 @@ class AddressHeaderTest extends TestCase
         $addresses = $header->getParts();
         $this->assertCount(1, $addresses);
         $this->assertEquals('Kilgore Trout', $addresses[0]->getName());
-        $this->assertEquals('kilgoretrout@ilium.ny.us', $addresses[0]->getEmail());
+        $this->assertEquals('kilgoretrout@"ilium".ny.us', $addresses[0]->getEmail());
     }
 
     public function testSingleAddressWithEscapedToken()
@@ -153,7 +154,7 @@ class AddressHeaderTest extends TestCase
         $this->assertTrue($header->hasAddress('arya@winterfell.com'));
         $this->assertTrue($header->hasAddress('jsnow@nightswatch.com'));
         // is this correct? Shouldn't it be cersei & cersei@lannister.com
-        $this->assertTrue($header->hasAddress('cersei&cersei@lannister.com'));
+        $this->assertTrue($header->hasAddress('"cersei & cersei"@lannister.com'));
         $this->assertTrue($header->hasAddress('maxpayne@addressunknown.com'));
         $this->assertFalse($header->hasAddress('nonexistent@example.com'));
     }

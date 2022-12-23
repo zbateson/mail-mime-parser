@@ -65,16 +65,14 @@ class AddressEmailConsumerTest extends TestCase
 
     public function testConsumeEmailWithQuotes()
     {
-        // can't remember any longer if this is how it should be handled
-        // need to review RFC
-        $email = 'Max"(imum).Payne (comment)"@AddressUnknown.com';
+        $email = 'Max"(imum)..Payne (comment)"@AddressUnknown.com';
         $ret = $this->addressConsumer->__invoke($email);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
         $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
-        $this->assertEquals('Max(imum).Payne(comment)@AddressUnknown.com', $address->getEmail());
+        $this->assertEquals('Max"(imum)..Payne (comment)"@AddressUnknown.com', $address->getEmail());
     }
 
     public function testNotConsumeAddressGroup()

@@ -30,11 +30,4 @@ class AddressPartTest extends TestCase
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
     }
-
-    public function testEmailSpacesStripped()
-    {
-        $email = "gaius julius\t\n caesar@altavista.com";
-        $part = new AddressPart($this->charsetConverter, '', $email);
-        $this->assertEquals('gaiusjuliuscaesar@altavista.com', $part->getEmail());
-    }
 }

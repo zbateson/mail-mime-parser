@@ -111,7 +111,7 @@ class CommentConsumer extends GenericConsumer
             if ($part instanceof CommentPart) {
                 $comment .= '(' . $part->getComment() . ')';
             } elseif ($part instanceof LiteralPart) {
-                $comment .= '"' . $part->getValue() . '"';
+                $comment .= '"' . str_replace('(["\\])', '\$1', $part->getValue()) . '"';
             } else {
                 $comment .= $part->getValue();
             }
