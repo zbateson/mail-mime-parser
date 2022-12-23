@@ -18,7 +18,7 @@ Yes, it's *this* easy:
 use ZBateson\MailMimeParser\Message;
 use GuzzleHttp\Psr7;
 
-$message = Message::parse($handleOrStreamOrString);
+$message = Message::from($handleOrStreamOrString);
 $subject = $message->getHeaderValue('Subject');
 $text = $message->getTextContent();
 $html = $message->getHtmlContent();
