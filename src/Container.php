@@ -65,7 +65,7 @@ class Container extends PimpleContainer
                 } elseif ($argClass !== null && !empty($c[$argClass])) {
                     $ap[] = $c[$argClass];
                 } else {
-                    $ap[] = null;
+                    $ap[] = 0;
                 }
             }
             $ret = $ref->newInstanceArgs($ap);
@@ -77,7 +77,7 @@ class Container extends PimpleContainer
     /**
      * Overridden to see if the class can be auto-registered and return true if
      * it can.
-     * 
+     *
      * @param string $id
      * @return boolean
      */
