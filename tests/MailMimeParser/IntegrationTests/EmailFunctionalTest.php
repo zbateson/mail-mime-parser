@@ -201,7 +201,7 @@ class EmailFunctionalTest extends TestCase
 
         $failMessage = 'Failed while parsing ' . $key;
         $this->runEmailTestForMessage($message, $props, $failMessage);
-        
+
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
 
         $parts = $message->getAllParts();
@@ -583,7 +583,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0016.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $part = $message->getPartByContentId('823504223@17052000-0f8d');
         $this->assertNotNull($part);
         $this->assertEquals('823504223@17052000-0f8d', $part->getContentId());
@@ -931,7 +931,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m1010.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $failMessage = 'Failed while parsing m1010';
         $message->setCharsetOverride('iso-8859-1');
         $f = $message->getTextStream(0);
@@ -1030,7 +1030,7 @@ class EmailFunctionalTest extends TestCase
         ]);
         $handle = fopen($this->messageDir . '/m1015.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $stream = $message->getTextStream(1);
         $this->assertTextContentTypeEquals('HasenundFrosche.txt', $stream);
     }
@@ -1051,7 +1051,7 @@ class EmailFunctionalTest extends TestCase
         ]);
         $handle = fopen($this->messageDir . '/m1016.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $stream = $message->getTextStream(1);
         $str = $this->assertTextContentTypeEquals('farmerandstork.txt', $stream);
     }
@@ -1462,7 +1462,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m4001.txt', 'r');
         $message = $this->parser->parse($handle, false);
-        
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
         fclose($handle);
@@ -1524,7 +1524,7 @@ class EmailFunctionalTest extends TestCase
     {
         $stream = Utils::streamFor(fopen($this->messageDir . '/m4003.txt', 'r'));
         $message = $this->parser->parse($stream, true);
-        
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1555,7 +1555,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m4004.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1586,7 +1586,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m4005.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $str = file_get_contents($this->messageDir . '/files/blueball.png');
         $this->assertEquals(1, $message->getAttachmentCount());
         $this->assertEquals('text/rtf', $message->getAttachmentPart(0)->getHeaderValue('Content-Type'));
@@ -1655,7 +1655,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m4008.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $testString = $message->getSignedMessageAsString();
         $this->assertEquals(md5($testString), trim($message->getSignaturePart()->getContent()));
     }
@@ -1755,11 +1755,11 @@ class EmailFunctionalTest extends TestCase
         $content->setRawHeader('Content-Type', "text/html;\r\n\tcharset=\"iso-8859-1\"");
         $test = '<span>This is my simple test</span>';
         $content->setContent($test);
-        
+
         $tmpSaved = fopen(dirname(dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/rewrite_m0001", 'w+');
         $message->save($tmpSaved);
         rewind($tmpSaved);
-        
+
         $messageWritten = $this->parser->parse($tmpSaved, true);
         $c2 = $messageWritten->getHtmlPart();
         $this->assertEquals($test, $c2->getContent());
@@ -1769,7 +1769,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m2004.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $att = $message->getAttachmentPart(0);
         $att->setRawHeader(
             'Content-Disposition',
@@ -1795,7 +1795,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0013.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $props = [
             'From' => [
                 'name' => 'Doug Sauder',
@@ -1824,7 +1824,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0014.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $message->removeTextPart();
 
         $props = [
@@ -1851,7 +1851,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0020.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $props = [
             'From' => [
                 'name' => 'Doug Sauder',
@@ -1923,7 +1923,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0020.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $props = [
             'From' => [
                 'name' => 'Doug Sauder',
@@ -1989,7 +1989,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $str = $message->getTextContent();
         $message->setHtmlPart($str, 'utf8');
         $this->assertNotNull($message->getTextPart());
@@ -2028,7 +2028,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0015.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $message->removeHtmlPart();
         $this->assertNull($message->getHtmlPart());
         $this->assertEquals(2, $message->getAttachmentCount());
@@ -2072,7 +2072,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $this->assertNull($message->getHtmlPart());
         $this->assertNotNull($message->getTextPart());
         $message->setHtmlPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
@@ -2108,7 +2108,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0013.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getTextPart());
         $message->setTextPart(file_get_contents($this->messageDir . '/files/hareandtortoise.txt'));
@@ -2184,7 +2184,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $message->addAttachmentPart(
             file_get_contents($this->messageDir . '/files/blueball.png'),
             'image/png',
@@ -2236,7 +2236,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $message->addAttachmentPart(
             file_get_contents($this->messageDir . '/files/farmerandstork.txt'),
             'text/plain',
@@ -2576,7 +2576,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m1005.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         $signableContent = $message->getSignedMessageAsString();
 
@@ -2716,7 +2716,7 @@ class EmailFunctionalTest extends TestCase
     {
         $handle = fopen($this->messageDir . '/m0009.txt', 'r');
         $message = $this->parser->parse($handle, true);
-        
+
         $this->assertEquals('Normal', $message->getHeaderValue('Importance'));
         $this->assertNotEmpty($message->getHeaderValue('X-Test-Long-Header'));
         $this->assertEquals('A-OK', $message->getHeaderValue('X-Test-Next-Header'));
