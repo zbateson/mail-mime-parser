@@ -70,14 +70,14 @@ abstract class PartFilter
     /**
      * Includes only parts that match the passed $mimeType in the return value
      * of a call to 'getContentType()'.
-     * 
+     *
      * @param string $mimeType Mime type of parts to find.
      * @return callable
      */
     public static function fromContentType($mimeType)
     {
         return function (IMessagePart $part) use ($mimeType) {
-            return strcasecmp($part->getContentType(), $mimeType) === 0;
+            return strcasecmp($part->getContentType() ? : '', $mimeType) === 0;
         };
     }
 
@@ -92,7 +92,7 @@ abstract class PartFilter
     {
         return function (IMessagePart $part) use ($mimeType) {
             $disp = $part->getContentDisposition();
-            return (strcasecmp($part->getContentType(), $mimeType) === 0) && ($disp === null
+            return (strcasecmp($part->getContentType() ? : '', $mimeType) === 0) && ($disp === null
                 || strcasecmp($disp, 'attachment') !== 0);
         };
     }
@@ -101,7 +101,7 @@ abstract class PartFilter
      * Finds parts with the passed disposition (matching against
      * IMessagePart::getContentDisposition()), optionally including
      * multipart parts and signed parts.
-     * 
+     *
      * @param string $disposition The disposition to find.
      * @param bool $includeMultipart Optionally include multipart parts by
      *        passing true (defaults to false).
