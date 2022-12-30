@@ -22,7 +22,7 @@ class ReceivedPart extends ParameterPart
 {
     /**
      * Constructor.
-     * 
+     *
      * @param MbWrapper $charsetConverter
      * @param string $name
      * @param string $value
@@ -31,6 +31,6 @@ class ReceivedPart extends ParameterPart
         parent::__construct($charsetConverter, '', '');
         // can't be mime-encoded
         $this->name = trim($name);
-        $this->value = trim($value);
+        $this->value = $value ? trim($value) : $value;
     }
 }
