@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of MailMimeParserTest
@@ -15,8 +16,8 @@ use GuzzleHttp\Psr7;
 class MailMimeParserTest extends TestCase
 {
     private $mockDi;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
             ->disableOriginalConstructor()
@@ -28,7 +29,7 @@ class MailMimeParserTest extends TestCase
     {
         MailMimeParser::setDependencyContainer(null);
     }
-    
+
     public function testConstructMailMimeParser()
     {
         MailMimeParser::setDependencyContainer($this->mockDi);
@@ -38,9 +39,9 @@ class MailMimeParserTest extends TestCase
 
     public function testParseFromHandle()
     {
-        $handle = fopen('php://memory', 'r+');
-        fwrite($handle, 'This is a test');
-        rewind($handle);
+        $handle = \fopen('php://memory', 'r+');
+        \fwrite($handle, 'This is a test');
+        \rewind($handle);
 
         $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
             ->disableOriginalConstructor()
@@ -64,9 +65,9 @@ class MailMimeParserTest extends TestCase
 
     public function testParseFromStream()
     {
-        $handle = fopen('php://memory', 'r+');
-        fwrite($handle, 'This is a test');
-        rewind($handle);
+        $handle = \fopen('php://memory', 'r+');
+        \fwrite($handle, 'This is a test');
+        \rewind($handle);
 
         $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
             ->disableOriginalConstructor()

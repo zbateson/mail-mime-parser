@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * IMimePartFactoryTest
@@ -32,7 +33,7 @@ class IMimePartFactoryTest extends TestCase
         $psc = $this->getMockForFactoryExpectsOnce('ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory', 'ZBateson\MailMimeParser\Message\PartStreamContainer');
         $phc = $this->getMockForFactoryExpectsOnce('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory', 'ZBateson\MailMimeParser\Message\PartHeaderContainer');
         $pcc = $this->getMockForFactoryExpectsOnce('ZBateson\MailMimeParser\Message\Factory\PartChildrenContainerFactory', 'ZBateson\MailMimeParser\Message\PartChildrenContainer');
-        
+
         $sdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()
             ->getMock();

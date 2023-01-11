@@ -35,6 +35,8 @@ class HeaderStream implements StreamInterface, SplObserver
      */
     protected $part;
 
+    protected $stream = null;
+
     public function __construct(IMessagePart $part)
     {
         $this->part = $part;
@@ -89,7 +91,7 @@ class HeaderStream implements StreamInterface, SplObserver
     public function writePartHeadersTo(StreamInterface $stream)
     {
         foreach ($this->getPartHeadersIterator() as $header) {
-            $stream->write("${header[0]}: ${header[1]}\r\n");
+            $stream->write("{$header[0]}: {$header[1]}\r\n");
         }
         $stream->write("\r\n");
     }

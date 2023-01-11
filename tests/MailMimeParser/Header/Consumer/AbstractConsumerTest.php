@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AbstractConsumerTest
@@ -15,7 +16,7 @@ class AbstractConsumerTest extends TestCase
 {
     private $abstractConsumerStub;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer')
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])

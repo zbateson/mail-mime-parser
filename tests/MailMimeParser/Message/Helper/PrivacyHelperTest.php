@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PrivacyHelperTest
@@ -16,11 +17,14 @@ use LegacyPHPUnit\TestCase;
 class PrivacyHelperTest extends TestCase
 {
     private $mockMimePartFactory;
+
     private $mockUUEncodedPartFactory;
+
     private $mockGenericHelper;
+
     private $mockMultipartHelper;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
             ->disableOriginalConstructor()
@@ -66,7 +70,7 @@ class PrivacyHelperTest extends TestCase
 
         $message->expects($this->once())
             ->method('getAllParts')
-            ->willReturn([ $partText, $partNonText ]);
+            ->willReturn([$partText, $partNonText]);
 
         $partText->expects($this->once())
             ->method('getContentType')
@@ -92,7 +96,7 @@ class PrivacyHelperTest extends TestCase
         $message = $this->newMockIMessage();
         $alt = $this->newMockIMimePart();
         $cont = $this->newMockIMimePart();
-        $children = [ $this->newMockIMimePart(), $cont ];
+        $children = [$this->newMockIMimePart(), $cont];
 
         $message->expects($this->once())
             ->method('getPartByMimeType')

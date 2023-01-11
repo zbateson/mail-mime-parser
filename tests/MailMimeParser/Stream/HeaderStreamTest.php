@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * HeaderStreamTest
@@ -34,8 +35,8 @@ class HeaderStreamTest extends TestCase
         $mimePart->expects($this->once())
             ->method('getRawHeaderIterator')
             ->willReturn(new ArrayIterator([
-                [ 'First-Header', 'Missed by a long-shot' ],
-                [ 'Second-Header', 'Gooaaaaaaaaal' ]
+                ['First-Header', 'Missed by a long-shot'],
+                ['Second-Header', 'Gooaaaaaaaaal']
             ]));
 
         $stream = new HeaderStream($mimePart);

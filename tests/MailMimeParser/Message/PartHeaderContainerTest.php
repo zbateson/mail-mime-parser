@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of HeaderContainerTest
@@ -15,7 +16,7 @@ class PartHeaderContainerTest extends TestCase
 {
     protected $mockHeaderFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()
@@ -38,8 +39,8 @@ class PartHeaderContainerTest extends TestCase
             ->expects($this->exactly(2))
             ->method('newInstance')
             ->withConsecutive(
-                [ 'first', 'value' ],
-                [ 'second', 'value' ]
+                ['first', 'value'],
+                ['second', 'value']
             )
             ->willReturnOnConsecutiveCalls('first-value', 'second-value');
 
@@ -53,7 +54,7 @@ class PartHeaderContainerTest extends TestCase
         $this->assertNull($ob->get('other'));
         $this->assertNull($ob->get('second', 1));
 
-        $headers = [ [ 'first', 'value' ], [ 'second', 'value' ] ];
+        $headers = [['first', 'value'], ['second', 'value']];
         $this->assertEquals($headers, $ob->getHeaders());
     }
 
@@ -75,9 +76,9 @@ class PartHeaderContainerTest extends TestCase
             ->expects($this->exactly(3))
             ->method('newInstance')
             ->withConsecutive(
-                [ 'repeated', 'first' ],
-                [ 'repeated', 'second' ],
-                [ 'repeated', 'third' ]
+                ['repeated', 'first'],
+                ['repeated', 'second'],
+                ['repeated', 'third']
             )
             ->willReturnOnConsecutiveCalls('repeated-first', 'repeated-second', 'repeated-third');
 
@@ -95,9 +96,9 @@ class PartHeaderContainerTest extends TestCase
         $this->assertNull($ob->get('repeated', 3));
 
         $headers = [
-            [ 'repeated', 'first' ],
-            [ 'repeated', 'second' ],
-            [ 'repeated', 'third' ]
+            ['repeated', 'first'],
+            ['repeated', 'second'],
+            ['repeated', 'third']
         ];
         $this->assertEquals($headers, $ob->getHeaders());
     }
@@ -125,11 +126,11 @@ class PartHeaderContainerTest extends TestCase
             ->expects($this->exactly(5))
             ->method('newInstance')
             ->withConsecutive(
-                [ 'first', 'updated-value' ],
-                [ 'second', 'second-updated-value' ],
-                [ 'first', 'second-first' ],
-                [ 'second', 'value' ],
-                [ 'third', 'value' ]
+                ['first', 'updated-value'],
+                ['second', 'second-updated-value'],
+                ['first', 'second-first'],
+                ['second', 'value'],
+                ['third', 'value']
             )
             ->willReturnOnConsecutiveCalls(
                 'first-updated-value',
@@ -151,11 +152,11 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals($instanceHeaders, $ob->getAll('first'));
 
         $headers = [
-            [ 'first', 'updated-value' ],
-            [ 'second', 'value' ],
-            [ 'third', 'value' ],
-            [ 'first', 'second-first' ],
-            [ 'second', 'second-updated-value' ]
+            ['first', 'updated-value'],
+            ['second', 'value'],
+            ['third', 'value'],
+            ['first', 'second-first'],
+            ['second', 'second-updated-value']
         ];
         $this->assertEquals($headers, $ob->getHeaders());
     }
@@ -181,9 +182,9 @@ class PartHeaderContainerTest extends TestCase
             ->expects($this->exactly(3))
             ->method('newInstance')
             ->withConsecutive(
-                [ 'second', 'value' ],
-                [ 'third', 'value' ],
-                [ 'second', 'updated' ]
+                ['second', 'value'],
+                ['third', 'value'],
+                ['second', 'updated']
             )
             ->willReturnOnConsecutiveCalls('second-value', 'third-value', 'second-updated');
 
@@ -191,14 +192,14 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals('second-value', $ob->get('second'));
         $this->assertEquals('third-value', $ob->get('third'));
         $headers = [
-            [ 'second', 'value' ],
-            [ 'third', 'value' ],
+            ['second', 'value'],
+            ['third', 'value'],
         ];
         $this->assertEquals($headers, $ob->getHeaders());
 
         $ob->remove('second');
         $headers = [
-            [ 'third', 'value' ]
+            ['third', 'value']
         ];
         $this->assertNull($ob->get('second'));
         $this->assertEquals('third-value', $ob->get('third'));
@@ -206,8 +207,8 @@ class PartHeaderContainerTest extends TestCase
 
         $ob->set('second', 'updated');
         $headers = [
-            [ 'third', 'value' ],
-            [ 'second', 'updated' ]
+            ['third', 'value'],
+            ['second', 'updated']
         ];
         $this->assertEquals($headers, $ob->getHeaders());
         $this->assertEquals('second-updated', $ob->get('second'));
@@ -243,9 +244,9 @@ class PartHeaderContainerTest extends TestCase
             ->expects($this->exactly(3))
             ->method('newInstance')
             ->withConsecutive(
-                [ 'first', 'second-first' ],
-                [ 'second', 'value' ],
-                [ 'second', 'third-second' ]
+                ['first', 'second-first'],
+                ['second', 'value'],
+                ['second', 'third-second']
             )
             ->willReturnOnConsecutiveCalls('second-first-value', 'second-value', 'second-third-second-value');
 
@@ -265,13 +266,13 @@ class PartHeaderContainerTest extends TestCase
         $this->assertFalse($ob->exists('second'));
 
         $headers = [
-            [ 'first', 'second-first' ],
-            [ 'third', 'value' ],
+            ['first', 'second-first'],
+            ['third', 'value'],
         ];
         $this->assertEquals($headers, $ob->getHeaders());
 
         $ob->set('second', 'new-value', 3);
-        $headers[] = [ 'second', 'new-value' ];
+        $headers[] = ['second', 'new-value'];
         $this->assertEquals($headers, $ob->getHeaders());
     }
 }

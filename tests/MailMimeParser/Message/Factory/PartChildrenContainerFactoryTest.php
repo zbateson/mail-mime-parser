@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartChildrenContainerFactoryTest
@@ -15,7 +16,7 @@ class PartChildrenContainerFactoryTest extends TestCase
 {
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->instance = new PartChildrenContainerFactory();
     }

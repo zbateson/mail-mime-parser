@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserManagerTest
@@ -14,9 +15,10 @@ use LegacyPHPUnit\TestCase;
 class ParserManagerTest extends TestCase
 {
     private $mimeParser;
+
     private $nonMimeParser;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->mimeParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MimeParser')
             ->disableOriginalConstructor()
@@ -48,7 +50,7 @@ class ParserManagerTest extends TestCase
             ->method('setParserManager')
             ->with($instance);
 
-        $instance->setParsers([ $this->mimeParser, $this->nonMimeParser ]);
+        $instance->setParsers([$this->mimeParser, $this->nonMimeParser]);
     }
 
     public function testPrependParserSetsParserManager()

@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -17,7 +18,7 @@ class MimeLiteralPartTest extends TestCase
 {
     private $charsetConverter;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->charsetConverter = new MbWrapper();
     }
@@ -38,7 +39,7 @@ class MimeLiteralPartTest extends TestCase
     {
         $part = $this->assertDecoded('Step', 'Step');
         $this->assertEquals([
-            [ 'lang' => null, 'value' => 'Step' ]
+            ['lang' => null, 'value' => 'Step']
         ], $part->getLanguageArray());
     }
 
@@ -53,12 +54,11 @@ class MimeLiteralPartTest extends TestCase
         $this->assertDecoded('', '=?utf-8?Q??=');
     }
 
-
     public function testMimeEncodingNullLanguage()
     {
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals([
-            [ 'lang' => null, 'value' => 'Kilgore Trout' ]
+            ['lang' => null, 'value' => 'Kilgore Trout']
         ], $part->getLanguageArray());
     }
 
@@ -167,10 +167,10 @@ class MimeLiteralPartTest extends TestCase
             'Hello and =?UTF-8*fr-be?Q?bonjou?= =?UTF-8*it?Q?r_mi amici?=. Welcome!'
         );
         $expectedLang = [
-            [ 'lang' => null, 'value' => 'Hello and ' ],
-            [ 'lang' => 'fr-be', 'value' => 'bonjou' ],
-            [ 'lang' => 'it', 'value' => 'r mi amici' ],
-            [ 'lang' => null, 'value' => '. Welcome!' ]
+            ['lang' => null, 'value' => 'Hello and '],
+            ['lang' => 'fr-be', 'value' => 'bonjou'],
+            ['lang' => 'it', 'value' => 'r mi amici'],
+            ['lang' => null, 'value' => '. Welcome!']
         ];
         $this->assertEquals($expectedLang, $part->getLanguageArray());
     }

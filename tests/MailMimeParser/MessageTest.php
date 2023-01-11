@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
@@ -15,12 +16,16 @@ use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 class MessageTest extends TestCase
 {
     private $mockPartStreamContainer;
+
     private $mockHeaderContainer;
+
     private $mockPartChildrenContainer;
+
     private $mockMultipartHelper;
+
     private $mockPrivacyHelper;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()
@@ -93,7 +98,7 @@ class MessageTest extends TestCase
         return new Message(
             $this->mockPartStreamContainer,
             $this->mockHeaderContainer,
-            ($childrenContainer) ? $childrenContainer : $this->mockPartChildrenContainer,
+            ($childrenContainer) ?: $this->mockPartChildrenContainer,
             $this->mockMultipartHelper,
             $this->mockPrivacyHelper
         );
@@ -239,7 +244,7 @@ class MessageTest extends TestCase
     {
         $hf = $this->mockHeaderContainer;
         $this->mockHeaderContainer->method('get')
-            ->willReturnMap([ [ 'Content-Type', 0, null ], [ 'MIME-Version', 0, $this->getMockedParameterHeader('MIME-Version', '4.3') ] ]);
+            ->willReturnMap([['Content-Type', 0, null], ['MIME-Version', 0, $this->getMockedParameterHeader('MIME-Version', '4.3')]]);
         $message = $this->newMessage();
         $this->assertTrue($message->isMime());
     }
@@ -286,12 +291,12 @@ class MessageTest extends TestCase
 
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
-                [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64' ],
-                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'base64' ]
+                [$message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64'],
+                [$message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'base64']
             )
             ->willReturn($part);
 
-        $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
+        $testFile = \dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
         $message->addAttachmentPart('content', 'mimetype');
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline');
     }
@@ -304,12 +309,12 @@ class MessageTest extends TestCase
 
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
-                [ $message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable' ],
-                [ $message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'quoted-printable' ]
+                [$message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable'],
+                [$message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'quoted-printable']
             )
             ->willReturn($part);
 
-        $testFile = dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
+        $testFile = \dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
         $message->addAttachmentPart('content', 'mimetype', null, 'attachment', 'quoted-printable');
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline', 'quoted-printable');
     }

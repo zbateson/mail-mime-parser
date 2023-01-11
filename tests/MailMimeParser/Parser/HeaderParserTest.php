@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * HeaderParserTest
@@ -16,9 +17,10 @@ use GuzzleHttp\Psr7\StreamWrapper;
 class HeaderParserTest extends TestCase
 {
     private $headerContainer;
+
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
@@ -32,7 +34,7 @@ class HeaderParserTest extends TestCase
         $res = StreamWrapper::getResource(Utils::streamFor(''));
         $this->headerContainer->expects($this->never())->method('add');
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleLine()
@@ -42,7 +44,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', 'The Value');
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleLineWithFollowingEmptyLine()
@@ -52,7 +54,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', 'The Value');
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleLineWithMultipleColons()
@@ -62,7 +64,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', 'The: Value');
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleLineWithNoColons()
@@ -70,7 +72,7 @@ class HeaderParserTest extends TestCase
         $res = StreamWrapper::getResource(Utils::streamFor("The-Header The Value\r\n"));
         $this->headerContainer->expects($this->never())->method('add');
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseValidAndInvalidLines()
@@ -80,7 +82,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('Another-Header', 'An actual value');
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleMultilineHeaderWithSpaceSeparator()
@@ -90,7 +92,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', "The\r\n Value");
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleMultilineHeaderWithMultiSpaceSeparators()
@@ -100,7 +102,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', "The\r\n   Value");
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleMultilineHeaderWithTabSeparator()
@@ -110,7 +112,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', "The\r\n\tValue");
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleMultilineHeaderWithMultiTabSeparators()
@@ -120,7 +122,7 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', "The\r\n\t\t\tValue");
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 
     public function testParseSingleMultilineHeaderWithMixedSeparators()
@@ -130,6 +132,6 @@ class HeaderParserTest extends TestCase
             ->method('add')
             ->with('The-Header', "The\r\n\t \tValue");
         $this->instance->parse($res, $this->headerContainer);
-        fclose($res);
+        \fclose($res);
     }
 }

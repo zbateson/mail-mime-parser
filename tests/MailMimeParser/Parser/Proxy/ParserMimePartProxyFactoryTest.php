@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserMimePartProxyFactoryTest
@@ -15,19 +16,28 @@ use GuzzleHttp\Psr7\Utils;
 class ParserMimePartProxyFactoryTest extends TestCase
 {
     private $instance;
+
     private $streamFactory;
+
     private $headerContainerFactory;
+
     private $partStreamContainerFactory;
+
     private $partChildrenContainerFactory;
 
     private $headerContainer;
+
     private $partBuilder;
+
     private $partStreamContainer;
+
     private $partChildrenContainer;
+
     private $parser;
+
     private $parent;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->streamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()
@@ -41,7 +51,7 @@ class ParserMimePartProxyFactoryTest extends TestCase
         $this->partChildrenContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()
             ->getMock();

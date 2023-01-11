@@ -2,11 +2,11 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use org\bovigo\vfs\vfsStream;
-use Exception;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MessagePartTest
@@ -16,12 +16,13 @@ use Exception;
  * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
-class MessagePartTest extends TestCase {
-
+class MessagePartTest extends TestCase
+{
     protected $partStreamContainer;
+
     private $vfs;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->vfs = vfsStream::setup('root');
         $this->partStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
@@ -59,7 +60,7 @@ class MessagePartTest extends TestCase {
         }
         return $this->getMockForAbstractClass(
             'ZBateson\MailMimeParser\Message\MessagePart',
-            [ $this->partStreamContainer, $parent ]
+            [$this->partStreamContainer, $parent]
         );
     }
 
@@ -98,7 +99,7 @@ class MessagePartTest extends TestCase {
         $this->assertNull($messagePart->getContentStream());
         $this->assertNull($messagePart->getContent());
         $this->assertNull($messagePart->getParent());
-        $this->assertEquals('habibi', stream_get_contents($messagePart->getResourceHandle()));
+        $this->assertEquals('habibi', \stream_get_contents($messagePart->getResourceHandle()));
         $this->assertEquals('habibi', $messagePart->getStream()->getContents());
     }
 
@@ -145,7 +146,7 @@ class MessagePartTest extends TestCase {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        
+
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
             ->expects($this->never())
@@ -156,7 +157,7 @@ class MessagePartTest extends TestCase {
             ->willReturnOnConsecutiveCalls($f, $s);
 
         $this->assertEquals('First', $messagePart->getBinaryContentStream()->getContents());
-        $this->assertEquals('Second', stream_get_contents($messagePart->getBinaryContentResourceHandle()));
+        $this->assertEquals('Second', \stream_get_contents($messagePart->getBinaryContentResourceHandle()));
     }
 
     public function testSaveContent()
@@ -178,7 +179,7 @@ class MessagePartTest extends TestCase {
 
         $content = vfsStream::newFile('part')->at($this->vfs);
         $messagePart->saveContent($content->url());
-        $this->assertEquals('Que tonto', file_get_contents($content->url()));
+        $this->assertEquals('Que tonto', \file_get_contents($content->url()));
     }
 
     public function testSaveContentToStream()
@@ -224,10 +225,10 @@ class MessagePartTest extends TestCase {
 
         $res = StreamWrapper::getResource(Psr7\Utils::streamFor());
         $messagePart->saveContent($res);
-        rewind($res);
+        \rewind($res);
 
-        $this->assertEquals('Que tonto', stream_get_contents($res));
-        fclose($res);
+        $this->assertEquals('Que tonto', \stream_get_contents($res));
+        \fclose($res);
     }
 
     public function testDetachContentStream()
@@ -265,7 +266,7 @@ class MessagePartTest extends TestCase {
             ->method('getContentStream')
             ->withConsecutive(
                 ['', 'charset', 'a-charset']
-        );
+            );
 
         $this->assertSame($ms, $messagePart->getStream());
 
@@ -291,11 +292,11 @@ class MessagePartTest extends TestCase {
             Psr7\Utils::streamFor('other demons')
         );
 
-        $handle = fopen('php://temp', 'r+');
+        $handle = \fopen('php://temp', 'r+');
         $messagePart->save($handle);
-        rewind($handle);
-        $str = stream_get_contents($handle);
-        fclose($handle);
+        \rewind($handle);
+        $str = \stream_get_contents($handle);
+        \fclose($handle);
 
         $this->assertEquals('Demigorgon', $str);
         $this->assertEquals('Demigorgon', $messagePart->__toString());
@@ -310,6 +311,6 @@ class MessagePartTest extends TestCase {
 
         $part = vfsStream::newFile('part')->at($this->vfs);
         $messagePart->save($part->url());
-        $this->assertEquals('Demigorgon', file_get_contents($part->url()));
+        $this->assertEquals('Demigorgon', \file_get_contents($part->url()));
     }
 }

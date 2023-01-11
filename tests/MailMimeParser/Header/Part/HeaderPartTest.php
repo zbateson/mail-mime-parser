@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -16,7 +17,7 @@ class HeaderPartTest extends TestCase
 {
     private $abstractHeaderPartStub;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Part\HeaderPart')

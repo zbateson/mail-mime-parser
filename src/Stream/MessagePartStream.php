@@ -37,6 +37,8 @@ class MessagePartStream implements StreamInterface, SplObserver
      */
     protected $part;
 
+    protected $stream = null;
+
     protected $appendStream = null;
 
     /**

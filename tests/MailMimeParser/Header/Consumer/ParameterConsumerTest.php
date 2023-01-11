@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParameterConsumerTest
@@ -16,23 +17,23 @@ class ParameterConsumerTest extends TestCase
 {
     private $parameterConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->parameterConsumer = new ParameterConsumer($cs, $pf);
     }
 
@@ -177,12 +178,12 @@ class ParameterConsumerTest extends TestCase
     public function testSplitHeaderWithMultiByteEncodedPartAndLanguage()
     {
         $str = 'هلا هلا شخبار بعد؟ شلون تبرمج؟';
-        $encoded = rawurlencode($str);
-        $halfPos = floor((strlen($encoded) / 3) / 2) * 3;
-        $part1 = substr($encoded, 0, $halfPos);
-        $part2 = substr($encoded, $halfPos);
+        $encoded = \rawurlencode($str);
+        $halfPos = \floor((\strlen($encoded) / 3) / 2) * 3;
+        $part1 = \substr($encoded, 0, $halfPos);
+        $part2 = \substr($encoded, $halfPos);
 
-        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0*=utf-8\'abv-BH\''. $part1
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0*=utf-8\'abv-BH\'' . $part1
             . '; condiments*1*=' . $part2);
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
@@ -200,7 +201,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertCount(2, $ret);
         $this->assertEquals('TS Eliot', $ret[1]->getValue());
     }
-    
+
     public function testSplitHeaderWithQuotedValueContainingDoubleApos()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'

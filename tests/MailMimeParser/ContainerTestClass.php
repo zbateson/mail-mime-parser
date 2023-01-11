@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser;
 
 use SplFixedArray;
@@ -11,6 +12,7 @@ use SplFixedArray;
 class ContainerTestClass
 {
     public $firstArg;
+
     public $secondArg;
 
     public function __construct(SplFixedArray $firstArg, $secondArg)
