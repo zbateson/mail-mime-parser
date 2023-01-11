@@ -30,7 +30,7 @@ class StreamFactoryTest extends TestCase
             ->method('getStreamContentLength')
             ->willReturnOnConsecutiveCalls(2, 2, 0);
         $partBuilder->expects($this->once())
-            ->method('getStreamPartStartPos')
+            ->method('getStreamContentStartPos')
             ->willReturn(4);
 
         $partBuilder->expects($this->atLeastOnce())
