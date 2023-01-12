@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use PHPUnit\Framework\TestCase;
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ReceivedConsumerTest
@@ -22,20 +23,20 @@ class ReceivedConsumerTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->receivedConsumer = new ReceivedConsumer($cs, $pf);
     }
 
@@ -49,7 +50,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testWithFrom()
     {
-        $value = "from [1.2.3.4]";
+        $value = 'from [1.2.3.4]';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -60,7 +61,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testWithBy()
     {
-        $value = "by [1.2.3.4]";
+        $value = 'by [1.2.3.4]';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -71,7 +72,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testWithFromAndBy()
     {
-        $value = "FrOM [1.2.3.4] By (host.name)";
+        $value = 'FrOM [1.2.3.4] By (host.name)';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -86,7 +87,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testWithWith()
     {
-        $value = "WITH ESMTP (TLS1.2)";
+        $value = 'WITH ESMTP (TLS1.2)';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -100,7 +101,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testWithId()
     {
-        $value = "id (blah) 123";
+        $value = 'id (blah) 123';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -114,7 +115,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testWithVia()
     {
-        $value = "via someplace";
+        $value = 'via someplace';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -126,7 +127,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testDate()
     {
-        $value = "; Wed, 17 May 2000 19:08:29 -0400";
+        $value = '; Wed, 17 May 2000 19:08:29 -0400';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -138,7 +139,7 @@ class ReceivedConsumerTest extends TestCase
 
     public function testFromAndDate()
     {
-        $value = "from localhost; Wed, 17 May 2000 19:08:29 -0400";
+        $value = 'from localhost; Wed, 17 May 2000 19:08:29 -0400';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -155,7 +156,7 @@ class ReceivedConsumerTest extends TestCase
     public function testExampleFullLines()
     {
         $value = "FROM LeComputer (blah.host) by MyComputer ([1.2.2.2]) WITH\n"
-            . "ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400";
+            . 'ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);

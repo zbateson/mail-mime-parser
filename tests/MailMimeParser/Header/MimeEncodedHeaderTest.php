@@ -1,10 +1,12 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
-class MimeEncodedHeaderImpl extends MimeEncodedHeader {
+class MimeEncodedHeaderImpl extends MimeEncodedHeader
+{
     protected function getConsumer(ConsumerService $consumerService)
     {
         return $consumerService->getQuotedStringConsumer();
@@ -23,25 +25,26 @@ class MimeEncodedHeaderImpl extends MimeEncodedHeader {
 class MimeEncodedHeaderTest extends TestCase
 {
     protected $consumerService;
+
     protected $mimeLiteralPartFactory;
 
     protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->mimeLiteralPartFactory = $mlpf;
     }
 
@@ -72,7 +75,7 @@ class MimeEncodedHeaderTest extends TestCase
 
     public function testDecodeWhenMixed()
     {
-        $t = "=?US-ASCII?Q?Kilgore_?= TEST =?US-ASCII?Q?Tro?= =?US-ASCII?Q?ut?=";
+        $t = '=?US-ASCII?Q?Kilgore_?= TEST =?US-ASCII?Q?Tro?= =?US-ASCII?Q?ut?=';
         $header = $this->newMimeEncodedHeader(
             'Test',
             $t

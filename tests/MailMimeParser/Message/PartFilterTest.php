@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
@@ -59,8 +60,12 @@ class PartFilterTest extends TestCase
         $part = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
         $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(false, false, false, true, false, true);
         $part->method('getHeaderValue')->with('detective')->willReturnOnConsecutiveCalls(
-            'PERAlta', 'peralta', 'HOLT!',
-            'PERAlta', 'peralta', 'HOLT!'
+            'PERAlta',
+            'peralta',
+            'HOLT!',
+            'PERAlta',
+            'peralta',
+            'HOLT!'
         );
         $this->assertTrue($callback($part));
         $this->assertTrue($callback($part));

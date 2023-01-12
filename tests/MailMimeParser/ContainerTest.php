@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser;
 
 use PHPUnit\Framework\TestCase;

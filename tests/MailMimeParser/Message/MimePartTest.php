@@ -1,9 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MessageFilter;
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Psr7;
 
 /**
  * Description of MimePartTest
@@ -18,7 +17,9 @@ use GuzzleHttp\Psr7;
 class MimePartTest extends TestCase
 {
     private $mockPartStreamContainer;
+
     private $mockHeaderContainer;
+
     private $mockPartChildrenContainer;
 
     protected function setUp() : void
@@ -77,12 +78,12 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
             ->withConsecutive(
-                [ $this->equalTo('Content-Type'), 0 ],
-                [ $this->equalTo('Content-Disposition'), 0 ],
-                [ $this->equalTo('Content-Type'), 0 ],
-                [ $this->equalTo('Content-Disposition'), 0 ],
-                [ $this->equalTo('Content-Type'), 0 ],
-                [ $this->equalTo('Content-Disposition'), 0 ]
+                [$this->equalTo('Content-Type'), 0],
+                [$this->equalTo('Content-Disposition'), 0],
+                [$this->equalTo('Content-Type'), 0],
+                [$this->equalTo('Content-Disposition'), 0],
+                [$this->equalTo('Content-Type'), 0],
+                [$this->equalTo('Content-Disposition'), 0]
             )
             ->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('Content-Type', 'blah-blooh', null),
@@ -215,7 +216,7 @@ class MimePartTest extends TestCase
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')->disableOriginalConstructor()->getMock()
             ])
-            ->setMethods([ 'getSignaturePart' ])
+            ->setMethods(['getSignaturePart'])
             ->getMock();
         $message->expects($this->once())->method('getSignaturePart')->willReturn($part);
         $message->addChild($part);
@@ -329,8 +330,8 @@ class MimePartTest extends TestCase
             ->expects($this->exactly(2))
             ->method('set')
             ->withConsecutive(
-                [ 'title', 'SILENCE of the lamboos', 0 ],
-                [ 'title', 'SILENCE of the lambies', 3 ]
+                ['title', 'SILENCE of the lamboos', 0],
+                ['title', 'SILENCE of the lambies', 3]
             );
         $observer = $this->getMockForAbstractClass('SplObserver');
         $observer->expects($this->exactly(2))
@@ -377,7 +378,7 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('remove')
-            ->withConsecutive([ 'weeeee', 0 ], [ 'wooooo', 3 ]);
+            ->withConsecutive(['weeeee', 0], ['wooooo', 3]);
         $observer = $this->getMockForAbstractClass('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');

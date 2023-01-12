@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserPartStreamContainerTest
@@ -15,14 +16,16 @@ use GuzzleHttp\Psr7\Utils;
 class ParserPartStreamContainerTest extends TestCase
 {
     private $instance;
+
     private $streamFactory;
+
     private $proxy;
 
     protected function setUp() : void
     {
         $this->proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
             ->disableOriginalConstructor()
-            ->setMethods([ 'parseAll', 'parseContent' ])
+            ->setMethods(['parseAll', 'parseContent'])
             ->getMockForAbstractClass();
         $this->streamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()
@@ -174,7 +177,7 @@ class ParserPartStreamContainerTest extends TestCase
 
     public function testDetachedParsedStream()
     {
-        $parsedStream = Utils::streamFor('Fighting bOars', [ 'metadata' => [ 'mmp-detached-stream' => true ] ]);
+        $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => true]]);
         $instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
 
         $this->proxy->expects($this->once())
@@ -192,7 +195,7 @@ class ParserPartStreamContainerTest extends TestCase
 
     public function testAttachedParsedStream()
     {
-        $parsedStream = Utils::streamFor('Fighting bOars', [ 'metadata' => [ 'mmp-detached-stream' => false ] ]);
+        $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => false]]);
         $instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
 
         $this->proxy->expects($this->once())

@@ -1,8 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
  * Description of AddressHeaderTest
@@ -20,20 +20,20 @@ class AddressHeaderTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
     }
 
     public function testEmptyHeader()
@@ -174,14 +174,14 @@ class AddressHeaderTest extends TestCase
         $parts = $header->getParts();
 
         foreach ($parts[0]->getAddresses() as $addr) {
-            $this->assertSame($addr, current($addresses));
-            next($addresses);
+            $this->assertSame($addr, \current($addresses));
+            \next($addresses);
         }
         foreach ($parts[1]->getAddresses() as $addr) {
-            $this->assertSame($addr, current($addresses));
-            next($addresses);
+            $this->assertSame($addr, \current($addresses));
+            \next($addresses);
         }
-        $this->assertEquals('maxpayne@addressunknown.com', current($addresses)->getEmail());
+        $this->assertEquals('maxpayne@addressunknown.com', \current($addresses)->getEmail());
     }
 
     public function testGetGroups()

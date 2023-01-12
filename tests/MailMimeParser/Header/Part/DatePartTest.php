@@ -1,8 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
-use DateTime;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -34,7 +34,7 @@ class DatePartTest extends TestCase
         ];
 
         foreach ($values as $value) {
-            list ($expected, $raw) = $value;
+            list($expected, $raw) = $value;
             $part = new DatePart($this->charsetConverter, $raw);
             $this->assertEquals($raw, $part->getValue(), 'Testing ' . $raw);
             $this->assertNotEmpty($part->getDateTime(), 'Testing ' . $raw);

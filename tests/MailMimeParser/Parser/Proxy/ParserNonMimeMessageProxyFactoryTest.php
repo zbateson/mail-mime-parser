@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserNonMimeMessageProxyFactoryTest
@@ -15,17 +16,27 @@ use GuzzleHttp\Psr7\Utils;
 class ParserNonMimeMessageProxyFactoryTest extends TestCase
 {
     private $instance;
+
     private $streamFactory;
+
     private $headerContainerFactory;
+
     private $partStreamContainerFactory;
+
     private $partChildrenContainerFactory;
+
     private $multipartHelper;
+
     private $privacyHelper;
 
     private $headerContainer;
+
     private $partBuilder;
+
     private $partStreamContainer;
+
     private $partChildrenContainer;
+
     private $parser;
 
     protected function setUp() : void

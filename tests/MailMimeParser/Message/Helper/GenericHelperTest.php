@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
-use ZBateson\MailMimeParser\MailMimeParser;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * GenericHelperTest
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 class GenericHelperTest extends TestCase
 {
     private $mockMimePartFactory;
+
     private $mockUUEncodedPartFactory;
 
     protected function setUp() : void
@@ -73,10 +75,10 @@ class GenericHelperTest extends TestCase
         $helper = $this->newGenericHelper();
         $part = $this->newMockIMimePart();
 
-        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
-                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
-                'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
+        $names = ['Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+            'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+            'Content-Location', 'Content-Features', 'Content-Alternative',
+            'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return'];
         $aHeaders = [];
         foreach ($names as $name) {
             $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
@@ -93,18 +95,18 @@ class GenericHelperTest extends TestCase
         $part->expects($this->exactly(12))
             ->method('removeHeader')
             ->withConsecutive(
-                [ 'Content-Type' ],
-                [ 'Content-Transfer-Encoding' ],
-                [ 'Content-Disposition' ],
-                [ 'Content-ID' ],
-                [ 'Content-Description' ],
-                [ 'Content-Language' ],
-                [ 'Content-Base' ],
-                [ 'Content-Location' ],
-                [ 'Content-Features' ],
-                [ 'Content-Alternative' ],
-                [ 'Content-MD5' ],
-                [ 'Content-Duration' ]
+                ['Content-Type'],
+                ['Content-Transfer-Encoding'],
+                ['Content-Disposition'],
+                ['Content-ID'],
+                ['Content-Description'],
+                ['Content-Language'],
+                ['Content-Base'],
+                ['Content-Location'],
+                ['Content-Features'],
+                ['Content-Alternative'],
+                ['Content-MD5'],
+                ['Content-Duration']
             );
         $part->expects($this->once())
             ->method('detachContentStream');
@@ -119,10 +121,10 @@ class GenericHelperTest extends TestCase
         $from = $this->newMockIMimePart();
         $to = $this->newMockIMimePart();
 
-        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
-                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
-                'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
+        $names = ['Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+            'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+            'Content-Location', 'Content-Features', 'Content-Alternative',
+            'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return'];
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
@@ -131,7 +133,7 @@ class GenericHelperTest extends TestCase
                 ->getMock();
             $mock->method('getName')->willReturn($name);
             $aHeaders[] = $mock;
-            $returnMap[] = [ $name, $mock ];
+            $returnMap[] = [$name, $mock];
         }
 
         $fromStream = Psr7\Utils::streamFor('test');
@@ -164,10 +166,10 @@ class GenericHelperTest extends TestCase
         $from = $this->newMockIMimePart();
         $to = $this->newMockIMimePart();
 
-        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
-                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
-                'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
+        $names = ['Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+            'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+            'Content-Location', 'Content-Features', 'Content-Alternative',
+            'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return'];
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
@@ -176,7 +178,7 @@ class GenericHelperTest extends TestCase
                 ->getMock();
             $mock->method('getName')->willReturn($name);
             $aHeaders[] = $mock;
-            $returnMap[] = [ $name, $mock ];
+            $returnMap[] = [$name, $mock];
         }
 
         $mockPart = $this->newMockIMimePart();
@@ -212,10 +214,10 @@ class GenericHelperTest extends TestCase
         $child1 = $this->newMockIMimePart();
         $child2 = $this->newMockIMimePart();
 
-        $names = [ 'Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
-                'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
-                'Content-Location', 'Content-Features', 'Content-Alternative',
-                'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return' ];
+        $names = ['Content-Type', 'Content-Transfer-Encoding', 'Content-Disposition',
+            'Content-ID', 'Content-Description', 'Content-Language', 'Content-Base',
+            'Content-Location', 'Content-Features', 'Content-Alternative',
+            'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return'];
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
@@ -224,7 +226,7 @@ class GenericHelperTest extends TestCase
                 ->getMock();
             $mock->method('getName')->willReturn($name);
             $aHeaders[] = $mock;
-            $returnMap[] = [ $name, $mock ];
+            $returnMap[] = [$name, $mock];
         }
 
         $toStream = Psr7\Utils::streamFor('test');
@@ -237,7 +239,7 @@ class GenericHelperTest extends TestCase
 
         $to->expects($this->once())
             ->method('getChildIterator')
-            ->willReturn([ $child1, $child2 ]);
+            ->willReturn([$child1, $child2]);
         $to->expects($this->once())
             ->method('getChildCount')
             ->willReturn(2);
@@ -278,7 +280,7 @@ class GenericHelperTest extends TestCase
             ->willReturn($message);
         $message->expects($this->exactly(2))
             ->method('removePart')
-            ->withConsecutive([ $rep ], [ $part ])
+            ->withConsecutive([$rep], [$part])
             ->willReturn(10);
         $message->expects($this->once())
             ->method('addChild')

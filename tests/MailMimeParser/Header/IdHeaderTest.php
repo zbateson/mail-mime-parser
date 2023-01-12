@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
@@ -15,25 +16,26 @@ use PHPUnit\Framework\TestCase;
 class IdHeaderTest extends TestCase
 {
     protected $consumerService;
+
     protected $mimeLiteralPartFactory;
 
     protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->mimeLiteralPartFactory = $mlpf;
     }
 
@@ -60,14 +62,14 @@ class IdHeaderTest extends TestCase
     {
         $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'References', ' <1337@example.com> <7331@example.com> <4@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
-        $this->assertEquals([ '1337@example.com', '7331@example.com', '4@example.com' ], $header->getIds());
+        $this->assertEquals(['1337@example.com', '7331@example.com', '4@example.com'], $header->getIds());
     }
 
     public function testGetIdsWithComments()
     {
         $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'References', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
-        $this->assertEquals([ '1337@example.com', '7331@example.com', '4@example.com' ], $header->getIds());
+        $this->assertEquals(['1337@example.com', '7331@example.com', '4@example.com'], $header->getIds());
     }
 
     public function testGetIdsWithInvalidValue()

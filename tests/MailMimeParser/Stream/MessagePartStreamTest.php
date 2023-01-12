@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
-use ZBateson\StreamDecorators\NonClosingStream;
 use PHPUnit\Framework\TestCase;
+use ZBateson\StreamDecorators\NonClosingStream;
 
 /**
  * MessagePartStreamTest
@@ -56,7 +57,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 
@@ -65,7 +66,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('quoted-printable');
         $this->mockStreamFactory->expects($this->once())
             ->method('newQuotedPrintableStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
 
@@ -74,7 +75,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('ISO-8859-1');
         $this->mockStreamFactory->expects($this->once())
             ->method('newCharsetStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
 
@@ -96,7 +97,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('ze-boundary');
         $message->expects($this->once())
             ->method('getChildParts')
-            ->willReturn([ $child1, $child2 ]);
+            ->willReturn([$child1, $child2]);
         $message->expects($this->once())
             ->method('hasContent')
             ->willReturn(false);
@@ -133,7 +134,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 
@@ -142,12 +143,12 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('base64');
         $this->mockStreamFactory->expects($this->once())
             ->method('newChunkSplitStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
         $this->mockStreamFactory->expects($this->once())
             ->method('newBase64Stream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
 
@@ -180,7 +181,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 
@@ -195,7 +196,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('la-file');
         $this->mockStreamFactory->expects($this->once())
             ->method('newUUStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 $mock = $this->getMockBuilder('ZBateson\StreamDecorators\NonClosingStream')
                     ->setConstructorArgs([$stream])
                     ->setMethods(['setFilename'])
@@ -228,7 +229,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn(null);
         $message->expects($this->once())
             ->method('getChildParts')
-            ->willReturn([ $child1, $child2 ]);
+            ->willReturn([$child1, $child2]);
 
         $message->expects($this->once())
             ->method('getChildCount')
@@ -258,7 +259,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 

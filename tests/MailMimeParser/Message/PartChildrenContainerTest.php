@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
@@ -47,7 +48,7 @@ class PartChildrenContainerTest extends TestCase
         $this->assertEquals($this->instance, $this->instance->getChildren());
 
         $part2 = $this->getIMessagePart();
-        $t = new PartChildrenContainer([ $part2, $part ]);
+        $t = new PartChildrenContainer([$part2, $part]);
         $this->assertFalse($t->hasChildren());
         $this->assertNull($t->getChildren());
 
@@ -70,7 +71,7 @@ class PartChildrenContainerTest extends TestCase
         $this->assertFalse($this->instance->valid());
         $this->assertNull($this->instance->current());
 
-        $arr = [ $this->getIMultiPart(), $this->getIMultiPart(), $this->getIMultiPart(), $this->getIMultiPart() ];
+        $arr = [$this->getIMultiPart(), $this->getIMultiPart(), $this->getIMultiPart(), $this->getIMultiPart()];
         $t = new PartChildrenContainer($arr);
 
         foreach ($arr as $k => $p) {
@@ -94,7 +95,7 @@ class PartChildrenContainerTest extends TestCase
         $this->assertFalse(isset($this->instance[0]));
         $this->assertNull($this->instance[0]);
 
-        $arr = [ $this->getIMultiPart(), $this->getIMultiPart(), $this->getIMultiPart() ];
+        $arr = [$this->getIMultiPart(), $this->getIMultiPart(), $this->getIMultiPart()];
         $t = new PartChildrenContainer($arr);
 
         foreach ($arr as $k => $p) {
@@ -102,13 +103,13 @@ class PartChildrenContainerTest extends TestCase
             $this->assertTrue(isset($t[$k]));
             $this->assertSame($p, $t[$k]);
         }
-        $this->assertFalse($t->offsetExists(count($arr)));
-        $this->assertNull($t[count($arr)]);
+        $this->assertFalse($t->offsetExists(\count($arr)));
+        $this->assertNull($t[\count($arr)]);
 
         $n = $this->getIMultiPart();
         $t[] = $n;
-        $this->assertTrue(isset($t[count($arr)]));
-        $this->assertSame($n, $t[count($arr)]);
+        $this->assertTrue(isset($t[\count($arr)]));
+        $this->assertSame($n, $t[\count($arr)]);
 
         $n2 = $this->getIMultiPart();
         $t[1] = $n2;

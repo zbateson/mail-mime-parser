@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartBuilderTest
@@ -69,7 +70,7 @@ class PartBuilderTest extends TestCase
     {
         $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getMessageResourceHandle', 'setStreamPartEndPos' ])
+            ->setMethods(['getMessageResourceHandle', 'setStreamPartEndPos'])
             ->getMockForAbstractClass();
 
         $stream = Psr7\Utils::streamFor('test');

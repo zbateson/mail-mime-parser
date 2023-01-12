@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
@@ -16,8 +17,11 @@ use PHPUnit\Framework\TestCase;
 class PrivacyHelperTest extends TestCase
 {
     private $mockMimePartFactory;
+
     private $mockUUEncodedPartFactory;
+
     private $mockGenericHelper;
+
     private $mockMultipartHelper;
 
     protected function setUp() : void
@@ -66,7 +70,7 @@ class PrivacyHelperTest extends TestCase
 
         $message->expects($this->once())
             ->method('getAllParts')
-            ->willReturn([ $partText, $partNonText ]);
+            ->willReturn([$partText, $partNonText]);
 
         $partText->expects($this->once())
             ->method('getContentType')
@@ -92,7 +96,7 @@ class PrivacyHelperTest extends TestCase
         $message = $this->newMockIMessage();
         $alt = $this->newMockIMimePart();
         $cont = $this->newMockIMimePart();
-        $children = [ $this->newMockIMimePart(), $cont ];
+        $children = [$this->newMockIMimePart(), $cont];
 
         $message->expects($this->once())
             ->method('getPartByMimeType')

@@ -1,8 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Psr7;
 
 /**
  * Description of UUEncodedPartTest

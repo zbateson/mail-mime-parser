@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
 use PHPUnit\Framework\TestCase;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ParserManagerTest extends TestCase
 {
     private $mimeParser;
+
     private $nonMimeParser;
 
     protected function setUp() : void
@@ -48,7 +50,7 @@ class ParserManagerTest extends TestCase
             ->method('setParserManager')
             ->with($instance);
 
-        $instance->setParsers([ $this->mimeParser, $this->nonMimeParser ]);
+        $instance->setParsers([$this->mimeParser, $this->nonMimeParser]);
     }
 
     public function testPrependParserSetsParserManager()

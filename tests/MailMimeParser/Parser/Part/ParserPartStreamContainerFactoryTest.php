@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use PHPUnit\Framework\TestCase;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ParserPartStreamContainerFactoryTest extends TestCase
 {
     private $instance;
+
     private $proxy;
 
     protected function setUp() : void

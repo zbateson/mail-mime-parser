@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
-use PHPUnit\Framework\TestCase;
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ReceivedHeaderTest
@@ -20,20 +21,20 @@ class ReceivedHeaderTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
         $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
     }
 
     public function testParsingWithFromName()
@@ -80,7 +81,7 @@ class ReceivedHeaderTest extends TestCase
     public function testParsingWithFullExampleLine()
     {
         $value = "FROM LeComputer (blah.host) by MyComputer ([1.2.2.2]) WITH\n"
-            . "ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400";
+            . 'ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400';
         $header = new ReceivedHeader($this->consumerService, 'Received', $value);
 
         $this->assertEquals('LeComputer', $header->getFromName());
@@ -107,7 +108,7 @@ class ReceivedHeaderTest extends TestCase
             . "(Exim 4.94.2)\n"
             . "(envelope-from <noreply@domain.example.idd>)\n"
             . "id unique-string\n"
-            . "for i.am.your.father@jediforce.example.com; Sun, 28 Nov 2021 16:54:15 +0100";
+            . 'for i.am.your.father@jediforce.example.com; Sun, 28 Nov 2021 16:54:15 +0100';
         $header = new ReceivedHeader($this->consumerService, 'Received', $value);
 
         $this->assertEquals('domain.example.id', $header->getFromName());

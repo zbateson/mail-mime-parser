@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MessageParserTest
@@ -15,9 +16,13 @@ use GuzzleHttp\Psr7;
 class MessageParserTest extends TestCase
 {
     private $instance;
+
     private $partBuilderFactory;
+
     private $partHeaderContainerFactory;
+
     private $parserManager;
+
     private $headerParser;
 
     protected function setUp() : void
@@ -92,19 +97,19 @@ class MessageParserTest extends TestCase
         $stream = Psr7\Utils::streamFor(
             "This is a string\n"
             . "with multiple lines,\n"
-            . "multiple lines..."
+            . 'multiple lines...'
         );
         $handle = Psr7\StreamWrapper::getResource($stream);
         $this->assertEquals("This is a string\n", MessageParser::readLine($handle));
         $this->assertEquals("with multiple lines,\n", MessageParser::readLine($handle));
-        $this->assertEquals("multiple lines...", MessageParser::readLine($handle));
+        $this->assertEquals('multiple lines...', MessageParser::readLine($handle));
         $this->assertFalse(MessageParser::readLine($handle));
         $stream->close();
     }
 
     public function testReadLineWith4096Chars()
     {
-        $checkDiscarded = str_repeat('a', 4096);
+        $checkDiscarded = \str_repeat('a', 4096);
         $checkLarger = $checkDiscarded . $checkDiscarded;
         $stream = Psr7\Utils::streamFor(
             $checkDiscarded . "\n"
@@ -112,8 +117,8 @@ class MessageParserTest extends TestCase
             . 'last line'
         );
         $handle = Psr7\StreamWrapper::getResource($stream);
-        $this->assertEquals(substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
-        $this->assertEquals(substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
+        $this->assertEquals(\substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
+        $this->assertEquals(\substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
         $this->assertEquals('last line', MessageParser::readLine($handle));
         $this->assertFalse(MessageParser::readLine($handle));
         $stream->close();

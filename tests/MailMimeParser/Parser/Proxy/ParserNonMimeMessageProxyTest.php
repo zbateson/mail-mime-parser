@@ -1,4 +1,5 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
@@ -14,7 +15,9 @@ use PHPUnit\Framework\TestCase;
 class ParserNonMimeMessageProxyTest extends TestCase
 {
     private $partBuilder;
+
     private $parser;
+
     private $instance;
 
     protected function setUp() : void
