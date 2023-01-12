@@ -90,7 +90,7 @@ class HeaderStream implements StreamInterface, SplObserver
     public function writePartHeadersTo(StreamInterface $stream)
     {
         foreach ($this->getPartHeadersIterator() as $header) {
-            $stream->write("${header[0]}: ${header[1]}\r\n");
+            $stream->write("{$header[0]}: {$header[1]}\r\n");
         }
         $stream->write("\r\n");
     }
