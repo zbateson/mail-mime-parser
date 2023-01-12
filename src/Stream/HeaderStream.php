@@ -26,6 +26,7 @@ use SplSubject;
  *
  * @author Zaahid Bateson
  */
+#[\AllowDynamicProperties]
 class HeaderStream implements StreamInterface, SplObserver
 {
     use StreamDecoratorTrait;

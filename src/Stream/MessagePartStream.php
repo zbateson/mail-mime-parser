@@ -23,6 +23,7 @@ use SplSubject;
  *
  * @author Zaahid Bateson
  */
+#[\AllowDynamicProperties]
 class MessagePartStream implements StreamInterface, SplObserver
 {
     use StreamDecoratorTrait;
