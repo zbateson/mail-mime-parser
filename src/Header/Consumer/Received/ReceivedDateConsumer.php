@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use ZBateson\MailMimeParser\Header\Consumer\DateConsumer;
@@ -20,9 +21,9 @@ class ReceivedDateConsumer extends DateConsumer
 {
     /**
      * Returns true if the token is a ';'
-     * 
+     *
      * @param string $token
-     * @return boolean
+     * @return bool
      */
     protected function isStartToken($token)
     {

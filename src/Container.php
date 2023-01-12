@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser;
 
 use Pimple\Container as PimpleContainer;
@@ -27,15 +28,14 @@ class Container extends PimpleContainer
      *
      * Null is returned for built-in types.
      *
-     * @param ReflectionParameter $param
      * @return string|null
      */
     private function getParameterClass(ReflectionParameter $param)
     {
-        if (method_exists($param, 'getType')) {
+        if (\method_exists($param, 'getType')) {
             $type = $param->getType();
             if ($type && !$type->isBuiltin()) {
-                return method_exists($type, 'getName') ? $type->getName() : (string) $type;
+                return \method_exists($type, 'getName') ? $type->getName() : (string) $type;
             }
         } elseif ($param->getClass() !== null) {
             return $param->getClass()->getName();
@@ -53,7 +53,7 @@ class Container extends PimpleContainer
      */
     public function autoRegister($class)
     {
-        $fn = function ($c) use ($class) {
+        $fn = function($c) use ($class) {
             $ref = new ReflectionClass($class);
             $cargs = ($ref->getConstructor() !== null) ? $ref->getConstructor()->getParameters() : [];
             $ap = [];
@@ -79,12 +79,12 @@ class Container extends PimpleContainer
      * it can.
      *
      * @param string $id
-     * @return boolean
+     * @return bool
      */
     public function offsetExists($id)
     {
         $exists = parent::offsetExists($id);
-        if (!$exists && class_exists($id)) {
+        if (!$exists && \class_exists($id)) {
             $this->autoRegister($id);
             return true;
         }
@@ -96,15 +96,15 @@ class Container extends PimpleContainer
      * instance if it can.
      *
      * @param string $id
-     * @return object
      * @throws UnknownIdentifierException
+     * @return object
      */
     public function offsetGet($id)
     {
         try {
             return parent::offsetGet($id);
         } catch (UnknownIdentifierException $e) {
-            if (class_exists($id)) {
+            if (\class_exists($id)) {
                 $this->autoRegister($id);
                 return parent::offsetGet($id);
             }

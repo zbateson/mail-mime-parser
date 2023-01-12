@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory;
 
 /**
@@ -30,17 +31,16 @@ interface IParser
      * Called by the ParserManager to determine if the passed PartBuilder is a
      * part handled by this IParser.
      *
-     * @param PartBuilder $part
      */
     public function canParse(PartBuilder $part);
 
     /**
      * Returns the ParserPartProxyFactory responsible for creating IMessage
      * parts for this parser.
-     * 
+     *
      * This is called by ParserManager after 'canParse' if it returns true so
      * a ParserPartProxy can be created out of the PartBuilder.
-     * 
+     *
      * @return ParserPartProxyFactory
      */
     public function getParserMessageProxyFactory();

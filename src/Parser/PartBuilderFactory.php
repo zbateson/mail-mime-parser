@@ -4,11 +4,12 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
-use Psr\Http\Message\StreamInterface;
 
 /**
  * Responsible for creating PartBuilder instances.
@@ -20,8 +21,6 @@ class PartBuilderFactory
     /**
      * Constructs a top-level (message) PartBuilder object and returns it
      *
-     * @param PartHeaderContainer $headerContainer
-     * @param StreamInterface $messageStream
      * @return PartBuilder
      */
     public function newPartBuilder(PartHeaderContainer $headerContainer, StreamInterface $messageStream)
@@ -33,8 +32,6 @@ class PartBuilderFactory
      * Constructs a child PartBuilder object with the passed $parent as its
      * parent, and returns it
      *
-     * @param PartHeaderContainer $headerContainer
-     * @param ParserPartProxy $parent
      * @return PartBuilder
      */
     public function newChildPartBuilder(PartHeaderContainer $headerContainer, ParserPartProxy $parent)

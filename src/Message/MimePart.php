@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A mime email message part.
@@ -26,10 +27,10 @@ class MimePart extends MultiPart implements IMimePart
     protected $headerContainer;
 
     public function __construct(
-        IMimePart $parent = null,
-        PartStreamContainer $streamContainer = null,
-        PartHeaderContainer $headerContainer = null,
-        PartChildrenContainer $partChildrenContainer = null
+        ?IMimePart $parent = null,
+        ?PartStreamContainer $streamContainer = null,
+        ?PartHeaderContainer $headerContainer = null,
+        ?PartChildrenContainer $partChildrenContainer = null
     ) {
         $setStream = false;
         $di = MailMimeParser::getDependencyContainer();
@@ -85,7 +86,7 @@ class MimePart extends MultiPart implements IMimePart
     public function isMultiPart()
     {
         // casting to bool, preg_match returns 1 for true
-        return (bool) (preg_match(
+        return (bool) (\preg_match(
             '~multipart/.*~i',
             $this->getContentType()
         ));
@@ -124,7 +125,7 @@ class MimePart extends MultiPart implements IMimePart
      */
     public function getContentType($default = 'text/plain')
     {
-        return strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TYPE, $default));
+        return \strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TYPE, $default));
     }
 
     /**
@@ -141,14 +142,14 @@ class MimePart extends MultiPart implements IMimePart
     public function getCharset()
     {
         $charset = $this->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'charset');
-        if ($charset === null || strcasecmp($charset, 'binary') === 0) {
+        if ($charset === null || \strcasecmp($charset, 'binary') === 0) {
             $contentType = $this->getContentType();
             if ($contentType === 'text/plain' || $contentType === 'text/html') {
                 return 'ISO-8859-1';
             }
             return null;
         }
-        return strtoupper($charset);
+        return \strtoupper($charset);
     }
 
     /**
@@ -167,10 +168,10 @@ class MimePart extends MultiPart implements IMimePart
     public function getContentDisposition($default = 'inline')
     {
         $value = $this->getHeaderValue(HeaderConsts::CONTENT_DISPOSITION);
-        if ($value === null || !in_array($value, [ 'inline', 'attachment' ])) {
+        if ($value === null || !\in_array($value, ['inline', 'attachment'])) {
             return $default;
         }
-        return strtolower($value);
+        return \strtolower($value);
     }
 
     /**
@@ -195,7 +196,7 @@ class MimePart extends MultiPart implements IMimePart
             'uue' => 'x-uuencode',
             'uuencode' => 'x-uuencode'
         ];
-        $type = strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TRANSFER_ENCODING, $default));
+        $type = \strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TRANSFER_ENCODING, $default));
         if (isset($translated[$type])) {
             return $translated[$type];
         }

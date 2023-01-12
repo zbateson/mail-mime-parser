@@ -4,14 +4,15 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MailMimeParser;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use SplObjectStorage;
 use SplObserver;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Most basic representation of a single part of an email.
@@ -50,7 +51,7 @@ abstract class MessagePart implements IMessagePart
      */
     protected $observers;
 
-    public function __construct(PartStreamContainer $streamContainer, IMimePart $parent = null)
+    public function __construct(PartStreamContainer $streamContainer, ?IMimePart $parent = null)
     {
         $this->partStreamContainer = $streamContainer;
         $this->parent = $parent;
@@ -146,14 +147,14 @@ abstract class MessagePart implements IMessagePart
     public function saveContent($filenameResourceOrStream)
     {
         $resourceOrStream = $filenameResourceOrStream;
-        if (is_string($filenameResourceOrStream)) {
-            $resourceOrStream = fopen($filenameResourceOrStream, 'w+');
+        if (\is_string($filenameResourceOrStream)) {
+            $resourceOrStream = \fopen($filenameResourceOrStream, 'w+');
         }
 
         $stream = Utils::streamFor($resourceOrStream);
         Utils::copyToStream($this->getBinaryContentStream(), $stream);
 
-        if (!is_string($filenameResourceOrStream)
+        if (!\is_string($filenameResourceOrStream)
             && !($filenameResourceOrStream instanceof StreamInterface)) {
             // only detach if it wasn't a string or StreamInterface, so the
             // fopen call can be properly closed if it was
@@ -207,8 +208,8 @@ abstract class MessagePart implements IMessagePart
     public function save($filenameResourceOrStream, $filemode = 'w+')
     {
         $resourceOrStream = $filenameResourceOrStream;
-        if (is_string($filenameResourceOrStream)) {
-            $resourceOrStream = fopen($filenameResourceOrStream, $filemode);
+        if (\is_string($filenameResourceOrStream)) {
+            $resourceOrStream = \fopen($filenameResourceOrStream, $filemode);
         }
 
         $partStream = $this->getStream();
@@ -216,7 +217,7 @@ abstract class MessagePart implements IMessagePart
         $stream = Utils::streamFor($resourceOrStream);
         Utils::copyToStream($partStream, $stream);
 
-        if (!is_string($filenameResourceOrStream)
+        if (!\is_string($filenameResourceOrStream)
             && !($filenameResourceOrStream instanceof StreamInterface)) {
             // only detach if it wasn't a string or StreamInterface, so the
             // fopen call can be properly closed if it was

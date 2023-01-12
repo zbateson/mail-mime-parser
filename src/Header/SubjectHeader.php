@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
@@ -20,8 +21,7 @@ class SubjectHeader extends AbstractHeader
 {
     /**
      * Returns a SubjectConsumer.
-     * 
-     * @param ConsumerService $consumerService
+     *
      * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)

@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 /**
  * Represents a quoted part of a header value starting at a double quote, and
  * ending at the next double quote.
- * 
+ *
  * A quoted-pair part in a header is a literal.  There are no sub-consumers for
  * it and a Part\LiteralPart is returned.
  *
@@ -28,17 +29,17 @@ class QuotedStringConsumer extends GenericConsumer
     /**
      * QuotedStringConsumer doesn't have any sub-consumers.  This method returns
      * an empty array.
-     * 
+     *
      * @return array
      */
     public function getSubConsumers()
     {
         return [];
     }
-    
+
     /**
      * Returns true if the token is a double quote.
-     * 
+     *
      * @param string $token
      * @return bool
      */
@@ -46,33 +47,32 @@ class QuotedStringConsumer extends GenericConsumer
     {
         return ($token === '"');
     }
-    
+
     /**
      * Returns true if the token is a double quote.
-     * 
+     *
      * @param string $token
-     * @return boolean
+     * @return bool
      */
     protected function isEndToken($token)
     {
         return ($token === '"');
     }
-    
+
     /**
      * Returns a single regex pattern for a double quote.
-     * 
+     *
      * @return string[]
      */
     protected function getTokenSeparators()
     {
         return ['\"'];
     }
-    
+
     /**
      * No ignored spaces in a quoted part.  Returns the passed $parts param
      * as-is.
      *
-     * @param array $parts
      * @return array
      */
     protected function filterIgnoredSpaces(array $parts)
@@ -82,7 +82,7 @@ class QuotedStringConsumer extends GenericConsumer
 
     /**
      * Constructs a LiteralPart and returns it.
-     * 
+     *
      * @param string $token
      * @param bool $isLiteral not used - everything in a quoted string is a
      *        literal

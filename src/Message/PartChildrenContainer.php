@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
 use ArrayAccess;
@@ -15,7 +16,7 @@ use RecursiveIterator;
  *
  * @author Zaahid Bateson
  */
-class PartChildrenContainer implements RecursiveIterator, ArrayAccess
+class PartChildrenContainer implements ArrayAccess, RecursiveIterator
 {
     /**
      * @var IMessagePart[] array of child parts of the IMultiPart object that is
@@ -104,12 +105,12 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      */
     public function add(IMessagePart $part, $position = null)
     {
-        $index = ($position === null) ? count($this->children) : $position;
-        array_splice(
+        $index = ($position === null) ? \count($this->children) : $position;
+        \array_splice(
             $this->children,
             $index,
             0,
-            [ $part ]
+            [$part]
         );
     }
 
@@ -140,9 +141,6 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         return isset($this->children[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
@@ -157,10 +155,10 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
     {
         if (!$value instanceof IMessagePart) {
             throw new InvalidArgumentException(
-                get_class($value) . ' is not a ZBateson\MailMimeParser\Message\IMessagePart'
+                \get_class($value) . ' is not a ZBateson\MailMimeParser\Message\IMessagePart'
             );
         }
-        $index = ($offset === null) ? count($this->children) : $offset;
+        $index = ($offset === null) ? \count($this->children) : $offset;
         $this->children[$index] = $value;
         if ($index < $this->position) {
             ++$this->position;
@@ -173,7 +171,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        array_splice($this->children, $offset, 1);
+        \array_splice($this->children, $offset, 1);
         if ($this->position >= $offset) {
             --$this->position;
         }

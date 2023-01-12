@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7\CachingStream;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -87,7 +88,6 @@ class PartStreamContainer
      * Sets the part's stream containing the part's headers, content, and
      * children.
      *
-     * @param StreamInterface $stream
      */
     public function setStream(StreamInterface $stream)
     {
@@ -111,7 +111,7 @@ class PartStreamContainer
     /**
      * Returns true if there's a content stream associated with the part.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasContent()
     {
@@ -134,7 +134,7 @@ class PartStreamContainer
      *
      * @param StreamInterface $contentStream
      */
-    public function setContentStream(StreamInterface $contentStream = null)
+    public function setContentStream(?StreamInterface $contentStream = null)
     {
         $this->contentStream = $contentStream;
         $this->decodedStream = null;
@@ -146,7 +146,7 @@ class PartStreamContainer
      * on the current handle is different from the one passed as an argument.
      *
      * @param string $transferEncoding
-     * @return boolean
+     * @return bool
      */
     private function isTransferEncodingFilterChanged($transferEncoding)
     {
@@ -160,7 +160,7 @@ class PartStreamContainer
      *
      * @param string $fromCharset
      * @param string $toCharset
-     * @return boolean
+     * @return bool
      */
     private function isCharsetFilterChanged($fromCharset, $toCharset)
     {

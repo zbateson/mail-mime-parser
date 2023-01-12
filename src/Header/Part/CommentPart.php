@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MbWrapper\MbWrapper;
@@ -20,11 +21,10 @@ class CommentPart extends MimeLiteralPart
      * @var string the contents of the comment
      */
     protected $comment;
-    
+
     /**
      * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
-     * 
-     * @param MbWrapper $charsetConverter
+     *
      * @param string $token
      */
     public function __construct(MbWrapper $charsetConverter, $token)
@@ -35,16 +35,14 @@ class CommentPart extends MimeLiteralPart
         $this->canIgnoreSpacesBefore = true;
         $this->canIgnoreSpacesAfter = true;
     }
-    
+
     /**
      * Returns the comment's text.
-     * 
+     *
      * @return string
      */
     public function getComment()
     {
         return $this->comment;
     }
-    
-    
 }

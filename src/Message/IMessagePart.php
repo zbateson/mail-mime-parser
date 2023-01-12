@@ -4,11 +4,12 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MailMimeParser;
 use Psr\Http\Message\StreamInterface;
 use SplSubject;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * An interface representing a single part of an email.
@@ -120,7 +121,7 @@ interface IMessagePart extends SplSubject
      *
      * @see IMessagePart::getContentStream() to get the content stream.
      * @param string $charsetOverride the actual charset of the content.
-     * @param boolean $onlyIfNoCharset if true, $charsetOverride is used only if
+     * @param bool $onlyIfNoCharset if true, $charsetOverride is used only if
      *        getCharset returns null.
      */
     public function setCharsetOverride($charsetOverride, $onlyIfNoCharset = false);
@@ -128,7 +129,7 @@ interface IMessagePart extends SplSubject
     /**
      * Returns the StreamInterface for the part's content or null if the part
      * doesn't have a content section.
-     * 
+     *
      * To get a stream without charset conversion if you know the part's content
      * contains a binary stream, call {@see self::getBinaryContentStream()}
      * instead.
@@ -277,7 +278,6 @@ interface IMessagePart extends SplSubject
      * @param string $resourceCharset the charset of the passed $resource.
      */
     public function setContent($resource, $resourceCharset = MailMimeParser::DEFAULT_CHARSET);
-
 
     /**
      * Returns a resource handle for the string representation of this part,

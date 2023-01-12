@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -24,7 +25,6 @@ class PartHeaderContainerFactory
     /**
      * Constructor
      *
-     * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory)
     {
@@ -36,7 +36,7 @@ class PartHeaderContainerFactory
      *
      * @return PartHeaderContainer
      */
-    public function newInstance(PartHeaderContainer $from = null)
+    public function newInstance(?PartHeaderContainer $from = null)
     {
         return new PartHeaderContainer($this->headerFactory, $from);
     }

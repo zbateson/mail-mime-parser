@@ -4,11 +4,12 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ArrayIterator;
 use IteratorAggregate;
+use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
  * Maintains a collection of headers for a part.
@@ -57,11 +58,10 @@ class PartHeaderContainer implements IteratorAggregate
      * container is needed for parsing and changes to the header in the part
      * should not affect parsing.
      *
-     * @param HeaderFactory $headerFactory
      * @param PartHeaderContainer $cloneSource the original container to clone
      *        from
      */
-    public function __construct(HeaderFactory $headerFactory, PartHeaderContainer $cloneSource = null)
+    public function __construct(HeaderFactory $headerFactory, ?PartHeaderContainer $cloneSource = null)
     {
         $this->headerFactory = $headerFactory;
         if ($cloneSource !== null) {
@@ -77,7 +77,7 @@ class PartHeaderContainer implements IteratorAggregate
      *
      * @param string $name
      * @param int $offset
-     * @return boolean
+     * @return bool
      */
     public function exists($name, $offset = 0)
     {
@@ -100,8 +100,8 @@ class PartHeaderContainer implements IteratorAggregate
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (isset($this->headerMap[$s])) {
             $self = $this;
-            $filtered = array_filter($this->headerMap[$s], function ($h) use ($name, $self) {
-                return (strcasecmp($self->headers[$h][0], $name) === 0);
+            $filtered = \array_filter($this->headerMap[$s], function($h) use ($name, $self) {
+                return (\strcasecmp($self->headers[$h][0], $name) === 0);
             });
             return (!empty($filtered)) ? $filtered : $this->headerMap[$s];
         }
@@ -141,7 +141,7 @@ class PartHeaderContainer implements IteratorAggregate
         $a = $this->getAllWithOriginalHeaderNameIfSet($name);
         if (!empty($a)) {
             $self = $this;
-            return array_map(function ($index) use ($self) {
+            return \array_map(function($index) use ($self) {
                 return $self->getByIndex($index);
             }, $a);
         }
@@ -176,16 +176,16 @@ class PartHeaderContainer implements IteratorAggregate
      *
      * @param string $name
      * @param int $offset
-     * @return boolean if a header was removed.
+     * @return bool if a header was removed.
      */
     public function remove($name, $offset = 0)
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (isset($this->headerMap[$s][$offset])) {
             $index = $this->headerMap[$s][$offset];
-            array_splice($this->headerMap[$s], $offset, 1);
-            unset($this->headers[$index]);
-            unset($this->headerObjects[$index]);
+            \array_splice($this->headerMap[$s], $offset, 1);
+            unset($this->headers[$index], $this->headerObjects[$index]);
+
             return true;
         }
         return false;
@@ -195,15 +195,15 @@ class PartHeaderContainer implements IteratorAggregate
      * Removes all headers that match the passed name.
      *
      * @param string $name
-     * @return boolean true if one or more headers were removed.
+     * @return bool true if one or more headers were removed.
      */
     public function removeAll($name)
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (!empty($this->headerMap[$s])) {
             foreach ($this->headerMap[$s] as $i) {
-                unset($this->headers[$i]);
-                unset($this->headerObjects[$i]);
+                unset($this->headers[$i], $this->headerObjects[$i]);
+
             }
             $this->headerMap[$s] = [];
             return true;
@@ -220,12 +220,12 @@ class PartHeaderContainer implements IteratorAggregate
     public function add($name, $value)
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
-        $this->headers[$this->nextIndex] = [ $name, $value ];
+        $this->headers[$this->nextIndex] = [$name, $value];
         $this->headerObjects[$this->nextIndex] = null;
         if (!isset($this->headerMap[$s])) {
             $this->headerMap[$s] = [];
         }
-        array_push($this->headerMap[$s], $this->nextIndex);
+        $this->headerMap[$s][] = $this->nextIndex;
         $this->nextIndex++;
     }
 
@@ -248,7 +248,7 @@ class PartHeaderContainer implements IteratorAggregate
             return;
         }
         $i = $this->headerMap[$s][$offset];
-        $this->headers[$i] = [ $name, $value ];
+        $this->headers[$i] = [$name, $value];
         $this->headerObjects[$i] = null;
     }
 
@@ -260,7 +260,7 @@ class PartHeaderContainer implements IteratorAggregate
      */
     public function getHeaderObjects()
     {
-        return array_filter(array_map([ $this, 'getByIndex' ], array_keys($this->headers)));
+        return \array_filter(\array_map([$this, 'getByIndex'], \array_keys($this->headers)));
     }
 
     /**
@@ -278,7 +278,7 @@ class PartHeaderContainer implements IteratorAggregate
      */
     public function getHeaders()
     {
-        return array_values(array_filter($this->headers));
+        return \array_values(\array_filter($this->headers));
     }
 
     /**

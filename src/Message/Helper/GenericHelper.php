@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Header\IHeader;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
@@ -23,27 +24,24 @@ class GenericHelper extends AbstractHelper
      * @var string[] non mime content fields that are not related to the content
      *      of a part.
      */
-    private static $nonMimeContentFields = [ 'contentreturn', 'contentidentifier' ];
+    private static $nonMimeContentFields = ['contentreturn', 'contentidentifier'];
 
     /**
      * Returns true if the passed header's name is a Content-* header other than
      * one defined in the static $nonMimeContentFields
      *
-     * @param IHeader $header
      * @param string $exceptions
      */
     private function isMimeContentField(IHeader $header, array $exceptions = [])
     {
-        return (stripos($header->getName(), 'Content') === 0
-            && !in_array(strtolower(str_replace('-', '', $header->getName())), array_merge(self::$nonMimeContentFields, $exceptions)));
+        return (\stripos($header->getName(), 'Content') === 0
+            && !\in_array(\strtolower(\str_replace('-', '', $header->getName())), \array_merge(self::$nonMimeContentFields, $exceptions)));
     }
 
     /**
      * Copies the passed $header from $from, to $to or sets the header to
      * $default if it doesn't exist in $from.
      *
-     * @param IMimePart $from
-     * @param IMimePart $to
      * @param string $header
      * @param string $default
      */
@@ -62,8 +60,7 @@ class GenericHelper extends AbstractHelper
      *
      * An exception is made for the obsolete Content-Return header, which isn't
      * isn't a MIME content field and so isn't removed.
-     * 
-     * @param IMimePart $part
+     *
      */
     public function removeContentHeadersAndContent(IMimePart $part)
     {
@@ -83,8 +80,6 @@ class GenericHelper extends AbstractHelper
      * An exception is made for the obsolete Content-Return header, which isn't
      * isn't a MIME content field and so isn't copied.
      *
-     * @param IMimePart $from
-     * @param IMimePart $to
      * @param bool $move
      */
     public function copyContentHeadersAndContent(IMimePart $from, IMimePart $to, $move = false)
@@ -96,7 +91,7 @@ class GenericHelper extends AbstractHelper
             $this->copyHeader($from, $to, HeaderConsts::CONTENT_TRANSFER_ENCODING);
         }
         foreach ($from->getAllHeaders() as $header) {
-            if ($this->isMimeContentField($header, [ 'contenttype', 'contenttransferencoding' ])) {
+            if ($this->isMimeContentField($header, ['contenttype', 'contenttransferencoding'])) {
                 $this->copyHeader($from, $to, $header->getName());
             }
         }
@@ -113,9 +108,8 @@ class GenericHelper extends AbstractHelper
      * used for something else (e.g. changing a non-mime message to a multipart
      * mime message).
      *
-     * @param IMimePart $part
      * @return IMimePart the newly-created IMimePart
-    */
+     */
     public function createNewContentPartFrom(IMimePart $part)
     {
         $mime = $this->mimePartFactory->newInstance();
@@ -129,8 +123,6 @@ class GenericHelper extends AbstractHelper
      * content resource handle of $from to $to, and loops over child parts,
      * removing them from $from and adding them to $to.
      *
-     * @param IMimePart $from
-     * @param IMimePart $to
      */
     public function movePartContentAndChildren(IMimePart $from, IMimePart $to)
     {
@@ -151,9 +143,6 @@ class GenericHelper extends AbstractHelper
      * replaced, and instead $replacement's type headers are copied to $message,
      * and any children below $replacement are added directly below $message.
      *
-     * @param IMessage $message
-     * @param IMimePart $part
-     * @param IMimePart $replacement
      */
     public function replacePart(IMessage $message, IMimePart $part, IMimePart $replacement)
     {

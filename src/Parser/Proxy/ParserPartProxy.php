@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message\IMessagePart;
@@ -22,11 +23,6 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 abstract class ParserPartProxy extends PartBuilder
 {
     /**
-     * @var IMessagePart The part.
-     */
-    private $part;
-
-    /**
      * @var IParser The parser.
      */
     protected $parser;
@@ -35,6 +31,11 @@ abstract class ParserPartProxy extends PartBuilder
      * @var PartBuilder The part's PartBuilder.
      */
     protected $partBuilder;
+
+    /**
+     * @var IMessagePart The part.
+     */
+    private $part;
 
     public function __construct(
         PartBuilder $partBuilder,
@@ -84,7 +85,7 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * For ParserPartProxy, this is just content, but sub-classes may override
      * this to parse all children as well for example.
-.     */
+     * .     */
     public function parseAll()
     {
         $this->parseContent();

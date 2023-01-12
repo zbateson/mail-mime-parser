@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
@@ -17,13 +18,13 @@ use ZBateson\MailMimeParser\Message\IMessagePart;
 class ParserMimePartProxy extends ParserPartProxy
 {
     /**
-     * @var boolean set to true once the end boundary of the currently-parsed
+     * @var bool set to true once the end boundary of the currently-parsed
      *      part is found.
      */
     protected $endBoundaryFound = false;
 
     /**
-     * @var boolean set to true once a boundary belonging to this parent's part
+     * @var bool set to true once a boundary belonging to this parent's part
      *      is found.
      */
     protected $parentBoundaryFound = false;
@@ -76,7 +77,7 @@ class ParserMimePartProxy extends ParserPartProxy
         $this->ensureLastChildParsed();
         $next = $this->parser->parseNextChild($this);
         if ($next !== null) {
-            array_push($this->children, $next);
+            $this->children[] = $next;
             $this->lastAddedChild = $next;
         } else {
             $this->allChildrenParsed = true;
@@ -95,7 +96,7 @@ class ParserMimePartProxy extends ParserPartProxy
         if (empty($this->children)) {
             $this->parseNextChild();
         }
-        $proxy = array_shift($this->children);
+        $proxy = \array_shift($this->children);
         return ($proxy !== null) ? $proxy->getPart() : null;
     }
 

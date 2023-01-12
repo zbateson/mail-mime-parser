@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
 /**
@@ -15,7 +16,7 @@ abstract class NonMimePart extends MessagePart
 {
     /**
      * Returns true.
-     * 
+     *
      * @return bool
      */
     public function isTextPart()
@@ -25,7 +26,7 @@ abstract class NonMimePart extends MessagePart
 
     /**
      * Returns text/plain
-     * 
+     *
      * @return string
      */
     public function getContentType($default = 'text/plain')
@@ -35,7 +36,7 @@ abstract class NonMimePart extends MessagePart
 
     /**
      * Returns ISO-8859-1
-     * 
+     *
      * @return string
      */
     public function getCharset()
@@ -45,7 +46,7 @@ abstract class NonMimePart extends MessagePart
 
     /**
      * Returns 'inline'.
-     * 
+     *
      * @return string
      */
     public function getContentDisposition($default = 'inline')
@@ -55,7 +56,7 @@ abstract class NonMimePart extends MessagePart
 
     /**
      * Returns '7bit'.
-     * 
+     *
      * @return string
      */
     public function getContentTransferEncoding($default = '7bit')
@@ -65,7 +66,7 @@ abstract class NonMimePart extends MessagePart
 
     /**
      * Returns false.
-     * 
+     *
      * @return bool
      */
     public function isMime()

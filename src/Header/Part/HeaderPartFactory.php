@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
@@ -21,23 +22,22 @@ class HeaderPartFactory
      *      for converting strings in IHeaderPart::convertEncoding
      */
     protected $charsetConverter;
-    
+
     /**
      * Sets up dependencies.
-     * 
-     * @param MbWrapper $charsetConverter
+     *
      */
     public function __construct(MbWrapper $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
     }
-    
+
     /**
      * Creates and returns a default IHeaderPart for this factory, allowing
      * subclass factories for specialized IHeaderParts.
-     * 
+     *
      * The default implementation returns a new Token.
-     * 
+     *
      * @param string $value
      * @return IHeaderPart
      */
@@ -45,10 +45,10 @@ class HeaderPartFactory
     {
         return $this->newToken($value);
     }
-    
+
     /**
      * Initializes and returns a new Token.
-     * 
+     *
      * @param string $value
      * @return Token
      */
@@ -56,10 +56,10 @@ class HeaderPartFactory
     {
         return new Token($this->charsetConverter, $value);
     }
-    
+
     /**
      * Instantiates and returns a SplitParameterToken with the given name.
-     * 
+     *
      * @param string $name
      * @return SplitParameterToken
      */
@@ -67,10 +67,10 @@ class HeaderPartFactory
     {
         return new SplitParameterToken($this->charsetConverter, $name);
     }
-    
+
     /**
      * Initializes and returns a new LiteralPart.
-     * 
+     *
      * @param string $value
      * @return LiteralPart
      */
@@ -78,10 +78,10 @@ class HeaderPartFactory
     {
         return new LiteralPart($this->charsetConverter, $value);
     }
-    
+
     /**
      * Initializes and returns a new MimeLiteralPart.
-     * 
+     *
      * @param string $value
      * @return MimeLiteralPart
      */
@@ -89,10 +89,10 @@ class HeaderPartFactory
     {
         return new MimeLiteralPart($this->charsetConverter, $value);
     }
-    
+
     /**
      * Initializes and returns a new CommentPart.
-     * 
+     *
      * @param string $value
      * @return CommentPart
      */
@@ -100,10 +100,10 @@ class HeaderPartFactory
     {
         return new CommentPart($this->charsetConverter, $value);
     }
-    
+
     /**
      * Initializes and returns a new AddressPart.
-     * 
+     *
      * @param string $name
      * @param string $email
      * @return AddressPart
@@ -112,11 +112,10 @@ class HeaderPartFactory
     {
         return new AddressPart($this->charsetConverter, $name, $email);
     }
-    
+
     /**
      * Initializes and returns a new AddressGroupPart
-     * 
-     * @param array $addresses
+     *
      * @param string $name
      * @return AddressGroupPart
      */
@@ -124,10 +123,10 @@ class HeaderPartFactory
     {
         return new AddressGroupPart($this->charsetConverter, $addresses, $name);
     }
-    
+
     /**
      * Initializes and returns a new DatePart
-     * 
+     *
      * @param string $value
      * @return DatePart
      */
@@ -135,10 +134,10 @@ class HeaderPartFactory
     {
         return new DatePart($this->charsetConverter, $value);
     }
-    
+
     /**
      * Initializes and returns a new ParameterPart.
-     * 
+     *
      * @param string $name
      * @param string $value
      * @param string $language

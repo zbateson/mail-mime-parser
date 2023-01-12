@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
@@ -65,12 +66,12 @@ class DomainConsumer extends GenericReceivedConsumer
      * @param string $value
      * @param string $hostname
      * @param string $address
-     * @return boolean
+     * @return bool
      */
     private function matchHostPart($value, &$hostname, &$address) {
         $matches = [];
         $pattern = '~^(?P<name>[a-z0-9\-]+\.[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr>[a-f\d\.\:]+)\])?$~i';
-        if (preg_match($pattern, $value, $matches)) {
+        if (\preg_match($pattern, $value, $matches)) {
             if (!empty($matches['name'])) {
                 $hostname = $matches['name'];
             }
@@ -119,6 +120,6 @@ class DomainConsumer extends GenericReceivedConsumer
             $hostname,
             $address
         );
-        return array_filter([ $domainPart, $commentPart ]);
+        return \array_filter([$domainPart, $commentPart]);
     }
 }

@@ -4,18 +4,19 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
+use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
-use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
-use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7;
 
 /**
  * An email message.
@@ -39,11 +40,11 @@ class Message extends MimePart implements IMessage
     private $privacyHelper;
 
     public function __construct(
-        PartStreamContainer $streamContainer = null,
-        PartHeaderContainer $headerContainer = null,
-        PartChildrenContainer $partChildrenContainer = null,
-        MultipartHelper $multipartHelper = null,
-        PrivacyHelper $privacyHelper = null
+        ?PartStreamContainer $streamContainer = null,
+        ?PartHeaderContainer $headerContainer = null,
+        ?PartChildrenContainer $partChildrenContainer = null,
+        ?MultipartHelper $multipartHelper = null,
+        ?PrivacyHelper $privacyHelper = null
     ) {
         parent::__construct(
             null,
@@ -172,7 +173,10 @@ class Message extends MimePart implements IMessage
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
-                $this, 'text/plain', $resource, $charset
+                $this,
+                'text/plain',
+                $resource,
+                $charset
             );
     }
 
@@ -180,7 +184,10 @@ class Message extends MimePart implements IMessage
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
-                $this, 'text/html', $resource, $charset
+                $this,
+                'text/html',
+                $resource,
+                $charset
             );
     }
 
@@ -188,7 +195,9 @@ class Message extends MimePart implements IMessage
     {
         return $this->multipartHelper
             ->removePartByMimeType(
-                $this, 'text/plain', $index
+                $this,
+                'text/plain',
+                $index
             );
     }
 
@@ -196,7 +205,9 @@ class Message extends MimePart implements IMessage
     {
         return $this->multipartHelper
             ->removeAllContentPartsByMimeType(
-                $this, 'text/plain', $moveRelatedPartsBelowMessage
+                $this,
+                'text/plain',
+                $moveRelatedPartsBelowMessage
             );
     }
 
@@ -204,7 +215,9 @@ class Message extends MimePart implements IMessage
     {
         return $this->multipartHelper
             ->removePartByMimeType(
-                $this, 'text/html', $index
+                $this,
+                'text/html',
+                $index
             );
     }
 
@@ -212,7 +225,9 @@ class Message extends MimePart implements IMessage
     {
         return $this->multipartHelper
             ->removeAllContentPartsByMimeType(
-                $this, 'text/html', $moveRelatedPartsBelowMessage
+                $this,
+                'text/html',
+                $moveRelatedPartsBelowMessage
             );
     }
 
@@ -233,7 +248,7 @@ class Message extends MimePart implements IMessage
 
     public function getAttachmentCount()
     {
-        return count($this->getAllAttachmentParts());
+        return \count($this->getAllAttachmentParts());
     }
 
     public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
@@ -243,7 +258,7 @@ class Message extends MimePart implements IMessage
                 $this,
                 $resource,
                 $mimeType,
-                (strcasecmp($disposition, 'inline') === 0) ? 'inline' : 'attachment',
+                (\strcasecmp($disposition, 'inline') === 0) ? 'inline' : 'attachment',
                 $filename,
                 $encoding
             );
@@ -251,9 +266,9 @@ class Message extends MimePart implements IMessage
 
     public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
     {
-        $handle = Psr7\Utils::streamFor(fopen($filePath, 'r'));
+        $handle = Psr7\Utils::streamFor(\fopen($filePath, 'r'));
         if ($filename === null) {
-            $filename = basename($filePath);
+            $filename = \basename($filePath);
         }
         $this->addAttachmentPart($handle, $mimeType, $filename, $disposition, $encoding);
     }
@@ -280,11 +295,11 @@ class Message extends MimePart implements IMessage
 
     public function getSignaturePart()
     {
-        if (strcasecmp($this->getContentType(), 'multipart/signed') === 0) {
+        if (\strcasecmp($this->getContentType(), 'multipart/signed') === 0) {
             return $this->getChild(1);
-        } else {
-            return null;
         }
+            return null;
+
     }
 
     public function setAsMultipartSigned($micalg, $protocol)

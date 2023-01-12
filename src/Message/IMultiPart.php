@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
 /**
@@ -164,7 +165,7 @@ interface IMultiPart extends IMessagePart
 
     /**
      * Returns a \RecursiveIterator of child parts.
-     * 
+     *
      * The {@see https://www.php.net/manual/en/class.recursiveiterator.php \RecursiveIterator}
      * allows iterating over direct children, or using
      * a {@see https://www.php.net/manual/en/class.recursiveiteratoriterator.php \RecursiveIteratorIterator}

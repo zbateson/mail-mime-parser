@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MbWrapper\MbWrapper;
@@ -47,7 +48,6 @@ class ReceivedDomainPart extends ReceivedPart
 
     /**
      *
-     * @param MbWrapper $charsetConverter
      * @param string $name
      * @param string $value
      * @param string $ehloName

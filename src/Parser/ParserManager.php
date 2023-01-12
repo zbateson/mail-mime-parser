@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
@@ -27,14 +28,13 @@ class ParserManager
 
     public function __construct(MimeParser $mimeParser, NonMimeParser $nonMimeParser)
     {
-        $this->setParsers([ $mimeParser, $nonMimeParser ]);
+        $this->setParsers([$mimeParser, $nonMimeParser]);
     }
 
     /**
      * Overrides the internal prioritized list of parses with the passed list,
      * calling $parser->setParserManager($this) on each one.
      *
-     * @param array $parsers
      */
     public function setParsers(array $parsers)
     {
@@ -53,13 +53,13 @@ class ParserManager
     public function prependParser(IParser $parser)
     {
         $parser->setParserManager($this);
-        array_unshift($this->parsers, $parser);
+        \array_unshift($this->parsers, $parser);
     }
 
     /**
      * Creates a ParserPartProxy for the passed $partBuilder using a compatible
      * IParser.
-     * 
+     *
      * Loops through registered IParsers calling 'canParse()' on each with the
      * passed PartBuilder, then calling either 'getParserMessageProxyFactory()'
      * or 'getParserPartProxyFactory()' depending on if the PartBuilder has a
@@ -76,7 +76,7 @@ class ParserManager
     {
         foreach ($this->parsers as $parser) {
             if ($parser->canParse($partBuilder)) {
-                $factory = ($partBuilder->getParent() === null) ? 
+                $factory = ($partBuilder->getParent() === null) ?
                     $parser->getParserMessageProxyFactory() :
                     $parser->getParserPartProxyFactory();
                 return $factory->newInstance($partBuilder, $parser);

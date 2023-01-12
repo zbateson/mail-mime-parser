@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -66,17 +67,17 @@ class MessageParser
     public static function readLine($handle)
     {
         $size = 4096;
-        $ret = $line = fgets($handle, $size);
-        while (strlen($line) === $size - 1 && substr($line, -1) !== "\n") {
-            $line = fgets($handle, $size);
+        $ret = $line = \fgets($handle, $size);
+        while (\strlen($line) === $size - 1 && \substr($line, -1) !== "\n") {
+            $line = \fgets($handle, $size);
         }
         return $ret;
     }
-    
+
     /**
      * Parses the passed stream into an {@see ZBateson\MailMimeParser\IMessage}
      * object and returns it.
-     * 
+     *
      * @param StreamInterface $stream the stream to parse the message from
      * @return \ZBateson\MailMimeParser\IMessage
      */

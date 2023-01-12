@@ -4,14 +4,15 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 use SplObserver;
 use SplSubject;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * A part stream container that proxies requests for content streams to a parser
@@ -122,7 +123,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getBinaryContentStream($transferEncoding);
     }
 
-    public function setContentStream(StreamInterface $contentStream = null)
+    public function setContentStream(?StreamInterface $contentStream = null)
     {
         // has to be overridden because requestParsedContentStream calls
         // parent::setContentStream as well, so needs to be parsed before

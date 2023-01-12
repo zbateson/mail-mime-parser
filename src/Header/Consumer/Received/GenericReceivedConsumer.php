@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumer;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Consumes simple literal strings for parts of a Received header.
@@ -46,8 +47,6 @@ class GenericReceivedConsumer extends GenericConsumer
     /**
      * Constructor overridden to include $partName parameter.
      *
-     * @param ConsumerService $consumerService
-     * @param HeaderPartFactory $partFactory
      * @param string $partName
      */
     public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory, $partName)
@@ -76,7 +75,7 @@ class GenericReceivedConsumer extends GenericConsumer
      */
     protected function getSubConsumers()
     {
-        return [ $this->consumerService->getCommentConsumer() ];
+        return [$this->consumerService->getCommentConsumer()];
     }
 
     /**
@@ -88,8 +87,8 @@ class GenericReceivedConsumer extends GenericConsumer
      */
     protected function isStartToken($token)
     {
-        $pattern = '/^' . preg_quote($this->getPartName(), '/') . '$/i';
-        return (preg_match($pattern, $token) === 1);
+        $pattern = '/^' . \preg_quote($this->getPartName(), '/') . '$/i';
+        return (\preg_match($pattern, $token) === 1);
     }
 
     /**
@@ -104,11 +103,11 @@ class GenericReceivedConsumer extends GenericConsumer
      * o ;
      *
      * @param string $token
-     * @return boolean
+     * @return bool
      */
     protected function isEndToken($token)
     {
-        return (preg_match('/^(by|via|with|id|for|;)$/i', $token) === 1);
+        return (\preg_match('/^(by|via|with|id|for|;)$/i', $token) === 1);
     }
 
     /**
@@ -122,7 +121,7 @@ class GenericReceivedConsumer extends GenericConsumer
     {
         return [
             '\s+',
-            '(\A\s*|\s+)(?i)' . preg_quote($this->getPartName(), '/') . '(?-i)(?=\s+)'
+            '(\A\s*|\s+)(?i)' . \preg_quote($this->getPartName(), '/') . '(?-i)(?=\s+)'
         ];
     }
 
@@ -146,7 +145,7 @@ class GenericReceivedConsumer extends GenericConsumer
             }
             $strValue .= $part->getValue();
         }
-        array_unshift($ret, $this->partFactory->newReceivedPart($this->getPartName(), $strValue));
+        \array_unshift($ret, $this->partFactory->newReceivedPart($this->getPartName(), $strValue));
         return $ret;
     }
 }

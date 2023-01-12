@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
@@ -57,7 +58,6 @@ abstract class AbstractHeader implements IHeader
     /**
      * Returns the header's Consumer
      *
-     * @param ConsumerService $consumerService
      * @return AbstractConsumer
      */
     abstract protected function getConsumer(ConsumerService $consumerService);
@@ -67,7 +67,6 @@ abstract class AbstractHeader implements IHeader
      *
      * The default implementation assigns the returned value to $this->part.
      *
-     * @param AbstractConsumer $consumer
      */
     protected function setParseHeaderValue(AbstractConsumer $consumer)
     {

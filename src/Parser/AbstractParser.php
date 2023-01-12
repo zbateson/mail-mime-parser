@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory;

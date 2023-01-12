@@ -4,13 +4,14 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
-use ZBateson\MailMimeParser\Header\HeaderConsts;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
 /**
  * Holds generic/all purpose information about a part while it's being parsed.
@@ -34,20 +35,20 @@ class PartBuilder
      * headers) in the message's stream.
      */
     private $streamPartStartPos = null;
-    
+
     /**
      * @var int The offset read end position for this part.  If the part is a
      * multipart mime part, the end position is after all of this parts
      * children.
      */
     private $streamPartEndPos = null;
-    
+
     /**
      * @var int The offset read start position in the message's stream for the
      * beginning of this part's content (body).
      */
     private $streamContentStartPos = null;
-    
+
     /**
      * @var int The offset read end position in the message's stream for the
      * end of this part's content (body).
@@ -76,7 +77,7 @@ class PartBuilder
      */
     private $parent = null;
 
-    public function __construct(PartHeaderContainer $headerContainer, StreamInterface $messageStream = null, ParserPartProxy $parent = null)
+    public function __construct(PartHeaderContainer $headerContainer, ?StreamInterface $messageStream = null, ?ParserPartProxy $parent = null)
     {
         $this->headerContainer = $headerContainer;
         $this->messageStream = $messageStream;
@@ -90,7 +91,7 @@ class PartBuilder
     public function __destruct()
     {
         if ($this->messageHandle) {
-            fclose($this->messageHandle);
+            \fclose($this->messageHandle);
         }
     }
 
@@ -147,7 +148,7 @@ class PartBuilder
      */
     public function getMessageResourceHandlePos()
     {
-        return ftell($this->getMessageResourceHandle());
+        return \ftell($this->getMessageResourceHandle());
     }
 
     /**
@@ -203,7 +204,7 @@ class PartBuilder
     /**
      * Sets the byte offset start position of the part in the raw message
      * stream.
-     * 
+     *
      * @param int $streamPartStartPos
      */
     public function setStreamPartStartPos($streamPartStartPos)
@@ -215,7 +216,7 @@ class PartBuilder
      * Sets the byte offset end position of the part in the raw message stream,
      * and also calls its parent's setParentStreamPartEndPos to expand to parent
      * PartBuilders.
-     * 
+     *
      * @param int $streamPartEndPos
      */
     public function setStreamPartEndPos($streamPartEndPos)
@@ -229,7 +230,7 @@ class PartBuilder
     /**
      * Sets the byte offset start position of the content in the raw message
      * stream.
-     * 
+     *
      * @param int $streamContentStartPos
      */
     public function setStreamContentStartPos($streamContentStartPos)
@@ -240,7 +241,7 @@ class PartBuilder
     /**
      * Sets the byte offset end position of the content and part in the raw
      * message stream.
-     * 
+     *
      * @param int $streamContentEndPos
      */
     public function setStreamPartAndContentEndPos($streamContentEndPos)

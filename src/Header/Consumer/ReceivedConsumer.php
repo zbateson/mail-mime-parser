@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\Token;
 use Iterator;
+use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,
@@ -36,7 +37,7 @@ class ReceivedConsumer extends AbstractConsumer
      * false.
      *
      * @param string $token
-     * @return boolean false
+     * @return bool false
      */
     protected function isEndToken($token)
     {
@@ -46,10 +47,10 @@ class ReceivedConsumer extends AbstractConsumer
     /**
      * ReceivedConsumer doesn't start consuming at a specific token, it's the
      * base handler for the Received header, and so this always returns false.
-     * 
+     *
      * @codeCoverageIgnore
      * @param string $token
-     * @return boolean false
+     * @return bool false
      */
     protected function isStartToken($token)
     {
@@ -58,14 +59,14 @@ class ReceivedConsumer extends AbstractConsumer
 
     /**
      * Returns sub-consumers for a received consumer.
-     * 
+     *
      * - 2 {@see Received/DomainConsumer} instances, with FROM and BY as part
      *   names.
      * - 4 {@see Received/GenericReceivedConsumer} instances for VIA, WITH, ID,
      *   and FOR part names.
      * - 1 {@see Received/ReceivedDateConsumer} for the date/time stamp.
      * - 1 {@see CommentConsumer} to consume any comments.
-     * 
+     *
      * @return AbstractConsumer[] the sub-consumers
      */
     protected function getSubConsumers()
@@ -90,7 +91,7 @@ class ReceivedConsumer extends AbstractConsumer
      */
     protected function getTokenSplitPattern()
     {
-        $sChars = implode('|', $this->getAllTokenSeparators());
+        $sChars = \implode('|', $this->getAllTokenSeparators());
         return '~(' . $sChars . ')~';
     }
 
@@ -98,7 +99,6 @@ class ReceivedConsumer extends AbstractConsumer
      * Overridden to /not/ advance when the end token matches a start token for
      * a sub-consumer.
      *
-     * @param Iterator $tokens
      * @param bool $isStartToken
      */
     protected function advanceToNextToken(Iterator $tokens, $isStartToken)

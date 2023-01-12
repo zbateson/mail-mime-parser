@@ -4,34 +4,34 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
+use DateTimeImmutable;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
-use DateTimeImmutable;
 
 /**
  * Reads a DatePart value header in either RFC 2822 or RFC 822 format.
- * 
+ *
  * @author Zaahid Bateson
  */
 class DateHeader extends AbstractHeader
 {
     /**
      * Returns a DateConsumer.
-     * 
-     * @param ConsumerService $consumerService
+     *
      * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
         return $consumerService->getDateConsumer();
     }
-    
+
     /**
      * Convenience method returning the part's DateTime object, or null if the
      * date could not be parsed.
-     * 
+     *
      * @return \DateTime|null The parsed DateTime object.
      */
     public function getDateTime()

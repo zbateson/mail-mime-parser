@@ -4,17 +4,18 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Stream;
 
-use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Message\IMimePart;
+use ArrayIterator;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
-use ArrayIterator;
 use SplObserver;
 use SplSubject;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
  * Psr7 stream decorator implementation providing a readable stream for a part's
@@ -27,7 +28,7 @@ use SplSubject;
  * @author Zaahid Bateson
  */
 #[\AllowDynamicProperties]
-class HeaderStream implements StreamInterface, SplObserver
+class HeaderStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
 
@@ -74,9 +75,9 @@ class HeaderStream implements StreamInterface, SplObserver
             return $this->part->getRawHeaderIterator();
         } elseif ($this->part->getParent() !== null && $this->part->getParent()->isMime()) {
             return new ArrayIterator([
-                [ HeaderConsts::CONTENT_TYPE, $this->part->getContentType() ],
-                [ HeaderConsts::CONTENT_DISPOSITION, $this->part->getContentDisposition() ],
-                [ HeaderConsts::CONTENT_TRANSFER_ENCODING, $this->part->getContentTransferEncoding() ]
+                [HeaderConsts::CONTENT_TYPE, $this->part->getContentType()],
+                [HeaderConsts::CONTENT_DISPOSITION, $this->part->getContentDisposition()],
+                [HeaderConsts::CONTENT_TRANSFER_ENCODING, $this->part->getContentTransferEncoding()]
             ]);
         }
         return new ArrayIterator();
@@ -85,7 +86,6 @@ class HeaderStream implements StreamInterface, SplObserver
     /**
      * Writes out headers for $this->part and follows them with an empty line.
      *
-     * @param StreamInterface $stream
      */
     public function writePartHeadersTo(StreamInterface $stream)
     {

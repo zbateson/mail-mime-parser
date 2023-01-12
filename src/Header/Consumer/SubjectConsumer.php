@@ -4,11 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPart;
-use ZBateson\MailMimeParser\Header\Part\Token;
 use Iterator;
+use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Extends GenericConsumer to remove its sub consumers.
@@ -23,14 +23,14 @@ use Iterator;
  * doesn't have an effect (e.g. quoting a "mime-literal" encoded part still
  * comes out decoded), and parts in parentheses (comments) are displayed
  * normally.
- * 
+ *
  * @author Zaahid Bateson
  */
 class SubjectConsumer extends GenericConsumer
 {
     /**
      * Returns an empty array
-     * 
+     *
      * @return AbstractConsumer[] the sub-consumers
      */
     protected function getSubConsumers()
@@ -56,8 +56,8 @@ class SubjectConsumer extends GenericConsumer
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
-        } elseif (preg_match('/^\s+$/', $token)) {
-            if (preg_match('/^[\r\n]/', $token)) {
+        } elseif (\preg_match('/^\s+$/', $token)) {
+            if (\preg_match('/^[\r\n]/', $token)) {
                 return $this->partFactory->newToken(' ');
             }
             return $this->partFactory->newToken($token);
@@ -68,12 +68,11 @@ class SubjectConsumer extends GenericConsumer
     /**
      * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
      * the current token on the iterator.
-     * 
+     *
      * Overridden from AbstractConsumer to remove special filtering for
      * backslash escaping, which also seems to not apply to Subject headers at
      * least in ThunderBird's implementation.
-     * 
-     * @param Iterator $tokens
+     *
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
      */
     protected function getTokenParts(Iterator $tokens)
@@ -84,12 +83,12 @@ class SubjectConsumer extends GenericConsumer
     /**
      * Overridden to not split out backslash characters and its next character
      * as a special case defined in AbastractConsumer
-     * 
+     *
      * @return string the regex pattern
      */
     protected function getTokenSplitPattern()
     {
-        $sChars = implode('|', $this->getAllTokenSeparators());
+        $sChars = \implode('|', $this->getAllTokenSeparators());
         return '~(' . $sChars . ')~';
     }
 }

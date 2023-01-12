@@ -4,17 +4,18 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use DateTime;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
-use DateTime;
 
 /**
  * Represents a Received header.
- * 
+ *
  * The returned header value (as returned by a call to {@see
  * ReceivedHeader::getValue()}) for a
  * ReceivedHeader is the same as the raw value (as returned by a call to
@@ -91,20 +92,18 @@ class ReceivedHeader extends ParameterHeader
 
     /**
      * Returns a ReceivedConsumer.
-     * 
-     * @param ConsumerService $consumerService
+     *
      * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
         return $consumerService->getReceivedConsumer();
     }
-    
+
     /**
      * Overridden to assign comments to $this->comments, and the DateTime to
      * $this->date.
-     * 
-     * @param AbstractConsumer $consumer
+     *
      */
     protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
