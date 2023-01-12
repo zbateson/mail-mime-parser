@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
@@ -19,8 +19,8 @@ class MessageTest extends TestCase
     private $mockPartChildrenContainer;
     private $mockMultipartHelper;
     private $mockPrivacyHelper;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()

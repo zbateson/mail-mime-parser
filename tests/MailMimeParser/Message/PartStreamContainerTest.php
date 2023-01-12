@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -17,7 +17,7 @@ class PartStreamContainerTest extends TestCase
     private $instance = null;
     private $mockStreamFactory = null;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')->getMock();
         $this->instance = new PartStreamContainer($this->mockStreamFactory);

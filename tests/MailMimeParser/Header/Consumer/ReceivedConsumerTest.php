@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
 /**
@@ -19,7 +19,7 @@ class ReceivedConsumerTest extends TestCase
 {
     private $receivedConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
@@ -161,7 +161,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertNotEmpty($ret);
 
         $this->assertCount(6, $ret);
-        
+
         $this->assertEquals('from', $ret[0]->getName());
         $this->assertEquals('LeComputer', $ret[0]->getEhloName());
         $this->assertEquals('blah.host', $ret[0]->getHostname());

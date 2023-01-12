@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
@@ -17,7 +17,7 @@ class AddressHeaderTest extends TestCase
 {
     protected $consumerService;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

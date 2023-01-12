@@ -2,7 +2,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * StreamFactoryTest

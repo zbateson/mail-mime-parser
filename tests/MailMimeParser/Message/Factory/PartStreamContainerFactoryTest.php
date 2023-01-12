@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartStreamContainerFactoryTest
@@ -15,7 +15,7 @@ class PartStreamContainerFactoryTest extends TestCase
 {
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()

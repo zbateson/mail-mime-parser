@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserMimePartProxyTest
@@ -20,7 +20,7 @@ class ParserMimePartProxyTest extends TestCase
     private $parentParser;
     private $parent;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor();
@@ -34,7 +34,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->parentParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\IParser')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $this->parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,7 +150,7 @@ class ParserMimePartProxyTest extends TestCase
 
         $first->expects($this->once())->method('parseAll');
         $second->expects($this->once())->method('parseAll');
-        
+
         $this->parser
             ->expects($this->exactly(4))
             ->method('parseNextChild')
@@ -327,7 +327,7 @@ class ParserMimePartProxyTest extends TestCase
             $this->partBuilder,
             $this->parser
         );
-        
+
         $this->assertFalse($parent->isParentBoundaryFound());
         $this->assertFalse($parent->isEndBoundaryFound());
         $this->assertFalse($instance->isParentBoundaryFound());
@@ -347,7 +347,7 @@ class ParserMimePartProxyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->partBuilder->method('getParent')->willReturn($parent);
-        
+
         $parent->expects($this->once())
             ->method('setLastLineEndingLength')
             ->with(42);

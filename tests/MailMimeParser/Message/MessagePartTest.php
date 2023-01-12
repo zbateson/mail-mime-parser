@@ -2,7 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use org\bovigo\vfs\vfsStream;
@@ -21,7 +21,7 @@ class MessagePartTest extends TestCase {
     protected $partStreamContainer;
     private $vfs;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->vfs = vfsStream::setup('root');
         $this->partStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
@@ -145,7 +145,7 @@ class MessagePartTest extends TestCase {
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        
+
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
             ->expects($this->never())

@@ -3,7 +3,7 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
 use ZBateson\StreamDecorators\NonClosingStream;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MessagePartStreamTest
@@ -17,7 +17,7 @@ class MessagePartStreamTest extends TestCase
 {
     private $mockStreamFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
             ->disableOriginalConstructor()

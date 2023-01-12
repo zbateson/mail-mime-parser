@@ -3,7 +3,7 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
 use ZBateson\MailMimeParser\MailMimeParser;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * GenericHelperTest
@@ -19,7 +19,7 @@ class GenericHelperTest extends TestCase
     private $mockMimePartFactory;
     private $mockUUEncodedPartFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
             ->disableOriginalConstructor()

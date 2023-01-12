@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -18,7 +18,7 @@ class DatePartTest extends TestCase
 {
     private $charsetConverter;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->charsetConverter = new MbWrapper();
     }

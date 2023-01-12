@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -16,7 +16,7 @@ class MimeLiteralPartFactoryTest extends TestCase
 {
     protected $headerPartFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
         $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);

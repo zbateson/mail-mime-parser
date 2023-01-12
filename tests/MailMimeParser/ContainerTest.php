@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use Pimple\Exception\UnknownIdentifierException;
 
 /**
@@ -15,12 +15,12 @@ use Pimple\Exception\UnknownIdentifierException;
 class ContainerTest extends TestCase
 {
     private $container;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->container = new Container();
     }
-    
+
     public function testSetAndGet()
     {
         $this->container['test'] = 'toost';

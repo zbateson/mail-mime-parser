@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\StreamWrapper;
 
@@ -18,7 +18,7 @@ class HeaderParserTest extends TestCase
     private $headerContainer;
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
             ->disableOriginalConstructor()

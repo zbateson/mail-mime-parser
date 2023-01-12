@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AddressGroupConsumerTest
@@ -16,7 +16,7 @@ class AddressGroupConsumerTest extends TestCase
 {
     private $addressGroupConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

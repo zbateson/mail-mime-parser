@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 class MimeEncodedHeaderImpl extends MimeEncodedHeader {
@@ -25,7 +25,7 @@ class MimeEncodedHeaderTest extends TestCase
     protected $consumerService;
     protected $mimeLiteralPartFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

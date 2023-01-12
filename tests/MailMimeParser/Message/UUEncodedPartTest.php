@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -16,7 +16,7 @@ class UUEncodedPartTest extends TestCase
 {
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $psc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()

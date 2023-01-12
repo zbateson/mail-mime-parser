@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
 /**
@@ -17,7 +17,7 @@ class ReceivedDateConsumerTest extends TestCase
 {
     private $dateConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])

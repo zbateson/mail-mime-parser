@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * UUEncodedPartHeaderContainerFactoryTest
@@ -15,7 +15,7 @@ class UUEncodedPartHeaderContainerFactoryTest extends TestCase
 {
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $hf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
             ->disableOriginalConstructor()

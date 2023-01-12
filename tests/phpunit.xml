@@ -7,8 +7,8 @@
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
         convertDeprecationsToExceptions="true"
-        stopOnError="false"
-        stopOnFailure="false"
+        stopOnError="true"
+        stopOnFailure="true"
         stopOnIncomplete="false"
         stopOnSkipped="false"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">

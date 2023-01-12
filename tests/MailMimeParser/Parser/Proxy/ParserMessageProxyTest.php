@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserMessageProxyTest
@@ -16,7 +16,7 @@ class ParserMessageProxyTest extends TestCase
     private $partBuilder;
     private $parser;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
             ->disableOriginalConstructor()

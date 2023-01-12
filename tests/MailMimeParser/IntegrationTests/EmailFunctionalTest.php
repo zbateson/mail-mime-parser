@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\IMimePart;
@@ -25,7 +25,7 @@ class EmailFunctionalTest extends TestCase
     // tries to sign rather than verify a signature
     const USE_GPG_KEYGEN = false;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->parser = new MailMimeParser(true);
         $this->messageDir = dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/emails';

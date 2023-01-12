@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of ParameterConsumerTest
@@ -16,7 +16,7 @@ class ParameterConsumerTest extends TestCase
 {
     private $parameterConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
@@ -200,7 +200,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertCount(2, $ret);
         $this->assertEquals('TS Eliot', $ret[1]->getValue());
     }
-    
+
     public function testSplitHeaderWithQuotedValueContainingDoubleApos()
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'

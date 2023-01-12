@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of NonMimePartTest
@@ -15,7 +15,7 @@ class NonMimePartTest extends TestCase
 {
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->instance = $this->getMockForAbstractClass(
             'ZBateson\MailMimeParser\Message\NonMimePart',

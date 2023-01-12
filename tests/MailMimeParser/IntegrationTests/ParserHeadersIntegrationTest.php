@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**

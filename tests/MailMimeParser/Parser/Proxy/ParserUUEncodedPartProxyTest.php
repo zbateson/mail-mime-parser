@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserUUEncodedPartProxyTest
@@ -19,7 +19,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
     private $parent;
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer')
             ->disableOriginalConstructor()

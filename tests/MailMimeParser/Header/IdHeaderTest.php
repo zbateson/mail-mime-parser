@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of IdHeaderTest
@@ -17,7 +17,7 @@ class IdHeaderTest extends TestCase
     protected $consumerService;
     protected $mimeLiteralPartFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
@@ -99,7 +99,7 @@ class IdHeaderTest extends TestCase
             $header->getIds()
         );
     }
-    
+
     public function testReferencesHeader()
     {
         $header = new IdHeader(

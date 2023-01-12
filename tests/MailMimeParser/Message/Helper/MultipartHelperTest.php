@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MultipartHelperTest
@@ -18,7 +18,7 @@ class MultipartHelperTest extends TestCase
     private $mockUUEncodedPartFactory;
     private $mockGenericHelper;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
             ->disableOriginalConstructor()
@@ -388,7 +388,7 @@ class MultipartHelperTest extends TestCase
                 [ 'Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"" ],
                 [ 'Content-Transfer-Encoding', 'quoted-printable' ]
             );
-        
+
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(true);
@@ -429,7 +429,7 @@ class MultipartHelperTest extends TestCase
                 [ 'Content-Type', "$mimeType;\r\n\tcharset=\"$charset\"" ],
                 [ 'Content-Transfer-Encoding', 'quoted-printable' ]
             );
-        
+
         $message->expects($this->once())
             ->method('isMime')
             ->willReturn(true);

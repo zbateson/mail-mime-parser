@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

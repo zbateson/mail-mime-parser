@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of PartChildrenContainerTest
@@ -15,7 +15,7 @@ class PartChildrenContainerTest extends TestCase
 {
     protected $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->instance = new PartChildrenContainer();
     }
@@ -41,7 +41,7 @@ class PartChildrenContainerTest extends TestCase
         $this->instance->add($part);
         $this->assertFalse($this->instance->hasChildren());
         $this->assertNull($this->instance->getChildren());
-        
+
         $part->method('getChildIterator')->willReturn($this->instance);
         $this->assertTrue($this->instance->hasChildren());
         $this->assertEquals($this->instance, $this->instance->getChildren());

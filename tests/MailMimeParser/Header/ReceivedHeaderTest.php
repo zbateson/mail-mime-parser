@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
 /**
@@ -17,7 +17,7 @@ class ReceivedHeaderTest extends TestCase
 {
     protected $consumerService;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
 			->setMethods(['__toString'])
@@ -99,7 +99,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertNotNull($dt);
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
-    
+
     public function testParsingWithSubConsumerNames()
     {
         $value = "from domain.example.id ([111.222.333.444])\n"
@@ -112,11 +112,11 @@ class ReceivedHeaderTest extends TestCase
 
         $this->assertEquals('domain.example.id', $header->getFromName());
         $this->assertEquals('111.222.333.444', $header->getFromAddress());
-        
+
         $this->assertEquals('mail.jediforce.example.com', $header->getByName());
         $this->assertEquals('esmtps tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256', $header->getValueFor('with'));
         $this->assertEquals('unique-string', $header->getValueFor('id'));
-        
+
         $this->assertEquals('i.am.your.father@jediforce.example.com', $header->getValueFor('for'));
 
         $dt = $header->getDateTime();

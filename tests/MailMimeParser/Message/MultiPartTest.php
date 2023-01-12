@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
@@ -24,7 +24,7 @@ class MultiPartTest extends TestCase
     private $children;
     private $secondChildNested;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class MultiPartTest extends TestCase
                 $this->getMockedParameterHeader('Content-Type', 'multipart/anything'),
                 $this->getMockedParameterHeader('Content-Type', 'something/else')
             );
-        
+
         $this->assertFalse($part->isMultiPart());
         $this->assertTrue($part->isMultiPart());
         $this->assertTrue($part->isMultiPart());
@@ -306,7 +306,7 @@ class MultiPartTest extends TestCase
         $part->removePart($this->secondChildNested[0]);
         $part->addChild($this->secondChildNested[0], 0);
         $this->assertSame($part, $this->secondChildNested[0]->getParent());
-        
+
         array_splice($this->allParts, 3, 1);
         array_splice($this->allParts, 1, 0, [ $this->secondChildNested[0] ]);
         array_unshift($this->children, $this->secondChildNested[0]);

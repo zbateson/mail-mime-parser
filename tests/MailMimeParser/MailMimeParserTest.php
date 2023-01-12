@@ -1,7 +1,7 @@
 <?php
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7;
 
 /**
@@ -15,8 +15,8 @@ use GuzzleHttp\Psr7;
 class MailMimeParserTest extends TestCase
 {
     private $mockDi;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
             ->disableOriginalConstructor()
@@ -28,7 +28,7 @@ class MailMimeParserTest extends TestCase
     {
         MailMimeParser::setDependencyContainer(null);
     }
-    
+
     public function testConstructMailMimeParser()
     {
         MailMimeParser::setDependencyContainer($this->mockDi);
