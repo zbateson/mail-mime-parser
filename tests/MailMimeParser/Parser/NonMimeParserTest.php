@@ -39,27 +39,27 @@ class NonMimeParserTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->messageProxyFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory')
+        $this->messageProxyFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partProxyFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory')
+        $this->partProxyFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
+        $this->partBuilderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory')
+        $this->headerContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\HeaderParser')
+        $this->headerParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\HeaderParser::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parserManager = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\ParserManager')
+        $this->parserManager = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\ParserManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,15 +71,15 @@ class NonMimeParserTest extends TestCase
         );
         $this->instance->setParserManager($this->parserManager);
 
-        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parserMessageProxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy')
+        $this->parserMessageProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer')
+        $this->headerContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

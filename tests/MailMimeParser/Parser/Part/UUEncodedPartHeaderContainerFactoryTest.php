@@ -18,7 +18,7 @@ class UUEncodedPartHeaderContainerFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $hf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $hf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new UUEncodedPartHeaderContainerFactory($hf);
@@ -28,7 +28,7 @@ class UUEncodedPartHeaderContainerFactoryTest extends TestCase
     {
         $ob = $this->instance->newInstance(0777, 'test0r');
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer',
+            '\\' . \ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer::class,
             $ob
         );
         // make sure params are passed

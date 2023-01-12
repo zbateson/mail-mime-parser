@@ -18,7 +18,7 @@ class UUEncodedPartHeaderContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $hf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $hf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new UUEncodedPartHeaderContainer($hf);

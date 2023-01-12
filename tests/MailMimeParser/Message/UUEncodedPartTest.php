@@ -18,7 +18,7 @@ class UUEncodedPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $psc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $psc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new UUEncodedPart(null, null, null, $psc);

@@ -23,11 +23,11 @@ class ParserPartStreamContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+        $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
             ->setMethods(['parseAll', 'parseContent'])
             ->getMockForAbstractClass();
-        $this->streamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $this->streamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);

@@ -25,7 +25,7 @@ class MessagePartTest extends TestCase
     protected function setUp() : void
     {
         $this->vfs = vfsStream::setup('root');
-        $this->partStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $this->partStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -59,7 +59,7 @@ class MessagePartTest extends TestCase
                 });
         }
         return $this->getMockForAbstractClass(
-            'ZBateson\MailMimeParser\Message\MessagePart',
+            \ZBateson\MailMimeParser\Message\MessagePart::class,
             [$this->partStreamContainer, $parent]
         );
     }
@@ -78,7 +78,7 @@ class MessagePartTest extends TestCase
 
     public function testParentAndParentNotify()
     {
-        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
         $messagePart = $this->getMessagePart('blah', 'blooh', $parent);

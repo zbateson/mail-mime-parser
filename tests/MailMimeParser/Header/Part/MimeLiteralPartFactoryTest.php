@@ -27,6 +27,6 @@ class MimeLiteralPartFactoryTest extends TestCase
     {
         $token = $this->headerPartFactory->newInstance('Test');
         $this->assertNotNull($token);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart', $token);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::class, $token);
     }
 }

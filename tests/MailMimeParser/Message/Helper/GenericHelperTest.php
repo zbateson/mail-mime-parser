@@ -23,22 +23,22 @@ class GenericHelperTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockIMimePart()
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
     }
 
     private function newMockIMessage()
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
     }
 
     private function newGenericHelper()
@@ -52,7 +52,7 @@ class GenericHelperTest extends TestCase
         $from = $this->newMockIMimePart();
         $to = $this->newMockIMimePart();
 
-        $mockHeader = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+        $mockHeader = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\GenericHeader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -81,7 +81,7 @@ class GenericHelperTest extends TestCase
             'Content-MD5', 'Content-Duration', 'Something-Else', 'Content-Return'];
         $aHeaders = [];
         foreach ($names as $name) {
-            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+            $mock = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\GenericHeader::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $mock->method('getName')->willReturn($name);
@@ -128,7 +128,7 @@ class GenericHelperTest extends TestCase
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
-            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+            $mock = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\GenericHeader::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $mock->method('getName')->willReturn($name);
@@ -173,7 +173,7 @@ class GenericHelperTest extends TestCase
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
-            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+            $mock = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\GenericHeader::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $mock->method('getName')->willReturn($name);
@@ -221,7 +221,7 @@ class GenericHelperTest extends TestCase
         $aHeaders = [];
         $returnMap = [];
         foreach ($names as $name) {
-            $mock = $this->getMockBuilder('ZBateson\MailMimeParser\Header\GenericHeader')
+            $mock = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\GenericHeader::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $mock->method('getName')->willReturn($name);

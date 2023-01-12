@@ -18,18 +18,18 @@ class HeaderFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
             ->setConstructorArgs([$pf, $mlpf])
             ->setMethods(['__toString'])
             ->getMock();
@@ -43,12 +43,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\AddressHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\AddressHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\AddressHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\AddressHeader::class, $header);
         }
     }
 
@@ -59,12 +59,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Wed, 17 May 2000 19:08:29 -0400');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\DateHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\DateHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\DateHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\DateHeader::class, $header);
         }
     }
 
@@ -75,12 +75,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\GenericHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\GenericHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\GenericHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\GenericHeader::class, $header);
         }
     }
 
@@ -91,12 +91,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\IdHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\IdHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\IdHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\IdHeader::class, $header);
         }
     }
 
@@ -107,12 +107,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\SubjectHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\SubjectHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\SubjectHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\SubjectHeader::class, $header);
         }
     }
 
@@ -123,12 +123,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\ParameterHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\ParameterHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\ParameterHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\ParameterHeader::class, $header);
         }
     }
 
@@ -139,12 +139,12 @@ class HeaderFactoryTest extends TestCase
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\ReceivedHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\ReceivedHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
         }
     }
 }

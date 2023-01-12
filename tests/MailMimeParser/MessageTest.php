@@ -27,26 +27,26 @@ class MessageTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $this->mockPartStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $this->mockHeaderContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
+        $this->mockPartChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockMultipartHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+        $this->mockMultipartHelper = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPrivacyHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')
+        $this->mockPrivacyHelper = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
@@ -59,7 +59,7 @@ class MessageTest extends TestCase
 
     protected function getMockedIdHeader($id)
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\IdHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\IdHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -69,7 +69,7 @@ class MessageTest extends TestCase
 
     protected function getMockedIMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\IMimePart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMimePart::class)
             ->getMock();
     }
 
@@ -108,7 +108,7 @@ class MessageTest extends TestCase
     {
         $message = $this->newMessage();
         $this->assertNotNull($message);
-        $this->assertInstanceOf('ZBateson\MailMimeParser\Message', $message);
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Message::class, $message);
     }
 
     public function testGetTextPartAndTextPartCount()
@@ -292,7 +292,7 @@ class MessageTest extends TestCase
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
                 [$message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64'],
-                [$message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'base64']
+                [$message, $this->isInstanceOf(\Psr\Http\Message\StreamInterface::class), 'mimetype2', 'inline', 'blueball.png', 'base64']
             )
             ->willReturn($part);
 
@@ -310,7 +310,7 @@ class MessageTest extends TestCase
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
             ->withConsecutive(
                 [$message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable'],
-                [$message, $this->isInstanceOf('Psr\Http\Message\StreamInterface'), 'mimetype2', 'inline', 'blueball.png', 'quoted-printable']
+                [$message, $this->isInstanceOf(\Psr\Http\Message\StreamInterface::class), 'mimetype2', 'inline', 'blueball.png', 'quoted-printable']
             )
             ->willReturn($part);
 

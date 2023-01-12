@@ -22,18 +22,18 @@ class ReceivedConsumerTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
             ->setConstructorArgs([$pf, $mlpf])
             ->setMethods(['__toString'])
             ->getMock();
@@ -55,7 +55,7 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart::class, $ret[0]);
         $this->assertEquals('[1.2.3.4]', $ret[0]->getEhloName());
     }
 
@@ -66,7 +66,7 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart::class, $ret[0]);
         $this->assertEquals('[1.2.3.4]', $ret[0]->getEhloName());
     }
 
@@ -77,7 +77,7 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart::class, $ret[0]);
         $this->assertEquals('from', $ret[0]->getName());
         $this->assertEquals('[1.2.3.4]', $ret[0]->getEhloName());
         $this->assertEquals('by', $ret[1]->getName());
@@ -92,8 +92,8 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedPart', $ret[0]);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\CommentPart', $ret[1]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedPart::class, $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[1]);
         $this->assertEquals('with', $ret[0]->getName());
         $this->assertEquals('ESMTP', $ret[0]->getValue());
         $this->assertEquals('TLS1.2', $ret[1]->getComment());
@@ -106,8 +106,8 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedPart', $ret[0]);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\CommentPart', $ret[1]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedPart::class, $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[1]);
         $this->assertEquals('id', $ret[0]->getName());
         $this->assertEquals('123', $ret[0]->getValue());
         $this->assertEquals('blah', $ret[1]->getComment());
@@ -120,7 +120,7 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedPart::class, $ret[0]);
         $this->assertEquals('via', $ret[0]->getName());
         $this->assertEquals('someplace', $ret[0]->getValue());
     }
@@ -132,7 +132,7 @@ class ReceivedConsumerTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\DatePart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\DatePart::class, $ret[0]);
         $dt = $ret[0]->getDateTime();
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
@@ -145,10 +145,10 @@ class ReceivedConsumerTest extends TestCase
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
 
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart::class, $ret[0]);
         $this->assertEquals('localhost', $ret[0]->getEhloName());
 
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\DatePart', $ret[1]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\DatePart::class, $ret[1]);
         $dt = $ret[1]->getDateTime();
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }

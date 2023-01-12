@@ -25,7 +25,7 @@ class PartBuilderFactoryTest extends TestCase
 
     public function testNewPartBuilder()
     {
-        $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $hc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $stream = Psr7\Utils::streamFor('test');
@@ -34,11 +34,11 @@ class PartBuilderFactoryTest extends TestCase
             $stream
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\PartBuilder',
+            '\\' . \ZBateson\MailMimeParser\Parser\PartBuilder::class,
             $partBuilder
         );
 
-        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMessageResourceHandle'])
             ->getMockForAbstractClass();
@@ -51,7 +51,7 @@ class PartBuilderFactoryTest extends TestCase
             $parent
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\PartBuilder',
+            '\\' . \ZBateson\MailMimeParser\Parser\PartBuilder::class,
             $childPartBuilder
         );
         $this->assertSame(0, $childPartBuilder->getStreamPartStartPos());

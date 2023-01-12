@@ -158,7 +158,7 @@ class MimeLiteralPartTest extends TestCase
 
     public function testLanguageParts()
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
+        $this->charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
 

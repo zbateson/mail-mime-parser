@@ -18,7 +18,7 @@ class AbstractConsumerTest extends TestCase
 
     protected function setUp() : void
     {
-        $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer')
+        $stub = $this->getMockBuilder('\\' . \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::class)
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

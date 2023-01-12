@@ -20,7 +20,7 @@ class ParserPartChildrenContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+        $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new ParserPartChildrenContainer($this->proxy);
@@ -38,7 +38,7 @@ class ParserPartChildrenContainerTest extends TestCase
 
     public function testOffsetExistsCallsProxyTwiceAfterNotReturningNull()
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\IMessagePart')
+        $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->proxy->expects($this->exactly(2))

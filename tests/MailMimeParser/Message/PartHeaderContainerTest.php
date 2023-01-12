@@ -18,7 +18,7 @@ class PartHeaderContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockHeaderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $this->mockHeaderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['newInstance'])
             ->getMock();

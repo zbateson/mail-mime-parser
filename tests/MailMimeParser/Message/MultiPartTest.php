@@ -30,10 +30,10 @@ class MultiPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $this->mockPartStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $this->mockHeaderContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->partChildrenContainer = new PartChildrenContainer();
@@ -92,7 +92,7 @@ class MultiPartTest extends TestCase
 
     protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
@@ -192,7 +192,7 @@ class MultiPartTest extends TestCase
             ->method('get')
             ->with($this->equalTo('Content-Type'))
             ->willReturn($this->getMockedParameterHeader('Content-Type', 'Smiling'));
-        $matching = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $matching = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $matching->expects($this->atLeastOnce())
@@ -226,7 +226,7 @@ class MultiPartTest extends TestCase
             ->method('get')
             ->with($this->equalTo('Content-ID'))
             ->willReturn(null);
-        $matching = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $matching = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -370,7 +370,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->children, $part->getChildParts());
 
         $observer = $this->getMockForAbstractClass('SplObserver');
-        $observer->expects($this->exactly(\count($this->allParts) - 1))
+        $observer->expects($this->exactly((is_array($this->allParts) || $this->allParts instanceof \Countable ? \count($this->allParts) : 0) - 1))
             ->method('update');
         $part->attach($observer);
 

@@ -21,13 +21,13 @@ class PartStreamContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')->getMock();
+        $this->mockStreamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)->getMock();
         $this->instance = new PartStreamContainer($this->mockStreamFactory);
     }
 
     public function testSetAndGetStream()
     {
-        $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
+        $stream = $this->getMockForAbstractClass(\Psr\Http\Message\StreamInterface::class, [], '', false);
         $this->instance->setStream($stream);
         $stream->expects($this->once())->method('rewind');
         $this->assertSame($stream, $this->instance->getStream());
@@ -35,7 +35,7 @@ class PartStreamContainerTest extends TestCase
 
     public function testSetContentStreamAndHasContent()
     {
-        $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
+        $stream = $this->getMockForAbstractClass(\Psr\Http\Message\StreamInterface::class, [], '', false);
         $this->assertFalse($this->instance->hasContent());
         $this->assertNull($this->instance->getContentStream('', '', ''));
         $this->assertNull($this->instance->getBinaryContentStream(''));
@@ -82,7 +82,7 @@ class PartStreamContainerTest extends TestCase
 
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream('quoted-printable', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
@@ -95,7 +95,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream('base64', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
@@ -108,7 +108,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream('x-uuencode', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
@@ -121,7 +121,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream(null, 'US-ASCII', 'UTF-8');
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 

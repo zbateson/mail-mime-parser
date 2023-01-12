@@ -24,14 +24,14 @@ class PartChildrenContainerTest extends TestCase
     private function getIMessagePart()
     {
         return $this->getMockForAbstractClass(
-            'ZBateson\MailMimeParser\Message\IMessagePart'
+            \ZBateson\MailMimeParser\Message\IMessagePart::class
         );
     }
 
     private function getIMultiPart()
     {
         return $this->getMockForAbstractClass(
-            'ZBateson\MailMimeParser\Message\IMultiPart'
+            \ZBateson\MailMimeParser\Message\IMultiPart::class
         );
     }
 

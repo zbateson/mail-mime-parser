@@ -18,7 +18,7 @@ class PartHeaderContainerFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $mockhf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $mockhf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartHeaderContainerFactory(
@@ -30,7 +30,7 @@ class PartHeaderContainerFactoryTest extends TestCase
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\PartHeaderContainer',
+            '\\' . \ZBateson\MailMimeParser\Message\PartHeaderContainer::class,
             $container
         );
     }

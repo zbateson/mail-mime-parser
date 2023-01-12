@@ -116,7 +116,7 @@ abstract class MessagePart implements IMessagePart
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
-            $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
+            $ch = $this->charsetOverride ?? $this->getCharset();
             return $this->partStreamContainer->getContentStream(
                 $tr,
                 $ch,
@@ -173,7 +173,7 @@ abstract class MessagePart implements IMessagePart
 
     public function attachContentStream(StreamInterface $stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)
     {
-        $ch = ($this->charsetOverride !== null) ? $this->charsetOverride : $this->getCharset();
+        $ch = $this->charsetOverride ?? $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
             $this->charsetOverride = $streamCharset;
         }

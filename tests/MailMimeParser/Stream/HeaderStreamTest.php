@@ -17,14 +17,14 @@ class HeaderStreamTest extends TestCase
 {
     private function newMockMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockUUEncodedPart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\UUEncodedPart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

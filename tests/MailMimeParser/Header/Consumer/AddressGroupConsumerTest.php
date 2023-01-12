@@ -19,18 +19,18 @@ class AddressGroupConsumerTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
             ->setConstructorArgs([$pf, $mlpf])
             ->setMethods(['__toString'])
             ->getMock();
@@ -43,7 +43,7 @@ class AddressGroupConsumerTest extends TestCase
         $ret = $this->addressGroupConsumer->__invoke($group);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroupPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $ret[0]);
         $this->assertEquals('Wilfred', $ret[0]->getAddress(0)->getEmail());
         $this->assertEquals('Emma', $ret[0]->getAddress(1)->getEmail());
     }
@@ -54,7 +54,7 @@ class AddressGroupConsumerTest extends TestCase
         $ret = $this->addressGroupConsumer->__invoke($group);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroupPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $ret[0]);
         $this->assertEquals('Wilfred', $ret[0]->getAddress(0)->getEmail());
         $this->assertEquals('One', $ret[0]->getAddress(1)->getEmail());
         $this->assertEquals('Two', $ret[0]->getAddress(2)->getEmail());

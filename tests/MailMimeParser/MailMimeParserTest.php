@@ -19,7 +19,7 @@ class MailMimeParserTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockDi = $this->getMockBuilder('ZBateson\MailMimeParser\Container')
+        $this->mockDi = $this->getMockBuilder(\ZBateson\MailMimeParser\Container::class)
             ->disableOriginalConstructor()
             ->setMethods(['offsetGet', 'offsetExists'])
             ->getMock();
@@ -43,13 +43,13 @@ class MailMimeParserTest extends TestCase
         \fwrite($handle, 'This is a test');
         \rewind($handle);
 
-        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
+        $mockParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockDi
             ->expects($this->once())
             ->method('offsetGet')
-            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->with(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())
@@ -69,13 +69,13 @@ class MailMimeParserTest extends TestCase
         \fwrite($handle, 'This is a test');
         \rewind($handle);
 
-        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
+        $mockParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockDi
             ->expects($this->once())
             ->method('offsetGet')
-            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->with(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())
@@ -91,13 +91,13 @@ class MailMimeParserTest extends TestCase
 
     public function testParseFromString()
     {
-        $mockParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MessageParser')
+        $mockParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockDi
             ->expects($this->once())
             ->method('offsetGet')
-            ->with('ZBateson\MailMimeParser\Parser\MessageParser')
+            ->with(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->willReturn($mockParser);
         $mockParser
             ->expects($this->once())

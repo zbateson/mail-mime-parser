@@ -25,7 +25,7 @@ class PartChildrenContainerFactoryTest extends TestCase
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\PartChildrenContainer',
+            '\\' . \ZBateson\MailMimeParser\Message\PartChildrenContainer::class,
             $container
         );
     }

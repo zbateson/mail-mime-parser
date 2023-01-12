@@ -18,7 +18,7 @@ class PartStreamContainerFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $mocksdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartStreamContainerFactory(
@@ -30,7 +30,7 @@ class PartStreamContainerFactoryTest extends TestCase
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\PartStreamContainer',
+            '\\' . \ZBateson\MailMimeParser\Message\PartStreamContainer::class,
             $container
         );
     }

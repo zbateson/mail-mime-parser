@@ -24,13 +24,13 @@ class MimePartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $this->mockPartStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $this->mockHeaderContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
+        $this->mockPartChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)
             ->getMock();
     }
 
@@ -50,7 +50,7 @@ class MimePartTest extends TestCase
 
     protected function getMockedParameterHeader($name, $value, $parameterValue = null)
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
@@ -64,7 +64,7 @@ class MimePartTest extends TestCase
 
     protected function getMockedIdHeader($id)
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\IdHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\IdHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
@@ -208,13 +208,13 @@ class MimePartTest extends TestCase
         $parentMimePart->addChild($part);
         $this->assertFalse($part->isSignaturePart());
 
-        $message = $this->getMockBuilder('ZBateson\MailMimeParser\Message')
+        $message = $this->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
             ->setConstructorArgs([
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')->disableOriginalConstructor()->getMock()
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class)->disableOriginalConstructor()->getMock()
             ])
             ->setMethods(['getSignaturePart'])
             ->getMock();

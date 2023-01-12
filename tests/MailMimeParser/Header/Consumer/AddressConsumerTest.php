@@ -19,18 +19,18 @@ class AddressConsumerTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
             ->setConstructorArgs([$pf, $mlpf])
             ->setMethods(['__toString'])
             ->getMock();
@@ -45,7 +45,7 @@ class AddressConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $address);
         $this->assertEquals('', $address->getName());
         $this->assertEquals($email, $address->getEmail());
     }
@@ -65,7 +65,7 @@ class AddressConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $address);
         $this->assertEquals('Max.Payne@AddressUnknown.com', $address->getEmail());
         $this->assertEquals('Max Payne', $address->getName());
     }
@@ -78,7 +78,7 @@ class AddressConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $address);
         $this->assertEquals('Kilgore.Trout@Iliyum.ny', $address->getEmail());
         $this->assertEquals('Kilgore Trout', $address->getName());
     }
@@ -93,7 +93,7 @@ class AddressConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $address);
         $this->assertEquals('Max.Payne@AddressUnknown.com', $address->getEmail());
     }
 
@@ -105,7 +105,7 @@ class AddressConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressPart', $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $address);
         $this->assertEquals('Max"(imum)..Payne (not a comment)"@AddressUnknown.com', $address->getEmail());
     }
 
@@ -131,7 +131,7 @@ class AddressConsumerTest extends TestCase
         $this->assertCount(1, $ret);
 
         $addressGroup = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\AddressGroupPart', $addressGroup);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $addressGroup);
         $this->assertEquals('Senate', $addressGroup->getName());
     }
 }

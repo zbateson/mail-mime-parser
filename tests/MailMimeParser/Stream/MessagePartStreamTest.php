@@ -20,28 +20,28 @@ class MessagePartStreamTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $this->mockStreamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockMessage()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockMimePart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockUUEncodedPart()
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\UUEncodedPart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -197,7 +197,7 @@ class MessagePartStreamTest extends TestCase
         $this->mockStreamFactory->expects($this->once())
             ->method('newUUStream')
             ->willReturnCallback(function($stream) {
-                $mock = $this->getMockBuilder('ZBateson\StreamDecorators\NonClosingStream')
+                $mock = $this->getMockBuilder(\ZBateson\StreamDecorators\NonClosingStream::class)
                     ->setConstructorArgs([$stream])
                     ->setMethods(['setFilename'])
                     ->getMock();

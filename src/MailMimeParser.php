@@ -113,7 +113,7 @@ class MailMimeParser
             static::configureDependencyContainer();
         }
         $di = static::$di;
-        $this->messageParser = $di['ZBateson\MailMimeParser\Parser\MessageParser'];
+        $this->messageParser = $di[\ZBateson\MailMimeParser\Parser\MessageParser::class];
     }
 
     /**

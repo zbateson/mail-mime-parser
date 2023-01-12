@@ -30,15 +30,15 @@ class EmailFunctionalTest extends TestCase
     protected function setUp() : void
     {
         $this->parser = new MailMimeParser(true);
-        $this->messageDir = \dirname(\dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/emails';
+        $this->messageDir = \dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/emails';
     }
 
     protected function assertStringEqualsIgnoreWhiteSpace($test, $str, $message = null)
     {
         $equal = (\trim(\preg_replace('/\s+/', ' ', $test)) === \trim(\preg_replace('/\s+/', ' ', $str)));
         if (!$equal) {
-            \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/fail_org', $test);
-            \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/fail_parsed', $str);
+            \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/fail_org', $test);
+            \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/fail_parsed', $str);
         }
         $this->assertTrue(
             $equal,
@@ -149,8 +149,8 @@ class EmailFunctionalTest extends TestCase
                         \rewind($handle);
                         $equal = ($file === $att);
                         if (!$equal) {
-                            \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_org", $file);
-                            \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_parsed", $att);
+                            \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_org", $file);
+                            \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/{$name}_fail_parsed", $att);
                         }
                         $this->assertTrue(
                             $equal,
@@ -176,7 +176,7 @@ class EmailFunctionalTest extends TestCase
                     $part->getContentType(),
                     $failMessage
                 );
-                $this->assertInstanceOf('ZBateson\MailMimeParser\Message\IMimePart', $part);
+                $this->assertInstanceOf(\ZBateson\MailMimeParser\Message\IMimePart::class, $part);
                 $cparts = $part->getChildParts();
                 $curPart = \current($cparts);
                 $this->assertCount(\count($type), $cparts, $failMessage);
@@ -204,7 +204,7 @@ class EmailFunctionalTest extends TestCase
         $failMessage = 'Failed while parsing ' . $key;
         $this->runEmailTestForMessage($message, $props, $failMessage);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/$key", 'w+');
 
         $parts = $message->getAllParts();
         foreach ($parts as $part) {
@@ -1604,7 +1604,7 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($message, $props, 'failed parsing m4005');
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/m4005', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/m4005', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -1754,7 +1754,7 @@ class EmailFunctionalTest extends TestCase
         $test = '<span>This is my simple test</span>';
         $content->setContent($test);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rewrite_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rewrite_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -1776,7 +1776,7 @@ class EmailFunctionalTest extends TestCase
         $green = \fopen($this->messageDir . '/files/greenball.png', 'r');
         $att->attachContentStream(Utils::streamFor($green));
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rewrite_m2004', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rewrite_m2004', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -1872,7 +1872,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertNull($message->getTextPart());
         $this->runEmailTestForMessage($message, $test1, 'failed removing text part from m0020');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rm_m0020', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rm_m0020', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -1908,7 +1908,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertNull($message->getHtmlPart());
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0020');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rmh_m0020', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rmh_m0020', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -1956,7 +1956,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertNull($message->getHtmlPart(1));
         $this->runEmailTestForMessage($message, $test1, 'failed removing html content parts from m0020');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rmho_m0020', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rmho_m0020', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -1971,7 +1971,7 @@ class EmailFunctionalTest extends TestCase
         $message->removeHtmlPart();
         $this->assertNull($message->getHtmlPart());
         $this->assertNull($message->getPartByMimeType('multipart/alternative'));
-        $tmpSaved2 = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rmha_m0020', 'w+');
+        $tmpSaved2 = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rmha_m0020', 'w+');
         $message->save($tmpSaved2);
         \rewind($tmpSaved2);
 
@@ -2012,7 +2012,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $props, 'failed adding html part and removing text part from m0001');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/apr_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/apr_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2055,7 +2055,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0015');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/rm_m0015', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/rm_m0015', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2092,7 +2092,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0001');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/add_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/add_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2130,7 +2130,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertNotNull($message->getTextPart());
         $this->runEmailTestForMessage($message, $props, 'failed adding HTML and Text parts to m0013');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/add_m0013', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/add_m0013', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2168,7 +2168,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertNotNull($message->getHtmlPart());
         $this->runEmailTestForMessage($message, $props, 'failed adding HTML part to m0018');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/add_m0018', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/add_m0018', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2204,7 +2204,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0001');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/att_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/att_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2220,7 +2220,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
 
-        $tmpSaved2 = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/att2_m0001', 'w+');
+        $tmpSaved2 = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/att2_m0001', 'w+');
         $message->save($tmpSaved2);
         \rewind($tmpSaved2);
 
@@ -2258,7 +2258,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $props, 'failed adding attachment part to m0001');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/attqp_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/attqp_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2277,7 +2277,7 @@ class EmailFunctionalTest extends TestCase
 
         $this->runEmailTestForMessage($message, $props, 'failed adding second attachment part to m0001');
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/att8bit_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/att8bit_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2311,7 +2311,7 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($message, $props, 'failed adding large attachment part to m0001');
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/attl_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/attl_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2331,12 +2331,12 @@ class EmailFunctionalTest extends TestCase
         $signableContent = $message->getSignedMessageAsString();
         //$signature = md5($signableContent);
 
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0001', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0001', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
 
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m0001', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m0001', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2384,11 +2384,11 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals('text/html', $message->getHtmlPart()->getHeaderValue('Content-Type'));
         $signableContent = $message->getSignedMessageAsString();
 
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0014', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0014', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m0014', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m0014', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2434,11 +2434,11 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals('multipart/mixed', \strtolower($message->getChild(0)->getHeaderValue('Content-Type')));
 
         $signableContent = $message->getSignedMessageAsString();
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0015', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0015', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m0015', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m0015', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2483,11 +2483,11 @@ class EmailFunctionalTest extends TestCase
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         $signableContent = $message->getSignedMessageAsString();
 
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0018', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0018', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m0018', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m0018', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2530,11 +2530,11 @@ class EmailFunctionalTest extends TestCase
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         $signableContent = $message->getSignedMessageAsString();
 
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0019', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m0019', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m0019', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m0019', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2577,11 +2577,11 @@ class EmailFunctionalTest extends TestCase
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
         $signableContent = $message->getSignedMessageAsString();
 
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m1005', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m1005', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m1005', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m1005', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2624,11 +2624,11 @@ class EmailFunctionalTest extends TestCase
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
 
         $signableContent = $message->getSignedMessageAsString();
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4006', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4006', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m4006', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m4006', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 
@@ -2670,11 +2670,11 @@ class EmailFunctionalTest extends TestCase
         $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
 
         $signableContent = $message->getSignedMessageAsString();
-        \file_put_contents(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4007', $signableContent);
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4007', $signableContent);
         $signature = $this->getSignatureForContent($signableContent);
         $message->setSignature($signature);
 
-        $tmpSaved = \fopen(\dirname(\dirname(__DIR__)) . '/' . TEST_OUTPUT_DIR . '/sig_m4007', 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m4007', 'w+');
         $message->save($tmpSaved);
         \rewind($tmpSaved);
 

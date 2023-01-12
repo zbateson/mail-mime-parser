@@ -105,7 +105,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      */
     public function add(IMessagePart $part, $position = null)
     {
-        $index = ($position === null) ? \count($this->children) : $position;
+        $index = $position ?? \count($this->children);
         \array_splice(
             $this->children,
             $index,
@@ -158,7 +158,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
                 \get_class($value) . ' is not a ZBateson\MailMimeParser\Message\IMessagePart'
             );
         }
-        $index = ($offset === null) ? \count($this->children) : $offset;
+        $index = $offset ?? \count($this->children);
         $this->children[$index] = $value;
         if ($index < $this->position) {
             ++$this->position;

@@ -19,7 +19,7 @@ class NonMimePartTest extends TestCase
     protected function setUp() : void
     {
         $this->instance = $this->getMockForAbstractClass(
-            'ZBateson\MailMimeParser\Message\NonMimePart',
+            \ZBateson\MailMimeParser\Message\NonMimePart::class,
             [],
             '',
             false

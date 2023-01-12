@@ -35,9 +35,9 @@ class MimePart extends MultiPart implements IMimePart
         $setStream = false;
         $di = MailMimeParser::getDependencyContainer();
         if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null) {
-            $headerContainer = $di['ZBateson\MailMimeParser\Message\PartHeaderContainer'];
-            $streamContainer = $di['ZBateson\MailMimeParser\Message\PartStreamContainer'];
-            $partChildrenContainer = $di['ZBateson\MailMimeParser\Message\PartChildrenContainer'];
+            $headerContainer = $di[\ZBateson\MailMimeParser\Message\PartHeaderContainer::class];
+            $streamContainer = $di[\ZBateson\MailMimeParser\Message\PartStreamContainer::class];
+            $partChildrenContainer = $di[\ZBateson\MailMimeParser\Message\PartChildrenContainer::class];
             $setStream = true;
         }
         parent::__construct(
@@ -46,7 +46,7 @@ class MimePart extends MultiPart implements IMimePart
             $partChildrenContainer
         );
         if ($setStream) {
-            $streamFactory = $di['ZBateson\MailMimeParser\Stream\StreamFactory'];
+            $streamFactory = $di[\ZBateson\MailMimeParser\Stream\StreamFactory::class];
             $streamContainer->setStream($streamFactory->newMessagePartStream($this));
         }
         $this->headerContainer = $headerContainer;

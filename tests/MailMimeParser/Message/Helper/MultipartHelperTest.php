@@ -23,30 +23,30 @@ class MultipartHelperTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockGenericHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\GenericHelper')
+        $this->mockGenericHelper = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\GenericHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function newMockIMimePart()
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
     }
 
     private function newMockIUUEncodedPart()
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IUUEncodedPart');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IUUEncodedPart::class);
     }
 
     private function newMockIMessage()
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
     }
 
     private function newMultipartHelper()
