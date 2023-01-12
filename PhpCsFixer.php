@@ -168,7 +168,7 @@ return $config
         // Variables must be set `null` instead of using `(unset)` casting.
         'no_unset_cast' => true,
         // Properties should be set to `null` instead of using `unset`.
-        'no_unset_on_property' => true,
+        'no_unset_on_property' => false,
         // Unused `use` statements must be removed.
         'no_unused_imports' => true,
         // There should not be useless `else` cases.
