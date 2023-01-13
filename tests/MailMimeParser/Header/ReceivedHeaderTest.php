@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ReceivedHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class ReceivedHeaderTest extends TestCase
             ->getMock();
     }
 
-    public function testParsingWithFromName()
+    public function testParsingWithFromName() : void
     {
         $header = new ReceivedHeader($this->consumerService, 'Received', 'From JonSnow');
         $this->assertEquals('JonSnow', $header->getFromName());
@@ -48,7 +49,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertNull($header->getDateTime());
     }
 
-    public function testParsingFromExtended()
+    public function testParsingFromExtended() : void
     {
         $header = new ReceivedHeader($this->consumerService, 'Received', 'FROM JonSnow (domain.com [1.2.3.4]) (Crow Crow)');
         $this->assertEquals('JonSnow', $header->getFromName());
@@ -58,7 +59,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertEquals('Crow Crow', $header->getComments()[0]);
     }
 
-    public function testParsingByExtended()
+    public function testParsingByExtended() : void
     {
         $header = new ReceivedHeader($this->consumerService, 'Received', 'FROM JonSnow by Ygritte.local (name.com [1.2.3.4])');
         $this->assertEquals('JonSnow', $header->getFromName());
@@ -69,7 +70,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertEquals('1.2.3.4', $header->getByAddress());
     }
 
-    public function testParsingWithMissingDomainParts()
+    public function testParsingWithMissingDomainParts() : void
     {
         $header = new ReceivedHeader($this->consumerService, 'Received', 'with TEST; Wed, 17 May 2000 19:08:29 -0400');
         $this->assertEquals('TEST', $header->getValueFor('WITH'));
@@ -78,7 +79,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
-    public function testParsingWithFullExampleLine()
+    public function testParsingWithFullExampleLine() : void
     {
         $value = "FROM LeComputer (blah.host) by MyComputer ([1.2.2.2]) WITH\n"
             . 'ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400';
@@ -101,7 +102,7 @@ class ReceivedHeaderTest extends TestCase
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
-    public function testParsingWithSubConsumerNames()
+    public function testParsingWithSubConsumerNames() : void
     {
         $value = "from domain.example.id ([111.222.333.444])\n"
             . "by mail.jediforce.example.com with esmtps (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n"

@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ReceivedDateConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $dateConsumer;
 
     protected function setUp() : void
@@ -38,7 +39,7 @@ class ReceivedDateConsumerTest extends TestCase
         $this->dateConsumer = new ReceivedDateConsumer($cs, $pf);
     }
 
-    public function testConsumeDates()
+    public function testConsumeDates() : void
     {
         $date = 'Wed, 17 May 2000 19:08:29 -0400';
         $ret = $this->dateConsumer->__invoke($date);

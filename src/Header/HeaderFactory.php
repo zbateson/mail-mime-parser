@@ -115,7 +115,7 @@ class HeaderFactory
      * @param string $header The header name
      * @return string The normalized header name
      */
-    public function getNormalizedHeaderName($header)
+    public function getNormalizedHeaderName(string $header) : string
     {
         return \preg_replace('/[^a-z0-9]/', '', \strtolower($header));
     }
@@ -126,7 +126,7 @@ class HeaderFactory
      * @param string $name The header name.
      * @return string The Fully Qualified class name.
      */
-    private function getClassFor($name)
+    private function getClassFor(string $name) : string
     {
         $test = $this->getNormalizedHeaderName($name);
         foreach ($this->types as $class => $matchers) {
@@ -147,7 +147,7 @@ class HeaderFactory
      * @param string $value The header value.
      * @return IHeader The created header object.
      */
-    public function newInstance($name, $value)
+    public function newInstance(string $name, string $value)
     {
         $class = $this->getClassFor($name);
         if (\is_a($class, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {

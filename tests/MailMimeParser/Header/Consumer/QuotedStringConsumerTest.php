@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class QuotedStringConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $quotedStringConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class QuotedStringConsumerTest extends TestCase
         $this->quotedStringConsumer = new QuotedStringConsumer($cs, $pf);
     }
 
-    public function testConsumeTokens()
+    public function testConsumeTokens() : void
     {
         $value = 'Will end at " quote';
 

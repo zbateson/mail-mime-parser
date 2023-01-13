@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CommentConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $commentConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class CommentConsumerTest extends TestCase
         $this->commentConsumer = new CommentConsumer($cs, $pf);
     }
 
-    protected function assertCommentConsumed($expected, $value)
+    protected function assertCommentConsumed($expected, $value) : void
     {
         $ret = $this->commentConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
@@ -47,25 +48,25 @@ class CommentConsumerTest extends TestCase
         $this->assertEquals($expected, $ret[0]->getComment());
     }
 
-    public function testConsumeTokens()
+    public function testConsumeTokens() : void
     {
         $comment = 'Some silly comment made about my moustache';
         $this->assertCommentConsumed($comment, $comment);
     }
 
-    public function testNestedComments()
+    public function testNestedComments() : void
     {
         $comment = 'A very silly comment (made about my (very awesome) moustache no less)';
         $this->assertCommentConsumed($comment, $comment);
     }
 
-    public function testCommentWithQuotedLiteral()
+    public function testCommentWithQuotedLiteral() : void
     {
         $comment = 'A ("very ) wrong") comment was made (about my moustache obviously)';
         $this->assertCommentConsumed($comment, $comment);
     }
 
-    public function testMimeEncodedComment()
+    public function testMimeEncodedComment() : void
     {
         $this->assertCommentConsumed(
             'A comment was made (about my moustache obviously)',

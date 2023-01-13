@@ -23,7 +23,7 @@ class DateConsumer extends GenericConsumer
      *        e.g. an escaped token
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         return $this->partFactory->newLiteralPart($token);
     }
@@ -37,7 +37,7 @@ class DateConsumer extends GenericConsumer
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] Array of resulting
      *         final parts.
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $strValue = '';
         foreach ($parts as $part) {

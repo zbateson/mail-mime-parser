@@ -15,14 +15,19 @@ use ZBateson\MailMimeParser\Message\PartChildrenContainer;
  */
 class MessageTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockPartStreamContainer;
 
+    // @phpstan-ignore-next-line
     private $mockHeaderContainer;
 
+    // @phpstan-ignore-next-line
     private $mockPartChildrenContainer;
 
+    // @phpstan-ignore-next-line
     private $mockMultipartHelper;
 
+    // @phpstan-ignore-next-line
     private $mockPrivacyHelper;
 
     protected function setUp() : void
@@ -44,7 +49,7 @@ class MessageTest extends TestCase
             ->getMock();
     }
 
-    protected function getMockedParameterHeader($name, $value, $parameterValue = null)
+    protected function getMockedParameterHeader($name, $value, $parameterValue = null) : \ZBateson\MailMimeParser\Header\ParameterHeader
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
@@ -57,7 +62,7 @@ class MessageTest extends TestCase
         return $header;
     }
 
-    protected function getMockedIdHeader($id)
+    protected function getMockedIdHeader($id) : \ZBateson\MailMimeParser\Header\IdHeader
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\IdHeader::class)
             ->disableOriginalConstructor()
@@ -67,13 +72,13 @@ class MessageTest extends TestCase
         return $header;
     }
 
-    protected function getMockedIMimePart()
+    protected function getMockedIMimePart() : \ZBateson\MailMimeParser\Message\IMimePart
     {
         return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMimePart::class)
             ->getMock();
     }
 
-    protected function getChildrenContainerWithChildren()
+    protected function getChildrenContainerWithChildren() : PartChildrenContainer
     {
         $children = [
             $this->getMockedIMimePart(),
@@ -93,7 +98,7 @@ class MessageTest extends TestCase
         return $pc;
     }
 
-    private function newMessage($childrenContainer = null)
+    private function newMessage($childrenContainer = null) : Message
     {
         return new Message(
             $this->mockPartStreamContainer,
@@ -104,14 +109,14 @@ class MessageTest extends TestCase
         );
     }
 
-    public function testInstance()
+    public function testInstance() : void
     {
         $message = $this->newMessage();
         $this->assertNotNull($message);
         $this->assertInstanceOf(\ZBateson\MailMimeParser\Message::class, $message);
     }
 
-    public function testGetTextPartAndTextPartCount()
+    public function testGetTextPartAndTextPartCount() : void
     {
         $message = $this->newMessage(
             $this->getChildrenContainerWithChildren()
@@ -151,7 +156,7 @@ class MessageTest extends TestCase
         $this->assertEquals('tilkomore', $message->getTextStream(1, 'charset'));
     }
 
-    public function testGetHtmlPartAndHtmlPartCount()
+    public function testGetHtmlPartAndHtmlPartCount() : void
     {
         $message = $this->newMessage(
             $this->getChildrenContainerWithChildren()
@@ -191,7 +196,7 @@ class MessageTest extends TestCase
         $this->assertEquals('tilkomore', $message->getHtmlStream(1, 'charset'));
     }
 
-    public function testGetAndRemoveAttachmentParts()
+    public function testGetAndRemoveAttachmentParts() : void
     {
         $message = $this->newMessage(
             $this->getChildrenContainerWithChildren()
@@ -226,13 +231,13 @@ class MessageTest extends TestCase
         $this->assertEquals(null, $message->getAttachmentPart(0));
     }
 
-    public function testIsNotMime()
+    public function testIsNotMime() : void
     {
         $message = $this->newMessage();
         $this->assertFalse($message->isMime());
     }
 
-    public function testIsMimeWithContentType()
+    public function testIsMimeWithContentType() : void
     {
         $this->mockHeaderContainer->method('get')->willReturn($this->getMockedParameterHeader('Content-Type', 'text/html', 'utf-8'));
 
@@ -240,7 +245,7 @@ class MessageTest extends TestCase
         $this->assertTrue($message->isMime());
     }
 
-    public function testIsMimeWithMimeVersion()
+    public function testIsMimeWithMimeVersion() : void
     {
         $hf = $this->mockHeaderContainer;
         $this->mockHeaderContainer->method('get')
@@ -249,7 +254,7 @@ class MessageTest extends TestCase
         $this->assertTrue($message->isMime());
     }
 
-    public function testSetAndRemoveHtmlPart()
+    public function testSetAndRemoveHtmlPart() : void
     {
         $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
@@ -266,7 +271,7 @@ class MessageTest extends TestCase
         $message->removeAllHtmlParts();
     }
 
-    public function testSetAndRemoveTextPart()
+    public function testSetAndRemoveTextPart() : void
     {
         $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
@@ -283,7 +288,7 @@ class MessageTest extends TestCase
         $message->removeAllTextParts();
     }
 
-    public function testAddAttachmentPart()
+    public function testAddAttachmentPart() : void
     {
         $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
@@ -301,7 +306,7 @@ class MessageTest extends TestCase
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline');
     }
 
-    public function testAddAttachmentPartUsingQuotedPrintable()
+    public function testAddAttachmentPartUsingQuotedPrintable() : void
     {
         $helper = $this->mockMultipartHelper;
         $message = $this->newMessage();
@@ -319,7 +324,7 @@ class MessageTest extends TestCase
         $message->addAttachmentPartFromFile($testFile, 'mimetype2', null, 'inline', 'quoted-printable');
     }
 
-    public function testSigningHelperMethods()
+    public function testSigningHelperMethods() : void
     {
         $helper = $this->mockPrivacyHelper;
         $message = $this->newMessage();

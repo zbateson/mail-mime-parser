@@ -30,31 +30,24 @@ class QuotedStringConsumer extends GenericConsumer
      * QuotedStringConsumer doesn't have any sub-consumers.  This method returns
      * an empty array.
      *
-     * @return array
      */
-    public function getSubConsumers()
+    public function getSubConsumers() : array
     {
         return [];
     }
 
     /**
      * Returns true if the token is a double quote.
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return ($token === '"');
     }
 
     /**
      * Returns true if the token is a double quote.
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return ($token === '"');
     }
@@ -64,7 +57,7 @@ class QuotedStringConsumer extends GenericConsumer
      *
      * @return string[]
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return ['\"'];
     }
@@ -73,9 +66,8 @@ class QuotedStringConsumer extends GenericConsumer
      * No ignored spaces in a quoted part.  Returns the passed $parts param
      * as-is.
      *
-     * @return array
      */
-    protected function filterIgnoredSpaces(array $parts)
+    protected function filterIgnoredSpaces(array $parts) : array
     {
         return $parts;
     }
@@ -83,12 +75,11 @@ class QuotedStringConsumer extends GenericConsumer
     /**
      * Constructs a LiteralPart and returns it.
      *
-     * @param string $token
      * @param bool $isLiteral not used - everything in a quoted string is a
      *        literal
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         return $this->partFactory->newLiteralPart($token);
     }

@@ -16,16 +16,22 @@ use PHPUnit\Framework\TestCase;
  */
 class MultiPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockPartStreamContainer;
 
+    // @phpstan-ignore-next-line
     private $mockHeaderContainer;
 
+    // @phpstan-ignore-next-line
     private $partChildrenContainer;
 
+    // @phpstan-ignore-next-line
     private $allParts;
 
+    // @phpstan-ignore-next-line
     private $children;
 
+    // @phpstan-ignore-next-line
     private $secondChildNested;
 
     protected function setUp() : void
@@ -76,7 +82,7 @@ class MultiPartTest extends TestCase
         return $parent;
     }
 
-    private function getMimePart($childrenContainer = null, $headerContainer = null, $streamContainer = null, $parent = null)
+    private function getMimePart($childrenContainer = null, $headerContainer = null, $streamContainer = null, $parent = null) : MimePart
     {
         if ($childrenContainer === null) {
             $childrenContainer = $this->partChildrenContainer;
@@ -90,7 +96,7 @@ class MultiPartTest extends TestCase
         return new MimePart($parent, $streamContainer, $headerContainer, $childrenContainer);
     }
 
-    protected function getMockedParameterHeader($name, $value, $parameterValue = null)
+    protected function getMockedParameterHeader($name, $value, $parameterValue = null) : \ZBateson\MailMimeParser\Header\ParameterHeader
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
@@ -104,7 +110,7 @@ class MultiPartTest extends TestCase
         return $header;
     }
 
-    public function testIsMultiPart()
+    public function testIsMultiPart() : void
     {
         $part = $this->getMimePart();
 
@@ -130,7 +136,7 @@ class MultiPartTest extends TestCase
         $this->assertFalse($part->isMultiPart());
     }
 
-    public function testGetChildrenParts()
+    public function testGetChildrenParts() : void
     {
         $part = $this->getParentMimePart();
 
@@ -148,7 +154,7 @@ class MultiPartTest extends TestCase
         }
     }
 
-    public function testGetChildrenPartsWithFilters()
+    public function testGetChildrenPartsWithFilters() : void
     {
         $part = $this->getParentMimePart();
         $children = $this->children;
@@ -160,7 +166,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals([$children[1]], $part->getChildParts($fnFilter));
     }
 
-    public function testGetAllParts()
+    public function testGetAllParts() : void
     {
         $part = $this->getParentMimePart();
 
@@ -172,7 +178,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
     }
 
-    public function testGetAllPartsWithFilters()
+    public function testGetAllPartsWithFilters() : void
     {
         $part = $this->getParentMimePart();
         $parts = $this->allParts;
@@ -186,7 +192,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals([$parts[1], $parts[3]], $part->getAllParts($fnFilter));
     }
 
-    public function testGetAllPartsByMimeType()
+    public function testGetAllPartsByMimeType() : void
     {
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
@@ -220,7 +226,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals([$parent, $children[1]], $parent->getAllPartsByMimeType('Ecstatic'));
     }
 
-    public function testGetPartByContentId()
+    public function testGetPartByContentId() : void
     {
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
@@ -254,7 +260,7 @@ class MultiPartTest extends TestCase
         $this->assertSame($children[1], $parent->getPartByContentId(' <bar-of-foo>   '));
     }
 
-    public function testAddChild()
+    public function testAddChild() : void
     {
         $part = $this->getParentMimePart();
         // for clarity
@@ -276,7 +282,7 @@ class MultiPartTest extends TestCase
         $this->assertSame($part, $new->getParent());
     }
 
-    public function testRemovePart()
+    public function testRemovePart() : void
     {
         $part = $this->getParentMimePart();
         // for clarity
@@ -294,7 +300,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->children, $part->getChildParts());
     }
 
-    public function testRemovePartAndAddChild()
+    public function testRemovePartAndAddChild() : void
     {
         $part = $this->getParentMimePart();
         // for clarity
@@ -319,7 +325,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->children, $part->getChildParts());
     }
 
-    public function testRemoveAllPartsFromChild()
+    public function testRemoveAllPartsFromChild() : void
     {
         $part = $this->getParentMimePart();
         // for clarity
@@ -339,7 +345,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->children, $part->getChildParts());
     }
 
-    public function testRemoveAllPartsWithFilter()
+    public function testRemoveAllPartsWithFilter() : void
     {
         $part = $this->getParentMimePart();
         // for clarity
@@ -362,7 +368,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->children, $part->getChildParts());
     }
 
-    public function testRemoveAllParts()
+    public function testRemoveAllParts() : void
     {
         $part = $this->getParentMimePart();
         // for clarity
@@ -370,7 +376,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->children, $part->getChildParts());
 
         $observer = $this->getMockForAbstractClass('SplObserver');
-        $observer->expects($this->exactly((is_array($this->allParts) || $this->allParts instanceof \Countable ? \count($this->allParts) : 0) - 1))
+        $observer->expects($this->exactly((\is_array($this->allParts) || $this->allParts instanceof \Countable ? \count($this->allParts) : 0) - 1))
             ->method('update');
         $part->attach($observer);
 

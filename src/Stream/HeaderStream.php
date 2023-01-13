@@ -50,11 +50,7 @@ class HeaderStream implements SplObserver, StreamInterface
         }
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject) : void
     {
         if ($this->stream !== null) {
             $this->stream = $this->createStream();
@@ -67,9 +63,8 @@ class HeaderStream implements SplObserver, StreamInterface
      * If the part is not a MimePart, Content-Type, Content-Disposition and
      * Content-Transfer-Encoding headers are generated manually.
      *
-     * @return array
      */
-    private function getPartHeadersIterator()
+    private function getPartHeadersIterator() : \Iterator
     {
         if ($this->part instanceof IMimePart) {
             return $this->part->getRawHeaderIterator();
@@ -87,7 +82,7 @@ class HeaderStream implements SplObserver, StreamInterface
      * Writes out headers for $this->part and follows them with an empty line.
      *
      */
-    public function writePartHeadersTo(StreamInterface $stream)
+    public function writePartHeadersTo(StreamInterface $stream) : void
     {
         foreach ($this->getPartHeadersIterator() as $header) {
             $stream->write("{$header[0]}: {$header[1]}\r\n");
@@ -98,9 +93,8 @@ class HeaderStream implements SplObserver, StreamInterface
     /**
      * Creates the underlying stream lazily when required.
      *
-     * @return StreamInterface
      */
-    protected function createStream()
+    protected function createStream() : StreamInterface
     {
         $stream = Psr7\Utils::streamFor();
         $this->writePartHeadersTo($stream);

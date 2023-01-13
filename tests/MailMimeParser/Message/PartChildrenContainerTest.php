@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartChildrenContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $instance;
 
     protected function setUp() : void
@@ -21,21 +22,17 @@ class PartChildrenContainerTest extends TestCase
         $this->instance = new PartChildrenContainer();
     }
 
-    private function getIMessagePart()
+    private function getIMessagePart() : \ZBateson\MailMimeParser\Message\IMessagePart
     {
-        return $this->getMockForAbstractClass(
-            \ZBateson\MailMimeParser\Message\IMessagePart::class
-        );
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
     }
 
-    private function getIMultiPart()
+    private function getIMultiPart() : \ZBateson\MailMimeParser\Message\IMultiPart
     {
-        return $this->getMockForAbstractClass(
-            \ZBateson\MailMimeParser\Message\IMultiPart::class
-        );
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMultiPart::class);
     }
 
-    public function testHasAndGetChildren()
+    public function testHasAndGetChildren() : void
     {
         $this->assertFalse($this->instance->hasChildren());
         $part = $this->getIMultiPart();
@@ -61,7 +58,7 @@ class PartChildrenContainerTest extends TestCase
         $this->assertNull($t->getChildren());
     }
 
-    public function testIterator()
+    public function testIterator() : void
     {
         $this->assertFalse($this->instance->valid());
         $this->assertNull($this->instance->current());
@@ -89,7 +86,7 @@ class PartChildrenContainerTest extends TestCase
         $this->assertEquals(0, $t->key());
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess() : void
     {
         $this->assertFalse($this->instance->offsetExists(0));
         $this->assertFalse(isset($this->instance[0]));

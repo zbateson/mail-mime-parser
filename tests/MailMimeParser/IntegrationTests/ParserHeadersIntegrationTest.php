@@ -15,7 +15,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
  */
 class ParserHeadersIntegrationTest extends TestCase
 {
-    public function testParsingBasicHeaders()
+    public function testParsingBasicHeaders() : void
     {
         $parser = new MailMimeParser();
         $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/basic', 'r'), true);
@@ -27,7 +27,7 @@ class ParserHeadersIntegrationTest extends TestCase
         $this->assertNull($message->getHeaderValue('Body'));
     }
 
-    public function testParsingHeadersWithLFOnlyAndNoBody()
+    public function testParsingHeadersWithLFOnlyAndNoBody() : void
     {
         $parser = new MailMimeParser();
         $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/basic-2', 'r'), true);
@@ -37,7 +37,7 @@ class ParserHeadersIntegrationTest extends TestCase
         $this->assertEquals('Why not?', $message->getHeaderValue('No-Body'));
     }
 
-    public function testParsingHeadersWithLFOnlyAndInvalidHeaders()
+    public function testParsingHeadersWithLFOnlyAndInvalidHeaders() : void
     {
         $parser = new MailMimeParser();
         $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/basic-3', 'r'), true);
@@ -49,7 +49,7 @@ class ParserHeadersIntegrationTest extends TestCase
         );
     }
 
-    public function testParsingHeadersWithEncoding()
+    public function testParsingHeadersWithEncoding() : void
     {
         $parser = new MailMimeParser();
         $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/encoded-headers', 'r'), true);

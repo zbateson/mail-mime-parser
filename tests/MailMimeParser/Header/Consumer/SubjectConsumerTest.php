@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SubjectConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $subjectConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class SubjectConsumerTest extends TestCase
         $this->subjectConsumer = new SubjectConsumer($cs, $mlpf);
     }
 
-    public function testConsumeTokens()
+    public function testConsumeTokens() : void
     {
         $value = "Je\ \t suis\nici";
 
@@ -47,7 +48,7 @@ class SubjectConsumerTest extends TestCase
         $this->assertEquals("Je\ \t suis ici", $ret[0]);
     }
 
-    public function testFilterSpacesBetweenMimeParts()
+    public function testFilterSpacesBetweenMimeParts() : void
     {
         $value = "=?US-ASCII?Q?Je?=    =?US-ASCII?Q?suis?=\n=?US-ASCII?Q?ici?=";
 

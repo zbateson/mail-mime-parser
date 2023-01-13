@@ -23,17 +23,19 @@ class EmailFunctionalTest extends TestCase
     // tries to sign rather than verify a signature
     public const USE_GPG_KEYGEN = false;
 
+    // @phpstan-ignore-next-line
     private $parser;
 
+    // @phpstan-ignore-next-line
     private $messageDir;
 
     protected function setUp() : void
     {
-        $this->parser = new MailMimeParser(true);
+        $this->parser = new MailMimeParser();
         $this->messageDir = \dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/emails';
     }
 
-    protected function assertStringEqualsIgnoreWhiteSpace($test, $str, $message = null)
+    protected function assertStringEqualsIgnoreWhiteSpace($test, $str, $message = null) : void
     {
         $equal = (\trim(\preg_replace('/\s+/', ' ', $test)) === \trim(\preg_replace('/\s+/', ' ', $str)));
         if (!$equal) {
@@ -46,7 +48,7 @@ class EmailFunctionalTest extends TestCase
         );
     }
 
-    protected function assertTextContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null)
+    protected function assertTextContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null) : void
     {
         $str = $actualInputStream->getContents();
         $actualInputStream->rewind();
@@ -54,7 +56,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
 
-    protected function assertHtmlContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null)
+    protected function assertHtmlContentTypeEquals($expectedInputFileName, $actualInputStream, $message = null) : void
     {
         $str = \html_entity_decode(\str_replace('&nbsp;', ' ', \strip_tags($actualInputStream->getContents())));
         $actualInputStream->rewind();
@@ -62,7 +64,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertStringEqualsIgnoreWhiteSpace($text, $str, $message);
     }
 
-    private function runEmailTestForMessage($message, array $props, $failMessage)
+    private function runEmailTestForMessage($message, array $props, $failMessage) : void
     {
         if (isset($props['text'])) {
             $f = $message->getTextStream();
@@ -165,7 +167,7 @@ class EmailFunctionalTest extends TestCase
         }
     }
 
-    private function runPartsTests($part, array $types, $failMessage)
+    private function runPartsTests($part, array $types, $failMessage) : void
     {
         $this->assertNotNull($part, $failMessage);
         $this->assertNotNull($types);
@@ -197,7 +199,8 @@ class EmailFunctionalTest extends TestCase
         }
     }
 
-    private function runEmailTest($key, array $props) {
+    private function runEmailTest($key, array $props) : void
+    {
         $handle = \fopen($this->messageDir . '/' . $key . '.txt', 'r');
         $message = $this->parser->parse($handle, true);
 
@@ -219,7 +222,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    private function getSignatureForContent($signableContent)
+    private function getSignatureForContent($signableContent) : string
     {
         if (static::USE_GPG_KEYGEN) {
             $command = 'gpg --sign --detach-sign --armor --cipher-algo AES256 --digest-algo SHA256 --textmode --lock-never';
@@ -242,7 +245,7 @@ class EmailFunctionalTest extends TestCase
 
     }
 
-    public function testParseEmailm0001()
+    public function testParseEmailm0001() : void
     {
         $this->runEmailTest('m0001', [
             'From' => [
@@ -262,7 +265,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0002()
+    public function testParseEmailm0002() : void
     {
         $this->runEmailTest('m0002', [
             'From' => [
@@ -282,7 +285,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0003()
+    public function testParseEmailm0003() : void
     {
         $this->runEmailTest('m0003', [
             'From' => [
@@ -302,7 +305,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0004()
+    public function testParseEmailm0004() : void
     {
         $this->runEmailTest('m0004', [
             'From' => [
@@ -322,7 +325,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0005()
+    public function testParseEmailm0005() : void
     {
         $this->runEmailTest('m0005', [
             'From' => [
@@ -341,7 +344,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0006()
+    public function testParseEmailm0006() : void
     {
         $this->runEmailTest('m0006', [
             'From' => [
@@ -360,7 +363,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0007()
+    public function testParseEmailm0007() : void
     {
         $this->runEmailTest('m0007', [
             'From' => [
@@ -379,7 +382,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0008()
+    public function testParseEmailm0008() : void
     {
         $this->runEmailTest('m0008', [
             'From' => [
@@ -398,7 +401,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0009()
+    public function testParseEmailm0009() : void
     {
         $this->runEmailTest('m0009', [
             'From' => [
@@ -417,7 +420,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0010()
+    public function testParseEmailm0010() : void
     {
         $this->runEmailTest('m0010', [
             'From' => [
@@ -436,7 +439,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0011()
+    public function testParseEmailm0011() : void
     {
         $this->runEmailTest('m0011', [
             'From' => [
@@ -461,7 +464,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0012()
+    public function testParseEmailm0012() : void
     {
         $this->runEmailTest('m0012', [
             'From' => [
@@ -480,7 +483,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0013()
+    public function testParseEmailm0013() : void
     {
         $this->runEmailTest('m0013', [
             'From' => [
@@ -502,7 +505,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0014()
+    public function testParseEmailm0014() : void
     {
         $this->runEmailTest('m0014', [
             'From' => [
@@ -525,7 +528,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0015()
+    public function testParseEmailm0015() : void
     {
         $this->runEmailTest('m0015', [
             'From' => [
@@ -553,7 +556,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0016()
+    public function testParseEmailm0016() : void
     {
         $this->runEmailTest('m0016', [
             'From' => [
@@ -581,7 +584,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testGetAttachmentByContentIdFromEmailm0016()
+    public function testGetAttachmentByContentIdFromEmailm0016() : void
     {
         $handle = \fopen($this->messageDir . '/m0016.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -597,7 +600,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals('redball.png', $other->getFilename());
     }
 
-    public function testParseEmailm0017()
+    public function testParseEmailm0017() : void
     {
         $this->runEmailTest('m0017', [
             'From' => [
@@ -628,7 +631,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0018()
+    public function testParseEmailm0018() : void
     {
         $this->runEmailTest('m0018', [
             'From' => [
@@ -652,7 +655,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0019()
+    public function testParseEmailm0019() : void
     {
         $this->runEmailTest('m0019', [
             'From' => [
@@ -670,7 +673,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0020()
+    public function testParseEmailm0020() : void
     {
         $this->runEmailTest('m0020', [
             'From' => [
@@ -688,7 +691,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0021()
+    public function testParseEmailm0021() : void
     {
         $this->runEmailTest('m0021', [
             'From' => [
@@ -713,7 +716,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0022()
+    public function testParseEmailm0022() : void
     {
         $this->runEmailTest('m0022', [
             'From' => [
@@ -731,7 +734,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0023()
+    public function testParseEmailm0023() : void
     {
         $this->runEmailTest('m0023', [
             'From' => [
@@ -751,7 +754,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm0024()
+    public function testParseEmailm0024() : void
     {
         $this->runEmailTest('m0024', [
             'From' => [
@@ -774,7 +777,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1001()
+    public function testParseEmailm1001() : void
     {
         $this->runEmailTest('m1001', [
             'From' => [
@@ -791,7 +794,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1002()
+    public function testParseEmailm1002() : void
     {
         $this->runEmailTest('m1002', [
             'From' => [
@@ -808,7 +811,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1003()
+    public function testParseEmailm1003() : void
     {
         $this->runEmailTest('m1003', [
             'From' => [
@@ -825,7 +828,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1004()
+    public function testParseEmailm1004() : void
     {
         $this->runEmailTest('m1004', [
             'From' => [
@@ -843,7 +846,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1005()
+    public function testParseEmailm1005() : void
     {
         $this->runEmailTest('m1005', [
             'From' => [
@@ -860,7 +863,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1006()
+    public function testParseEmailm1006() : void
     {
         $this->runEmailTest('m1006', [
             'From' => [
@@ -877,7 +880,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1007()
+    public function testParseEmailm1007() : void
     {
         $this->runEmailTest('m1007', [
             'From' => [
@@ -893,7 +896,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1008()
+    public function testParseEmailm1008() : void
     {
         $this->runEmailTest('m1008', [
             'From' => [
@@ -909,7 +912,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1009()
+    public function testParseEmailm1009() : void
     {
         $this->runEmailTest('m1009', [
             'From' => [
@@ -927,7 +930,7 @@ class EmailFunctionalTest extends TestCase
     }
 
     // m1010.txt the encoding is wrong, using setCharsetOverride
-    public function testParseEmailm1010()
+    public function testParseEmailm1010() : void
     {
         $handle = \fopen($this->messageDir . '/m1010.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -963,7 +966,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }*/
 
-    public function testParseEmailm1012()
+    public function testParseEmailm1012() : void
     {
         $this->runEmailTest('m1012', [
             'From' => [
@@ -979,7 +982,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1013()
+    public function testParseEmailm1013() : void
     {
         $this->runEmailTest('m1013', [
             'From' => [
@@ -995,7 +998,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1014()
+    public function testParseEmailm1014() : void
     {
         $this->runEmailTest('m1014', [
             'From' => [
@@ -1012,7 +1015,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm1015()
+    public function testParseEmailm1015() : void
     {
         $this->runEmailTest('m1015', [
             'From' => [
@@ -1033,7 +1036,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertTextContentTypeEquals('HasenundFrosche.txt', $stream);
     }
 
-    public function testParseEmailm1016()
+    public function testParseEmailm1016() : void
     {
         $this->runEmailTest('m1016', [
             'From' => [
@@ -1054,7 +1057,7 @@ class EmailFunctionalTest extends TestCase
         $str = $this->assertTextContentTypeEquals('farmerandstork.txt', $stream);
     }
 
-    public function testParseEmailm2001()
+    public function testParseEmailm2001() : void
     {
         $this->runEmailTest('m2001', [
             'From' => [
@@ -1071,7 +1074,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2002()
+    public function testParseEmailm2002() : void
     {
         $this->runEmailTest('m2002', [
             'From' => [
@@ -1088,7 +1091,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2003()
+    public function testParseEmailm2003() : void
     {
         $this->runEmailTest('m2003', [
             'From' => [
@@ -1104,7 +1107,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2004()
+    public function testParseEmailm2004() : void
     {
         $this->runEmailTest('m2004', [
             'From' => [
@@ -1121,7 +1124,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2005()
+    public function testParseEmailm2005() : void
     {
         $this->runEmailTest('m2005', [
             'From' => [
@@ -1139,7 +1142,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2006()
+    public function testParseEmailm2006() : void
     {
         $this->runEmailTest('m2006', [
             'From' => [
@@ -1156,7 +1159,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2007()
+    public function testParseEmailm2007() : void
     {
         $this->runEmailTest('m2007', [
             'From' => [
@@ -1173,7 +1176,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2008()
+    public function testParseEmailm2008() : void
     {
         $this->runEmailTest('m2008', [
             'From' => [
@@ -1190,7 +1193,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2009()
+    public function testParseEmailm2009() : void
     {
         $this->runEmailTest('m2009', [
             'From' => [
@@ -1207,7 +1210,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2010()
+    public function testParseEmailm2010() : void
     {
         $this->runEmailTest('m2010', [
             'From' => [
@@ -1224,7 +1227,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2011()
+    public function testParseEmailm2011() : void
     {
         $this->runEmailTest('m2011', [
             'From' => [
@@ -1241,7 +1244,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2012()
+    public function testParseEmailm2012() : void
     {
         $this->runEmailTest('m2012', [
             'From' => [
@@ -1258,7 +1261,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2013()
+    public function testParseEmailm2013() : void
     {
         $this->runEmailTest('m2013', [
             'From' => [
@@ -1275,7 +1278,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2014()
+    public function testParseEmailm2014() : void
     {
         $this->runEmailTest('m2014', [
             'From' => [
@@ -1291,7 +1294,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2015()
+    public function testParseEmailm2015() : void
     {
         $this->runEmailTest('m2015', [
             'From' => [
@@ -1307,7 +1310,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm2016()
+    public function testParseEmailm2016() : void
     {
         $this->runEmailTest('m2016', [
             'From' => [
@@ -1323,7 +1326,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3001()
+    public function testParseEmailm3001() : void
     {
         $this->runEmailTest('m3001', [
             'From' => [
@@ -1339,7 +1342,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3002()
+    public function testParseEmailm3002() : void
     {
         $this->runEmailTest('m3002', [
             'From' => [
@@ -1355,7 +1358,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3003()
+    public function testParseEmailm3003() : void
     {
         $this->runEmailTest('m3003', [
             'From' => [
@@ -1371,7 +1374,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3004()
+    public function testParseEmailm3004() : void
     {
         $this->runEmailTest('m3004', [
             'From' => [
@@ -1387,7 +1390,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3005()
+    public function testParseEmailm3005() : void
     {
         $this->runEmailTest('m3005', [
             'From' => [
@@ -1404,7 +1407,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3006()
+    public function testParseEmailm3006() : void
     {
         $this->runEmailTest('m3006', [
             'From' => [
@@ -1421,7 +1424,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm3007()
+    public function testParseEmailm3007() : void
     {
         $this->runEmailTest('m3007', [
             'From' => [
@@ -1438,7 +1441,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseFromStringm0001()
+    public function testParseFromStringm0001() : void
     {
         $str = \file_get_contents($this->messageDir . '/m0001.txt');
         $message = Message::from($str, false);
@@ -1456,7 +1459,7 @@ class EmailFunctionalTest extends TestCase
         ], 'Failed to parse m0001 from a string');
     }
 
-    public function testVerifySignedEmailm4001()
+    public function testVerifySignedEmailm4001() : void
     {
         $handle = \fopen($this->messageDir . '/m4001.txt', 'r');
         $message = $this->parser->parse($handle, false);
@@ -1466,7 +1469,7 @@ class EmailFunctionalTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseEmailm4001()
+    public function testParseEmailm4001() : void
     {
         $this->runEmailTest('m4001', [
             'From' => [
@@ -1487,7 +1490,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testVerifySignedEmailm4002()
+    public function testVerifySignedEmailm4002() : void
     {
         $handle = \fopen($this->messageDir . '/m4002.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1496,7 +1499,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals(\md5($testString), \trim($message->getSignaturePart()->getContent()));
     }
 
-    public function testParseEmailm4002()
+    public function testParseEmailm4002() : void
     {
         $this->runEmailTest('m4002', [
             'From' => [
@@ -1518,7 +1521,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testVerifySignedEmailm4003()
+    public function testVerifySignedEmailm4003() : void
     {
         $stream = Utils::streamFor(\fopen($this->messageDir . '/m4003.txt', 'r'));
         $message = $this->parser->parse($stream, true);
@@ -1527,7 +1530,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals(\md5($testString), \trim($message->getSignaturePart()->getContent()));
     }
 
-    public function testParseEmailm4003()
+    public function testParseEmailm4003() : void
     {
         $this->runEmailTest('m4003', [
             'From' => [
@@ -1549,7 +1552,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testVerifySignedEmailm4004()
+    public function testVerifySignedEmailm4004() : void
     {
         $handle = \fopen($this->messageDir . '/m4004.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1558,7 +1561,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals(\md5($testString), \trim($message->getSignaturePart()->getContent()));
     }
 
-    public function testParseEmailm4004()
+    public function testParseEmailm4004() : void
     {
         $this->runEmailTest('m4004', [
             'From' => [
@@ -1580,7 +1583,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm4005()
+    public function testParseEmailm4005() : void
     {
         $handle = \fopen($this->messageDir . '/m4005.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1617,7 +1620,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertSame($messageWritten->getAttachmentPart(0)->getContent(), $str, 'text/rtf stream doesn\'t match binary stream');
     }
 
-    public function testParseEmailm4006()
+    public function testParseEmailm4006() : void
     {
         $this->runEmailTest('m4006', [
             'From' => [
@@ -1633,7 +1636,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailm4007()
+    public function testParseEmailm4007() : void
     {
         $this->runEmailTest('m4007', [
             'From' => [
@@ -1649,7 +1652,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testVerifySignedEmailm4008()
+    public function testVerifySignedEmailm4008() : void
     {
         $handle = \fopen($this->messageDir . '/m4008.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1658,7 +1661,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals(\md5($testString), \trim($message->getSignaturePart()->getContent()));
     }
 
-    public function testParseEmailm4008()
+    public function testParseEmailm4008() : void
     {
         $this->runEmailTest('m4008', [
             'From' => [
@@ -1679,7 +1682,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailGitHub_102_01()
+    public function testParseEmailGitHub_102_01() : void
     {
         $this->runEmailTest('github-102-01', [
             'From' => [
@@ -1699,7 +1702,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailGitHub_102_02()
+    public function testParseEmailGitHub_102_02() : void
     {
         $this->runEmailTest('github-102-02', [
             'From' => [
@@ -1719,7 +1722,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testParseEmailGitHub_115()
+    public function testParseEmailGitHub_115() : void
     {
         $this->runEmailTest('github-115', [
             'From' => [
@@ -1744,7 +1747,7 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
-    public function testRewriteEmailContentm0001()
+    public function testRewriteEmailContentm0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1763,7 +1766,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals($test, $c2->getContent());
     }
 
-    public function testRewriteEmailAttachmentm2004()
+    public function testRewriteEmailAttachmentm2004() : void
     {
         $handle = \fopen($this->messageDir . '/m2004.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1789,7 +1792,7 @@ class EmailFunctionalTest extends TestCase
         );
     }
 
-    public function testRemoveAttachmentPartm0013()
+    public function testRemoveAttachmentPartm0013() : void
     {
         $handle = \fopen($this->messageDir . '/m0013.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1818,7 +1821,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0013');
     }
 
-    public function testRemoveContentPartsm0014()
+    public function testRemoveContentPartsm0014() : void
     {
         $handle = \fopen($this->messageDir . '/m0014.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1845,7 +1848,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($message, $test1, 'failed removing content parts from m0014');
     }
 
-    public function testRemoveTextPartm0020()
+    public function testRemoveTextPartm0020() : void
     {
         $handle = \fopen($this->messageDir . '/m0020.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1881,7 +1884,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
 
-    public function testRemoveAllHtmlPartsm0020()
+    public function testRemoveAllHtmlPartsm0020() : void
     {
         $handle = \fopen($this->messageDir . '/m0020.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1917,7 +1920,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
 
-    public function testRemoveHtmlPartm0020()
+    public function testRemoveHtmlPartm0020() : void
     {
         $handle = \fopen($this->messageDir . '/m0020.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -1983,7 +1986,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals($secondContent, $messageWritten->getHtmlContent());
     }
 
-    public function testAddHtmlPartRemoveTextPartm0001()
+    public function testAddHtmlPartRemoveTextPartm0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2021,7 +2024,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testRemoveContentAndAttachmentPartsm0015()
+    public function testRemoveContentAndAttachmentPartsm0015() : void
     {
         $handle = \fopen($this->messageDir . '/m0015.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2065,7 +2068,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $test1, $failMessage);
     }
 
-    public function testAddHtmlContentPartm0001()
+    public function testAddHtmlContentPartm0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2101,7 +2104,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testAddTextAndHtmlContentPartm0013()
+    public function testAddTextAndHtmlContentPartm0013() : void
     {
         $handle = \fopen($this->messageDir . '/m0013.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2139,7 +2142,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testAddTextAndHtmlContentPartm0018()
+    public function testAddTextAndHtmlContentPartm0018() : void
     {
         $handle = \fopen($this->messageDir . '/m0018.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2177,7 +2180,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testAddAttachmentPartm0001()
+    public function testAddAttachmentPartm0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2229,7 +2232,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testAddAttachmentPartQuotedPrintablem0001()
+    public function testAddAttachmentPartQuotedPrintablem0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2286,7 +2289,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testAddLargeAttachmentPartm0001()
+    public function testAddLargeAttachmentPartm0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2320,7 +2323,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartm0001()
+    public function testCreateSignedPartm0001() : void
     {
         $handle = \fopen($this->messageDir . '/m0001.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2374,7 +2377,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartm0014()
+    public function testCreateSignedPartm0014() : void
     {
         $handle = \fopen($this->messageDir . '/m0014.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2423,7 +2426,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartm0015()
+    public function testCreateSignedPartm0015() : void
     {
         $handle = \fopen($this->messageDir . '/m0015.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2474,7 +2477,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartm0018()
+    public function testCreateSignedPartm0018() : void
     {
         $handle = \fopen($this->messageDir . '/m0018.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2521,7 +2524,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartm0019()
+    public function testCreateSignedPartm0019() : void
     {
         $handle = \fopen($this->messageDir . '/m0019.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2569,7 +2572,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartm1005()
+    public function testCreateSignedPartm1005() : void
     {
         $handle = \fopen($this->messageDir . '/m1005.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2616,7 +2619,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartForEmailm4006()
+    public function testCreateSignedPartForEmailm4006() : void
     {
         $handle = \fopen($this->messageDir . '/m4006.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2662,7 +2665,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testCreateSignedPartForEmailm4007()
+    public function testCreateSignedPartForEmailm4007() : void
     {
         $handle = \fopen($this->messageDir . '/m4007.txt', 'r');
         $message = $this->parser->parse($handle, true);
@@ -2709,7 +2712,7 @@ class EmailFunctionalTest extends TestCase
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 
-    public function testReadEmailWithLongHeader()
+    public function testReadEmailWithLongHeader() : void
     {
         $handle = \fopen($this->messageDir . '/m0009.txt', 'r');
         $message = $this->parser->parse($handle, true);

@@ -27,7 +27,7 @@ class AddressBaseConsumer extends AbstractConsumer
      *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [
             $this->consumerService->getAddressConsumer()
@@ -39,7 +39,7 @@ class AddressBaseConsumer extends AbstractConsumer
      *
      * @return string[] an array of regex pattern matchers
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return [];
     }
@@ -49,10 +49,8 @@ class AddressBaseConsumer extends AbstractConsumer
      *
      * The start token for AddressBaseConsumer is part of an AddressPart (or a
      * sub-consumer) and so must be passed on.
-     *
-     * @param bool $isStartToken
      */
-    protected function advanceToNextToken(Iterator $tokens, $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
     {
         if ($isStartToken) {
             return;
@@ -64,10 +62,9 @@ class AddressBaseConsumer extends AbstractConsumer
      * AddressBaseConsumer doesn't have start/end tokens, and so always returns
      * false.
      *
-     * @param string $token
-     * @return bool false
+     * @return false
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return false;
     }
@@ -77,10 +74,9 @@ class AddressBaseConsumer extends AbstractConsumer
      * false.
      *
      * @codeCoverageIgnore
-     * @param string $token
-     * @return bool false
+     * @return false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return false;
     }
@@ -91,7 +87,7 @@ class AddressBaseConsumer extends AbstractConsumer
      *
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
-    protected function getTokenParts(Iterator $tokens)
+    protected function getTokenParts(Iterator $tokens) : array
     {
         return $this->getConsumerTokenParts($tokens);
     }
@@ -104,10 +100,10 @@ class AddressBaseConsumer extends AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
+     * @return ?\ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
      *         header part or null if the token should be ignored
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         return null;
     }

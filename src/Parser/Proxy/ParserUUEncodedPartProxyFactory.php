@@ -31,10 +31,8 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
      */
     protected $parserPartStreamContainerFactory;
 
-    public function __construct(
-        StreamFactory $sdf,
-        ParserPartStreamContainerFactory $parserPartStreamContainerFactory
-    ) {
+    public function __construct(StreamFactory $sdf, ParserPartStreamContainerFactory $parserPartStreamContainerFactory)
+    {
         $this->streamFactory = $sdf;
         $this->parserPartStreamContainerFactory = $parserPartStreamContainerFactory;
     }

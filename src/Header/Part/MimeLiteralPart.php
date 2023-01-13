@@ -72,10 +72,8 @@ class MimeLiteralPart extends LiteralPart
      * either replacing a mime part with its value by calling iconv_mime_decode
      * or converts the encoding on the text part by calling convertEncoding.
      *
-     * @param string $value
-     * @return string
      */
-    protected function decodeMime($value)
+    protected function decodeMime(string $value) : string
     {
         $pattern = self::MIME_PART_PATTERN;
         // remove whitespace between two adjacent mime encoded parts
@@ -94,9 +92,8 @@ class MimeLiteralPart extends LiteralPart
      * adding the string into the languages array.
      *
      * @param string[] $matches
-     * @return string
      */
-    private function decodeMatchedEntity($matches)
+    private function decodeMatchedEntity(array $matches) : string
     {
         $body = $matches[4];
         if (\strtoupper($matches[3]) === 'Q') {
@@ -120,10 +117,8 @@ class MimeLiteralPart extends LiteralPart
      * Parsing out the charset and body of the encoded entity seems to be the
      * way to go to support the most charsets.
      *
-     * @param string $entity
-     * @return string
      */
-    private function decodeSplitPart($entity)
+    private function decodeSplitPart(string $entity) : string
     {
         if (\preg_match('/^=\?([A-Za-z\-_0-9]+)\*?([A-Za-z\-_0-9]+)?\?([QBqb])\?([^\?]*)\?=$/', $entity, $matches)) {
             return $this->decodeMatchedEntity($matches);
@@ -139,9 +134,8 @@ class MimeLiteralPart extends LiteralPart
      * Overridden to return $this->canIgnoreSpacesBefore which is setup in the
      * constructor.
      *
-     * @return bool
      */
-    public function ignoreSpacesBefore()
+    public function ignoreSpacesBefore() : bool
     {
         return $this->canIgnoreSpacesBefore;
     }
@@ -152,9 +146,8 @@ class MimeLiteralPart extends LiteralPart
      * Overridden to return $this->canIgnoreSpacesAfter which is setup in the
      * constructor.
      *
-     * @return bool
      */
-    public function ignoreSpacesAfter()
+    public function ignoreSpacesAfter() : bool
     {
         return $this->canIgnoreSpacesAfter;
     }
@@ -162,10 +155,8 @@ class MimeLiteralPart extends LiteralPart
     /**
      * Adds the passed part into the languages array with the given language.
      *
-     * @param string $part
-     * @param string|null $language
      */
-    protected function addToLanguage($part, $language = null)
+    protected function addToLanguage(string $part, ?string $language = null) : void
     {
         $this->languages[] = [
             'lang' => $language,

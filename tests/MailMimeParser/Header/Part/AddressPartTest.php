@@ -16,6 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class AddressPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
     protected function setUp() : void
@@ -23,7 +24,7 @@ class AddressPartTest extends TestCase
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testNameEmail()
+    public function testNameEmail() : void
     {
         $name = 'Julius Caeser';
         $email = 'gaius@altavista.com';

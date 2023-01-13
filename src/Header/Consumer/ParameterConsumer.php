@@ -32,7 +32,7 @@ class ParameterConsumer extends GenericConsumer
      *
      * @return string[]
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return [';', '='];
     }
@@ -48,7 +48,7 @@ class ParameterConsumer extends GenericConsumer
      *
      * @return string the regex pattern
      */
-    protected function getTokenSplitPattern()
+    protected function getTokenSplitPattern() : string
     {
         $sChars = \implode('|', $this->getAllTokenSeparators());
         $mimePartPattern = MimeLiteralPart::MIME_PART_PATTERN_NO_QUOTES;
@@ -60,11 +60,9 @@ class ParameterConsumer extends GenericConsumer
      * the passed string token and returns it, unless the token is an escaped
      * literal, in which case a LiteralPart is returned.
      *
-     * @param string $token
-     * @param bool $isLiteral
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
@@ -77,13 +75,9 @@ class ParameterConsumer extends GenericConsumer
      * SplitParameterToken, at the passed index. If one with the given name
      * doesn't exist, it is created.
      *
-     * @param string $name
-     * @param string $value
-     * @param int $index
-     * @param bool $isEncoded
      * @return SplitParameterToken
      */
-    private function addToSplitPart(ArrayObject $splitParts, $name, $value, $index, $isEncoded)
+    private function addToSplitPart(ArrayObject $splitParts, string $name, string $value, int $index, bool $isEncoded)
     {
         $ret = null;
         if (!isset($splitParts[$name])) {
@@ -103,11 +97,9 @@ class ParameterConsumer extends GenericConsumer
      * If the part is a SplitParameterToken, it's added to the passed
      * $splitParts as well with its name as a key.
      *
-     * @param string $strName
-     * @param string $strValue
      * @return MimeLiteralPart|SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart
      */
-    private function getPartFor($strName, $strValue, ArrayObject $splitParts)
+    private function getPartFor(string $strName, string $strValue, ArrayObject $splitParts)
     {
         if ($strName === '') {
             return $this->partFactory->newMimeLiteralPart($strValue);
@@ -116,7 +108,7 @@ class ParameterConsumer extends GenericConsumer
                 $splitParts,
                 $matches[1],
                 $strValue,
-                $matches[2],
+                (int) $matches[2],
                 (($matches[2] === '') || !empty($matches[3]))
             );
         }
@@ -132,18 +124,9 @@ class ParameterConsumer extends GenericConsumer
      *
      * Returns true if the token was processed, and false otherwise.
      *
-     * @param string $tokenValue
-     * @param string $strName
-     * @param string $strCat
-     * @return bool
      */
-    private function processTokenPart(
-        $tokenValue,
-        ArrayObject $combined,
-        ArrayObject $splitParts,
-        &$strName,
-        &$strCat
-    ) {
+    private function processTokenPart(string $tokenValue, ArrayObject $combined, ArrayObject $splitParts, string &$strName, string &$strCat) : bool
+    {
         if ($tokenValue === ';') {
             $combined[] = $this->getPartFor($strName, $strCat, $splitParts);
             $strName = '';
@@ -166,7 +149,7 @@ class ParameterConsumer extends GenericConsumer
      *
      * @return IHeaderPart[]|array
      */
-    private function finalizeParameterParts(ArrayObject $combined)
+    private function finalizeParameterParts(ArrayObject $combined) : array
     {
         foreach ($combined as $key => $part) {
             if ($part instanceof SplitParameterToken) {
@@ -187,7 +170,7 @@ class ParameterConsumer extends GenericConsumer
      * @param IHeaderPart[] $parts The parsed parts.
      * @return IHeaderPart[] Array of resulting final parts.
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $combined = new ArrayObject();
         $splitParts = new ArrayObject();

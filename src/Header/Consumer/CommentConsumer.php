@@ -39,29 +39,23 @@ class CommentConsumer extends GenericConsumer
      *
      * @return string[] the patterns
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return ['\(', '\)'];
     }
 
     /**
      * Returns true if the token is an open parenthesis character, '('.
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return ($token === '(');
     }
 
     /**
      * Returns true if the token is a close parenthesis character, ')'.
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return ($token === ')');
     }
@@ -72,11 +66,9 @@ class CommentConsumer extends GenericConsumer
      * Tokens from this and sub-consumers are combined into a Part\CommentPart
      * in processParts.
      *
-     * @param string $token
-     * @param bool $isLiteral
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         return $this->partFactory->newToken($token);
     }
@@ -88,9 +80,8 @@ class CommentConsumer extends GenericConsumer
      * and will not advance past it.  Because a comment part of a header can be
      * nested, its implementation must advance past its own 'end' token.
      *
-     * @param bool $isStartToken
      */
-    protected function advanceToNextToken(Iterator $tokens, $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
     {
         $tokens->next();
     }
@@ -103,7 +94,7 @@ class CommentConsumer extends GenericConsumer
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $comment = '';
         foreach ($parts as $part) {

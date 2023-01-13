@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartBuilderFactoryTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $instance;
 
     protected function setUp() : void
@@ -23,7 +24,7 @@ class PartBuilderFactoryTest extends TestCase
         $this->instance = new PartBuilderFactory();
     }
 
-    public function testNewPartBuilder()
+    public function testNewPartBuilder() : void
     {
         $hc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()

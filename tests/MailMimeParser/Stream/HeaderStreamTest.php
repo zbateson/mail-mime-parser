@@ -15,21 +15,21 @@ use PHPUnit\Framework\TestCase;
  */
 class HeaderStreamTest extends TestCase
 {
-    private function newMockMimePart()
+    private function newMockMimePart() : \ZBateson\MailMimeParser\Message\MimePart
     {
         return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockUUEncodedPart()
+    private function newMockUUEncodedPart() : \ZBateson\MailMimeParser\Message\UUEncodedPart
     {
         return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testReadWithMimePart()
+    public function testReadWithMimePart() : void
     {
         $mimePart = $this->newMockMimePart();
         $mimePart->expects($this->once())
@@ -46,7 +46,7 @@ class HeaderStreamTest extends TestCase
         );
     }
 
-    public function testReadWithUUEncodedPart()
+    public function testReadWithUUEncodedPart() : void
     {
         $uuPart = $this->newMockUUEncodedPart();
         $stream = new HeaderStream($uuPart);

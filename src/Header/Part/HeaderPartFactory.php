@@ -38,10 +38,9 @@ class HeaderPartFactory
      *
      * The default implementation returns a new Token.
      *
-     * @param string $value
      * @return IHeaderPart
      */
-    public function newInstance($value)
+    public function newInstance(string $value)
     {
         return $this->newToken($value);
     }
@@ -49,10 +48,9 @@ class HeaderPartFactory
     /**
      * Initializes and returns a new Token.
      *
-     * @param string $value
      * @return Token
      */
-    public function newToken($value)
+    public function newToken(string $value)
     {
         return new Token($this->charsetConverter, $value);
     }

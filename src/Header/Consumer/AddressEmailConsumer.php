@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\LiteralPart;
 
 /**
@@ -28,7 +29,7 @@ class AddressEmailConsumer extends AbstractConsumer
      *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [
             $this->consumerService->getCommentConsumer(),
@@ -42,29 +43,23 @@ class AddressEmailConsumer extends AbstractConsumer
      *
      * @return string[] the patterns
      */
-    public function getTokenSeparators()
+    public function getTokenSeparators() : array
     {
         return ['<', '>'];
     }
 
     /**
      * Returns true for the '>' char.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return ($token === '>');
     }
 
     /**
      * Returns true for the '<' char.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return ($token === '<');
     }
@@ -77,7 +72,7 @@ class AddressEmailConsumer extends AbstractConsumer
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $strEmail = '';
         foreach ($parts as $p) {

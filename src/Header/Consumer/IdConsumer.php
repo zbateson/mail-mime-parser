@@ -21,7 +21,7 @@ class IdConsumer extends GenericConsumer
      *
      * @return string[] the patterns
      */
-    public function getTokenSeparators()
+    public function getTokenSeparators() : array
     {
         return ['\s+', '<', '>'];
     }
@@ -29,18 +29,15 @@ class IdConsumer extends GenericConsumer
     /**
      * Returns true for '>'.
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return ($token === '>');
     }
 
     /**
      * Returns true for '<'.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return ($token === '<');
     }
@@ -54,7 +51,7 @@ class IdConsumer extends GenericConsumer
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null the constructed
      *         header part or null if the token should be ignored
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         if (\preg_match('/^\s+$/', $token)) {
             return null;

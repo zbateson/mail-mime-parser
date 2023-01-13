@@ -28,7 +28,7 @@ class IMimePartFactoryTest extends TestCase
         return $fac;
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $psc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
         $phc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory::class, \ZBateson\MailMimeParser\Message\PartHeaderContainer::class);

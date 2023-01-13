@@ -14,8 +14,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserManagerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mimeParser;
 
+    // @phpstan-ignore-next-line
     private $nonMimeParser;
 
     protected function setUp() : void
@@ -28,7 +30,7 @@ class ParserManagerTest extends TestCase
             ->getMock();
     }
 
-    public function testConstructorSetsParserManager()
+    public function testConstructorSetsParserManager() : void
     {
         $this->mimeParser->expects($this->once())
             ->method('setParserManager')
@@ -39,7 +41,7 @@ class ParserManagerTest extends TestCase
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
     }
 
-    public function testSetParsersSetsParserManager()
+    public function testSetParsersSetsParserManager() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
@@ -53,7 +55,7 @@ class ParserManagerTest extends TestCase
         $instance->setParsers([$this->mimeParser, $this->nonMimeParser]);
     }
 
-    public function testPrependParserSetsParserManager()
+    public function testPrependParserSetsParserManager() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
@@ -64,7 +66,7 @@ class ParserManagerTest extends TestCase
         $instance->prependParser($this->mimeParser);
     }
 
-    public function testCreateParserProxyForMessage()
+    public function testCreateParserProxyForMessage() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
@@ -94,7 +96,7 @@ class ParserManagerTest extends TestCase
         $this->assertSame('t000st', $instance->createParserProxyFor($partBuilder));
     }
 
-    public function testCreateParserProxyForPart()
+    public function testCreateParserProxyForPart() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 

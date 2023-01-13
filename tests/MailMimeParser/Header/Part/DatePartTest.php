@@ -16,6 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class DatePartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
     protected function setUp() : void
@@ -23,7 +24,7 @@ class DatePartTest extends TestCase
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testDateString()
+    public function testDateString() : void
     {
         $values = [
             ['2000-05-17T19:08:29-0400', 'Wed, 17 May 2000 19:08:29 -0400'],
@@ -42,7 +43,7 @@ class DatePartTest extends TestCase
         }
     }
 
-    public function testInvalidDate()
+    public function testInvalidDate() : void
     {
         $value = 'Invalid Date';
         $part = new DatePart($this->charsetConverter, $value);

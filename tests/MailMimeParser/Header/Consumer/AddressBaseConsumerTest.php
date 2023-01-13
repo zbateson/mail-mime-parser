@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AddressBaseConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $addressBaseConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class AddressBaseConsumerTest extends TestCase
         $this->addressBaseConsumer = new AddressBaseConsumer($cs, $pf);
     }
 
-    public function testConsumeAddress()
+    public function testConsumeAddress() : void
     {
         $email = 'Max.Payne@AddressUnknown.com';
         $ret = $this->addressBaseConsumer->__invoke($email);
@@ -50,7 +51,7 @@ class AddressBaseConsumerTest extends TestCase
         $this->assertEquals($email, $address->getEmail());
     }
 
-    public function testConsumeAddresses()
+    public function testConsumeAddresses() : void
     {
         $emails = 'Popeye@TheSailorMan.com, Olive@Oil.com, Brute <brute@isThatHisName.com>';
         $ret = $this->addressBaseConsumer->__invoke($emails);
@@ -63,7 +64,7 @@ class AddressBaseConsumerTest extends TestCase
         $this->assertEquals('brute@isThatHisName.com', $ret[2]->getEmail());
     }
 
-    public function testConsumeNamesAndAddressesWithFunnyChars()
+    public function testConsumeNamesAndAddressesWithFunnyChars() : void
     {
         $emails = '"Popeye the Sailor" <Popeye@TheSailorMan.com>, "Olive" <Olive@Oil.com:>, Brute <brute@isThatHisName.com,>, NotCute <notcute@address.com;>';
         $ret = $this->addressBaseConsumer->__invoke($emails);
@@ -77,7 +78,7 @@ class AddressBaseConsumerTest extends TestCase
         $this->assertEquals('notcute@address.com;', $ret[3]->getEmail());
     }
 
-    public function testConsumeAddressAndGroup()
+    public function testConsumeAddressAndGroup() : void
     {
         $emails = 'Tyrion Lannister <tyrion@houselannister.com>, '
             . 'Winterfell: Arya Stark <arya@winterfell.com>, robb@winterfell.com;'

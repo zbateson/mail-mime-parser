@@ -230,11 +230,11 @@ interface IMimePart extends IMultiPart
      * @see IMimePart::removeSingleHeader() Removes a single header if more than
      *      one with the passed name exists.
      * @param string $name The name of the new header, e.g. 'Content-Type'.
-     * @param string $value The raw value of the new header.
+     * @param ?string $value The raw value of the new header.
      * @param int $offset An optional offset, defaulting to '0' and therefore
      *        overriding the first header of the given $name if one exists.
      */
-    public function setRawHeader($name, $value, $offset = 0);
+    public function setRawHeader(string $name, ?string $value, int $offset = 0) : void;
 
     /**
      * Adds a header with the given $name and $value.
@@ -260,7 +260,7 @@ interface IMimePart extends IMultiPart
      * @param string $name The name of the header
      * @param string $value The raw value of the header.
      */
-    public function addRawHeader($name, $value);
+    public function addRawHeader(string $name, string $value) : void;
 
     /**
      * Removes all headers from this part with the passed name.
@@ -273,7 +273,7 @@ interface IMimePart extends IMultiPart
      *      one with the passed name exists.
      * @param string $name The name of the header(s) to remove.
      */
-    public function removeHeader($name);
+    public function removeHeader(string $name) : void;
 
     /**
      * Removes a single header with the passed name (in cases where more than
@@ -289,5 +289,5 @@ interface IMimePart extends IMultiPart
      * @param int $offset Optional offset of the header to remove (defaults to
      *        0 -- the first header).
      */
-    public function removeSingleHeader($name, $offset = 0);
+    public function removeSingleHeader(string $name, int $offset = 0) : void;
 }

@@ -25,14 +25,13 @@ interface IParser
      *
      * @param ParserManager $pm The ParserManager to set.
      */
-    public function setParserManager(ParserManager $pm);
+    public function setParserManager(ParserManager $pm) : void;
 
     /**
      * Called by the ParserManager to determine if the passed PartBuilder is a
      * part handled by this IParser.
-     *
      */
-    public function canParse(PartBuilder $part);
+    public function canParse(PartBuilder $part) : bool;
 
     /**
      * Returns the ParserPartProxyFactory responsible for creating IMessage
@@ -70,7 +69,7 @@ interface IParser
      * message has been reached $proxy->setEof() should be called in addition to
      * setStreamContentAndPartEndPos().
      */
-    public function parseContent(ParserPartProxy $proxy);
+    public function parseContent(ParserPartProxy $proxy) : void;
 
     /**
      * Performs read operations to read children from the passed $proxy, using

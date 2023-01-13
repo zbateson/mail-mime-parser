@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MailMimeParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockDi;
 
     protected function setUp() : void
@@ -25,19 +26,19 @@ class MailMimeParserTest extends TestCase
             ->getMock();
     }
 
-    protected function legacyTearDown()
+    protected function tearDown() : void
     {
         MailMimeParser::setDependencyContainer(null);
     }
 
-    public function testConstructMailMimeParser()
+    public function testConstructMailMimeParser() : void
     {
         MailMimeParser::setDependencyContainer($this->mockDi);
         $mmp = new MailMimeParser();
         $this->assertNotNull($mmp);
     }
 
-    public function testParseFromHandle()
+    public function testParseFromHandle() : void
     {
         $handle = \fopen('php://memory', 'r+');
         \fwrite($handle, 'This is a test');
@@ -63,7 +64,7 @@ class MailMimeParserTest extends TestCase
         $this->assertEquals('test', $ret);
     }
 
-    public function testParseFromStream()
+    public function testParseFromStream() : void
     {
         $handle = \fopen('php://memory', 'r+');
         \fwrite($handle, 'This is a test');
@@ -89,7 +90,7 @@ class MailMimeParserTest extends TestCase
         $this->assertEquals('test', $ret);
     }
 
-    public function testParseFromString()
+    public function testParseFromString() : void
     {
         $mockParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\MessageParser::class)
             ->disableOriginalConstructor()

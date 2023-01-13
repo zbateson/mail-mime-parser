@@ -16,12 +16,16 @@ use PHPUnit\Framework\TestCase;
  */
 class PrivacyHelperTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockMimePartFactory;
 
+    // @phpstan-ignore-next-line
     private $mockUUEncodedPartFactory;
 
+    // @phpstan-ignore-next-line
     private $mockGenericHelper;
 
+    // @phpstan-ignore-next-line
     private $mockMultipartHelper;
 
     protected function setUp() : void
@@ -40,17 +44,17 @@ class PrivacyHelperTest extends TestCase
             ->getMock();
     }
 
-    private function newMockIMimePart()
+    private function newMockIMimePart() : \ZBateson\MailMimeParser\Message\IMimePart
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
     }
 
-    private function newMockIMessage()
+    private function newMockIMessage() : \ZBateson\MailMimeParser\IMessage
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
     }
 
-    private function newPrivacyHelper()
+    private function newPrivacyHelper() : PrivacyHelper
     {
         return new PrivacyHelper(
             $this->mockMimePartFactory,
@@ -60,7 +64,7 @@ class PrivacyHelperTest extends TestCase
         );
     }
 
-    public function testOverwrite8bitContentEncoding()
+    public function testOverwrite8bitContentEncoding() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -89,7 +93,7 @@ class PrivacyHelperTest extends TestCase
         $helper->overwrite8bitContentEncoding($message);
     }
 
-    public function testEnsureHtmlPartFirstForSignedMessage()
+    public function testEnsureHtmlPartFirstForSignedMessage() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -123,7 +127,7 @@ class PrivacyHelperTest extends TestCase
         $helper->ensureHtmlPartFirstForSignedMessage($message);
     }
 
-    public function testSetSignature()
+    public function testSetSignature() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -157,7 +161,7 @@ class PrivacyHelperTest extends TestCase
         $helper->setSignature($message, 'much-signature');
     }
 
-    public function testSetMessageAsMultipartSigned()
+    public function testSetMessageAsMultipartSigned() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -212,7 +216,7 @@ class PrivacyHelperTest extends TestCase
         $helper->setMessageAsMultipartSigned($message, 'my-micalg', 'l33t-protocol');
     }
 
-    public function testSignedMessageStream()
+    public function testSignedMessageStream() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -231,7 +235,7 @@ class PrivacyHelperTest extends TestCase
         $this->assertEquals('test', $helper->getSignedMessageStream($message));
     }
 
-    public function testSignedMessageAsString()
+    public function testSignedMessageAsString() : void
     {
         $helper = $this->newPrivacyHelper();
 

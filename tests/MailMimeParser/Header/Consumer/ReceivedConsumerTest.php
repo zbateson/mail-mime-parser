@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ReceivedConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $receivedConsumer;
 
     protected function setUp() : void
@@ -40,7 +41,7 @@ class ReceivedConsumerTest extends TestCase
         $this->receivedConsumer = new ReceivedConsumer($cs, $pf);
     }
 
-    public function testInvalidLine()
+    public function testInvalidLine() : void
     {
         $value = "Je \t suis\nici";
 
@@ -48,7 +49,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEmpty($ret);
     }
 
-    public function testWithFrom()
+    public function testWithFrom() : void
     {
         $value = 'from [1.2.3.4]';
 
@@ -59,7 +60,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('[1.2.3.4]', $ret[0]->getEhloName());
     }
 
-    public function testWithBy()
+    public function testWithBy() : void
     {
         $value = 'by [1.2.3.4]';
 
@@ -70,7 +71,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('[1.2.3.4]', $ret[0]->getEhloName());
     }
 
-    public function testWithFromAndBy()
+    public function testWithFromAndBy() : void
     {
         $value = 'FrOM [1.2.3.4] By (host.name)';
 
@@ -85,7 +86,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertNull($ret[1]->getEhloName());
     }
 
-    public function testWithWith()
+    public function testWithWith() : void
     {
         $value = 'WITH ESMTP (TLS1.2)';
 
@@ -99,7 +100,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('TLS1.2', $ret[1]->getComment());
     }
 
-    public function testWithId()
+    public function testWithId() : void
     {
         $value = 'id (blah) 123';
 
@@ -113,7 +114,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('blah', $ret[1]->getComment());
     }
 
-    public function testWithVia()
+    public function testWithVia() : void
     {
         $value = 'via someplace';
 
@@ -125,7 +126,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('someplace', $ret[0]->getValue());
     }
 
-    public function testDate()
+    public function testDate() : void
     {
         $value = '; Wed, 17 May 2000 19:08:29 -0400';
 
@@ -137,7 +138,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
-    public function testFromAndDate()
+    public function testFromAndDate() : void
     {
         $value = 'from localhost; Wed, 17 May 2000 19:08:29 -0400';
 
@@ -153,7 +154,7 @@ class ReceivedConsumerTest extends TestCase
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
-    public function testExampleFullLines()
+    public function testExampleFullLines() : void
     {
         $value = "FROM LeComputer (blah.host) by MyComputer ([1.2.2.2]) WITH\n"
             . 'ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400';

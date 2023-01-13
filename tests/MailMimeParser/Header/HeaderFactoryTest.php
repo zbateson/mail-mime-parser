@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class HeaderFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $headerFactory;
 
     protected function setUp() : void
@@ -36,7 +37,7 @@ class HeaderFactoryTest extends TestCase
         $this->headerFactory = new HeaderFactory($cs, $mlpf);
     }
 
-    public function testAddressHeaderInstance()
+    public function testAddressHeaderInstance() : void
     {
         $aValid = ['BCC', 'to', 'FrOM', 'sender', 'reply-to', 'resent-from', 'Resent-To', 'Resent-Cc', 'Resent-Bcc', 'Resent-Reply-To', 'Return-Path', 'Delivered-To'];
         $aNot = ['MESSAGE-ID', 'date', 'Subject'];
@@ -52,7 +53,7 @@ class HeaderFactoryTest extends TestCase
         }
     }
 
-    public function testDateHeaderInstance()
+    public function testDateHeaderInstance() : void
     {
         $aValid = ['Date', 'ExpIRY-Date', 'EXPIRES'];
         $aNot = ['MESSAGE-ID', 'bcc', 'Subject'];
@@ -68,7 +69,7 @@ class HeaderFactoryTest extends TestCase
         }
     }
 
-    public function testGenericHeaderInstance()
+    public function testGenericHeaderInstance() : void
     {
         $aValid = ['X-Generic-Header', 'Some-Other-Header'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'References', 'Received'];
@@ -84,7 +85,7 @@ class HeaderFactoryTest extends TestCase
         }
     }
 
-    public function testIdHeaderInstance()
+    public function testIdHeaderInstance() : void
     {
         $aValid = ['Content-ID', 'Message-ID', 'In-Reply-To', 'References'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Received', 'Authentication-Results'];
@@ -100,7 +101,7 @@ class HeaderFactoryTest extends TestCase
         }
     }
 
-    public function testSubjectHeaderInstance()
+    public function testSubjectHeaderInstance() : void
     {
         $aValid = ['Subject'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Content-Id', 'content-ID', 'IN-REPLY-TO'];
@@ -116,7 +117,7 @@ class HeaderFactoryTest extends TestCase
         }
     }
 
-    public function testParameterHeaderInstance()
+    public function testParameterHeaderInstance() : void
     {
         $aValid = ['Content-Type', 'CONTENT-Disposition'];
         $aNot = ['MESSAGE-ID', 'bcc', 'Subject', 'X-Header-Test'];
@@ -132,7 +133,7 @@ class HeaderFactoryTest extends TestCase
         }
     }
 
-    public function testReceivedHeaderInstance()
+    public function testReceivedHeaderInstance() : void
     {
         $aValid = ['Received'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Authentication-Results', 'In-Reply-To', 'References', 'Message-ID'];

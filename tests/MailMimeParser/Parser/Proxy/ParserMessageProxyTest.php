@@ -14,8 +14,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserMessageProxyTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $parser;
 
     protected function setUp() : void
@@ -28,7 +30,7 @@ class ParserMessageProxyTest extends TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testSetGetLastLineEndingLength()
+    public function testSetGetLastLineEndingLength() : void
     {
         $instance = new ParserMessageProxy(
             $this->partBuilder,

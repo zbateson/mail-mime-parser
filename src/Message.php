@@ -94,9 +94,8 @@ class Message extends MimePart implements IMessage
      * The message is considered 'mime' if it has either a Content-Type or
      * MIME-Version header defined.
      *
-     * @return bool
      */
-    public function isMime()
+    public function isMime() : bool
     {
         $contentType = $this->getHeaderValue(HeaderConsts::CONTENT_TYPE);
         $mimeVersion = $this->getHeaderValue(HeaderConsts::MIME_VERSION);
@@ -169,7 +168,7 @@ class Message extends MimePart implements IMessage
         return null;
     }
 
-    public function setTextPart($resource, $charset = 'UTF-8')
+    public function setTextPart($resource, string $charset = 'UTF-8') : void
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
@@ -180,7 +179,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function setHtmlPart($resource, $charset = 'UTF-8')
+    public function setHtmlPart($resource, string $charset = 'UTF-8') : void
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
@@ -191,7 +190,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function removeTextPart($index = 0)
+    public function removeTextPart(int $index = 0) : bool
     {
         return $this->multipartHelper
             ->removePartByMimeType(
@@ -201,7 +200,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function removeAllTextParts($moveRelatedPartsBelowMessage = true)
+    public function removeAllTextParts(bool $moveRelatedPartsBelowMessage = true) : bool
     {
         return $this->multipartHelper
             ->removeAllContentPartsByMimeType(
@@ -211,7 +210,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function removeHtmlPart($index = 0)
+    public function removeHtmlPart(int $index = 0) : bool
     {
         return $this->multipartHelper
             ->removePartByMimeType(
@@ -221,7 +220,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function removeAllHtmlParts($moveRelatedPartsBelowMessage = true)
+    public function removeAllHtmlParts(bool $moveRelatedPartsBelowMessage = true) : bool
     {
         return $this->multipartHelper
             ->removeAllContentPartsByMimeType(
@@ -231,7 +230,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function getAttachmentPart($index)
+    public function getAttachmentPart(int $index)
     {
         return $this->getPart(
             $index,
@@ -246,12 +245,12 @@ class Message extends MimePart implements IMessage
         );
     }
 
-    public function getAttachmentCount()
+    public function getAttachmentCount() : int
     {
         return \count($this->getAllAttachmentParts());
     }
 
-    public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
+    public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void
     {
         $this->multipartHelper
             ->createAndAddPartForAttachment(
@@ -264,7 +263,7 @@ class Message extends MimePart implements IMessage
             );
     }
 
-    public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
+    public function addAttachmentPartFromFile($filePath, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void
     {
         $handle = Psr7\Utils::streamFor(\fopen($filePath, 'r'));
         if ($filename === null) {
@@ -273,7 +272,7 @@ class Message extends MimePart implements IMessage
         $this->addAttachmentPart($handle, $mimeType, $filename, $disposition, $encoding);
     }
 
-    public function removeAttachmentPart($index)
+    public function removeAttachmentPart(int $index) : void
     {
         $part = $this->getAttachmentPart($index);
         $this->removePart($part);
@@ -302,13 +301,13 @@ class Message extends MimePart implements IMessage
 
     }
 
-    public function setAsMultipartSigned($micalg, $protocol)
+    public function setAsMultipartSigned(string $micalg, string $protocol) : void
     {
         $this->privacyHelper
             ->setMessageAsMultipartSigned($this, $micalg, $protocol);
     }
 
-    public function setSignature($body)
+    public function setSignature(string $body) : void
     {
         $this->privacyHelper
             ->setSignature($this, $body);

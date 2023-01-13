@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UUEncodedPartHeaderContainerFactoryTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $instance;
 
     protected function setUp() : void
@@ -24,7 +25,7 @@ class UUEncodedPartHeaderContainerFactoryTest extends TestCase
         $this->instance = new UUEncodedPartHeaderContainerFactory($hf);
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $ob = $this->instance->newInstance(0777, 'test0r');
         $this->assertInstanceOf(

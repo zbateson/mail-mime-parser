@@ -46,11 +46,8 @@ class DomainConsumer extends GenericReceivedConsumer
 {
     /**
      * Overridden to return true if the passed token is a closing parenthesis.
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         if ($token === ')') {
             return true;
@@ -63,12 +60,11 @@ class DomainConsumer extends GenericReceivedConsumer
      * address.  Returns true if the expression matched, and either hostname or
      * address were found.
      *
-     * @param string $value
      * @param string $hostname
      * @param string $address
-     * @return bool
      */
-    private function matchHostPart($value, &$hostname, &$address) {
+    private function matchHostPart(string $value, ?string &$hostname, ?string &$address) : bool
+    {
         $matches = [];
         $pattern = '~^(?P<name>[a-z0-9\-]+\.[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr>[a-f\d\.\:]+)\])?$~i';
         if (\preg_match($pattern, $value, $matches)) {
@@ -91,7 +87,7 @@ class DomainConsumer extends GenericReceivedConsumer
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]|\ZBateson\MailMimeParser\Header\Part\HeaderPart[]
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $ehloName = null;
         $hostname = null;

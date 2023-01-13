@@ -14,8 +14,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserPartChildrenContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $proxy;
 
     protected function setUp() : void
@@ -26,7 +28,7 @@ class ParserPartChildrenContainerTest extends TestCase
         $this->instance = new ParserPartChildrenContainer($this->proxy);
     }
 
-    public function testOffsetExistsCallsProxyOnceAfterReturningNull()
+    public function testOffsetExistsCallsProxyOnceAfterReturningNull() : void
     {
         $this->proxy->expects($this->once())
             ->method('popNextChild')
@@ -36,7 +38,7 @@ class ParserPartChildrenContainerTest extends TestCase
         $this->assertFalse($this->instance->offsetExists(0));
     }
 
-    public function testOffsetExistsCallsProxyTwiceAfterNotReturningNull()
+    public function testOffsetExistsCallsProxyTwiceAfterNotReturningNull() : void
     {
         $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()

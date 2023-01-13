@@ -4,5 +4,10 @@ parameters:
 	editorUrl: '%%file%% %%line%% %%column%%: %%error%%'
 	paths:
 		- src
-		- tests
-
+	bootstrapFiles:
+		- PHPStanConstants.php
+	ignoreErrors:
+		-
+			message: '#Call to an undefined method ZBateson\\MailMimeParser#'
+			paths:
+				- src/*

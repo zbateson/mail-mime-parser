@@ -28,9 +28,8 @@ class Container extends PimpleContainer
      *
      * Null is returned for built-in types.
      *
-     * @return string|null
      */
-    private function getParameterClass(ReflectionParameter $param)
+    private function getParameterClass(ReflectionParameter $param) : ?string
     {
         if (\method_exists($param, 'getType')) {
             $type = $param->getType();
@@ -48,10 +47,8 @@ class Container extends PimpleContainer
      *
      * The returned factory method looks up arguments and uses pimple to get an
      * instance of those types to pass them during construction.
-     *
-     * @param string $class
      */
-    public function autoRegister($class)
+    public function autoRegister($class) : ?string
     {
         $fn = function($c) use ($class) {
             $ref = new ReflectionClass($class);
@@ -72,16 +69,14 @@ class Container extends PimpleContainer
             return $ret;
         };
         $this[$class] = $fn;
+        return null;
     }
 
     /**
      * Overridden to see if the class can be auto-registered and return true if
      * it can.
-     *
-     * @param string $id
-     * @return bool
      */
-    public function offsetExists($id)
+    public function offsetExists($id) : bool
     {
         $exists = parent::offsetExists($id);
         if (!$exists && \class_exists($id)) {
@@ -95,10 +90,11 @@ class Container extends PimpleContainer
      * Overridden to see if the class can be auto-registered and return an
      * instance if it can.
      *
-     * @param string $id
+     * @param string | int $id
+     *
      * @throws UnknownIdentifierException
-     * @return object
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($id)
     {
         try {

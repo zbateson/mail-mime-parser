@@ -105,7 +105,7 @@ class ReceivedHeader extends ParameterHeader
      * $this->date.
      *
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
@@ -120,10 +120,8 @@ class ReceivedHeader extends ParameterHeader
     /**
      * Returns the raw, unparsed header value, same as {@see
      * ReceivedHeader::getRawValue()}.
-     *
-     * @return string
      */
-    public function getValue()
+    public function getValue() : ?string
     {
         return $this->rawValue;
     }

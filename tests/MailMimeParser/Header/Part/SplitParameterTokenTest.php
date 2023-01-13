@@ -16,6 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class SplitParameterTokenTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
     protected function setUp() : void
@@ -23,35 +24,35 @@ class SplitParameterTokenTest extends TestCase
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testGetNameAndNullLanguage()
+    public function testGetNameAndNullLanguage() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, '  Drogo  ');
         $this->assertEquals('Drogo', $part->getName());
         $this->assertNull($part->getLanguage());
     }
 
-    public function testLanguageIsSetBeforeGetValue()
+    public function testLanguageIsSetBeforeGetValue() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, '  Drogo  ');
         $part->addPart('unknown\'Dothraki\'blah', true, '');
         $this->assertEquals('Dothraki', $part->getLanguage());
     }
 
-    public function testLanguageIsNullForEmptyEncodedLanguage()
+    public function testLanguageIsNullForEmptyEncodedLanguage() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('unknown\'\'Khal%20Drogo,%20', true, 0);
         $this->assertNull($part->getLanguage());
     }
 
-    public function testAddLiteralPart()
+    public function testAddLiteralPart() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khal Drogo', false, 0);
         $this->assertEquals('Khal Drogo', $part->getValue());
     }
 
-    public function testAddMultipleLiteralParts()
+    public function testAddMultipleLiteralParts() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khal ', false, 0);
@@ -59,7 +60,7 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('Khal Drogo', $part->getValue());
     }
 
-    public function testAddUnsortedMultipleLiteralParts()
+    public function testAddUnsortedMultipleLiteralParts() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Dro', false, 1);
@@ -68,14 +69,14 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('Khal Drogo', $part->getValue());
     }
 
-    public function testAddEncodedPart()
+    public function testAddEncodedPart() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khal%20Drogo', true, 0);
         $this->assertEquals('Khal Drogo', $part->getValue());
     }
 
-    public function testAddMultiEncodedPart()
+    public function testAddMultiEncodedPart() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khal%20Drogo,%20', true, 0);
@@ -85,7 +86,7 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('Khal Drogo, Ruler of his Khalisar', $part->getValue());
     }
 
-    public function testAddUnsortedMultiEncodedPart()
+    public function testAddUnsortedMultiEncodedPart() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
@@ -95,7 +96,7 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('Khal Drogo, Ruler of his Khalisar', $part->getValue());
     }
 
-    public function testAddUnsortedMultiEncodedPartWithLanguage()
+    public function testAddUnsortedMultiEncodedPartWithLanguage() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
@@ -106,7 +107,7 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('dothraki-LHAZ', $part->getLanguage());
     }
 
-    public function testLanguageNotSetOnNonZeroPart()
+    public function testLanguageNotSetOnNonZeroPart() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);
@@ -117,7 +118,7 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('dothraki-LHAZ', $part->getLanguage());
     }
 
-    public function testAddMixedEncodedAndNonEncodedCombinesCharsetConversion()
+    public function testAddMixedEncodedAndNonEncodedCombinesCharsetConversion() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('us-ascii\'dothraki-LHAZ\'Khal%20Drogo,%20', true, 0);
@@ -128,7 +129,7 @@ class SplitParameterTokenTest extends TestCase
         $this->assertEquals('Khal Drogo, Ruler of his Khalisar', $part->getValue());
     }
 
-    public function testAddUnsortedMixedEncodedAndNonEncodedCombinesCharsetConversion()
+    public function testAddUnsortedMixedEncodedAndNonEncodedCombinesCharsetConversion() : void
     {
         $part = new SplitParameterToken($this->charsetConverter, 'name');
         $part->addPart('Khalisar', true, 3);

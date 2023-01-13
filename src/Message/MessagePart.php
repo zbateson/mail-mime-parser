@@ -22,7 +22,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
 abstract class MessagePart implements IMessagePart
 {
     /**
-     * @var IMimePart parent part
+     * @var ?IMimePart parent part
      */
     protected $parent;
 
@@ -32,7 +32,7 @@ abstract class MessagePart implements IMessagePart
     protected $partStreamContainer;
 
     /**
-     * @var string can be used to set an override for content's charset in cases
+     * @var ?string can be used to set an override for content's charset in cases
      *      where a user knows the charset on the content is not what it claims
      *      to be.
      */
@@ -58,29 +58,17 @@ abstract class MessagePart implements IMessagePart
         $this->observers = new SplObjectStorage();
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function attach(SplObserver $observer)
+    public function attach(SplObserver $observer) : void
     {
         $this->observers->attach($observer);
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function detach(SplObserver $observer)
+    public function detach(SplObserver $observer) : void
     {
         $this->observers->detach($observer);
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function notify()
+    public function notify() : void
     {
         foreach ($this->observers as $observer) {
             $observer->update($this);
@@ -95,24 +83,24 @@ abstract class MessagePart implements IMessagePart
         return $this->parent;
     }
 
-    public function hasContent()
+    public function hasContent() : bool
     {
         return $this->partStreamContainer->hasContent();
     }
 
-    public function getFilename()
+    public function getFilename() : ?string
     {
         return null;
     }
 
-    public function setCharsetOverride($charsetOverride, $onlyIfNoCharset = false)
+    public function setCharsetOverride(string $charsetOverride, bool $onlyIfNoCharset = false) : void
     {
         if (!$onlyIfNoCharset || $this->getCharset() === null) {
             $this->charsetOverride = $charsetOverride;
         }
     }
 
-    public function getContentStream($charset = MailMimeParser::DEFAULT_CHARSET)
+    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
@@ -126,7 +114,7 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function getBinaryContentStream()
+    public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
@@ -144,7 +132,7 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function saveContent($filenameResourceOrStream)
+    public function saveContent($filenameResourceOrStream) : void
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {
@@ -162,7 +150,7 @@ abstract class MessagePart implements IMessagePart
         }
     }
 
-    public function getContent($charset = MailMimeParser::DEFAULT_CHARSET)
+    public function getContent(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?string
     {
         $stream = $this->getContentStream($charset);
         if ($stream !== null) {
@@ -171,7 +159,7 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function attachContentStream(StreamInterface $stream, $streamCharset = MailMimeParser::DEFAULT_CHARSET)
+    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET) : void
     {
         $ch = $this->charsetOverride ?? $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
@@ -182,13 +170,13 @@ abstract class MessagePart implements IMessagePart
         $this->notify();
     }
 
-    public function detachContentStream()
+    public function detachContentStream() : void
     {
         $this->partStreamContainer->setContentStream(null);
         $this->notify();
     }
 
-    public function setContent($resource, $charset = MailMimeParser::DEFAULT_CHARSET)
+    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET) : void
     {
         $stream = Utils::streamFor($resource);
         $this->attachContentStream($stream, $charset);
@@ -205,7 +193,7 @@ abstract class MessagePart implements IMessagePart
         return $this->partStreamContainer->getStream();
     }
 
-    public function save($filenameResourceOrStream, $filemode = 'w+')
+    public function save($filenameResourceOrStream, string $filemode = 'w+') : void
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {
@@ -225,7 +213,7 @@ abstract class MessagePart implements IMessagePart
         }
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return $this->getStream()->getContents();
     }

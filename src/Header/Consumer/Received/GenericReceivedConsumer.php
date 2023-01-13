@@ -47,9 +47,8 @@ class GenericReceivedConsumer extends GenericConsumer
     /**
      * Constructor overridden to include $partName parameter.
      *
-     * @param string $partName
      */
-    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory, $partName)
+    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory, string $partName)
     {
         parent::__construct($consumerService, $partFactory);
         $this->partName = $partName;
@@ -61,9 +60,8 @@ class GenericReceivedConsumer extends GenericConsumer
      * This is always the lower-case name provided to the constructor, not the
      * actual string that started the consumer, which could be in any case.
      *
-     * @return string
      */
-    protected function getPartName()
+    protected function getPartName() : string
     {
         return $this->partName;
     }
@@ -71,9 +69,9 @@ class GenericReceivedConsumer extends GenericConsumer
     /**
      * Overridden to return a CommentConsumer.
      *
-     * @return AbstractConsumer[] the sub-consumers
+     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [$this->consumerService->getCommentConsumer()];
     }
@@ -81,11 +79,8 @@ class GenericReceivedConsumer extends GenericConsumer
     /**
      * Returns true if the passed token matches (case-insensitively)
      * $this->getPartName() with optional whitespace surrounding it.
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         $pattern = '/^' . \preg_quote($this->getPartName(), '/') . '$/i';
         return (\preg_match($pattern, $token) === 1);
@@ -101,11 +96,8 @@ class GenericReceivedConsumer extends GenericConsumer
      * o id
      * o for
      * o ;
-     *
-     * @param string $token
-     * @return bool
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return (\preg_match('/^(by|via|with|id|for|;)$/i', $token) === 1);
     }
@@ -117,7 +109,7 @@ class GenericReceivedConsumer extends GenericConsumer
      *
      * @return string[] an array of regex pattern matchers
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return [
             '\s+',
@@ -133,7 +125,7 @@ class GenericReceivedConsumer extends GenericConsumer
      * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $strValue = '';
         $ret = [];

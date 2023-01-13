@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IdConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $idConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class IdConsumerTest extends TestCase
         $this->idConsumer = new IdConsumer($cs, $pf);
     }
 
-    public function testConsumeId()
+    public function testConsumeId() : void
     {
         $ret = $this->idConsumer->__invoke('id123@host.name>');
         $this->assertNotEmpty($ret);
@@ -48,7 +49,7 @@ class IdConsumerTest extends TestCase
         $this->assertEquals('id123@host.name', $address->getValue());
     }
 
-    public function testConsumeSpaces()
+    public function testConsumeSpaces() : void
     {
         $ret = $this->idConsumer->__invoke('An id without an end');
         $this->assertNotEmpty($ret);
@@ -57,7 +58,7 @@ class IdConsumerTest extends TestCase
         $this->assertEquals('Anidwithoutanend', $ret[0]->getValue());
     }
 
-    public function testConsumeIdWithComments()
+    public function testConsumeIdWithComments() : void
     {
         $ret = $this->idConsumer->__invoke('first (comment) "quoted"');
         $this->assertNotEmpty($ret);

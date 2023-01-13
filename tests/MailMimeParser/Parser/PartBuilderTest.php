@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartBuilderTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $headerContainer;
 
     protected function setUp() : void
@@ -25,7 +26,7 @@ class PartBuilderTest extends TestCase
             ->getMock();
     }
 
-    private function newPartBuilder($stream = null, $parent = null)
+    private function newPartBuilder($stream = null, $parent = null) : PartBuilder
     {
         if ($stream === null && $parent === null) {
             $stream = Psr7\Utils::streamFor('test');
@@ -39,13 +40,13 @@ class PartBuilderTest extends TestCase
         );
     }
 
-    public function testGetHeaderContainer()
+    public function testGetHeaderContainer() : void
     {
         $instance = $this->newPartBuilder();
         $this->assertSame($this->headerContainer, $instance->getHeaderContainer());
     }
 
-    public function testSetStreamPartPosAndGetFilename()
+    public function testSetStreamPartPosAndGetFilename() : void
     {
         $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(42);
@@ -54,7 +55,7 @@ class PartBuilderTest extends TestCase
         $this->assertEquals(42, $instance->getStreamPartLength());
     }
 
-    public function testSetStreamContentPosAndGetFilename()
+    public function testSetStreamContentPosAndGetFilename() : void
     {
         $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(11);
@@ -66,7 +67,7 @@ class PartBuilderTest extends TestCase
         $this->assertEquals(84 - 42, $instance->getStreamContentLength());
     }
 
-    public function testSetStreamContentPosAndGetFilenameWithParent()
+    public function testSetStreamContentPosAndGetFilenameWithParent() : void
     {
         $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()

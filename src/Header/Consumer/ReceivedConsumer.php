@@ -27,7 +27,7 @@ class ReceivedConsumer extends AbstractConsumer
      *
      * @return string[] an array of regex pattern matchers
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return [];
     }
@@ -35,11 +35,8 @@ class ReceivedConsumer extends AbstractConsumer
     /**
      * ReceivedConsumer doesn't have an end token, and so this just returns
      * false.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return false;
     }
@@ -49,10 +46,8 @@ class ReceivedConsumer extends AbstractConsumer
      * base handler for the Received header, and so this always returns false.
      *
      * @codeCoverageIgnore
-     * @param string $token
-     * @return bool false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return false;
     }
@@ -69,7 +64,7 @@ class ReceivedConsumer extends AbstractConsumer
      *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [
             $this->consumerService->getSubReceivedConsumer('from'),
@@ -89,7 +84,7 @@ class ReceivedConsumer extends AbstractConsumer
      *
      * @return string the regex pattern
      */
-    protected function getTokenSplitPattern()
+    protected function getTokenSplitPattern() : string
     {
         $sChars = \implode('|', $this->getAllTokenSeparators());
         return '~(' . $sChars . ')~';
@@ -99,9 +94,8 @@ class ReceivedConsumer extends AbstractConsumer
      * Overridden to /not/ advance when the end token matches a start token for
      * a sub-consumer.
      *
-     * @param bool $isStartToken
      */
-    protected function advanceToNextToken(Iterator $tokens, $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
     {
         if ($isStartToken) {
             $tokens->next();
@@ -122,7 +116,7 @@ class ReceivedConsumer extends AbstractConsumer
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $ret = [];
         foreach ($parts as $part) {

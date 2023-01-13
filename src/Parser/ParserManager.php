@@ -36,7 +36,7 @@ class ParserManager
      * calling $parser->setParserManager($this) on each one.
      *
      */
-    public function setParsers(array $parsers)
+    public function setParsers(array $parsers) : void
     {
         foreach ($parsers as $parser) {
             $parser->setParserManager($this);
@@ -50,7 +50,7 @@ class ParserManager
      *
      * @param IParser $parser The parser to add.
      */
-    public function prependParser(IParser $parser)
+    public function prependParser(IParser $parser) : void
     {
         $parser->setParserManager($this);
         \array_unshift($this->parsers, $parser);
@@ -69,7 +69,7 @@ class ParserManager
      *
      * @param PartBuilder $partBuilder The PartBuilder to wrap in a proxy with
      *        an IParser
-     * @return ParserPartProxy The created ParserPartProxy tied to a new
+     * @return ?ParserPartProxy The created ParserPartProxy tied to a new
      *         IMessagePart and associated IParser.
      */
     public function createParserProxyFor(PartBuilder $partBuilder)

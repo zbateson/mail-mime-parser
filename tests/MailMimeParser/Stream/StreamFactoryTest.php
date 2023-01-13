@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class StreamFactoryTest extends TestCase
 {
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()

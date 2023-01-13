@@ -30,9 +30,8 @@ class GenericHelper extends AbstractHelper
      * Returns true if the passed header's name is a Content-* header other than
      * one defined in the static $nonMimeContentFields
      *
-     * @param string $exceptions
      */
-    private function isMimeContentField(IHeader $header, array $exceptions = [])
+    private function isMimeContentField(IHeader $header, array $exceptions = []) : bool
     {
         return (\stripos($header->getName(), 'Content') === 0
             && !\in_array(\strtolower(\str_replace('-', '', $header->getName())), \array_merge(self::$nonMimeContentFields, $exceptions)));
@@ -62,7 +61,7 @@ class GenericHelper extends AbstractHelper
      * isn't a MIME content field and so isn't removed.
      *
      */
-    public function removeContentHeadersAndContent(IMimePart $part)
+    public function removeContentHeadersAndContent(IMimePart $part) : void
     {
         foreach ($part->getAllHeaders() as $header) {
             if ($this->isMimeContentField($header)) {

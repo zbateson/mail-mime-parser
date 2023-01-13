@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AddressGroupConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $addressGroupConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class AddressGroupConsumerTest extends TestCase
         $this->addressGroupConsumer = new AddressGroupConsumer($cs, $pf);
     }
 
-    public function testConsumeGroup()
+    public function testConsumeGroup() : void
     {
         $group = 'Wilfred, Emma';
         $ret = $this->addressGroupConsumer->__invoke($group);
@@ -48,7 +49,7 @@ class AddressGroupConsumerTest extends TestCase
         $this->assertEquals('Emma', $ret[0]->getAddress(1)->getEmail());
     }
 
-    public function testConsumeGroupWithinGroup()
+    public function testConsumeGroupWithinGroup() : void
     {
         $group = 'Wilfred, Bubba: One, Two';
         $ret = $this->addressGroupConsumer->__invoke($group);

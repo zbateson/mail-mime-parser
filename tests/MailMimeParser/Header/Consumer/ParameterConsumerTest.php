@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ParameterConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $parameterConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class ParameterConsumerTest extends TestCase
         $this->parameterConsumer = new ParameterConsumer($cs, $pf);
     }
 
-    public function testConsumeTokens()
+    public function testConsumeTokens() : void
     {
         $ret = $this->parameterConsumer->__invoke('text/html; charset=utf8');
         $this->assertNotEmpty($ret);
@@ -49,7 +50,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('utf8', $ret[1]->getValue());
     }
 
-    public function testEscapedSeparators()
+    public function testEscapedSeparators() : void
     {
         $ret = $this->parameterConsumer->__invoke('test\;with\;special\=chars; and\=more=blah');
         $this->assertNotEmpty($ret);
@@ -59,7 +60,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('blah', $ret[1]->getValue());
     }
 
-    public function testWithSubConsumers()
+    public function testWithSubConsumers() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; weiner="all-beef";toppings=sriracha (boo-yah!)');
         $this->assertNotEmpty($ret);
@@ -71,7 +72,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('sriracha', $ret[2]->getValue());
     }
 
-    public function testQuotedWithRfc2047Value()
+    public function testQuotedWithRfc2047Value() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments="=?US-ASCII?Q?mustard?="');
         $this->assertNotEmpty($ret);
@@ -81,7 +82,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('mustard', $ret[1]->getValue());
     }
 
-    public function testUnquotedWithRfc2047Value()
+    public function testUnquotedWithRfc2047Value() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments==?US-ASCII?Q?mustard?=');
         $this->assertNotEmpty($ret);
@@ -91,7 +92,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('mustard', $ret[1]->getValue());
     }
 
-    public function testSimpleSplitHeaderWithDoubleQuotedParts()
+    public function testSimpleSplitHeaderWithDoubleQuotedParts() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="mustar";'
             . 'condiments*1="d, ketchup"; condiments*2=" and mayo"');
@@ -103,7 +104,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertNull($ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderInFunnyOrder()
+    public function testSplitHeaderInFunnyOrder() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*2=" and mayo";'
             . 'condiments*1="d, ketchup"; condiments*0="mustar"');
@@ -115,7 +116,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertNull($ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithEmptyEncodingAndLanguage()
+    public function testSplitHeaderWithEmptyEncodingAndLanguage() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=\'\''
             . 'mustard,%20ketchup%20and%20mayo');
@@ -127,7 +128,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertNull($ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithEncodingAndLanguage()
+    public function testSplitHeaderWithEncodingAndLanguage() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=us-ascii\'en-US\''
             . 'mustard,%20ketchup%20and%20mayo');
@@ -139,7 +140,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('en-US', $ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithEncodingLanguageAndQuotedPart()
+    public function testSplitHeaderWithEncodingLanguageAndQuotedPart() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0*=us-ascii\'en-US\''
             . 'mustard,%20ketchup; condiments*1*=%20and; condiments*2=" mayo"');
@@ -151,7 +152,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('en-US', $ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithEncodingLanguageAndQuotedPartAndWrongNumbering()
+    public function testSplitHeaderWithEncodingLanguageAndQuotedPartAndWrongNumbering() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*1*=us-ascii\'en-US\''
             . 'mustard,%20ketchup; condiments*2*=%20and; condiments*3=" mayo"');
@@ -163,7 +164,7 @@ class ParameterConsumerTest extends TestCase
         // $this->assertEquals('en-US', $ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithMultiByteEncodedPart()
+    public function testSplitHeaderWithMultiByteEncodedPart() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=utf-8\'\''
             . 'mustardized%E2%80%93ketchup');
@@ -175,11 +176,11 @@ class ParameterConsumerTest extends TestCase
         $this->assertNull($ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithMultiByteEncodedPartAndLanguage()
+    public function testSplitHeaderWithMultiByteEncodedPartAndLanguage() : void
     {
         $str = 'هلا هلا شخبار بعد؟ شلون تبرمج؟';
         $encoded = \rawurlencode($str);
-        $halfPos = \floor((\strlen($encoded) / 3) / 2) * 3;
+        $halfPos = (int) \floor((\strlen($encoded) / 3) / 2) * 3;
         $part1 = \substr($encoded, 0, $halfPos);
         $part2 = \substr($encoded, $halfPos);
 
@@ -193,7 +194,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('abv-BH', $ret[1]->getLanguage());
     }
 
-    public function testSplitHeaderWithRfc2047()
+    public function testSplitHeaderWithRfc2047() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*=\'\''
             . '=?US-ASCII?Q?TS_Eliot?=');
@@ -202,7 +203,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('TS Eliot', $ret[1]->getValue());
     }
 
-    public function testSplitHeaderWithQuotedValueContainingDoubleApos()
+    public function testSplitHeaderWithQuotedValueContainingDoubleApos() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
             . 'That\'s \'gotta\' hurt"');
@@ -211,7 +212,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('That\'s \'gotta\' hurt', $ret[1]->getValue());
     }
 
-    public function testSplitHeaderWithSplitRfc2047()
+    public function testSplitHeaderWithSplitRfc2047() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
             . '=?US-ASCII?Q?TS_Eli"; condiments*1="ot?="');
@@ -220,7 +221,7 @@ class ParameterConsumerTest extends TestCase
         $this->assertEquals('TS Eliot', $ret[1]->getValue());
     }
 
-    public function testSplitHeaderWithMultipleSplitRfc2047()
+    public function testSplitHeaderWithMultipleSplitRfc2047() : void
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
             . '=?US-ASCII?Q?TS_E?=   =?US-ASCII?Q?li"; condiments*1="ot?="');

@@ -25,9 +25,8 @@ class CommentPart extends MimeLiteralPart
     /**
      * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
      *
-     * @param string $token
      */
-    public function __construct(MbWrapper $charsetConverter, $token)
+    public function __construct(MbWrapper $charsetConverter, string $token)
     {
         parent::__construct($charsetConverter, $token);
         $this->comment = $this->value;
@@ -39,9 +38,8 @@ class CommentPart extends MimeLiteralPart
     /**
      * Returns the comment's text.
      *
-     * @return string
      */
-    public function getComment()
+    public function getComment() : string
     {
         return $this->comment;
     }

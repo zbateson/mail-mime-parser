@@ -28,9 +28,8 @@ class DatePart extends LiteralPart
      * an RFC 822 date, and failing that, tries to parse it by calling
      * new DateTime($value).
      *
-     * @param string $token
      */
-    public function __construct(MbWrapper $charsetConverter, $token)
+    public function __construct(MbWrapper $charsetConverter, string $token)
     {
         $dateToken = \trim($token);
         // parent::__construct converts character encoding -- may cause problems sometimes.
@@ -56,7 +55,7 @@ class DatePart extends LiteralPart
      *
      * @return DateTime
      */
-    public function getDateTime()
+    public function getDateTime() : ?\DateTime
     {
         return $this->date;
     }

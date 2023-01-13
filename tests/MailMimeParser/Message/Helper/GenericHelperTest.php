@@ -17,8 +17,10 @@ use ZBateson\MailMimeParser\MailMimeParser;
  */
 class GenericHelperTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockMimePartFactory;
 
+    // @phpstan-ignore-next-line
     private $mockUUEncodedPartFactory;
 
     protected function setUp() : void
@@ -31,22 +33,22 @@ class GenericHelperTest extends TestCase
             ->getMock();
     }
 
-    private function newMockIMimePart()
+    private function newMockIMimePart() : \ZBateson\MailMimeParser\Message\IMimePart
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
     }
 
-    private function newMockIMessage()
+    private function newMockIMessage() : \ZBateson\MailMimeParser\IMessage
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
     }
 
-    private function newGenericHelper()
+    private function newGenericHelper() : GenericHelper
     {
         return new GenericHelper($this->mockMimePartFactory, $this->mockUUEncodedPartFactory);
     }
 
-    public function testCopyHeaders()
+    public function testCopyHeaders() : void
     {
         $helper = $this->newGenericHelper();
         $from = $this->newMockIMimePart();
@@ -70,7 +72,7 @@ class GenericHelperTest extends TestCase
         $helper->copyHeader($from, $to, 'test');
     }
 
-    public function testRemoveContentHeadersAndContent()
+    public function testRemoveContentHeadersAndContent() : void
     {
         $helper = $this->newGenericHelper();
         $part = $this->newMockIMimePart();
@@ -114,7 +116,7 @@ class GenericHelperTest extends TestCase
         $helper->removeContentHeadersAndContent($part);
     }
 
-    public function testCopyContentHeadersAndContent()
+    public function testCopyContentHeadersAndContent() : void
     {
         $helper = $this->newGenericHelper();
 
@@ -159,7 +161,7 @@ class GenericHelperTest extends TestCase
         $helper->copyContentHeadersAndContent($from, $to);
     }
 
-    public function testCreateNewContentPartFrom()
+    public function testCreateNewContentPartFrom() : void
     {
         $helper = $this->newGenericHelper();
 
@@ -204,7 +206,7 @@ class GenericHelperTest extends TestCase
         $helper->createNewContentPartFrom($from);
     }
 
-    public function testMovePartContentAndChildrenWithReplacePart()
+    public function testMovePartContentAndChildrenWithReplacePart() : void
     {
         $helper = $this->newGenericHelper();
 
@@ -267,7 +269,7 @@ class GenericHelperTest extends TestCase
         $helper->replacePart($from, $from, $to);
     }
 
-    public function testReplacePart()
+    public function testReplacePart() : void
     {
         $helper = $this->newGenericHelper();
 

@@ -15,10 +15,13 @@ use PHPUnit\Framework\TestCase;
  */
 class MultipartHelperTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockMimePartFactory;
 
+    // @phpstan-ignore-next-line
     private $mockUUEncodedPartFactory;
 
+    // @phpstan-ignore-next-line
     private $mockGenericHelper;
 
     protected function setUp() : void
@@ -34,22 +37,22 @@ class MultipartHelperTest extends TestCase
             ->getMock();
     }
 
-    private function newMockIMimePart()
+    private function newMockIMimePart() : \ZBateson\MailMimeParser\Message\IMimePart
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
     }
 
-    private function newMockIUUEncodedPart()
+    private function newMockIUUEncodedPart() : \ZBateson\MailMimeParser\Message\IUUEncodedPart
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IUUEncodedPart::class);
     }
 
-    private function newMockIMessage()
+    private function newMockIMessage() : \ZBateson\MailMimeParser\IMessage
     {
         return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
     }
 
-    private function newMultipartHelper()
+    private function newMultipartHelper() : MultipartHelper
     {
         return new MultipartHelper(
             $this->mockMimePartFactory,
@@ -58,7 +61,7 @@ class MultipartHelperTest extends TestCase
         );
     }
 
-    public function testGetUniqueBoundary()
+    public function testGetUniqueBoundary() : void
     {
         $helper = $this->newMultipartHelper();
         $first = $helper->getUniqueBoundary('test');
@@ -74,7 +77,7 @@ class MultipartHelperTest extends TestCase
         $this->assertNotEquals($second, $third);
     }
 
-    public function testSetMimeHeaderBoundaryOnPart()
+    public function testSetMimeHeaderBoundaryOnPart() : void
     {
         $helper = $this->newMultipartHelper();
         $part = $this->newMockIMimePart();
@@ -86,7 +89,7 @@ class MultipartHelperTest extends TestCase
         $helper->setMimeHeaderBoundaryOnPart($part, 'mime-type');
     }
 
-    public function testSetMessageAsMixed()
+    public function testSetMessageAsMixed() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -117,7 +120,7 @@ class MultipartHelperTest extends TestCase
         $helper->setMessageAsMixed($message);
     }
 
-    public function testSetMessageAsAlternative()
+    public function testSetMessageAsAlternative() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -138,7 +141,7 @@ class MultipartHelperTest extends TestCase
         $helper->setMessageAsAlternative($message);
     }
 
-    public function testGetContentPartContainerFromAlternative()
+    public function testGetContentPartContainerFromAlternative() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -158,7 +161,7 @@ class MultipartHelperTest extends TestCase
         $this->assertFalse($helper->getContentPartContainerFromAlternative('test/test', $child3));
     }
 
-    public function testCreateAlternativeContentPart()
+    public function testCreateAlternativeContentPart() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -184,7 +187,7 @@ class MultipartHelperTest extends TestCase
         $this->assertEquals($newPart, $helper->createAlternativeContentPart($message, $contentPart));
     }
 
-    public function testMoveAllPartsAsAttachmentsExcept()
+    public function testMoveAllPartsAsAttachmentsExcept() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -214,7 +217,7 @@ class MultipartHelperTest extends TestCase
         $helper->moveAllNonMultiPartsToMessageExcept($message, $from, 'test');
     }
 
-    public function testEnforceMimeWithAttachments()
+    public function testEnforceMimeWithAttachments() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -240,7 +243,7 @@ class MultipartHelperTest extends TestCase
         $helper->enforceMime($message);
     }
 
-    public function testEnforceMimeWithoutAttachments()
+    public function testEnforceMimeWithoutAttachments() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -263,7 +266,7 @@ class MultipartHelperTest extends TestCase
         $helper->enforceMime($message);
     }
 
-    public function testCreateMultipartRelatedPartForInlineChildrenOf()
+    public function testCreateMultipartRelatedPartForInlineChildrenOf() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -296,7 +299,7 @@ class MultipartHelperTest extends TestCase
         $this->assertSame($related, $helper->createMultipartRelatedPartForInlineChildrenOf($parent));
     }
 
-    public function testFindOtherContentPartFor()
+    public function testFindOtherContentPartFor() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -330,7 +333,7 @@ class MultipartHelperTest extends TestCase
         $helper->findOtherContentPartFor($message, 'text/html');
     }
 
-    public function testCreateContentPartForMimeTypeWithContentInMessage()
+    public function testCreateContentPartForMimeTypeWithContentInMessage() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -370,7 +373,7 @@ class MultipartHelperTest extends TestCase
         $helper->createContentPartForMimeType($message, $mimeType, $charset);
     }
 
-    public function testCreateContentPartForMimeTypeWithContentInPart()
+    public function testCreateContentPartForMimeTypeWithContentInPart() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -412,7 +415,7 @@ class MultipartHelperTest extends TestCase
         $helper->createContentPartForMimeType($message, $mimeType, $charset);
     }
 
-    public function testCreateContentPartForMimeTypeInMessageWithoutContent()
+    public function testCreateContentPartForMimeTypeInMessageWithoutContent() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -448,7 +451,7 @@ class MultipartHelperTest extends TestCase
         $helper->createContentPartForMimeType($message, $mimeType, $charset);
     }
 
-    public function testCreateAndAddPartForAttachmentToMimeMessage()
+    public function testCreateAndAddPartForAttachmentToMimeMessage() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -489,7 +492,7 @@ class MultipartHelperTest extends TestCase
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', null);
     }
 
-    public function testCreateAndAddPartForAttachmentToMimeMessageWithDifferentEncoding()
+    public function testCreateAndAddPartForAttachmentToMimeMessageWithDifferentEncoding() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -530,7 +533,7 @@ class MultipartHelperTest extends TestCase
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', null, 'quoted-printable');
     }
 
-    public function testCreateAndAddPartForAttachmentToNonMimeMessage()
+    public function testCreateAndAddPartForAttachmentToNonMimeMessage() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -560,7 +563,7 @@ class MultipartHelperTest extends TestCase
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', 'test-file');
     }
 
-    public function testSetContentPartForMimeTypeThatExists()
+    public function testSetContentPartForMimeTypeThatExists() : void
     {
         $helper = $this->newMultipartHelper();
 
@@ -586,7 +589,7 @@ class MultipartHelperTest extends TestCase
         $helper->setContentPartForMimeType($message, $contentType, 'test-content', $charset);
     }
 
-    public function testSetContentPartForMimeTypeThatDoesntExists()
+    public function testSetContentPartForMimeTypeThatDoesntExists() : void
     {
         $helper = $this->newMultipartHelper();
 

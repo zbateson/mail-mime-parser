@@ -34,7 +34,7 @@ class DateHeader extends AbstractHeader
      *
      * @return \DateTime|null The parsed DateTime object.
      */
-    public function getDateTime()
+    public function getDateTime() : ?\DateTime
     {
         if (!empty($this->parts) && $this->parts[0] instanceof DatePart) {
             return $this->parts[0]->getDateTime();
@@ -48,7 +48,7 @@ class DateHeader extends AbstractHeader
      *
      * @return DateTimeImmutable|null The parsed DateTimeImmutable object.
      */
-    public function getDateTimeImmutable()
+    public function getDateTimeImmutable() : ?\DateTimeImmutable
     {
         $dateTime = $this->getDateTime();
         if ($dateTime !== null) {

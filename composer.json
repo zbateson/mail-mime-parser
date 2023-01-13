@@ -28,8 +28,8 @@
     "require-dev": {
         "mikey179/vfsstream": "^1.6.0",
         "phpunit/phpunit": "<10",
-        "friendsofphp/php-cs-fixer": "^3.13",
-        "phpstan/phpstan": "^1.9"
+        "friendsofphp/php-cs-fixer": "*",
+        "phpstan/phpstan": "*"
     },
     "suggest": {
         "ext-mbstring": "For best support/performance",

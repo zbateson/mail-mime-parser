@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class GenericHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
     protected function setUp() : void
@@ -36,7 +37,7 @@ class GenericHeaderTest extends TestCase
             ->getMock();
     }
 
-    public function testParsing()
+    public function testParsing() : void
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
@@ -45,7 +46,7 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Hunted-By', $header->getName());
     }
 
-    public function testMultilineMimeParts()
+    public function testMultilineMimeParts() : void
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', '=?US-ASCII?Q?Hunt?=
              =?US-ASCII?Q?er_S._?=
@@ -58,7 +59,7 @@ class GenericHeaderTest extends TestCase
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
      */
-    public function testQuotesMimeAndComments()
+    public function testQuotesMimeAndComments() : void
     {
         $header = new GenericHeader(
             $this->consumerService,
@@ -68,7 +69,7 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Dwayne "The Rock" Jackson', $header->getValue());
     }
 
-    public function testCommentBetweenParts()
+    public function testCommentBetweenParts() : void
     {
         $header = new GenericHeader(
             $this->consumerService,
@@ -78,7 +79,7 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Dwayne Jackson', $header->getValue());
     }
 
-    public function testGenericHeaderToString()
+    public function testGenericHeaderToString() : void
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunted-By: Hunter S. Thompson', $header);

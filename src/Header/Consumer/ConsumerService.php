@@ -156,10 +156,9 @@ class ConsumerService
      * Returns the consumer instance corresponding to the passed part name of a
      * Received header.
      *
-     * @param string $partName
      * @return AbstractConsumer
      */
-    public function getSubReceivedConsumer($partName)
+    public function getSubReceivedConsumer(string $partName)
     {
         if (empty($this->receivedConsumers[$partName])) {
             $consumer = null;

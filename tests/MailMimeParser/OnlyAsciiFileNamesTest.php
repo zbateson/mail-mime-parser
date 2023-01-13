@@ -17,7 +17,7 @@ use RecursiveIteratorIterator;
  */
 class OnlyAsciiFileNamesTest extends TestCase
 {
-    public function testFileNames()
+    public function testFileNames() : void
     {
         $dir = new RecursiveDirectoryIterator(\dirname(__DIR__), FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS);
         $iter = new RecursiveIteratorIterator($dir);

@@ -43,7 +43,7 @@ class AddressConsumer extends AbstractConsumer
      *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [
             $this->consumerService->getAddressGroupConsumer(),
@@ -59,7 +59,7 @@ class AddressConsumer extends AbstractConsumer
      *
      * @return string[] the patterns
      */
-    public function getTokenSeparators()
+    public function getTokenSeparators() : array
     {
         return [',', ';', '\s+'];
     }
@@ -69,22 +69,16 @@ class AddressConsumer extends AbstractConsumer
      *
      * Although the semi-colon is not strictly the end token of an
      * AddressConsumer, it could end a parent AddressGroupConsumer.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return ($token === ',' || $token === ';');
     }
 
     /**
      * AddressConsumer is "greedy", so this always returns true.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return true;
     }
@@ -104,7 +98,7 @@ class AddressConsumer extends AbstractConsumer
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $strName = '';
         $strEmail = '';

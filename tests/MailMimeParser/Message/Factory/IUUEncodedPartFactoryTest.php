@@ -28,7 +28,7 @@ class IUUEncodedPartFactoryTest extends TestCase
         return $fac;
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $psc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
 

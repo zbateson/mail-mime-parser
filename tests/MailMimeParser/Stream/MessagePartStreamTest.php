@@ -16,6 +16,7 @@ use ZBateson\StreamDecorators\NonClosingStream;
  */
 class MessagePartStreamTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockStreamFactory;
 
     protected function setUp() : void
@@ -25,28 +26,28 @@ class MessagePartStreamTest extends TestCase
             ->getMock();
     }
 
-    private function newMockMessage()
+    private function newMockMessage() : \ZBateson\MailMimeParser\Message
     {
         return $this->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockMimePart()
+    private function newMockMimePart() : \ZBateson\MailMimeParser\Message\MimePart
     {
         return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockUUEncodedPart()
+    private function newMockUUEncodedPart() : \ZBateson\MailMimeParser\Message\UUEncodedPart
     {
         return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testReadMimeMessageWithChildren()
+    public function testReadMimeMessageWithChildren() : void
     {
         $testContents = '';
 
@@ -123,7 +124,7 @@ class MessagePartStreamTest extends TestCase
         $this->assertEquals($testContents, $ms->getContents());
     }
 
-    public function testReadBase64MimeMessage()
+    public function testReadBase64MimeMessage() : void
     {
         $testContents = '';
 
@@ -170,7 +171,7 @@ class MessagePartStreamTest extends TestCase
         $this->assertEquals($testContents, $ms->getContents());
     }
 
-    public function testReadUUEncodedNonMimeMessageWithChildren()
+    public function testReadUUEncodedNonMimeMessageWithChildren() : void
     {
         $testContents = '';
 
@@ -248,7 +249,7 @@ class MessagePartStreamTest extends TestCase
         $this->assertEquals($testContents, $ms->getContents());
     }
 
-    public function testRead7BitMimeMessage()
+    public function testRead7BitMimeMessage() : void
     {
         $testContents = '';
 

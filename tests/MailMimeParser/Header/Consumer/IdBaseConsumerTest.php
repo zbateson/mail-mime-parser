@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IdBaseConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $idBaseConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class IdBaseConsumerTest extends TestCase
         $this->idBaseConsumer = new IdBaseConsumer($cs, $pf);
     }
 
-    public function testConsumeId()
+    public function testConsumeId() : void
     {
         $ret = $this->idBaseConsumer->__invoke('<id123@host.name>');
         $this->assertNotEmpty($ret);
@@ -48,7 +49,7 @@ class IdBaseConsumerTest extends TestCase
         $this->assertEquals('id123@host.name', $address->getValue());
     }
 
-    public function testConsumeIds()
+    public function testConsumeIds() : void
     {
         $ret = $this->idBaseConsumer->__invoke('<first-id> <second-id@asdf> <third-id>');
         $this->assertNotEmpty($ret);
@@ -59,7 +60,7 @@ class IdBaseConsumerTest extends TestCase
         $this->assertEquals('third-id', $ret[2]->getValue());
     }
 
-    public function testConsumeIdsWithComments()
+    public function testConsumeIdsWithComments() : void
     {
         $ret = $this->idBaseConsumer->__invoke('(first) <first-id> (comment) <second-id@asdf> <third-id>');
         $this->assertNotEmpty($ret);

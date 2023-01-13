@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartFilterTest extends TestCase
 {
-    public function testAttachmentFilter()
+    public function testAttachmentFilter() : void
     {
         $callback = PartFilter::fromAttachmentFilter();
 
@@ -38,14 +38,14 @@ class PartFilterTest extends TestCase
         $this->assertTrue($callback($part));
     }
 
-    public function testHeaderValueFilterWithMessagePart()
+    public function testHeaderValueFilterWithMessagePart() : void
     {
         $callback = PartFilter::fromHeaderValue('detective', 'peralta');
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertFalse($callback($part));
     }
 
-    public function testHeaderValueFilterWithSignaturePart()
+    public function testHeaderValueFilterWithSignaturePart() : void
     {
         $callback = PartFilter::fromHeaderValue('detective', 'peralta');
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
@@ -54,7 +54,7 @@ class PartFilterTest extends TestCase
         $this->assertFalse($callback($part));
     }
 
-    public function testHeaderValueFilterWithMimePart()
+    public function testHeaderValueFilterWithMimePart() : void
     {
         $callback = PartFilter::fromHeaderValue('detective', 'peralta');
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
@@ -77,7 +77,7 @@ class PartFilterTest extends TestCase
         $this->assertFalse($callback($part));
     }
 
-    public function testContentTypeFilter()
+    public function testContentTypeFilter() : void
     {
         $callback = PartFilter::fromContentType('text/plain');
 
@@ -90,7 +90,7 @@ class PartFilterTest extends TestCase
         $this->assertFalse($callback($part));
     }
 
-    public function testInlineContentTypeFilter()
+    public function testInlineContentTypeFilter() : void
     {
         $callback = PartFilter::fromInlineContentType('text/plain');
 
@@ -104,7 +104,7 @@ class PartFilterTest extends TestCase
         $this->assertFalse($callback($part));
     }
 
-    public function testDispositionFilter()
+    public function testDispositionFilter() : void
     {
         $callback = PartFilter::fromDisposition('needy');
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
@@ -116,7 +116,7 @@ class PartFilterTest extends TestCase
         $this->assertTrue($callback($part));
     }
 
-    public function testDispositionFilterNoMultiOrSignedParts()
+    public function testDispositionFilterNoMultiOrSignedParts() : void
     {
         $callback = PartFilter::fromDisposition('needy');
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
@@ -128,7 +128,7 @@ class PartFilterTest extends TestCase
         $this->assertTrue($callback($part));
     }
 
-    public function testDispositionFilterWithMultiParts()
+    public function testDispositionFilterWithMultiParts() : void
     {
         $callback = PartFilter::fromDisposition('greedy', true);
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
@@ -140,7 +140,7 @@ class PartFilterTest extends TestCase
         $this->assertTrue($callback($part));
     }
 
-    public function testDispositionFilterWithSignatureParts()
+    public function testDispositionFilterWithSignatureParts() : void
     {
         $callback = PartFilter::fromDisposition('seedy', false, true);
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
@@ -152,7 +152,7 @@ class PartFilterTest extends TestCase
         $this->assertTrue($callback($part));
     }
 
-    public function testDispositionFilterWithMultiAndSignatureParts()
+    public function testDispositionFilterWithMultiAndSignatureParts() : void
     {
         $callback = PartFilter::fromDisposition('seedy', true, true);
         $part = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);

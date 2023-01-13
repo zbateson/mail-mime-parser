@@ -23,12 +23,12 @@ class ParserMessageProxy extends ParserMimePartProxy
      */
     protected $lastLineEndingLength = 0;
 
-    public function getLastLineEndingLength()
+    public function getLastLineEndingLength() : int
     {
         return $this->lastLineEndingLength;
     }
 
-    public function setLastLineEndingLength($lastLineEndingLength)
+    public function setLastLineEndingLength(int $lastLineEndingLength) : void
     {
         $this->lastLineEndingLength = $lastLineEndingLength;
     }

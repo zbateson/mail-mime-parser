@@ -17,24 +17,34 @@ use PHPUnit\Framework\TestCase;
  */
 class NonMimeParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $messageProxyFactory;
 
+    // @phpstan-ignore-next-line
     private $partProxyFactory;
 
+    // @phpstan-ignore-next-line
     private $partBuilderFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $headerParser;
 
+    // @phpstan-ignore-next-line
     private $parserManager;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $parserMessageProxy;
 
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $instance;
 
     protected function setUp() : void
@@ -84,18 +94,18 @@ class NonMimeParserTest extends TestCase
             ->getMock();
     }
 
-    public function testAbstractParserGetters()
+    public function testAbstractParserGetters() : void
     {
         $this->assertSame($this->messageProxyFactory, $this->instance->getParserMessageProxyFactory());
         $this->assertSame($this->partProxyFactory, $this->instance->getParserPartProxyFactory());
     }
 
-    public function testCanParse()
+    public function testCanParse() : void
     {
         $this->assertTrue($this->instance->canParse($this->partBuilder));
     }
 
-    public function testParseEmptyContent()
+    public function testParseEmptyContent() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor(''));
         $this->parserMessageProxy->expects($this->atLeastOnce())
@@ -114,7 +124,7 @@ class NonMimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentWithNonNullNextPartStart()
+    public function testParseContentWithNonNullNextPartStart() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor('test'));
         $this->parserMessageProxy->expects($this->atLeastOnce())
@@ -132,7 +142,7 @@ class NonMimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentReadsLinesToEnd()
+    public function testParseContentReadsLinesToEnd() : void
     {
         $str = "test\r\ntoost\r\ntoast";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -150,7 +160,7 @@ class NonMimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentReadsLinesToUUEncodeBeginLine()
+    public function testParseContentReadsLinesToUUEncodeBeginLine() : void
     {
         $first = "test\r\ntoost\r\n";
         $begin = "begin 714 test\r\n";
@@ -182,7 +192,7 @@ class NonMimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseNextChild()
+    public function testParseNextChild() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor('test'));
 
@@ -227,7 +237,7 @@ class NonMimeParserTest extends TestCase
         $this->assertSame('A little somefin', $this->instance->parseNextChild($this->parserMessageProxy));
     }
 
-    public function testParseNextChildWithNullNextPartStartOrHandleAtEof()
+    public function testParseNextChildWithNullNextPartStartOrHandleAtEof() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor('test'));
         \stream_get_contents($handle);

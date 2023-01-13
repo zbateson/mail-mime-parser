@@ -33,7 +33,7 @@ class SubjectConsumer extends GenericConsumer
      *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [];
     }
@@ -52,7 +52,7 @@ class SubjectConsumer extends GenericConsumer
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart|null the
      *         constructed header part or null if the token should be ignored
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
@@ -75,7 +75,7 @@ class SubjectConsumer extends GenericConsumer
      *
      * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
      */
-    protected function getTokenParts(Iterator $tokens)
+    protected function getTokenParts(Iterator $tokens) : array
     {
         return $this->getConsumerTokenParts($tokens);
     }
@@ -86,7 +86,7 @@ class SubjectConsumer extends GenericConsumer
      *
      * @return string the regex pattern
      */
-    protected function getTokenSplitPattern()
+    protected function getTokenSplitPattern() : string
     {
         $sChars = \implode('|', $this->getAllTokenSeparators());
         return '~(' . $sChars . ')~';

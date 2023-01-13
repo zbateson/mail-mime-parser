@@ -40,9 +40,9 @@ abstract class HeaderPart implements IHeaderPart
     /**
      * Returns the part's value.
      *
-     * @return string the value of the part
+     * @return ?string the value of the part
      */
-    public function getValue()
+    public function getValue() : ?string
     {
         return $this->value;
     }
@@ -52,7 +52,7 @@ abstract class HeaderPart implements IHeaderPart
      *
      * @return string the value
      */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->value;
     }
@@ -62,9 +62,8 @@ abstract class HeaderPart implements IHeaderPart
      * returned for MimeLiterals if the part begins with a mime-encoded string,
      * Tokens if the Token's value is a single space, and for CommentParts.
      *
-     * @return bool
      */
-    public function ignoreSpacesBefore()
+    public function ignoreSpacesBefore() : bool
     {
         return false;
     }
@@ -74,9 +73,8 @@ abstract class HeaderPart implements IHeaderPart
      * returned for MimeLiterals if the part ends with a mime-encoded string
      * Tokens if the Token's value is a single space, and for CommentParts.
      *
-     * @return bool
      */
-    public function ignoreSpacesAfter()
+    public function ignoreSpacesAfter() : bool
     {
         return false;
     }
@@ -88,12 +86,9 @@ abstract class HeaderPart implements IHeaderPart
      * if $force is set to false and mb_check_encoding for $str returns true
      * for 'UTF-8'.
      *
-     * @param string $str
-     * @param string $from
-     * @param bool $force
      * @return string utf-8 string
      */
-    protected function convertEncoding($str, $from = 'ISO-8859-1', $force = false)
+    protected function convertEncoding(string $str, string $from = 'ISO-8859-1', bool $force = false) : string
     {
         if ($from !== 'UTF-8') {
             // mime header part decoding will force it.  This is necessary for

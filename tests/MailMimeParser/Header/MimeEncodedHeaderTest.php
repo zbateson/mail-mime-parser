@@ -24,8 +24,10 @@ class MimeEncodedHeaderImpl extends MimeEncodedHeader
  */
 class MimeEncodedHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
+    // @phpstan-ignore-next-line
     protected $mimeLiteralPartFactory;
 
     protected function setUp() : void
@@ -48,7 +50,7 @@ class MimeEncodedHeaderTest extends TestCase
         $this->mimeLiteralPartFactory = $mlpf;
     }
 
-    private function newMimeEncodedHeader($name, $value)
+    private function newMimeEncodedHeader($name, $value) : MimeEncodedHeaderImpl
     {
         return new MimeEncodedHeaderImpl(
             $this->mimeLiteralPartFactory,
@@ -58,13 +60,13 @@ class MimeEncodedHeaderTest extends TestCase
         );
     }
 
-    public function testGetDecoded()
+    public function testGetDecoded() : void
     {
         $header = $this->newMimeEncodedHeader('Test', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('Kilgore Trout', $header->getValue());
     }
 
-    public function testMultipleDecoded()
+    public function testMultipleDecoded() : void
     {
         $header = $this->newMimeEncodedHeader(
             'Test',
@@ -73,7 +75,7 @@ class MimeEncodedHeaderTest extends TestCase
         $this->assertEquals('Kilgore  Tro ut', $header->getValue());
     }
 
-    public function testDecodeWhenMixed()
+    public function testDecodeWhenMixed() : void
     {
         $t = '=?US-ASCII?Q?Kilgore_?= TEST =?US-ASCII?Q?Tro?= =?US-ASCII?Q?ut?=';
         $header = $this->newMimeEncodedHeader(

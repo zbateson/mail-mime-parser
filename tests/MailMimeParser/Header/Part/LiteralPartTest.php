@@ -16,7 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class LiteralPartTest extends TestCase
 {
-    public function testInstance()
+    public function testInstance() : void
     {
         $charsetConverter = new MbWrapper();
 

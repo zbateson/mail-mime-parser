@@ -66,10 +66,8 @@ class SplitParameterToken extends HeaderPart
      * current object if $index is 0 and adds the value part to the encodedParts
      * array.
      *
-     * @param string $value
-     * @param int $index
      */
-    protected function extractMetaInformationAndValue($value, $index)
+    protected function extractMetaInformationAndValue(string $value, int $index) : void
     {
         if (\preg_match('~^([^\']*)\'([^\']*)\'(.*)$~', $value, $matches)) {
             if ($index === 0) {
@@ -116,9 +114,8 @@ class SplitParameterToken extends HeaderPart
      *
      * The returned string is converted to UTF-8 before being returned.
      *
-     * @return string
      */
-    private function getNextEncodedValue()
+    private function getNextEncodedValue() : string
     {
         $cur = \current($this->encodedParts);
         $key = \key($this->encodedParts);
@@ -142,10 +139,8 @@ class SplitParameterToken extends HeaderPart
     /**
      * Reconstructs the value of the split parameter into a single UTF-8 string
      * and returns it.
-     *
-     * @return string
      */
-    public function getValue()
+    public function getValue() : ?string
     {
         $parts = $this->literalParts;
 

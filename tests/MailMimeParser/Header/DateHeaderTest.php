@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DateHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
     protected function setUp() : void
@@ -36,7 +37,7 @@ class DateHeaderTest extends TestCase
             ->getMock();
     }
 
-    public function testSimpleDate()
+    public function testSimpleDate() : void
     {
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $header->getValue());
@@ -45,20 +46,20 @@ class DateHeaderTest extends TestCase
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $dt->format(\DateTime::RFC2822));
     }
 
-    public function testInvalidDate()
+    public function testInvalidDate() : void
     {
         $header = new DateHeader($this->consumerService, 'DATE', 'This is not a date');
         $this->assertNull($header->getDateTime());
         $this->assertEquals('This is not a date', $header->getValue());
     }
 
-    public function testDateWithEmptyPart()
+    public function testDateWithEmptyPart() : void
     {
         $header = new DateHeader($this->consumerService, 'DATE', '');
         $this->assertNull($header->getDateTime());
     }
 
-    public function testDateHeaderToString()
+    public function testDateHeaderToString() : void
     {
         $header = new DateHeader($this->consumerService, 'Date', 'Wed, 17 May 2000 19:08:29 -0400');
         $this->assertEquals('Date: Wed, 17 May 2000 19:08:29 -0400', $header);

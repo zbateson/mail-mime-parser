@@ -15,26 +15,37 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserMimePartProxyFactoryTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $streamFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $partStreamContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $partChildrenContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $partStreamContainer;
 
+    // @phpstan-ignore-next-line
     private $partChildrenContainer;
 
+    // @phpstan-ignore-next-line
     private $parser;
 
+    // @phpstan-ignore-next-line
     private $parent;
 
     protected function setUp() : void
@@ -78,7 +89,7 @@ class ParserMimePartProxyFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $this->headerContainerFactory->expects($this->once())
             ->method('newInstance')

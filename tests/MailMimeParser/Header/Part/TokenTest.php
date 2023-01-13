@@ -16,6 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class TokenTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
     protected function setUp() : void
@@ -23,7 +24,7 @@ class TokenTest extends TestCase
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testInstance()
+    public function testInstance() : void
     {
         $token = new Token($this->charsetConverter, 'testing');
         $this->assertNotNull($token);
@@ -31,14 +32,14 @@ class TokenTest extends TestCase
         $this->assertEquals('testing', (string) $token);
     }
 
-    public function testSpaceTokenValue()
+    public function testSpaceTokenValue() : void
     {
         $token = new Token($this->charsetConverter, ' ');
         $this->assertTrue($token->ignoreSpacesBefore());
         $this->assertTrue($token->ignoreSpacesAfter());
     }
 
-    public function testNonSpaceTokenValue()
+    public function testNonSpaceTokenValue() : void
     {
         $token = new Token($this->charsetConverter, 'Anything');
         $this->assertFalse($token->ignoreSpacesBefore());

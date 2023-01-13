@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DomainConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $domainConsumer;
 
     protected function setUp() : void
@@ -36,7 +37,7 @@ class DomainConsumerTest extends TestCase
         $this->domainConsumer = new DomainConsumer($cs, $pf, 'from');
     }
 
-    public function testConsumeParts()
+    public function testConsumeParts() : void
     {
         $aTests = [
             ['hello (blah.blooh [1.2.3.4])', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],

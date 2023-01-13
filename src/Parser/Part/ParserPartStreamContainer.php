@@ -76,7 +76,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      * Requests content from the parser if not previously requested, and calls
      * PartStreamContainer::setContentStream().
      */
-    protected function requestParsedContentStream()
+    protected function requestParsedContentStream() : void
     {
         if (!$this->contentParseRequested) {
             $this->contentParseRequested = true;
@@ -92,7 +92,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      * $this->parsedStream to the original parsed stream (or a limited part of
      * it corresponding to the current part this stream container belongs to).
      */
-    protected function requestParsedStream()
+    protected function requestParsedStream() : void
     {
         if ($this->parsedStream === null) {
             $this->parserProxy->parseAll();
@@ -105,25 +105,25 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         }
     }
 
-    public function hasContent()
+    public function hasContent() : bool
     {
         $this->requestParsedContentStream();
         return parent::hasContent();
     }
 
-    public function getContentStream($transferEncoding, $fromCharset, $toCharset)
+    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset)
     {
         $this->requestParsedContentStream();
         return parent::getContentStream($transferEncoding, $fromCharset, $toCharset);
     }
 
-    public function getBinaryContentStream($transferEncoding)
+    public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface
     {
         $this->requestParsedContentStream();
         return parent::getBinaryContentStream($transferEncoding);
     }
 
-    public function setContentStream(?StreamInterface $contentStream = null)
+    public function setContentStream(?StreamInterface $contentStream = null) : void
     {
         // has to be overridden because requestParsedContentStream calls
         // parent::setContentStream as well, so needs to be parsed before
@@ -144,11 +144,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getStream();
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject) : void
     {
         $this->partUpdated = true;
     }

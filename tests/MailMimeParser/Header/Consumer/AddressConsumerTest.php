@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AddressConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $addressConsumer;
 
     protected function setUp() : void
@@ -37,7 +38,7 @@ class AddressConsumerTest extends TestCase
         $this->addressConsumer = new AddressConsumer($cs, $pf);
     }
 
-    public function testConsumeEmail()
+    public function testConsumeEmail() : void
     {
         $email = 'Max.Payne@AddressUnknown.com';
         $ret = $this->addressConsumer->__invoke($email);
@@ -50,14 +51,14 @@ class AddressConsumerTest extends TestCase
         $this->assertEquals($email, $address->getEmail());
     }
 
-    public function testConsumeEmailWithSpaces()
+    public function testConsumeEmailWithSpaces() : void
     {
         $email = "Max\n\t  .Payne@AddressUnknown.com";
         $ret = $this->addressConsumer->__invoke($email);
         $this->assertEquals('Max.Payne@AddressUnknown.com', $ret[0]->getEmail());
     }
 
-    public function testConsumeEmailName()
+    public function testConsumeEmailName() : void
     {
         $email = 'Max Payne <Max.Payne@AddressUnknown.com>';
         $ret = $this->addressConsumer->__invoke($email);
@@ -70,7 +71,7 @@ class AddressConsumerTest extends TestCase
         $this->assertEquals('Max Payne', $address->getName());
     }
 
-    public function testConsumeMimeEncodedName()
+    public function testConsumeMimeEncodedName() : void
     {
         $email = '=?US-ASCII?Q?Kilgore_Trout?= <Kilgore.Trout@Iliyum.ny>';
         $ret = $this->addressConsumer->__invoke($email);
@@ -83,7 +84,7 @@ class AddressConsumerTest extends TestCase
         $this->assertEquals('Kilgore Trout', $address->getName());
     }
 
-    public function testConsumeEmailWithComments()
+    public function testConsumeEmailWithComments() : void
     {
         // can't remember any longer if this is how it should be handled
         // need to review RFC
@@ -97,7 +98,7 @@ class AddressConsumerTest extends TestCase
         $this->assertEquals('Max.Payne@AddressUnknown.com', $address->getEmail());
     }
 
-    public function testConsumeEmailWithQuotes()
+    public function testConsumeEmailWithQuotes() : void
     {
         $email = 'Max"(imum)..Payne (not a comment)"@AddressUnknown.com';
         $ret = $this->addressConsumer->__invoke($email);
@@ -109,21 +110,21 @@ class AddressConsumerTest extends TestCase
         $this->assertEquals('Max"(imum)..Payne (not a comment)"@AddressUnknown.com', $address->getEmail());
     }
 
-    public function testConsumeQuotedEmailLocalPartWithSpaces()
+    public function testConsumeQuotedEmailLocalPartWithSpaces() : void
     {
         $email = "\"Max\n\t  .Payne\"@AddressUnknown.com";
         $ret = $this->addressConsumer->__invoke($email);
         $this->assertEquals("\"Max\t  .Payne\"@AddressUnknown.com", $ret[0]->getEmail());
     }
 
-    public function testConsumeVeryStrangeQuotedEmailLocalPart()
+    public function testConsumeVeryStrangeQuotedEmailLocalPart() : void
     {
         $email = '"very.(),:;<>[]\"  .VERY.\"very@\\\\ \"very\".unusual"@strange.example.com';
         $ret = $this->addressConsumer->__invoke($email);
         $this->assertEquals($email, $ret[0]->getEmail());
     }
 
-    public function testConsumeAddressGroup()
+    public function testConsumeAddressGroup() : void
     {
         $email = 'Senate: Caesar@Dictator.com,Cicero@Philosophy.com, Marc Antony <MarcAntony@imawesome.it>';
         $ret = $this->addressConsumer->__invoke($email);

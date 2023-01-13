@@ -15,28 +15,40 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserNonMimeMessageProxyFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $streamFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $partStreamContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $partChildrenContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $multipartHelper;
 
+    // @phpstan-ignore-next-line
     private $privacyHelper;
 
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $partStreamContainer;
 
+    // @phpstan-ignore-next-line
     private $partChildrenContainer;
 
+    // @phpstan-ignore-next-line
     private $parser;
 
     protected function setUp() : void
@@ -84,7 +96,7 @@ class ParserNonMimeMessageProxyFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $this->headerContainerFactory->expects($this->once())
             ->method('newInstance')

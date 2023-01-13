@@ -16,7 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class AddressGroupPartTest extends TestCase
 {
-    public function testNameGroup()
+    public function testNameGroup() : void
     {
         $name = 'Roman Senate';
         $members = ['Caesar', 'Cicero', 'Cato'];

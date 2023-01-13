@@ -15,6 +15,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class HeaderPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $abstractHeaderPartStub;
 
     protected function setUp() : void
@@ -26,7 +27,7 @@ class HeaderPartTest extends TestCase
         $this->abstractHeaderPartStub = $stub;
     }
 
-    public function testIgnoreSpaces()
+    public function testIgnoreSpaces() : void
     {
         $this->assertFalse($this->abstractHeaderPartStub->ignoreSpacesBefore());
         $this->assertFalse($this->abstractHeaderPartStub->ignoreSpacesAfter());

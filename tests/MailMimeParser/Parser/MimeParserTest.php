@@ -17,24 +17,34 @@ use PHPUnit\Framework\TestCase;
  */
 class MimeParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $messageProxyFactory;
 
+    // @phpstan-ignore-next-line
     private $partProxyFactory;
 
+    // @phpstan-ignore-next-line
     private $partBuilderFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $headerParser;
 
+    // @phpstan-ignore-next-line
     private $parserManager;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $parserPartProxy;
 
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $instance;
 
     protected function setUp() : void
@@ -85,13 +95,13 @@ class MimeParserTest extends TestCase
             ->getMock();
     }
 
-    public function testAbstractParserGetters()
+    public function testAbstractParserGetters() : void
     {
         $this->assertSame($this->messageProxyFactory, $this->instance->getParserMessageProxyFactory());
         $this->assertSame($this->partProxyFactory, $this->instance->getParserPartProxyFactory());
     }
 
-    public function testCanParse()
+    public function testCanParse() : void
     {
         $this->partBuilder->expects($this->exactly(2))
             ->method('isMime')
@@ -100,7 +110,7 @@ class MimeParserTest extends TestCase
         $this->assertFalse($this->instance->canParse($this->partBuilder));
     }
 
-    public function testParseEmptyContent()
+    public function testParseEmptyContent() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor(''));
         $this->parserPartProxy->expects($this->once())
@@ -122,7 +132,7 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentLinesWithoutBoundary()
+    public function testParseContentLinesWithoutBoundary() : void
     {
         $str = "Some\r\nLines\r\nOf\r\nText";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -152,7 +162,7 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentLinesWithLeadingDashesWithoutBoundary()
+    public function testParseContentLinesWithLeadingDashesWithoutBoundary() : void
     {
         $str = "--Some\r\n--Lines\r\n--Of\r\n--Text";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -186,7 +196,7 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentLinesWithBoundary()
+    public function testParseContentLinesWithBoundary() : void
     {
         $str = "Some\r\nLines\r\n--Of\r\n--Text";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -220,7 +230,7 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentLinesWithBoundarySetsCorrectLastLineEndingLength()
+    public function testParseContentLinesWithBoundarySetsCorrectLastLineEndingLength() : void
     {
         $str = "Some\r\nLines\r\n--Of\n--Text";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -254,7 +264,7 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseContentLinesIgnoresLongBoundaryLine()
+    public function testParseContentLinesIgnoresLongBoundaryLine() : void
     {
         // 2044 + '--' + potential \r\n for 2048 limit
         $boundary = '--' . \str_repeat('t', 2044);
@@ -292,7 +302,7 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
-    public function testParseNextChild()
+    public function testParseNextChild() : void
     {
         $this->parserPartProxy->expects($this->once())
             ->method('isParentBoundaryFound')
@@ -322,7 +332,7 @@ class MimeParserTest extends TestCase
         $this->assertSame('groot', $this->instance->parseNextChild($this->parserPartProxy));
     }
 
-    public function testParseNextChildWhenParentBoundaryFoundReturnsNull()
+    public function testParseNextChildWhenParentBoundaryFoundReturnsNull() : void
     {
         $this->parserPartProxy->expects($this->once())
             ->method('isParentBoundaryFound')
@@ -330,7 +340,7 @@ class MimeParserTest extends TestCase
         $this->assertNull($this->instance->parseNextChild($this->parserPartProxy));
     }
 
-    public function testParseNextChildAfterParentEndBoundaryFound()
+    public function testParseNextChildAfterParentEndBoundaryFound() : void
     {
         $this->parserPartProxy->expects($this->once())
             ->method('isParentBoundaryFound')

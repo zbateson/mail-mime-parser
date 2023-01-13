@@ -92,10 +92,9 @@ class PartHeaderContainer implements IteratorAggregate
      * with the name "Content-Type", only headers that match exactly
      * "Content-Type" would be returned.
      *
-     * @param string $name
      * @return int[]|null
      */
-    private function getAllWithOriginalHeaderNameIfSet($name)
+    private function getAllWithOriginalHeaderNameIfSet(string $name) : ?array
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (isset($this->headerMap[$s])) {
@@ -152,10 +151,9 @@ class PartHeaderContainer implements IteratorAggregate
      * Returns the header in the headers array at the passed 0-based integer
      * index or null if one doesn't exist.
      *
-     * @param int $index
      * @return \ZBateson\MailMimeParser\Header\IHeader|null
      */
-    private function getByIndex($index)
+    private function getByIndex(int $index)
     {
         if (!isset($this->headers[$index])) {
             return null;
@@ -256,7 +254,7 @@ class PartHeaderContainer implements IteratorAggregate
      * Returns an array of IHeader objects representing all headers in this
      * collection.
      *
-     * @return IHeader[]
+     * @return \ZBateson\MailMimeParser\Header\IHeader[]
      */
     public function getHeaderObjects()
     {

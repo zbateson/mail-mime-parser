@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class GenericReceivedConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $genericConsumer;
 
     protected function setUp() : void
@@ -36,7 +37,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->genericConsumer = new GenericReceivedConsumer($cs, $pf, 'test');
     }
 
-    public function testConsumeTokens()
+    public function testConsumeTokens() : void
     {
         $value = "Je \t suis\nici";
 
@@ -46,7 +47,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->assertEquals('Je suis ici', $ret[0]);
     }
 
-    public function testEndsAtViaWithIdAndFor()
+    public function testEndsAtViaWithIdAndFor() : void
     {
         $tests = [
             'sweet via sugar',
@@ -62,7 +63,7 @@ class GenericReceivedConsumerTest extends TestCase
         }
     }
 
-    public function testWithSingleComments()
+    public function testWithSingleComments() : void
     {
         $str = 'sweet (via sugar) bee';
         $ret = $this->genericConsumer->__invoke($str);
@@ -72,7 +73,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->assertEquals('via sugar', $ret[1]->getComment());
     }
 
-    public function testWithMultipleComments()
+    public function testWithMultipleComments() : void
     {
         $str = 'sweet (as can) (surely) bee (innit)';
         $ret = $this->genericConsumer->__invoke($str);
@@ -84,7 +85,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->assertEquals('innit', $ret[3]->getComment());
     }
 
-    public function testWithSeparatorInWords()
+    public function testWithSeparatorInWords() : void
     {
         $str = 'bullets within abe and stuff';
         $ret = $this->genericConsumer->__invoke($str);

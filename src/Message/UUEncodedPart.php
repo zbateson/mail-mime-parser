@@ -26,7 +26,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      */
     protected $filename = null;
 
-    public function __construct($mode = null, $filename = null, ?IMimePart $parent = null, ?PartStreamContainer $streamContainer = null)
+    public function __construct(?int $mode = null, ?string $filename = null, ?IMimePart $parent = null, ?PartStreamContainer $streamContainer = null)
     {
         if ($streamContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
@@ -48,12 +48,12 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename() : ?string
     {
         return $this->filename;
     }
 
-    public function setFilename($filename)
+    public function setFilename(string $filename) : void
     {
         $this->filename = $filename;
         $this->notify();
@@ -66,9 +66,9 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      * determining its type since uuencoded 'begin' lines only include a file
      * name and no mime type.  The file name's extension may be a hint.
      *
-     * @return bool
+     * @return false
      */
-    public function isTextPart()
+    public function isTextPart() : bool
     {
         return false;
     }
@@ -78,47 +78,41 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
      *
      * @return string
      */
-    public function getContentType($default = 'application/octet-stream')
+    public function getContentType(string $default = 'application/octet-stream') : ?string
     {
         return 'application/octet-stream';
     }
 
     /**
      * Returns null
-     *
-     * @return string
      */
-    public function getCharset()
+    public function getCharset() : ?string
     {
         return null;
     }
 
     /**
      * Returns 'attachment'.
-     *
-     * @return string
      */
-    public function getContentDisposition($default = 'attachment')
+    public function getContentDisposition(?string $default = 'attachment') : ?string
     {
         return 'attachment';
     }
 
     /**
      * Returns 'x-uuencode'.
-     *
-     * @return string
      */
-    public function getContentTransferEncoding($default = 'x-uuencode')
+    public function getContentTransferEncoding(?string $default = 'x-uuencode') : ?string
     {
         return 'x-uuencode';
     }
 
-    public function getUnixFileMode()
+    public function getUnixFileMode() : ?int
     {
         return $this->mode;
     }
 
-    public function setUnixFileMode($mode)
+    public function setUnixFileMode(int $mode) : void
     {
         $this->mode = $mode;
         $this->notify();

@@ -15,6 +15,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class MimeLiteralPartFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $headerPartFactory;
 
     protected function setUp() : void
@@ -23,7 +24,7 @@ class MimeLiteralPartFactoryTest extends TestCase
         $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $token = $this->headerPartFactory->newInstance('Test');
         $this->assertNotNull($token);

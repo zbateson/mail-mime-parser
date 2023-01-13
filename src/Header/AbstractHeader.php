@@ -46,7 +46,7 @@ abstract class AbstractHeader implements IHeader
      * @param string $name Name of the header.
      * @param string $value Value of the header.
      */
-    public function __construct(ConsumerService $consumerService, $name, $value)
+    public function __construct(ConsumerService $consumerService, string $name, string $value)
     {
         $this->name = $name;
         $this->rawValue = $value;
@@ -68,17 +68,20 @@ abstract class AbstractHeader implements IHeader
      * The default implementation assigns the returned value to $this->part.
      *
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
     {
         $this->parts = $consumer($this->rawValue);
     }
 
-    public function getParts()
+    /**
+     * @return IHeaderPart[]
+     */
+    public function getParts() : array
     {
         return $this->parts;
     }
 
-    public function getValue()
+    public function getValue() : ?string
     {
         if (!empty($this->parts)) {
             return $this->parts[0]->getValue();
@@ -86,17 +89,17 @@ abstract class AbstractHeader implements IHeader
         return null;
     }
 
-    public function getRawValue()
+    public function getRawValue() : string
     {
         return $this->rawValue;
     }
 
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return "{$this->name}: {$this->rawValue}";
     }

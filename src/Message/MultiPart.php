@@ -38,7 +38,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         $this->partChildrenContainer = $partChildrenContainer;
     }
 
-    private function getAllPartsIterator()
+    private function getAllPartsIterator() : AppendIterator
     {
         $iter = new AppendIterator();
         $iter->append(new ArrayIterator([$this]));
@@ -134,7 +134,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         });
     }
 
-    public function addChild(IMessagePart $part, $position = null)
+    public function addChild(IMessagePart $part, ?int $position = null)
     {
         if ($part !== $this) {
             $part->parent = $this;
@@ -143,21 +143,21 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         }
     }
 
-    public function removePart(IMessagePart $part)
+    public function removePart(IMessagePart $part) : ?int
     {
         $parent = $part->getParent();
         if ($this !== $parent && $parent !== null) {
             return $parent->removePart($part);
         }
-            $position = $this->partChildrenContainer->remove($part);
-            if ($position !== null) {
-                $this->notify();
-            }
-            return $position;
 
+        $position = $this->partChildrenContainer->remove($part);
+        if ($position !== null) {
+            $this->notify();
+        }
+        return $position;
     }
 
-    public function removeAllParts($fnFilter = null)
+    public function removeAllParts($fnFilter = null) : int
     {
         $parts = $this->getAllParts($fnFilter);
         $count = \count($parts);

@@ -35,7 +35,7 @@ class IdHeader extends MimeEncodedHeader
      *
      * @return string|null The ID
      */
-    public function getId()
+    public function getId() : ?string
     {
         return $this->getValue();
     }
@@ -46,7 +46,7 @@ class IdHeader extends MimeEncodedHeader
      *
      * @return string[] An array of IDs
      */
-    public function getIds()
+    public function getIds() : array
     {
         return $this->parts;
     }

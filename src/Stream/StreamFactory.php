@@ -45,7 +45,7 @@ class StreamFactory
      * Returns a SeekingLimitStream using $part->getStreamContentLength() and
      * $part->getStreamContentStartPos()
      *
-     * @return SeekingLimitStream
+     * @return ?SeekingLimitStream
      */
     public function getLimitedContentStream(PartBuilder $part)
     {
@@ -63,11 +63,8 @@ class StreamFactory
     /**
      * Creates and returns a SeekingLimitedStream.
      *
-     * @param int $length
-     * @param int $start
-     * @return SeekingLimitStream
      */
-    private function newLimitStream(StreamInterface $stream, $length, $start)
+    private function newLimitStream(StreamInterface $stream, int $length, int $start) : SeekingLimitStream
     {
         return new SeekingLimitStream(
             $this->newNonClosingStream($stream),
@@ -133,11 +130,9 @@ class StreamFactory
     /**
      * Creates and returns a CharsetStream
      *
-     * @param string $fromCharset
-     * @param string $toCharset
      * @return CharsetStream
      */
-    public function newCharsetStream(StreamInterface $stream, $fromCharset, $toCharset)
+    public function newCharsetStream(StreamInterface $stream, string $fromCharset, string $toCharset)
     {
         return new CharsetStream($stream, $fromCharset, $toCharset);
     }

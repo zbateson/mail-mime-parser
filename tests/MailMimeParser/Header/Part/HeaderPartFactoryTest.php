@@ -15,6 +15,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class HeaderPartFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $headerPartFactory;
 
     protected function setUp() : void
@@ -23,77 +24,77 @@ class HeaderPartFactoryTest extends TestCase
         $this->headerPartFactory = new HeaderPartFactory($charsetConverter);
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $token = $this->headerPartFactory->newInstance('Test');
         $this->assertNotNull($token);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\Token::class, $token);
     }
 
-    public function testNewToken()
+    public function testNewToken() : void
     {
         $token = $this->headerPartFactory->newToken('Test');
         $this->assertNotNull($token);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\Token::class, $token);
     }
 
-    public function testNewSplitParameterToken()
+    public function testNewSplitParameterToken() : void
     {
         $token = $this->headerPartFactory->newSplitParameterToken('Test');
         $this->assertNotNull($token);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\SplitParameterToken::class, $token);
     }
 
-    public function testNewLiteralPart()
+    public function testNewLiteralPart() : void
     {
         $part = $this->headerPartFactory->newLiteralPart('Test');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $part);
     }
 
-    public function testNewMimeLiteralPart()
+    public function testNewMimeLiteralPart() : void
     {
         $part = $this->headerPartFactory->newMimeLiteralPart('Test');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::class, $part);
     }
 
-    public function testNewCommentPart()
+    public function testNewCommentPart() : void
     {
         $part = $this->headerPartFactory->newCommentPart('Test');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $part);
     }
 
-    public function testNewAddressPart()
+    public function testNewAddressPart() : void
     {
         $part = $this->headerPartFactory->newAddressPart('Test', 'Test');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $part);
     }
 
-    public function testNewAddressGroupPart()
+    public function testNewAddressGroupPart() : void
     {
         $part = $this->headerPartFactory->newAddressGroupPart(['Test']);
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $part);
     }
 
-    public function testNewDatePart()
+    public function testNewDatePart() : void
     {
         $part = $this->headerPartFactory->newDatePart('Test');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\DatePart::class, $part);
     }
 
-    public function testNewParameterPart()
+    public function testNewParameterPart() : void
     {
         $part = $this->headerPartFactory->newParameterPart('Test', 'Value');
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ParameterPart::class, $part);
     }
 
-    public function testNewReceivedPart()
+    public function testNewReceivedPart() : void
     {
         $part = $this->headerPartFactory->newReceivedPart('Test', 'Value');
         $this->assertNotNull($part);
@@ -102,7 +103,7 @@ class HeaderPartFactoryTest extends TestCase
         $this->assertEquals('Value', $part->getValue());
     }
 
-    public function testNewReceivedDomainPart()
+    public function testNewReceivedDomainPart() : void
     {
         $part = $this->headerPartFactory->newReceivedDomainPart('Test', 'Value', 'ehlo', 'host', 'addr');
         $this->assertNotNull($part);

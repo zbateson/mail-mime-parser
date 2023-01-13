@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SubjectHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
     protected function setUp() : void
@@ -36,7 +37,7 @@ class SubjectHeaderTest extends TestCase
             ->getMock();
     }
 
-    public function testParsing()
+    public function testParsing() : void
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
@@ -45,7 +46,7 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Hunted-By', $header->getName());
     }
 
-    public function testMultilineMimeParts()
+    public function testMultilineMimeParts() : void
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', '=?US-ASCII?Q?Hunt?=
              =?US-ASCII?Q?er_S._?=
@@ -53,13 +54,13 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
 
-    public function testMultilineMimePartsWithTextAtTheEnd()
+    public function testMultilineMimePartsWithTextAtTheEnd() : void
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', "Hunt=?UTF-8?Q?er_S._Th?=\r\n=?UTF-8?Q?ompson?= Jr.");
         $this->assertEquals('Hunter S. Thompson Jr.', $header->getValue());
     }
 
-    public function testMultilineMimePartWithParentheses()
+    public function testMultilineMimePartWithParentheses() : void
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', ' =?koi8-r?B?9MXIzsnexdPLycUg0sHCz9TZIChFUlAg58HMwcvUycvBIMkg79TexdTZIPTk?=
             =?koi8-r?Q?)?=');
@@ -71,7 +72,7 @@ class SubjectHeaderTest extends TestCase
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
      */
-    public function testQuotesMimeAndComments()
+    public function testQuotesMimeAndComments() : void
     {
         $header = new SubjectHeader(
             $this->consumerService,
@@ -81,7 +82,7 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('"Dwayne \"The Rock\"" Johnson (main actor)', $header->getValue());
     }
 
-    public function testQuotedMimeEncodedPart()
+    public function testQuotedMimeEncodedPart() : void
     {
         $header = new SubjectHeader(
             $this->consumerService,
@@ -91,7 +92,7 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('"Johnson"', $header->getValue());
     }
 
-    public function testCommentBetweenParts()
+    public function testCommentBetweenParts() : void
     {
         $header = new SubjectHeader(
             $this->consumerService,
@@ -101,7 +102,7 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Dwayne (The Rock) Jackson', $header->getValue());
     }
 
-    public function testWhiteSpace()
+    public function testWhiteSpace() : void
     {
         $header = new SubjectHeader(
             $this->consumerService,
@@ -111,7 +112,7 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Dwayne  Double Spaced  Jackson', $header->getValue());
     }
 
-    public function testMultilineWhiteSpace()
+    public function testMultilineWhiteSpace() : void
     {
         $header = new SubjectHeader(
             $this->consumerService,
@@ -121,7 +122,7 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Dwayne Double Spaced  Jackson', $header->getValue());
     }
 
-    public function testSubjectHeaderToString()
+    public function testSubjectHeaderToString() : void
     {
         $header = new SubjectHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunted-By: Hunter S. Thompson', $header);

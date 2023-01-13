@@ -36,7 +36,7 @@ class UUEncodedPartHeaderContainerFactory
      *
      * @return UUEncodedPartHeaderContainer
      */
-    public function newInstance($mode, $filename)
+    public function newInstance(int $mode, string $filename)
     {
         $container = new UUEncodedPartHeaderContainer($this->headerFactory);
         $container->setUnixFileMode($mode);

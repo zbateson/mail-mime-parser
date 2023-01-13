@@ -47,9 +47,8 @@ class MimeParser extends AbstractParser
     /**
      * Returns true if the passed PartBuilder::isMime() method returns true.
      *
-     * @return bool
      */
-    public function canParse(PartBuilder $part)
+    public function canParse(PartBuilder $part) : bool
     {
         return $part->isMime();
     }
@@ -63,9 +62,8 @@ class MimeParser extends AbstractParser
      * findContentBoundary() to set the exact end byte of a part.
      *
      * @param resource $handle
-     * @return string
      */
-    private function readBoundaryLine($handle, ParserMimePartProxy $proxy)
+    private function readBoundaryLine($handle, ParserMimePartProxy $proxy) : string
     {
         $size = 2048;
         $isCut = false;
@@ -95,7 +93,7 @@ class MimeParser extends AbstractParser
      * were read.
      *
      */
-    private function findContentBoundary(ParserMimePartProxy $proxy)
+    private function findContentBoundary(ParserMimePartProxy $proxy) : void
     {
         $handle = $proxy->getMessageResourceHandle();
         // last separator before a boundary belongs to the boundary, and is not
@@ -112,7 +110,7 @@ class MimeParser extends AbstractParser
         $proxy->setEof();
     }
 
-    public function parseContent(ParserPartProxy $proxy)
+    public function parseContent(ParserPartProxy $proxy) : void
     {
         $proxy->setStreamContentStartPos($proxy->getMessageResourceHandlePos());
         $this->findContentBoundary($proxy);

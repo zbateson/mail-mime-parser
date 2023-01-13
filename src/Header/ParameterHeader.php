@@ -54,7 +54,7 @@ class ParameterHeader extends AbstractHeader
      * names to ParameterParts.
      *
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
@@ -68,9 +68,8 @@ class ParameterHeader extends AbstractHeader
      * Returns true if a parameter exists with the passed name.
      *
      * @param string $name The parameter to look up.
-     * @return bool
      */
-    public function hasParameter($name)
+    public function hasParameter(string $name) : bool
     {
         return isset($this->parameters[\strtolower($name)]);
     }
@@ -84,7 +83,7 @@ class ParameterHeader extends AbstractHeader
      *        not provided).
      * @return string|null The parameter's value.
      */
-    public function getValueFor($name, $defaultValue = null)
+    public function getValueFor(string $name, ?string $defaultValue = null) : ?string
     {
         if (!$this->hasParameter($name)) {
             return $defaultValue;

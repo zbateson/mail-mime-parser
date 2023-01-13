@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartStreamContainerFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
     protected function setUp() : void
@@ -26,7 +27,7 @@ class PartStreamContainerFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(

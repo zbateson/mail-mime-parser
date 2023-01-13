@@ -15,14 +15,19 @@ use PHPUnit\Framework\TestCase;
  */
 class MessageParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $partBuilderFactory;
 
+    // @phpstan-ignore-next-line
     private $partHeaderContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $parserManager;
 
+    // @phpstan-ignore-next-line
     private $headerParser;
 
     protected function setUp() : void
@@ -48,7 +53,7 @@ class MessageParserTest extends TestCase
         );
     }
 
-    public function testParse()
+    public function testParse() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $msg = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
@@ -92,7 +97,7 @@ class MessageParserTest extends TestCase
         $stream->close();
     }
 
-    public function testReadLine()
+    public function testReadLine() : void
     {
         $stream = Psr7\Utils::streamFor(
             "This is a string\n"
@@ -107,7 +112,7 @@ class MessageParserTest extends TestCase
         $stream->close();
     }
 
-    public function testReadLineWith4096Chars()
+    public function testReadLineWith4096Chars() : void
     {
         $checkDiscarded = \str_repeat('a', 4096);
         $checkLarger = $checkDiscarded . $checkDiscarded;

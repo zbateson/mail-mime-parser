@@ -251,7 +251,7 @@ interface IMultiPart extends IMessagePart
      * @param IMessagePart $part The part to add.
      * @param int $position Optional insertion position 0-based index.
      */
-    public function addChild(IMessagePart $part, $position = null);
+    public function addChild(IMessagePart $part, ?int $position = null);
 
     /**
      * Removes the child part from this part and returns its previous position
@@ -270,7 +270,7 @@ interface IMultiPart extends IMessagePart
      * @return int|null The previous index position of the part within its old
      *         parent.
      */
-    public function removePart(IMessagePart $part);
+    public function removePart(IMessagePart $part) : ?int;
 
     /**
      * Removes all parts below the current part.  If a callable filter is
@@ -286,5 +286,5 @@ interface IMultiPart extends IMessagePart
      *        returning true if the part should be included.
      * @return int The number of removed parts.
      */
-    public function removeAllParts($fnFilter = null);
+    public function removeAllParts($fnFilter = null) : int;
 }

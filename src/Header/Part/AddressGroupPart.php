@@ -31,9 +31,8 @@ class AddressGroupPart extends MimeLiteralPart
      * optional name (which may be mime-encoded).
      *
      * @param AddressPart[] $addresses
-     * @param string $name
      */
-    public function __construct(MbWrapper $charsetConverter, array $addresses, $name = '')
+    public function __construct(MbWrapper $charsetConverter, array $addresses, string $name = '')
     {
         parent::__construct($charsetConverter, \trim($name));
         $this->addresses = $addresses;
@@ -44,7 +43,7 @@ class AddressGroupPart extends MimeLiteralPart
      *
      * @return AddressPart[] An array of address parts.
      */
-    public function getAddresses()
+    public function getAddresses() : array
     {
         return $this->addresses;
     }
@@ -55,7 +54,7 @@ class AddressGroupPart extends MimeLiteralPart
      * @param int $index The 0-based index.
      * @return AddressPart|null The address.
      */
-    public function getAddress($index)
+    public function getAddress(int $index)
     {
         if (!isset($this->addresses[$index])) {
             return null;
@@ -68,7 +67,7 @@ class AddressGroupPart extends MimeLiteralPart
      *
      * @return string The name
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->value;
     }

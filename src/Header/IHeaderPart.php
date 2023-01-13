@@ -22,12 +22,12 @@ interface IHeaderPart
      *
      * @return string The value of the part
      */
-    public function getValue();
+    public function getValue() : ?string;
 
     /**
      * Returns the value of the part (which is a string).
      *
      * @return string The value
      */
-    public function __toString();
+    public function __toString() : string;
 }

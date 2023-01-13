@@ -29,10 +29,8 @@ class AddressPart extends ParameterPart
      * The passed $name may be mime-encoded.  $email is stripped of any
      * whitespace.
      *
-     * @param string $name
-     * @param string $email
      */
-    public function __construct(MbWrapper $charsetConverter, $name, $email)
+    public function __construct(MbWrapper $charsetConverter, string $name, string $email)
     {
         parent::__construct(
             $charsetConverter,
@@ -48,7 +46,7 @@ class AddressPart extends ParameterPart
      *
      * @return string The email address.
      */
-    public function getEmail()
+    public function getEmail() : string
     {
         return $this->value;
     }

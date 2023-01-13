@@ -91,9 +91,8 @@ class ReceivedDomainPart extends ReceivedPart
      * Returns the address of the server, or whatever string that looks like an
      * address in the address position when parsing (but never a hostname).
      *
-     * @return string|null
      */
-    public function getAddress()
+    public function getAddress() : ?string
     {
         return $this->address;
     }

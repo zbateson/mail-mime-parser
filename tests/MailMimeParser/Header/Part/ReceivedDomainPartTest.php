@@ -16,6 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class ReceivedDomainPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
     protected function setUp() : void
@@ -23,7 +24,7 @@ class ReceivedDomainPartTest extends TestCase
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testBasicNameValueAndDomainParts()
+    public function testBasicNameValueAndDomainParts() : void
     {
         $part = new ReceivedDomainPart($this->charsetConverter, 'Name', 'Value', 'ehlo', 'hostname', 'address');
         $this->assertEquals('Name', $part->getName());

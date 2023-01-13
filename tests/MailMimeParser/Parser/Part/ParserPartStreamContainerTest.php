@@ -15,10 +15,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserPartStreamContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $streamFactory;
 
+    // @phpstan-ignore-next-line
     private $proxy;
 
     protected function setUp() : void
@@ -33,7 +36,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
     }
 
-    public function testHasContentRequestsContentStream()
+    public function testHasContentRequestsContentStream() : void
     {
         $this->proxy->expects($this->once())
             ->method('parseContent');
@@ -47,7 +50,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertFalse($this->instance->hasContent());
     }
 
-    public function testHasContentRequestsContentStreamReturnsTrue()
+    public function testHasContentRequestsContentStreamReturnsTrue() : void
     {
         $stream = Utils::streamFor('Fighting bears');
 
@@ -63,7 +66,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertTrue($this->instance->hasContent());
     }
 
-    public function testGetContentRequestsContentStream()
+    public function testGetContentRequestsContentStream() : void
     {
         $this->proxy->expects($this->once())
             ->method('parseContent');
@@ -77,7 +80,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertNull($this->instance->getContentStream('7bit', '', ''));
     }
 
-    public function testGetContentRequestsContentStreamReturnsStream()
+    public function testGetContentRequestsContentStreamReturnsStream() : void
     {
         $stream = Utils::streamFor('Fighting bears');
 
@@ -93,7 +96,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertSame('Fighting bears', $this->instance->getContentStream('7bit', '', '')->getContents());
     }
 
-    public function testGetBinaryContentRequestsContentStream()
+    public function testGetBinaryContentRequestsContentStream() : void
     {
         $this->proxy->expects($this->once())
             ->method('parseContent');
@@ -107,7 +110,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertNull($this->instance->getBinaryContentStream('7bit'));
     }
 
-    public function testGetBinaryContentRequestsContentStreamReturnsStream()
+    public function testGetBinaryContentRequestsContentStreamReturnsStream() : void
     {
         $stream = Utils::streamFor('Fighting bears');
 
@@ -123,7 +126,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream('7bit')->getContents());
     }
 
-    public function testSetContentStreamRequestsContentStream()
+    public function testSetContentStreamRequestsContentStream() : void
     {
         $this->proxy->expects($this->once())
             ->method('parseContent');
@@ -137,7 +140,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->instance->setContentStream(Utils::streamFor(''));
     }
 
-    public function testGetStreamParsesPart()
+    public function testGetStreamParsesPart() : void
     {
         $stream = Utils::streamFor('Fighting bears');
 
@@ -153,7 +156,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertSame($stream, $this->instance->getStream());
     }
 
-    public function testGetStreamAfterUpdate()
+    public function testGetStreamAfterUpdate() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars');
         $stream = Utils::streamFor('Fighting bears');
@@ -175,7 +178,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertSame($stream, $this->instance->getStream());
     }
 
-    public function testDetachedParsedStream()
+    public function testDetachedParsedStream() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => true]]);
         $instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
@@ -193,7 +196,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertFalse($parsedStream->isReadable());
     }
 
-    public function testAttachedParsedStream()
+    public function testAttachedParsedStream() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => false]]);
         $instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);

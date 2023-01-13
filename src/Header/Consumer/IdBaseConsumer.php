@@ -28,7 +28,7 @@ class IdBaseConsumer extends AbstractConsumer
      *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [
             $this->consumerService->getCommentConsumer(),
@@ -42,7 +42,7 @@ class IdBaseConsumer extends AbstractConsumer
      *
      * @return string[] an array of regex pattern matchers.
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return ['\s+'];
     }
@@ -50,11 +50,8 @@ class IdBaseConsumer extends AbstractConsumer
     /**
      * IdBaseConsumer doesn't have start/end tokens, and so always returns
      * false.
-     *
-     * @param string $token
-     * @return bool false
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return false;
     }
@@ -64,10 +61,8 @@ class IdBaseConsumer extends AbstractConsumer
      * false.
      *
      * @codeCoverageIgnore
-     * @param string $token
-     * @return bool false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return false;
     }
@@ -81,7 +76,7 @@ class IdBaseConsumer extends AbstractConsumer
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null the constructed
      *         header part or null if the token should be ignored
      */
-    protected function getPartForToken($token, $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral)
     {
         if (\preg_match('/^\s+$/', $token)) {
             return null;
@@ -95,7 +90,7 @@ class IdBaseConsumer extends AbstractConsumer
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         return \array_values(\array_filter($parts, function($part) {
             return !(empty($part) || $part instanceof CommentPart);

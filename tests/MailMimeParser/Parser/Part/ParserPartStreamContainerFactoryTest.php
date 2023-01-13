@@ -14,8 +14,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserPartStreamContainerFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $proxy;
 
     protected function setUp() : void
@@ -26,7 +28,7 @@ class ParserPartStreamContainerFactoryTest extends TestCase
         $this->instance = new ParserPartChildrenContainerFactory();
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $ob = $this->instance->newInstance($this->proxy);
         $this->assertInstanceOf(

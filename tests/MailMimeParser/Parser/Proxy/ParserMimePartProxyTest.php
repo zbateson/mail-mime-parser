@@ -15,14 +15,19 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserMimePartProxyTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $parser;
 
+    // @phpstan-ignore-next-line
     private $parentParser;
 
+    // @phpstan-ignore-next-line
     private $parent;
 
     protected function setUp() : void
@@ -45,7 +50,7 @@ class ParserMimePartProxyTest extends TestCase
             ->getMock();
     }
 
-    public function testSetGetPart()
+    public function testSetGetPart() : void
     {
         $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()
@@ -55,7 +60,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertSame($part, $instance->getPart());
     }
 
-    public function testParseContent()
+    public function testParseContent() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
@@ -71,7 +76,7 @@ class ParserMimePartProxyTest extends TestCase
         $instance->parseContent();
     }
 
-    public function testParseAllParsesContent()
+    public function testParseAllParsesContent() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
@@ -87,7 +92,7 @@ class ParserMimePartProxyTest extends TestCase
         $instance->parseAll();
     }
 
-    public function testPopNextChild()
+    public function testPopNextChild() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
@@ -119,7 +124,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertNull($instance->popNextChild());
     }
 
-    public function testPopNextChildParsesContent()
+    public function testPopNextChildParsesContent() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
@@ -139,7 +144,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertNull($instance->popNextChild());
     }
 
-    public function testParseAllParsesContentAndChildren()
+    public function testParseAllParsesContentAndChildren() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
@@ -164,7 +169,7 @@ class ParserMimePartProxyTest extends TestCase
         $instance->parseAll();
     }
 
-    public function testPopChildrenAfterParseAll()
+    public function testPopChildrenAfterParseAll() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder
@@ -197,7 +202,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertNull($instance->popNextChild());
     }
 
-    public function testGetHeaderContainer()
+    public function testGetHeaderContainer() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder->expects($this->once())
@@ -206,7 +211,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertSame($this->headerContainer, $instance->getHeaderContainer());
     }
 
-    public function testGetContentType()
+    public function testGetContentType() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $this->partBuilder->expects($this->once())
@@ -219,7 +224,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertSame('Fruity', $instance->getContentType());
     }
 
-    public function testGetMimeBoundary()
+    public function testGetMimeBoundary() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
@@ -245,7 +250,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertSame('Personal Space', $instance->getMimeBoundary());
     }
 
-    public function testGetNullMimeBoundary()
+    public function testGetNullMimeBoundary() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
@@ -263,7 +268,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertNull($instance->getMimeBoundary());
     }
 
-    public function testSetEndBoundaryFound()
+    public function testSetEndBoundaryFound() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
@@ -294,7 +299,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertFalse($instance->isParentBoundaryFound());
     }
 
-    public function testSetEndBoundaryFoundWithParentBoundary()
+    public function testSetEndBoundaryFoundWithParentBoundary() : void
     {
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
 
@@ -318,7 +323,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertTrue($instance->isParentBoundaryFound());
     }
 
-    public function testSetEof()
+    public function testSetEof() : void
     {
         $parentPb = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
@@ -346,7 +351,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertFalse($instance->isEndBoundaryFound());
     }
 
-    public function testSetGetLastLineEndingLength()
+    public function testSetGetLastLineEndingLength() : void
     {
         $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()

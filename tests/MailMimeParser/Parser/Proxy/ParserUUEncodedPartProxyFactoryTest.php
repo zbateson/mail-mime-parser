@@ -15,20 +15,28 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserUUEncodedPartProxyFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
+    // @phpstan-ignore-next-line
     private $streamFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $partStreamContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
 
+    // @phpstan-ignore-next-line
     private $partStreamContainer;
 
+    // @phpstan-ignore-next-line
     private $parser;
 
+    // @phpstan-ignore-next-line
     private $parent;
 
     protected function setUp() : void
@@ -63,7 +71,7 @@ class ParserUUEncodedPartProxyFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $this->partStreamContainerFactory->expects($this->once())
             ->method('newInstance')

@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DateConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $dateConsumer;
 
     protected function setUp() : void
@@ -38,7 +39,7 @@ class DateConsumerTest extends TestCase
         $this->dateConsumer = new DateConsumer($cs, $pf);
     }
 
-    public function testConsumeDates()
+    public function testConsumeDates() : void
     {
         $date = 'Wed, 17 May 2000 19:08:29 -0400';
         $ret = $this->dateConsumer->__invoke($date);
@@ -49,7 +50,7 @@ class DateConsumerTest extends TestCase
         $this->assertEquals($date, $ret[0]->getDateTime()->format(DateTime::RFC2822));
     }
 
-    public function testConsumeDateWithComment()
+    public function testConsumeDateWithComment() : void
     {
         $dateTest = 'Wed, 17 May 2000 19:08:29 -0400 (some comment)';
         $actDate = 'Wed, 17 May 2000 19:08:29 -0400';

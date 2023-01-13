@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConsumerServiceTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $consumerService;
 
     protected function setUp() : void
@@ -33,63 +34,63 @@ class ConsumerServiceTest extends TestCase
         $this->consumerService = new ConsumerService($pf, $mlpf);
     }
 
-    public function testGetAddressBaseConsumer()
+    public function testGetAddressBaseConsumer() : void
     {
         $consumer = $this->consumerService->getAddressBaseConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumer::class, $consumer);
     }
 
-    public function testGetAddressConsumer()
+    public function testGetAddressConsumer() : void
     {
         $consumer = $this->consumerService->getAddressConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\AddressConsumer::class, $consumer);
     }
 
-    public function testGetAddressEmailConsumer()
+    public function testGetAddressEmailConsumer() : void
     {
         $consumer = $this->consumerService->getAddressEmailConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumer::class, $consumer);
     }
 
-    public function testGetAddressGroupConsumer()
+    public function testGetAddressGroupConsumer() : void
     {
         $consumer = $this->consumerService->getAddressGroupConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumer::class, $consumer);
     }
 
-    public function testGetCommentConsumer()
+    public function testGetCommentConsumer() : void
     {
         $consumer = $this->consumerService->getCommentConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\CommentConsumer::class, $consumer);
     }
 
-    public function testGetGenericConsumer()
+    public function testGetGenericConsumer() : void
     {
         $consumer = $this->consumerService->getGenericConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\GenericConsumer::class, $consumer);
     }
 
-    public function testGetQuotedStringConsumer()
+    public function testGetQuotedStringConsumer() : void
     {
         $consumer = $this->consumerService->getQuotedStringConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::class, $consumer);
     }
 
-    public function testGetDateConsumer()
+    public function testGetDateConsumer() : void
     {
         $consumer = $this->consumerService->getDateConsumer();
         $this->assertNotNull($consumer);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Consumer\DateConsumer::class, $consumer);
     }
 
-    public function testGetParameterConsumer()
+    public function testGetParameterConsumer() : void
     {
         $consumer = $this->consumerService->getParameterConsumer();
         $this->assertNotNull($consumer);

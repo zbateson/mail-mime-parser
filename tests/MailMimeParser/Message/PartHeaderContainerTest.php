@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartHeaderContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $mockHeaderFactory;
 
     protected function setUp() : void
@@ -24,7 +25,7 @@ class PartHeaderContainerTest extends TestCase
             ->getMock();
     }
 
-    public function testAddExistsGet()
+    public function testAddExistsGet() : void
     {
         $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
@@ -58,7 +59,7 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals($headers, $ob->getHeaders());
     }
 
-    public function testAddExistsGetSameName()
+    public function testAddExistsGetSameName() : void
     {
         $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('repeated', 'first');
@@ -103,7 +104,7 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals($headers, $ob->getHeaders());
     }
 
-    public function testAddSetExistsGet()
+    public function testAddSetExistsGet() : void
     {
         $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->set('first', 'value');
@@ -161,7 +162,7 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals($headers, $ob->getHeaders());
     }
 
-    public function testAddRemoveGet()
+    public function testAddRemoveGet() : void
     {
         $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
@@ -214,7 +215,7 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals('second-updated', $ob->get('second'));
     }
 
-    public function testAddRemoveAllGet()
+    public function testAddRemoveAllGet() : void
     {
         $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
