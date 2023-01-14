@@ -191,7 +191,7 @@ interface IMessagePart extends SplSubject
      * @see IMessagePart::saveContent() to save the binary contents to file.
      * @return StreamInterface|null the stream
      */
-    public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface;
+    public function getBinaryContentStream();
 
     /**
      * Returns a resource handle for the content's raw data stream, or null if

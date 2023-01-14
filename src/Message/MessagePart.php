@@ -114,7 +114,7 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface
+    public function getBinaryContentStream()
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
