@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
@@ -14,7 +15,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  * For a multi-id header like In-Reply-To or References, all IDs can be
  * retrieved by calling {@see IdHeader::getIds()}.  Otherwise, to retrieve the
  * first (or only) ID call {@see IdHeader::getValue()}.
- * 
+ *
  * @author Zaahid Bateson
  */
 class IdHeader extends MimeEncodedHeader
@@ -22,7 +23,6 @@ class IdHeader extends MimeEncodedHeader
     /**
      * Returns an IdBaseConsumer.
      *
-     * @param ConsumerService $consumerService
      * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
@@ -35,7 +35,7 @@ class IdHeader extends MimeEncodedHeader
      *
      * @return string|null The ID
      */
-    public function getId()
+    public function getId() : ?string
     {
         return $this->getValue();
     }
@@ -43,10 +43,10 @@ class IdHeader extends MimeEncodedHeader
     /**
      * Returns all IDs parsed for a multi-id header like References or
      * In-Reply-To.
-     * 
+     *
      * @return string[] An array of IDs
      */
-    public function getIds()
+    public function getIds() : array
     {
         return $this->parts;
     }

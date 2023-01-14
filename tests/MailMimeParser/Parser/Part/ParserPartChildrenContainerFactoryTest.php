@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserPartChildrenContainerFactoryTest
@@ -13,22 +14,25 @@ use LegacyPHPUnit\TestCase;
  */
 class ParserPartChildrenContainerFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
+
+    // @phpstan-ignore-next-line
     private $proxy;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
-        $this->proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+        $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new ParserPartChildrenContainerFactory();
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $ob = $this->instance->newInstance($this->proxy);
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer',
+            '\\' . \ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer::class,
             $ob
         );
         // make sure proxy is attached

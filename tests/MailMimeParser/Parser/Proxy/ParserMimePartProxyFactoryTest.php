@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserMimePartProxyFactoryTest
@@ -14,49 +15,69 @@ use GuzzleHttp\Psr7\Utils;
  */
 class ParserMimePartProxyFactoryTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $instance;
+
+    // @phpstan-ignore-next-line
     private $streamFactory;
+
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
+
+    // @phpstan-ignore-next-line
     private $partStreamContainerFactory;
+
+    // @phpstan-ignore-next-line
     private $partChildrenContainerFactory;
 
+    // @phpstan-ignore-next-line
     private $headerContainer;
+
+    // @phpstan-ignore-next-line
     private $partBuilder;
+
+    // @phpstan-ignore-next-line
     private $partStreamContainer;
+
+    // @phpstan-ignore-next-line
     private $partChildrenContainer;
+
+    // @phpstan-ignore-next-line
     private $parser;
+
+    // @phpstan-ignore-next-line
     private $parent;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->streamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $this->streamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->headerContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory')
+        $this->headerContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->partStreamContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory')
+        $this->partStreamContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->partChildrenContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory')
+        $this->partChildrenContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->partStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->partChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->parser = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Parser\IParser');
 
-        $this->parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+        $this->headerContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->partStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->partChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->parser = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\IParser::class);
+
+        $this->parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,7 +89,7 @@ class ParserMimePartProxyFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $this->headerContainerFactory->expects($this->once())
             ->method('newInstance')
@@ -79,16 +100,16 @@ class ParserMimePartProxyFactoryTest extends TestCase
             ->willReturn($this->headerContainer);
         $this->partStreamContainerFactory->expects($this->once())
             ->method('newInstance')
-            ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy'))
+            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class))
             ->willReturn($this->partStreamContainer);
         $this->partChildrenContainerFactory->expects($this->once())
             ->method('newInstance')
-            ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy'))
+            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class))
             ->willReturn($this->partChildrenContainer);
         $stream = Utils::streamFor('test');
         $this->streamFactory->expects($this->once())
             ->method('newMessagePartStream')
-            ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Message\IMimePart'))
+            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Message\IMimePart::class))
             ->willReturn($stream);
         $this->partStreamContainer->expects($this->once())
             ->method('setStream')
@@ -98,15 +119,15 @@ class ParserMimePartProxyFactoryTest extends TestCase
             ->willReturn($this->parent);
         $this->parent->expects($this->once())
             ->method('getPart')
-            ->willReturn($this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart'));
+            ->willReturn($this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class));
 
         $ob = $this->instance->newInstance($this->partBuilder, $this->parser);
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy',
+            '\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class,
             $ob
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\IMimePart',
+            '\\' . \ZBateson\MailMimeParser\Message\IMimePart::class,
             $ob->getPart()
         );
     }

@@ -9,13 +9,12 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
+use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
-use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -54,8 +53,6 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
      * Constructs a new ParserMessageProxy wrapping an IMessage object that will
      * dynamically parse a message's content and parts as they're requested.
      *
-     * @param PartBuilder $partBuilder
-     * @param IParser $parser
      * @return ParserMessageProxy
      */
     public function newInstance(PartBuilder $partBuilder, IParser $parser)
@@ -79,5 +76,4 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
         $message->attach($streamContainer);
         return $parserProxy;
     }
-
 }

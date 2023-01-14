@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
@@ -14,7 +15,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 /**
  * Allows a header to be mime-encoded and be decoded with a consumer after
  * decoding.
- * 
+ *
  * @author Zaahid Bateson
  */
 abstract class MimeEncodedHeader extends AbstractHeader
@@ -37,14 +38,12 @@ abstract class MimeEncodedHeader extends AbstractHeader
     /**
      * Mime-decodes any mime-encoded parts prior to invoking the passed
      * consumer.
-     *
-     * @param AbstractConsumer $consumer
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
     {
         $value = $this->rawValue;
         $matchp = '~' . MimeLiteralPart::MIME_PART_PATTERN . '~';
-        $value = preg_replace_callback($matchp, function ($matches) {
+        $value = \preg_replace_callback($matchp, function($matches) {
             return $this->mimeLiteralPartFactory->newInstance($matches[0]);
         }, $value);
         $this->parts = $consumer($value);

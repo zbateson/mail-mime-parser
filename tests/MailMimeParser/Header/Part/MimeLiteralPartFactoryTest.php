@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -14,18 +15,19 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class MimeLiteralPartFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $headerPartFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
         $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $token = $this->headerPartFactory->newInstance('Test');
         $this->assertNotNull($token);
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart', $token);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::class, $token);
     }
 }

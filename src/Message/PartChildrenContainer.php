@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
 use ArrayAccess;
@@ -15,7 +16,7 @@ use RecursiveIterator;
  *
  * @author Zaahid Bateson
  */
-class PartChildrenContainer implements RecursiveIterator, ArrayAccess
+class PartChildrenContainer implements ArrayAccess, RecursiveIterator
 {
     /**
      * @var IMessagePart[] array of child parts of the IMultiPart object that is
@@ -37,11 +38,8 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      * Returns true if the current element is an IMultiPart and doesn't return
      * null for {@see IMultiPart::getChildIterator()}.  Note that the iterator
      * may still be empty.
-     *
-     * @return bool
      */
-    #[\ReturnTypeWillChange]
-    public function hasChildren()
+    public function hasChildren() : bool
     {
         return ($this->current() instanceof IMultiPart
             && $this->current()->getChildIterator() !== null);
@@ -53,8 +51,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      *
      * @return RecursiveIterator|null the iterator
      */
-    #[\ReturnTypeWillChange]
-    public function getChildren()
+    public function getChildren() : ?RecursiveIterator
     {
         if ($this->current() instanceof IMultiPart) {
             return $this->current()->getChildIterator();
@@ -68,26 +65,22 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         return $this->offsetGet($this->position);
     }
 
-    #[\ReturnTypeWillChange]
-    public function key()
+    public function key() : int
     {
         return $this->position;
     }
 
-    #[\ReturnTypeWillChange]
-    public function next()
+    public function next() : void
     {
         ++$this->position;
     }
 
-    #[\ReturnTypeWillChange]
-    public function rewind()
+    public function rewind() : void
     {
         $this->position = 0;
     }
 
-    #[\ReturnTypeWillChange]
-    public function valid()
+    public function valid() : bool
     {
         return $this->offsetExists($this->position);
     }
@@ -104,12 +97,12 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      */
     public function add(IMessagePart $part, $position = null)
     {
-        $index = ($position === null) ? count($this->children) : $position;
-        array_splice(
+        $index = $position ?? \count($this->children);
+        \array_splice(
             $this->children,
             $index,
             0,
-            [ $part ]
+            [$part]
         );
     }
 
@@ -119,8 +112,7 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
      * @param IMessagePart $part The part to remove.
      * @return int the 0-based position it previously occupied.
      */
-    #[\ReturnTypeWillChange]
-    public function remove(IMessagePart $part)
+    public function remove(IMessagePart $part) : ?int
     {
         foreach ($this->children as $key => $child) {
             if ($child === $part) {
@@ -131,49 +123,34 @@ class PartChildrenContainer implements RecursiveIterator, ArrayAccess
         return null;
     }
 
-    /**
-     * @return bool
-     */
-    #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         return isset($this->children[$offset]);
     }
 
-    /**
-     * @return mixed
-     */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->children[$offset] : null;
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value) : void
     {
         if (!$value instanceof IMessagePart) {
             throw new InvalidArgumentException(
-                get_class($value) . ' is not a ZBateson\MailMimeParser\Message\IMessagePart'
+                \get_class($value) . ' is not a ZBateson\MailMimeParser\Message\IMessagePart'
             );
         }
-        $index = ($offset === null) ? count($this->children) : $offset;
+        $index = $offset ?? \count($this->children);
         $this->children[$index] = $value;
         if ($index < $this->position) {
             ++$this->position;
         }
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset) : void
     {
-        array_splice($this->children, $offset, 1);
+        \array_splice($this->children, $offset, 1);
         if ($this->position >= $offset) {
             --$this->position;
         }

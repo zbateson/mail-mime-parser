@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser;
 
 use Pimple\Container as PimpleContainer;
@@ -27,15 +28,13 @@ class Container extends PimpleContainer
      *
      * Null is returned for built-in types.
      *
-     * @param ReflectionParameter $param
-     * @return string|null
      */
-    private function getParameterClass(ReflectionParameter $param)
+    private function getParameterClass(ReflectionParameter $param) : ?string
     {
-        if (method_exists($param, 'getType')) {
+        if (\method_exists($param, 'getType')) {
             $type = $param->getType();
             if ($type && !$type->isBuiltin()) {
-                return method_exists($type, 'getName') ? $type->getName() : (string) $type;
+                return \method_exists($type, 'getName') ? $type->getName() : (string) $type;
             }
         } elseif ($param->getClass() !== null) {
             return $param->getClass()->getName();
@@ -48,12 +47,10 @@ class Container extends PimpleContainer
      *
      * The returned factory method looks up arguments and uses pimple to get an
      * instance of those types to pass them during construction.
-     *
-     * @param string $class
      */
-    public function autoRegister($class)
+    public function autoRegister($class) : ?string
     {
-        $fn = function ($c) use ($class) {
+        $fn = function($c) use ($class) {
             $ref = new ReflectionClass($class);
             $cargs = ($ref->getConstructor() !== null) ? $ref->getConstructor()->getParameters() : [];
             $ap = [];
@@ -72,19 +69,17 @@ class Container extends PimpleContainer
             return $ret;
         };
         $this[$class] = $fn;
+        return null;
     }
 
     /**
      * Overridden to see if the class can be auto-registered and return true if
      * it can.
-     *
-     * @param string $id
-     * @return boolean
      */
-    public function offsetExists($id)
+    public function offsetExists($id) : bool
     {
         $exists = parent::offsetExists($id);
-        if (!$exists && class_exists($id)) {
+        if (!$exists && \class_exists($id)) {
             $this->autoRegister($id);
             return true;
         }
@@ -95,16 +90,17 @@ class Container extends PimpleContainer
      * Overridden to see if the class can be auto-registered and return an
      * instance if it can.
      *
-     * @param string $id
-     * @return object
+     * @param string | int $id
+     *
      * @throws UnknownIdentifierException
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($id)
     {
         try {
             return parent::offsetGet($id);
         } catch (UnknownIdentifierException $e) {
-            if (class_exists($id)) {
+            if (\class_exists($id)) {
                 $this->autoRegister($id);
                 return parent::offsetGet($id);
             }

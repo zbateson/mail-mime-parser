@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Parser\IParser;
@@ -18,9 +19,7 @@ abstract class ParserPartProxyFactory
 {
     /**
      * Constructs a new ParserPartProxy wrapping an IMessagePart object.
-     * 
-     * @param PartBuilder $partBuilder
-     * @param IParser $parser
+     *
      * @return ParserPartProxy
      */
     abstract public function newInstance(PartBuilder $partBuilder, IParser $parser);

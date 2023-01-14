@@ -4,18 +4,19 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
+use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
-use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
-use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Psr7;
 
 /**
  * An email message.
@@ -39,11 +40,11 @@ class Message extends MimePart implements IMessage
     private $privacyHelper;
 
     public function __construct(
-        PartStreamContainer $streamContainer = null,
-        PartHeaderContainer $headerContainer = null,
-        PartChildrenContainer $partChildrenContainer = null,
-        MultipartHelper $multipartHelper = null,
-        PrivacyHelper $privacyHelper = null
+        ?PartStreamContainer $streamContainer = null,
+        ?PartHeaderContainer $headerContainer = null,
+        ?PartChildrenContainer $partChildrenContainer = null,
+        ?MultipartHelper $multipartHelper = null,
+        ?PrivacyHelper $privacyHelper = null
     ) {
         parent::__construct(
             null,
@@ -53,8 +54,8 @@ class Message extends MimePart implements IMessage
         );
         if ($multipartHelper === null || $privacyHelper === null) {
             $di = MailMimeParser::getDependencyContainer();
-            $multipartHelper = $di['ZBateson\MailMimeParser\Message\Helper\MultipartHelper'];
-            $privacyHelper = $di['ZBateson\MailMimeParser\Message\Helper\PrivacyHelper'];
+            $multipartHelper = $di[\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class];
+            $privacyHelper = $di[\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class];
         }
         $this->multipartHelper = $multipartHelper;
         $this->privacyHelper = $privacyHelper;
@@ -93,9 +94,8 @@ class Message extends MimePart implements IMessage
      * The message is considered 'mime' if it has either a Content-Type or
      * MIME-Version header defined.
      *
-     * @return bool
      */
-    public function isMime()
+    public function isMime() : bool
     {
         $contentType = $this->getHeaderValue(HeaderConsts::CONTENT_TYPE);
         $mimeVersion = $this->getHeaderValue(HeaderConsts::MIME_VERSION);
@@ -168,55 +168,69 @@ class Message extends MimePart implements IMessage
         return null;
     }
 
-    public function setTextPart($resource, $charset = 'UTF-8')
+    public function setTextPart($resource, string $charset = 'UTF-8') : void
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
-                $this, 'text/plain', $resource, $charset
+                $this,
+                'text/plain',
+                $resource,
+                $charset
             );
     }
 
-    public function setHtmlPart($resource, $charset = 'UTF-8')
+    public function setHtmlPart($resource, string $charset = 'UTF-8') : void
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
-                $this, 'text/html', $resource, $charset
+                $this,
+                'text/html',
+                $resource,
+                $charset
             );
     }
 
-    public function removeTextPart($index = 0)
+    public function removeTextPart(int $index = 0) : bool
     {
         return $this->multipartHelper
             ->removePartByMimeType(
-                $this, 'text/plain', $index
+                $this,
+                'text/plain',
+                $index
             );
     }
 
-    public function removeAllTextParts($moveRelatedPartsBelowMessage = true)
+    public function removeAllTextParts(bool $moveRelatedPartsBelowMessage = true) : bool
     {
         return $this->multipartHelper
             ->removeAllContentPartsByMimeType(
-                $this, 'text/plain', $moveRelatedPartsBelowMessage
+                $this,
+                'text/plain',
+                $moveRelatedPartsBelowMessage
             );
     }
 
-    public function removeHtmlPart($index = 0)
+    public function removeHtmlPart(int $index = 0) : bool
     {
         return $this->multipartHelper
             ->removePartByMimeType(
-                $this, 'text/html', $index
+                $this,
+                'text/html',
+                $index
             );
     }
 
-    public function removeAllHtmlParts($moveRelatedPartsBelowMessage = true)
+    public function removeAllHtmlParts(bool $moveRelatedPartsBelowMessage = true) : bool
     {
         return $this->multipartHelper
             ->removeAllContentPartsByMimeType(
-                $this, 'text/html', $moveRelatedPartsBelowMessage
+                $this,
+                'text/html',
+                $moveRelatedPartsBelowMessage
             );
     }
 
-    public function getAttachmentPart($index)
+    public function getAttachmentPart(int $index)
     {
         return $this->getPart(
             $index,
@@ -231,34 +245,34 @@ class Message extends MimePart implements IMessage
         );
     }
 
-    public function getAttachmentCount()
+    public function getAttachmentCount() : int
     {
-        return count($this->getAllAttachmentParts());
+        return \count($this->getAllAttachmentParts());
     }
 
-    public function addAttachmentPart($resource, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
+    public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void
     {
         $this->multipartHelper
             ->createAndAddPartForAttachment(
                 $this,
                 $resource,
                 $mimeType,
-                (strcasecmp($disposition, 'inline') === 0) ? 'inline' : 'attachment',
+                (\strcasecmp($disposition, 'inline') === 0) ? 'inline' : 'attachment',
                 $filename,
                 $encoding
             );
     }
 
-    public function addAttachmentPartFromFile($filePath, $mimeType, $filename = null, $disposition = 'attachment', $encoding = 'base64')
+    public function addAttachmentPartFromFile($filePath, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void
     {
-        $handle = Psr7\Utils::streamFor(fopen($filePath, 'r'));
+        $handle = Psr7\Utils::streamFor(\fopen($filePath, 'r'));
         if ($filename === null) {
-            $filename = basename($filePath);
+            $filename = \basename($filePath);
         }
         $this->addAttachmentPart($handle, $mimeType, $filename, $disposition, $encoding);
     }
 
-    public function removeAttachmentPart($index)
+    public function removeAttachmentPart(int $index) : void
     {
         $part = $this->getAttachmentPart($index);
         $this->removePart($part);
@@ -280,20 +294,20 @@ class Message extends MimePart implements IMessage
 
     public function getSignaturePart()
     {
-        if (strcasecmp($this->getContentType(), 'multipart/signed') === 0) {
+        if (\strcasecmp($this->getContentType(), 'multipart/signed') === 0) {
             return $this->getChild(1);
-        } else {
-            return null;
         }
+            return null;
+
     }
 
-    public function setAsMultipartSigned($micalg, $protocol)
+    public function setAsMultipartSigned(string $micalg, string $protocol) : void
     {
         $this->privacyHelper
             ->setMessageAsMultipartSigned($this, $micalg, $protocol);
     }
 
-    public function setSignature($body)
+    public function setSignature(string $body) : void
     {
         $this->privacyHelper
             ->setSignature($this, $body);

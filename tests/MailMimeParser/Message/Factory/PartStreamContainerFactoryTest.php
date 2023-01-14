@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartStreamContainerFactoryTest
@@ -13,11 +14,12 @@ use LegacyPHPUnit\TestCase;
  */
 class PartStreamContainerFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $mocksdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $mocksdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartStreamContainerFactory(
@@ -25,11 +27,11 @@ class PartStreamContainerFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\PartStreamContainer',
+            '\\' . \ZBateson\MailMimeParser\Message\PartStreamContainer::class,
             $container
         );
     }

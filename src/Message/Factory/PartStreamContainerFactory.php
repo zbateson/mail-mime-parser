@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use ZBateson\MailMimeParser\Message\PartStreamContainer;

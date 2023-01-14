@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
@@ -35,7 +36,8 @@ class ParserPartChildrenContainer extends PartChildrenContainer
         $this->parserProxy = $parserProxy;
     }
 
-    public function offsetExists($offset)
+
+    public function offsetExists($offset) : bool
     {
         $exists = parent::offsetExists($offset);
         while (!$exists && !$this->allParsed) {

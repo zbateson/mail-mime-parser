@@ -4,10 +4,10 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\IParser;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 
@@ -22,8 +22,6 @@ class ParserNonMimeMessageProxyFactory extends ParserMessageProxyFactory
     /**
      * Constructs a new ParserNonMimeMessageProxy wrapping an IMessage object.
      *
-     * @param PartBuilder $partBuilder
-     * @param IParser $parser
      * @return ParserMimePartProxy
      */
     public function newInstance(PartBuilder $partBuilder, IParser $parser)
@@ -47,5 +45,4 @@ class ParserNonMimeMessageProxyFactory extends ParserMessageProxyFactory
         $message->attach($streamContainer);
         return $parserProxy;
     }
-
 }

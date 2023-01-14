@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use Pimple\Exception\UnknownIdentifierException;
 
 /**
@@ -14,20 +15,21 @@ use Pimple\Exception\UnknownIdentifierException;
  */
 class ContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $container;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->container = new Container();
     }
-    
-    public function testSetAndGet()
+
+    public function testSetAndGet() : void
     {
         $this->container['test'] = 'toost';
         $this->assertSame('toost', $this->container['test']);
     }
 
-    public function testAutoRegister()
+    public function testAutoRegister() : void
     {
         $this->assertFalse($this->container->offsetExists('blah'));
         $this->assertTrue($this->container->offsetExists('ArrayObject'));
@@ -41,7 +43,7 @@ class ContainerTest extends TestCase
         $this->assertTrue($thrown);
     }
 
-    public function testAutoRegisterParams()
+    public function testAutoRegisterParams() : void
     {
         $this->container['secondArg'] = 'Aha!';
         $ob = $this->container['ZBateson\MailMimeParser\ContainerTestClass'];

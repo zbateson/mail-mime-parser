@@ -4,19 +4,19 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Stream;
 
-use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Message\IMimePart;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
 use SplObserver;
 use SplSubject;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
  * Provides a readable stream for a MessagePart.
@@ -24,7 +24,7 @@ use SplSubject;
  * @author Zaahid Bateson
  */
 #[\AllowDynamicProperties]
-class MessagePartStream implements StreamInterface, SplObserver
+class MessagePartStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
 
@@ -43,8 +43,6 @@ class MessagePartStream implements StreamInterface, SplObserver
     /**
      * Constructor
      *
-     * @param StreamFactory $sdf
-     * @param IMessagePart $part
      */
     public function __construct(StreamFactory $sdf, IMessagePart $part)
     {
@@ -60,11 +58,7 @@ class MessagePartStream implements StreamInterface, SplObserver
         }
     }
 
-    /**
-     * @return void
-     */
-    #[\ReturnTypeWillChange]
-    public function update(SplSubject $subject)
+    public function update(SplSubject $subject) : void
     {
         if ($this->appendStream !== null) {
             // unset forces recreation in StreamDecoratorTrait with a call to __get
@@ -79,10 +73,8 @@ class MessagePartStream implements StreamInterface, SplObserver
      * If the current attached IMessagePart doesn't specify a charset, $stream
      * is returned as-is.
      *
-     * @param StreamInterface $stream
-     * @return StreamInterface
      */
-    private function getCharsetDecoratorForStream(StreamInterface $stream)
+    private function getCharsetDecoratorForStream(StreamInterface $stream) : StreamInterface
     {
         $charset = $this->part->getCharset();
         if (!empty($charset)) {
@@ -107,10 +99,8 @@ class MessagePartStream implements StreamInterface, SplObserver
      * o Base64Stream
      * o UUStream
      *
-     * @param StreamInterface $stream
-     * @return StreamInterface
      */
-    private function getTransferEncodingDecoratorForStream(StreamInterface $stream)
+    private function getTransferEncodingDecoratorForStream(StreamInterface $stream) : StreamInterface
     {
         $encoding = $this->part->getContentTransferEncoding();
         $decorator = null;
@@ -120,7 +110,8 @@ class MessagePartStream implements StreamInterface, SplObserver
                 break;
             case 'base64':
                 $decorator = $this->streamFactory->newBase64Stream(
-                    $this->streamFactory->newChunkSplitStream($stream));
+                    $this->streamFactory->newChunkSplitStream($stream)
+                );
                 break;
             case 'x-uuencode':
                 $decorator = $this->streamFactory->newUUStream($stream);
@@ -136,9 +127,8 @@ class MessagePartStream implements StreamInterface, SplObserver
      * Writes out the content portion of the attached mime part to the passed
      * $stream.
      *
-     * @param StreamInterface $stream
      */
-    private function writePartContentTo(StreamInterface $stream)
+    private function writePartContentTo(StreamInterface $stream) : void
     {
         $contentStream = $this->part->getContentStream();
         if ($contentStream !== null) {
@@ -158,12 +148,12 @@ class MessagePartStream implements StreamInterface, SplObserver
      *        as IMessagePart
      * @return StreamInterface[]
      */
-    protected function getBoundaryAndChildStreams(IMimePart $part)
+    protected function getBoundaryAndChildStreams(IMimePart $part) : array
     {
         $boundary = $part->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'boundary');
         if ($boundary === null) {
-            return array_map(
-                function ($child) {
+            return \array_map(
+                function($child) {
                     return $child->getStream();
                 },
                 $part->getChildParts()
@@ -188,15 +178,15 @@ class MessagePartStream implements StreamInterface, SplObserver
      *
      * @return StreamInterface[]
      */
-    protected function getStreamsArray()
+    protected function getStreamsArray() : array
     {
         $content = Psr7\Utils::streamFor();
         $this->writePartContentTo($content);
         $content->rewind();
-        $streams = [ $this->streamFactory->newHeaderStream($this->part), $content ];
+        $streams = [$this->streamFactory->newHeaderStream($this->part), $content];
 
         if ($this->part instanceof IMimePart && $this->part->getChildCount() > 0) {
-            $streams = array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
+            $streams = \array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
         }
 
         return $streams;
@@ -205,9 +195,8 @@ class MessagePartStream implements StreamInterface, SplObserver
     /**
      * Creates the underlying stream lazily when required.
      *
-     * @return StreamInterface
      */
-    protected function createStream()
+    protected function createStream() : StreamInterface
     {
         if ($this->appendStream === null) {
             $this->appendStream = new AppendStream($this->getStreamsArray());

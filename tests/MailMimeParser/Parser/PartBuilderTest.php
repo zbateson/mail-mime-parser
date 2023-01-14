@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartBuilderTest
@@ -15,16 +16,17 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 class PartBuilderTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $headerContainer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $this->headerContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newPartBuilder($stream = null, $parent = null)
+    private function newPartBuilder($stream = null, $parent = null) : PartBuilder
     {
         if ($stream === null && $parent === null) {
             $stream = Psr7\Utils::streamFor('test');
@@ -38,13 +40,13 @@ class PartBuilderTest extends TestCase
         );
     }
 
-    public function testGetHeaderContainer()
+    public function testGetHeaderContainer() : void
     {
         $instance = $this->newPartBuilder();
         $this->assertSame($this->headerContainer, $instance->getHeaderContainer());
     }
 
-    public function testSetStreamPartPosAndGetFilename()
+    public function testSetStreamPartPosAndGetFilename() : void
     {
         $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(42);
@@ -53,7 +55,7 @@ class PartBuilderTest extends TestCase
         $this->assertEquals(42, $instance->getStreamPartLength());
     }
 
-    public function testSetStreamContentPosAndGetFilename()
+    public function testSetStreamContentPosAndGetFilename() : void
     {
         $instance = $this->newPartBuilder();
         $instance->setStreamPartStartPos(11);
@@ -65,11 +67,11 @@ class PartBuilderTest extends TestCase
         $this->assertEquals(84 - 42, $instance->getStreamContentLength());
     }
 
-    public function testSetStreamContentPosAndGetFilenameWithParent()
+    public function testSetStreamContentPosAndGetFilenameWithParent() : void
     {
-        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
-            ->setMethods([ 'getMessageResourceHandle', 'setStreamPartEndPos' ])
+            ->setMethods(['getMessageResourceHandle', 'setStreamPartEndPos'])
             ->getMockForAbstractClass();
 
         $stream = Psr7\Utils::streamFor('test');

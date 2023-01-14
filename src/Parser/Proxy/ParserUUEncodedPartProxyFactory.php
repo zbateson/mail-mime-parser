@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 use ZBateson\MailMimeParser\Parser\IParser;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -30,18 +31,15 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
      */
     protected $parserPartStreamContainerFactory;
 
-    public function __construct(
-        StreamFactory $sdf,
-        ParserPartStreamContainerFactory $parserPartStreamContainerFactory
-    ) {
+    public function __construct(StreamFactory $sdf, ParserPartStreamContainerFactory $parserPartStreamContainerFactory)
+    {
         $this->streamFactory = $sdf;
         $this->parserPartStreamContainerFactory = $parserPartStreamContainerFactory;
     }
 
     /**
      * Constructs a new ParserUUEncodedPartProxy wrapping an IUUEncoded object.
-     * 
-     * @param PartBuilder $partBuilder
+     *
      * @return ParserPartProxy
      */
     public function newInstance(PartBuilder $partBuilder, IParser $parser)

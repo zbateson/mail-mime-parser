@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Psr7\CachingStream;
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -62,7 +63,7 @@ class PartStreamContainer
     protected $detachParsedStream;
 
     /**
-     * @var array map of the active encoding filter on the current handle.
+     * @var array<string, null> map of the active encoding filter on the current handle.
      */
     private $encoding = [
         'type' => null,
@@ -70,7 +71,7 @@ class PartStreamContainer
     ];
 
     /**
-     * @var array map of the active charset filter on the current handle.
+     * @var array<string, null> map of the active charset filter on the current handle.
      */
     private $charset = [
         'from' => null,
@@ -87,7 +88,6 @@ class PartStreamContainer
      * Sets the part's stream containing the part's headers, content, and
      * children.
      *
-     * @param StreamInterface $stream
      */
     public function setStream(StreamInterface $stream)
     {
@@ -111,9 +111,8 @@ class PartStreamContainer
     /**
      * Returns true if there's a content stream associated with the part.
      *
-     * @return boolean
      */
-    public function hasContent()
+    public function hasContent() : bool
     {
         return ($this->contentStream !== null);
     }
@@ -134,7 +133,7 @@ class PartStreamContainer
      *
      * @param StreamInterface $contentStream
      */
-    public function setContentStream(StreamInterface $contentStream = null)
+    public function setContentStream(?StreamInterface $contentStream = null)
     {
         $this->contentStream = $contentStream;
         $this->decodedStream = null;
@@ -146,9 +145,8 @@ class PartStreamContainer
      * on the current handle is different from the one passed as an argument.
      *
      * @param string $transferEncoding
-     * @return boolean
      */
-    private function isTransferEncodingFilterChanged($transferEncoding)
+    private function isTransferEncodingFilterChanged(?string $transferEncoding) : bool
     {
         return ($transferEncoding !== $this->encoding['type']);
     }
@@ -158,11 +156,8 @@ class PartStreamContainer
      * the current handle is different from the one needed based on the passed
      * arguments.
      *
-     * @param string $fromCharset
-     * @param string $toCharset
-     * @return boolean
      */
-    private function isCharsetFilterChanged($fromCharset, $toCharset)
+    private function isCharsetFilterChanged(string $fromCharset, string $toCharset) : bool
     {
         return ($fromCharset !== $this->charset['from']
             || $toCharset !== $this->charset['to']);
@@ -174,7 +169,7 @@ class PartStreamContainer
      *
      * @param string $transferEncoding
      */
-    protected function attachTransferEncodingFilter($transferEncoding)
+    protected function attachTransferEncodingFilter(?string $transferEncoding) : void
     {
         if ($this->decodedStream !== null) {
             $this->encoding['type'] = $transferEncoding;
@@ -203,7 +198,7 @@ class PartStreamContainer
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
      */
-    protected function attachCharsetFilter($fromCharset, $toCharset)
+    protected function attachCharsetFilter(string $fromCharset, string $toCharset) : void
     {
         if ($this->charsetStream !== null) {
             $this->charsetStream = new CachingStream($this->streamFactory->newCharsetStream(
@@ -219,7 +214,7 @@ class PartStreamContainer
     /**
      * Resets just the charset stream, and rewinds the decodedStream.
      */
-    private function resetCharsetStream()
+    private function resetCharsetStream() : void
     {
         $this->charset = [
             'from' => null,
@@ -257,9 +252,9 @@ class PartStreamContainer
      * @param string $transferEncoding the transfer encoding
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
-     * @return StreamInterface
+     * @return ?StreamInterface
      */
-    public function getContentStream($transferEncoding, $fromCharset, $toCharset)
+    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset)
     {
         if ($this->contentStream === null) {
             return null;
@@ -289,7 +284,7 @@ class PartStreamContainer
      * @param string $transferEncoding
      * @return StreamInterface
      */
-    public function getBinaryContentStream($transferEncoding)
+    public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface
     {
         if ($this->contentStream === null) {
             return null;

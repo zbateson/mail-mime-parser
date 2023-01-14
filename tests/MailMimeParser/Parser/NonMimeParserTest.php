@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * NonMimeParserTest
@@ -16,42 +17,59 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 class NonMimeParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $messageProxyFactory;
+
+    // @phpstan-ignore-next-line
     private $partProxyFactory;
+
+    // @phpstan-ignore-next-line
     private $partBuilderFactory;
+
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
+
+    // @phpstan-ignore-next-line
     private $headerParser;
+
+    // @phpstan-ignore-next-line
     private $parserManager;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
+
+    // @phpstan-ignore-next-line
     private $parserMessageProxy;
+
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->messageProxyFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory')
+        $this->messageProxyFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partProxyFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory')
+        $this->partProxyFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
+        $this->partBuilderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory')
+        $this->headerContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\HeaderParser')
+        $this->headerParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\HeaderParser::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parserManager = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\ParserManager')
+        $this->parserManager = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\ParserManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -63,31 +81,31 @@ class NonMimeParserTest extends TestCase
         );
         $this->instance->setParserManager($this->parserManager);
 
-        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parserMessageProxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy')
+        $this->parserMessageProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer')
+        $this->headerContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testAbstractParserGetters()
+    public function testAbstractParserGetters() : void
     {
         $this->assertSame($this->messageProxyFactory, $this->instance->getParserMessageProxyFactory());
         $this->assertSame($this->partProxyFactory, $this->instance->getParserPartProxyFactory());
     }
 
-    public function testCanParse()
+    public function testCanParse() : void
     {
         $this->assertTrue($this->instance->canParse($this->partBuilder));
     }
 
-    public function testParseEmptyContent()
+    public function testParseEmptyContent() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor(''));
         $this->parserMessageProxy->expects($this->atLeastOnce())
@@ -103,10 +121,10 @@ class NonMimeParserTest extends TestCase
         $this->instance->parseContent($this->parserMessageProxy);
         // on feof(), returns early
         $this->instance->parseContent($this->parserMessageProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentWithNonNullNextPartStart()
+    public function testParseContentWithNonNullNextPartStart() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor('test'));
         $this->parserMessageProxy->expects($this->atLeastOnce())
@@ -121,10 +139,10 @@ class NonMimeParserTest extends TestCase
             ->method('setStreamPartAndContentEndPos');
 
         $this->instance->parseContent($this->parserMessageProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentReadsLinesToEnd()
+    public function testParseContentReadsLinesToEnd() : void
     {
         $str = "test\r\ntoost\r\ntoast";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -136,17 +154,17 @@ class NonMimeParserTest extends TestCase
             ->with(0);
         $this->parserMessageProxy->expects($this->exactly(3))
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([ $this->anything() ], [ $this->anything() ], [ strlen($str) ]);
+            ->withConsecutive([$this->anything()], [$this->anything()], [\strlen($str)]);
 
         $this->instance->parseContent($this->parserMessageProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentReadsLinesToUUEncodeBeginLine()
+    public function testParseContentReadsLinesToUUEncodeBeginLine() : void
     {
         $first = "test\r\ntoost\r\n";
         $begin = "begin 714 test\r\n";
-        $end = "blah";
+        $end = 'blah';
         $str = $first . $begin . $end;
 
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -158,11 +176,11 @@ class NonMimeParserTest extends TestCase
             ->with(0);
         $this->parserMessageProxy->expects($this->exactly(2))
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([ $this->anything() ], [ strlen($first) ]);
+            ->withConsecutive([$this->anything()], [\strlen($first)]);
 
         $this->parserMessageProxy->expects($this->once())
             ->method('setNextPartStart')
-            ->with(strlen($first));
+            ->with(\strlen($first));
         $this->parserMessageProxy->expects($this->once())
             ->method('setNextPartMode')
             ->with(714);
@@ -171,10 +189,10 @@ class NonMimeParserTest extends TestCase
             ->with('test');
 
         $this->instance->parseContent($this->parserMessageProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseNextChild()
+    public function testParseNextChild() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor('test'));
 
@@ -219,10 +237,10 @@ class NonMimeParserTest extends TestCase
         $this->assertSame('A little somefin', $this->instance->parseNextChild($this->parserMessageProxy));
     }
 
-    public function testParseNextChildWithNullNextPartStartOrHandleAtEof()
+    public function testParseNextChildWithNullNextPartStartOrHandleAtEof() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor('test'));
-        stream_get_contents($handle);
+        \stream_get_contents($handle);
 
         $this->parserMessageProxy->expects($this->atLeastOnce())
             ->method('getMessageResourceHandle')

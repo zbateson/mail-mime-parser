@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -14,18 +15,19 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class HeaderPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $abstractHeaderPartStub;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
-        $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Part\HeaderPart')
+        $stub = $this->getMockBuilder('\\' . \ZBateson\MailMimeParser\Header\Part\HeaderPart::class)
             ->setConstructorArgs([$charsetConverter])
             ->getMockForAbstractClass();
         $this->abstractHeaderPartStub = $stub;
     }
 
-    public function testIgnoreSpaces()
+    public function testIgnoreSpaces() : void
     {
         $this->assertFalse($this->abstractHeaderPartStub->ignoreSpacesBefore());
         $this->assertFalse($this->abstractHeaderPartStub->ignoreSpacesAfter());

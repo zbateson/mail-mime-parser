@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartStreamFilterManagerTest
@@ -14,26 +15,29 @@ use GuzzleHttp\Psr7;
  */
 class PartStreamContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance = null;
+
+    // @phpstan-ignore-next-line
     private $mockStreamFactory = null;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')->getMock();
+        $this->mockStreamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)->getMock();
         $this->instance = new PartStreamContainer($this->mockStreamFactory);
     }
 
-    public function testSetAndGetStream()
+    public function testSetAndGetStream() : void
     {
-        $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
+        $stream = $this->getMockForAbstractClass(\Psr\Http\Message\StreamInterface::class, [], '', false);
         $this->instance->setStream($stream);
         $stream->expects($this->once())->method('rewind');
         $this->assertSame($stream, $this->instance->getStream());
     }
 
-    public function testSetContentStreamAndHasContent()
+    public function testSetContentStreamAndHasContent() : void
     {
-        $stream = $this->getMockForAbstractClass('Psr\Http\Message\StreamInterface', [], '', false);
+        $stream = $this->getMockForAbstractClass(\Psr\Http\Message\StreamInterface::class, [], '', false);
         $this->assertFalse($this->instance->hasContent());
         $this->assertNull($this->instance->getContentStream('', '', ''));
         $this->assertNull($this->instance->getBinaryContentStream(''));
@@ -41,7 +45,7 @@ class PartStreamContainerTest extends TestCase
         $this->assertTrue($this->instance->hasContent());
     }
 
-    public function testGetBinaryStream()
+    public function testGetBinaryStream() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
@@ -69,7 +73,7 @@ class PartStreamContainerTest extends TestCase
         $this->assertEquals('test3', $manager->getBinaryContentStream('x-uuencode')->getContents());
     }
 
-    public function testGetContentStreamWithQuotedPrintableDecoderTransferEncoding()
+    public function testGetContentStreamWithQuotedPrintableDecoderTransferEncoding() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
@@ -80,11 +84,11 @@ class PartStreamContainerTest extends TestCase
 
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream('quoted-printable', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
-    public function testGetContentStreamWithBase64DecoderTransferEncoding()
+    public function testGetContentStreamWithBase64DecoderTransferEncoding() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
@@ -93,11 +97,11 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream('base64', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
-    public function testGetContentStreamWithUUDecoderTransferEncoding()
+    public function testGetContentStreamWithUUDecoderTransferEncoding() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
@@ -106,11 +110,11 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream('x-uuencode', null, null);
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
-    public function testGetContentStreamWithCharsetEncoding()
+    public function testGetContentStreamWithCharsetEncoding() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
@@ -119,11 +123,11 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->instance->setContentStream($stream);
         $managerStream = $this->instance->getContentStream(null, 'US-ASCII', 'UTF-8');
-        $this->assertInstanceOf('\GuzzleHttp\Psr7\CachingStream', $managerStream);
+        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
-    public function testGetContentStreamWithReAttachedTransferEncodingDecoder()
+    public function testGetContentStreamWithReAttachedTransferEncodingDecoder() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
@@ -151,7 +155,7 @@ class PartStreamContainerTest extends TestCase
         $this->assertEquals('test3', $manager->getContentStream('x-uuencode', null, null)->getContents());
     }
 
-    public function testGetContentStreamWithReAttachedCharsetConversionDecoder()
+    public function testGetContentStreamWithReAttachedCharsetConversionDecoder() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(4))
@@ -174,7 +178,7 @@ class PartStreamContainerTest extends TestCase
         $this->assertEquals('test', $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8')->getContents());
     }
 
-    public function testGetContentStreamWithCharsetAndTransferEncoding()
+    public function testGetContentStreamWithCharsetAndTransferEncoding() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))

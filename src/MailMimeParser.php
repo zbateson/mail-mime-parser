@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Parser\MessageParser;
 use GuzzleHttp\Psr7\CachingStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Parser\MessageParser;
 
 /**
  * Parses a MIME message into an {@see IMessage} object.
@@ -38,7 +39,7 @@ class MailMimeParser
      *      like streams) returned by MailMimeParser (for e.g. the string
      *      returned by calling $message->getTextContent()).
      */
-    const DEFAULT_CHARSET = 'UTF-8';
+    public const DEFAULT_CHARSET = 'UTF-8';
 
     /**
      * @var Container dependency injection container
@@ -94,11 +95,11 @@ class MailMimeParser
      *
      * @param Container $di
      */
-    public static function setDependencyContainer(Container $di = null)
+    public static function setDependencyContainer(?Container $di = null)
     {
         static::$di = $di;
     }
-    
+
     /**
      * Initializes the dependency container if not already initialized.
      *
@@ -112,7 +113,7 @@ class MailMimeParser
             static::configureDependencyContainer();
         }
         $di = static::$di;
-        $this->messageParser = $di['ZBateson\MailMimeParser\Parser\MessageParser'];
+        $this->messageParser = $di[\ZBateson\MailMimeParser\Parser\MessageParser::class];
     }
 
     /**
@@ -137,7 +138,7 @@ class MailMimeParser
     {
         $stream = Utils::streamFor(
             $resource,
-            [ 'metadata' => [ 'mmp-detached-stream' => ($attached !== true) ] ]
+            ['metadata' => ['mmp-detached-stream' => ($attached !== true)]]
         );
         if (!$stream->isSeekable()) {
             $stream = new CachingStream($stream);

@@ -1,10 +1,12 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
-class MimeEncodedHeaderImpl extends MimeEncodedHeader {
+class MimeEncodedHeaderImpl extends MimeEncodedHeader
+{
     protected function getConsumer(ConsumerService $consumerService)
     {
         return $consumerService->getQuotedStringConsumer();
@@ -22,30 +24,33 @@ class MimeEncodedHeaderImpl extends MimeEncodedHeader {
  */
 class MimeEncodedHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
+
+    // @phpstan-ignore-next-line
     protected $mimeLiteralPartFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->mimeLiteralPartFactory = $mlpf;
     }
 
-    private function newMimeEncodedHeader($name, $value)
+    private function newMimeEncodedHeader($name, $value) : MimeEncodedHeaderImpl
     {
         return new MimeEncodedHeaderImpl(
             $this->mimeLiteralPartFactory,
@@ -55,13 +60,13 @@ class MimeEncodedHeaderTest extends TestCase
         );
     }
 
-    public function testGetDecoded()
+    public function testGetDecoded() : void
     {
         $header = $this->newMimeEncodedHeader('Test', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('Kilgore Trout', $header->getValue());
     }
 
-    public function testMultipleDecoded()
+    public function testMultipleDecoded() : void
     {
         $header = $this->newMimeEncodedHeader(
             'Test',
@@ -70,9 +75,9 @@ class MimeEncodedHeaderTest extends TestCase
         $this->assertEquals('Kilgore  Tro ut', $header->getValue());
     }
 
-    public function testDecodeWhenMixed()
+    public function testDecodeWhenMixed() : void
     {
-        $t = "=?US-ASCII?Q?Kilgore_?= TEST =?US-ASCII?Q?Tro?= =?US-ASCII?Q?ut?=";
+        $t = '=?US-ASCII?Q?Kilgore_?= TEST =?US-ASCII?Q?Tro?= =?US-ASCII?Q?ut?=';
         $header = $this->newMimeEncodedHeader(
             'Test',
             $t

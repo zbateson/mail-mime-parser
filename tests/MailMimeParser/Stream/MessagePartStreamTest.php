@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 use ZBateson\StreamDecorators\NonClosingStream;
-use LegacyPHPUnit\TestCase;
 
 /**
  * MessagePartStreamTest
@@ -15,37 +16,38 @@ use LegacyPHPUnit\TestCase;
  */
 class MessagePartStreamTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockStreamFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->mockStreamFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $this->mockStreamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockMessage()
+    private function newMockMessage() : \ZBateson\MailMimeParser\Message
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockMimePart()
+    private function newMockMimePart() : \ZBateson\MailMimeParser\Message\MimePart
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockUUEncodedPart()
+    private function newMockUUEncodedPart() : \ZBateson\MailMimeParser\Message\UUEncodedPart
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\UUEncodedPart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testReadMimeMessageWithChildren()
+    public function testReadMimeMessageWithChildren() : void
     {
         $testContents = '';
 
@@ -56,7 +58,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 
@@ -65,7 +67,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('quoted-printable');
         $this->mockStreamFactory->expects($this->once())
             ->method('newQuotedPrintableStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
 
@@ -74,7 +76,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('ISO-8859-1');
         $this->mockStreamFactory->expects($this->once())
             ->method('newCharsetStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
 
@@ -96,7 +98,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('ze-boundary');
         $message->expects($this->once())
             ->method('getChildParts')
-            ->willReturn([ $child1, $child2 ]);
+            ->willReturn([$child1, $child2]);
         $message->expects($this->once())
             ->method('hasContent')
             ->willReturn(false);
@@ -122,7 +124,7 @@ class MessagePartStreamTest extends TestCase
         $this->assertEquals($testContents, $ms->getContents());
     }
 
-    public function testReadBase64MimeMessage()
+    public function testReadBase64MimeMessage() : void
     {
         $testContents = '';
 
@@ -133,7 +135,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 
@@ -142,12 +144,12 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('base64');
         $this->mockStreamFactory->expects($this->once())
             ->method('newChunkSplitStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
         $this->mockStreamFactory->expects($this->once())
             ->method('newBase64Stream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return $stream;
             });
 
@@ -169,7 +171,7 @@ class MessagePartStreamTest extends TestCase
         $this->assertEquals($testContents, $ms->getContents());
     }
 
-    public function testReadUUEncodedNonMimeMessageWithChildren()
+    public function testReadUUEncodedNonMimeMessageWithChildren() : void
     {
         $testContents = '';
 
@@ -180,7 +182,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 
@@ -195,8 +197,8 @@ class MessagePartStreamTest extends TestCase
             ->willReturn('la-file');
         $this->mockStreamFactory->expects($this->once())
             ->method('newUUStream')
-            ->willReturnCallback(function ($stream) {
-                $mock = $this->getMockBuilder('ZBateson\StreamDecorators\NonClosingStream')
+            ->willReturnCallback(function($stream) {
+                $mock = $this->getMockBuilder(\ZBateson\StreamDecorators\NonClosingStream::class)
                     ->setConstructorArgs([$stream])
                     ->setMethods(['setFilename'])
                     ->getMock();
@@ -228,7 +230,7 @@ class MessagePartStreamTest extends TestCase
             ->willReturn(null);
         $message->expects($this->once())
             ->method('getChildParts')
-            ->willReturn([ $child1, $child2 ]);
+            ->willReturn([$child1, $child2]);
 
         $message->expects($this->once())
             ->method('getChildCount')
@@ -247,7 +249,7 @@ class MessagePartStreamTest extends TestCase
         $this->assertEquals($testContents, $ms->getContents());
     }
 
-    public function testRead7BitMimeMessage()
+    public function testRead7BitMimeMessage() : void
     {
         $testContents = '';
 
@@ -258,7 +260,7 @@ class MessagePartStreamTest extends TestCase
 
         $this->mockStreamFactory->expects($this->once())
             ->method('newNonClosingStream')
-            ->willReturnCallback(function ($stream) {
+            ->willReturnCallback(function($stream) {
                 return new NonClosingStream($stream);
             });
 

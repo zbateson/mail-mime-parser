@@ -1,8 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AddressHeaderTest
@@ -15,35 +15,36 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  */
 class AddressHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
     }
 
-    public function testEmptyHeader()
+    public function testEmptyHeader() : void
     {
         $header = new AddressHeader($this->consumerService, 'TO', '');
         $this->assertEquals('', $header->getValue());
         $this->assertNull($header->getPersonName());
     }
 
-    public function testSingleAddress()
+    public function testSingleAddress() : void
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
@@ -51,13 +52,13 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('From', $header->getName());
     }
 
-    public function testAddressHeaderToString()
+    public function testAddressHeaderToString() : void
     {
         $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('From: koolaid@dontdrinkit.com', $header);
     }
 
-    public function testSingleAddressWithName()
+    public function testSingleAddressWithName() : void
     {
         $header = new AddressHeader($this->consumerService, 'From', 'Kool Aid <koolaid@dontdrinkit.com>');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
@@ -68,7 +69,7 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('koolaid@dontdrinkit.com', $addresses[0]->getValue());
     }
 
-    public function testSingleAddressWithQuotedName()
+    public function testSingleAddressWithQuotedName() : void
     {
         $header = new AddressHeader($this->consumerService, 'To', '"Jürgen Schmürgen" <schmuergen@example.com>');
         $addresses = $header->getParts();
@@ -77,7 +78,7 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('schmuergen@example.com', $addresses[0]->getEmail());
     }
 
-    public function testComplexSingleAddress()
+    public function testComplexSingleAddress() : void
     {
         // the domain is invalid here
         $header = new AddressHeader(
@@ -91,7 +92,7 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('kilgoretrout@"ilium".ny.us', $addresses[0]->getEmail());
     }
 
-    public function testSingleAddressWithEscapedToken()
+    public function testSingleAddressWithEscapedToken() : void
     {
         $header = new AddressHeader($this->consumerService, 'From', '\"Kool Aid\" <koolaid@dontdrinkit.com>');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
@@ -102,7 +103,7 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('koolaid@dontdrinkit.com', $addresses[0]->getValue());
     }
 
-    public function testMultipleAddresses()
+    public function testMultipleAddresses() : void
     {
         $header = new AddressHeader(
             $this->consumerService,
@@ -120,7 +121,7 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('therose@pureawesome.com', $addresses[3]->getEmail());
     }
 
-    public function testAddressGroups()
+    public function testAddressGroups() : void
     {
         $header = new AddressHeader(
             $this->consumerService,
@@ -141,7 +142,7 @@ class AddressHeaderTest extends TestCase
         $this->assertCount(4, $lannisters->getAddresses());
     }
 
-    public function testHasAddress()
+    public function testHasAddress() : void
     {
         $header = new AddressHeader(
             $this->consumerService,
@@ -159,7 +160,7 @@ class AddressHeaderTest extends TestCase
         $this->assertFalse($header->hasAddress('nonexistent@example.com'));
     }
 
-    public function testGetAddresses()
+    public function testGetAddresses() : void
     {
         $header = new AddressHeader(
             $this->consumerService,
@@ -174,17 +175,17 @@ class AddressHeaderTest extends TestCase
         $parts = $header->getParts();
 
         foreach ($parts[0]->getAddresses() as $addr) {
-            $this->assertSame($addr, current($addresses));
-            next($addresses);
+            $this->assertSame($addr, \current($addresses));
+            \next($addresses);
         }
         foreach ($parts[1]->getAddresses() as $addr) {
-            $this->assertSame($addr, current($addresses));
-            next($addresses);
+            $this->assertSame($addr, \current($addresses));
+            \next($addresses);
         }
-        $this->assertEquals('maxpayne@addressunknown.com', current($addresses)->getEmail());
+        $this->assertEquals('maxpayne@addressunknown.com', \current($addresses)->getEmail());
     }
 
-    public function testGetGroups()
+    public function testGetGroups() : void
     {
         $header = new AddressHeader(
             $this->consumerService,

@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserManagerTest
@@ -13,31 +14,34 @@ use LegacyPHPUnit\TestCase;
  */
 class ParserManagerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mimeParser;
+
+    // @phpstan-ignore-next-line
     private $nonMimeParser;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
-        $this->mimeParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\MimeParser')
+        $this->mimeParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\MimeParser::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->nonMimeParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\NonMimeParser')
+        $this->nonMimeParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\NonMimeParser::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testConstructorSetsParserManager()
+    public function testConstructorSetsParserManager() : void
     {
         $this->mimeParser->expects($this->once())
             ->method('setParserManager')
-            ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Parser\ParserManager'));
+            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\ParserManager::class));
         $this->nonMimeParser->expects($this->once())
             ->method('setParserManager')
-            ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Parser\ParserManager'));
+            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\ParserManager::class));
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
     }
 
-    public function testSetParsersSetsParserManager()
+    public function testSetParsersSetsParserManager() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
@@ -48,10 +52,10 @@ class ParserManagerTest extends TestCase
             ->method('setParserManager')
             ->with($instance);
 
-        $instance->setParsers([ $this->mimeParser, $this->nonMimeParser ]);
+        $instance->setParsers([$this->mimeParser, $this->nonMimeParser]);
     }
 
-    public function testPrependParserSetsParserManager()
+    public function testPrependParserSetsParserManager() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
@@ -62,14 +66,14 @@ class ParserManagerTest extends TestCase
         $instance->prependParser($this->mimeParser);
     }
 
-    public function testCreateParserProxyForMessage()
+    public function testCreateParserProxyForMessage() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $proxyFactory = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory');
+        $proxyFactory = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
 
         $this->mimeParser->expects($this->once())
             ->method('canParse')
@@ -92,14 +96,14 @@ class ParserManagerTest extends TestCase
         $this->assertSame('t000st', $instance->createParserProxyFor($partBuilder));
     }
 
-    public function testCreateParserProxyForPart()
+    public function testCreateParserProxyForPart() : void
     {
         $instance = new ParserManager($this->mimeParser, $this->nonMimeParser);
 
-        $partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $proxyFactory = $this->getMockForAbstractClass('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory');
+        $proxyFactory = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
 
         $this->mimeParser->expects($this->once())
             ->method('canParse')

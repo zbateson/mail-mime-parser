@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory;
@@ -40,10 +41,8 @@ class NonMimeParser extends AbstractParser
      * Always returns true, and should therefore be the last parser reached by
      * a ParserManager.
      *
-     * @param PartBuilder $part
-     * @return bool
      */
-    public function canParse(PartBuilder $part)
+    public function canParse(PartBuilder $part) : bool
     {
         return true;
     }
@@ -56,7 +55,6 @@ class NonMimeParser extends AbstractParser
      * pos to that of $parent->getNextParStart() (since a 'begin' line is read
      * prior to another child being created, see parseNextPart()).
      *
-     * @param ParserNonMimeMessageProxy $parent
      * @return ParserPartProxy
      */
     private function createPart(ParserNonMimeMessageProxy $parent)
@@ -76,30 +74,30 @@ class NonMimeParser extends AbstractParser
      *
      * @param ParserNonMimeMessageProxy|ParserUUEncodedPartProxy $proxy
      */
-    private function parseNextPart(ParserPartProxy $proxy)
+    private function parseNextPart(ParserPartProxy $proxy) : void
     {
         $handle = $proxy->getMessageResourceHandle();
-        while (!feof($handle)) {
-            $start = ftell($handle);
-            $line = trim(MessageParser::readLine($handle));
-            if (preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
+        while (!\feof($handle)) {
+            $start = \ftell($handle);
+            $line = \trim(MessageParser::readLine($handle));
+            if (\preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
                 $proxy->setNextPartStart($start);
-                $proxy->setNextPartMode($matches[1]);
+                $proxy->setNextPartMode((int)$matches[1]);
                 $proxy->setNextPartFilename($matches[2]);
                 return;
             }
-            $proxy->setStreamPartAndContentEndPos(ftell($handle));
+            $proxy->setStreamPartAndContentEndPos(\ftell($handle));
         }
     }
 
-    public function parseContent(ParserPartProxy $proxy)
+    public function parseContent(ParserPartProxy $proxy) : void
     {
         $handle = $proxy->getMessageResourceHandle();
-        if ($proxy->getNextPartStart() !== null || feof($handle)) {
+        if ($proxy->getNextPartStart() !== null || \feof($handle)) {
             return;
         }
         if ($proxy->getStreamContentStartPos() === null) {
-            $proxy->setStreamContentStartPos(ftell($handle));
+            $proxy->setStreamContentStartPos(\ftell($handle));
         }
         $this->parseNextPart($proxy);
     }
@@ -107,12 +105,10 @@ class NonMimeParser extends AbstractParser
     public function parseNextChild(ParserMimePartProxy $proxy)
     {
         $handle = $proxy->getMessageResourceHandle();
-        if ($proxy->getNextPartStart() === null || feof($handle)) {
+        if ($proxy->getNextPartStart() === null || \feof($handle)) {
             return null;
         }
-        $child = $this->createPart(
-            $proxy
-        );
+        $child = $this->createPart($proxy);
         $proxy->clearNextPart();
         return $child;
     }

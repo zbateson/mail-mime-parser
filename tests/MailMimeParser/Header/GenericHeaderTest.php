@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of GenericHeaderTest
@@ -14,28 +15,29 @@ use LegacyPHPUnit\TestCase;
  */
 class GenericHeaderTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $consumerService;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-		$charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $this->consumerService = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
     }
 
-    public function testParsing()
+    public function testParsing() : void
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
@@ -44,7 +46,7 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Hunted-By', $header->getName());
     }
 
-    public function testMultilineMimeParts()
+    public function testMultilineMimeParts() : void
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', '=?US-ASCII?Q?Hunt?=
              =?US-ASCII?Q?er_S._?=
@@ -57,7 +59,7 @@ class GenericHeaderTest extends TestCase
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
      * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
      */
-    public function testQuotesMimeAndComments()
+    public function testQuotesMimeAndComments() : void
     {
         $header = new GenericHeader(
             $this->consumerService,
@@ -67,7 +69,7 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Dwayne "The Rock" Jackson', $header->getValue());
     }
 
-    public function testCommentBetweenParts()
+    public function testCommentBetweenParts() : void
     {
         $header = new GenericHeader(
             $this->consumerService,
@@ -77,7 +79,7 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Dwayne Jackson', $header->getValue());
     }
 
-    public function testGenericHeaderToString()
+    public function testGenericHeaderToString() : void
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunted-By: Hunter S. Thompson', $header);

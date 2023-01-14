@@ -4,15 +4,14 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
-use ZBateson\MailMimeParser\Message\PartFilter;
-use Iterator;
 use AppendIterator;
 use ArrayIterator;
+use Iterator;
 use RecursiveIteratorIterator;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A message part that contains children.
@@ -27,22 +26,22 @@ abstract class MultiPart extends MessagePart implements IMultiPart
     protected $partChildrenContainer;
 
     public function __construct(
-        IMimePart $parent = null,
-        PartStreamContainer $streamContainer = null,
-        PartChildrenContainer $partChildrenContainer = null
+        ?IMimePart $parent = null,
+        ?PartStreamContainer $streamContainer = null,
+        ?PartChildrenContainer $partChildrenContainer = null
     ) {
         parent::__construct($streamContainer, $parent);
         if ($partChildrenContainer === null) {
             $di = MailMimeParser::getDependencyContainer();
-            $partChildrenContainer = $di['ZBateson\MailMimeParser\Message\PartChildrenContainer'];
+            $partChildrenContainer = $di[\ZBateson\MailMimeParser\Message\PartChildrenContainer::class];
         }
         $this->partChildrenContainer = $partChildrenContainer;
     }
 
-    private function getAllPartsIterator()
+    private function getAllPartsIterator() : AppendIterator
     {
         $iter = new AppendIterator();
-        $iter->append(new ArrayIterator([ $this ]));
+        $iter->append(new ArrayIterator([$this]));
         $iter->append(new RecursiveIteratorIterator($this->partChildrenContainer, RecursiveIteratorIterator::SELF_FIRST));
         return $iter;
     }
@@ -71,16 +70,16 @@ abstract class MultiPart extends MessagePart implements IMultiPart
 
     public function getAllParts($fnFilter = null)
     {
-        $array = iterator_to_array($this->getAllPartsIterator(), false);
+        $array = \iterator_to_array($this->getAllPartsIterator(), false);
         if ($fnFilter !== null) {
-            return array_values(array_filter($array, $fnFilter));
+            return \array_values(\array_filter($array, $fnFilter));
         }
         return $array;
     }
 
     public function getPartCount($fnFilter = null)
     {
-        return count($this->getAllParts($fnFilter));
+        return \count($this->getAllParts($fnFilter));
     }
 
     public function getChild($index, $fnFilter = null)
@@ -99,16 +98,16 @@ abstract class MultiPart extends MessagePart implements IMultiPart
 
     public function getChildParts($fnFilter = null)
     {
-        $array = iterator_to_array($this->partChildrenContainer, false);
+        $array = \iterator_to_array($this->partChildrenContainer, false);
         if ($fnFilter !== null) {
-            return array_values(array_filter($array, $fnFilter));
+            return \array_values(\array_filter($array, $fnFilter));
         }
         return $array;
     }
 
     public function getChildCount($fnFilter = null)
     {
-        return count($this->getChildParts($fnFilter));
+        return \count($this->getChildParts($fnFilter));
     }
 
     public function getPartByMimeType($mimeType, $index = 0)
@@ -128,14 +127,14 @@ abstract class MultiPart extends MessagePart implements IMultiPart
 
     public function getPartByContentId($contentId)
     {
-        $sanitized = preg_replace('/^\s*<|>\s*$/', '', $contentId);
-        return $this->getPart(0, function (IMessagePart $part) use ($sanitized) {
+        $sanitized = \preg_replace('/^\s*<|>\s*$/', '', $contentId);
+        return $this->getPart(0, function(IMessagePart $part) use ($sanitized) {
             $cid = $part->getContentId();
-            return ($cid !== null && strcasecmp($cid, $sanitized) === 0);
+            return ($cid !== null && \strcasecmp($cid, $sanitized) === 0);
         });
     }
 
-    public function addChild(IMessagePart $part, $position = null)
+    public function addChild(IMessagePart $part, ?int $position = null)
     {
         if ($part !== $this) {
             $part->parent = $this;
@@ -144,24 +143,24 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         }
     }
 
-    public function removePart(IMessagePart $part)
+    public function removePart(IMessagePart $part) : ?int
     {
         $parent = $part->getParent();
         if ($this !== $parent && $parent !== null) {
             return $parent->removePart($part);
-        } else {
-            $position = $this->partChildrenContainer->remove($part);
-            if ($position !== null) {
-                $this->notify();
-            }
-            return $position;
         }
+
+        $position = $this->partChildrenContainer->remove($part);
+        if ($position !== null) {
+            $this->notify();
+        }
+        return $position;
     }
 
-    public function removeAllParts($fnFilter = null)
+    public function removeAllParts($fnFilter = null) : int
     {
         $parts = $this->getAllParts($fnFilter);
-        $count = count($parts);
+        $count = \count($parts);
         foreach ($parts as $part) {
             if ($part === $this) {
                 --$count;

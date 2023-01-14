@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserPartChildrenContainerTest
@@ -13,18 +14,21 @@ use LegacyPHPUnit\TestCase;
  */
 class ParserPartChildrenContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
+
+    // @phpstan-ignore-next-line
     private $proxy;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+        $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new ParserPartChildrenContainer($this->proxy);
     }
 
-    public function testOffsetExistsCallsProxyOnceAfterReturningNull()
+    public function testOffsetExistsCallsProxyOnceAfterReturningNull() : void
     {
         $this->proxy->expects($this->once())
             ->method('popNextChild')
@@ -34,9 +38,9 @@ class ParserPartChildrenContainerTest extends TestCase
         $this->assertFalse($this->instance->offsetExists(0));
     }
 
-    public function testOffsetExistsCallsProxyTwiceAfterNotReturningNull()
+    public function testOffsetExistsCallsProxyTwiceAfterNotReturningNull() : void
     {
-        $part = $this->getMockBuilder('ZBateson\MailMimeParser\Message\IMessagePart')
+        $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->proxy->expects($this->exactly(2))

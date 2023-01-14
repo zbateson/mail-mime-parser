@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 /**
@@ -40,7 +41,7 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
      *
      * @return int|null The start position or null
      */
-    public function getNextPartStart()
+    public function getNextPartStart() : ?int
     {
         return $this->nextPartStart;
     }
@@ -51,7 +52,7 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
      *
      * @return int|null The file mode or null
      */
-    public function getNextPartMode()
+    public function getNextPartMode() : ?int
     {
         return $this->nextPartMode;
     }
@@ -60,9 +61,9 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
      * Returns the next part's filename in a uu-encoded 'begin' line if one
      * exists, or null otherwise.
      *
-     * @return int|null The file name or null
+     * @return string|null The file name or null
      */
-    public function getNextPartFilename()
+    public function getNextPartFilename() : ?string
     {
         return $this->nextPartFilename;
     }
@@ -70,9 +71,8 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
     /**
      * Sets the next part's start position within the message's raw stream.
      *
-     * @param int $nextPartStart
      */
-    public function setNextPartStart($nextPartStart)
+    public function setNextPartStart(int $nextPartStart) : void
     {
         $this->nextPartStart = $nextPartStart;
     }
@@ -80,9 +80,8 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
     /**
      * Sets the next part's unix file mode from its 'begin' line.
      *
-     * @param int $nextPartMode
      */
-    public function setNextPartMode($nextPartMode)
+    public function setNextPartMode(int $nextPartMode) : void
     {
         $this->nextPartMode = $nextPartMode;
     }
@@ -90,9 +89,8 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
     /**
      * Sets the next part's filename from its 'begin' line.
      *
-     * @param string $nextPartFilename
      */
-    public function setNextPartFilename($nextPartFilename)
+    public function setNextPartFilename(string $nextPartFilename) : void
     {
         $this->nextPartFilename = $nextPartFilename;
     }
@@ -100,7 +98,7 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
     /**
      * Sets the next part start position, file mode, and filename to null
      */
-    public function clearNextPart()
+    public function clearNextPart() : void
     {
         $this->nextPartStart = null;
         $this->nextPartMode = null;

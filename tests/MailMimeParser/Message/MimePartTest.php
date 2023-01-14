@@ -1,9 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MessageFilter;
-use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of MimePartTest
@@ -17,23 +16,28 @@ use GuzzleHttp\Psr7;
  */
 class MimePartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockPartStreamContainer;
+
+    // @phpstan-ignore-next-line
     private $mockHeaderContainer;
+
+    // @phpstan-ignore-next-line
     private $mockPartChildrenContainer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->mockPartStreamContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $this->mockPartStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $this->mockHeaderContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartChildrenContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')
+        $this->mockPartChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)
             ->getMock();
     }
 
-    private function getMimePart($childrenContainer = null, $headerContainer = null, $streamContainer = null, $parent = null)
+    private function getMimePart($childrenContainer = null, $headerContainer = null, $streamContainer = null, $parent = null) : MimePart
     {
         if ($childrenContainer === null) {
             $childrenContainer = $this->mockPartChildrenContainer;
@@ -47,9 +51,9 @@ class MimePartTest extends TestCase
         return new MimePart($parent, $streamContainer, $headerContainer, $childrenContainer);
     }
 
-    protected function getMockedParameterHeader($name, $value, $parameterValue = null)
+    protected function getMockedParameterHeader($name, $value, $parameterValue = null) : \ZBateson\MailMimeParser\Header\ParameterHeader
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\ParameterHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
@@ -61,9 +65,9 @@ class MimePartTest extends TestCase
         return $header;
     }
 
-    protected function getMockedIdHeader($id)
+    protected function getMockedIdHeader($id) : \ZBateson\MailMimeParser\Header\IdHeader
     {
-        $header = $this->getMockBuilder('ZBateson\MailMimeParser\Header\IdHeader')
+        $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\IdHeader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
@@ -71,18 +75,18 @@ class MimePartTest extends TestCase
         return $header;
     }
 
-    public function testGetFileName()
+    public function testGetFileName() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
             ->withConsecutive(
-                [ $this->equalTo('Content-Type'), 0 ],
-                [ $this->equalTo('Content-Disposition'), 0 ],
-                [ $this->equalTo('Content-Type'), 0 ],
-                [ $this->equalTo('Content-Disposition'), 0 ],
-                [ $this->equalTo('Content-Type'), 0 ],
-                [ $this->equalTo('Content-Disposition'), 0 ]
+                [$this->equalTo('Content-Type'), 0],
+                [$this->equalTo('Content-Disposition'), 0],
+                [$this->equalTo('Content-Type'), 0],
+                [$this->equalTo('Content-Disposition'), 0],
+                [$this->equalTo('Content-Type'), 0],
+                [$this->equalTo('Content-Disposition'), 0]
             )
             ->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('Content-Type', 'blah-blooh', null),
@@ -97,7 +101,7 @@ class MimePartTest extends TestCase
         $this->assertNull($part->getFilename());
     }
 
-    public function testIsMimeDefaultContentTypeAndCharset()
+    public function testIsMimeDefaultContentTypeAndCharset() : void
     {
         $part = $this->getMimePart();
         $this->assertTrue($part->isMime());
@@ -106,7 +110,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('ISO-8859-1', $part->getCharset());
     }
 
-    public function testGetContentType()
+    public function testGetContentType() : void
     {
         $part = $this->getMimePart();
         $header = $this->getMockedParameterHeader('content-type', 'MEEP/MOOP');
@@ -117,7 +121,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('meep/moop', $part->getContentType());
     }
 
-    public function testGetCharset()
+    public function testGetCharset() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -132,7 +136,7 @@ class MimePartTest extends TestCase
         $this->assertNull($part->getCharset());
     }
 
-    public function testDefaultCharset()
+    public function testDefaultCharset() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -154,7 +158,7 @@ class MimePartTest extends TestCase
         $this->assertNull($part->getCharset());
     }
 
-    public function testGetContentDisposition()
+    public function testGetContentDisposition() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -164,7 +168,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('inline', $part->getContentDisposition());
     }
 
-    public function testGetContentTransferEncoding()
+    public function testGetContentTransferEncoding() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -187,7 +191,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('base64', $part->getContentTransferEncoding());
     }
 
-    public function testGetContentId()
+    public function testGetContentId() : void
     {
         $part = $this->getMimePart();
         $header = $this->getMockedIdHeader('1337');
@@ -198,7 +202,7 @@ class MimePartTest extends TestCase
         $this->assertNull($part->getContentId());
     }
 
-    public function testIsSignaturePart()
+    public function testIsSignaturePart() : void
     {
         $part = $this->getMimePart();
         $this->assertFalse($part->isSignaturePart());
@@ -207,15 +211,15 @@ class MimePartTest extends TestCase
         $parentMimePart->addChild($part);
         $this->assertFalse($part->isSignaturePart());
 
-        $message = $this->getMockBuilder('ZBateson\MailMimeParser\Message')
+        $message = $this->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
             ->setConstructorArgs([
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartChildrenContainer')->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\PrivacyHelper')->disableOriginalConstructor()->getMock()
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class)->disableOriginalConstructor()->getMock()
             ])
-            ->setMethods([ 'getSignaturePart' ])
+            ->setMethods(['getSignaturePart'])
             ->getMock();
         $message->expects($this->once())->method('getSignaturePart')->willReturn($part);
         $message->addChild($part);
@@ -223,7 +227,7 @@ class MimePartTest extends TestCase
         $this->assertTrue($part->isSignaturePart());
     }
 
-    public function testGetHeader()
+    public function testGetHeader() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -237,7 +241,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('giggidysekint', $part->getHeader('sekint', 1));
     }
 
-    public function testGetAllHeaders()
+    public function testGetAllHeaders() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -247,7 +251,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('noice', $part->getAllHeaders());
     }
 
-    public function testGetAllHeadersByName()
+    public function testGetAllHeadersByName() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -258,7 +262,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('noice', $part->getAllHeadersByName('dahoida'));
     }
 
-    public function testGetRawHeaders()
+    public function testGetRawHeaders() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -268,7 +272,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('noice', $part->getRawHeaders());
     }
 
-    public function testGetRawHeadersIterator()
+    public function testGetRawHeadersIterator() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -278,7 +282,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('noice', $part->getRawHeaderIterator());
     }
 
-    public function testGetHeaderValue()
+    public function testGetHeaderValue() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -300,7 +304,7 @@ class MimePartTest extends TestCase
         $this->assertEquals('WOW', $part->getHeaderValue('foiiiith', 'WOW'));
     }
 
-    public function testGetHeaderParameter()
+    public function testGetHeaderParameter() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -322,15 +326,15 @@ class MimePartTest extends TestCase
         $this->assertEquals('WOW', $part->getHeaderParameter('foiiiith', 'eep', 'WOW'));
     }
 
-    public function testSetRawHeader()
+    public function testSetRawHeader() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('set')
             ->withConsecutive(
-                [ 'title', 'SILENCE of the lamboos', 0 ],
-                [ 'title', 'SILENCE of the lambies', 3 ]
+                ['title', 'SILENCE of the lamboos', 0],
+                ['title', 'SILENCE of the lambies', 3]
             );
         $observer = $this->getMockForAbstractClass('SplObserver');
         $observer->expects($this->exactly(2))
@@ -341,7 +345,7 @@ class MimePartTest extends TestCase
         $part->setRawHeader('title', 'SILENCE of the lambies', 3);
     }
 
-    public function testAddRawHeader()
+    public function testAddRawHeader() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -356,7 +360,7 @@ class MimePartTest extends TestCase
         $part->addRawHeader('title', 'SILENCE of the lamboos');
     }
 
-    public function testRemoveHeader()
+    public function testRemoveHeader() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
@@ -371,13 +375,13 @@ class MimePartTest extends TestCase
         $part->removeHeader('weeeee');
     }
 
-    public function testRemoveSingleHeader()
+    public function testRemoveSingleHeader() : void
     {
         $part = $this->getMimePart();
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('remove')
-            ->withConsecutive([ 'weeeee', 0 ], [ 'wooooo', 3 ]);
+            ->withConsecutive(['weeeee', 0], ['wooooo', 3]);
         $observer = $this->getMockForAbstractClass('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');

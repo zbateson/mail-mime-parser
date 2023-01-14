@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of HeaderFactoryTest
@@ -13,137 +14,138 @@ use LegacyPHPUnit\TestCase;
  */
 class HeaderFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     protected $headerFactory;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->headerFactory = new HeaderFactory($cs, $mlpf);
     }
 
-    public function testAddressHeaderInstance()
+    public function testAddressHeaderInstance() : void
     {
         $aValid = ['BCC', 'to', 'FrOM', 'sender', 'reply-to', 'resent-from', 'Resent-To', 'Resent-Cc', 'Resent-Bcc', 'Resent-Reply-To', 'Return-Path', 'Delivered-To'];
         $aNot = ['MESSAGE-ID', 'date', 'Subject'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\AddressHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\AddressHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\AddressHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\AddressHeader::class, $header);
         }
     }
 
-    public function testDateHeaderInstance()
+    public function testDateHeaderInstance() : void
     {
         $aValid = ['Date', 'ExpIRY-Date', 'EXPIRES'];
         $aNot = ['MESSAGE-ID', 'bcc', 'Subject'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Wed, 17 May 2000 19:08:29 -0400');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\DateHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\DateHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\DateHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\DateHeader::class, $header);
         }
     }
 
-    public function testGenericHeaderInstance()
+    public function testGenericHeaderInstance() : void
     {
         $aValid = ['X-Generic-Header', 'Some-Other-Header'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'Content-ID', 'Message-ID', 'References', 'Received'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\GenericHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\GenericHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\GenericHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\GenericHeader::class, $header);
         }
     }
 
-    public function testIdHeaderInstance()
+    public function testIdHeaderInstance() : void
     {
         $aValid = ['Content-ID', 'Message-ID', 'In-Reply-To', 'References'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Received', 'Authentication-Results'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\IdHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\IdHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\IdHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\IdHeader::class, $header);
         }
     }
 
-    public function testSubjectHeaderInstance()
+    public function testSubjectHeaderInstance() : void
     {
         $aValid = ['Subject'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Content-Id', 'content-ID', 'IN-REPLY-TO'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\SubjectHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\SubjectHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\SubjectHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\SubjectHeader::class, $header);
         }
     }
 
-    public function testParameterHeaderInstance()
+    public function testParameterHeaderInstance() : void
     {
         $aValid = ['Content-Type', 'CONTENT-Disposition'];
         $aNot = ['MESSAGE-ID', 'bcc', 'Subject', 'X-Header-Test'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\ParameterHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\ParameterHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\ParameterHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\ParameterHeader::class, $header);
         }
     }
 
-    public function testReceivedHeaderInstance()
+    public function testReceivedHeaderInstance() : void
     {
         $aValid = ['Received'];
         $aNot = ['BCC', 'ExPirY-daTE', 'Content-DISPOSITION', 'Subject', 'X-Generic-Header', 'Authentication-Results', 'In-Reply-To', 'References', 'Message-ID'];
         foreach ($aValid as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertInstanceOf('ZBateson\MailMimeParser\Header\ReceivedHeader', $header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
         }
         foreach ($aNot as $name) {
             $header = $this->headerFactory->newInstance($name, 'Test');
             $this->assertNotNull($header);
-            $this->assertNotInstanceOf('ZBateson\MailMimeParser\Header\ReceivedHeader', $header);
+            $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
         }
     }
 }

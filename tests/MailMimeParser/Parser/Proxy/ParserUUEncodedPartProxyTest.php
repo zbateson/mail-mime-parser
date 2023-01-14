@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserUUEncodedPartProxyTest
@@ -13,24 +14,33 @@ use LegacyPHPUnit\TestCase;
  */
 class ParserUUEncodedPartProxyTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $headerContainer;
+
+    // @phpstan-ignore-next-line
     private $partBuilder;
+
+    // @phpstan-ignore-next-line
     private $parser;
+
+    // @phpstan-ignore-next-line
     private $parent;
+
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer')
+        $this->headerContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\IParser')
+        $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParser::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy')
+        $this->parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new ParserUUEncodedPartProxy(
@@ -39,7 +49,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         );
     }
 
-    public function testGetNextPartStart()
+    public function testGetNextPartStart() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getParent')
@@ -50,7 +60,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->assertSame(42, $this->instance->getNextPartStart());
     }
 
-    public function testGetNextPartMode()
+    public function testGetNextPartMode() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getParent')
@@ -61,7 +71,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->assertSame(42, $this->instance->getNextPartMode());
     }
 
-    public function testGetNextPartFilename()
+    public function testGetNextPartFilename() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getParent')
@@ -72,7 +82,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->assertSame('t00000st', $this->instance->getNextPartFilename());
     }
 
-    public function testSetNextPartStart()
+    public function testSetNextPartStart() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getParent')
@@ -83,7 +93,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->instance->setNextPartStart(42);
     }
 
-    public function testSetNextPartMode()
+    public function testSetNextPartMode() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getParent')
@@ -94,7 +104,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->instance->setNextPartMode(42);
     }
 
-    public function testSetNextPartFilename()
+    public function testSetNextPartFilename() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getParent')
@@ -105,7 +115,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->instance->setNextPartFilename('t00stee');
     }
 
-    public function testGetUnixFileMode()
+    public function testGetUnixFileMode() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getHeaderContainer')
@@ -116,7 +126,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
         $this->assertSame(42, $this->instance->getUnixFileMode());
     }
 
-    public function testGetFilename()
+    public function testGetFilename() : void
     {
         $this->partBuilder->expects($this->once())
             ->method('getHeaderContainer')

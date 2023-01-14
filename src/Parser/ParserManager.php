@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser;
 
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
@@ -27,16 +28,15 @@ class ParserManager
 
     public function __construct(MimeParser $mimeParser, NonMimeParser $nonMimeParser)
     {
-        $this->setParsers([ $mimeParser, $nonMimeParser ]);
+        $this->setParsers([$mimeParser, $nonMimeParser]);
     }
 
     /**
      * Overrides the internal prioritized list of parses with the passed list,
      * calling $parser->setParserManager($this) on each one.
      *
-     * @param array $parsers
      */
-    public function setParsers(array $parsers)
+    public function setParsers(array $parsers) : void
     {
         foreach ($parsers as $parser) {
             $parser->setParserManager($this);
@@ -50,16 +50,16 @@ class ParserManager
      *
      * @param IParser $parser The parser to add.
      */
-    public function prependParser(IParser $parser)
+    public function prependParser(IParser $parser) : void
     {
         $parser->setParserManager($this);
-        array_unshift($this->parsers, $parser);
+        \array_unshift($this->parsers, $parser);
     }
 
     /**
      * Creates a ParserPartProxy for the passed $partBuilder using a compatible
      * IParser.
-     * 
+     *
      * Loops through registered IParsers calling 'canParse()' on each with the
      * passed PartBuilder, then calling either 'getParserMessageProxyFactory()'
      * or 'getParserPartProxyFactory()' depending on if the PartBuilder has a
@@ -69,14 +69,14 @@ class ParserManager
      *
      * @param PartBuilder $partBuilder The PartBuilder to wrap in a proxy with
      *        an IParser
-     * @return ParserPartProxy The created ParserPartProxy tied to a new
+     * @return ?ParserPartProxy The created ParserPartProxy tied to a new
      *         IMessagePart and associated IParser.
      */
     public function createParserProxyFor(PartBuilder $partBuilder)
     {
         foreach ($this->parsers as $parser) {
             if ($parser->canParse($partBuilder)) {
-                $factory = ($partBuilder->getParent() === null) ? 
+                $factory = ($partBuilder->getParent() === null) ?
                     $parser->getParserMessageProxyFactory() :
                     $parser->getParserPartProxyFactory();
                 return $factory->newInstance($partBuilder, $parser);

@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7\Utils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MimeParserTest
@@ -16,42 +17,59 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 class MimeParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $messageProxyFactory;
+
+    // @phpstan-ignore-next-line
     private $partProxyFactory;
+
+    // @phpstan-ignore-next-line
     private $partBuilderFactory;
+
+    // @phpstan-ignore-next-line
     private $headerContainerFactory;
+
+    // @phpstan-ignore-next-line
     private $headerParser;
+
+    // @phpstan-ignore-next-line
     private $parserManager;
 
+    // @phpstan-ignore-next-line
     private $partBuilder;
+
+    // @phpstan-ignore-next-line
     private $parserPartProxy;
+
+    // @phpstan-ignore-next-line
     private $headerContainer;
 
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->messageProxyFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory')
+        $this->messageProxyFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partProxyFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory')
+        $this->partProxyFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
+        $this->partBuilderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory')
+        $this->headerContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\HeaderParser')
+        $this->headerParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\HeaderParser::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parserManager = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\ParserManager')
+        $this->parserManager = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\ParserManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -64,26 +82,26 @@ class MimeParserTest extends TestCase
         );
         $this->instance->setParserManager($this->parserManager);
 
-        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parserPartProxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+        $this->parserPartProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->headerContainer = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $this->headerContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testAbstractParserGetters()
+    public function testAbstractParserGetters() : void
     {
         $this->assertSame($this->messageProxyFactory, $this->instance->getParserMessageProxyFactory());
         $this->assertSame($this->partProxyFactory, $this->instance->getParserPartProxyFactory());
     }
 
-    public function testCanParse()
+    public function testCanParse() : void
     {
         $this->partBuilder->expects($this->exactly(2))
             ->method('isMime')
@@ -92,7 +110,7 @@ class MimeParserTest extends TestCase
         $this->assertFalse($this->instance->canParse($this->partBuilder));
     }
 
-    public function testParseEmptyContent()
+    public function testParseEmptyContent() : void
     {
         $handle = StreamWrapper::getResource(Utils::streamFor(''));
         $this->parserPartProxy->expects($this->once())
@@ -111,10 +129,10 @@ class MimeParserTest extends TestCase
             ->method('setEof');
 
         $this->instance->parseContent($this->parserPartProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentLinesWithoutBoundary()
+    public function testParseContentLinesWithoutBoundary() : void
     {
         $str = "Some\r\nLines\r\nOf\r\nText";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -133,18 +151,18 @@ class MimeParserTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([ 2 ], [ 2 ], [ 2 ], [ 0 ]);
+            ->withConsecutive([2], [2], [2], [0]);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->with(strlen($str));
+            ->with(\strlen($str));
         $this->parserPartProxy->expects($this->once())
             ->method('setEof');
 
         $this->instance->parseContent($this->parserPartProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentLinesWithLeadingDashesWithoutBoundary()
+    public function testParseContentLinesWithLeadingDashesWithoutBoundary() : void
     {
         $str = "--Some\r\n--Lines\r\n--Of\r\n--Text";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -163,22 +181,22 @@ class MimeParserTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([ 2 ], [ 2 ], [ 2 ], [ 0 ]);
+            ->withConsecutive([2], [2], [2], [0]);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setEndBoundaryFound')
-            ->withConsecutive([ '--Some' ], [ '--Lines' ], [ '--Of' ], [ '--Text' ])
+            ->withConsecutive(['--Some'], ['--Lines'], ['--Of'], ['--Text'])
             ->willReturn(false);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->with(strlen($str));
+            ->with(\strlen($str));
         $this->parserPartProxy->expects($this->once())
             ->method('setEof');
 
         $this->instance->parseContent($this->parserPartProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentLinesWithBoundary()
+    public function testParseContentLinesWithBoundary() : void
     {
         $str = "Some\r\nLines\r\n--Of\r\n--Text";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -197,22 +215,22 @@ class MimeParserTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([ 2 ], [ 2 ], [ 2 ], [ 0 ]);
+            ->withConsecutive([2], [2], [2], [0]);
         $this->parserPartProxy->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
-            ->withConsecutive([ '--Of' ], [ '--Text' ])
+            ->withConsecutive(['--Of'], ['--Text'])
             ->willReturnOnConsecutiveCalls(false, true);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->with(strlen($str) - strlen('--Text') - 2);
+            ->with(\strlen($str) - \strlen('--Text') - 2);
         $this->parserPartProxy->expects($this->never())
             ->method('setEof');
 
         $this->instance->parseContent($this->parserPartProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentLinesWithBoundarySetsCorrectLastLineEndingLength()
+    public function testParseContentLinesWithBoundarySetsCorrectLastLineEndingLength() : void
     {
         $str = "Some\r\nLines\r\n--Of\n--Text";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -231,26 +249,26 @@ class MimeParserTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 1);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([ 2 ], [ 2 ], [ 1 ], [ 0 ]);
+            ->withConsecutive([2], [2], [1], [0]);
         $this->parserPartProxy->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
-            ->withConsecutive([ '--Of' ], [ '--Text' ])
+            ->withConsecutive(['--Of'], ['--Text'])
             ->willReturnOnConsecutiveCalls(false, true);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->with(strlen($str) - strlen('--Text') - 1);
+            ->with(\strlen($str) - \strlen('--Text') - 1);
         $this->parserPartProxy->expects($this->never())
             ->method('setEof');
 
         $this->instance->parseContent($this->parserPartProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseContentLinesIgnoresLongBoundaryLine()
+    public function testParseContentLinesIgnoresLongBoundaryLine() : void
     {
         // 2044 + '--' + potential \r\n for 2048 limit
-        $boundary = '--' . str_repeat('t', 2044);
-        $boundaryLong = '--' . str_repeat('t', 2045);
+        $boundary = '--' . \str_repeat('t', 2044);
+        $boundaryLong = '--' . \str_repeat('t', 2045);
 
         $str = "Some\r\n--Of\r\n$boundaryLong\r\n$boundary";
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
@@ -269,22 +287,22 @@ class MimeParserTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([ 2 ], [ 2 ], [ 2 ], [ 0 ]);
+            ->withConsecutive([2], [2], [2], [0]);
         $this->parserPartProxy->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
-            ->withConsecutive([ '--Of' ], [ $boundary ])
+            ->withConsecutive(['--Of'], [$boundary])
             ->willReturn(false);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
-            ->with(strlen($str));
+            ->with(\strlen($str));
         $this->parserPartProxy->expects($this->once())
             ->method('setEof');
 
         $this->instance->parseContent($this->parserPartProxy);
-        fclose($handle);
+        \fclose($handle);
     }
 
-    public function testParseNextChild()
+    public function testParseNextChild() : void
     {
         $this->parserPartProxy->expects($this->once())
             ->method('isParentBoundaryFound')
@@ -314,7 +332,7 @@ class MimeParserTest extends TestCase
         $this->assertSame('groot', $this->instance->parseNextChild($this->parserPartProxy));
     }
 
-    public function testParseNextChildWhenParentBoundaryFoundReturnsNull()
+    public function testParseNextChildWhenParentBoundaryFoundReturnsNull() : void
     {
         $this->parserPartProxy->expects($this->once())
             ->method('isParentBoundaryFound')
@@ -322,7 +340,7 @@ class MimeParserTest extends TestCase
         $this->assertNull($this->instance->parseNextChild($this->parserPartProxy));
     }
 
-    public function testParseNextChildAfterParentEndBoundaryFound()
+    public function testParseNextChildAfterParentEndBoundaryFound() : void
     {
         $this->parserPartProxy->expects($this->once())
             ->method('isParentBoundaryFound')
@@ -338,7 +356,7 @@ class MimeParserTest extends TestCase
             ->method('isEndBoundaryFound')
             ->willReturn(true);
 
-        $endPartProxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy')
+        $endPartProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->partProxyFactory->expects($this->once())

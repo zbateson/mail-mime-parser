@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MessageParserTest
@@ -14,24 +15,33 @@ use GuzzleHttp\Psr7;
  */
 class MessageParserTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
+
+    // @phpstan-ignore-next-line
     private $partBuilderFactory;
+
+    // @phpstan-ignore-next-line
     private $partHeaderContainerFactory;
+
+    // @phpstan-ignore-next-line
     private $parserManager;
+
+    // @phpstan-ignore-next-line
     private $headerParser;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->partBuilderFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilderFactory')
+        $this->partBuilderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->partHeaderContainerFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory')
+        $this->partHeaderContainerFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parserManager = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\ParserManager')
+        $this->parserManager = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\ParserManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->headerParser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\HeaderParser')
+        $this->headerParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\HeaderParser::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -43,18 +53,18 @@ class MessageParserTest extends TestCase
         );
     }
 
-    public function testParse()
+    public function testParse() : void
     {
         $stream = Psr7\Utils::streamFor('test');
-        $msg = $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
+        $msg = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
 
-        $pb = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $pb = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $hc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $proxy = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+        $proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,24 +97,24 @@ class MessageParserTest extends TestCase
         $stream->close();
     }
 
-    public function testReadLine()
+    public function testReadLine() : void
     {
         $stream = Psr7\Utils::streamFor(
             "This is a string\n"
             . "with multiple lines,\n"
-            . "multiple lines..."
+            . 'multiple lines...'
         );
         $handle = Psr7\StreamWrapper::getResource($stream);
         $this->assertEquals("This is a string\n", MessageParser::readLine($handle));
         $this->assertEquals("with multiple lines,\n", MessageParser::readLine($handle));
-        $this->assertEquals("multiple lines...", MessageParser::readLine($handle));
+        $this->assertEquals('multiple lines...', MessageParser::readLine($handle));
         $this->assertFalse(MessageParser::readLine($handle));
         $stream->close();
     }
 
-    public function testReadLineWith4096Chars()
+    public function testReadLineWith4096Chars() : void
     {
-        $checkDiscarded = str_repeat('a', 4096);
+        $checkDiscarded = \str_repeat('a', 4096);
         $checkLarger = $checkDiscarded . $checkDiscarded;
         $stream = Psr7\Utils::streamFor(
             $checkDiscarded . "\n"
@@ -112,8 +122,8 @@ class MessageParserTest extends TestCase
             . 'last line'
         );
         $handle = Psr7\StreamWrapper::getResource($stream);
-        $this->assertEquals(substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
-        $this->assertEquals(substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
+        $this->assertEquals(\substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
+        $this->assertEquals(\substr($checkDiscarded, 0, -1), MessageParser::readLine($handle));
         $this->assertEquals('last line', MessageParser::readLine($handle));
         $this->assertFalse(MessageParser::readLine($handle));
         $stream->close();

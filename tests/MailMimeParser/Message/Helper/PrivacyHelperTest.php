@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PrivacyHelperTest
@@ -15,38 +16,45 @@ use LegacyPHPUnit\TestCase;
  */
 class PrivacyHelperTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $mockMimePartFactory;
+
+    // @phpstan-ignore-next-line
     private $mockUUEncodedPartFactory;
+
+    // @phpstan-ignore-next-line
     private $mockGenericHelper;
+
+    // @phpstan-ignore-next-line
     private $mockMultipartHelper;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->mockMimePartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IMimePartFactory')
+        $this->mockMimePartFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockUUEncodedPartFactory = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory')
+        $this->mockUUEncodedPartFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockGenericHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\GenericHelper')
+        $this->mockGenericHelper = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\GenericHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockMultipartHelper = $this->getMockBuilder('ZBateson\MailMimeParser\Message\Helper\MultipartHelper')
+        $this->mockMultipartHelper = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockIMimePart()
+    private function newMockIMimePart() : \ZBateson\MailMimeParser\Message\IMimePart
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\Message\IMimePart');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
     }
 
-    private function newMockIMessage()
+    private function newMockIMessage() : \ZBateson\MailMimeParser\IMessage
     {
-        return $this->getMockForAbstractClass('ZBateson\MailMimeParser\IMessage');
+        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
     }
 
-    private function newPrivacyHelper()
+    private function newPrivacyHelper() : PrivacyHelper
     {
         return new PrivacyHelper(
             $this->mockMimePartFactory,
@@ -56,7 +64,7 @@ class PrivacyHelperTest extends TestCase
         );
     }
 
-    public function testOverwrite8bitContentEncoding()
+    public function testOverwrite8bitContentEncoding() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -66,7 +74,7 @@ class PrivacyHelperTest extends TestCase
 
         $message->expects($this->once())
             ->method('getAllParts')
-            ->willReturn([ $partText, $partNonText ]);
+            ->willReturn([$partText, $partNonText]);
 
         $partText->expects($this->once())
             ->method('getContentType')
@@ -85,14 +93,14 @@ class PrivacyHelperTest extends TestCase
         $helper->overwrite8bitContentEncoding($message);
     }
 
-    public function testEnsureHtmlPartFirstForSignedMessage()
+    public function testEnsureHtmlPartFirstForSignedMessage() : void
     {
         $helper = $this->newPrivacyHelper();
 
         $message = $this->newMockIMessage();
         $alt = $this->newMockIMimePart();
         $cont = $this->newMockIMimePart();
-        $children = [ $this->newMockIMimePart(), $cont ];
+        $children = [$this->newMockIMimePart(), $cont];
 
         $message->expects($this->once())
             ->method('getPartByMimeType')
@@ -119,7 +127,7 @@ class PrivacyHelperTest extends TestCase
         $helper->ensureHtmlPartFirstForSignedMessage($message);
     }
 
-    public function testSetSignature()
+    public function testSetSignature() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -153,7 +161,7 @@ class PrivacyHelperTest extends TestCase
         $helper->setSignature($message, 'much-signature');
     }
 
-    public function testSetMessageAsMultipartSigned()
+    public function testSetMessageAsMultipartSigned() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -208,7 +216,7 @@ class PrivacyHelperTest extends TestCase
         $helper->setMessageAsMultipartSigned($message, 'my-micalg', 'l33t-protocol');
     }
 
-    public function testSignedMessageStream()
+    public function testSignedMessageStream() : void
     {
         $helper = $this->newPrivacyHelper();
 
@@ -227,7 +235,7 @@ class PrivacyHelperTest extends TestCase
         $this->assertEquals('test', $helper->getSignedMessageStream($message));
     }
 
-    public function testSignedMessageAsString()
+    public function testSignedMessageAsString() : void
     {
         $helper = $this->newPrivacyHelper();
 

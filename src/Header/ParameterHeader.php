@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
@@ -27,7 +28,7 @@ use ZBateson\MailMimeParser\Header\Part\ParameterPart;
  *
  * In that example, calling ```php $header->getValue() ``` would return
  * 'zb@example.com', as would calling ```php $header->getValueFor('addr'); ```.
- * 
+ *
  * @author Zaahid Bateson
  */
 class ParameterHeader extends AbstractHeader
@@ -37,59 +38,56 @@ class ParameterHeader extends AbstractHeader
      *      ParameterParts.
      */
     protected $parameters = [];
-    
+
     /**
      * Returns a ParameterConsumer.
-     * 
-     * @param ConsumerService $consumerService
+     *
      * @return Consumer\AbstractConsumer
      */
     protected function getConsumer(ConsumerService $consumerService)
     {
         return $consumerService->getParameterConsumer();
     }
-    
+
     /**
      * Overridden to assign ParameterParts to a map of lower-case parameter
      * names to ParameterParts.
-     * 
-     * @param AbstractConsumer $consumer
+     *
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
             if ($part instanceof ParameterPart) {
-                $this->parameters[strtolower($part->getName())] = $part;
+                $this->parameters[\strtolower($part->getName())] = $part;
             }
         }
     }
-    
+
     /**
      * Returns true if a parameter exists with the passed name.
-     * 
+     *
      * @param string $name The parameter to look up.
-     * @return boolean
      */
-    public function hasParameter($name)
+    public function hasParameter(string $name) : bool
     {
-        return isset($this->parameters[strtolower($name)]);
+        return isset($this->parameters[\strtolower($name)]);
     }
-    
+
     /**
      * Returns the value of the parameter with the given name, or $defaultValue
      * if not set.
-     * 
+     *
      * @param string $name The parameter to retrieve.
      * @param string $defaultValue Optional default value (defaulting to null if
      *        not provided).
      * @return string|null The parameter's value.
      */
-    public function getValueFor($name, $defaultValue = null)
+    public function getValueFor(string $name, ?string $defaultValue = null) : ?string
     {
         if (!$this->hasParameter($name)) {
             return $defaultValue;
         }
-        return $this->parameters[strtolower($name)]->getValue();
+        return $this->parameters[\strtolower($name)]->getValue();
     }
 }

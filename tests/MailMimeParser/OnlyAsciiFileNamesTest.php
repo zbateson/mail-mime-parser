@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser;
 
-use LegacyPHPUnit\TestCase;
 use FilesystemIterator;
+use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -16,13 +17,13 @@ use RecursiveIteratorIterator;
  */
 class OnlyAsciiFileNamesTest extends TestCase
 {
-    public function testFileNames()
+    public function testFileNames() : void
     {
-        $dir = new RecursiveDirectoryIterator(dirname(__DIR__), FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS);
+        $dir = new RecursiveDirectoryIterator(\dirname(__DIR__), FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS);
         $iter = new RecursiveIteratorIterator($dir);
         foreach ($iter as $f) {
             $this->assertTrue(
-                mb_check_encoding($f->getFileName(), 'ASCII'),
+                \mb_check_encoding($f->getFileName(), 'ASCII'),
                 $f->getFileName() . ' contains non-ascii characters, which may '
                     . 'cause problems with some \'unzip\' utilities when '
                     . 'installing via composer'

@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * HeaderStreamTest
@@ -14,28 +15,28 @@ use LegacyPHPUnit\TestCase;
  */
 class HeaderStreamTest extends TestCase
 {
-    private function newMockMimePart()
+    private function newMockMimePart() : \ZBateson\MailMimeParser\Message\MimePart
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\MimePart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function newMockUUEncodedPart()
+    private function newMockUUEncodedPart() : \ZBateson\MailMimeParser\Message\UUEncodedPart
     {
-        return $this->getMockBuilder('ZBateson\MailMimeParser\Message\UUEncodedPart')
+        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function testReadWithMimePart()
+    public function testReadWithMimePart() : void
     {
         $mimePart = $this->newMockMimePart();
         $mimePart->expects($this->once())
             ->method('getRawHeaderIterator')
             ->willReturn(new ArrayIterator([
-                [ 'First-Header', 'Missed by a long-shot' ],
-                [ 'Second-Header', 'Gooaaaaaaaaal' ]
+                ['First-Header', 'Missed by a long-shot'],
+                ['Second-Header', 'Gooaaaaaaaaal']
             ]));
 
         $stream = new HeaderStream($mimePart);
@@ -45,7 +46,7 @@ class HeaderStreamTest extends TestCase
         );
     }
 
-    public function testReadWithUUEncodedPart()
+    public function testReadWithUUEncodedPart() : void
     {
         $uuPart = $this->newMockUUEncodedPart();
         $stream = new HeaderStream($uuPart);

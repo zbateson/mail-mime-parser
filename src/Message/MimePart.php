@@ -4,12 +4,13 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A mime email message part.
@@ -26,17 +27,17 @@ class MimePart extends MultiPart implements IMimePart
     protected $headerContainer;
 
     public function __construct(
-        IMimePart $parent = null,
-        PartStreamContainer $streamContainer = null,
-        PartHeaderContainer $headerContainer = null,
-        PartChildrenContainer $partChildrenContainer = null
+        ?IMimePart $parent = null,
+        ?PartStreamContainer $streamContainer = null,
+        ?PartHeaderContainer $headerContainer = null,
+        ?PartChildrenContainer $partChildrenContainer = null
     ) {
         $setStream = false;
         $di = MailMimeParser::getDependencyContainer();
         if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null) {
-            $headerContainer = $di['ZBateson\MailMimeParser\Message\PartHeaderContainer'];
-            $streamContainer = $di['ZBateson\MailMimeParser\Message\PartStreamContainer'];
-            $partChildrenContainer = $di['ZBateson\MailMimeParser\Message\PartChildrenContainer'];
+            $headerContainer = $di[\ZBateson\MailMimeParser\Message\PartHeaderContainer::class];
+            $streamContainer = $di[\ZBateson\MailMimeParser\Message\PartStreamContainer::class];
+            $partChildrenContainer = $di[\ZBateson\MailMimeParser\Message\PartChildrenContainer::class];
             $setStream = true;
         }
         parent::__construct(
@@ -45,7 +46,7 @@ class MimePart extends MultiPart implements IMimePart
             $partChildrenContainer
         );
         if ($setStream) {
-            $streamFactory = $di['ZBateson\MailMimeParser\Stream\StreamFactory'];
+            $streamFactory = $di[\ZBateson\MailMimeParser\Stream\StreamFactory::class];
             $streamContainer->setStream($streamFactory->newMessagePartStream($this));
         }
         $this->headerContainer = $headerContainer;
@@ -60,7 +61,7 @@ class MimePart extends MultiPart implements IMimePart
      *
      * @return string|null the file name of the part or null.
      */
-    public function getFilename()
+    public function getFilename() : ?string
     {
         return $this->getHeaderParameter(
             HeaderConsts::CONTENT_DISPOSITION,
@@ -75,9 +76,8 @@ class MimePart extends MultiPart implements IMimePart
     /**
      * Returns true.
      *
-     * @return bool
      */
-    public function isMime()
+    public function isMime() : bool
     {
         return true;
     }
@@ -85,7 +85,7 @@ class MimePart extends MultiPart implements IMimePart
     public function isMultiPart()
     {
         // casting to bool, preg_match returns 1 for true
-        return (bool) (preg_match(
+        return (bool) (\preg_match(
             '~multipart/.*~i',
             $this->getContentType()
         ));
@@ -101,9 +101,8 @@ class MimePart extends MultiPart implements IMimePart
      * avoid issues, or to call {@see IMessagePart::saveContent()} directly if
      * saving a part's content.
      *
-     * @return bool
      */
-    public function isTextPart()
+    public function isTextPart() : bool
     {
         return ($this->getCharset() !== null);
     }
@@ -122,9 +121,9 @@ class MimePart extends MultiPart implements IMimePart
      *        than text/plain if needed.
      * @return string the mime type
      */
-    public function getContentType($default = 'text/plain')
+    public function getContentType(string $default = 'text/plain') : ?string
     {
-        return strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TYPE, $default));
+        return \strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TYPE, $default));
     }
 
     /**
@@ -138,17 +137,17 @@ class MimePart extends MultiPart implements IMimePart
      *
      * @return string|null the charset
      */
-    public function getCharset()
+    public function getCharset() : ?string
     {
         $charset = $this->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'charset');
-        if ($charset === null || strcasecmp($charset, 'binary') === 0) {
+        if ($charset === null || \strcasecmp($charset, 'binary') === 0) {
             $contentType = $this->getContentType();
             if ($contentType === 'text/plain' || $contentType === 'text/html') {
                 return 'ISO-8859-1';
             }
             return null;
         }
-        return strtoupper($charset);
+        return \strtoupper($charset);
     }
 
     /**
@@ -164,13 +163,13 @@ class MimePart extends MultiPart implements IMimePart
      *        match 'inline' or 'attachment'.
      * @return string the content disposition
      */
-    public function getContentDisposition($default = 'inline')
+    public function getContentDisposition(?string $default = 'inline') : ?string
     {
         $value = $this->getHeaderValue(HeaderConsts::CONTENT_DISPOSITION);
-        if ($value === null || !in_array($value, [ 'inline', 'attachment' ])) {
+        if ($value === null || !\in_array($value, ['inline', 'attachment'])) {
             return $default;
         }
-        return strtolower($value);
+        return \strtolower($value);
     }
 
     /**
@@ -188,14 +187,14 @@ class MimePart extends MultiPart implements IMimePart
      *        isn't set.
      * @return string the content transfer encoding.
      */
-    public function getContentTransferEncoding($default = '7bit')
+    public function getContentTransferEncoding(?string $default = '7bit') : ?string
     {
         static $translated = [
             'x-uue' => 'x-uuencode',
             'uue' => 'x-uuencode',
             'uuencode' => 'x-uuencode'
         ];
-        $type = strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TRANSFER_ENCODING, $default));
+        $type = \strtolower($this->getHeaderValue(HeaderConsts::CONTENT_TRANSFER_ENCODING, $default));
         if (isset($translated[$type])) {
             return $translated[$type];
         }
@@ -209,7 +208,7 @@ class MimePart extends MultiPart implements IMimePart
      *
      * @return string|null the content ID or null if not defined.
      */
-    public function getContentId()
+    public function getContentId() : ?string
     {
         return $this->getHeaderValue(HeaderConsts::CONTENT_ID);
     }
@@ -271,25 +270,25 @@ class MimePart extends MultiPart implements IMimePart
         return $defaultValue;
     }
 
-    public function setRawHeader($name, $value, $offset = 0)
+    public function setRawHeader(string $name, ?string $value, int $offset = 0) : void
     {
         $this->headerContainer->set($name, $value, $offset);
         $this->notify();
     }
 
-    public function addRawHeader($name, $value)
+    public function addRawHeader(string $name, string $value) : void
     {
         $this->headerContainer->add($name, $value);
         $this->notify();
     }
 
-    public function removeHeader($name)
+    public function removeHeader(string $name) : void
     {
         $this->headerContainer->removeAll($name);
         $this->notify();
     }
 
-    public function removeSingleHeader($name, $offset = 0)
+    public function removeSingleHeader(string $name, int $offset = 0) : void
     {
         $this->headerContainer->remove($name, $offset);
         $this->notify();

@@ -1,8 +1,9 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * IMimePartFactoryTest
@@ -27,24 +28,24 @@ class IMimePartFactoryTest extends TestCase
         return $fac;
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
-        $psc = $this->getMockForFactoryExpectsOnce('ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory', 'ZBateson\MailMimeParser\Message\PartStreamContainer');
-        $phc = $this->getMockForFactoryExpectsOnce('ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory', 'ZBateson\MailMimeParser\Message\PartHeaderContainer');
-        $pcc = $this->getMockForFactoryExpectsOnce('ZBateson\MailMimeParser\Message\Factory\PartChildrenContainerFactory', 'ZBateson\MailMimeParser\Message\PartChildrenContainer');
-        
-        $sdf = $this->getMockBuilder('ZBateson\MailMimeParser\Stream\StreamFactory')
+        $psc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
+        $phc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory::class, \ZBateson\MailMimeParser\Message\PartHeaderContainer::class);
+        $pcc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartChildrenContainerFactory::class, \ZBateson\MailMimeParser\Message\PartChildrenContainer::class);
+
+        $sdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $sdf->expects($this->once())
             ->method('newMessagePartStream')
-            ->with($this->isInstanceOf('\ZBateson\MailMimeParser\Message\MimePart'))
+            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Message\MimePart::class))
             ->willReturn(Psr7\Utils::streamFor('test'));
 
         $instance = new IMimePartFactory($sdf, $psc, $phc, $pcc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\MimePart',
+            '\\' . \ZBateson\MailMimeParser\Message\MimePart::class,
             $part
         );
     }

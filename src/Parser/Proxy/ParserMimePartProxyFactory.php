@@ -4,15 +4,15 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
+use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Parser\IParser;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -60,8 +60,6 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
      * will dynamically parse a message's content and parts as they're
      * requested.
      *
-     * @param PartBuilder $partBuilder
-     * @param IParser $parser
      * @return ParserMimePartProxy
      */
     public function newInstance(PartBuilder $partBuilder, IParser $parser)

@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message\IMessagePart;
@@ -22,11 +23,6 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 abstract class ParserPartProxy extends PartBuilder
 {
     /**
-     * @var IMessagePart The part.
-     */
-    private $part;
-
-    /**
      * @var IParser The parser.
      */
     protected $parser;
@@ -36,10 +32,13 @@ abstract class ParserPartProxy extends PartBuilder
      */
     protected $partBuilder;
 
-    public function __construct(
-        PartBuilder $partBuilder,
-        IParser $parser
-    ) {
+    /**
+     * @var IMessagePart The part.
+     */
+    private $part;
+
+    public function __construct(PartBuilder $partBuilder, IParser $parser)
+    {
         $this->partBuilder = $partBuilder;
         $this->parser = $parser;
     }
@@ -49,7 +48,7 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * @param IMessagePart $part The part
      */
-    public function setPart(IMessagePart $part)
+    public function setPart(IMessagePart $part) : void
     {
         $this->part = $part;
     }
@@ -72,7 +71,7 @@ abstract class ParserPartProxy extends PartBuilder
      * The method first checks to see if the content has already been parsed,
      * and is safe to call multiple times.
      */
-    public function parseContent()
+    public function parseContent() : void
     {
         if (!$this->isContentParsed()) {
             $this->parser->parseContent($this);
@@ -84,8 +83,8 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * For ParserPartProxy, this is just content, but sub-classes may override
      * this to parse all children as well for example.
-.     */
-    public function parseAll()
+     * .     */
+    public function parseAll() : void
     {
         $this->parseContent();
     }
@@ -110,57 +109,57 @@ abstract class ParserPartProxy extends PartBuilder
         return $this->partBuilder->getMessageResourceHandle();
     }
 
-    public function getMessageResourceHandlePos()
+    public function getMessageResourceHandlePos() : int
     {
         return $this->partBuilder->getMessageResourceHandlePos();
     }
 
-    public function getStreamPartStartPos()
+    public function getStreamPartStartPos() : int
     {
         return $this->partBuilder->getStreamPartStartPos();
     }
 
-    public function getStreamPartLength()
+    public function getStreamPartLength() : int
     {
         return $this->partBuilder->getStreamPartLength();
     }
 
-    public function getStreamContentStartPos()
+    public function getStreamContentStartPos() : ?int
     {
         return $this->partBuilder->getStreamContentStartPos();
     }
 
-    public function getStreamContentLength()
+    public function getStreamContentLength() : int
     {
         return $this->partBuilder->getStreamContentLength();
     }
 
-    public function setStreamPartStartPos($streamPartStartPos)
+    public function setStreamPartStartPos(int $streamPartStartPos) : void
     {
         $this->partBuilder->setStreamPartStartPos($streamPartStartPos);
     }
 
-    public function setStreamPartEndPos($streamPartEndPos)
+    public function setStreamPartEndPos(int $streamPartEndPos) : void
     {
         $this->partBuilder->setStreamPartEndPos($streamPartEndPos);
     }
 
-    public function setStreamContentStartPos($streamContentStartPos)
+    public function setStreamContentStartPos(int $streamContentStartPos) : void
     {
         $this->partBuilder->setStreamContentStartPos($streamContentStartPos);
     }
 
-    public function setStreamPartAndContentEndPos($streamContentEndPos)
+    public function setStreamPartAndContentEndPos(int $streamContentEndPos) : void
     {
         $this->partBuilder->setStreamPartAndContentEndPos($streamContentEndPos);
     }
 
-    public function isContentParsed()
+    public function isContentParsed() : ?bool
     {
         return $this->partBuilder->isContentParsed();
     }
 
-    public function isMime()
+    public function isMime() : bool
     {
         return $this->partBuilder->isMime();
     }

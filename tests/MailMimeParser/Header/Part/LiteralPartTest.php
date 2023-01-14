@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -15,7 +16,7 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class LiteralPartTest extends TestCase
 {
-    public function testInstance()
+    public function testInstance() : void
     {
         $charsetConverter = new MbWrapper();
 

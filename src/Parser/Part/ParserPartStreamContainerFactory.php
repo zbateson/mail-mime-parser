@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
@@ -26,7 +27,8 @@ class ParserPartStreamContainerFactory
         $this->streamFactory = $streamFactory;
     }
 
-    public function newInstance(ParserPartProxy $parserProxy) {
+    public function newInstance(ParserPartProxy $parserProxy)
+    {
         return new ParserPartStreamContainer($this->streamFactory, $parserProxy);
     }
 }

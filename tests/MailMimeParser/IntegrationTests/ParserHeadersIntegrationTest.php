@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
@@ -14,10 +15,10 @@ use ZBateson\MailMimeParser\MailMimeParser;
  */
 class ParserHeadersIntegrationTest extends TestCase
 {
-    public function testParsingBasicHeaders()
+    public function testParsingBasicHeaders() : void
     {
         $parser = new MailMimeParser();
-        $message = $parser->parse(fopen(dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/headers/basic', 'r'), true);
+        $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/basic', 'r'), true);
         $this->assertEquals('Line endings in this file are: CRLF', $message->getHeaderValue('test'));
         $this->assertEquals('More text', $message->getHeaderValue('Second'));
         $this->assertEquals('No Space', $message->getHeaderValue('third'));
@@ -26,20 +27,20 @@ class ParserHeadersIntegrationTest extends TestCase
         $this->assertNull($message->getHeaderValue('Body'));
     }
 
-    public function testParsingHeadersWithLFOnlyAndNoBody()
+    public function testParsingHeadersWithLFOnlyAndNoBody() : void
     {
         $parser = new MailMimeParser();
-        $message = $parser->parse(fopen(dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/headers/basic-2', 'r'), true);
+        $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/basic-2', 'r'), true);
         $this->assertEquals('LF Only', $message->getHeaderValue('Line-Endings'));
         $this->assertEquals('text\html', $message->getHeaderValue('Content-Type'));
         $this->assertEquals('With Value', $message->getHeaderValue('Invalid Header'));
         $this->assertEquals('Why not?', $message->getHeaderValue('No-Body'));
     }
 
-    public function testParsingHeadersWithLFOnlyAndInvalidHeaders()
+    public function testParsingHeadersWithLFOnlyAndInvalidHeaders() : void
     {
         $parser = new MailMimeParser();
-        $message = $parser->parse(fopen(dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/headers/basic-3', 'r'), true);
+        $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/basic-3', 'r'), true);
         $this->assertEquals('LF Only', $message->getHeaderValue('Line-Endings'));
         $this->assertEquals('', $message->getHeaderValue('Empty-Header'));
         $this->assertEquals(
@@ -48,10 +49,10 @@ class ParserHeadersIntegrationTest extends TestCase
         );
     }
 
-    public function testParsingHeadersWithEncoding()
+    public function testParsingHeadersWithEncoding() : void
     {
         $parser = new MailMimeParser();
-        $message = $parser->parse(fopen(dirname(dirname(__DIR__)) . '/' . TEST_DATA_DIR . '/headers/encoded-headers', 'r'), true);
+        $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/encoded-headers', 'r'), true);
         $this->assertEquals('¡Hola, señor!', $message->getHeaderValue('Subject'));
         $this->assertEquals('muzner@example.com', $message->getHeaderValue('To'));
         $this->assertEquals('Müller Müzner', $message->getHeader('To')->getPersonName());

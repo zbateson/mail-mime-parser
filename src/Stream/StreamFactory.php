@@ -4,19 +4,20 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\StreamDecorators\Base64Stream;
 use ZBateson\StreamDecorators\CharsetStream;
 use ZBateson\StreamDecorators\ChunkSplitStream;
-use ZBateson\StreamDecorators\SeekingLimitStream;
 use ZBateson\StreamDecorators\NonClosingStream;
 use ZBateson\StreamDecorators\PregReplaceFilterStream;
 use ZBateson\StreamDecorators\QuotedPrintableStream;
+use ZBateson\StreamDecorators\SeekingLimitStream;
 use ZBateson\StreamDecorators\UUStream;
-use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
  * Factory class for Psr7 stream decorators used in MailMimeParser.
@@ -29,7 +30,6 @@ class StreamFactory
      * Returns a SeekingLimitStream using $part->getStreamPartLength() and
      * $part->getStreamPartStartPos()
      *
-     * @param PartBuilder $part
      * @return SeekingLimitStream
      */
     public function getLimitedPartStream(PartBuilder $part)
@@ -45,8 +45,7 @@ class StreamFactory
      * Returns a SeekingLimitStream using $part->getStreamContentLength() and
      * $part->getStreamContentStartPos()
      *
-     * @param PartBuilder $part
-     * @return SeekingLimitStream
+     * @return ?SeekingLimitStream
      */
     public function getLimitedContentStream(PartBuilder $part)
     {
@@ -64,12 +63,8 @@ class StreamFactory
     /**
      * Creates and returns a SeekingLimitedStream.
      *
-     * @param StreamInterface $stream
-     * @param int $length
-     * @param int $start
-     * @return SeekingLimitStream
      */
-    private function newLimitStream(StreamInterface $stream, $length, $start)
+    private function newLimitStream(StreamInterface $stream, int $length, int $start) : SeekingLimitStream
     {
         return new SeekingLimitStream(
             $this->newNonClosingStream($stream),
@@ -81,8 +76,7 @@ class StreamFactory
     /**
      * Creates a non-closing stream that doesn't close it's internal stream when
      * closing/detaching.
-     * 
-     * @param StreamInterface $stream
+     *
      * @return NonClosingStream
      */
     public function newNonClosingStream(StreamInterface $stream)
@@ -92,8 +86,7 @@ class StreamFactory
 
     /**
      * Creates a ChunkSplitStream.
-     * 
-     * @param StreamInterface $stream
+     *
      * @return ChunkSplitStream
      */
     public function newChunkSplitStream(StreamInterface $stream)
@@ -104,8 +97,7 @@ class StreamFactory
     /**
      * Creates and returns a Base64Stream with an internal
      * PregReplaceFilterStream that filters out non-base64 characters.
-     * 
-     * @param StreamInterface $stream
+     *
      * @return Base64Stream
      */
     public function newBase64Stream(StreamInterface $stream)
@@ -118,7 +110,6 @@ class StreamFactory
     /**
      * Creates and returns a QuotedPrintableStream.
      *
-     * @param StreamInterface $stream
      * @return QuotedPrintableStream
      */
     public function newQuotedPrintableStream(StreamInterface $stream)
@@ -129,7 +120,6 @@ class StreamFactory
     /**
      * Creates and returns a UUStream
      *
-     * @param StreamInterface $stream
      * @return UUStream
      */
     public function newUUStream(StreamInterface $stream)
@@ -140,12 +130,9 @@ class StreamFactory
     /**
      * Creates and returns a CharsetStream
      *
-     * @param StreamInterface $stream
-     * @param string $fromCharset
-     * @param string $toCharset
      * @return CharsetStream
      */
-    public function newCharsetStream(StreamInterface $stream, $fromCharset, $toCharset)
+    public function newCharsetStream(StreamInterface $stream, string $fromCharset, string $toCharset)
     {
         return new CharsetStream($stream, $fromCharset, $toCharset);
     }
@@ -153,7 +140,6 @@ class StreamFactory
     /**
      * Creates and returns a MessagePartStream
      *
-     * @param IMessagePart $part
      * @return MessagePartStream
      */
     public function newMessagePartStream(IMessagePart $part)
@@ -164,7 +150,6 @@ class StreamFactory
     /**
      * Creates and returns a HeaderStream
      *
-     * @param IMessagePart $part
      * @return HeaderStream
      */
     public function newHeaderStream(IMessagePart $part)

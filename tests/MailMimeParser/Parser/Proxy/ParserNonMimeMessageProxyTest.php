@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParserNonMimeMessageProxyTest
@@ -13,16 +14,21 @@ use LegacyPHPUnit\TestCase;
  */
 class ParserNonMimeMessageProxyTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $partBuilder;
+
+    // @phpstan-ignore-next-line
     private $parser;
+
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $this->partBuilder = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\PartBuilder')
+        $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parser = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\IParser')
+        $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParser::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->instance = new ParserNonMimeMessageProxy(
@@ -31,28 +37,28 @@ class ParserNonMimeMessageProxyTest extends TestCase
         );
     }
 
-    public function testSetGetNextPartStart()
+    public function testSetGetNextPartStart() : void
     {
         $this->assertNull($this->instance->getNextPartStart());
         $this->instance->setNextPartStart(42);
         $this->assertSame(42, $this->instance->getNextPartStart());
     }
 
-    public function testSetGetNextPartMode()
+    public function testSetGetNextPartMode() : void
     {
         $this->assertNull($this->instance->getNextPartMode());
         $this->instance->setNextPartMode(42);
         $this->assertSame(42, $this->instance->getNextPartMode());
     }
 
-    public function testSetGetNextPartFilename()
+    public function testSetGetNextPartFilename() : void
     {
         $this->assertNull($this->instance->getNextPartFilename());
         $this->instance->setNextPartFilename('booya');
         $this->assertSame('booya', $this->instance->getNextPartFilename());
     }
 
-    public function testClearNextPart()
+    public function testClearNextPart() : void
     {
         $this->instance->setNextPartStart(42);
         $this->instance->setNextPartMode(42);

@@ -1,8 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
-use DateTime;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -16,14 +16,15 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class DatePartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testDateString()
+    public function testDateString() : void
     {
         $values = [
             ['2000-05-17T19:08:29-0400', 'Wed, 17 May 2000 19:08:29 -0400'],
@@ -34,7 +35,7 @@ class DatePartTest extends TestCase
         ];
 
         foreach ($values as $value) {
-            list ($expected, $raw) = $value;
+            [$expected, $raw] = $value;
             $part = new DatePart($this->charsetConverter, $raw);
             $this->assertEquals($raw, $part->getValue(), 'Testing ' . $raw);
             $this->assertNotEmpty($part->getDateTime(), 'Testing ' . $raw);
@@ -42,7 +43,7 @@ class DatePartTest extends TestCase
         }
     }
 
-    public function testInvalidDate()
+    public function testInvalidDate() : void
     {
         $value = 'Invalid Date';
         $part = new DatePart($this->charsetConverter, $value);

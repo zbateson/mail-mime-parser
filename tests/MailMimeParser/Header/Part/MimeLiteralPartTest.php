@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -15,54 +16,55 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class MimeLiteralPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->charsetConverter = new MbWrapper();
     }
 
-    protected function assertDecoded($expected, $encodedActual)
+    protected function assertDecoded($expected, $encodedActual) : MimeLiteralPart
     {
         $part = new MimeLiteralPart($this->charsetConverter, $encodedActual);
         $this->assertEquals($expected, $part->getValue());
+
         return $part;
     }
 
-    public function testBasicValue()
+    public function testBasicValue() : void
     {
         $this->assertDecoded('Step', 'Step');
     }
 
-    public function testNullLanguage()
+    public function testNullLanguage() : void
     {
         $part = $this->assertDecoded('Step', 'Step');
         $this->assertEquals([
-            [ 'lang' => null, 'value' => 'Step' ]
+            ['lang' => null, 'value' => 'Step']
         ], $part->getLanguageArray());
     }
 
-    public function testMimeEncoding()
+    public function testMimeEncoding() : void
     {
         $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
     }
 
-    public function testDecodeEmpty()
+    public function testDecodeEmpty() : void
     {
         $this->assertDecoded('', '=?US-ASCII?Q??=');
         $this->assertDecoded('', '=?utf-8?Q??=');
     }
 
-
-    public function testMimeEncodingNullLanguage()
+    public function testMimeEncodingNullLanguage() : void
     {
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals([
-            [ 'lang' => null, 'value' => 'Kilgore Trout' ]
+            ['lang' => null, 'value' => 'Kilgore Trout']
         ], $part->getLanguageArray());
     }
 
-    public function testEncodingTwoParts()
+    public function testEncodingTwoParts() : void
     {
         $kilgore = '=?US-ASCII?Q?Kilgore_Trout?=';
         $snow = '=?US-ASCII?Q?Jon_Snow?=';
@@ -89,7 +91,7 @@ class MimeLiteralPartTest extends TestCase
         );
     }
 
-    public function testNonAscii()
+    public function testNonAscii() : void
     {
         $this->assertDecoded(
             'κόσμε fløde',
@@ -135,30 +137,30 @@ class MimeLiteralPartTest extends TestCase
             =?iso-2022-jp?Q?)(=1B$B%G%b=1B(B)=1B$B7h:QLsDj$N$*CN$i$;=1B(B?=');
     }
 
-    public function testIgnoreSpacesBefore()
+    public function testIgnoreSpacesBefore() : void
     {
         $part = new MimeLiteralPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=Blah');
         $this->assertTrue($part->ignoreSpacesBefore(), 'ignore spaces before');
         $this->assertFalse($part->ignoreSpacesAfter(), 'ignore spaces after');
     }
 
-    public function testIgnoreSpacesAfter()
+    public function testIgnoreSpacesAfter() : void
     {
         $part = new MimeLiteralPart($this->charsetConverter, 'Blah=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertFalse($part->ignoreSpacesBefore(), 'ignore spaces before');
         $this->assertTrue($part->ignoreSpacesAfter(), 'ignore spaces after');
     }
 
-    public function testIgnoreSpacesBeforeAndAfter()
+    public function testIgnoreSpacesBeforeAndAfter() : void
     {
         $part = new MimeLiteralPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertTrue($part->ignoreSpacesBefore(), 'ignore spaces before');
         $this->assertTrue($part->ignoreSpacesAfter(), 'ignore spaces after');
     }
 
-    public function testLanguageParts()
+    public function testLanguageParts() : void
     {
-        $this->charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
+        $this->charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
 
@@ -167,10 +169,10 @@ class MimeLiteralPartTest extends TestCase
             'Hello and =?UTF-8*fr-be?Q?bonjou?= =?UTF-8*it?Q?r_mi amici?=. Welcome!'
         );
         $expectedLang = [
-            [ 'lang' => null, 'value' => 'Hello and ' ],
-            [ 'lang' => 'fr-be', 'value' => 'bonjou' ],
-            [ 'lang' => 'it', 'value' => 'r mi amici' ],
-            [ 'lang' => null, 'value' => '. Welcome!' ]
+            ['lang' => null, 'value' => 'Hello and '],
+            ['lang' => 'fr-be', 'value' => 'bonjou'],
+            ['lang' => 'it', 'value' => 'r mi amici'],
+            ['lang' => null, 'value' => '. Welcome!']
         ];
         $this->assertEquals($expectedLang, $part->getLanguageArray());
     }

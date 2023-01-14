@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use ZBateson\MailMimeParser\Header\HeaderFactory;
@@ -24,7 +25,6 @@ class UUEncodedPartHeaderContainerFactory
     /**
      * Constructor
      *
-     * @param HeaderFactory $headerFactory
      */
     public function __construct(HeaderFactory $headerFactory)
     {
@@ -36,7 +36,7 @@ class UUEncodedPartHeaderContainerFactory
      *
      * @return UUEncodedPartHeaderContainer
      */
-    public function newInstance($mode, $filename)
+    public function newInstance(int $mode, string $filename)
     {
         $container = new UUEncodedPartHeaderContainer($this->headerFactory);
         $container->setUnixFileMode($mode);

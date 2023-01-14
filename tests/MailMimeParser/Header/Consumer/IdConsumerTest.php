@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of IdConsumerTest
@@ -14,40 +15,41 @@ use LegacyPHPUnit\TestCase;
  */
 class IdConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $idConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->idConsumer = new IdConsumer($cs, $pf);
     }
 
-    public function testConsumeId()
+    public function testConsumeId() : void
     {
         $ret = $this->idConsumer->__invoke('id123@host.name>');
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\LiteralPart', $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $address);
         $this->assertEquals('id123@host.name', $address->getValue());
     }
 
-    public function testConsumeSpaces()
+    public function testConsumeSpaces() : void
     {
         $ret = $this->idConsumer->__invoke('An id without an end');
         $this->assertNotEmpty($ret);
@@ -56,13 +58,13 @@ class IdConsumerTest extends TestCase
         $this->assertEquals('Anidwithoutanend', $ret[0]->getValue());
     }
 
-    public function testConsumeIdWithComments()
+    public function testConsumeIdWithComments() : void
     {
         $ret = $this->idConsumer->__invoke('first (comment) "quoted"');
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
 
-        $this->assertInstanceOf('\ZBateson\MailMimeParser\Header\Part\LiteralPart', $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[0]);
         $this->assertEquals('firstquoted', $ret[0]->getValue());
     }
 }

@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of AbstractConsumerTest
@@ -13,11 +14,12 @@ use LegacyPHPUnit\TestCase;
  */
 class AbstractConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $abstractConsumerStub;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $stub = $this->getMockBuilder('\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer')
+        $stub = $this->getMockBuilder('\\' . \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::class)
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -32,7 +34,7 @@ class AbstractConsumerTest extends TestCase
         $this->abstractConsumerStub = $stub;
     }
 
-    public function testSingleToken()
+    public function testSingleToken() : void
     {
         $value = 'teapot';
         $stub = $this->abstractConsumerStub;
@@ -48,7 +50,7 @@ class AbstractConsumerTest extends TestCase
         $this->assertCount(1, $ret);
     }
 
-    public function testMultipleTokens()
+    public function testMultipleTokens() : void
     {
         $value = "Je\ \t suis\nici";
         $parts = ['Je', ' ', "\t ", 'suis', "\n", 'ici'];
@@ -67,7 +69,7 @@ class AbstractConsumerTest extends TestCase
         $this->assertCount(6, $ret);
     }
 
-    public function testInvokeWithEmptyValue()
+    public function testInvokeWithEmptyValue() : void
     {
         $stub = $this->abstractConsumerStub;
         $ret = $stub('');

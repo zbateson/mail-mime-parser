@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
 /**
@@ -24,7 +25,7 @@ interface IHeader
      *
      * @return IHeaderPart[] The array of parts.
      */
-    public function getParts();
+    public function getParts() : array;
 
     /**
      * Returns the parsed 'value' of the header.
@@ -35,21 +36,21 @@ interface IHeader
      *
      * @return string The value
      */
-    public function getValue();
+    public function getValue() : ?string;
 
     /**
      * Returns the raw value of the header.
      *
      * @return string The raw value.
      */
-    public function getRawValue();
+    public function getRawValue() : string;
 
     /**
      * Returns the name of the header.
      *
      * @return string The name.
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Returns the string representation of the header.
@@ -58,5 +59,5 @@ interface IHeader
      *
      * @return string The string representation.
      */
-    public function __toString();
+    public function __toString() : string;
 }

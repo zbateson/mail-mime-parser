@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of GenericReceivedConsumerTest
@@ -13,29 +14,30 @@ use LegacyPHPUnit\TestCase;
  */
 class GenericReceivedConsumerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $genericConsumer;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder('ZBateson\MbWrapper\MbWrapper')
-			->setMethods(['__toString'])
-			->getMock();
-        $pf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\HeaderPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $mlpf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory')
-			->setConstructorArgs([$charsetConverter])
-			->setMethods(['__toString'])
-			->getMock();
-        $cs = $this->getMockBuilder('ZBateson\MailMimeParser\Header\Consumer\ConsumerService')
-			->setConstructorArgs([$pf, $mlpf])
-			->setMethods(['__toString'])
-			->getMock();
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+            ->setConstructorArgs([$charsetConverter])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
+            ->setConstructorArgs([$pf, $mlpf])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->genericConsumer = new GenericReceivedConsumer($cs, $pf, 'test');
     }
 
-    public function testConsumeTokens()
+    public function testConsumeTokens() : void
     {
         $value = "Je \t suis\nici";
 
@@ -45,7 +47,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->assertEquals('Je suis ici', $ret[0]);
     }
 
-    public function testEndsAtViaWithIdAndFor()
+    public function testEndsAtViaWithIdAndFor() : void
     {
         $tests = [
             'sweet via sugar',
@@ -61,7 +63,7 @@ class GenericReceivedConsumerTest extends TestCase
         }
     }
 
-    public function testWithSingleComments()
+    public function testWithSingleComments() : void
     {
         $str = 'sweet (via sugar) bee';
         $ret = $this->genericConsumer->__invoke($str);
@@ -71,7 +73,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->assertEquals('via sugar', $ret[1]->getComment());
     }
 
-    public function testWithMultipleComments()
+    public function testWithMultipleComments() : void
     {
         $str = 'sweet (as can) (surely) bee (innit)';
         $ret = $this->genericConsumer->__invoke($str);
@@ -83,7 +85,7 @@ class GenericReceivedConsumerTest extends TestCase
         $this->assertEquals('innit', $ret[3]->getComment());
     }
 
-    public function testWithSeparatorInWords()
+    public function testWithSeparatorInWords() : void
     {
         $str = 'bullets within abe and stuff';
         $ret = $this->genericConsumer->__invoke($str);

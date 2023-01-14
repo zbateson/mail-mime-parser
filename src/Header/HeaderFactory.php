@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
@@ -11,11 +12,11 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Constructs various IHeader types depending on the type of header passed.
- * 
+ *
  * If the passed header resolves to a specific defined header type, it is parsed
  * as such.  Otherwise, a GenericHeader is instantiated and returned.  Headers
  * are mapped as follows:
- * 
+ *
  *  - {@see AddressHeader}: From, To, Cc, Bcc, Sender, Reply-To, Resent-From,
  *    Resent-To, Resent-Cc, Resent-Bcc, Resent-Reply-To, Return-Path,
  *    Delivered-To
@@ -41,12 +42,12 @@ class HeaderFactory
      * @var MimeLiteralPartFactory for mime decoding.
      */
     protected $mimeLiteralPartFactory;
-    
+
     /**
      * @var string[][] maps IHeader types to headers.
      */
     protected $types = [
-        'ZBateson\MailMimeParser\Header\AddressHeader' => [
+        \ZBateson\MailMimeParser\Header\AddressHeader::class => [
             'from',
             'to',
             'cc',
@@ -61,7 +62,7 @@ class HeaderFactory
             'returnpath',
             'deliveredto',
         ],
-        'ZBateson\MailMimeParser\Header\DateHeader' => [
+        \ZBateson\MailMimeParser\Header\DateHeader::class => [
             'date',
             'resentdate',
             'deliverydate',
@@ -69,7 +70,7 @@ class HeaderFactory
             'expirydate',
             'replyby',
         ],
-        'ZBateson\MailMimeParser\Header\ParameterHeader' => [
+        \ZBateson\MailMimeParser\Header\ParameterHeader::class => [
             'contenttype',
             'contentdisposition',
             'receivedspf',
@@ -77,31 +78,29 @@ class HeaderFactory
             'dkimsignature',
             'autocrypt',
         ],
-        'ZBateson\MailMimeParser\Header\SubjectHeader' => [
+        \ZBateson\MailMimeParser\Header\SubjectHeader::class => [
             'subject',
         ],
-        'ZBateson\MailMimeParser\Header\IdHeader' => [
+        \ZBateson\MailMimeParser\Header\IdHeader::class => [
             'messageid',
             'contentid',
             'inreplyto',
             'references'
         ],
-        'ZBateson\MailMimeParser\Header\ReceivedHeader' => [
+        \ZBateson\MailMimeParser\Header\ReceivedHeader::class => [
             'received'
         ]
     ];
-    
+
     /**
      * @var string Defines the generic IHeader type to use for headers that
      *      aren't mapped in $types
      */
-    protected $genericType = 'ZBateson\MailMimeParser\Header\GenericHeader';
-    
+    protected $genericType = \ZBateson\MailMimeParser\Header\GenericHeader::class;
+
     /**
      * Instantiates member variables with the passed objects.
-     * 
-     * @param ConsumerService $consumerService
-     * @param MimeLiteralPartFactory $mimeLiteralPartFactory
+     *
      */
     public function __construct(ConsumerService $consumerService, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {
@@ -116,18 +115,18 @@ class HeaderFactory
      * @param string $header The header name
      * @return string The normalized header name
      */
-    public function getNormalizedHeaderName($header)
+    public function getNormalizedHeaderName(string $header) : string
     {
-        return preg_replace('/[^a-z0-9]/', '', strtolower($header));
+        return \preg_replace('/[^a-z0-9]/', '', \strtolower($header));
     }
-    
+
     /**
      * Returns the name of an IHeader class for the passed header name.
-     * 
+     *
      * @param string $name The header name.
      * @return string The Fully Qualified class name.
      */
-    private function getClassFor($name)
+    private function getClassFor(string $name) : string
     {
         $test = $this->getNormalizedHeaderName($name);
         foreach ($this->types as $class => $matchers) {
@@ -139,19 +138,19 @@ class HeaderFactory
         }
         return $this->genericType;
     }
-    
+
     /**
      * Creates an IHeader instance for the passed header name and value, and
      * returns it.
-     * 
+     *
      * @param string $name The header name.
      * @param string $value The header value.
      * @return IHeader The created header object.
      */
-    public function newInstance($name, $value)
+    public function newInstance(string $name, string $value)
     {
         $class = $this->getClassFor($name);
-        if (is_a($class, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {
+        if (\is_a($class, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {
             return new $class(
                 $this->mimeLiteralPartFactory,
                 $this->consumerService,

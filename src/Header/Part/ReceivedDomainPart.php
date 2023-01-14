@@ -4,6 +4,7 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MbWrapper\MbWrapper;
@@ -47,7 +48,6 @@ class ReceivedDomainPart extends ReceivedPart
 
     /**
      *
-     * @param MbWrapper $charsetConverter
      * @param string $name
      * @param string $value
      * @param string $ehloName
@@ -91,9 +91,8 @@ class ReceivedDomainPart extends ReceivedPart
      * Returns the address of the server, or whatever string that looks like an
      * address in the address position when parsing (but never a hostname).
      *
-     * @return string|null
      */
-    public function getAddress()
+    public function getAddress() : ?string
     {
         return $this->address;
     }

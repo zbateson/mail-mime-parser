@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartHeaderContainerFactoryTest
@@ -13,11 +14,12 @@ use LegacyPHPUnit\TestCase;
  */
 class PartHeaderContainerFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $mockhf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $mockhf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartHeaderContainerFactory(
@@ -25,11 +27,11 @@ class PartHeaderContainerFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\PartHeaderContainer',
+            '\\' . \ZBateson\MailMimeParser\Message\PartHeaderContainer::class,
             $container
         );
     }

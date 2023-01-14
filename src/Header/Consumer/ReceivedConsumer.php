@@ -4,10 +4,11 @@
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
+
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\Token;
 use Iterator;
+use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,
@@ -26,7 +27,7 @@ class ReceivedConsumer extends AbstractConsumer
      *
      * @return string[] an array of regex pattern matchers
      */
-    protected function getTokenSeparators()
+    protected function getTokenSeparators() : array
     {
         return [];
     }
@@ -34,11 +35,8 @@ class ReceivedConsumer extends AbstractConsumer
     /**
      * ReceivedConsumer doesn't have an end token, and so this just returns
      * false.
-     *
-     * @param string $token
-     * @return boolean false
      */
-    protected function isEndToken($token)
+    protected function isEndToken(string $token) : bool
     {
         return false;
     }
@@ -46,29 +44,27 @@ class ReceivedConsumer extends AbstractConsumer
     /**
      * ReceivedConsumer doesn't start consuming at a specific token, it's the
      * base handler for the Received header, and so this always returns false.
-     * 
+     *
      * @codeCoverageIgnore
-     * @param string $token
-     * @return boolean false
      */
-    protected function isStartToken($token)
+    protected function isStartToken(string $token) : bool
     {
         return false;
     }
 
     /**
      * Returns sub-consumers for a received consumer.
-     * 
+     *
      * - 2 {@see Received/DomainConsumer} instances, with FROM and BY as part
      *   names.
      * - 4 {@see Received/GenericReceivedConsumer} instances for VIA, WITH, ID,
      *   and FOR part names.
      * - 1 {@see Received/ReceivedDateConsumer} for the date/time stamp.
      * - 1 {@see CommentConsumer} to consume any comments.
-     * 
+     *
      * @return AbstractConsumer[] the sub-consumers
      */
-    protected function getSubConsumers()
+    protected function getSubConsumers() : array
     {
         return [
             $this->consumerService->getSubReceivedConsumer('from'),
@@ -88,9 +84,9 @@ class ReceivedConsumer extends AbstractConsumer
      *
      * @return string the regex pattern
      */
-    protected function getTokenSplitPattern()
+    protected function getTokenSplitPattern() : string
     {
-        $sChars = implode('|', $this->getAllTokenSeparators());
+        $sChars = \implode('|', $this->getAllTokenSeparators());
         return '~(' . $sChars . ')~';
     }
 
@@ -98,10 +94,8 @@ class ReceivedConsumer extends AbstractConsumer
      * Overridden to /not/ advance when the end token matches a start token for
      * a sub-consumer.
      *
-     * @param Iterator $tokens
-     * @param bool $isStartToken
      */
-    protected function advanceToNextToken(Iterator $tokens, $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
     {
         if ($isStartToken) {
             $tokens->next();
@@ -122,7 +116,7 @@ class ReceivedConsumer extends AbstractConsumer
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
-    protected function processParts(array $parts)
+    protected function processParts(array $parts) : array
     {
         $ret = [];
         foreach ($parts as $part) {

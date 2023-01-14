@@ -1,9 +1,10 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser;
 
-use LegacyPHPUnit\TestCase;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartBuilderFactoryTest
@@ -15,16 +16,17 @@ use GuzzleHttp\Psr7\StreamWrapper;
  */
 class PartBuilderFactoryTest extends TestCase
 {
+  // @phpstan-ignore-next-line
     private $instance;
-    
-    protected function legacySetUp()
+
+    protected function setUp() : void
     {
         $this->instance = new PartBuilderFactory();
     }
 
-    public function testNewPartBuilder()
+    public function testNewPartBuilder() : void
     {
-        $hc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartHeaderContainer')
+        $hc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $stream = Psr7\Utils::streamFor('test');
@@ -33,13 +35,13 @@ class PartBuilderFactoryTest extends TestCase
             $stream
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\PartBuilder',
+            '\\' . \ZBateson\MailMimeParser\Parser\PartBuilder::class,
             $partBuilder
         );
 
-        $parent = $this->getMockBuilder('ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy')
+        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
-            ->setMethods([ 'getMessageResourceHandle' ])
+            ->setMethods(['getMessageResourceHandle'])
             ->getMockForAbstractClass();
         $parent->expects($this->once())
             ->method('getMessageResourceHandle')
@@ -50,7 +52,7 @@ class PartBuilderFactoryTest extends TestCase
             $parent
         );
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Parser\PartBuilder',
+            '\\' . \ZBateson\MailMimeParser\Parser\PartBuilder::class,
             $childPartBuilder
         );
         $this->assertSame(0, $childPartBuilder->getStreamPartStartPos());

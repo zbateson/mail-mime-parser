@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * UUEncodedPartHeaderContainerTest
@@ -13,23 +14,24 @@ use LegacyPHPUnit\TestCase;
  */
 class UUEncodedPartHeaderContainerTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $hf = $this->getMockBuilder('ZBateson\MailMimeParser\Header\HeaderFactory')
+        $hf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new UUEncodedPartHeaderContainer($hf);
     }
 
-    public function testGetSetUnixFileMode()
+    public function testGetSetUnixFileMode() : void
     {
         $this->instance->setUnixFileMode(0777);
         $this->assertSame(0777, $this->instance->getUnixFileMode());
     }
 
-    public function testGetSetFilename()
+    public function testGetSetFilename() : void
     {
         $this->instance->setFilename('test0r');
         $this->assertSame('test0r', $this->instance->getFilename());

@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -15,14 +16,15 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class CommentPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $charsetConverter;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->charsetConverter = new MbWrapper();
     }
 
-    public function testBasicComment()
+    public function testBasicComment() : void
     {
         $comment = 'Some silly comment made about my moustache';
         $part = new CommentPart($this->charsetConverter, $comment);
@@ -30,7 +32,7 @@ class CommentPartTest extends TestCase
         $this->assertEquals($comment, $part->getComment());
     }
 
-    public function testMimeEncoding()
+    public function testMimeEncoding() : void
     {
         $part = new CommentPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertEquals('', $part->getValue());

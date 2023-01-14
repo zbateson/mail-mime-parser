@@ -1,7 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use LegacyPHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PartChildrenContainerFactoryTest
@@ -13,18 +14,19 @@ use LegacyPHPUnit\TestCase;
  */
 class PartChildrenContainerFactoryTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
         $this->instance = new PartChildrenContainerFactory();
     }
 
-    public function testNewInstance()
+    public function testNewInstance() : void
     {
         $container = $this->instance->newInstance();
         $this->assertInstanceOf(
-            '\ZBateson\MailMimeParser\Message\PartChildrenContainer',
+            '\\' . \ZBateson\MailMimeParser\Message\PartChildrenContainer::class,
             $container
         );
     }

@@ -1,8 +1,8 @@
 <?php
+
 namespace ZBateson\MailMimeParser\Message;
 
-use LegacyPHPUnit\TestCase;
-use GuzzleHttp\Psr7;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of UUEncodedPartTest
@@ -14,17 +14,18 @@ use GuzzleHttp\Psr7;
  */
 class UUEncodedPartTest extends TestCase
 {
+    // @phpstan-ignore-next-line
     private $instance;
 
-    protected function legacySetUp()
+    protected function setUp() : void
     {
-        $psc = $this->getMockBuilder('ZBateson\MailMimeParser\Message\PartStreamContainer')
+        $psc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new UUEncodedPart(null, null, null, $psc);
     }
 
-    public function testGetAndSetFileName()
+    public function testGetAndSetFileName() : void
     {
         $observer = $this->getMockForAbstractClass('SplObserver');
         $observer->expects($this->once())
@@ -36,7 +37,7 @@ class UUEncodedPartTest extends TestCase
         $this->assertEquals('arre', $this->instance->getFilename());
     }
 
-    public function testGetAndUnixFileMode()
+    public function testGetAndUnixFileMode() : void
     {
         $observer = $this->getMockForAbstractClass('SplObserver');
         $observer->expects($this->once())
@@ -48,27 +49,27 @@ class UUEncodedPartTest extends TestCase
         $this->assertEquals(0776, $this->instance->getUnixFileMode());
     }
 
-     public function testIsTextPart()
+     public function testIsTextPart() : void
     {
         $this->assertFalse($this->instance->isTextPart());
     }
 
-    public function testGetContentType()
+    public function testGetContentType() : void
     {
         $this->assertEquals('application/octet-stream', $this->instance->getContentType());
     }
 
-    public function testGetCharset()
+    public function testGetCharset() : void
     {
         $this->assertEquals(null, $this->instance->getCharset());
     }
 
-    public function testGetContentDisposition()
+    public function testGetContentDisposition() : void
     {
         $this->assertEquals('attachment', $this->instance->getContentDisposition());
     }
 
-    public function getContentTransferEncoding()
+    public function getContentTransferEncoding() : void
     {
         $this->assertEquals('x-uuencode', $this->instance->getContentTransferEncoding());
     }
