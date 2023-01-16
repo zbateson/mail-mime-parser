@@ -103,7 +103,7 @@ class ReceivedConsumer extends AbstractConsumer
         } elseif ($tokens->valid() && !$this->isEndToken($tokens->current())) {
             foreach ($this->getSubConsumers() as $consumer) {
                 if ($consumer->isStartToken($tokens->current())) {
-                  return $this;
+                    return $this;
                 }
             }
             $tokens->next();
