@@ -169,7 +169,7 @@ class PartStreamContainer
      *
      * @param string $transferEncoding
      */
-    protected function attachTransferEncodingFilter(?string $transferEncoding) : void
+    protected function attachTransferEncodingFilter(?string $transferEncoding) : self
     {
         if ($this->decodedStream !== null) {
             $this->encoding['type'] = $transferEncoding;
@@ -189,6 +189,7 @@ class PartStreamContainer
                 $this->decodedStream = new CachingStream($assign);
             }
         }
+        return $this;
     }
 
     /**
@@ -198,7 +199,7 @@ class PartStreamContainer
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
      */
-    protected function attachCharsetFilter(string $fromCharset, string $toCharset) : void
+    protected function attachCharsetFilter(string $fromCharset, string $toCharset) : self
     {
         if ($this->charsetStream !== null) {
             $this->charsetStream = new CachingStream($this->streamFactory->newCharsetStream(
@@ -209,12 +210,13 @@ class PartStreamContainer
             $this->charset['from'] = $fromCharset;
             $this->charset['to'] = $toCharset;
         }
+        return $this;
     }
 
     /**
      * Resets just the charset stream, and rewinds the decodedStream.
      */
-    private function resetCharsetStream() : void
+    private function resetCharsetStream() : self
     {
         $this->charset = [
             'from' => null,
@@ -223,6 +225,7 @@ class PartStreamContainer
         ];
         $this->decodedStream->rewind();
         $this->charsetStream = $this->decodedStream;
+        return $this;
     }
 
     /**

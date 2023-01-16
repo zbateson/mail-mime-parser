@@ -57,21 +57,22 @@ class ParserMimePartProxy extends ParserPartProxy
      * Ensures that the last child added to this part is fully parsed (content
      * and children).
      */
-    protected function ensureLastChildParsed() : void
+    protected function ensureLastChildParsed() : self
     {
         if ($this->lastAddedChild !== null) {
             $this->lastAddedChild->parseAll();
         }
+        return $this;
     }
 
     /**
      * Parses the next child of this part and adds it to the 'stack' of
      * children.
      */
-    protected function parseNextChild() : void
+    protected function parseNextChild() : self
     {
         if ($this->allChildrenParsed) {
-            return;
+            return $this;
         }
         $this->parseContent();
         $this->ensureLastChildParsed();
@@ -82,6 +83,7 @@ class ParserMimePartProxy extends ParserPartProxy
         } else {
             $this->allChildrenParsed = true;
         }
+        return $this;
     }
 
     /**
@@ -102,13 +104,15 @@ class ParserMimePartProxy extends ParserPartProxy
 
     /**
      * Parses all content and children for this part.
+     * @return static
      */
-    public function parseAll() : void
+    public function parseAll()
     {
         $this->parseContent();
         while (!$this->allChildrenParsed) {
             $this->parseNextChild();
         }
+        return $this;
     }
 
     /**
@@ -190,13 +194,16 @@ class ParserMimePartProxy extends ParserPartProxy
      * Called once EOF is reached while reading content.  The method sets the
      * flag used by isParentBoundaryFound() to true on this part and all parent
      * parts.
+     *
+     * @return static
      */
-    public function setEof() : void
+    public function setEof() : self
     {
         $this->parentBoundaryFound = true;
         if ($this->getParent() !== null) {
             $this->getParent()->setEof();
         }
+        return $this;
     }
 
     /**
@@ -208,10 +215,12 @@ class ParserMimePartProxy extends ParserPartProxy
      * which must eventually reach a ParserMessageProxy which actually stores
      * the length.
      *
+     * @return static
      */
-    public function setLastLineEndingLength(int $length) : void
+    public function setLastLineEndingLength(int $length)
     {
         $this->getParent()->setLastLineEndingLength($length);
+        return $this;
     }
 
     /**

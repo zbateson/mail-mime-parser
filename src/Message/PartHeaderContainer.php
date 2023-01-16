@@ -238,16 +238,17 @@ class PartHeaderContainer implements IteratorAggregate
      * @param string $value
      * @param int $offset
      */
-    public function set($name, $value, $offset = 0)
+    public function set($name, $value, $offset = 0) : self
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (!isset($this->headerMap[$s][$offset])) {
             $this->add($name, $value);
-            return;
+            return $this;
         }
         $i = $this->headerMap[$s][$offset];
         $this->headers[$i] = [$name, $value];
         $this->headerObjects[$i] = null;
+        return $this;
     }
 
     /**

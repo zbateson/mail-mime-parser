@@ -72,36 +72,39 @@ class ParserNonMimeMessageProxy extends ParserMessageProxy
      * Sets the next part's start position within the message's raw stream.
      *
      */
-    public function setNextPartStart(int $nextPartStart) : void
+    public function setNextPartStart(int $nextPartStart) : self
     {
         $this->nextPartStart = $nextPartStart;
+        return $this;
     }
 
     /**
      * Sets the next part's unix file mode from its 'begin' line.
-     *
      */
-    public function setNextPartMode(int $nextPartMode) : void
+    public function setNextPartMode(int $nextPartMode) : self
     {
         $this->nextPartMode = $nextPartMode;
+        return $this;
     }
 
     /**
      * Sets the next part's filename from its 'begin' line.
      *
      */
-    public function setNextPartFilename(string $nextPartFilename) : void
+    public function setNextPartFilename(string $nextPartFilename) : self
     {
         $this->nextPartFilename = $nextPartFilename;
+        return $this;
     }
 
     /**
      * Sets the next part start position, file mode, and filename to null
      */
-    public function clearNextPart() : void
+    public function clearNextPart() : self
     {
         $this->nextPartStart = null;
         $this->nextPartMode = null;
         $this->nextPartFilename = null;
+        return $this;
     }
 }

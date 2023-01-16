@@ -66,11 +66,11 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * As this is a message-wide setting, ParserUUEncodedPartProxy calls
      * setNextPartStart() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
-     *
      */
-    public function setNextPartStart(int $nextPartStart) : void
+    public function setNextPartStart(int $nextPartStart) : self
     {
         $this->getParent()->setNextPartStart($nextPartStart);
+        return $this;
     }
 
     /**
@@ -79,11 +79,11 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * As this is a message-wide setting, ParserUUEncodedPartProxy calls
      * setNextPartMode() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
-     *
      */
-    public function setNextPartMode(int $nextPartMode) : void
+    public function setNextPartMode(int $nextPartMode) : self
     {
         $this->getParent()->setNextPartMode($nextPartMode);
+        return $this;
     }
 
     /**
@@ -92,11 +92,11 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * As this is a message-wide setting, ParserUUEncodedPartProxy calls
      * setNextPartFilename() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
-     *
      */
-    public function setNextPartFilename(string $nextPartFilename) : void
+    public function setNextPartFilename(string $nextPartFilename) : self
     {
         $this->getParent()->setNextPartFilename($nextPartFilename);
+        return $this;
     }
 
     /**

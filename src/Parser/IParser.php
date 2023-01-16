@@ -25,7 +25,7 @@ interface IParser
      *
      * @param ParserManager $pm The ParserManager to set.
      */
-    public function setParserManager(ParserManager $pm) : void;
+    public function setParserManager(ParserManager $pm);
 
     /**
      * Called by the ParserManager to determine if the passed PartBuilder is a
@@ -69,7 +69,7 @@ interface IParser
      * message has been reached $proxy->setEof() should be called in addition to
      * setStreamContentAndPartEndPos().
      */
-    public function parseContent(ParserPartProxy $proxy) : void;
+    public function parseContent(ParserPartProxy $proxy);
 
     /**
      * Performs read operations to read children from the passed $proxy, using

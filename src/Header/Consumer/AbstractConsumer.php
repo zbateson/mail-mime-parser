@@ -276,12 +276,15 @@ abstract class AbstractConsumer
      *
      * @param Iterator $tokens The token iterator.
      * @param bool $isStartToken true for the start token.
+     *
+     * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
     {
         if (($isStartToken) || ($tokens->valid() && !$this->isEndToken($tokens->current()))) {
             $tokens->next();
         }
+        return $this;
     }
 
     /**

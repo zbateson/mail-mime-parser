@@ -59,9 +59,8 @@ class GenericHelper extends AbstractHelper
      *
      * An exception is made for the obsolete Content-Return header, which isn't
      * isn't a MIME content field and so isn't removed.
-     *
      */
-    public function removeContentHeadersAndContent(IMimePart $part) : void
+    public function removeContentHeadersAndContent(IMimePart $part) : self
     {
         foreach ($part->getAllHeaders() as $header) {
             if ($this->isMimeContentField($header)) {
@@ -69,6 +68,7 @@ class GenericHelper extends AbstractHelper
             }
         }
         $part->detachContentStream();
+        return $this;
     }
 
     /**
@@ -141,17 +141,18 @@ class GenericHelper extends AbstractHelper
      * same position.  If $part is the IMessage, then $part can't be removed and
      * replaced, and instead $replacement's type headers are copied to $message,
      * and any children below $replacement are added directly below $message.
-     *
      */
-    public function replacePart(IMessage $message, IMimePart $part, IMimePart $replacement)
+    public function replacePart(IMessage $message, IMimePart $part, IMimePart $replacement) : self
     {
         $position = $message->removePart($replacement);
         if ($part === $message) {
             $this->movePartContentAndChildren($replacement, $message);
-            return;
+            return $this;
         }
         $parent = $part->getParent();
         $parent->addChild($replacement, $position);
         $parent->removePart($part);
+
+        return $this;
     }
 }

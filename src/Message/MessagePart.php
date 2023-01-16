@@ -93,11 +93,15 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function setCharsetOverride(string $charsetOverride, bool $onlyIfNoCharset = false) : void
+    /**
+     * @return static
+     */
+    public function setCharsetOverride(string $charsetOverride, bool $onlyIfNoCharset = false)
     {
         if (!$onlyIfNoCharset || $this->getCharset() === null) {
             $this->charsetOverride = $charsetOverride;
         }
+        return $this;
     }
 
     public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET)
@@ -132,7 +136,7 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function saveContent($filenameResourceOrStream) : void
+    public function saveContent($filenameResourceOrStream) : self
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {
@@ -148,6 +152,7 @@ abstract class MessagePart implements IMessagePart
             // fopen call can be properly closed if it was
             $stream->detach();
         }
+        return $this;
     }
 
     public function getContent(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?string
@@ -159,7 +164,7 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET) : void
+    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET) : self
     {
         $ch = $this->charsetOverride ?? $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
@@ -168,19 +173,22 @@ abstract class MessagePart implements IMessagePart
         $this->ignoreTransferEncoding = true;
         $this->partStreamContainer->setContentStream($stream);
         $this->notify();
+        return $this;
     }
 
-    public function detachContentStream() : void
+    public function detachContentStream() : self
     {
         $this->partStreamContainer->setContentStream(null);
         $this->notify();
+        return $this;
     }
 
-    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET) : void
+    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET) : self
     {
         $stream = Utils::streamFor($resource);
         $this->attachContentStream($stream, $charset);
         // this->notify() called in attachContentStream
+        return $this;
     }
 
     public function getResourceHandle()
@@ -193,7 +201,7 @@ abstract class MessagePart implements IMessagePart
         return $this->partStreamContainer->getStream();
     }
 
-    public function save($filenameResourceOrStream, string $filemode = 'w+') : void
+    public function save($filenameResourceOrStream, string $filemode = 'w+') : self
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {
@@ -211,6 +219,7 @@ abstract class MessagePart implements IMessagePart
             // fopen call can be properly closed if it was
             $stream->detach();
         }
+        return $this;
     }
 
     public function __toString() : string

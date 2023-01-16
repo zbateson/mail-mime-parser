@@ -199,10 +199,12 @@ class PartBuilder
      * Sets the byte offset start position of the part in the raw message
      * stream.
      *
+     * @return static
      */
-    public function setStreamPartStartPos(int $streamPartStartPos) : void
+    public function setStreamPartStartPos(int $streamPartStartPos)
     {
         $this->streamPartStartPos = $streamPartStartPos;
+        return $this;
     }
 
     /**
@@ -210,34 +212,40 @@ class PartBuilder
      * and also calls its parent's setParentStreamPartEndPos to expand to parent
      * PartBuilders.
      *
+     * @return static
      */
-    public function setStreamPartEndPos(int $streamPartEndPos) : void
+    public function setStreamPartEndPos(int $streamPartEndPos)
     {
         $this->streamPartEndPos = $streamPartEndPos;
         if ($this->parent !== null) {
             $this->parent->setStreamPartEndPos($streamPartEndPos);
         }
+        return $this;
     }
 
     /**
      * Sets the byte offset start position of the content in the raw message
      * stream.
      *
+     * @return static
      */
-    public function setStreamContentStartPos(int $streamContentStartPos) : void
+    public function setStreamContentStartPos(int $streamContentStartPos)
     {
         $this->streamContentStartPos = $streamContentStartPos;
+        return $this;
     }
 
     /**
      * Sets the byte offset end position of the content and part in the raw
      * message stream.
      *
+     * @return static
      */
-    public function setStreamPartAndContentEndPos(int $streamContentEndPos) : void
+    public function setStreamPartAndContentEndPos(int $streamContentEndPos)
     {
         $this->streamContentEndPos = $streamContentEndPos;
         $this->setStreamPartEndPos($streamContentEndPos);
+        return $this;
     }
 
     /**

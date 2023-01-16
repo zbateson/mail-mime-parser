@@ -104,8 +104,9 @@ class ReceivedHeader extends ParameterHeader
      * Overridden to assign comments to $this->comments, and the DateTime to
      * $this->date.
      *
+     * @return static
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
@@ -115,6 +116,7 @@ class ReceivedHeader extends ParameterHeader
                 $this->date = $part->getDateTime();
             }
         }
+        return $this;
     }
 
     /**

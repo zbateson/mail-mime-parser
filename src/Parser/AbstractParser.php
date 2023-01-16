@@ -57,9 +57,13 @@ abstract class AbstractParser implements IParser
         $this->partBuilderFactory = $partBuilderFactory;
     }
 
-    public function setParserManager(ParserManager $pm) : void
+    /**
+     * @return static
+     */
+    public function setParserManager(ParserManager $pm)
     {
         $this->parserManager = $pm;
+        return $this;
     }
 
     public function getParserMessageProxyFactory()

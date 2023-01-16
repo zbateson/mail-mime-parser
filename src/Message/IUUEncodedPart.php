@@ -31,7 +31,7 @@ interface IUUEncodedPart extends IMessagePart
      * Sets the filename included in the uuencoded 'begin' line.
      *
      */
-    public function setFilename(string $filename) : void;
+    public function setFilename(string $filename);
 
     /**
      * Returns the file mode included in the uuencoded 'begin' line for this
@@ -42,5 +42,5 @@ interface IUUEncodedPart extends IMessagePart
     /**
      * Sets the unix file mode for the uuencoded 'begin' line.
      */
-    public function setUnixFileMode(int $mode) : void;
+    public function setUnixFileMode(int $mode);
 }

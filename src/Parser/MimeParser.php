@@ -93,7 +93,7 @@ class MimeParser extends AbstractParser
      * were read.
      *
      */
-    private function findContentBoundary(ParserMimePartProxy $proxy) : void
+    private function findContentBoundary(ParserMimePartProxy $proxy) : self
     {
         $handle = $proxy->getMessageResourceHandle();
         // last separator before a boundary belongs to the boundary, and is not
@@ -103,17 +103,22 @@ class MimeParser extends AbstractParser
             $line = $this->readBoundaryLine($handle, $proxy);
             if (\substr($line, 0, 2) === '--' && $proxy->setEndBoundaryFound($line)) {
                 $proxy->setStreamPartAndContentEndPos($endPos);
-                return;
+                return $this;
             }
         }
         $proxy->setStreamPartAndContentEndPos(\ftell($handle));
         $proxy->setEof();
+        return $this;
     }
 
-    public function parseContent(ParserPartProxy $proxy) : void
+    /**
+     * @return static
+     */
+    public function parseContent(ParserPartProxy $proxy)
     {
         $proxy->setStreamContentStartPos($proxy->getMessageResourceHandlePos());
         $this->findContentBoundary($proxy);
+        return $this;
     }
 
     /**

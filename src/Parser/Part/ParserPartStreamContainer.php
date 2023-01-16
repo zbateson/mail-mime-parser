@@ -76,7 +76,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      * Requests content from the parser if not previously requested, and calls
      * PartStreamContainer::setContentStream().
      */
-    protected function requestParsedContentStream() : void
+    protected function requestParsedContentStream() : self
     {
         if (!$this->contentParseRequested) {
             $this->contentParseRequested = true;
@@ -85,6 +85,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
                 $this->parserProxy
             ));
         }
+        return $this;
     }
 
     /**
@@ -92,7 +93,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      * $this->parsedStream to the original parsed stream (or a limited part of
      * it corresponding to the current part this stream container belongs to).
      */
-    protected function requestParsedStream() : void
+    protected function requestParsedStream() : self
     {
         if ($this->parsedStream === null) {
             $this->parserProxy->parseAll();
@@ -103,6 +104,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
                 $this->detachParsedStream = ($this->parsedStream->getMetadata('mmp-detached-stream') === true);
             }
         }
+        return $this;
     }
 
     public function hasContent() : bool
@@ -123,13 +125,14 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getBinaryContentStream($transferEncoding);
     }
 
-    public function setContentStream(?StreamInterface $contentStream = null) : void
+    public function setContentStream(?StreamInterface $contentStream = null) : self
     {
         // has to be overridden because requestParsedContentStream calls
         // parent::setContentStream as well, so needs to be parsed before
         // overriding the contentStream with a manual 'set'.
         $this->requestParsedContentStream();
         parent::setContentStream($contentStream);
+        return $this;
     }
 
     public function getStream()
