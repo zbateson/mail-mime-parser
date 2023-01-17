@@ -255,9 +255,9 @@ class Message extends MimePart implements IMessage
         return \count($this->getAllAttachmentParts());
     }
 
-	/**
-	 * @return static
-	 */
+    /**
+     * @return static
+     */
     public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64')
     {
         $this->multipartHelper

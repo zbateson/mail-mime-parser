@@ -39,8 +39,8 @@ class UUEncodedPartHeaderContainer extends PartHeaderContainer
 
     /**
      * Sets the unix file mode for the uuencoded 'begin' line.
-	 *
-	 * @return static
+     *
+     * @return static
      */
     public function setUnixFileMode(int $mode)
     {
@@ -60,8 +60,8 @@ class UUEncodedPartHeaderContainer extends PartHeaderContainer
     }
 
     /**
-	 * Sets the filename included in the uuencoded 'begin' line.
-	 *
+     * Sets the filename included in the uuencoded 'begin' line.
+     *
      * @return static
      */
     public function setFilename(string $filename)
