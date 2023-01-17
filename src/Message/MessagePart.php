@@ -164,7 +164,10 @@ abstract class MessagePart implements IMessagePart
         return null;
     }
 
-    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET) : self
+    /**
+     * @return static
+     */
+    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET)
     {
         $ch = $this->charsetOverride ?? $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
@@ -176,14 +179,20 @@ abstract class MessagePart implements IMessagePart
         return $this;
     }
 
-    public function detachContentStream() : self
+    /**
+     * @return static
+     */
+    public function detachContentStream()
     {
         $this->partStreamContainer->setContentStream(null);
         $this->notify();
         return $this;
     }
 
-    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET) : self
+    /**
+     * @return static
+     */
+    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET)
     {
         $stream = Utils::streamFor($resource);
         $this->attachContentStream($stream, $charset);
@@ -201,7 +210,10 @@ abstract class MessagePart implements IMessagePart
         return $this->partStreamContainer->getStream();
     }
 
-    public function save($filenameResourceOrStream, string $filemode = 'w+') : self
+    /**
+     * @return static
+     */
+    public function save($filenameResourceOrStream, string $filemode = 'w+')
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {

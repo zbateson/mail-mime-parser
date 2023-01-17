@@ -53,7 +53,10 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         return $this->filename;
     }
 
-    public function setFilename(string $filename) : self
+    /**
+     * @return static
+     */
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
         $this->notify();
@@ -113,7 +116,10 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         return $this->mode;
     }
 
-    public function setUnixFileMode(int $mode) : self
+    /**
+     * @return static
+     */
+    public function setUnixFileMode(int $mode)
     {
         $this->mode = $mode;
         $this->notify();

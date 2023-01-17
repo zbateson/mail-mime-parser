@@ -300,7 +300,10 @@ class MimePart extends MultiPart implements IMimePart
         return $this;
     }
 
-    public function removeSingleHeader(string $name, int $offset = 0) : self
+    /**
+     * @return static
+     */
+    public function removeSingleHeader(string $name, int $offset = 0)
     {
         $this->headerContainer->remove($name, $offset);
         $this->notify();
