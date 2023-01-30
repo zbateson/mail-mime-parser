@@ -80,10 +80,12 @@ class CommentConsumer extends GenericConsumer
      * and will not advance past it.  Because a comment part of a header can be
      * nested, its implementation must advance past its own 'end' token.
      *
+     * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
     {
         $tokens->next();
+        return $this;
     }
 
     /**

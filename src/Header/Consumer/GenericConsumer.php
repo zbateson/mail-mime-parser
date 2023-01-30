@@ -85,13 +85,14 @@ class GenericConsumer extends AbstractConsumer
      * @param HeaderPart[] $parts
      * @param HeaderPart[] $retParts
      */
-    private function addSpaceToRetParts(array $parts, array &$retParts, int $curIndex, HeaderPart &$spacePart, HeaderPart $lastPart) : void
+    private function addSpaceToRetParts(array $parts, array &$retParts, int $curIndex, HeaderPart &$spacePart, HeaderPart $lastPart) : self
     {
         $nextPart = $parts[$curIndex];
         if ($this->shouldAddSpace($nextPart, $lastPart)) {
             $retParts[] = $spacePart;
             $spacePart = null;
         }
+        return $this;
     }
 
     /**
@@ -105,12 +106,13 @@ class GenericConsumer extends AbstractConsumer
      * @param HeaderPart[] $retParts
      * @param HeaderPart $spacePart
      */
-    private function addSpaces(array $parts, array &$retParts, int $curIndex, ?HeaderPart &$spacePart = null) : void
+    private function addSpaces(array $parts, array &$retParts, int $curIndex, ?HeaderPart &$spacePart = null) : self
     {
         $lastPart = \end($retParts);
         if ($spacePart !== null && $curIndex < \count($parts) && $parts[$curIndex]->getValue() !== '' && $lastPart !== false) {
             $this->addSpaceToRetParts($parts, $retParts, $curIndex, $spacePart, $lastPart);
         }
+        return $this;
     }
 
     /**

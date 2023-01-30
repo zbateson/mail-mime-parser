@@ -53,8 +53,10 @@ class ParameterHeader extends AbstractHeader
      * Overridden to assign ParameterParts to a map of lower-case parameter
      * names to ParameterParts.
      *
+     *
+     * @return static
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
@@ -62,6 +64,7 @@ class ParameterHeader extends AbstractHeader
                 $this->parameters[\strtolower($part->getName())] = $part;
             }
         }
+        return $this;
     }
 
     /**

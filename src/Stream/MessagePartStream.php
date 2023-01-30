@@ -126,9 +126,8 @@ class MessagePartStream implements SplObserver, StreamInterface
     /**
      * Writes out the content portion of the attached mime part to the passed
      * $stream.
-     *
      */
-    private function writePartContentTo(StreamInterface $stream) : void
+    private function writePartContentTo(StreamInterface $stream) : self
     {
         $contentStream = $this->part->getContentStream();
         if ($contentStream !== null) {
@@ -138,6 +137,7 @@ class MessagePartStream implements SplObserver, StreamInterface
             Psr7\Utils::copyToStream($contentStream, $cs);
             $cs->close();
         }
+        return $this;
     }
 
     /**

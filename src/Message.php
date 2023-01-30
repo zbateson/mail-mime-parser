@@ -168,7 +168,10 @@ class Message extends MimePart implements IMessage
         return null;
     }
 
-    public function setTextPart($resource, string $charset = 'UTF-8') : void
+    /**
+     * @return static
+     */
+    public function setTextPart($resource, string $charset = 'UTF-8')
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
@@ -177,9 +180,10 @@ class Message extends MimePart implements IMessage
                 $resource,
                 $charset
             );
+        return $this;
     }
 
-    public function setHtmlPart($resource, string $charset = 'UTF-8') : void
+    public function setHtmlPart($resource, string $charset = 'UTF-8') : self
     {
         $this->multipartHelper
             ->setContentPartForMimeType(
@@ -188,6 +192,7 @@ class Message extends MimePart implements IMessage
                 $resource,
                 $charset
             );
+        return $this;
     }
 
     public function removeTextPart(int $index = 0) : bool
@@ -250,7 +255,10 @@ class Message extends MimePart implements IMessage
         return \count($this->getAllAttachmentParts());
     }
 
-    public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void
+    /**
+     * @return static
+     */
+    public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64')
     {
         $this->multipartHelper
             ->createAndAddPartForAttachment(
@@ -261,21 +269,27 @@ class Message extends MimePart implements IMessage
                 $filename,
                 $encoding
             );
+        return $this;
     }
 
-    public function addAttachmentPartFromFile($filePath, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void
+    /**
+     * @return static
+     */
+    public function addAttachmentPartFromFile($filePath, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64')
     {
         $handle = Psr7\Utils::streamFor(\fopen($filePath, 'r'));
         if ($filename === null) {
             $filename = \basename($filePath);
         }
         $this->addAttachmentPart($handle, $mimeType, $filename, $disposition, $encoding);
+        return $this;
     }
 
-    public function removeAttachmentPart(int $index) : void
+    public function removeAttachmentPart(int $index) : self
     {
         $part = $this->getAttachmentPart($index);
         $this->removePart($part);
+        return $this;
     }
 
     public function getSignedMessageStream()
@@ -301,15 +315,20 @@ class Message extends MimePart implements IMessage
 
     }
 
-    public function setAsMultipartSigned(string $micalg, string $protocol) : void
+    /**
+     * @return static
+     */
+    public function setAsMultipartSigned(string $micalg, string $protocol)
     {
         $this->privacyHelper
             ->setMessageAsMultipartSigned($this, $micalg, $protocol);
+        return $this;
     }
 
-    public function setSignature(string $body) : void
+    public function setSignature(string $body) : self
     {
         $this->privacyHelper
             ->setSignature($this, $body);
+        return $this;
     }
 }

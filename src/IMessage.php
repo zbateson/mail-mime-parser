@@ -166,7 +166,7 @@ interface IMessage extends IMimePart
      * @param string $contentTypeCharset the charset to use as the text/plain
      *        part's content-type header charset value.
      */
-    public function setTextPart($resource, string $contentTypeCharset = 'UTF-8') : void;
+    public function setTextPart($resource, string $contentTypeCharset = 'UTF-8');
 
     /**
      * Sets the text/html part of the message to the passed $resource, either
@@ -185,7 +185,7 @@ interface IMessage extends IMimePart
      * @param string $contentTypeCharset the charset to use as the text/html
      *        part's content-type header charset value.
      */
-    public function setHtmlPart($resource, string $contentTypeCharset = 'UTF-8') : void;
+    public function setHtmlPart($resource, string $contentTypeCharset = 'UTF-8');
 
     /**
      * Removes the text/plain part of the message at the passed index if one
@@ -329,7 +329,7 @@ interface IMessage extends IMimePart
      * @param string $encoding defaults to 'base64', only applied for a mime
      *        email
      */
-    public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void;
+    public function addAttachmentPart($resource, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64');
 
     /**
      * Adds an attachment part using the passed file.
@@ -347,7 +347,7 @@ interface IMessage extends IMimePart
      * @param string $encoding defaults to 'base64', only applied for a mime
      *        email
      */
-    public function addAttachmentPartFromFile($filePath, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64') : void;
+    public function addAttachmentPartFromFile($filePath, string $mimeType, ?string $filename = null, string $disposition = 'attachment', string $encoding = 'base64');
 
     /**
      * Removes the attachment at the given index.
@@ -360,7 +360,7 @@ interface IMessage extends IMimePart
      *  - any signature part
      *
      */
-    public function removeAttachmentPart(int $index) : void;
+    public function removeAttachmentPart(int $index);
 
     /**
      * Returns a stream that can be used to read the content part of a signed
@@ -420,7 +420,7 @@ interface IMessage extends IMimePart
      * @param string $micalg The Message Integrity Check algorithm being used
      * @param string $protocol The mime-type of the signature body
      */
-    public function setAsMultipartSigned(string $micalg, string $protocol) : void;
+    public function setAsMultipartSigned(string $micalg, string $protocol);
 
     /**
      * Sets the signature body of the message to the passed $body for a
@@ -428,5 +428,5 @@ interface IMessage extends IMimePart
      *
      * @param string $body the message's hash
      */
-    public function setSignature(string $body) : void;
+    public function setSignature(string $body);
 }

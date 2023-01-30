@@ -270,27 +270,43 @@ class MimePart extends MultiPart implements IMimePart
         return $defaultValue;
     }
 
-    public function setRawHeader(string $name, ?string $value, int $offset = 0) : void
+    /**
+     * @return static
+     */
+    public function setRawHeader(string $name, ?string $value, int $offset = 0)
     {
         $this->headerContainer->set($name, $value, $offset);
         $this->notify();
+        return $this;
     }
 
-    public function addRawHeader(string $name, string $value) : void
+    /**
+     * @return static
+     */
+    public function addRawHeader(string $name, string $value)
     {
         $this->headerContainer->add($name, $value);
         $this->notify();
+        return $this;
     }
 
-    public function removeHeader(string $name) : void
+    /**
+     * @return static
+     */
+    public function removeHeader(string $name)
     {
         $this->headerContainer->removeAll($name);
         $this->notify();
+        return $this;
     }
 
-    public function removeSingleHeader(string $name, int $offset = 0) : void
+    /**
+     * @return static
+     */
+    public function removeSingleHeader(string $name, int $offset = 0)
     {
         $this->headerContainer->remove($name, $offset);
         $this->notify();
+        return $this;
     }
 }

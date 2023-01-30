@@ -74,7 +74,7 @@ class NonMimeParser extends AbstractParser
      *
      * @param ParserNonMimeMessageProxy|ParserUUEncodedPartProxy $proxy
      */
-    private function parseNextPart(ParserPartProxy $proxy) : void
+    private function parseNextPart(ParserPartProxy $proxy) : self
     {
         $handle = $proxy->getMessageResourceHandle();
         while (!\feof($handle)) {
@@ -82,24 +82,29 @@ class NonMimeParser extends AbstractParser
             $line = \trim(MessageParser::readLine($handle));
             if (\preg_match('/^begin ([0-7]{3}) (.*)$/', $line, $matches)) {
                 $proxy->setNextPartStart($start);
-                $proxy->setNextPartMode((int)$matches[1]);
+                $proxy->setNextPartMode((int) $matches[1]);
                 $proxy->setNextPartFilename($matches[2]);
-                return;
+                return $this;
             }
             $proxy->setStreamPartAndContentEndPos(\ftell($handle));
         }
+        return $this;
     }
 
-    public function parseContent(ParserPartProxy $proxy) : void
+    /**
+     * @return static
+     */
+    public function parseContent(ParserPartProxy $proxy)
     {
         $handle = $proxy->getMessageResourceHandle();
         if ($proxy->getNextPartStart() !== null || \feof($handle)) {
-            return;
+            return $this;
         }
         if ($proxy->getStreamContentStartPos() === null) {
             $proxy->setStreamContentStartPos(\ftell($handle));
         }
         $this->parseNextPart($proxy);
+        return $this;
     }
 
     public function parseNextChild(ParserMimePartProxy $proxy)

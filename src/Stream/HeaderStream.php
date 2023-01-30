@@ -80,14 +80,14 @@ class HeaderStream implements SplObserver, StreamInterface
 
     /**
      * Writes out headers for $this->part and follows them with an empty line.
-     *
      */
-    public function writePartHeadersTo(StreamInterface $stream) : void
+    public function writePartHeadersTo(StreamInterface $stream) : self
     {
         foreach ($this->getPartHeadersIterator() as $header) {
             $stream->write("{$header[0]}: {$header[1]}\r\n");
         }
         $stream->write("\r\n");
+        return $this;
     }
 
     /**

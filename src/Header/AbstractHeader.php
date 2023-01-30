@@ -67,10 +67,12 @@ abstract class AbstractHeader implements IHeader
      *
      * The default implementation assigns the returned value to $this->part.
      *
+     * @return static
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
         $this->parts = $consumer($this->rawValue);
+        return $this;
     }
 
     /**

@@ -49,13 +49,16 @@ class AddressBaseConsumer extends AbstractConsumer
      *
      * The start token for AddressBaseConsumer is part of an AddressPart (or a
      * sub-consumer) and so must be passed on.
+     *
+     * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : void
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
     {
         if ($isStartToken) {
-            return;
+            return $this;
         }
         parent::advanceToNextToken($tokens, $isStartToken);
+        return $this;
     }
 
     /**

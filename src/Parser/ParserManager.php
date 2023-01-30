@@ -36,12 +36,13 @@ class ParserManager
      * calling $parser->setParserManager($this) on each one.
      *
      */
-    public function setParsers(array $parsers) : void
+    public function setParsers(array $parsers) : self
     {
         foreach ($parsers as $parser) {
             $parser->setParserManager($this);
         }
         $this->parsers = $parsers;
+        return $this;
     }
 
     /**
@@ -50,10 +51,11 @@ class ParserManager
      *
      * @param IParser $parser The parser to add.
      */
-    public function prependParser(IParser $parser) : void
+    public function prependParser(IParser $parser) : self
     {
         $parser->setParserManager($this);
         \array_unshift($this->parsers, $parser);
+        return $this;
     }
 
     /**

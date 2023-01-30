@@ -65,9 +65,8 @@ class SplitParameterToken extends HeaderPart
      * Extracts charset and language from an encoded value, setting them on the
      * current object if $index is 0 and adds the value part to the encodedParts
      * array.
-     *
      */
-    protected function extractMetaInformationAndValue(string $value, int $index) : void
+    protected function extractMetaInformationAndValue(string $value, int $index) : self
     {
         if (\preg_match('~^([^\']*)\'([^\']*)\'(.*)$~', $value, $matches)) {
             if ($index === 0) {
@@ -77,6 +76,7 @@ class SplitParameterToken extends HeaderPart
             $value = $matches[3];
         }
         $this->encodedParts[$index] = $value;
+        return $this;
     }
 
     /**

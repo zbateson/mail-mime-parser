@@ -38,8 +38,10 @@ abstract class MimeEncodedHeader extends AbstractHeader
     /**
      * Mime-decodes any mime-encoded parts prior to invoking the passed
      * consumer.
+     *
+     * @return static
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
         $value = $this->rawValue;
         $matchp = '~' . MimeLiteralPart::MIME_PART_PATTERN . '~';
@@ -47,5 +49,6 @@ abstract class MimeEncodedHeader extends AbstractHeader
             return $this->mimeLiteralPartFactory->newInstance($matches[0]);
         }, $value);
         $this->parts = $consumer($value);
+        return $this;
     }
 }

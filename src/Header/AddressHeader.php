@@ -50,8 +50,9 @@ class AddressHeader extends AbstractHeader
     /**
      * Overridden to extract all addresses into addresses array.
      *
+     * @return static
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer) : void
+    protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
         parent::setParseHeaderValue($consumer);
         foreach ($this->parts as $part) {
@@ -62,6 +63,7 @@ class AddressHeader extends AbstractHeader
                 $this->groups[] = $part;
             }
         }
+        return $this;
     }
 
     /**

@@ -154,14 +154,14 @@ class MimeLiteralPart extends LiteralPart
 
     /**
      * Adds the passed part into the languages array with the given language.
-     *
      */
-    protected function addToLanguage(string $part, ?string $language = null) : void
+    protected function addToLanguage(string $part, ?string $language = null) : self
     {
         $this->languages[] = [
             'lang' => $language,
             'value' => $part
         ];
+        return $this;
     }
 
     /**
