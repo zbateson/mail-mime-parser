@@ -241,8 +241,8 @@ class EmailFunctionalTest extends TestCase
             \proc_close($proc);
             return \preg_replace('/\r|\n/', '', $signature);
         }
-            return \md5($signableContent);
-
+        
+        return \md5($signableContent);
     }
 
     public function testParseEmailm0001() : void
@@ -2710,6 +2710,33 @@ class EmailFunctionalTest extends TestCase
         ];
 
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
+    }
+
+    public function testCreateSignedPartm4009() : void
+    {
+        $handle = \fopen($this->messageDir . '/m4009.txt', 'r');
+        $message = $this->parser->parse($handle, true);
+
+        $message->setAsMultipartSigned('pgp-sha256', 'application/pgp-signature');
+        $signableContent = $message->getSignedMessageAsString();
+
+        \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4009', $signableContent);
+        // $signature = $this->getSignatureForContent($signableContent);
+        $signature = md5($signableContent);
+        $this->assertEquals('3c20fc7a6d26141f748a0481d886d932', $signature);
+        $message->setSignature($signature);
+
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m4009', 'w+');
+        $message->save($tmpSaved);
+        \rewind($tmpSaved);
+
+        $this->assertTrue(\strpos(\preg_replace('/\r\n|\r|\n/', "\r\n", \stream_get_contents($tmpSaved)), $signableContent) !== false);
+        \rewind($tmpSaved);
+
+        $messageWritten = $this->parser->parse($tmpSaved, true);
+
+        $testString = $messageWritten->getSignedMessageAsString();
+        $this->assertEquals($signature, $this->getSignatureForContent($testString));
     }
 
     public function testReadEmailWithLongHeader() : void

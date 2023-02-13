@@ -91,13 +91,13 @@ class MimeParser extends AbstractParser
      * Once a boundary is found, setStreamPartAndContentEndPos is called with
      * the passed $handle's read pos before the boundary and its line separator
      * were read.
-     *
      */
     private function findContentBoundary(ParserMimePartProxy $proxy) : self
     {
         $handle = $proxy->getMessageResourceHandle();
         // last separator before a boundary belongs to the boundary, and is not
-        // part of the current part
+        // part of the current part, if a part is immediately followed by a
+        // boundary, this could result in a '-1' or '-2' content length
         while (!\feof($handle)) {
             $endPos = \ftell($handle) - $proxy->getLastLineEndingLength();
             $line = $this->readBoundaryLine($handle, $proxy);
@@ -126,7 +126,7 @@ class MimeParser extends AbstractParser
      * $this->parserManager->createParserProxyFor($child);
      *
      * The method first checks though if the 'part' represents hidden content
-     * passed a MIME end boundary, which some messages like to include, for
+     * past a MIME end boundary, which some messages like to include, for
      * instance:
      *
      * ```
@@ -154,11 +154,10 @@ class MimeParser extends AbstractParser
             $parserProxy = $this->parserManager->createParserProxyFor($child);
             return $parserProxy;
         }
-            // reads content past an end boundary if there is any
-            $parserProxy = $this->parserPartProxyFactory->newInstance($child, $this);
-            $this->parseContent($parserProxy);
-            return null;
-
+        // reads content past an end boundary if there is any
+        $parserProxy = $this->parserPartProxyFactory->newInstance($child, $this);
+        $this->parseContent($parserProxy);
+        return null;
     }
 
     public function parseNextChild(ParserMimePartProxy $proxy)

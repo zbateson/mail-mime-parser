@@ -1,0 +1,34 @@
+From: "Test Sender" <meint@example.com>
+To: "Test Recipient" <meint@example.com>
+Message-ID: 12223
+Date: Sun, 12 Feb 2023 11:34:41 -0800
+Subject: Attachment
+Content-Type: multipart/mixed; boundary="001a11412778aa4fb3054b4d33d4"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+--001a11412778aa4fb3054b4d33d4
+Content-Type: multipart/alternative; boundary="001a11412778aa4fae054b4d33d2"
+
+--001a11412778aa4fae054b4d33d2
+Content-Type: text/plain; charset="UTF-8"
+
+Test
+
+--001a11412778aa4fae054b4d33d2
+Content-Type: text/html; charset="UTF-8"
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr">Test</div>
+
+--001a11412778aa4fae054b4d33d2--
+
+--001a11412778aa4fb3054b4d33d4
+Content-Type: text/plain; name="test10Mb.db"
+Content-Disposition: attachment; filename="test10Mb.db"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_j0koluy20
+
+AAAAAA
+
+--001a11412778aa4fb3054b4d33d4--
+

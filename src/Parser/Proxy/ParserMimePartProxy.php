@@ -207,6 +207,26 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
+     * Overridden to set a 0-length content length, and a stream end pos of -2
+     * if the passed end pos is before the start pos (can happen if a mime
+     * end boundary doesn't have an empty line before the next parent start
+     * boundary).
+     *
+     * @return static
+     */
+    public function setStreamPartAndContentEndPos(int $streamContentEndPos)
+    {
+        $start = $this->getStreamContentStartPos();
+        if ($streamContentEndPos - $start < 0) {
+            parent::setStreamPartAndContentEndPos($start);
+            $this->setStreamPartEndPos($streamContentEndPos);
+        } else {
+            parent::setStreamPartAndContentEndPos($streamContentEndPos);
+        }
+        return $this;
+    }
+
+    /**
      * Sets the length of the last line ending read by MimeParser (e.g. 2 for
      * '\r\n', or 1 for '\n').
      *

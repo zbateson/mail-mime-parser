@@ -230,6 +230,40 @@ class MimeParserTest extends TestCase
         \fclose($handle);
     }
 
+    public function testParseEmptyContentWithBoundaryAndStartingLineEndingLength() : void
+    {
+        $str = "--boundary";
+        $handle = StreamWrapper::getResource(Utils::streamFor($str));
+        $this->parserPartProxy->expects($this->once())
+            ->method('getMessageResourceHandlePos')
+            ->willReturn(42);
+        $this->parserPartProxy->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with(42);
+        $this->parserPartProxy->expects($this->once())
+            ->method('getMessageResourceHandle')
+            ->willReturn($handle);
+
+        $this->parserPartProxy->expects($this->exactly(1))
+            ->method('getLastLineEndingLength')
+            ->willReturnOnConsecutiveCalls(2);
+        $this->parserPartProxy->expects($this->exactly(1))
+            ->method('setLastLineEndingLength')
+            ->withConsecutive([0]);
+        $this->parserPartProxy->expects($this->exactly(1))
+            ->method('setEndBoundaryFound')
+            ->withConsecutive(['--boundary'])
+            ->willReturnOnConsecutiveCalls(true);
+        $this->parserPartProxy->expects($this->once())
+            ->method('setStreamPartAndContentEndPos')
+            ->with(-2);
+        $this->parserPartProxy->expects($this->never())
+            ->method('setEof');
+
+        $this->instance->parseContent($this->parserPartProxy);
+        \fclose($handle);
+    }
+
     public function testParseContentLinesWithBoundarySetsCorrectLastLineEndingLength() : void
     {
         $str = "Some\r\nLines\r\n--Of\n--Text";
