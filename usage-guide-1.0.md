@@ -1,4 +1,4 @@
-[Home](/) - [Sponsors](/#sponsors) - [API Documentation](api/2.2) - [Upgrading to 2.0](upgrade-2.0) - [Contributors](/#contributors)
+[Home](/) - [Sponsors](/#sponsors) - [API Documentation](api/2.3) - [Upgrading to 2.0](upgrade-2.0) - [Contributors](/#contributors)
 
 ## Deprecation Notice (since 1.2.1)
 
