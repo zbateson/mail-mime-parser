@@ -106,9 +106,9 @@ class AddressHeader extends AbstractHeader
     /**
      * Returns the first email address in the header.
      *
-     * @return string The email address
+     * @return ?string The email address
      */
-    public function getEmail() : string
+    public function getEmail() : ?string
     {
         return $this->getValue();
     }
