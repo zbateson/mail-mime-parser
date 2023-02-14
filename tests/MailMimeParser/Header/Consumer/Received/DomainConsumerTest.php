@@ -41,7 +41,7 @@ class DomainConsumerTest extends TestCase
     {
         $aTests = [
             ['hello (blah.blooh [1.2.3.4])', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
-            ['hello (blah.blooh)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh'], []],
+            ['hello (helo=blah.blooh)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh'], []],
             ['hello ([1.2.3.4])', ['ehloName' => 'hello', 'address' => '1.2.3.4'], []],
             ['hello ([1.2.3.4:333])', ['ehloName' => 'hello', 'address' => '1.2.3.4:333'], []],
             ['hello ([::1])', ['ehloName' => 'hello', 'address' => '::1'], []],
@@ -51,6 +51,9 @@ class DomainConsumerTest extends TestCase
             ['hello (blah.blooh [1.2.3.4]) (TEST)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
             ['hello (TEST)', ['ehloName' => 'hello'], ['TEST']],
             ['(blah.blooh)', ['hostname' => 'blah.blooh'], []],
+            ['hello ([1.2.3.4] blah.blooh)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
+            ['hello ([1.2.3.4] helo=blah.blooh)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
+            ['hello (helo=blah.blooh [1.2.3.4])', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
             ['(negatron)', [], ['negatron']],
         ];
 
@@ -64,23 +67,23 @@ class DomainConsumerTest extends TestCase
             $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart::class, $domPart);
             $this->assertEquals('from', $domPart->getName());
             if (isset($pt['ehloName'])) {
-                $this->assertEquals($pt['ehloName'], $domPart->getEhloName());
+                $this->assertEquals($pt['ehloName'], $domPart->getEhloName(), $test[0]);
             } else {
-                $this->assertNull($domPart->getEhloName());
+                $this->assertNull($domPart->getEhloName(), $test[0]);
             }
             if (isset($pt['hostname'])) {
-                $this->assertEquals($pt['hostname'], $domPart->getHostname());
+                $this->assertEquals($pt['hostname'], $domPart->getHostname(), $test[0]);
             } else {
-                $this->assertNull($domPart->getHostname());
+                $this->assertNull($domPart->getHostname(), $test[0]);
             }
             if (isset($pt['address'])) {
-                $this->assertEquals($pt['address'], $domPart->getAddress());
+                $this->assertEquals($pt['address'], $domPart->getAddress(), $test[0]);
             } else {
-                $this->assertNull($domPart->getAddress());
+                $this->assertNull($domPart->getAddress(), $test[0]);
             }
 
             foreach ($test[2] as $comment) {
-                $this->assertNotNull($ret[1]);
+                $this->assertNotNull($ret[1], $test[0]);
                 $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[1], $test[0]);
                 $this->assertEquals($comment, $ret[1]->getComment(), $test[0]);
             }
