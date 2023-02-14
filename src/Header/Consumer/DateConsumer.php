@@ -43,6 +43,9 @@ class DateConsumer extends GenericConsumer
         foreach ($parts as $part) {
             $strValue .= $part->getValue();
         }
-        return [$this->partFactory->newDatePart($strValue)];
+        $comments = array_filter($parts, function ($part) {
+            return ($part instanceof \ZBateson\MailMimeParser\Header\Part\CommentPart);
+        });
+        return array_merge([$this->partFactory->newDatePart($strValue)], $comments);
     }
 }

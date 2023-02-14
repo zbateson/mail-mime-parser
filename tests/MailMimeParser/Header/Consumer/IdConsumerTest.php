@@ -62,9 +62,10 @@ class IdConsumerTest extends TestCase
     {
         $ret = $this->idConsumer->__invoke('first (comment) "quoted"');
         $this->assertNotEmpty($ret);
-        $this->assertCount(1, $ret);
+        $this->assertCount(2, $ret);
 
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[0]);
         $this->assertEquals('firstquoted', $ret[0]->getValue());
+        $this->assertEquals('comment', $ret[1]->getComment());
     }
 }

@@ -83,4 +83,23 @@ class QuotedStringConsumer extends GenericConsumer
     {
         return $this->partFactory->newLiteralPart($token);
     }
+
+    /**
+     * Overridden to combine all part values into a single string and return it
+     * as an array with a single element.
+     *
+     * The returned IHeaderParts are all LiteralParts.
+     *
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
+     */
+    protected function processParts(array $parts) : array
+    {
+        $strValue = '';
+        $filtered = $this->filterIgnoredSpaces($parts);
+        foreach ($filtered as $part) {
+            $strValue .= $part->getValue();
+        }
+        return [$this->partFactory->newLiteralPart($strValue)];
+    }
 }

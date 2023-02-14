@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Abstract base class representing a mime email's header.
@@ -86,7 +87,11 @@ abstract class AbstractHeader implements IHeader
     public function getValue() : ?string
     {
         if (!empty($this->parts)) {
-            return $this->parts[0]->getValue();
+            foreach ($this->parts as $p) {
+                if (!($p instanceof CommentPart)) {
+                    return $p->getValue();
+                }
+            }
         }
         return null;
     }

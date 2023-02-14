@@ -83,17 +83,4 @@ class IdBaseConsumer extends AbstractConsumer
         }
         return $this->partFactory->newLiteralPart($token);
     }
-
-    /**
-     * Overridden to filter out any found CommentPart objects.
-     *
-     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
-     */
-    protected function processParts(array $parts) : array
-    {
-        return \array_values(\array_filter($parts, function($part) {
-            return !(empty($part) || $part instanceof CommentPart);
-        }));
-    }
 }

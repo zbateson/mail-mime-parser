@@ -154,7 +154,6 @@ class AddressHeaderTest extends TestCase
         );
         $this->assertTrue($header->hasAddress('arya@winterfell.com'));
         $this->assertTrue($header->hasAddress('jsnow@nightswatch.com'));
-        // is this correct? Shouldn't it be cersei & cersei@lannister.com
         $this->assertTrue($header->hasAddress('"cersei & cersei"@lannister.com'));
         $this->assertTrue($header->hasAddress('maxpayne@addressunknown.com'));
         $this->assertFalse($header->hasAddress('nonexistent@example.com'));

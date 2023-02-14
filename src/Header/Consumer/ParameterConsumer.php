@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ArrayObject;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use ZBateson\MailMimeParser\Header\Part\SplitParameterToken;
 use ZBateson\MailMimeParser\Header\Part\Token;
@@ -179,10 +180,13 @@ class ParameterConsumer extends GenericConsumer
         $parts[] = $this->partFactory->newToken(';');
         foreach ($parts as $part) {
             $pValue = $part->getValue();
-            if ($part instanceof Token && $this->processTokenPart($pValue, $combined, $splitParts, $strName, $strCat)) {
+            if (($part instanceof Token || $part instanceof CommentPart) && $this->processTokenPart($pValue, $combined, $splitParts, $strName, $strCat)) {
                 continue;
+            } elseif ($part instanceof CommentPart) {
+                $combined[] = $part;
+            } else {
+                $strCat .= $pValue;
             }
-            $strCat .= $pValue;
         }
         return $this->finalizeParameterParts($combined);
     }

@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MailMimeParser\Header\Part\Token;
 
@@ -165,11 +166,21 @@ class GenericConsumer extends AbstractConsumer
      */
     protected function processParts(array $parts) : array
     {
-        $strValue = '';
+        $ret = [];
+        $runningValue = '';
         $filtered = $this->filterIgnoredSpaces($parts);
         foreach ($filtered as $part) {
-            $strValue .= $part->getValue();
+            if ($part instanceof CommentPart) {
+                $ret[] = $this->partFactory->newLiteralPart($runningValue);
+                $runningValue = '';
+                $ret[] = $part;
+            } else {
+                $runningValue .= $part->getValue();
+            }
         }
-        return [$this->partFactory->newLiteralPart($strValue)];
+        if (!empty($runningValue)) {
+            $ret[] = $this->partFactory->newLiteralPart($runningValue);
+        }
+        return $ret;
     }
 }

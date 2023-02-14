@@ -56,8 +56,9 @@ class DateConsumerTest extends TestCase
         $actDate = 'Wed, 17 May 2000 19:08:29 -0400';
         $ret = $this->dateConsumer->__invoke($dateTest);
         $this->assertNotEmpty($ret);
-        $this->assertCount(1, $ret);
+        $this->assertCount(2, $ret);
         $this->assertEquals($actDate, $ret[0]->getValue());
         $this->assertEquals($actDate, $ret[0]->getDateTime()->format(DateTime::RFC2822));
+        $this->assertEquals('some comment', $ret[1]->getComment());
     }
 }

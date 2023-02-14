@@ -19,6 +19,14 @@ use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
  */
 class GenericHeader extends AbstractHeader
 {
+    public function getValue() : ?string
+    {
+        if (!empty($this->parts)) {
+            return implode('', array_map(function($p) { return $p->getValue(); }, $this->parts));
+        }
+        return null;
+    }
+
     /**
      * Returns a GenericConsumer.
      *

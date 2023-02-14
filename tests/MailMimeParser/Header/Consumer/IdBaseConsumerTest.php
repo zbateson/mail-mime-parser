@@ -64,15 +64,21 @@ class IdBaseConsumerTest extends TestCase
     {
         $ret = $this->idBaseConsumer->__invoke('(first) <first-id> (comment) <second-id@asdf> <third-id>');
         $this->assertNotEmpty($ret);
-        $this->assertCount(3, $ret);
+        $this->assertCount(5, $ret);
 
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[0]);
-        $this->assertEquals('first-id', $ret[0]->getValue());
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[0]);
+        $this->assertEquals('first', $ret[0]->getComment());
 
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[1]);
-        $this->assertEquals('second-id@asdf', $ret[1]->getValue());
+        $this->assertEquals('first-id', $ret[1]->getValue());
 
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[2]);
-        $this->assertEquals('third-id', $ret[2]->getValue());
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[2]);
+        $this->assertEquals('comment', $ret[2]->getComment());
+
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[3]);
+        $this->assertEquals('second-id@asdf', $ret[3]->getValue());
+
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[4]);
+        $this->assertEquals('third-id', $ret[4]->getValue());
     }
 }

@@ -32,7 +32,7 @@ interface IHeader
      *
      * For headers that contain multiple parts, like address headers (To, From)
      * or parameter headers (Content-Type), the 'value' is the value of the
-     * first parsed part.
+     * first parsed part that isn't a comment.
      *
      * @return string The value
      */
