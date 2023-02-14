@@ -63,7 +63,6 @@ class PrivacyHelper extends AbstractHelper
             );
         }
         $this->overwrite8bitContentEncoding($message);
-        $this->ensureHtmlPartFirstForSignedMessage($message);
         $this->setSignature($message, 'Empty');
     }
 
@@ -109,26 +108,6 @@ class PrivacyHelper extends AbstractHelper
                 'quoted-printable' :
                 'base64'
             );
-        }
-    }
-
-    /**
-     * Ensures a non-text part comes first in a signed multipart/alternative
-     * message as some clients seem to prefer the first content part if the
-     * client doesn't understand multipart/signed.
-     *
-     */
-    public function ensureHtmlPartFirstForSignedMessage(IMessage $message)
-    {
-        $alt = $message->getPartByMimeType('multipart/alternative');
-        if ($alt !== null && $alt->getChildCount() > 0) {
-            $cont = $this->multipartHelper->getContentPartContainerFromAlternative('text/html', $alt);
-            $children = $alt->getChildParts();
-            $pos = \array_search($cont, $children, true);
-            if ($pos !== false && $pos !== 0) {
-                $alt->removePart($children[0]);
-                $alt->addChild($children[0]);
-            }
         }
     }
 
