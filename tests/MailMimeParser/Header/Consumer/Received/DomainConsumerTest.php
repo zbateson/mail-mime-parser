@@ -49,12 +49,12 @@ class DomainConsumerTest extends TestCase
             ['hello ([2001:0db8:85a3:0000:0000:8a2e:0370:7334])', ['ehloName' => 'hello', 'address' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334'], []],
             ['hello', ['ehloName' => 'hello'], []],
             ['hello (blah.blooh [1.2.3.4]) (TEST)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
-            ['hello (TEST)', ['ehloName' => 'hello'], ['TEST']],
-            ['(blah.blooh)', ['hostname' => 'blah.blooh'], []],
+            ['(blah-blooh)', ['hostname' => 'blah-blooh'], []],
             ['hello ([1.2.3.4] blah.blooh)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
             ['hello ([1.2.3.4] helo=blah.blooh)', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
             ['hello (helo=blah.blooh [1.2.3.4])', ['ehloName' => 'hello', 'hostname' => 'blah.blooh', 'address' => '1.2.3.4'], []],
-            ['(negatron)', [], ['negatron']],
+            ['(negatron)', ['hostname' => 'negatron'], []],
+            ['(.negatron)', [], ['.negatron']],
         ];
 
         foreach ($aTests as $test) {
