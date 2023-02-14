@@ -150,14 +150,27 @@ class HeaderFactory
     public function newInstance(string $name, string $value)
     {
         $class = $this->getClassFor($name);
-        if (\is_a($class, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {
-            return new $class(
+        return $this->newInstanceOf($name, $value, $class);
+    }
+
+    /**
+     * Creates an IHeader instance for the passed header name and value, and
+     * returns it.
+     *
+     * @param string $name The header name.
+     * @param string $value The header value.
+     * @return IHeader The created header object.
+     */
+    public function newInstanceOf(string $name, string $value, string $iHeaderClass) : IHeader
+    {
+        if (\is_a($iHeaderClass, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {
+            return new $iHeaderClass(
                 $this->mimeLiteralPartFactory,
                 $this->consumerService,
                 $name,
                 $value
             );
         }
-        return new $class($this->consumerService, $name, $value);
+        return new $iHeaderClass($this->consumerService, $name, $value);
     }
 }

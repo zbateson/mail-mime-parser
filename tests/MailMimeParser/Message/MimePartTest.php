@@ -241,6 +241,22 @@ class MimePartTest extends TestCase
         $this->assertEquals('giggidysekint', $part->getHeader('sekint', 1));
     }
 
+    public function testGetHeaderAs() : void
+    {
+        $part = $this->getMimePart();
+        $oRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $oRet2 = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $this->mockHeaderContainer
+            ->expects($this->exactly(2))
+            ->method('getAs')
+            ->withConsecutive(
+                ['foist', 'IHeaderClass', 0],
+                ['sekint', 'IHeaderClass', 1]
+            )->willReturnOnConsecutiveCalls($oRet, $oRet2);
+        $this->assertEquals($oRet, $part->getHeaderAs('foist', 'IHeaderClass'));
+        $this->assertEquals($oRet2, $part->getHeaderAs('sekint', 'IHeaderClass', 1));
+    }
+
     public function testGetAllHeaders() : void
     {
         $part = $this->getMimePart();

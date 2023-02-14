@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Message;
 use ArrayIterator;
 use IteratorAggregate;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
+use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
  * Maintains a collection of headers for a part.
@@ -120,11 +121,34 @@ class PartHeaderContainer implements IteratorAggregate
      * @param int $offset
      * @return \ZBateson\MailMimeParser\Header\IHeader|null
      */
-    public function get($name, $offset = 0)
+    public function get(string $name, int $offset = 0)
     {
         $a = $this->getAllWithOriginalHeaderNameIfSet($name);
         if (!empty($a) && isset($a[$offset])) {
             return $this->getByIndex($a[$offset]);
+        }
+        return null;
+    }
+
+    /**
+     * Returns the IHeader object for the header with the given $name, or null
+     * if none exist, using the passed $iHeaderClass to construct it.
+     *
+     * An optional offset can be provided, which defaults to the first header in
+     * the collection when more than one header with the same name exists.
+     *
+     * Note that mime headers aren't case sensitive.
+     *
+     * @param string $name
+     * @param string $iHeaderClass
+     * @param int $offset
+     * @return ?IHeader
+     */
+    public function getAs(string $name, string $iHeaderClass, int $offset = 0) : ?IHeader
+    {
+        $a = $this->getAllWithOriginalHeaderNameIfSet($name);
+        if (!empty($a) && isset($a[$offset])) {
+            return $this->getByIndexAs($a[$offset], $iHeaderClass);
         }
         return null;
     }
@@ -165,6 +189,28 @@ class PartHeaderContainer implements IteratorAggregate
             );
         }
         return $this->headerObjects[$index];
+    }
+
+    /**
+     * Returns the header in the headers array at the passed 0-based integer
+     * index or null if one doesn't exist, using the passed $iHeaderClass to
+     * construct it.
+     *
+     * @return \ZBateson\MailMimeParser\Header\IHeader|null
+     */
+    private function getByIndexAs(int $index, string $iHeaderClass) : ?IHeader
+    {
+        if (!isset($this->headers[$index])) {
+            return null;
+        }
+        if ($this->headerObjects[$index] !== null && \get_class($this->headerObjects[$index]) === $iHeaderClass) {
+            return $this->headerObjects[$index];
+        }
+        return $this->headerFactory->newInstanceOf(
+            $this->headers[$index][0],
+            $this->headers[$index][1],
+            $iHeaderClass
+        );
     }
 
     /**
