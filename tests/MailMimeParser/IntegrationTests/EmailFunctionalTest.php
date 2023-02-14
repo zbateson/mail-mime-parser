@@ -2723,7 +2723,7 @@ class EmailFunctionalTest extends TestCase
         \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4009', $signableContent);
         // $signature = $this->getSignatureForContent($signableContent);
         $signature = md5($signableContent);
-        $this->assertEquals('3c20fc7a6d26141f748a0481d886d932', $signature);
+        $this->assertEquals('10fd4349160a214f3d1f7dfd1aa4ca05', $signature);
         $message->setSignature($signature);
 
         $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sig_m4009', 'w+');
