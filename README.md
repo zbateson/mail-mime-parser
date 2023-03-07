@@ -92,7 +92,7 @@ echo $message->getHeaderValue(HeaderConsts::SUBJECT);  // The email's subject
 echo $message
     ->getHeader(HeaderConsts::TO)                      // also AddressHeader
     ->getAddresses()[0]                                // AddressPart
-    ->getName();                                       // Person Name
+    ->getPersonName();                                 // Person Name
 echo $message
     ->getHeader(HeaderConsts::CC)                      // also AddressHeader
     ->getAddresses()[0]                                // AddressPart
