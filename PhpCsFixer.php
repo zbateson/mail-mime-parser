@@ -70,7 +70,7 @@ return $config
         // Replace core functions calls returning constants with the constants.
         'function_to_constant' => true,
         // Ensure single space between function's argument and its typehint.
-        'function_typehint_space' => true,
+        'type_declaration_spaces' => true,
         // Renames PHPDoc tags.
         'general_phpdoc_tag_rename' => true,
         // Function `implode` must be called with 2 arguments in the documented order.
@@ -230,7 +230,7 @@ return $config
         // A PHP file without end tag must always end with a single empty line feed.
         'single_blank_line_at_eof' => true,
         // There should be exactly one blank line before a namespace declaration.
-        'single_blank_line_before_namespace' => true,
+        'blank_lines_before_namespace' => ['max_line_breaks' => 2, 'min_line_breaks' => 2],
         // There MUST NOT be more than one property or constant declared per statement.
         'single_class_element_per_statement' => true,
         // There MUST be one use keyword per declaration.

@@ -117,8 +117,6 @@ class PartHeaderContainer implements IteratorAggregate
      *
      * Note that mime headers aren't case sensitive.
      *
-     * @param string $name
-     * @param int $offset
      * @return \ZBateson\MailMimeParser\Header\IHeader|null
      */
     public function get(string $name, int $offset = 0)
@@ -139,9 +137,6 @@ class PartHeaderContainer implements IteratorAggregate
      *
      * Note that mime headers aren't case sensitive.
      *
-     * @param string $name
-     * @param string $iHeaderClass
-     * @param int $offset
      * @return ?IHeader
      */
     public function getAs(string $name, string $iHeaderClass, int $offset = 0) : ?IHeader
@@ -196,7 +191,6 @@ class PartHeaderContainer implements IteratorAggregate
      * index or null if one doesn't exist, using the passed $iHeaderClass to
      * construct it.
      *
-     * @return \ZBateson\MailMimeParser\Header\IHeader|null
      */
     private function getByIndexAs(int $index, string $iHeaderClass) : ?IHeader
     {
