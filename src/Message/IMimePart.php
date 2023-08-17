@@ -90,7 +90,6 @@ interface IMimePart extends IMultiPart
      * @see IMimePart::getRawHeaderIterator() to retrieve an iterator traversing
      *      a two-dimensional string[] array of raw headers.
      * @param string $name The name of the header to retrieve.
-     * @param
      * @param int $offset Optional offset if there are multiple headers with the
      *        given name.
      * @return ?IHeader the header object

@@ -188,7 +188,7 @@ class ReceivedConsumerTest extends TestCase
     {
         $value = "from xcv.gurbuzsrc.com ([69.69.69.69])\nby mail.yetiforce.com with esmtp (Exim 4.94)\n"
             . "(envelope-from <xxcv@gurbuzsrc.com>)\nid 1kfCyx-0002Zp-BY\n"
-            . "for vbc@yetiforce.com; Wed, 18 Nov 2020 03:14:03 +0100";
+            . 'for vbc@yetiforce.com; Wed, 18 Nov 2020 03:14:03 +0100';
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);

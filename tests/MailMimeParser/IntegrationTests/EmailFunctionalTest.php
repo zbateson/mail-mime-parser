@@ -241,7 +241,7 @@ class EmailFunctionalTest extends TestCase
             \proc_close($proc);
             return \preg_replace('/\r|\n/', '', $signature);
         }
-        
+
         return \md5($signableContent);
     }
 
@@ -2722,7 +2722,7 @@ class EmailFunctionalTest extends TestCase
 
         \file_put_contents(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/sigpart_m4009', $signableContent);
         // $signature = $this->getSignatureForContent($signableContent);
-        $signature = md5($signableContent);
+        $signature = \md5($signableContent);
         $this->assertEquals('10fd4349160a214f3d1f7dfd1aa4ca05', $signature);
         $message->setSignature($signature);
 
