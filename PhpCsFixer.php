@@ -149,8 +149,6 @@ return $config
         'no_short_bool_cast' => true,
         // When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis.
         'no_spaces_after_function_name' => true,
-        // There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.
-        'no_spaces_inside_parenthesis' => true,
         // Removes `@param`, `@return` and `@var` tags that don't provide any useful information.
         'no_superfluous_phpdoc_tags' => true,
         // Remove trailing whitespace at the end of non-blank lines.
@@ -243,6 +241,8 @@ return $config
         'single_quote' => true,
         // Each trait `use` must be done as single statement.
         'single_trait_insert_per_statement' => true,
+        // There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.
+        'spaces_inside_parentheses' => true,
         // Replace all `<>` with `!=`.
         'standardize_not_equals' => true,
         // Lambdas not (indirect) referencing `$this` must be declared `static`.
