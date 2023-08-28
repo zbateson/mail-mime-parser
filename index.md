@@ -63,16 +63,16 @@ $subject = $message->getHeaderValue('Subject');
 $text = $message->getTextContent();
 $html = $message->getHtmlContent();
 $from = $message->getHeader('From');
-$fromName = $from->getName();
+$fromName = $from->getPersonName();
 $fromEmail = $from->getEmail();
 
 $to = $message->getHeader('To');
 // first email address can be accessed directly
-$firstToName = $to->getName();
+$firstToName = $to->getPersonName();
 $firstToEmail = $to->getEmail();
 
 foreach ($to->getAllAddresses() as $addr) {
-    $toName = $to->getName();
+    $toName = $to->getPersonName();
     $toEmail = $to->getEmail();
 }
 
@@ -179,7 +179,7 @@ if ($to->hasAddress('someone@example.com')) {
 }
 // or to loop over AddressPart objects:
 foreach ($to->getAddresses() as $address) {
-    echo $address->getName() . ' ' . $address->getEmail();
+    echo $address->getPersonName() . ' ' . $address->getEmail();
 }
 ```
 
