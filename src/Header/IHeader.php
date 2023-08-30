@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ZBateson\MailMimeParser project.
  *
@@ -26,6 +27,14 @@ interface IHeader
      * @return IHeaderPart[] The array of parts.
      */
     public function getParts() : array;
+
+    /**
+     * Returns all address parts in the header including any addresses that are
+     * in groups (lists).
+     *
+     * @return AddressPart[] The addresses.
+     */
+    public function getAddresses() : array;
 
     /**
      * Returns the parsed 'value' of the header.
