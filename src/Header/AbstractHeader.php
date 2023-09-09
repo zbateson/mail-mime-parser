@@ -27,23 +27,28 @@ abstract class AbstractHeader implements IHeader
     /**
      * @var string the name of the header
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @var IHeaderPart[] all parts not including CommentParts.
      */
-    protected $parts;
+    protected $parts = [];
 
     /**
      * @var IHeaderPart[] the header's parts (as returned from the consumer),
      *      including commentParts
      */
-    protected $allParts;
+    protected $allParts = [];
+
+    /**
+     * @var string[] array of comments, initialized on demand in getComments()
+     */
+    private $comments;
 
     /**
      * @var string the raw value
      */
-    protected $rawValue;
+    protected $rawValue = '';
 
     /**
      * Assigns the header's name and raw value, then calls getConsumer and
@@ -98,6 +103,23 @@ abstract class AbstractHeader implements IHeader
     public function getAllParts() : array
     {
         return $this->allParts;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getComments() : array
+    {
+        if ($this->comments === null) {
+            $this->comments = \array_map(
+                function ($p) { return $p->getComment(); },
+                \array_filter(
+                    $this->allParts,
+                    function ($p) { return ($p instanceof CommentPart); }
+                )
+            );
+        }
+        return $this->comments;
     }
 
     public function getValue() : ?string

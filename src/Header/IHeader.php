@@ -39,6 +39,14 @@ interface IHeader
     public function getAllParts() : array;
 
     /**
+     * Returns an array of comments parsed from the header.  If there are no
+     * comments in the header, an empty array is returned.
+     *
+     * @return string[]
+     */
+    public function getComments() : array;
+
+    /**
      * Returns the parsed 'value' of the header.
      *
      * For headers that contain multiple parts, like address headers (To, From)

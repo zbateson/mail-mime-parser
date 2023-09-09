@@ -81,14 +81,9 @@ use ZBateson\MailMimeParser\Header\Part\DatePart;
 class ReceivedHeader extends ParameterHeader
 {
     /**
-     * @var string[] an array of comments in the header.
+     * @var DateTime|bool the date/time stamp in the header.
      */
-    protected $comments = [];
-
-    /**
-     * @var DateTime the date/time stamp in the header.
-     */
-    protected $date = null;
+    private $date = false;
 
     /**
      * Returns a ReceivedConsumer.
@@ -98,22 +93,6 @@ class ReceivedHeader extends ParameterHeader
     protected function getConsumer(ConsumerService $consumerService)
     {
         return $consumerService->getReceivedConsumer();
-    }
-
-    /**
-     * Overridden to assign comments to $this->comments, and the DateTime to
-     * $this->date.
-     */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
-    {
-        parent::setParseHeaderValue($consumer, $value);
-        foreach ($this->allParts as $part) {
-            if ($part instanceof CommentPart) {
-                $this->comments[] = $part->getComment();
-            } elseif ($part instanceof DatePart) {
-                $this->date = $part->getDateTime();
-            }
-        }
     }
 
     /**
@@ -228,24 +207,19 @@ class ReceivedHeader extends ParameterHeader
     }
 
     /**
-     * Returns an array of comments parsed from the header.  If there are no
-     * comments in the header, an empty array is returned.
-     *
-     * @return string[]
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    /**
      * Returns the date/time stamp for the received header if set, or null
      * otherwise.
-     *
-     * @return \DateTime|null
      */
-    public function getDateTime()
+    public function getDateTime() : ?DateTime
     {
+        if ($this->date === false) {
+            $this->date = null;
+            foreach ($this->parts as $part) {
+                if ($part instanceof DatePart) {
+                    $this->date = $part->getDateTime();
+                }
+            }
+        }
         return $this->date;
     }
 }
