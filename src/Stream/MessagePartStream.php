@@ -23,10 +23,14 @@ use ZBateson\MailMimeParser\Message\IMimePart;
  *
  * @author Zaahid Bateson
  */
-#[\AllowDynamicProperties]
 class MessagePartStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
+
+    /**
+     * @var StreamInterface
+     */
+    private $stream;
 
     /**
      * @var StreamFactory For creating needed stream decorators.
@@ -38,6 +42,9 @@ class MessagePartStream implements SplObserver, StreamInterface
      */
     protected $part;
 
+    /**
+     * @var ?AppendStream
+     */
     protected $appendStream = null;
 
     /**
@@ -49,6 +56,10 @@ class MessagePartStream implements SplObserver, StreamInterface
         $this->streamFactory = $sdf;
         $this->part = $part;
         $part->attach($this);
+
+        // unsetting the property forces the first access to go through
+        // __get().
+        unset($this->stream);
     }
 
     public function __destruct()

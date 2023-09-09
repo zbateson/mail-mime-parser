@@ -27,10 +27,14 @@ use ZBateson\MailMimeParser\Message\IMimePart;
  *
  * @author Zaahid Bateson
  */
-#[\AllowDynamicProperties]
 class HeaderStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
+
+    /**
+     * @var StreamInterface
+     */
+    private $stream;
 
     /**
      * @var IMessagePart the part to read from.
@@ -41,6 +45,10 @@ class HeaderStream implements SplObserver, StreamInterface
     {
         $this->part = $part;
         $part->attach($this);
+
+        // unsetting the property forces the first access to go through
+        // __get().
+        unset($this->stream);
     }
 
     public function __destruct()
