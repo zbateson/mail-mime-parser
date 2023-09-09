@@ -21,7 +21,7 @@ class PartHeaderContainerTest extends TestCase
     {
         $this->mockHeaderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['newInstance'])
+            ->setMethods(['newInstance', 'newInstanceOf'])
             ->getMock();
     }
 
@@ -162,45 +162,59 @@ class PartHeaderContainerTest extends TestCase
         $this->assertEquals($headers, $ob->getHeaders());
     }
 
-    public function testAddRemoveGet() : void
+    public function testAddRemoveGetGetAs() : void
     {
         $ob = new PartHeaderContainer($this->mockHeaderFactory);
         $ob->add('first', 'value');
         $ob->add('second', 'value');
         $ob->add('third', 'value');
+        $ob->add('fourth', 'value');
 
         $this->assertTrue($ob->exists('first'));
         $this->assertTrue($ob->exists('second'));
         $this->assertTrue($ob->exists('third'));
+        $this->assertTrue($ob->exists('fourth'));
 
         $ob->remove('first');
 
         $this->assertFalse($ob->exists('first'));
         $this->assertTrue($ob->exists('second'));
         $this->assertTrue($ob->exists('third'));
+        $this->assertTrue($ob->exists('fourth'));
 
+        $oRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
         $this->mockHeaderFactory
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('newInstance')
             ->withConsecutive(
                 ['second', 'value'],
                 ['third', 'value'],
+                ['fourth', 'value'],
                 ['second', 'updated']
             )
-            ->willReturnOnConsecutiveCalls('second-value', 'third-value', 'second-updated');
+            ->willReturnOnConsecutiveCalls('second-value', 'third-value', $oRet, 'second-updated');
+
+        $custRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $this->mockHeaderFactory->expects($this->once())
+            ->method('newInstanceOf')
+            ->with('fourth', 'value', 'IHeaderClass')
+            ->willReturn($custRet);
 
         $this->assertNull($ob->get('first'));
         $this->assertEquals('second-value', $ob->get('second'));
         $this->assertEquals('third-value', $ob->get('third'));
+        $this->assertEquals($oRet, $ob->get('fourth'));
         $headers = [
             ['second', 'value'],
             ['third', 'value'],
+            ['fourth', 'value'],
         ];
         $this->assertEquals($headers, $ob->getHeaders());
 
         $ob->remove('second');
         $headers = [
-            ['third', 'value']
+            ['third', 'value'],
+            ['fourth', 'value']
         ];
         $this->assertNull($ob->get('second'));
         $this->assertEquals('third-value', $ob->get('third'));
@@ -209,10 +223,14 @@ class PartHeaderContainerTest extends TestCase
         $ob->set('second', 'updated');
         $headers = [
             ['third', 'value'],
+            ['fourth', 'value'],
             ['second', 'updated']
         ];
         $this->assertEquals($headers, $ob->getHeaders());
         $this->assertEquals('second-updated', $ob->get('second'));
+
+        $h = $ob->getAs('fourth', 'IHeaderClass');
+        $this->assertEquals($custRet, $h);
     }
 
     public function testAddRemoveAllGet() : void

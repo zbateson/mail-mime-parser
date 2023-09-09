@@ -183,4 +183,35 @@ class ReceivedConsumerTest extends TestCase
         $dt = $ret[5]->getDateTime();
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
+
+    public function testExampleFullLine2() : void
+    {
+        $value = "from xcv.gurbuzsrc.com ([69.69.69.69])\nby mail.yetiforce.com with esmtp (Exim 4.94)\n"
+            . "(envelope-from <xxcv@gurbuzsrc.com>)\nid 1kfCyx-0002Zp-BY\n"
+            . 'for vbc@yetiforce.com; Wed, 18 Nov 2020 03:14:03 +0100';
+
+        $ret = $this->receivedConsumer->__invoke($value);
+        $this->assertNotEmpty($ret);
+
+        $this->assertCount(8, $ret);
+
+        $this->assertEquals('from', $ret[0]->getName());
+        $this->assertEquals('xcv.gurbuzsrc.com', $ret[0]->getEhloName());
+        $this->assertEquals('69.69.69.69', $ret[0]->getAddress());      // nice
+
+        $this->assertEquals('by', $ret[1]->getName());
+        $this->assertEquals('mail.yetiforce.com', $ret[1]->getEhloName());
+
+        $this->assertEquals('with', $ret[2]->getName());
+        $this->assertEquals('esmtp', $ret[2]->getValue());
+
+        $this->assertEquals('id', $ret[5]->getName());
+        $this->assertEquals('1kfCyx-0002Zp-BY', $ret[5]->getValue());
+
+        $this->assertEquals('for', $ret[6]->getName());
+        $this->assertEquals('vbc@yetiforce.com', $ret[6]->getValue());
+
+        $dt = $ret[7]->getDateTime();
+        $this->assertEquals('2020-11-18T03:14:03+01:00', $dt->format(DateTime::RFC3339));
+    }
 }

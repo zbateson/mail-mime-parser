@@ -232,7 +232,7 @@ class MimeParserTest extends TestCase
 
     public function testParseEmptyContentWithBoundaryAndStartingLineEndingLength() : void
     {
-        $str = "--boundary";
+        $str = '--boundary';
         $handle = StreamWrapper::getResource(Utils::streamFor($str));
         $this->parserPartProxy->expects($this->once())
             ->method('getMessageResourceHandlePos')

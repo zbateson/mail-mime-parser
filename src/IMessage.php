@@ -56,7 +56,7 @@ interface IMessage extends IMimePart
      * default behavior is to return the first part.  Additional parts can be
      * returned by passing a 0-based index.
      *
-     * If there are no inline text/plain parts in this message, null is
+     * If there are no inline text/html parts in this message, null is
      * returned.
      *
      * @see IMessage::getHtmlStream() to get the html content stream directly.

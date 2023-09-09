@@ -148,4 +148,14 @@ class HeaderFactoryTest extends TestCase
             $this->assertNotInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
         }
     }
+
+    public function testNewInstanceOf() : void
+    {
+        $aHeaders = ['Subject', 'X-Subject', 'From'];
+        foreach ($aHeaders as $name) {
+            $header = $this->headerFactory->newInstanceOf($name, 'Test', \ZBateson\MailMimeParser\Header\ReceivedHeader::class);
+            $this->assertNotNull($header);
+            $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
+        }
+    }
 }

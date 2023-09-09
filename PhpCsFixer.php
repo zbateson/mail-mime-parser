@@ -70,7 +70,7 @@ return $config
         // Replace core functions calls returning constants with the constants.
         'function_to_constant' => true,
         // Ensure single space between function's argument and its typehint.
-        'function_typehint_space' => true,
+        'type_declaration_spaces' => true,
         // Renames PHPDoc tags.
         'general_phpdoc_tag_rename' => true,
         // Function `implode` must be called with 2 arguments in the documented order.
@@ -149,8 +149,6 @@ return $config
         'no_short_bool_cast' => true,
         // When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis.
         'no_spaces_after_function_name' => true,
-        // There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.
-        'no_spaces_inside_parenthesis' => true,
         // Removes `@param`, `@return` and `@var` tags that don't provide any useful information.
         'no_superfluous_phpdoc_tags' => true,
         // Remove trailing whitespace at the end of non-blank lines.
@@ -230,7 +228,7 @@ return $config
         // A PHP file without end tag must always end with a single empty line feed.
         'single_blank_line_at_eof' => true,
         // There should be exactly one blank line before a namespace declaration.
-        'single_blank_line_before_namespace' => true,
+        'blank_lines_before_namespace' => ['max_line_breaks' => 2, 'min_line_breaks' => 2],
         // There MUST NOT be more than one property or constant declared per statement.
         'single_class_element_per_statement' => true,
         // There MUST be one use keyword per declaration.
@@ -243,6 +241,8 @@ return $config
         'single_quote' => true,
         // Each trait `use` must be done as single statement.
         'single_trait_insert_per_statement' => true,
+        // There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.
+        'spaces_inside_parentheses' => true,
         // Replace all `<>` with `!=`.
         'standardize_not_equals' => true,
         // Lambdas not (indirect) referencing `$this` must be declared `static`.

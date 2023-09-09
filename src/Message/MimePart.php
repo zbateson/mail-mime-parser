@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
@@ -230,6 +231,11 @@ class MimePart extends MultiPart implements IMimePart
     public function getHeader($name, $offset = 0)
     {
         return $this->headerContainer->get($name, $offset);
+    }
+
+    public function getHeaderAs(string $name, string $iHeaderClass, int $offset = 0) : ?IHeader
+    {
+        return $this->headerContainer->getAs($name, $iHeaderClass, $offset);
     }
 
     public function getAllHeaders()

@@ -106,7 +106,7 @@ class AddressHeader extends AbstractHeader
     /**
      * Returns the first email address in the header.
      *
-     * @return string|null The email address
+     * @return ?string The email address
      */
     public function getEmail() : ?string
     {
