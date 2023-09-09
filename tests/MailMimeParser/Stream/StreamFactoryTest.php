@@ -15,6 +15,11 @@ use PHPUnit\Framework\TestCase;
  */
 class StreamFactoryTest extends TestCase
 {
+    public function testIsService() : void
+    {
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, new StreamFactory());
+    }
+
     public function testNewInstance() : void
     {
         $partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)

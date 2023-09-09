@@ -3,12 +3,12 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 class MimeEncodedHeaderImpl extends MimeEncodedHeader
 {
-    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer
+    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService
     {
         return $consumerService->getQuotedStringConsumer();
     }
@@ -33,7 +33,7 @@ class MimeEncodedHeaderTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)

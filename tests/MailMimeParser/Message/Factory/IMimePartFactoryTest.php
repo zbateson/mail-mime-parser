@@ -43,6 +43,7 @@ class IMimePartFactoryTest extends TestCase
             ->willReturn(Psr7\Utils::streamFor('test'));
 
         $instance = new IMimePartFactory($sdf, $psc, $phc, $pcc);
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $instance);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\\' . \ZBateson\MailMimeParser\Message\MimePart::class,

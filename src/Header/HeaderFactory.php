@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
@@ -30,7 +31,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @author Zaahid Bateson
  */
-class HeaderFactory
+class HeaderFactory implements IService
 {
     /**
      * @var ConsumerService the passed ConsumerService providing

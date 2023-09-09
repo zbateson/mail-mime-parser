@@ -31,11 +31,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         ?PartChildrenContainer $partChildrenContainer = null
     ) {
         parent::__construct($streamContainer, $parent);
-        if ($partChildrenContainer === null) {
-            $di = MailMimeParser::getDependencyContainer();
-            $partChildrenContainer = $di[\ZBateson\MailMimeParser\Message\PartChildrenContainer::class];
-        }
-        $this->partChildrenContainer = $partChildrenContainer;
+        $this->partChildrenContainer = $partChildrenContainer ?? new PartChildrenContainer();
     }
 
     private function getAllPartsIterator() : AppendIterator

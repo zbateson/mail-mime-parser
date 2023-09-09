@@ -5,7 +5,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
-use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of AddressGroupTest
@@ -20,7 +19,7 @@ class AddressGroupPartTest extends TestCase
 {
     public function testNameGroup() : void
     {
-        $csConverter = new MbWrapper();
+        $csConverter = new MbWrapperService();
 
         $name = 'Roman Senate';
         $members = [

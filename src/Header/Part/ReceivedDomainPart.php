@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
-
 /**
  * Holds extra information about a parsed Received header part, for FROM and BY
  * parts, namely: ehlo name, hostname, and address.
@@ -47,7 +45,7 @@ class ReceivedDomainPart extends ReceivedPart
     protected $address;
 
     public function __construct(
-        MbWrapper $charsetConverter,
+        MbWrapperService $charsetConverter,
         string $name,
         ?string $value = null,
         ?string $ehloName = null,

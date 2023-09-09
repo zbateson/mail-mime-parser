@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
-
 /**
  * Represents a single mime header part token, with the possibility of it being
  * MIME-Encoded as per RFC-2047.
@@ -55,7 +53,7 @@ class MimeLiteralPart extends LiteralPart
      *
      * @param string $token
      */
-    public function __construct(MbWrapper $charsetConverter, $token)
+    public function __construct(MbWrapperService $charsetConverter, $token)
     {
         parent::__construct($charsetConverter);
         $this->value = $this->decodeMime($token);

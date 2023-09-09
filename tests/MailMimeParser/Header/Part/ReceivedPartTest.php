@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of ReceivedTest
@@ -21,7 +20,7 @@ class ReceivedPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapper();
+        $this->charsetConverter = new MbWrapperService();
     }
 
     public function testBasicNameValuePair() : void

@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use DateTime;
 use Exception;
-use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Parses a header into a DateTime object.
@@ -29,7 +28,7 @@ class DatePart extends LiteralPart
      * new DateTime($value).
      *
      */
-    public function __construct(MbWrapper $charsetConverter, string $token)
+    public function __construct(MbWrapperService $charsetConverter, string $token)
     {
         $dateToken = \trim($token);
         // parent::__construct converts character encoding -- may cause problems sometimes.

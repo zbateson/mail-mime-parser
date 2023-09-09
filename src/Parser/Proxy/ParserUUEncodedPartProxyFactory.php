@@ -8,7 +8,7 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
-use ZBateson\MailMimeParser\Parser\IParser;
+use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
@@ -42,7 +42,7 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
      *
      * @return ParserPartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParser $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
     {
         $parserProxy = new ParserUUEncodedPartProxy($partBuilder, $parser);
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);

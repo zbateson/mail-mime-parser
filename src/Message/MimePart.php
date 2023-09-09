@@ -8,10 +8,11 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\ServiceLocator;
 
 /**
  * A mime email message part.
@@ -33,24 +34,13 @@ class MimePart extends MultiPart implements IMimePart
         ?PartHeaderContainer $headerContainer = null,
         ?PartChildrenContainer $partChildrenContainer = null
     ) {
-        $setStream = false;
-        $di = MailMimeParser::getDependencyContainer();
-        if ($streamContainer === null || $headerContainer === null || $partChildrenContainer === null) {
-            $headerContainer = $di[\ZBateson\MailMimeParser\Message\PartHeaderContainer::class];
-            $streamContainer = $di[\ZBateson\MailMimeParser\Message\PartStreamContainer::class];
-            $partChildrenContainer = $di[\ZBateson\MailMimeParser\Message\PartChildrenContainer::class];
-            $setStream = true;
-        }
         parent::__construct(
             $parent,
             $streamContainer,
             $partChildrenContainer
         );
-        if ($setStream) {
-            $streamFactory = $di[\ZBateson\MailMimeParser\Stream\StreamFactory::class];
-            $streamContainer->setStream($streamFactory->newMessagePartStream($this));
-        }
-        $this->headerContainer = $headerContainer;
+        $di = ServiceLocator::getSingleton();
+        $this->headerContainer = $headerContainer ?? new PartHeaderContainer($di[HeaderFactory::class]);
     }
 
     /**

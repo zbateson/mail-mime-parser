@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
-
 /**
  * Holds a single address or name/address pair.
  *
@@ -29,7 +27,7 @@ class AddressPart extends ParameterPart
      * The passed $name may be mime-encoded.  $email is stripped of any
      * whitespace.
      */
-    public function __construct(MbWrapper $charsetConverter, string $name, string $email)
+    public function __construct(MbWrapperService $charsetConverter, string $name, string $email)
     {
         parent::__construct(
             $charsetConverter,

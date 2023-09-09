@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
-use ZBateson\MailMimeParser\Parser\IParser;
+use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
@@ -62,7 +62,7 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
      *
      * @return ParserMimePartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParser $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
     {
         $parserProxy = new ParserMimePartProxy($partBuilder, $parser);
 

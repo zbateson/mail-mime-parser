@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
-
 /**
  * Represents a mime header comment -- text in a structured mime header
  * value existing within parentheses.
@@ -26,7 +24,7 @@ class CommentPart extends MimeLiteralPart
      * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
      *
      */
-    public function __construct(MbWrapper $charsetConverter, string $token)
+    public function __construct(MbWrapperService $charsetConverter, string $token)
     {
         parent::__construct($charsetConverter, $token);
         $this->comment = $this->value;

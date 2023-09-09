@@ -5,9 +5,10 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Container;
 
-use Pimple\Container as PimpleContainer;
+use ZBateson\MailMimeParser\ServiceLocator;
+use ZBateson\MailMimeParser\Container\IService;
 use Pimple\Exception\UnknownIdentifierException;
 use ReflectionClass;
 use ReflectionParameter;
@@ -20,7 +21,7 @@ use ReflectionParameter;
  *
  * @author Zaahid Bateson
  */
-class Container extends PimpleContainer
+class AutoServiceContainer extends ServiceLocator
 {
     /**
      * Looks up the type of the passed ReflectionParameter and returns it as a
@@ -48,10 +49,10 @@ class Container extends PimpleContainer
      * The returned factory method looks up arguments and uses pimple to get an
      * instance of those types to pass them during construction.
      */
-    public function autoRegister($class) : ?string
+    protected function autoRegister($class) : ?string
     {
-        $fn = function($c) use ($class) {
-            $ref = new ReflectionClass($class);
+        $ref = new ReflectionClass($class);
+        $fn = function($c) use ($ref) {
             $cargs = ($ref->getConstructor() !== null) ? $ref->getConstructor()->getParameters() : [];
             $ap = [];
             foreach ($cargs as $arg) {
@@ -68,7 +69,11 @@ class Container extends PimpleContainer
             $ret = $ref->newInstanceArgs($ap);
             return $ret;
         };
-        $this[$class] = $fn;
+        if ($ref->isSubclassOf(IService::class)) {
+            $this[$class] = $fn;
+        } else {
+            $this[$class] = $this->factory($fn);
+        }
         return null;
     }
 

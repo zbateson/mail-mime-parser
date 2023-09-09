@@ -7,9 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumer;
-use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumer;
-use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumer;
+use ZBateson\MailMimeParser\Container\IService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
@@ -18,7 +19,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @author Zaahid Bateson
  */
-class ConsumerService
+class ConsumerService implements IService
 {
     /**
      * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory the
@@ -33,7 +34,7 @@ class ConsumerService
     protected $mimeLiteralPartFactory;
 
     /**
-     * @var Received\DomainConsumer[]|Received\GenericReceivedConsumer[]|Received\ReceivedDateConsumer[]
+     * @var array<string,DomainConsumerService[]|GenericReceivedConsumerService[]|ReceivedDateConsumer[]>
      *      an array of sub-received header consumer instances.
      */
     protected $receivedConsumers = [
@@ -55,119 +56,119 @@ class ConsumerService
     /**
      * Returns the AddressBaseConsumer singleton instance.
      *
-     * @return AddressBaseConsumer
+     * @return AddressBaseConsumerService
      */
     public function getAddressBaseConsumer()
     {
-        return AddressBaseConsumer::getInstance($this, $this->partFactory);
+        return AddressBaseConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the AddressConsumer singleton instance.
      *
-     * @return AddressConsumer
+     * @return AddressConsumerService
      */
     public function getAddressConsumer()
     {
-        return AddressConsumer::getInstance($this, $this->partFactory);
+        return AddressConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the AddressGroupConsumer singleton instance.
      *
-     * @return AddressGroupConsumer
+     * @return AddressGroupConsumerService
      */
     public function getAddressGroupConsumer()
     {
-        return AddressGroupConsumer::getInstance($this, $this->partFactory);
+        return AddressGroupConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the AddressEmailConsumer singleton instance.
      *
-     * @return AddressEmailConsumer
+     * @return AddressEmailConsumerService
      */
     public function getAddressEmailConsumer()
     {
-        return AddressEmailConsumer::getInstance($this, $this->partFactory);
+        return AddressEmailConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the CommentConsumer singleton instance.
      *
-     * @return CommentConsumer
+     * @return CommentConsumerService
      */
     public function getCommentConsumer()
     {
-        return CommentConsumer::getInstance($this, $this->partFactory);
+        return CommentConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the GenericConsumer singleton instance.
      *
-     * @return GenericConsumer
+     * @return GenericConsumerService
      */
     public function getGenericConsumer()
     {
-        return GenericConsumer::getInstance($this, $this->mimeLiteralPartFactory);
+        return GenericConsumerService::getInstance($this, $this->mimeLiteralPartFactory);
     }
 
     /**
      * Returns the SubjectConsumer singleton instance.
      *
-     * @return SubjectConsumer
+     * @return SubjectConsumerService
      */
     public function getSubjectConsumer()
     {
-        return SubjectConsumer::getInstance($this, $this->mimeLiteralPartFactory);
+        return SubjectConsumerService::getInstance($this, $this->mimeLiteralPartFactory);
     }
 
     /**
      * Returns the QuotedStringConsumer singleton instance.
      *
-     * @return QuotedStringConsumer
+     * @return QuotedStringConsumerService
      */
     public function getQuotedStringConsumer()
     {
-        return QuotedStringConsumer::getInstance($this, $this->partFactory);
+        return QuotedStringConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the DateConsumer singleton instance.
      *
-     * @return DateConsumer
+     * @return DateConsumerService
      */
     public function getDateConsumer()
     {
-        return DateConsumer::getInstance($this, $this->partFactory);
+        return DateConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the ParameterConsumer singleton instance.
      *
-     * @return ParameterConsumer
+     * @return ParameterConsumerService
      */
     public function getParameterConsumer()
     {
-        return ParameterConsumer::getInstance($this, $this->partFactory);
+        return ParameterConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the consumer instance corresponding to the passed part name of a
      * Received header.
      *
-     * @return AbstractConsumer
+     * @return AbstractConsumerService
      */
     public function getSubReceivedConsumer(string $partName)
     {
         if (empty($this->receivedConsumers[$partName])) {
             $consumer = null;
             if ($partName === 'from' || $partName === 'by') {
-                $consumer = new DomainConsumer($this, $this->partFactory, $partName);
+                $consumer = new DomainConsumerService($this, $this->partFactory, $partName);
             } elseif ($partName === 'date') {
-                $consumer = new ReceivedDateConsumer($this, $this->partFactory);
+                $consumer = new ReceivedDateConsumerService($this, $this->partFactory);
             } else {
-                $consumer = new GenericReceivedConsumer($this, $this->partFactory, $partName);
+                $consumer = new GenericReceivedConsumerService($this, $this->partFactory, $partName);
             }
             $this->receivedConsumers[$partName] = $consumer;
         }
@@ -177,30 +178,30 @@ class ConsumerService
     /**
      * Returns the ReceivedConsumer singleton instance.
      *
-     * @return ReceivedConsumer
+     * @return ReceivedConsumerService
      */
     public function getReceivedConsumer()
     {
-        return ReceivedConsumer::getInstance($this, $this->partFactory);
+        return ReceivedConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the IdConsumer singleton instance.
      *
-     * @return IdConsumer
+     * @return IdConsumerService
      */
     public function getIdConsumer()
     {
-        return IdConsumer::getInstance($this, $this->partFactory);
+        return IdConsumerService::getInstance($this, $this->partFactory);
     }
 
     /**
      * Returns the IdBaseConsumer singleton instance.
      *
-     * @return IdBaseConsumer
+     * @return IdBaseConsumerService
      */
     public function getIdBaseConsumer()
     {
-        return IdBaseConsumer::getInstance($this, $this->partFactory);
+        return IdBaseConsumerService::getInstance($this, $this->partFactory);
     }
 }

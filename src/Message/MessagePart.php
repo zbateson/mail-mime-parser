@@ -12,7 +12,9 @@ use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use SplObjectStorage;
 use SplObserver;
+
 use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
  * Most basic representation of a single part of an email.
@@ -51,9 +53,14 @@ abstract class MessagePart implements IMessagePart
      */
     protected $observers;
 
-    public function __construct(PartStreamContainer $streamContainer, ?IMimePart $parent = null)
+    public function __construct(?PartStreamContainer $streamContainer = null, ?IMimePart $parent = null)
     {
         $this->partStreamContainer = $streamContainer;
+        if ($this->partStreamContainer === null) {
+            $fc = new StreamFactory();
+            $this->partStreamContainer = new PartStreamContainer($fc);
+            $this->partStreamContainer->setStream($fc->newMessagePartStream($this));
+        }
         $this->parent = $parent;
         $this->observers = new SplObjectStorage();
     }

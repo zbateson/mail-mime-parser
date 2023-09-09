@@ -38,10 +38,10 @@ class ParserMimePartProxyTest extends TestCase
         $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParser::class)
+        $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->parentParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParser::class)
+        $this->parentParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -210,11 +210,17 @@ class ParserMimePartProxyTest extends TestCase
         $second = $c->getMock();
         $third = $c->getMock();
 
+        $mp = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\MessagePart::class)
+            ->disableOriginalConstructor();
+        $fmp = $mp->getMock();
+        $smp = $mp->getMock();
+        $tmp = $mp->getMock();
+
         $first->expects($this->once())->method('parseAll');
-        $first->expects($this->any())->method('getPart')->willReturn('first');
+        $first->expects($this->any())->method('getPart')->willReturn($fmp);
         $second->expects($this->once())->method('parseAll');
-        $second->expects($this->any())->method('getPart')->willReturn('second');
-        $third->expects($this->any())->method('getPart')->willReturn('third');
+        $second->expects($this->any())->method('getPart')->willReturn($smp);
+        $third->expects($this->any())->method('getPart')->willReturn($tmp);
 
         $this->parser
             ->expects($this->exactly(4))
@@ -222,11 +228,22 @@ class ParserMimePartProxyTest extends TestCase
             ->willReturnOnConsecutiveCalls($first, $second, $third, null);
 
         $instance->parseAll();
-        $this->assertSame('first', $instance->popNextChild());
-        $this->assertSame('second', $instance->popNextChild());
-        $this->assertSame('third', $instance->popNextChild());
+
+        $this->assertSame($first, $instance->getAddedChildAt(0));
+        $this->assertSame($second, $instance->getAddedChildAt(1));
+        $this->assertSame($third, $instance->getAddedChildAt(2));
+        $this->assertSame($third, $instance->getLastAddedChild());
+
+        $this->assertSame($fmp, $instance->popNextChild());
+        $this->assertSame($smp, $instance->popNextChild());
+        $this->assertSame($tmp, $instance->popNextChild());
         $this->assertNull($instance->popNextChild());
         $this->assertNull($instance->popNextChild());
+
+        $this->assertSame($first, $instance->getAddedChildAt(0));
+        $this->assertSame($second, $instance->getAddedChildAt(1));
+        $this->assertSame($third, $instance->getAddedChildAt(2));
+        $this->assertSame($third, $instance->getLastAddedChild());
     }
 
     public function testGetHeaderContainer() : void

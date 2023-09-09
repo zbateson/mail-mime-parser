@@ -7,7 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
@@ -39,7 +39,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
      * Mime-decodes any mime-encoded parts prior to invoking
      * parent::parseHeaderValue.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : AbstractHeader
+    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : AbstractHeader
     {
         $matchp = '~' . MimeLiteralPart::MIME_PART_PATTERN . '~';
         $rep = \preg_replace_callback($matchp, function($matches) {

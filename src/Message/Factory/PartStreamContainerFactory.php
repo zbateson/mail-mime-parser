@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
+use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -15,7 +16,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  *
  * @author Zaahid Bateson
  */
-class PartStreamContainerFactory
+class PartStreamContainerFactory implements IService
 {
     /**
      * @var StreamFactory

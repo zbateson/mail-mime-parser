@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Abstract base class representing a single part of a parsed header.
@@ -32,7 +31,7 @@ abstract class HeaderPart implements IHeaderPart
      * Sets up dependencies.
      *
      */
-    public function __construct(MbWrapper $charsetConverter)
+    public function __construct(MbWrapperService $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
     }

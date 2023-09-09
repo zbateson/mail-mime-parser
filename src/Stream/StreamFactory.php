@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\StreamDecorators\Base64Stream;
@@ -24,7 +25,7 @@ use ZBateson\StreamDecorators\UUStream;
  *
  * @author Zaahid Bateson
  */
-class StreamFactory
+class StreamFactory implements IService
 {
     /**
      * Returns a SeekingLimitStream using $part->getStreamPartLength() and

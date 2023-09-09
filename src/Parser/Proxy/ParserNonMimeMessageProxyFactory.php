@@ -8,7 +8,7 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Message;
-use ZBateson\MailMimeParser\Parser\IParser;
+use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 
 /**
@@ -24,7 +24,7 @@ class ParserNonMimeMessageProxyFactory extends ParserMessageProxyFactory
      *
      * @return ParserMimePartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParser $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
     {
         $parserProxy = new ParserNonMimeMessageProxy($partBuilder, $parser);
 

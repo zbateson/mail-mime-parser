@@ -7,7 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
@@ -71,7 +71,7 @@ abstract class AbstractHeader implements IHeader
      * Responsible for returning an AbstractConsumer that will be passed to
      * parseHeaderValue to parse the header into parts.
      */
-    abstract protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer;
+    abstract protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService;
 
     /**
      * Calls the consumer and assigns the parsed parts to member variables.
@@ -80,7 +80,7 @@ abstract class AbstractHeader implements IHeader
      * and filters out comments from it, assigning the filtered array to
      * $this->parts.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : self
+    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : self
     {
         $this->allParts = $consumer($value);
         $this->parts = \array_values(\array_filter($this->allParts, function ($p) {

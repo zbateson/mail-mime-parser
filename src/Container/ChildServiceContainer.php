@@ -5,71 +5,29 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 
-namespace ZBateson\MailMimeParser;
+namespace ZBateson\MailMimeParser\Container;
 
-use Pimple\Container as PimpleContainer;
+use ZBateson\MailMimeParser\ServiceLocator;
+use Pimple\Container;
 use Pimple\Exception\UnknownIdentifierException;
-use ReflectionClass;
-use ReflectionParameter;
 
 /**
- * Automatically configures classes and dependencies.
- *
- * Sets up an automatic registration for classes when requested through
- * Pimple by looking up the class's constructor and arguments.
  *
  * @author Zaahid Bateson
  */
-class Container extends PimpleContainer
+class ChildServiceContainer extends ServiceLocator
 {
     /**
-     * Looks up the type of the passed ReflectionParameter and returns it as a
-     * fully qualified class name as expected by the class's auto registration.
-     *
-     * Null is returned for built-in types.
-     *
+     * @var PimpleContainer
      */
-    private function getParameterClass(ReflectionParameter $param) : ?string
-    {
-        if (\method_exists($param, 'getType')) {
-            $type = $param->getType();
-            if ($type && !$type->isBuiltin()) {
-                return \method_exists($type, 'getName') ? $type->getName() : (string) $type;
-            }
-        } elseif ($param->getClass() !== null) {
-            return $param->getClass()->getName();
-        }
-        return null;
-    }
+    protected $parent;
 
-    /**
-     * Returns a factory function for the passed class.
-     *
-     * The returned factory method looks up arguments and uses pimple to get an
-     * instance of those types to pass them during construction.
-     */
-    public function autoRegister($class) : ?string
+    public function __construct(Container $parent, array $extensions = [])
     {
-        $fn = function($c) use ($class) {
-            $ref = new ReflectionClass($class);
-            $cargs = ($ref->getConstructor() !== null) ? $ref->getConstructor()->getParameters() : [];
-            $ap = [];
-            foreach ($cargs as $arg) {
-                $name = $arg->getName();
-                $argClass = $this->getParameterClass($arg);
-                if (!empty($c[$name])) {
-                    $ap[] = $c[$name];
-                } elseif ($argClass !== null && !empty($c[$argClass])) {
-                    $ap[] = $c[$argClass];
-                } else {
-                    $ap[] = 0;
-                }
-            }
-            $ret = $ref->newInstanceArgs($ap);
-            return $ret;
-        };
-        $this[$class] = $fn;
-        return null;
+        $this->parent = $parent;
+        foreach ($extensions as $ext) {
+            $this->register($ext);
+        }
     }
 
     /**
@@ -79,9 +37,8 @@ class Container extends PimpleContainer
     public function offsetExists($id) : bool
     {
         $exists = parent::offsetExists($id);
-        if (!$exists && \class_exists($id)) {
-            $this->autoRegister($id);
-            return true;
+        if (!$exists) {
+            return $this->parent->exists($id);
         }
         return $exists;
     }
@@ -100,11 +57,7 @@ class Container extends PimpleContainer
         try {
             return parent::offsetGet($id);
         } catch (UnknownIdentifierException $e) {
-            if (\class_exists($id)) {
-                $this->autoRegister($id);
-                return parent::offsetGet($id);
-            }
-            throw $e;
+            return $this->parent->offsetGet($id);
         }
     }
 
@@ -118,7 +71,12 @@ class Container extends PimpleContainer
      */
     public function extend($id, $callable)
     {
-        $this->offsetExists($id);
-        return parent::extend($id, $callable);
+        try {
+            return parent::extend($id, $callable);
+        } catch (UnknownIdentifierException $e) {
+            $raw = $this->parent->raw($id);
+            $this[$id] = $raw;
+            return parent::extend($id, $callable);
+        }
     }
 }

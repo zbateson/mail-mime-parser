@@ -64,6 +64,11 @@ class PrivacyHelperTest extends TestCase
         );
     }
 
+    public function testIsService() : void
+    {
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->newPrivacyHelper());
+    }
+
     public function testOverwrite8bitContentEncoding() : void
     {
         $helper = $this->newPrivacyHelper();

@@ -25,6 +25,11 @@ class UUEncodedPartHeaderContainerFactoryTest extends TestCase
         $this->instance = new UUEncodedPartHeaderContainerFactory($hf);
     }
 
+    public function testIsService() : void
+    {
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
+    }
+
     public function testNewInstance() : void
     {
         $ob = $this->instance->newInstance(0777, 'test0r');

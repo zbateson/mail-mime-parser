@@ -10,7 +10,9 @@ namespace ZBateson\MailMimeParser;
 use GuzzleHttp\Psr7\CachingStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Parser\MessageParser;
+use Pimple\ServiceProviderInterface;
+use ZBateson\MailMimeParser\Parser\MessageParserService;
+use ZBateson\MailMimeParser\Container\ChildServiceContainer;
 
 /**
  * Parses a MIME message into an {@see IMessage} object.
@@ -42,62 +44,24 @@ class MailMimeParser
     public const DEFAULT_CHARSET = 'UTF-8';
 
     /**
-     * @var Container dependency injection container
+     * @var ServiceLocator The instance's dependency injection container.
      */
-    protected static $di = null;
+    protected $serviceLocator = null;
 
     /**
-     * @var MessageParser for parsing messages
+     * @var MessageParserService for parsing messages
      */
     protected $messageParser;
 
     /**
-     * Returns the container.
-     *
-     * @return Container
+     * @param ServiceProviderInterface[] $extensions
      */
-    public static function getDependencyContainer()
+    public static function registerGlobalServiceProviders(array $extensions)
     {
-        return static::$di;
-    }
-
-    /**
-     * (Re)creates the container using the passed providers.
-     *
-     * This is necessary if configuration needs to be reset to parse emails
-     * differently.
-     *
-     * Note that reconfiguring the dependency container can have an affect on
-     * existing objects -- for instance if a provider were to override a
-     * factory class, and an operation on an existing instance were to try to
-     * create an object using that factory class, the new factory class would be
-     * returned.  In other words, references to the Container are not maintained
-     * in a non-static context separately, so care should be taken when
-     * reconfiguring the parser.
-     *
-     * @param \Pimple\ServiceProviderInterface[] $providers
-     */
-    public static function configureDependencyContainer(array $providers = [])
-    {
-        static::$di = new Container();
-        $di = static::$di;
-        foreach ($providers as $provider) {
-            $di->register($provider);
+        $container = ServiceLocator::getSingleton();
+        foreach ($extensions as $ext) {
+            $container->register($ext);
         }
-    }
-
-    /**
-     * Override the dependency container completely.  If multiple configurations
-     * are known to be needed, it would be better to keep the different
-     * Container configurations and call setDependencyContainer instead of
-     * {@see MailMimeParser::configureDependencyContainer}, which instantiates a
-     * new {@see Container} on every call.
-     *
-     * @param Container $di
-     */
-    public static function setDependencyContainer(?Container $di = null)
-    {
-        static::$di = $di;
     }
 
     /**
@@ -106,14 +70,16 @@ class MailMimeParser
      * To configure custom {@see https://pimple.symfony.com/ \Pimple\ServiceProviderInterface}
      * objects, call {@see MailMimeParser::configureDependencyContainer()}
      * before creating a MailMimeParser instance.
+     *
+     * @param ServiceProviderInterface[] $extensions
      */
-    public function __construct()
+    public function __construct(?array $extensions = null, ?MessageParserService $messageParser = null)
     {
-        if (static::$di === null) {
-            static::configureDependencyContainer();
+        $this->serviceLocator = ServiceLocator::getSingleton();
+        if ($extensions !== null) {
+            $this->serviceLocator = new ChildServiceContainer($this->serviceLocator, $extensions);
         }
-        $di = static::$di;
-        $this->messageParser = $di[\ZBateson\MailMimeParser\Parser\MessageParser::class];
+        $this->messageParser = $messageParser ?? $this->serviceLocator[MessageParserService::class];
     }
 
     /**

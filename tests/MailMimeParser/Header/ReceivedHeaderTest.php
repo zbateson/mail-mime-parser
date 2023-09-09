@@ -21,7 +21,7 @@ class ReceivedHeaderTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)

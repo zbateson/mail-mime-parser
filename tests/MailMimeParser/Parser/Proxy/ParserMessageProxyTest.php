@@ -25,7 +25,7 @@ class ParserMessageProxyTest extends TestCase
         $this->partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParser::class)
+        $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
     }

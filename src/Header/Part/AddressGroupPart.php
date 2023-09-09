@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
-
 /**
  * Holds a group of addresses, and an optional group name.
  *
@@ -32,7 +30,7 @@ class AddressGroupPart extends MimeLiteralPart
      *
      * @param AddressPart[] $addresses
      */
-    public function __construct(MbWrapper $charsetConverter, array $addresses, string $name = '')
+    public function __construct(MbWrapperService $charsetConverter, array $addresses, string $name = '')
     {
         parent::__construct($charsetConverter, \trim($name));
         $this->addresses = $addresses;

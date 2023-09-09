@@ -61,6 +61,11 @@ class MultipartHelperTest extends TestCase
         );
     }
 
+    public function testIsService() : void
+    {
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->newMultipartHelper());
+    }
+
     public function testGetUniqueBoundary() : void
     {
         $helper = $this->newMultipartHelper();
