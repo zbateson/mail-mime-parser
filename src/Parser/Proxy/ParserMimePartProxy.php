@@ -43,10 +43,15 @@ class ParserMimePartProxy extends ParserPartProxy
     protected $allChildrenParsed = false;
 
     /**
+     * @var ParserPartProxy[] Array of all parsed children.
+     */
+    protected $children = [];
+
+    /**
      * @var ParserPartProxy[] Parsed children used as a 'first-in-first-out'
      *      stack as children are parsed.
      */
-    protected $children = [];
+    protected $childrenStack = [];
 
     /**
      * @var ParserPartProxy Reference to the last child added to this part.
@@ -79,6 +84,7 @@ class ParserMimePartProxy extends ParserPartProxy
         $next = $this->parser->parseNextChild($this);
         if ($next !== null) {
             $this->children[] = $next;
+            $this->childrenStack[] = $next;
             $this->lastAddedChild = $next;
         } else {
             $this->allChildrenParsed = true;
@@ -91,14 +97,14 @@ class ParserMimePartProxy extends ParserPartProxy
      * 'stack' of children, attempting to parse a new one if the stack is empty,
      * and returning null if there are no more children.
      *
-     * @return IMessagePart|null the child part.
+     * @return ?IMessagePart the child part.
      */
-    public function popNextChild()
+    public function popNextChild() : ?IMessagePart
     {
-        if (empty($this->children)) {
+        if (empty($this->childrenStack)) {
             $this->parseNextChild();
         }
-        $proxy = \array_shift($this->children);
+        $proxy = \array_shift($this->childrenStack);
         return ($proxy !== null) ? $proxy->getPart() : null;
     }
 
@@ -257,5 +263,25 @@ class ParserMimePartProxy extends ParserPartProxy
     public function getLastLineEndingLength() : int
     {
         return $this->getParent()->getLastLineEndingLength();
+    }
+
+    /**
+     * Returns the last part that was added.
+     * @return ParserPartProxy|null
+     */
+    public function getLastAddedChild() : ?ParserPartProxy
+    {
+        return $this->lastAddedChild;
+    }
+
+    /**
+     * Returns the added child at the provided index, useful for looking at
+     * previously parsed children.
+     *
+     * @return ParserPartProxy|null
+     */
+    public function getAddedChildAt(int $index) : ?ParserPartProxy
+    {
+        return $this->children[$index] ?? null;
     }
 }
