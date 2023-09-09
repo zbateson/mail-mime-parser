@@ -21,15 +21,13 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class ReceivedPart extends ParameterPart
 {
-    /**
-     * Constructor.
-     *
-     * @param string $name
-     * @param string $value
-     */
-    public function __construct(MbWrapper $charsetConverter, $name, $value) {
+    public function __construct(
+        MbWrapper $charsetConverter,
+        string $name,
+        ?string $value
+    ) {
+        // parent tries to mime decode, $name/$value cannot be mime encoded
         parent::__construct($charsetConverter, '', '');
-        // can't be mime-encoded
         $this->name = \trim($name);
         $this->value = $value ? \trim($value) : $value;
     }

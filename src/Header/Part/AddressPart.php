@@ -28,7 +28,6 @@ class AddressPart extends ParameterPart
      *
      * The passed $name may be mime-encoded.  $email is stripped of any
      * whitespace.
-     *
      */
     public function __construct(MbWrapper $charsetConverter, string $name, string $email)
     {

@@ -68,11 +68,10 @@ abstract class AbstractHeader implements IHeader
     }
 
     /**
-     * Returns the header's Consumer
-     *
-     * @return AbstractConsumer
+     * Responsible for returning an AbstractConsumer that will be passed to
+     * parseHeaderValue to parse the header into parts.
      */
-    abstract protected function getConsumer(ConsumerService $consumerService);
+    abstract protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer;
 
     /**
      * Calls the consumer and assigns the parsed parts to member variables.
@@ -81,12 +80,13 @@ abstract class AbstractHeader implements IHeader
      * and filters out comments from it, assigning the filtered array to
      * $this->parts.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
+    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : self
     {
         $this->allParts = $consumer($value);
         $this->parts = \array_values(\array_filter($this->allParts, function ($p) {
             return !($p instanceof CommentPart);
         }));
+        return $this;
     }
 
     /**

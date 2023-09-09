@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+
 /**
  * Represents a quoted part of a header value starting at a double quote, and
  * ending at the next double quote.
@@ -77,9 +79,8 @@ class QuotedStringConsumer extends GenericConsumer
      *
      * @param bool $isLiteral not used - everything in a quoted string is a
      *        literal
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         return $this->partFactory->newLiteralPart($token);
     }
@@ -90,8 +91,8 @@ class QuotedStringConsumer extends GenericConsumer
      *
      * The returned IHeaderParts are all LiteralParts.
      *
-     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
+     * @param IHeaderPart[] $parts
+     * @return IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {

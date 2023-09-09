@@ -39,10 +39,8 @@ class AddressHeader extends AbstractHeader
 
     /**
      * Returns an AddressBaseConsumer.
-     *
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer
      */
-    protected function getConsumer(ConsumerService $consumerService)
+    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer
     {
         return $consumerService->getAddressBaseConsumer();
     }
@@ -50,7 +48,7 @@ class AddressHeader extends AbstractHeader
     /**
      * Overridden to extract all addresses into addresses array.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
+    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : self
     {
         parent::parseHeaderValue($consumer, $value);
         foreach ($this->parts as $part) {
@@ -61,6 +59,7 @@ class AddressHeader extends AbstractHeader
                 $this->groups[] = $part;
             }
         }
+        return $this;
     }
 
     /**

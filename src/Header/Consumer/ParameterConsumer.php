@@ -60,10 +60,8 @@ class ParameterConsumer extends GenericConsumer
      * Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
      * the passed string token and returns it, unless the token is an escaped
      * literal, in which case a LiteralPart is returned.
-     *
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
@@ -75,11 +73,14 @@ class ParameterConsumer extends GenericConsumer
      * Adds the passed parameter with the given name and value to a
      * SplitParameterToken, at the passed index. If one with the given name
      * doesn't exist, it is created.
-     *
-     * @return SplitParameterToken
      */
-    private function addToSplitPart(ArrayObject $splitParts, string $name, string $value, int $index, bool $isEncoded)
-    {
+    private function addToSplitPart(
+        ArrayObject $splitParts,
+        string $name,
+        string $value,
+        int $index,
+        bool $isEncoded
+    ) : ?SplitParameterToken {
         $ret = null;
         if (!isset($splitParts[$name])) {
             $ret = $this->partFactory->newSplitParameterToken($name);
@@ -97,10 +98,8 @@ class ParameterConsumer extends GenericConsumer
      *
      * If the part is a SplitParameterToken, it's added to the passed
      * $splitParts as well with its name as a key.
-     *
-     * @return MimeLiteralPart|SplitParameterToken|\ZBateson\MailMimeParser\Header\Part\ParameterPart
      */
-    private function getPartFor(string $strName, string $strValue, ArrayObject $splitParts)
+    private function getPartFor(string $strName, string $strValue, ArrayObject $splitParts) : ?IHeaderPart
     {
         if ($strName === '') {
             return $this->partFactory->newMimeLiteralPart($strValue);
@@ -148,7 +147,7 @@ class ParameterConsumer extends GenericConsumer
      * The method then calls filterIgnoreSpaces to filter out empty elements in
      * the combined array and returns an array.
      *
-     * @return IHeaderPart[]|array
+     * @return IHeaderPart[]
      */
     private function finalizeParameterParts(ArrayObject $combined) : array
     {

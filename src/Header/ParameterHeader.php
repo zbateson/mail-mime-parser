@@ -41,10 +41,8 @@ class ParameterHeader extends AbstractHeader
 
     /**
      * Returns a ParameterConsumer.
-     *
-     * @return Consumer\AbstractConsumer
      */
-    protected function getConsumer(ConsumerService $consumerService)
+    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer
     {
         return $consumerService->getParameterConsumer();
     }
@@ -53,7 +51,7 @@ class ParameterHeader extends AbstractHeader
      * Overridden to assign ParameterParts to a map of lower-case parameter
      * names to ParameterParts.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
+    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : self
     {
         parent::parseHeaderValue($consumer, $value);
         foreach ($this->parts as $part) {
@@ -61,6 +59,7 @@ class ParameterHeader extends AbstractHeader
                 $this->parameters[\strtolower($part->getName())] = $part;
             }
         }
+        return $this;
     }
 
     /**

@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use \ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
@@ -46,14 +47,8 @@ class IdConsumer extends GenericConsumer
 
     /**
      * Returns null for whitespace, and LiteralPart for anything else.
-     *
-     * @param string $token the token
-     * @param bool $isLiteral set to true if the token represents a literal -
-     *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null the constructed
-     *         header part or null if the token should be ignored
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if (\preg_match('/^\s+$/', $token)) {
             return null;
@@ -65,8 +60,8 @@ class IdConsumer extends GenericConsumer
      * Overridden to combine non-comment parts into a single part and return
      * any comment parts after.
      *
-     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
+     * @param IHeaderPart[] $parts
+     * @return IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {

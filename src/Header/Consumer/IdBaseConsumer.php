@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+
 /**
  * Serves as a base-consumer for ID headers (like Message-ID and Content-ID).
  *
@@ -71,10 +73,10 @@ class IdBaseConsumer extends AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null the constructed
-     *         header part or null if the token should be ignored
+     * @return ?IHeaderPart The constructed header part or null if the token
+     *         should be ignored
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if (\preg_match('/^\s+$/', $token)) {
             return null;

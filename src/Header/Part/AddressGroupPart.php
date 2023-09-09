@@ -52,9 +52,9 @@ class AddressGroupPart extends MimeLiteralPart
      * Returns the AddressPart at the passed index or null.
      *
      * @param int $index The 0-based index.
-     * @return AddressPart|null The address.
+     * @return ?AddressPart The address.
      */
-    public function getAddress(int $index)
+    public function getAddress(int $index) : ?AddressPart
     {
         if (!isset($this->addresses[$index])) {
             return null;

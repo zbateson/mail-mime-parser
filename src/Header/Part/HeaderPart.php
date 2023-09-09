@@ -18,7 +18,7 @@ use ZBateson\MbWrapper\MbWrapper;
 abstract class HeaderPart implements IHeaderPart
 {
     /**
-     * @var string the value of the part
+     * @var ?string the value of the part
      */
     protected $value;
 

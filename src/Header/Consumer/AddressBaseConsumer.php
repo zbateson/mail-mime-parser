@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use Iterator;
 
 /**
@@ -52,7 +53,7 @@ class AddressBaseConsumer extends AbstractConsumer
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumer
     {
         if ($isStartToken) {
             return $this;
@@ -100,13 +101,8 @@ class AddressBaseConsumer extends AbstractConsumer
      * AbstractConsumer.
      *
      * @codeCoverageIgnore
-     * @param string $token the token
-     * @param bool $isLiteral set to true if the token represents a literal -
-     *        e.g. an escaped token
-     * @return ?\ZBateson\MailMimeParser\Header\Part\HeaderPart the constructed
-     *         header part or null if the token should be ignored
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         return null;
     }

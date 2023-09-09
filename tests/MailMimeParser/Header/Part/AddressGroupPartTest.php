@@ -3,6 +3,8 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+
+use ZBateson\MailMimeParser\Header\Part\AddressPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -18,9 +20,15 @@ class AddressGroupPartTest extends TestCase
 {
     public function testNameGroup() : void
     {
-        $name = 'Roman Senate';
-        $members = ['Caesar', 'Cicero', 'Cato'];
         $csConverter = new MbWrapper();
+
+        $name = 'Roman Senate';
+        $members = [
+            $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock()
+        ];
+        
         $part = new AddressGroupPart($csConverter, $members, $name);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($members, $part->getAddresses());

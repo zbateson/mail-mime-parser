@@ -40,8 +40,8 @@ class MimeLiteralPart extends LiteralPart
     protected $canIgnoreSpacesAfter = false;
 
     /**
-     * @var array maintains an array mapping rfc1766 language tags to parts of
-     * text in the value.
+     * @var array<int,array<string,string>> maintains an array mapping rfc1766
+     *      language tags to parts of text in the value.
      *
      * Each array element is an array containing two elements, one with key
      * 'lang', and another with key 'value'.
@@ -181,9 +181,9 @@ class MimeLiteralPart extends LiteralPart
      * ]
      * ```
      *
-     * @return string[][]
+     * @return array<int,array<string,string>>
      */
-    public function getLanguageArray()
+    public function getLanguageArray() : array
     {
         return $this->languages;
     }

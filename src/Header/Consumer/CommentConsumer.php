@@ -7,9 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use Iterator;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\LiteralPart;
+use Iterator;
 
 /**
  * Consumes all tokens within parentheses as comments.
@@ -65,10 +66,8 @@ class CommentConsumer extends GenericConsumer
      *
      * Tokens from this and sub-consumers are combined into a Part\CommentPart
      * in processParts.
-     *
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         return $this->partFactory->newToken($token);
     }
@@ -82,7 +81,7 @@ class CommentConsumer extends GenericConsumer
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumer
     {
         $tokens->next();
         return $this;
@@ -93,8 +92,8 @@ class CommentConsumer extends GenericConsumer
      * generated parts from tokens.  The Part\CommentPart is returned in an
      * array.
      *
-     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
+     * @param IHeaderPart[] $parts
+     * @return IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {

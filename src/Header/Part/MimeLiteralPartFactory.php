@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+
 /**
  * Extends HeaderPartFactory to instantiate MimeLiteralParts for its newInstance
  * function.
@@ -17,10 +19,8 @@ class MimeLiteralPartFactory extends HeaderPartFactory
 {
     /**
      * Creates and returns a MimeLiteralPart.
-     *
-     * @return HeaderPart
      */
-    public function newInstance(string $value)
+    public function newInstance(string $value) : IHeaderPart
     {
         return $this->newMimeLiteralPart($value);
     }

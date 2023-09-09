@@ -35,17 +35,14 @@ class Token extends HeaderPart
 
     /**
      * Returns true if the value of the token is equal to a single space.
-     *
-     * @return bool
      */
-    public function isSpace()
+    public function isSpace() : bool
     {
         return (\preg_match('/^\s+$/', $this->value) === 1);
     }
 
     /**
      * Returns true if the value is a space.
-     *
      */
     public function ignoreSpacesBefore() : bool
     {
@@ -54,7 +51,6 @@ class Token extends HeaderPart
 
     /**
      * Returns true if the value is a space.
-     *
      */
     public function ignoreSpacesAfter() : bool
     {

@@ -113,7 +113,7 @@ class DomainConsumer extends GenericReceivedConsumer
         }
 
         $domainPart = $this->partFactory->newReceivedDomainPart(
-            $this->getPartName(),
+            $this->partName,
             $strValue,
             $ehloName,
             $hostname,

@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 
 /**
@@ -21,10 +22,8 @@ class SubjectHeader extends AbstractHeader
 {
     /**
      * Returns a SubjectConsumer.
-     *
-     * @return Consumer\AbstractConsumer
      */
-    protected function getConsumer(ConsumerService $consumerService)
+    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer
     {
         return $consumerService->getSubjectConsumer();
     }

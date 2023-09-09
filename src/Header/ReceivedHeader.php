@@ -10,7 +10,6 @@ namespace ZBateson\MailMimeParser\Header;
 use DateTime;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
 
 /**
@@ -87,10 +86,8 @@ class ReceivedHeader extends ParameterHeader
 
     /**
      * Returns a ReceivedConsumer.
-     *
-     * @return Consumer\AbstractConsumer
      */
-    protected function getConsumer(ConsumerService $consumerService)
+    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumer
     {
         return $consumerService->getReceivedConsumer();
     }
@@ -113,9 +110,9 @@ class ReceivedHeader extends ParameterHeader
      * exists in this position is returned -- be it contains spaces, or invalid
      * characters, etc...
      *
-     * @return string|null The 'FROM' name.
+     * @return The 'FROM' name.
      */
-    public function getFromName()
+    public function getFromName() : ?string
     {
         return (isset($this->parameters['from'])) ?
             $this->parameters['from']->getEhloName() : null;
@@ -130,9 +127,9 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return string|null The 'FROM' hostname.
+     * @return The 'FROM' hostname.
      */
-    public function getFromHostname()
+    public function getFromHostname() : ?string
     {
         return (isset($this->parameters['from'])) ?
             $this->parameters['from']->getHostname() : null;
@@ -147,9 +144,9 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return string|null The 'FROM' address.
+     * @return The 'FROM' address.
      */
-    public function getFromAddress()
+    public function getFromAddress() : ?string
     {
         return (isset($this->parameters['from'])) ?
             $this->parameters['from']->getAddress() : null;
@@ -164,9 +161,9 @@ class ReceivedHeader extends ParameterHeader
      * exists in this position is returned -- be it contains spaces, or invalid
      * characters, etc...
      *
-     * @return string|null The 'BY' name.
+     * @return The 'BY' name.
      */
-    public function getByName()
+    public function getByName() : ?string
     {
         return (isset($this->parameters['by'])) ?
             $this->parameters['by']->getEhloName() : null;
@@ -181,9 +178,9 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return string|null The 'BY' hostname.
+     * @return The 'BY' hostname.
      */
-    public function getByHostname()
+    public function getByHostname() : ?string
     {
         return (isset($this->parameters['by'])) ?
             $this->parameters['by']->getHostname() : null;
@@ -198,9 +195,9 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return string|null The 'BY' address.
+     * @return The 'BY' address.
      */
-    public function getByAddress()
+    public function getByAddress() : ?string
     {
         return (isset($this->parameters['by'])) ?
             $this->parameters['by']->getAddress() : null;

@@ -96,7 +96,7 @@ class ReceivedConsumer extends AbstractConsumer
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumer
     {
         if ($isStartToken) {
             $tokens->next();

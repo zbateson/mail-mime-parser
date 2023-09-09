@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use ArrayIterator;
 use Iterator;
 use NoRewindIterator;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 
@@ -40,10 +41,9 @@ abstract class AbstractConsumer
     }
 
     /**
-     * Returns the singleton instance for the class.
-     *
+     * Returns the singleton instance for the class type it was called on.
      */
-    public static function getInstance(ConsumerService $consumerService, HeaderPartFactory $partFactory)
+    public static function getInstance(ConsumerService $consumerService, HeaderPartFactory $partFactory) : AbstractConsumer
     {
         static $instances = [];
         $class = static::class;
@@ -211,10 +211,10 @@ abstract class AbstractConsumer
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -
      *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart|null The constructed
-     *         header part or null if the token should be ignored.
+     * @return ?IHeaderPart The constructed header part or null if the token
+     *         should be ignored.
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
@@ -232,7 +232,7 @@ abstract class AbstractConsumer
      * If no sub-consumer is responsible for the current token, calls
      * {@see AbstractConsumer::getPartForToken()} and returns it in an array.
      *
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
+     * @return IHeaderPart[]
      */
     protected function getConsumerTokenParts(Iterator $tokens) : array
     {
@@ -255,7 +255,7 @@ abstract class AbstractConsumer
      * called.
      *
      * @param Iterator $tokens The token iterator.
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
+     * @return IHeaderPart[]
      */
     protected function getTokenParts(Iterator $tokens) : array
     {
@@ -279,7 +279,7 @@ abstract class AbstractConsumer
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken)
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumer
     {
         if (($isStartToken) || ($tokens->valid() && !$this->isEndToken($tokens->current()))) {
             $tokens->next();
@@ -303,8 +303,7 @@ abstract class AbstractConsumer
      * processing.
      *
      * @param Iterator $tokens An iterator over a string of tokens
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] An array of
-     *         parsed parts
+     * @return IHeaderPart[] An array of parsed parts
      */
     protected function parseTokensIntoParts(Iterator $tokens) : array
     {
@@ -323,10 +322,8 @@ abstract class AbstractConsumer
      * The default implementation simply returns the passed array after
      * filtering out null/empty parts.
      *
-     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts The parsed
-     *        parts.
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] Array of resulting
-     *         final parts.
+     * @param IHeaderPart[] $parts The parsed parts.
+     * @return IHeaderPart[] Array of resulting final parts.
      */
     protected function processParts(array $parts) : array
     {

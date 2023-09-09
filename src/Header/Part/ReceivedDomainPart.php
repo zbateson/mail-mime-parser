@@ -46,15 +46,14 @@ class ReceivedDomainPart extends ReceivedPart
      */
     protected $address;
 
-    /**
-     *
-     * @param string $name
-     * @param string $value
-     * @param string $ehloName
-     * @param string $hostname
-     * @param string $address
-     */
-    public function __construct(MbWrapper $charsetConverter, $name, $value, $ehloName = null, $hostname = null, $address = null) {
+    public function __construct(
+        MbWrapper $charsetConverter,
+        string $name,
+        ?string $value = null,
+        ?string $ehloName = null,
+        ?string $hostname = null,
+        ?string $address = null
+    ) {
         parent::__construct($charsetConverter, $name, $value);
         $this->ehloName = $ehloName;
         $this->hostname = $hostname;
@@ -68,10 +67,8 @@ class ReceivedDomainPart extends ReceivedPart
      * Note that this is not necessarily the name used in the EHLO line to an
      * SMTP server, since implementations differ so much, not much can be
      * guaranteed except the position it was parsed in.
-     *
-     * @return string|null The name
      */
-    public function getEhloName()
+    public function getEhloName() : ?string
     {
         return $this->ehloName;
     }
@@ -79,10 +76,8 @@ class ReceivedDomainPart extends ReceivedPart
     /**
      * Returns the hostname of the server, or whatever string in the hostname
      * position when parsing (but never an address).
-     *
-     * @return string|null
      */
-    public function getHostname()
+    public function getHostname() : ?string
     {
         return $this->hostname;
     }
@@ -90,7 +85,6 @@ class ReceivedDomainPart extends ReceivedPart
     /**
      * Returns the address of the server, or whatever string that looks like an
      * address in the address position when parsing (but never a hostname).
-     *
      */
     public function getAddress() : ?string
     {

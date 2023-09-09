@@ -19,10 +19,8 @@ class LiteralPart extends HeaderPart
 {
     /**
      * Creates a LiteralPart out of the passed string token
-     *
-     * @param string $token
      */
-    public function __construct(MbWrapper $charsetConverter, $token = null)
+    public function __construct(MbWrapper $charsetConverter, ?string $token = null)
     {
         parent::__construct($charsetConverter);
         $this->value = $token;

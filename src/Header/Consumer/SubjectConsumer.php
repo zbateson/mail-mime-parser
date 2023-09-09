@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use Iterator;
-use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Extends GenericConsumer to remove its sub consumers.
@@ -45,14 +45,8 @@ class SubjectConsumer extends GenericConsumer
      * with a newline (\n or \r\n), in which case the entire string of
      * whitespace is discarded, and a single space ' ' character is used in its
      * place.
-     *
-     * @param string $token the token
-     * @param bool $isLiteral set to true if the token represents a literal -
-     *        e.g. an escaped token
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart|null the
-     *         constructed header part or null if the token should be ignored
      */
-    protected function getPartForToken(string $token, bool $isLiteral)
+    protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if ($isLiteral) {
             return $this->partFactory->newLiteralPart($token);
@@ -73,7 +67,7 @@ class SubjectConsumer extends GenericConsumer
      * backslash escaping, which also seems to not apply to Subject headers at
      * least in ThunderBird's implementation.
      *
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|array
+     * @return IHeaderPart[]
      */
     protected function getTokenParts(Iterator $tokens) : array
     {
@@ -98,8 +92,8 @@ class SubjectConsumer extends GenericConsumer
      *
      * The returned IHeaderParts are all LiteralParts.
      *
-     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
+     * @param IHeaderPart[] $parts
+     * @return IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {

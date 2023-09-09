@@ -32,13 +32,13 @@ class ParameterPart extends MimeLiteralPart
      *
      * If $language is provided, $name and $value are not mime-decoded. Instead,
      * they're taken as literals as part of a SplitParameterToken.
-     *
-     * @param string $name
-     * @param string $value
-     * @param string $language
      */
-    public function __construct(MbWrapper $charsetConverter, $name, $value, $language = null)
-    {
+    public function __construct(
+        MbWrapper $charsetConverter,
+        string $name,
+        string $value,
+        ?string $language = null
+    ) {
         if ($language !== null) {
             parent::__construct($charsetConverter, '');
             $this->name = $name;
@@ -52,10 +52,8 @@ class ParameterPart extends MimeLiteralPart
 
     /**
      * Returns the name of the parameter.
-     *
-     * @return string The name.
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -64,9 +62,9 @@ class ParameterPart extends MimeLiteralPart
      * Returns the RFC-1766 (or subset) language tag, if the parameter is a
      * split RFC-2231 part with a language tag set.
      *
-     * @return string the language
+     * @return ?string the language if set, or null if not
      */
-    public function getLanguage()
+    public function getLanguage() : ?string
     {
         return $this->language;
     }

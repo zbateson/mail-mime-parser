@@ -55,7 +55,7 @@ class DatePart extends LiteralPart
      *
      * @return DateTime
      */
-    public function getDateTime() : ?\DateTime
+    public function getDateTime() : ?DateTime
     {
         return $this->date;
     }

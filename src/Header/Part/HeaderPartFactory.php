@@ -36,77 +36,57 @@ class HeaderPartFactory
      * Creates and returns a default IHeaderPart for this factory, allowing
      * subclass factories for specialized IHeaderParts.
      *
-     * The default implementation returns a new Token.
-     *
-     * @return IHeaderPart
+     * The default implementation returns a new Token
      */
-    public function newInstance(string $value)
+    public function newInstance(string $value) : IHeaderPart
     {
         return $this->newToken($value);
     }
 
     /**
      * Initializes and returns a new Token.
-     *
-     * @return Token
      */
-    public function newToken(string $value)
+    public function newToken(string $value) : Token
     {
         return new Token($this->charsetConverter, $value);
     }
 
     /**
      * Instantiates and returns a SplitParameterToken with the given name.
-     *
-     * @param string $name
-     * @return SplitParameterToken
      */
-    public function newSplitParameterToken($name)
+    public function newSplitParameterToken(string $name) : SplitParameterToken
     {
         return new SplitParameterToken($this->charsetConverter, $name);
     }
 
     /**
      * Initializes and returns a new LiteralPart.
-     *
-     * @param string $value
-     * @return LiteralPart
      */
-    public function newLiteralPart($value)
+    public function newLiteralPart(string $value) : LiteralPart
     {
         return new LiteralPart($this->charsetConverter, $value);
     }
 
     /**
      * Initializes and returns a new MimeLiteralPart.
-     *
-     * @param string $value
-     * @return MimeLiteralPart
      */
-    public function newMimeLiteralPart($value)
+    public function newMimeLiteralPart(string $value) : MimeLiteralPart
     {
         return new MimeLiteralPart($this->charsetConverter, $value);
     }
 
     /**
      * Initializes and returns a new CommentPart.
-     *
-     * @param string $value
-     * @return CommentPart
      */
-    public function newCommentPart($value)
+    public function newCommentPart(string $value) : CommentPart
     {
         return new CommentPart($this->charsetConverter, $value);
     }
 
     /**
      * Initializes and returns a new AddressPart.
-     *
-     * @param string $name
-     * @param string $email
-     * @return AddressPart
      */
-    public function newAddressPart($name, $email)
+    public function newAddressPart(string $name, string $email) : AddressPart
     {
         return new AddressPart($this->charsetConverter, $name, $email);
     }
@@ -114,67 +94,47 @@ class HeaderPartFactory
     /**
      * Initializes and returns a new AddressGroupPart
      *
-     * @param string $name
-     * @return AddressGroupPart
+     * @param string[] $addresses
      */
-    public function newAddressGroupPart(array $addresses, $name = '')
+    public function newAddressGroupPart(array $addresses, string $name = '') : AddressGroupPart
     {
         return new AddressGroupPart($this->charsetConverter, $addresses, $name);
     }
 
     /**
      * Initializes and returns a new DatePart
-     *
-     * @param string $value
-     * @return DatePart
      */
-    public function newDatePart($value)
+    public function newDatePart(string $value) : DatePart
     {
         return new DatePart($this->charsetConverter, $value);
     }
 
     /**
      * Initializes and returns a new ParameterPart.
-     *
-     * @param string $name
-     * @param string $value
-     * @param string $language
-     * @return ParameterPart
      */
-    public function newParameterPart($name, $value, $language = null)
+    public function newParameterPart(string $name, string $value, ?string $language = null) : ParameterPart
     {
         return new ParameterPart($this->charsetConverter, $name, $value, $language);
     }
 
     /**
      * Initializes and returns a new ReceivedPart.
-     *
-     * @param string $name
-     * @param string $value
-     * @return ReceivedPart
      */
-    public function newReceivedPart($name, $value)
+    public function newReceivedPart(string $name, string $value) : ReceivedPart
     {
         return new ReceivedPart($this->charsetConverter, $name, $value);
     }
 
     /**
      * Initializes and returns a new ReceivedDomainPart.
-     *
-     * @param string $name
-     * @param string $value
-     * @param string $ehloName
-     * @param string $hostName
-     * @param string $hostAddress
-     * @return ReceivedDomainPart
      */
     public function newReceivedDomainPart(
-        $name,
-        $value,
-        $ehloName = null,
-        $hostName = null,
-        $hostAddress = null
-    ) {
+        string $name,
+        ?string $value = null,
+        ?string $ehloName = null,
+        ?string $hostName = null,
+        ?string $hostAddress = null
+    ) : ReceivedDomainPart {
         return new ReceivedDomainPart(
             $this->charsetConverter,
             $name,

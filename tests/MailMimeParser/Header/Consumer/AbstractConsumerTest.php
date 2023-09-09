@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Description of AbstractConsumerTest
@@ -19,7 +20,7 @@ class AbstractConsumerTest extends TestCase
 
     protected function setUp() : void
     {
-        $stub = $this->getMockBuilder('\\' . \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumer::class)
+        $stub = $this->getMockBuilder('\\' . AbstractConsumer::class)
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -53,13 +54,22 @@ class AbstractConsumerTest extends TestCase
     public function testMultipleTokens() : void
     {
         $value = "Je\ \t suis\nici";
-        $parts = ['Je', ' ', "\t ", 'suis', "\n", 'ici'];
+        $mock = $this->getMockBuilder(Token::class)->disableOriginalConstructor();
+        $args = ['Je', ' ', "\t ", 'suis', "\n", 'ici'];
+        $parts = [
+            $mock->getMock(),
+            $mock->getMock(),
+            $mock->getMock(),
+            $mock->getMock(),
+            $mock->getMock(),
+            $mock->getMock()
+        ];
 
         $stub = $this->abstractConsumerStub;
 
         $stub->expects($this->exactly(6))
             ->method('getPartForToken')
-            ->withConsecutive([$parts[0]], [$parts[1]], [$parts[2]], [$parts[3]], [$parts[4]], [$parts[5]])
+            ->withConsecutive([$args[0]], [$args[1]], [$args[2]], [$args[3]], [$args[4]], [$args[5]])
             ->will($this->onConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5]));
         $stub->method('processParts')
             ->willReturn($parts);

@@ -55,7 +55,7 @@ class SplitParameterToken extends HeaderPart
      *
      * @param string $name the parameter's name
      */
-    public function __construct(MbWrapper $charsetConverter, $name)
+    public function __construct(MbWrapper $charsetConverter, string $name)
     {
         parent::__construct($charsetConverter);
         $this->name = \trim($name);
@@ -93,7 +93,7 @@ class SplitParameterToken extends HeaderPart
      * @param bool $isEncoded
      * @param int $index
      */
-    public function addPart($value, $isEncoded, $index)
+    public function addPart($value, $isEncoded, $index) : self
     {
         if (empty($index)) {
             $index = 0;
@@ -103,6 +103,7 @@ class SplitParameterToken extends HeaderPart
         } else {
             $this->literalParts[$index] = $this->convertEncoding($value);
         }
+        return $this;
     }
 
     /**

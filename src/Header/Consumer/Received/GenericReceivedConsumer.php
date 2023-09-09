@@ -41,6 +41,9 @@ class GenericReceivedConsumer extends GenericConsumer
 {
     /**
      * @var string the current part name being parsed.
+     *
+     * This is always the lower-case name provided to the constructor, not the
+     * actual string that started the consumer, which could be in any case.
      */
     protected $partName;
 
@@ -52,18 +55,6 @@ class GenericReceivedConsumer extends GenericConsumer
     {
         parent::__construct($consumerService, $partFactory);
         $this->partName = $partName;
-    }
-
-    /**
-     * Returns the name of the part being parsed.
-     *
-     * This is always the lower-case name provided to the constructor, not the
-     * actual string that started the consumer, which could be in any case.
-     *
-     */
-    protected function getPartName() : string
-    {
-        return $this->partName;
     }
 
     /**
@@ -82,7 +73,7 @@ class GenericReceivedConsumer extends GenericConsumer
      */
     protected function isStartToken(string $token) : bool
     {
-        $pattern = '/^' . \preg_quote($this->getPartName(), '/') . '$/i';
+        $pattern = '/^' . \preg_quote($this->partName, '/') . '$/i';
         return (\preg_match($pattern, $token) === 1);
     }
 
@@ -105,7 +96,7 @@ class GenericReceivedConsumer extends GenericConsumer
     /**
      * Returns a whitespace separator (for filtering ignorable whitespace
      * between parts), and a separator matching the current part name as
-     * returned by $this->getPartName().
+     * set on $this->partName.
      *
      * @return string[] an array of regex pattern matchers
      */
@@ -113,7 +104,7 @@ class GenericReceivedConsumer extends GenericConsumer
     {
         return [
             '\s+',
-            '(\A\s*|\s+)(?i)' . \preg_quote($this->getPartName(), '/') . '(?-i)(?=\s+)'
+            '(\A\s*|\s+)(?i)' . \preg_quote($this->partName, '/') . '(?-i)(?=\s+)'
         ];
     }
 
@@ -122,8 +113,8 @@ class GenericReceivedConsumer extends GenericConsumer
      * as the first element, followed by any comment elements as subsequent
      * elements.
      *
-     * @param \ZBateson\MailMimeParser\Header\Part\HeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\HeaderPart[]|\ZBateson\MailMimeParser\Header\Part\CommentPart[]
+     * @param \ZBateson\MailMimeParser\Header\Part\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\Part\IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {
@@ -137,7 +128,7 @@ class GenericReceivedConsumer extends GenericConsumer
             }
             $strValue .= $part->getValue();
         }
-        \array_unshift($ret, $this->partFactory->newReceivedPart($this->getPartName(), $strValue));
+        \array_unshift($ret, $this->partFactory->newReceivedPart($this->partName, $strValue));
         return $ret;
     }
 }
