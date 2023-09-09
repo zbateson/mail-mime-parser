@@ -52,8 +52,8 @@ class AddressHeader extends AbstractHeader
      */
     protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
     {
-        parent::parseHeaderValue($consumer, value);
-        foreach ($this->nonCommentParts as $part) {
+        parent::parseHeaderValue($consumer, $value);
+        foreach ($this->parts as $part) {
             if ($part instanceof AddressPart) {
                 $this->addresses[] = $part;
             } elseif ($part instanceof AddressGroupPart) {

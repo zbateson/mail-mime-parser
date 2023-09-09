@@ -96,7 +96,7 @@ class HeaderFactory
      * @var string Defines the generic IHeader type to use for headers that
      *      aren't mapped in $types
      */
-    protected $genericType = \ZBateson\MailMimeParser\Header\GenericHeader::class;
+    protected $genericType = GenericHeader::class;
 
     /**
      * Instantiates member variables with the passed objects.

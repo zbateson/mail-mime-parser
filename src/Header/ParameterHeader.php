@@ -57,7 +57,9 @@ class ParameterHeader extends AbstractHeader
     {
         parent::parseHeaderValue($consumer, $value);
         foreach ($this->parts as $part) {
-            $this->parameters[\strtolower($part->getName())] = $part;
+            if ($part instanceof ParameterPart) {
+                $this->parameters[\strtolower($part->getName())] = $part;
+            }
         }
     }
 

@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
+
 /**
  * Parses a date header into a Part\DatePart taking care of comment and quoted
  * parts as necessary.
@@ -43,9 +45,9 @@ class DateConsumer extends GenericConsumer
         foreach ($parts as $part) {
             $strValue .= $part->getValue();
         }
-        $comments = array_filter($parts, function ($part) {
-            return ($part instanceof \ZBateson\MailMimeParser\Header\Part\CommentPart);
-        });
-        return array_merge([$this->partFactory->newDatePart($strValue)], $comments);
+        $comments = \array_values(\array_filter($parts, function ($part) {
+            return ($part instanceof CommentPart);
+        }));
+        return \array_merge([$this->partFactory->newDatePart($strValue)], $comments);
     }
 }

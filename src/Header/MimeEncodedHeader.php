@@ -43,7 +43,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
     {
         $matchp = '~' . MimeLiteralPart::MIME_PART_PATTERN . '~';
         $rep = \preg_replace_callback($matchp, function($matches) {
-            return $this->mimeLiteralPartFactory->newInstance($matches[0]);
+            return $this->mimeLiteralPartFactory->newInstance($matches[0])->getValue();
         }, $value);
         parent::parseHeaderValue($consumer, $rep);
     }

@@ -83,10 +83,10 @@ abstract class AbstractHeader implements IHeader
      */
     protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
     {
-        $this->allParts = $consumer($this->rawValue);
-        $this->parts = \array_filter($this->parts, function ($p) {
+        $this->allParts = $consumer($value);
+        $this->parts = \array_values(\array_filter($this->allParts, function ($p) {
             return !($p instanceof CommentPart);
-        });
+        }));
     }
 
     /**
@@ -111,13 +111,13 @@ abstract class AbstractHeader implements IHeader
     public function getComments() : array
     {
         if ($this->comments === null) {
-            $this->comments = \array_map(
+            $this->comments = \array_values(\array_map(
                 function ($p) { return $p->getComment(); },
                 \array_filter(
                     $this->allParts,
                     function ($p) { return ($p instanceof CommentPart); }
                 )
-            );
+            ));
         }
         return $this->comments;
     }

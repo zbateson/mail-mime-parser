@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
-
 /**
  * Serves as a base-consumer for ID headers (like Message-ID and Content-ID).
  *

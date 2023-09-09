@@ -119,6 +119,6 @@ class DomainConsumer extends GenericReceivedConsumer
             $hostname,
             $address
         );
-        return \array_filter([$domainPart, $commentPart]);
+        return \array_values(\array_filter([$domainPart, $commentPart]));
     }
 }
