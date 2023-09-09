@@ -72,17 +72,16 @@ abstract class AbstractHeader implements IHeader
     /**
      * Calls the consumer and assigns the parsed parts to member variables.
      *
-     * The default implementation assigns the returned value to $this->part.
-     *
-     * @return static
+     * The default implementation assigns the returned value to $this->allParts
+     * and filters out comments from it, assigning the filtered array to
+     * $this->parts.
      */
-    protected function setParseHeaderValue(AbstractConsumer $consumer)
+    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : void
     {
         $this->allParts = $consumer($this->rawValue);
         $this->parts = \array_filter($this->parts, function ($p) {
             return !($p instanceof CommentPart);
         });
-        return $this;
     }
 
     /**
