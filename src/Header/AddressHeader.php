@@ -110,19 +110,21 @@ class AddressHeader extends AbstractHeader
      */
     public function getEmail() : ?string
     {
-        return $this->getValue();
+        if (!empty($this->addresses)) {
+            return $this->addresses->getEmail();
+        }
     }
 
     /**
      * Returns the name associated with the first email address to complement
-     * getValue()/getEmail() if one is set, or null if not.
+     * getEmail() if one is set, or null if not.
      *
      * @return string|null The person name.
      */
     public function getPersonName() : ?string
     {
-        if (!empty($this->parts)) {
-            return $this->parts[0]->getName();
+        if (!empty($this->addresses)) {
+            return $this->addresses[0]->getName();
         }
         return null;
     }
