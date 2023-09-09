@@ -48,7 +48,7 @@ class AddressHeader extends AbstractHeader
     /**
      * Overridden to extract all addresses into addresses array.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : self
+    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : AbstractHeader
     {
         parent::parseHeaderValue($consumer, $value);
         foreach ($this->parts as $part) {

@@ -39,7 +39,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
      * Mime-decodes any mime-encoded parts prior to invoking
      * parent::parseHeaderValue.
      */
-    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : self
+    protected function parseHeaderValue(AbstractConsumer $consumer, string $value) : AbstractHeader
     {
         $matchp = '~' . MimeLiteralPart::MIME_PART_PATTERN . '~';
         $rep = \preg_replace_callback($matchp, function($matches) {
