@@ -7,9 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use DateTime;
 use DateTimeImmutable;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Part\DatePart;
 
 /**
  * Reads a DatePart value header in either RFC 2822 or RFC 822 format.
@@ -32,9 +31,9 @@ class DateHeader extends AbstractHeader
      * Convenience method returning the part's DateTime object, or null if the
      * date could not be parsed.
      *
-     * @return \DateTime|null The parsed DateTime object.
+     * @return ?DateTime The parsed DateTime object.
      */
-    public function getDateTime() : ?\DateTime
+    public function getDateTime() : ?DateTime
     {
         if (!empty($this->parts) && $this->parts[0] instanceof DatePart) {
             return $this->parts[0]->getDateTime();
@@ -48,7 +47,7 @@ class DateHeader extends AbstractHeader
      *
      * @return DateTimeImmutable|null The parsed DateTimeImmutable object.
      */
-    public function getDateTimeImmutable() : ?\DateTimeImmutable
+    public function getDateTimeImmutable() : ?DateTimeImmutable
     {
         $dateTime = $this->getDateTime();
         if ($dateTime !== null) {

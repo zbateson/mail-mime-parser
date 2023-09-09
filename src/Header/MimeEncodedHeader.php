@@ -45,10 +45,10 @@ abstract class MimeEncodedHeader extends AbstractHeader
     {
         $value = $this->rawValue;
         $matchp = '~' . MimeLiteralPart::MIME_PART_PATTERN . '~';
-        $value = \preg_replace_callback($matchp, function($matches) {
+        $rep = \preg_replace_callback($matchp, function($matches) {
             return $this->mimeLiteralPartFactory->newInstance($matches[0]);
         }, $value);
-        $this->parts = $consumer($value);
+        $this->allParts = $consumer($value);
         return $this;
     }
 }

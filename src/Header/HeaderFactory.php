@@ -47,7 +47,7 @@ class HeaderFactory
      * @var string[][] maps IHeader types to headers.
      */
     protected $types = [
-        \ZBateson\MailMimeParser\Header\AddressHeader::class => [
+        AddressHeader::class => [
             'from',
             'to',
             'cc',
@@ -62,7 +62,7 @@ class HeaderFactory
             'returnpath',
             'deliveredto',
         ],
-        \ZBateson\MailMimeParser\Header\DateHeader::class => [
+        DateHeader::class => [
             'date',
             'resentdate',
             'deliverydate',
@@ -70,7 +70,7 @@ class HeaderFactory
             'expirydate',
             'replyby',
         ],
-        \ZBateson\MailMimeParser\Header\ParameterHeader::class => [
+        ParameterHeader::class => [
             'contenttype',
             'contentdisposition',
             'receivedspf',
@@ -78,16 +78,16 @@ class HeaderFactory
             'dkimsignature',
             'autocrypt',
         ],
-        \ZBateson\MailMimeParser\Header\SubjectHeader::class => [
+        SubjectHeader::class => [
             'subject',
         ],
-        \ZBateson\MailMimeParser\Header\IdHeader::class => [
+        IdHeader::class => [
             'messageid',
             'contentid',
             'inreplyto',
             'references'
         ],
-        \ZBateson\MailMimeParser\Header\ReceivedHeader::class => [
+        ReceivedHeader::class => [
             'received'
         ]
     ];
