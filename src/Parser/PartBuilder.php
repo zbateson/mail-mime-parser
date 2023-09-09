@@ -123,7 +123,7 @@ class PartBuilder
      */
     public function getStream()
     {
-        return ($this->parent !== null) ?
+        return ($this->messageStream === null && $this->parent !== null) ?
             $this->parent->getStream() :
             $this->messageStream;
     }
@@ -136,7 +136,7 @@ class PartBuilder
      */
     public function getMessageResourceHandle()
     {
-        return ($this->parent !== null) ?
+        return ($this->messageHandle === null && $this->parent !== null) ?
             $this->parent->getMessageResourceHandle() :
             $this->messageHandle;
     }
