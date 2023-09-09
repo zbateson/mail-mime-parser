@@ -28,9 +28,9 @@ A huge thank you to [all my sponsors](https://github.com/sponsors/zbateson). <3
 
 If this project's helped you, please consider [sponsoring me](https://github.com/sponsors/zbateson).
 
-## Php 5.4-7.0 Support Dropped
+## Php 7.1 Support Dropped
 
-As of mail-mime-parser 2.3.0, support for php 5.4, 5.5, 5.6 and 7.0 has been dropped.
+As of mail-mime-parser 3.0.0, support for php 7.1 has been dropped.
 
 ## Removal Notice (since 2.0.0)
 
@@ -60,7 +60,7 @@ For a more complete list of changes, please visit the [2.0 Upgrade Guide](https:
 
 ## Requirements
 
-MailMimeParser requires PHP 7.1 or newer.  Tested on PHP 7.1, 7.2, 7.3, 7.4, 8.0, 8.1 and 8.2.
+MailMimeParser requires PHP 7.2 or newer.  Tested on PHP 7.2, 7.3, 7.4, 8.0, 8.1 and 8.2.
 
 ## Usage
 

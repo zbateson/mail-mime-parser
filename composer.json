@@ -19,7 +19,7 @@
         "docs": "https://mail-mime-parser.org/#usage-guide"
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "guzzlehttp/psr7": "^1.7.0|^2.0",
         "zbateson/mb-wrapper": "^1.0.1",
         "zbateson/stream-decorators": "^1.0.6",
