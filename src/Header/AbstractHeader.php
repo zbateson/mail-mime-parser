@@ -30,9 +30,15 @@ abstract class AbstractHeader implements IHeader
     protected $name;
 
     /**
-     * @var IHeaderPart[] the header's parts (as returned from the consumer)
+     * @var IHeaderPart[] all parts not including CommentParts.
      */
     protected $parts;
+
+    /**
+     * @var IHeaderPart[] the header's parts (as returned from the consumer),
+     *      including commentParts
+     */
+    protected $allParts;
 
     /**
      * @var string the raw value
@@ -53,7 +59,7 @@ abstract class AbstractHeader implements IHeader
         $this->rawValue = $value;
 
         $consumer = $this->getConsumer($consumerService);
-        $this->setParseHeaderValue($consumer);
+        $this->parseHeaderValue($consumer, $this->rawValue);
     }
 
     /**
@@ -72,7 +78,10 @@ abstract class AbstractHeader implements IHeader
      */
     protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
-        $this->parts = $consumer($this->rawValue);
+        $this->allParts = $consumer($this->rawValue);
+        $this->parts = \array_filter($this->parts, function ($p) {
+            return !($p instanceof CommentPart);
+        });
         return $this;
     }
 
@@ -84,14 +93,18 @@ abstract class AbstractHeader implements IHeader
         return $this->parts;
     }
 
+    /**
+     * @return IHeaderPart[]
+     */
+    public function getAllParts() : array
+    {
+        return $this->allParts;
+    }
+
     public function getValue() : ?string
     {
         if (!empty($this->parts)) {
-            foreach ($this->parts as $p) {
-                if (!($p instanceof CommentPart)) {
-                    return $p->getValue();
-                }
-            }
+            return $this->parts[0]->getValue();
         }
         return null;
     }

@@ -21,11 +21,22 @@ interface IHeader
 {
     /**
      * Returns an array of IHeaderPart objects the header's value has been
-     * parsed into.
+     * parsed into, excluding any
+     * {@see \ZBateson\MailMimeParser\Header\Part\CommentPart}s.
+     *
+     * To retrieve all parts /including/ CommentParts, {@see getAllParts()}.
      *
      * @return IHeaderPart[] The array of parts.
      */
     public function getParts() : array;
+
+    /**
+     * Returns an array of all IHeaderPart objects the header's value has been
+     * parsed into, including any CommentParts.
+     *
+     * @return IHeaderPart[] The array of parts.
+     */
+    public function getAllParts() : array;
 
     /**
      * Returns the parsed 'value' of the header.

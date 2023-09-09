@@ -109,7 +109,7 @@ class ReceivedHeader extends ParameterHeader
     protected function setParseHeaderValue(AbstractConsumer $consumer)
     {
         parent::setParseHeaderValue($consumer);
-        foreach ($this->parts as $part) {
+        foreach ($this->allParts as $part) {
             if ($part instanceof CommentPart) {
                 $this->comments[] = $part->getComment();
             } elseif ($part instanceof DatePart) {
