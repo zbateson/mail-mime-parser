@@ -39,7 +39,7 @@ class MimePart extends MultiPart implements IMimePart
             $streamContainer,
             $partChildrenContainer
         );
-        $di = ServiceLocator::getSingleton();
+        $di = ServiceLocator::getGlobalInstance();
         $this->headerContainer = $headerContainer ?? new PartHeaderContainer($di[HeaderFactory::class]);
     }
 

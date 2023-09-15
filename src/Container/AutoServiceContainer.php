@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Container;
 use ZBateson\MailMimeParser\ServiceLocator;
 use ZBateson\MailMimeParser\Container\IService;
 use Pimple\Exception\UnknownIdentifierException;
+use Pimple\Exception\ExpectedInvokableException;
 use ReflectionClass;
 use ReflectionParameter;
 
@@ -23,6 +24,8 @@ use ReflectionParameter;
  */
 class AutoServiceContainer extends ServiceLocator
 {
+    protected $globalExtensions = [];
+
     /**
      * Looks up the type of the passed ReflectionParameter and returns it as a
      * fully qualified class name as expected by the class's auto registration.
@@ -44,12 +47,12 @@ class AutoServiceContainer extends ServiceLocator
     }
 
     /**
-     * Returns a factory function for the passed class.
+     * Creates a factory function for the passed class.
      *
      * The returned factory method looks up arguments and uses pimple to get an
      * instance of those types to pass them during construction.
      */
-    protected function autoRegister($class) : ?string
+    protected function autoRegister($class) : void
     {
         $ref = new ReflectionClass($class);
         $fn = function($c) use ($ref) {
@@ -66,15 +69,25 @@ class AutoServiceContainer extends ServiceLocator
                     $ap[] = 0;
                 }
             }
-            $ret = $ref->newInstanceArgs($ap);
-            return $ret;
+            return $ref->newInstanceArgs($ap);
         };
+        foreach ($this->globalExtensions as $ext) {
+            $fn = function ($c) use ($ext, $fn) {
+                return $ext($fn($c), $c);
+            };
+        }
         if ($ref->isSubclassOf(IService::class)) {
             $this[$class] = $fn;
         } else {
             $this[$class] = $this->factory($fn);
         }
-        return null;
+    }
+
+    protected function applyGlobalExtensions($ob)
+    {
+        foreach ($this->globalExtensions as $ext) {
+            $ext($ob, $this);
+        }
     }
 
     /**
@@ -125,5 +138,13 @@ class AutoServiceContainer extends ServiceLocator
     {
         $this->offsetExists($id);
         return parent::extend($id, $callable);
+    }
+
+    public function extendAll($callable)
+    {
+        if (!\is_object($callable) || !\method_exists($callable, '__invoke')) {
+            throw new ExpectedInvokableException('Extension service definition is not a Closure or invokable object.');
+        }
+        $this->globalExtensions[] = $callable;
     }
 }

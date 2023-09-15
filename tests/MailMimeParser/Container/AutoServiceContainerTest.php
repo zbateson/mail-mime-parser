@@ -4,13 +4,15 @@ namespace ZBateson\MailMimeParser\Container;
 
 use PHPUnit\Framework\TestCase;
 use Pimple\Exception\UnknownIdentifierException;
+use ZBateson\MailMimeParser\ServiceLocator;
 
 /**
  * Description of AutoServiceContainerTest
  *
+ * @group AutoServiceContainer
  * @group Container
- * @group Base
- * @covers ZBateson\MailMimeParser\AutoServiceContainer
+ * @covers ZBateson\MailMimeParser\ServiceLocator
+ * @covers ZBateson\MailMimeParser\Container\AutoServiceContainer
  * @author Zaahid Bateson
  */
 class AutoServiceContainerTest extends TestCase
@@ -20,7 +22,7 @@ class AutoServiceContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->container = new AutoServiceContainer();
+        $this->container = ServiceLocator::newInstance();
     }
 
     public function testSetAndGet() : void

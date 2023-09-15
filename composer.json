@@ -23,13 +23,15 @@
         "guzzlehttp/psr7": "^1.9|^2.0",
         "zbateson/mb-wrapper": "^1.0.1",
         "zbateson/stream-decorators": "^1.0.6",
-        "pimple/pimple": "^3.0"
+        "pimple/pimple": "^3.0",
+        "psr/log": "^1|^2|^3"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.0",
         "phpunit/phpunit": "<10",
         "friendsofphp/php-cs-fixer": "*",
-        "phpstan/phpstan": "*"
+        "phpstan/phpstan": "*",
+        "monolog/monolog": "^2|^3"
     },
     "suggest": {
         "ext-mbstring": "For best support/performance",

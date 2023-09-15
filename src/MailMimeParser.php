@@ -10,9 +10,9 @@ namespace ZBateson\MailMimeParser;
 use GuzzleHttp\Psr7\CachingStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 use Pimple\ServiceProviderInterface;
 use ZBateson\MailMimeParser\Parser\MessageParserService;
-use ZBateson\MailMimeParser\Container\ChildServiceContainer;
 
 /**
  * Parses a MIME message into an {@see IMessage} object.
@@ -46,7 +46,7 @@ class MailMimeParser
     /**
      * @var ServiceLocator The instance's dependency injection container.
      */
-    protected $serviceLocator = null;
+    protected $container = null;
 
     /**
      * @var MessageParserService for parsing messages
@@ -54,32 +54,53 @@ class MailMimeParser
     protected $messageParser;
 
     /**
-     * @param ServiceProviderInterface[] $extensions
+     * Registers a
+     *
+     * @param ServiceProviderInterface[] $serviceProviders
      */
-    public static function registerGlobalServiceProviders(array $extensions)
+    public static function registerGlobalServiceProviders(array $serviceProviders) : void
     {
-        $container = ServiceLocator::getSingleton();
-        foreach ($extensions as $ext) {
-            $container->register($ext);
-        }
+        ServiceLocator::setGlobalServiceProviders($serviceProviders);
     }
 
     /**
-     * Initializes the dependency container if not already initialized.
-     *
-     * To configure custom {@see https://pimple.symfony.com/ \Pimple\ServiceProviderInterface}
-     * objects, call {@see MailMimeParser::configureDependencyContainer()}
-     * before creating a MailMimeParser instance.
-     *
-     * @param ServiceProviderInterface[] $extensions
+     * Registers the provided logger globally
      */
-    public function __construct(?array $extensions = null, ?MessageParserService $messageParser = null)
+    public static function setGlobalLogger(LoggerInterface $logger) : void
     {
-        $this->serviceLocator = ServiceLocator::getSingleton();
-        if ($extensions !== null) {
-            $this->serviceLocator = new ChildServiceContainer($this->serviceLocator, $extensions);
+        ServiceLocator::setGlobalLogger($logger);
+    }
+
+    /**
+     * Provide custom ServiceProviderInterface objects to customize dependency
+     * injection for email parsing, or provide a custom logger for the new
+     * instance only.
+     *
+     * Note 1: providing an array of service providers creates a dependency
+     * injection container <i>without</i> using any previously registered global
+     * service providers.
+     *
+     * Note 2: this only affects instances created through this instance of the
+     * MailMimeParser, or the container itself.  Calling 'new MimePart()'
+     * directly for instance, would use the global service locator to setup any
+     * dependencies MimePart needs.  This applies to a provided $logger too --
+     * it would only affect instances of objects created through the provided
+     * MailMimeParser.
+     *
+     * @see MailMimeParser::registerGlobalServiceProviders() to register service
+     *      providers globally
+     * @see MailMimeParser::setGlobalLogger() to set a global logger
+     * @param ?ServiceProviderInterface[] $serviceProviders
+     * @param ?LoggerInterface $logger
+     */
+    public function __construct(?array $serviceProviders = null, ?LoggerInterface $logger = null)
+    {
+        if ($serviceProviders !== null || $logger !== null) {
+            $this->container = ServiceLocator::newInstance($logger, $serviceProviders);
+        } else {
+            $this->container = ServiceLocator::getGlobalInstance();
         }
-        $this->messageParser = $messageParser ?? $this->serviceLocator[MessageParserService::class];
+        $this->messageParser = $this->container[MessageParserService::class];
     }
 
     /**
@@ -98,9 +119,9 @@ class MailMimeParser
      *        mime message.
      * @param bool $attached pass true to have it attached to the returned
      *        IMessage and destroyed with it.
-     * @return \ZBateson\MailMimeParser\IMessage
+     * @return IMessage
      */
-    public function parse($resource, $attached)
+    public function parse($resource, $attached) : IMessage
     {
         $stream = Utils::streamFor(
             $resource,

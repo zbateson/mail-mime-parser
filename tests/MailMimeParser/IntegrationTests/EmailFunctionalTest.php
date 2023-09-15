@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\IMimePart;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Processor\IntrospectionProcessor;
 
 /**
  * Description of EmailFunctionalTest
