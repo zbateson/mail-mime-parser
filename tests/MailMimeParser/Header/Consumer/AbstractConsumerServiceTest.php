@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Part\Token;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Description of AbstractConsumerServiceTest
@@ -22,7 +23,10 @@ class AbstractConsumerServiceTest extends TestCase
     {
         $stub = $this->getMockBuilder('\\' . AbstractConsumerService::class)
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
-            ->disableOriginalConstructor()
+            ->setConstructorArgs([
+                $this->getMockBuilder(ConsumerService::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(HeaderPartFactory::class)->disableOriginalConstructor()->getMock(),
+            ])
             ->getMockForAbstractClass();
 
         $stub->method('isEndToken')

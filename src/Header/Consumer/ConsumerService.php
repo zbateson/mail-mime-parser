@@ -13,6 +13,8 @@ use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerServ
 use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Simple service provider for consumer singletons.
@@ -21,6 +23,11 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  */
 class ConsumerService implements IService
 {
+    /**
+     * @var LoggerInterface logger
+     */
+    protected $logger;
+
     /**
      * @var \ZBateson\MailMimeParser\Header\Part\HeaderPartFactory the
      * HeaderPartFactory instance used to create HeaderParts.
@@ -47,10 +54,14 @@ class ConsumerService implements IService
         'date' => null
     ];
 
-    public function __construct(HeaderPartFactory $partFactory, MimeLiteralPartFactory $mimeLiteralPartFactory)
-    {
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        MimeLiteralPartFactory $mimeLiteralPartFactory,
+        ?LoggerInterface $logger = null
+    ) {
         $this->partFactory = $partFactory;
         $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -60,7 +71,7 @@ class ConsumerService implements IService
      */
     public function getAddressBaseConsumer()
     {
-        return AddressBaseConsumerService::getInstance($this, $this->partFactory);
+        return AddressBaseConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -70,7 +81,7 @@ class ConsumerService implements IService
      */
     public function getAddressConsumer()
     {
-        return AddressConsumerService::getInstance($this, $this->partFactory);
+        return AddressConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -80,7 +91,7 @@ class ConsumerService implements IService
      */
     public function getAddressGroupConsumer()
     {
-        return AddressGroupConsumerService::getInstance($this, $this->partFactory);
+        return AddressGroupConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -90,7 +101,7 @@ class ConsumerService implements IService
      */
     public function getAddressEmailConsumer()
     {
-        return AddressEmailConsumerService::getInstance($this, $this->partFactory);
+        return AddressEmailConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -100,7 +111,7 @@ class ConsumerService implements IService
      */
     public function getCommentConsumer()
     {
-        return CommentConsumerService::getInstance($this, $this->partFactory);
+        return CommentConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -110,7 +121,7 @@ class ConsumerService implements IService
      */
     public function getGenericConsumer()
     {
-        return GenericConsumerService::getInstance($this, $this->mimeLiteralPartFactory);
+        return GenericConsumerService::getInstance($this, $this->mimeLiteralPartFactory, $this->logger);
     }
 
     /**
@@ -120,7 +131,7 @@ class ConsumerService implements IService
      */
     public function getSubjectConsumer()
     {
-        return SubjectConsumerService::getInstance($this, $this->mimeLiteralPartFactory);
+        return SubjectConsumerService::getInstance($this, $this->mimeLiteralPartFactory, $this->logger);
     }
 
     /**
@@ -130,7 +141,7 @@ class ConsumerService implements IService
      */
     public function getQuotedStringConsumer()
     {
-        return QuotedStringConsumerService::getInstance($this, $this->partFactory);
+        return QuotedStringConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -140,7 +151,7 @@ class ConsumerService implements IService
      */
     public function getDateConsumer()
     {
-        return DateConsumerService::getInstance($this, $this->partFactory);
+        return DateConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -150,7 +161,7 @@ class ConsumerService implements IService
      */
     public function getParameterConsumer()
     {
-        return ParameterConsumerService::getInstance($this, $this->partFactory);
+        return ParameterConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -164,14 +175,21 @@ class ConsumerService implements IService
         if (empty($this->receivedConsumers[$partName])) {
             $consumer = null;
             if ($partName === 'from' || $partName === 'by') {
-                $consumer = new DomainConsumerService($this, $this->partFactory, $partName);
+                $this->logger->debug("Generating DomainConsumerService for partName ${partName}");
+                $consumer = new DomainConsumerService($this, $this->partFactory, $partName, $this->logger);
             } elseif ($partName === 'date') {
-                $consumer = new ReceivedDateConsumerService($this, $this->partFactory);
+                $this->logger->debug("Generating ReceivedDateConsumerService for partName ${partName}");
+                $consumer = new ReceivedDateConsumerService($this, $this->partFactory, $this->logger);
             } else {
-                $consumer = new GenericReceivedConsumerService($this, $this->partFactory, $partName);
+                $this->logger->debug("Generating GenericReceivedConsumerService for partName ${partName}");
+                $consumer = new GenericReceivedConsumerService($this, $this->partFactory, $partName, $this->logger);
             }
             $this->receivedConsumers[$partName] = $consumer;
         }
+        $this->logger->debug('Using ${cls} for partName ${name}', [
+            'cls' => get_class($this->receivedConsumers[$partName]),
+            'name' => $partName
+        ]);
         return $this->receivedConsumers[$partName];
     }
 
@@ -182,7 +200,7 @@ class ConsumerService implements IService
      */
     public function getReceivedConsumer()
     {
-        return ReceivedConsumerService::getInstance($this, $this->partFactory);
+        return ReceivedConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -192,7 +210,7 @@ class ConsumerService implements IService
      */
     public function getIdConsumer()
     {
-        return IdConsumerService::getInstance($this, $this->partFactory);
+        return IdConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 
     /**
@@ -202,6 +220,6 @@ class ConsumerService implements IService
      */
     public function getIdBaseConsumer()
     {
-        return IdBaseConsumerService::getInstance($this, $this->partFactory);
+        return IdBaseConsumerService::getInstance($this, $this->partFactory, $this->logger);
     }
 }

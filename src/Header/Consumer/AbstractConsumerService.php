@@ -14,6 +14,8 @@ use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Abstract base class for all header token consumers.
@@ -26,6 +28,11 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 abstract class AbstractConsumerService implements IService
 {
     /**
+     * @var LoggerInterface logger
+     */
+    protected $logger;
+
+    /**
      * @var ConsumerService used to get consumer instances for sub-consumers.
      */
     protected $consumerService;
@@ -35,21 +42,28 @@ abstract class AbstractConsumerService implements IService
      */
     protected $partFactory;
 
-    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
+    /**
+     * @var string the generated token split pattern on first run, so it doesn't
+     *      need to be regenerated every time.
+     */
+    private $tokenSplitPattern;
+
+    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory, ?LoggerInterface $logger = null)
     {
         $this->consumerService = $consumerService;
         $this->partFactory = $partFactory;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
      * Returns the singleton instance for the class type it was called on.
      */
-    public static function getInstance(ConsumerService $consumerService, HeaderPartFactory $partFactory) : AbstractConsumerService
+    public static function getInstance(ConsumerService $consumerService, HeaderPartFactory $partFactory, LoggerInterface $logger) : AbstractConsumerService
     {
         static $instances = [];
         $class = static::class;
         if (!isset($instances[$class])) {
-            $instances[$class] = new static($consumerService, $partFactory);
+            $instances[$class] = new static($consumerService, $partFactory, $logger);
         }
         return $instances[$class];
     }
@@ -63,8 +77,14 @@ abstract class AbstractConsumerService implements IService
      */
     public function __invoke(string $value) : array
     {
+        $this->logger->info('Starting ${class} for "${value}"', [ 'class' => static::class, 'value' => $value ]);
         if ($value !== '') {
-            return $this->parseRawValue($value);
+            $parts = $this->parseRawValue($value);
+            $this->logger->info(
+                'Ending ${class} for "${value}": parsed into ${cnt} header part objects',
+                [ 'class' => static::class, 'value' => $value, 'cnt' => count($parts) ]
+            );
+            return $parts;
         }
         return [];
     }
@@ -173,12 +193,19 @@ abstract class AbstractConsumerService implements IService
      * not contain any empty parts and will contain the markers.
      *
      * @param string $rawValue the raw string
-     * @return array the array of tokens
+     * @return string[] the array of tokens
      */
     protected function splitRawValue($rawValue) : array
     {
+        if ($this->tokenSplitPattern === null) {
+            $this->tokenSplitPattern = $this->getTokenSplitPattern();
+            $this->logger->debug(
+                'Configuring ${class} with token split pattern: ${pattern}',
+                [ 'class' => static::class, 'pattern' => $this->tokenSplitPattern]
+            );
+        }
         return \preg_split(
-            $this->getTokenSplitPattern(),
+            $this->tokenSplitPattern,
             $rawValue,
             -1,
             PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
@@ -222,6 +249,7 @@ abstract class AbstractConsumerService implements IService
         } elseif (\preg_match('/^\s+$/', $token)) {
             return $this->partFactory->newToken(' ');
         }
+        // can be overridden with custom PartFactory
         return $this->partFactory->newInstance($token);
     }
 
@@ -233,6 +261,7 @@ abstract class AbstractConsumerService implements IService
      * If no sub-consumer is responsible for the current token, calls
      * {@see AbstractConsumer::getPartForToken()} and returns it in an array.
      *
+     * @param Iterator<string> $tokens
      * @return IHeaderPart[]
      */
     protected function getConsumerTokenParts(Iterator $tokens) : array
@@ -241,6 +270,10 @@ abstract class AbstractConsumerService implements IService
         $subConsumers = $this->getSubConsumers();
         foreach ($subConsumers as $consumer) {
             if ($consumer->isStartToken($token)) {
+                $this->logger->debug(
+                    'Token: "${value}" in ${class} starting sub-consumer ${consumer}',
+                    [ 'value' => $token, 'class' => static::class, 'consumer' => get_class($consumer) ]
+                );
                 $this->advanceToNextToken($tokens, true);
                 return $consumer->parseTokensIntoParts($tokens);
             }
@@ -255,7 +288,7 @@ abstract class AbstractConsumerService implements IService
      * consumer's {@see AbstractConsumer::parseTokensIntoParts()} method is
      * called.
      *
-     * @param Iterator $tokens The token iterator.
+     * @param Iterator<string> $tokens The token iterator.
      * @return IHeaderPart[]
      */
     protected function getTokenParts(Iterator $tokens) : array
@@ -282,7 +315,9 @@ abstract class AbstractConsumerService implements IService
      */
     protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumerService
     {
-        if (($isStartToken) || ($tokens->valid() && !$this->isEndToken($tokens->current()))) {
+        $checkEndToken = (!$isStartToken && $tokens->valid());
+        $isEndToken = ($checkEndToken && $this->isEndToken($tokens->current()));
+        if (($isStartToken) || ($checkEndToken && !$isEndToken)) {
             $tokens->next();
         }
         return $this;
@@ -303,13 +338,14 @@ abstract class AbstractConsumerService implements IService
      * the array is passed to AbstractConsumer::processParts for any final
      * processing.
      *
-     * @param Iterator $tokens An iterator over a string of tokens
+     * @param Iterator<string> $tokens An iterator over a string of tokens
      * @return IHeaderPart[] An array of parsed parts
      */
     protected function parseTokensIntoParts(Iterator $tokens) : array
     {
         $parts = [];
         while ($tokens->valid() && !$this->isEndToken($tokens->current())) {
+            $this->logger->debug('Parsing token: ${token} in consumer: ${consumer}');
             $parts = \array_merge($parts, $this->getTokenParts($tokens));
             $this->advanceToNextToken($tokens, false);
         }
