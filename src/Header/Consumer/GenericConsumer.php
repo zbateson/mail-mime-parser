@@ -104,7 +104,6 @@ class GenericConsumer extends AbstractConsumer
      *
      * @param HeaderPart[] $parts
      * @param HeaderPart[] $retParts
-     * @param HeaderPart $spacePart
      */
     private function addSpaces(array $parts, array &$retParts, int $curIndex, ?HeaderPart &$spacePart = null) : self
     {

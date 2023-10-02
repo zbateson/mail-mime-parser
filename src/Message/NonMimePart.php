@@ -26,7 +26,6 @@ abstract class NonMimePart extends MessagePart
     /**
      * Returns text/plain
      *
-     * @return string
      */
     public function getContentType(string $default = 'text/plain') : ?string
     {
@@ -36,7 +35,6 @@ abstract class NonMimePart extends MessagePart
     /**
      * Returns ISO-8859-1
      *
-     * @return string
      */
     public function getCharset() : ?string
     {
@@ -46,7 +44,6 @@ abstract class NonMimePart extends MessagePart
     /**
      * Returns 'inline'.
      *
-     * @return string
      */
     public function getContentDisposition(?string $default = 'inline') : ?string
     {
@@ -56,7 +53,6 @@ abstract class NonMimePart extends MessagePart
     /**
      * Returns '7bit'.
      *
-     * @return string
      */
     public function getContentTransferEncoding(?string $default = '7bit') : ?string
     {

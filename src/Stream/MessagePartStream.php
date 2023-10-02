@@ -62,7 +62,7 @@ class MessagePartStream implements SplObserver, StreamInterface
     {
         if ($this->appendStream !== null) {
             // unset forces recreation in StreamDecoratorTrait with a call to __get
-            unset($this->stream);
+            $this->stream = null;
             $this->appendStream = null;
         }
     }

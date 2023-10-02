@@ -53,7 +53,6 @@ class DatePart extends LiteralPart
     /**
      * Returns a DateTime object or null if it can't be parsed.
      *
-     * @return DateTime
      */
     public function getDateTime() : ?\DateTime
     {
