@@ -93,7 +93,6 @@ class MailMimeParser
      * {@see MailMimeParser::configureDependencyContainer}, which instantiates a
      * new {@see Container} on every call.
      *
-     * @param Container $di
      */
     public static function setDependencyContainer(?Container $di = null)
     {

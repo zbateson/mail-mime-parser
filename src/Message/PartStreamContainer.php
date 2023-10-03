@@ -131,7 +131,6 @@ class PartStreamContainer
      * setContentStream can be called with 'null' to indicate the IMessagePart
      * does not contain any content.
      *
-     * @param StreamInterface $contentStream
      */
     public function setContentStream(?StreamInterface $contentStream = null)
     {
@@ -144,7 +143,6 @@ class PartStreamContainer
      * Returns true if the attached stream filter used for decoding the content
      * on the current handle is different from the one passed as an argument.
      *
-     * @param string $transferEncoding
      */
     private function isTransferEncodingFilterChanged(?string $transferEncoding) : bool
     {
@@ -167,7 +165,6 @@ class PartStreamContainer
      * Attaches a decoding filter to the attached content handle, for the passed
      * $transferEncoding.
      *
-     * @param string $transferEncoding
      */
     protected function attachTransferEncodingFilter(?string $transferEncoding) : self
     {
@@ -284,8 +281,6 @@ class PartStreamContainer
      * Checks what transfer-encoding decoder stream is attached on the
      * underlying stream, and resets it if the requested arguments differ.
      *
-     * @param string $transferEncoding
-     * @return StreamInterface
      */
     public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface
     {

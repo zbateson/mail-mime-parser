@@ -60,8 +60,6 @@ class DomainConsumer extends GenericReceivedConsumer
      * address.  Returns true if the expression matched, and either hostname or
      * address were found.
      *
-     * @param string $hostname
-     * @param string $address
      */
     private function matchHostPart(string $value, ?string &$hostname, ?string &$address) : bool
     {
