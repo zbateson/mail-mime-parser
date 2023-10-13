@@ -13,6 +13,9 @@ use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\ILogger;
 
 /**
+ * Scans objects as they're created, checking if they're ILoggers, and calling
+ * setLogger on them.
+ *
  * @author Zaahid Bateson
  */
 class LoggerServiceProvider implements ServiceProviderInterface
