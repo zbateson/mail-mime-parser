@@ -57,36 +57,36 @@ interface IErrorBag
     public function getErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array;
 
     /**
-     * Returns true if there are errors on error bag children of this object at
-     * or above the passed PSR log level (defaulting to LogLevel::ERROR).  Note
-     * that this will stop after finding the first error and return, so may be
-     * slightly more performant if an error actually exists over calling
-     * getAllChildErrors if only interested in whether an error exists.
+     * Returns true if there are errors on this object, or any IErrorBag child
+     * of this object at or above the passed PSR log level (defaulting to
+     * LogLevel::ERROR).  Note that this will stop after finding the first error
+     * and return, so may be slightly more performant if an error actually
+     * exists over calling getAllErrors if only interested in whether an error
+     * exists.
      *
-     * Errors on the current object are not considered.  Care should be taken
-     * using this if the intention is to only 'preview' a message without
-     * parsing it entirely, since this will cause the whole message to be
-     * parsed as it traverses children, and could be slow on messages with large
-     * attachments, etc...
+     * Care should be taken using this if the intention is to only 'preview' a
+     * message without parsing it entirely, since this will cause the whole
+     * message to be parsed as it traverses children, and could be slow on
+     * messages with large attachments, etc...
      *
-     * If $validate is true, additional validation may be performed on children
-     * to check for errors.
+     * If $validate is true, additional validation may be performed to check for
+     * errors.
      *
      * @param bool $validate
      * @param string $minPsrLevel
      * @return bool
      */
-    public function hasChildErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : bool;
+    public function hasAnyErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : bool;
 
     /**
-     * Returns any errors on error bag children of this object at or above the
-     * passed PSR log level (defaulting to LogLevel::ERROR).
+     * Returns any errors on this object, and all IErrorBag children of this
+     * object at or above the passed PSR log level (defaulting to
+     * LogLevel::ERROR).
      *
-     * Errors on the current object are not included.  Care should be taken
-     * using this if the intention is to only 'preview' a message without
-     * parsing it entirely, since this will cause the whole message to be
-     * parsed as it traverses children, and could be slow on messages with large
-     * attachments, etc...
+     * Care should be taken using this if the intention is to only 'preview' a
+     * message without parsing it entirely, since this will cause the whole
+     * message to be parsed as it traverses children, and could be slow on
+     * messages with large attachments, etc...
      *
      * If $validate is true, additional validation may be performed on children
      * to check for errors.
@@ -95,5 +95,5 @@ interface IErrorBag
      * @param string $minPsrLevel
      * @return array
      */
-    public function getAllChildErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array;
+    public function getAllErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array;
 }

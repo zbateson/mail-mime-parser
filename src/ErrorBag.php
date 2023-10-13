@@ -68,23 +68,27 @@ abstract class ErrorBag extends Logger implements IErrorBag
 
     public function hasErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : bool
     {
-        return (count($this->getLocalErrors($validate, $minPsrLevel)) > 0);
+        return (count($this->getErrors($validate, $minPsrLevel)) > 0);
     }
 
-    public function getAllChildErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array
+    public function getAllErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array
     {
-        return \array_merge(...\array_values(\array_map(
+        $arr = \array_values(\array_map(
             function ($e) use ($validate, $minPsrLevel) {
-                return $e->getErrors($validate, $minPsrLevel);
+                return $e->getAllErrors($validate, $minPsrLevel) ?? [];
             },
             $this->getErrorBagChildren()
-        )));
+        )) ?? [];
+        return \array_merge($this->getErrors($validate, $minPsrLevel), ...$arr);
     }
 
-    public function hasChildErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : bool
+    public function hasAnyErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : bool
     {
+        if ($this->hasErrors($validate, $minPsrLevel)) {
+            return true;
+        }
         foreach ($this->getErrorBagChildren() as $ch) {
-            if ($ch->hasErrors($validate, $minPsrLevel) || $ch->hasChildErrors($validate, $minPsrLevel)) {
+            if ($ch->hasAnyErrors($validate, $minPsrLevel)) {
                 return true;
             }
         }
