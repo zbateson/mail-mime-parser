@@ -83,13 +83,6 @@ class AutoServiceContainer extends ServiceLocator
         }
     }
 
-    protected function applyGlobalExtensions($ob)
-    {
-        foreach ($this->globalExtensions as $ext) {
-            $ext($ob, $this);
-        }
-    }
-
     /**
      * Overridden to see if the class can be auto-registered and return true if
      * it can.
@@ -140,7 +133,7 @@ class AutoServiceContainer extends ServiceLocator
         return parent::extend($id, $callable);
     }
 
-    public function extendAll($callable)
+    public function addGlobalExtension($callable)
     {
         if (!\is_object($callable) || !\method_exists($callable, '__invoke')) {
             throw new ExpectedInvokableException('Extension service definition is not a Closure or invokable object.');

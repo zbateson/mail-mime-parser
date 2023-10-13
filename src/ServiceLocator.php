@@ -12,7 +12,13 @@ use Psr\Log\NullLogger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use ZBateson\MailMimeParser\Container\AutoServiceContainer;
+use ZBateson\MailMimeParser\Container\LoggerServiceProvider;
 
+/**
+ * 
+ *
+ * @author Zaahid Bateson
+ */
 class ServiceLocator extends Container
 {
     /**
@@ -33,9 +39,7 @@ class ServiceLocator extends Container
     protected function __construct(?LoggerInterface $logger = null, ?array $serviceProviders = null)
     {
         parent::__construct([ LoggerInterface::class => $logger ?? new NullLogger() ]);
-        if (!empty($serviceProviders)) {
-            $this->registerAll($serviceProviders);
-        }
+        $this->registerAll($serviceProviders);
     }
 
     /**
@@ -100,11 +104,12 @@ class ServiceLocator extends Container
      * Convenience method to register an array of ServiceProviderInterface
      * extensions (calls $this->register() on each one).
      *
-     * @param ServiceProviderInterface[] $exts
+     * @param ServiceProviderInterface[]|null $exts
      */
-    private function registerAll(array $exts)
+    private function registerAll(?array $exts)
     {
-        foreach ($exts as $e) {
+        $a = array_merge($exts ?? [], [ new LoggerServiceProvider() ]);
+        foreach ($a as $e) {
             $this->register($e);
         }
     }
