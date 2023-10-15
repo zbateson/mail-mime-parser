@@ -10,28 +10,45 @@ namespace ZBateson\MailMimeParser;
 use Psr\Log\LogLevel;
 
 /**
- *
+ * Provides a top-level abstract implementation of IErrorBag.
  *
  * @author Zaahid Bateson
  */
 abstract class ErrorBag extends Logger implements IErrorBag
 {
+    /**
+     * @var Error[] array of Error objects belonging to this object.
+     */
     private $errors = [];
+
+    /**
+     * @var bool true once the object has been validated.
+     */
     private $validated = false;
 
+    /**
+     * Returns the class name.  Override to identify objects in logs.
+     *
+     * @return string
+     */
     public function getErrorLoggingContextName() : string
     {
         return static::class;
     }
 
     /**
+     * Return any children IErrorBag objects.
      *
-     * @return ErrorBag[]
+     * @return IErrorBag[]
      */
     abstract protected function getErrorBagChildren() : array;
 
     /**
      * Perform any extra validation and call 'addError'.
+     *
+     * getErrors and getAllErrors call validate() if their $validate parameter
+     * is true.  validate() is only called once on an object with getErrors
+     * getAllErrors.
      */
     protected function validate() : void
     {

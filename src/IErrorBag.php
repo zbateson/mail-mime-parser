@@ -10,7 +10,8 @@ namespace ZBateson\MailMimeParser;
 use Psr\Log\LogLevel;
 
 /**
- * Represents 
+ * Defines an object that may contain a set of errors, and optionally perform
+ * additional validation.
  *
  * @author Zaahid Bateson
  */
