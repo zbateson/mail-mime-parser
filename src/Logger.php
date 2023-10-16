@@ -11,7 +11,8 @@ use Psr\Log\NullLogger;
 use Psr\Log\LoggerInterface;
 
 /**
- *
+ * Default ILogger implementation also defines a protected 'getLogger' function
+ * for sub-classes.
  *
  * @author Zaahid Bateson
  */
@@ -25,6 +26,11 @@ class Logger implements ILogger
         return $this;
     }
 
+    /**
+     * Returns the set LoggerInterface, or a Psr\Log\NullLogger if none set.
+     *
+     * @return LoggerInterface
+     */
     protected function getLogger() : LoggerInterface
     {
         return $this->logger ?? new NullLogger();
