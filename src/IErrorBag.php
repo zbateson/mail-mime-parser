@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser;
 
 use Psr\Log\LogLevel;
+use Throwable;
 
 /**
  * Defines an object that may contain a set of errors, and optionally perform
@@ -26,12 +27,12 @@ interface IErrorBag
     public function getErrorLoggingContextName() : string;
 
     /**
-     * Adds the passed $error as an error on this object.
+     * Creates and adds an Error object to this ErrorBag.
      *
      * @param Error $error
      * @return self
      */
-    public function addError(Error $error) : IErrorBag;
+    public function addError(string $message, string $psrLogLevel, ?Throwable $exception = null) : IErrorBag;
 
     /**
      * Returns true if this object has an error in its error bag at or above

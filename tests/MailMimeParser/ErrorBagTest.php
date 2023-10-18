@@ -55,27 +55,22 @@ class ErrorBagTest extends TestCase
         $ob = $this->newErrorBagStub();
         $mb = $this->getMockBuilder('\\' . Error::class)
             ->disableOriginalConstructor();
-        $errors = [
-            $mb->getMock(),
-            $mb->getMock()
-        ];
-
-        $errors[0]->expects($this->once())->method('getPsrLevel')->willReturn(LogLevel::ERROR);
-        $errors[0]->expects($this->once())->method('getMessage')->willReturn('test1');
-        $errors[1]->expects($this->once())->method('getPsrLevel')->willReturn(LogLevel::ERROR);
-        $errors[1]->expects($this->once())->method('getMessage')->willReturn('test2');
 
         $this->assertFalse($ob->hasErrors());
         $this->assertSame([], $ob->getErrors());
 
-        $this->assertSame($ob, $ob->addError($errors[0]));
-        $this->assertSame($ob, $ob->addError($errors[1]));
-
-        $errors[0]->expects($this->exactly(2))->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::ERROR)->willReturn(true);
-        $errors[1]->expects($this->exactly(2))->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::ERROR)->willReturn(true);
+        $this->assertSame($ob, $ob->addError('test1', LogLevel::ERROR));
+        $this->assertSame($ob, $ob->addError('test2', LogLevel::ERROR));
 
         $this->assertTrue($ob->hasErrors());
-        $this->assertSame($errors, $ob->getErrors());
+        $errors = $ob->getErrors();
+        $this->assertCount(2, $errors);
+        $this->assertSame('test1', $errors[0]->getMessage());
+        $this->assertSame('test2', $errors[1]->getMessage());
+        $this->assertSame($ob, $errors[0]->getObject());
+        $this->assertSame($ob, $errors[1]->getObject());
+        $this->assertSame(LogLevel::ERROR, $errors[0]->getPsrLevel());
+        $this->assertSame(LogLevel::ERROR, $errors[1]->getPsrLevel());
     }
 
     public function testGetHasFilteredErrors() : void
@@ -83,22 +78,30 @@ class ErrorBagTest extends TestCase
         $ob = $this->newErrorBagStub();
         $mb = $this->getMockBuilder('\\' . Error::class)
             ->disableOriginalConstructor();
-        $errors = [
-            $mb->getMock(),
-            $mb->getMock()
-        ];
+        
+        $this->assertSame($ob, $ob->addError('test1', LogLevel::ERROR));
+        $this->assertSame($ob, $ob->addError('test2', LogLevel::NOTICE));
 
-        $this->assertFalse($ob->hasErrors(true, LogLevel::INFO));
-        $this->assertSame([], $ob->getErrors(true, LogLevel::INFO));
+        $this->assertTrue($ob->hasErrors());
+        $errors = $ob->getErrors();
 
-        $this->assertSame($ob, $ob->addError($errors[0]));
-        $this->assertSame($ob, $ob->addError($errors[1]));
+        $this->assertCount(1, $errors);
+        $this->assertSame('test1', $errors[0]->getMessage());
+        $this->assertSame($ob, $errors[0]->getObject());
+        $this->assertSame(LogLevel::ERROR, $errors[0]->getPsrLevel());
 
-        $errors[0]->expects($this->exactly(2))->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::INFO)->willReturn(true);
-        $errors[1]->expects($this->exactly(2))->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::INFO)->willReturn(false);
+        $this->assertFalse($ob->hasErrors(false, LogLevel::CRITICAL));
+        $this->assertCount(0, $ob->getErrors(false, LogLevel::CRITICAL));
 
-        $this->assertTrue($ob->hasErrors(true, LogLevel::INFO));
-        $this->assertSame([ $errors[0] ], $ob->getErrors(true, LogLevel::INFO));
+        $this->assertTrue($ob->hasErrors(false, LogLevel::NOTICE));
+        $errors = $ob->getErrors(false, LogLevel::NOTICE);
+        $this->assertCount(2, $errors);
+        $this->assertSame('test1', $errors[0]->getMessage());
+        $this->assertSame('test2', $errors[1]->getMessage());
+        $this->assertSame($ob, $errors[0]->getObject());
+        $this->assertSame($ob, $errors[1]->getObject());
+        $this->assertSame(LogLevel::ERROR, $errors[0]->getPsrLevel());
+        $this->assertSame(LogLevel::NOTICE, $errors[1]->getPsrLevel());
     }
 
     public function testAddHasAnyAndGetAllErrors() : void
@@ -110,34 +113,30 @@ class ErrorBagTest extends TestCase
 
         $mb = $this->getMockBuilder('\\' . Error::class)
             ->disableOriginalConstructor();
-        $errors = [
-            $mb->getMock(),
-            $mb->getMock()
-        ];
-        
-        $errors[0]->expects($this->any())->method('getPsrLevel')->willReturn(LogLevel::ERROR);
-        $errors[0]->expects($this->any())->method('getMessage')->willReturn('test1');
-        $errors[1]->expects($this->any())->method('getPsrLevel')->willReturn(LogLevel::ERROR);
-        $errors[1]->expects($this->any())->method('getMessage')->willReturn('test2');
 
         $this->assertFalse($ob->hasAnyErrors());
         $this->assertSame([], $ob->getAllErrors());
 
-        $this->assertSame($ob, $ob->addError($errors[0]));
-        $this->assertSame($ob, $ob->addError($errors[1]));
-        $this->assertSame($child, $child->addError($errors[0]));
-        $this->assertSame($child, $child->addError($errors[1]));
-        $this->assertSame($subChild, $subChild->addError($errors[0]));
-        $this->assertSame($subChild, $subChild->addError($errors[1]));
-        $this->assertSame($child2, $child2->addError($errors[0]));
-        $this->assertSame($child2, $child2->addError($errors[1]));
-
-        $errors[0]->expects($this->any())->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::ERROR)->willReturn(true);
-        $errors[1]->expects($this->any())->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::ERROR)->willReturn(true);
+        $this->assertSame($ob, $ob->addError('test1', LogLevel::ERROR));
+        $this->assertSame($ob, $ob->addError('test2', LogLevel::ERROR));
+        $this->assertSame($child, $child->addError('child1', LogLevel::ERROR));
+        $this->assertSame($child, $child->addError('child2', LogLevel::ERROR));
+        $this->assertSame($subChild, $subChild->addError('subchild1', LogLevel::ERROR));
+        $this->assertSame($subChild, $subChild->addError('subchild2', LogLevel::ERROR));
+        $this->assertSame($child2, $child2->addError('schild1', LogLevel::ERROR));
+        $this->assertSame($child2, $child2->addError('schild2', LogLevel::ERROR));
 
         $this->assertTrue($ob->hasAnyErrors());
-        $this->assertCount(8, $ob->getAllErrors());
-        $this->assertSame([ $errors[0], $errors[1], $errors[0], $errors[1], $errors[0], $errors[1], $errors[0], $errors[1] ], $ob->getAllErrors());
+        $errors = $ob->getAllErrors();
+        $this->assertCount(8, $errors);
+        $this->assertSame('test1', $errors[0]->getMessage());
+        $this->assertSame('test2', $errors[1]->getMessage());
+        $this->assertSame('child1', $errors[2]->getMessage());
+        $this->assertSame('child2', $errors[3]->getMessage());
+        $this->assertSame('subchild1', $errors[4]->getMessage());
+        $this->assertSame('subchild2', $errors[5]->getMessage());
+        $this->assertSame('schild1', $errors[6]->getMessage());
+        $this->assertSame('schild2', $errors[7]->getMessage());
     }
 
     public function testAddHasAnyAndGetAllFilteredErrors() : void
@@ -149,33 +148,36 @@ class ErrorBagTest extends TestCase
 
         $mb = $this->getMockBuilder('\\' . Error::class)
             ->disableOriginalConstructor();
-        $errors = [
-            $mb->getMock(),
-            $mb->getMock()
-        ];
+        $this->assertFalse($ob->hasAnyErrors());
+        $this->assertSame([], $ob->getAllErrors());
 
-        $this->assertFalse($ob->hasAnyErrors(true, LogLevel::INFO));
-        $this->assertSame([], $ob->getAllErrors(true, LogLevel::INFO));
+        $this->assertSame($ob, $ob->addError('test1', LogLevel::ERROR));
+        $this->assertSame($ob, $ob->addError('test2', LogLevel::INFO));
+        $this->assertSame($child, $child->addError('child1', LogLevel::ERROR));
+        $this->assertSame($child, $child->addError('child2', LogLevel::INFO));
+        $this->assertSame($subChild, $subChild->addError('subchild1', LogLevel::ERROR));
+        $this->assertSame($subChild, $subChild->addError('subchild2', LogLevel::INFO));
+        $this->assertSame($child2, $child2->addError('schild1', LogLevel::ERROR));
+        $this->assertSame($child2, $child2->addError('schild2', LogLevel::INFO));
 
-        $errors[0]->expects($this->any())->method('getPsrLevel')->willReturn(LogLevel::ERROR);
-        $errors[0]->expects($this->any())->method('getMessage')->willReturn('test1');
-        $errors[1]->expects($this->any())->method('getPsrLevel')->willReturn(LogLevel::ERROR);
-        $errors[1]->expects($this->any())->method('getMessage')->willReturn('test2');
+        $this->assertTrue($ob->hasAnyErrors());
+        $errors = $ob->getAllErrors();
+        $this->assertCount(4, $errors);
+        $this->assertSame('test1', $errors[0]->getMessage());
+        $this->assertSame('child1', $errors[1]->getMessage());
+        $this->assertSame('subchild1', $errors[2]->getMessage());
+        $this->assertSame('schild1', $errors[3]->getMessage());
 
-        $this->assertSame($ob, $ob->addError($errors[0]));
-        $this->assertSame($ob, $ob->addError($errors[1]));
-        $this->assertSame($child, $child->addError($errors[0]));
-        $this->assertSame($child, $child->addError($errors[1]));
-        $this->assertSame($subChild, $subChild->addError($errors[0]));
-        $this->assertSame($subChild, $subChild->addError($errors[1]));
-        $this->assertSame($child2, $child2->addError($errors[0]));
-        $this->assertSame($child2, $child2->addError($errors[1]));
-
-        $errors[0]->expects($this->any())->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::INFO)->willReturn(false);
-        $errors[1]->expects($this->any())->method('isPsrLevelGreaterOrEqualTo')->with(LogLevel::INFO)->willReturn(true);
-
-        $this->assertTrue($ob->hasAnyErrors(true, LogLevel::INFO));
-        $this->assertCount(4, $ob->getAllErrors(true, LogLevel::INFO));
-        $this->assertSame([ $errors[1], $errors[1], $errors[1], $errors[1] ], $ob->getAllErrors(true, LogLevel::INFO));
+        $this->assertTrue($ob->hasAnyErrors(false, LogLevel::INFO));
+        $errors = $ob->getAllErrors(false, LogLevel::INFO);
+        $this->assertCount(8, $errors);
+        $this->assertSame('test1', $errors[0]->getMessage());
+        $this->assertSame('test2', $errors[1]->getMessage());
+        $this->assertSame('child1', $errors[2]->getMessage());
+        $this->assertSame('child2', $errors[3]->getMessage());
+        $this->assertSame('subchild1', $errors[4]->getMessage());
+        $this->assertSame('subchild2', $errors[5]->getMessage());
+        $this->assertSame('schild1', $errors[6]->getMessage());
+        $this->assertSame('schild2', $errors[7]->getMessage());
     }
 }

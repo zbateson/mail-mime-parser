@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser;
 
 use Psr\Log\LogLevel;
+use Throwable;
 
 /**
  * Provides a top-level abstract implementation of IErrorBag.
@@ -55,15 +56,17 @@ abstract class ErrorBag extends Logger implements IErrorBag
         // do nothing
     }
 
-    public function addError(Error $error) : IErrorBag
+    public function addError(string $message, string $psrLogLevel, ?Throwable $exception = null) : IErrorBag
     {
+        $error = new Error($message, $psrLogLevel, $this, $exception);
         $this->errors[] = $error;
         $this->getLogger()->log(
-            $error->getPsrLevel(),
-            '${contextName} ${message}',
+            $psrLogLevel,
+            '${contextName} ${message} ${exception}',
             [
                 'contextName' => $this->getErrorLoggingContextName(),
-                'message' => $error->getMessage()
+                'message' => $message,
+                'exception' => $exception ?? ''
             ]
         );
         return $this;
