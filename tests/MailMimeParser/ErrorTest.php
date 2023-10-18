@@ -59,10 +59,9 @@ class ErrorTest extends TestCase
         $this->assertFalse($ob->isPsrLevelGreaterOrEqualTo(LogLevel::ERROR));
     }
 
-    public function testIsPsrLevelGreaterOrEqualToInvalidArgumentExceptionForBadPsrLevel() : void
+    public function testIsPsrLevelGreaterOrEqualToNonPsrLevel() : void
     {
         $ob = new Error('', LogLevel::NOTICE, $this->errorBagMock);
-        $this->expectException(InvalidArgumentException::class);
-        $ob->isPsrLevelGreaterOrEqualTo('baaaaad');
+        $this->assertTrue($ob->isPsrLevelGreaterOrEqualTo('baaaaad'));
     }
 }
