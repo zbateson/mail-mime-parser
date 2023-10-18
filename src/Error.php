@@ -125,17 +125,12 @@ class Error
      * LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.
      *
      * @param string $minLevel
-     * @throws InvalidArgumentException if the passed $minLevel is not a known
-     *         PSR log level (see \Psr\Log\LogLevel)
      * @return bool
      */
     public function isPsrLevelGreaterOrEqualTo(string $minLevel) : bool
     {
-        if (!isset($this->levelMap[$minLevel])) {
-            throw new InvalidArgumentException($minLevel . ' is not a known PSR Log Level');
-        }
-        $intLevel = $this->levelMap[$minLevel] ?? 1000;
-        $thisLevel = $this->levelMap[$this->psrLevel] ?? 1000;
-        return ($thisLevel <= $intLevel);
+        $minIntLevel = $this->levelMap[$minLevel] ?? 1000;
+        $thisLevel = $this->levelMap[$this->psrLevel];
+        return ($minIntLevel >= $thisLevel);
     }
 }
