@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ErrorBag;
 
 /**
  * Description of HeaderPartTest
@@ -24,6 +25,11 @@ class HeaderPartTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->getMockForAbstractClass();
         $this->abstractHeaderPartStub = $stub;
+    }
+
+    public function testInstance() : void
+    {
+        $this->assertInstanceOf(ErrorBag::class, $this->abstractHeaderPartStub);
     }
 
     public function testIgnoreSpaces() : void

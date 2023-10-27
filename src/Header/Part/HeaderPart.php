@@ -8,13 +8,14 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\ErrorBag;
 
 /**
  * Abstract base class representing a single part of a parsed header.
  *
  * @author Zaahid Bateson
  */
-abstract class HeaderPart implements IHeaderPart
+abstract class HeaderPart extends ErrorBag implements IHeaderPart
 {
     /**
      * @var ?string the value of the part
@@ -97,5 +98,10 @@ abstract class HeaderPart implements IHeaderPart
             }
         }
         return $str;
+    }
+
+    protected function getErrorBagChildren() : array
+    {
+        return [];
     }
 }
