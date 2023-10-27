@@ -38,9 +38,9 @@ abstract class ErrorBag extends Logger implements IErrorBag
     }
 
     /**
-     * Return any children IErrorBag objects.
+     * Return any children ErrorBag objects.
      *
-     * @return IErrorBag[]
+     * @return ErrorBag[]
      */
     abstract protected function getErrorBagChildren() : array;
 
