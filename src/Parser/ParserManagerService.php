@@ -72,6 +72,8 @@ class ParserManagerService implements IService
      *
      * @param PartBuilder $partBuilder The PartBuilder to wrap in a proxy with
      *        an IParser
+     * @throws CompatibleParserNotFoundException if a compatible parser for the
+     *         type is not configured.
      * @return ?ParserPartProxy The created ParserPartProxy tied to a new
      *         IMessagePart and associated IParser.
      */
@@ -85,6 +87,6 @@ class ParserManagerService implements IService
                 return $factory->newInstance($partBuilder, $parser);
             }
         }
-        return null;
+        throw new CompatibleParserNotFoundException('Compatible parser for a part cannot be found with content-type: ' . $partBuilder->getHeaderContainer()->get('Content-Type'));
     }
 }
