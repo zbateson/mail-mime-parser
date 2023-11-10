@@ -75,9 +75,9 @@ class MimeLiteralPart extends LiteralPart
     {
         $pattern = self::MIME_PART_PATTERN;
         // remove whitespace between two adjacent mime encoded parts
-        $value = \preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
+        $normed = \preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
         // with PREG_SPLIT_DELIM_CAPTURE, matched and unmatched parts are returned
-        $aMimeParts = \preg_split("/($pattern)/", $value, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $aMimeParts = \preg_split("/($pattern)/", $normed, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         $ret = '';
         foreach ($aMimeParts as $entity) {
             $ret .= $this->decodeSplitPart($entity);
