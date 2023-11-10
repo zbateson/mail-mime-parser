@@ -186,4 +186,10 @@ abstract class ParserPartProxy extends PartBuilder
     {
         return $this->partBuilder->isMime();
     }
+
+    public function addError(string $message, string $level) : ParserPartProxy
+    {
+        $this->part->addError($message, $level);
+        return $this;
+    }
 }

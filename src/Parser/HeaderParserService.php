@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser;
 
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
@@ -21,14 +22,22 @@ class HeaderParserService implements IService
      * Ensures the header isn't empty and contains a colon separator character,
      * then splits it and adds it to the passed PartHeaderContainer.
      *
+     * @param int $offset read offset for error reporting
      * @param string $header the header line
      * @param PartHeaderContainer $headerContainer the container
      */
-    private function addRawHeaderToPart(string $header, PartHeaderContainer $headerContainer) : self
+    private function addRawHeaderToPart(int $offset, string $header, PartHeaderContainer $headerContainer) : self
     {
-        if ($header !== '' && \strpos($header, ':') !== false) {
-            $a = \explode(':', $header, 2);
-            $headerContainer->add($a[0], \trim($a[1]));
+        if ($header !== '') {
+            if (\strpos($header, ':') !== false) {
+                $a = \explode(':', $header, 2);
+                $headerContainer->add($a[0], \trim($a[1]));
+            } else {
+                $headerContainer->addError(
+                    "Invalid header found at offset: $offset",
+                    LogLevel::ERROR
+                );
+            }
         }
         return $this;
     }
@@ -44,9 +53,10 @@ class HeaderParserService implements IService
     {
         $header = '';
         do {
+            $offset = \ftell($handle);
             $line = MessageParserService::readLine($handle);
             if ($line === false || $line === '' || $line[0] !== "\t" && $line[0] !== ' ') {
-                $this->addRawHeaderToPart($header, $container);
+                $this->addRawHeaderToPart($offset, $header, $container);
                 $header = '';
             } else {
                 $line = "\r\n" . $line;

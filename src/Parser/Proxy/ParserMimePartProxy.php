@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\IMessagePart;
+use Psr\Log\LogLevel;
 
 /**
  * A bi-directional parser-to-part proxy for MimeParser and IMimeParts.
@@ -222,6 +223,12 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     public function setStreamPartAndContentEndPos(int $streamContentEndPos)
     {
+        // check if we're expecting a boundary and didn't find one
+        if (!$this->endBoundaryFound && !$this->parentBoundaryFound) {
+            if (!empty($this->mimeBoundary) || ($this->getParent() !== null && !empty($this->getParent()->mimeBoundary))) {
+                $this->addError('End boundary for part not found', LogLevel::WARNING);
+            }
+        }
         $start = $this->getStreamContentStartPos();
         if ($streamContentEndPos - $start < 0) {
             parent::setStreamPartAndContentEndPos($start);
