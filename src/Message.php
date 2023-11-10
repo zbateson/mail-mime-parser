@@ -331,4 +331,21 @@ class Message extends MimePart implements IMessage
             ->setSignature($this, $body);
         return $this;
     }
+
+    public function getMessageId(): ?string
+    {
+        return $this->getHeaderValue(HeaderConsts::MESSAGE_ID);
+    }
+
+    public function getErrorLoggingContextName(): string
+    {
+        $params = '';
+        if (!empty($this->getMessageId())) {
+            $params .= ', message-id=' . $this->getContentId();
+        }
+        $params .= ', content-type=' . $this->getContentType();
+        $nsClass = get_class($this);
+        $class = substr($nsClass, (strrpos($nsClass, '\\') ?? -1) + 1);
+        return $class . '(' . spl_object_id($this) . $params . ')';
+    }
 }

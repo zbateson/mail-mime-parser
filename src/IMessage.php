@@ -429,4 +429,11 @@ interface IMessage extends IMimePart
      * @param string $body the message's hash
      */
     public function setSignature(string $body);
+
+    /**
+     * Returns the value of the 'Message-ID' header, or null if not set.
+     *
+     * @return string|null the content ID.
+     */
+    public function getMessageId() : ?string;
 }
