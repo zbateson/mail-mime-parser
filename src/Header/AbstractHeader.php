@@ -7,9 +7,11 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
+use Psr\Log\LogLevel;
 
 /**
  * Abstract base class representing a mime email's header.
@@ -22,7 +24,7 @@ use ZBateson\MailMimeParser\Header\Part\CommentPart;
  *
  * @author Zaahid Bateson
  */
-abstract class AbstractHeader implements IHeader
+abstract class AbstractHeader extends ErrorBag implements IHeader
 {
     /**
      * @var string the name of the header
@@ -143,5 +145,25 @@ abstract class AbstractHeader implements IHeader
     public function __toString() : string
     {
         return "{$this->name}: {$this->rawValue}";
+    }
+
+    public function getErrorLoggingContextName(): string
+    {
+        return 'Header::' . $this->getName();
+    }
+
+    protected function getErrorBagChildren() : array
+    {
+        return $this->getAllParts();
+    }
+
+    protected function validate() : void
+    {
+        if (strlen(trim($this->name)) === 0) {
+            $this->addError('Header doesn\'t have a name', LogLevel::ERROR);
+        }
+        if (strlen(trim($this->rawValue)) === 0) {
+            $this->addError('Header doesn\'t have a value', LogLevel::NOTICE);
+        }
     }
 }

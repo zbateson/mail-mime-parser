@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\IErrorBag;
+
 /**
  * A mime email header line consisting of a name and value.
  *
@@ -17,7 +19,7 @@ namespace ZBateson\MailMimeParser\Header;
  *
  * @author Zaahid Bateson
  */
-interface IHeader
+interface IHeader extends IErrorBag
 {
     /**
      * Returns an array of IHeaderPart objects the header's value has been
