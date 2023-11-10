@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * Description of GenericHeaderTest
@@ -83,5 +84,24 @@ class GenericHeaderTest extends TestCase
     {
         $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
         $this->assertEquals('Hunted-By: Hunter S. Thompson', $header);
+    }
+
+    public function testErrorLoggingContextName() : void
+    {
+        $header = new GenericHeader($this->consumerService, 'Hunted-By', 'Hunter S. Thompson');
+        $this->assertEquals('Header::Hunted-By', $header->getErrorLoggingContextName());
+    }
+
+    public function testValidation() : void
+    {
+        $header = new GenericHeader($this->consumerService, '', '');
+        $errs = $header->getErrors(false, LogLevel::NOTICE);
+        $this->assertCount(0, $errs);
+        $errs = $header->getErrors(true, LogLevel::NOTICE);
+        $this->assertCount(2, $errs);
+        $this->assertEquals('Header doesn\'t have a name', $errs[0]->getMessage());
+        $this->assertEquals(LogLevel::ERROR, $errs[0]->getPsrLevel());
+        $this->assertEquals('Header doesn\'t have a value', $errs[1]->getMessage());
+        $this->assertEquals(LogLevel::NOTICE, $errs[1]->getPsrLevel());
     }
 }
