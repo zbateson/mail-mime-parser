@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * Description of ParameterTest
@@ -55,5 +56,14 @@ class ParameterPartTest extends TestCase
     {
         $part = new ParameterPart($this->charsetConverter, 'name', 'Drogo', 'Dothraki');
         $this->assertEquals('Dothraki', $part->getLanguage());
+    }
+
+    public function testValidation() : void
+    {
+        $part = new ParameterPart($this->charsetConverter, 'name', '');
+        $errs = $part->getErrors(true, LogLevel::NOTICE);
+        $this->assertCount(1, $errs);
+        $this->assertEquals('Parameter part value is empty', $errs[0]->getMessage());
+        $this->assertEquals(LogLevel::NOTICE, $errs[0]->getPsrLevel());
     }
 }

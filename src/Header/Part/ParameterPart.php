@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LogLevel;
+
 /**
  * Represents a name/value pair part of a header.
  *
@@ -65,5 +67,12 @@ class ParameterPart extends MimeLiteralPart
     public function getLanguage() : ?string
     {
         return $this->language;
+    }
+
+    protected function validate() : void
+    {
+        if ($this->value === '') {
+            $this->addError('Parameter part value is empty', LogLevel::NOTICE);
+        }
     }
 }

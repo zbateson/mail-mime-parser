@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * Description of DateTest
@@ -49,5 +50,10 @@ class DatePartTest extends TestCase
         $this->assertEquals($value, $part->getValue());
         $date = $part->getDateTime();
         $this->assertNull($date);
+
+        $errs = $part->getErrors(false, LogLevel::ERROR);
+        $this->assertCount(1, $errs);
+        $this->assertEquals("Unable to parse date from header: \"${value}\"", $errs[0]->getMessage());
+        $this->assertEquals(LogLevel::ERROR, $errs[0]->getPsrLevel());
     }
 }

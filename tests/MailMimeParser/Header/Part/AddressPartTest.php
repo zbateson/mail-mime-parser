@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * Description of AddressPartTest
@@ -30,5 +31,14 @@ class AddressPartTest extends TestCase
         $part = new AddressPart($this->charsetConverter, $name, $email);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
+    }
+
+    public function testValidation() : void
+    {
+        $part = new AddressPart($this->charsetConverter, '', '');
+        $errs = $part->getErrors(true, LogLevel::ERROR);
+        $this->assertCount(1, $errs);
+        $this->assertEquals('AddressPart doesn\'t contain an email address', $errs[0]->getMessage());
+        $this->assertEquals(LogLevel::ERROR, $errs[0]->getPsrLevel());
     }
 }

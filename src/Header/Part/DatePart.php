@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use DateTime;
 use Exception;
+use Psr\Log\LogLevel;
 
 /**
  * Parses a header into a DateTime object.
@@ -46,6 +47,11 @@ class DatePart extends LiteralPart
         try {
             $this->date = new DateTime($dateToken);
         } catch (Exception $e) {
+            $this->addError(
+                "Unable to parse date from header: \"${dateToken}\"",
+                LogLevel::ERROR,
+                $e
+            );
         }
     }
 
@@ -57,5 +63,13 @@ class DatePart extends LiteralPart
     public function getDateTime() : ?DateTime
     {
         return $this->date;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getErrorBagChildren() : array
+    {
+        return $this->addresses;
     }
 }

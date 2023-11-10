@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LogLevel;
+
 /**
  * Holds a group of addresses, and an optional group name.
  *
@@ -68,5 +70,20 @@ class AddressGroupPart extends MimeLiteralPart
     public function getName() : string
     {
         return $this->value;
+    }
+
+    protected function getErrorBagChildren() : array
+    {
+        return $this->addresses;
+    }
+
+    protected function validate() : void
+    {
+        if (mb_strlen($this->value) === 0) {
+            $this->addError('Address group doesn\'t have a name', LogLevel::ERROR);
+        }
+        if (empty($this->addresses)) {
+            $this->addError('Address group doesn\'t have any email addresses defined in it', LogLevel::NOTICE);
+        }
     }
 }

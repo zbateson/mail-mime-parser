@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LogLevel;
+
 /**
  * Holds a single address or name/address pair.
  *
@@ -46,5 +48,12 @@ class AddressPart extends ParameterPart
     public function getEmail() : string
     {
         return $this->value;
+    }
+
+    protected function validate() : void
+    {
+        if (empty($this->value)) {
+            $this->addError('AddressPart doesn\'t contain an email address', LogLevel::ERROR);
+        }
     }
 }

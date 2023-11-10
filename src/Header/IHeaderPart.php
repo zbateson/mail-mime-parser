@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\IErrorBag;
+
 /**
  * Represents a single parsed part of a header line's value.
  *
@@ -15,7 +17,7 @@ namespace ZBateson\MailMimeParser\Header;
  *
  * @author Zaahid Bateson
  */
-interface IHeaderPart
+interface IHeaderPart extends IErrorBag
 {
     /**
      * Returns the part's value.
