@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Logger;
 use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
@@ -31,7 +32,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @author Zaahid Bateson
  */
-class HeaderFactory implements IService
+class HeaderFactory extends Logger implements IService
 {
     /**
      * @var ConsumerService the passed ConsumerService providing
@@ -151,6 +152,10 @@ class HeaderFactory implements IService
     public function newInstance(string $name, string $value)
     {
         $class = $this->getClassFor($name);
+        $this->getLogger()->debug(
+            'Creating ${class} for header with name "${name}" and value "${value}"',
+            [ 'class' => $class, 'name' => $name, 'value' => $value ]
+        );
         return $this->newInstanceOf($name, $value, $class);
     }
 
