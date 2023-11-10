@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
 use SplSubject;
+use ZBateson\MailMimeParser\IErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
@@ -23,7 +24,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
  *
  * @author Zaahid Bateson
  */
-interface IMessagePart extends SplSubject
+interface IMessagePart extends SplSubject, IErrorBag
 {
     /**
      * Returns this part's parent.

@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Message;
 
 use ArrayIterator;
 use IteratorAggregate;
+use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
 
@@ -17,7 +18,7 @@ use ZBateson\MailMimeParser\Header\IHeader;
  *
  * @author Zaahid Bateson
  */
-class PartHeaderContainer implements IteratorAggregate
+class PartHeaderContainer extends ErrorBag implements IteratorAggregate
 {
     /**
      * @var HeaderFactory the HeaderFactory object used for created headers
@@ -333,5 +334,10 @@ class PartHeaderContainer implements IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->getHeaders());
+    }
+
+    public function getErrorBagChildren() : array
+    {
+        return $this->headerObjects;
     }
 }

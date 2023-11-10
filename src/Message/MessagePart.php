@@ -13,6 +13,7 @@ use Psr\Http\Message\StreamInterface;
 use SplObjectStorage;
 use SplObserver;
 
+use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -21,7 +22,7 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  *
  * @author Zaahid Bateson
  */
-abstract class MessagePart implements IMessagePart
+abstract class MessagePart extends ErrorBag implements IMessagePart
 {
     /**
      * @var ?IMimePart parent part
@@ -244,5 +245,22 @@ abstract class MessagePart implements IMessagePart
     public function __toString() : string
     {
         return $this->getStream()->getContents();
+    }
+
+    public function getErrorLoggingContextName(): string
+    {
+        $params = '';
+        if (!empty($this->getContentId())) {
+            $params .= ', content-id=' . $this->getContentId();
+        }
+        $params .= ', content-type=' . $this->getContentType();
+        $nsClass = get_class($this);
+        $class = substr($nsClass, (strrpos($nsClass, '\\') ?? -1) + 1);
+        return $class . '(' . spl_object_id($this) . $params . ')';
+    }
+
+    protected function getErrorBagChildren() : array
+    {
+        return [];
     }
 }

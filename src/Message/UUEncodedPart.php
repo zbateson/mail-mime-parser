@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\MailMimeParser;
-
 /**
  * Implementation of a non-mime message's uuencoded attachment part.
  *
@@ -122,5 +120,10 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         $this->mode = $mode;
         $this->notify();
         return $this;
+    }
+
+    public function getErrorBagChildren(): array
+    {
+        return \array_merge([]);
     }
 }

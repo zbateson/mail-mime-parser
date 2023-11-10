@@ -11,7 +11,6 @@ use AppendIterator;
 use ArrayIterator;
 use Iterator;
 use RecursiveIteratorIterator;
-use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A message part that contains children.
@@ -165,5 +164,10 @@ abstract class MultiPart extends MessagePart implements IMultiPart
             $this->removePart($part);
         }
         return $count;
+    }
+
+    protected function getErrorBagChildren() : array
+    {
+        return $this->getChildParts();
     }
 }
