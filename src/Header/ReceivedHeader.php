@@ -8,8 +8,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
 
 /**
@@ -84,12 +83,12 @@ class ReceivedHeader extends ParameterHeader
      */
     private $date = false;
 
-    /**
-     * Returns a ReceivedConsumer.
-     */
-    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService
-    {
-        return $consumerService->getReceivedConsumer();
+    public function __construct(
+        ReceivedConsumerService $consumerService,
+        string $name,
+        string $value
+    ) {
+        parent::__construct($consumerService, $name, $value);
     }
 
     /**

@@ -60,35 +60,40 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      * @param string $name Name of the header.
      * @param string $value Value of the header.
      */
-    public function __construct(ConsumerService $consumerService, string $name, string $value)
-    {
+    public function __construct(
+        AbstractConsumerService $consumerService,
+        string $name,
+        string $value
+    ) {
         $this->name = $name;
         $this->rawValue = $value;
-
-        $consumer = $this->getConsumer($consumerService);
-        $this->parseHeaderValue($consumer, $this->rawValue);
+        $this->parseHeaderValue($consumerService, $value);
     }
 
     /**
-     * Responsible for returning an AbstractConsumer that will be passed to
-     * parseHeaderValue to parse the header into parts.
+     * Filters $this->allParts into the parts required by $this->parts
+     * and assignes it.
+     *
+     * The AbstractHeader::filterAndAssignToParts method filters out CommentParts.
      */
-    abstract protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService;
+    protected function filterAndAssignToParts() : void
+    {
+        $this->parts = \array_values(\array_filter($this->allParts, function ($p) {
+            return !($p instanceof CommentPart);
+        }));
+    }
 
     /**
      * Calls the consumer and assigns the parsed parts to member variables.
      *
      * The default implementation assigns the returned value to $this->allParts
      * and filters out comments from it, assigning the filtered array to
-     * $this->parts.
+     * $this->parts by calling filterAndAssignToParts.
      */
-    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : self
+    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : void
     {
         $this->allParts = $consumer($value);
-        $this->parts = \array_values(\array_filter($this->allParts, function ($p) {
-            return !($p instanceof CommentPart);
-        }));
-        return $this;
+        $this->filterAndAssignToParts();
     }
 
     /**

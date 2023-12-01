@@ -7,8 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
 use DateTime;
 use DateTimeImmutable;
@@ -20,12 +19,12 @@ use DateTimeImmutable;
  */
 class DateHeader extends AbstractHeader
 {
-    /**
-     * Returns a DateConsumer.
-     */
-    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService
-    {
-        return $consumerService->getDateConsumer();
+    public function __construct(
+        DateConsumerService $consumerService,
+        string $name,
+        string $value
+    ) {
+        parent::__construct($consumerService, $name, $value);
     }
 
     /**

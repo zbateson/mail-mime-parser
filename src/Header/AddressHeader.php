@@ -7,8 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
 
@@ -37,20 +36,23 @@ class AddressHeader extends AbstractHeader
      */
     protected $groups = [];
 
-    /**
-     * Returns an AddressBaseConsumer.
-     */
-    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService
-    {
-        return $consumerService->getAddressBaseConsumer();
+    public function __construct(
+        AddressBaseConsumerService $consumerService,
+        string $name,
+        string $value
+    ) {
+        parent::__construct($consumerService, $name, $value);
     }
 
     /**
-     * Overridden to extract all addresses into addresses array.
+     * Filters $this->allParts into the parts required by $this->parts
+     * and assignes it.
+     *
+     * The AbstractHeader::filterAndAssignToParts method filters out CommentParts.
      */
-    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : AbstractHeader
+    protected function filterAndAssignToParts() : void
     {
-        parent::parseHeaderValue($consumer, $value);
+        parent::filterAndAssignToParts();
         foreach ($this->parts as $part) {
             if ($part instanceof AddressPart) {
                 $this->addresses[] = $part;
@@ -59,7 +61,6 @@ class AddressHeader extends AbstractHeader
                 $this->groups[] = $part;
             }
         }
-        return $this;
     }
 
     /**

@@ -7,8 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
@@ -39,19 +38,19 @@ class ParameterHeader extends AbstractHeader
      */
     protected $parameters = [];
 
-    /**
-     * Returns a ParameterConsumer.
-     */
-    protected function getConsumer(ConsumerService $consumerService) : AbstractConsumerService
-    {
-        return $consumerService->getParameterConsumer();
+    public function __construct(
+        ParameterConsumerService $consumerService,
+        string $name,
+        string $value
+    ) {
+        parent::__construct($consumerService, $name, $value);
     }
 
     /**
      * Overridden to assign ParameterParts to a map of lower-case parameter
      * names to ParameterParts.
      */
-    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : AbstractHeader
+    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : void
     {
         parent::parseHeaderValue($consumer, $value);
         foreach ($this->parts as $part) {
@@ -59,7 +58,6 @@ class ParameterHeader extends AbstractHeader
                 $this->parameters[\strtolower($part->getName())] = $part;
             }
         }
-        return $this;
     }
 
     /**
