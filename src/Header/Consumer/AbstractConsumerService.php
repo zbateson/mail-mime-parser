@@ -10,8 +10,6 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use ArrayIterator;
 use Iterator;
 use NoRewindIterator;
-use ZBateson\MailMimeParser\Logger;
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
@@ -25,56 +23,44 @@ use Psr\Log\LoggerInterface;
  *
  * @author Zaahid Bateson
  */
-abstract class AbstractConsumerService extends Logger implements IService
+abstract class AbstractConsumerService implements IConsumerService
 {
-    /**
-     * @var ConsumerService used to get consumer instances for sub-consumers.
-     */
-    protected $consumerService;
+    #[Inject]
+    protected LoggerInterface $logger;
 
     /**
-     * @var HeaderPartFactory used to construct IHeaderPart objects
+     * @var used to construct IHeaderPart objects
      */
-    protected $partFactory;
+    protected HeaderPartFactory $partFactory;
 
     /**
-     * @var string the generated token split pattern on first run, so it doesn't
+     * @var the generated token split pattern on first run, so it doesn't
      *      need to be regenerated every time.
      */
-    private $tokenSplitPattern;
+    private string $tokenSplitPattern;
 
-    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory)
+    /**
+     * @var AbstractConsumerService[] array of sub-consumers used by this
+     *      consumer if any, or an empty array if none exist.
+     */
+    protected array $subConsumers = [];
+
+    /**
+     * @param HeaderPartFactory $partFactory
+     * @param AbstractConsumerService[] $subConsumers
+     */
+    public function __construct(HeaderPartFactory $partFactory, array $subConsumers = [])
     {
-        $this->consumerService = $consumerService;
         $this->partFactory = $partFactory;
+        $this->subConsumers = $subConsumers;
     }
 
-    /**
-     * Returns the singleton instance for the class type it was called on.
-     */
-    public static function getInstance(ConsumerService $consumerService, HeaderPartFactory $partFactory, LoggerInterface $logger) : AbstractConsumerService
-    {
-        static $instances = [];
-        $class = static::class;
-        if (!isset($instances[$class])) {
-            $instances[$class] = new static($consumerService, $partFactory, $logger);
-        }
-        return $instances[$class];
-    }
-
-    /**
-     * Invokes parsing of a header's value into header parts.
-     *
-     * @param string $value the raw header value
-     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] the array of parsed
-     *         parts
-     */
     public function __invoke(string $value) : array
     {
-        $this->getLogger()->debug('Starting ${class} for "${value}"', [ 'class' => static::class, 'value' => $value ]);
+        $this->logger->debug('Starting ${class} for "${value}"', [ 'class' => static::class, 'value' => $value ]);
         if ($value !== '') {
             $parts = $this->parseRawValue($value);
-            $this->getLogger()->debug(
+            $this->logger->debug(
                 'Ending ${class} for "${value}": parsed into ${cnt} header part objects',
                 [ 'class' => static::class, 'value' => $value, 'cnt' => count($parts) ]
             );
@@ -82,17 +68,6 @@ abstract class AbstractConsumerService extends Logger implements IService
         }
         return [];
     }
-
-    /**
-     * Returns an array of sub-consumers.
-     *
-     * Called during construction to set up the list of sub-consumers that will
-     * take control from this consumer should a token match a sub-consumer's
-     * start token.
-     *
-     * @return AbstractConsumerService[] Array of sub-consumers
-     */
-    abstract protected function getSubConsumers() : array;
 
     /**
      * Returns this consumer and all unique sub consumers.
@@ -107,7 +82,7 @@ abstract class AbstractConsumerService extends Logger implements IService
         $found = [$this];
         do {
             $current = \current($found);
-            $subConsumers = $current->getSubConsumers();
+            $subConsumers = $current->subConsumers;
             foreach ($subConsumers as $consumer) {
                 if (!\in_array($consumer, $found)) {
                     $found[] = $consumer;
@@ -167,7 +142,7 @@ abstract class AbstractConsumerService extends Logger implements IService
      * Returns a regex pattern used to split the input header string.
      *
      * The default implementation calls
-     * {@see AbstractConsumer::getAllTokenSeparators()} and implodes the
+     * {@see AbstractConsumerService::getAllTokenSeparators()} and implodes the
      * returned array with the regex OR '|' character as its glue.
      *
      * @return string the regex pattern
@@ -183,8 +158,8 @@ abstract class AbstractConsumerService extends Logger implements IService
      * Returns an array of split tokens from the input string.
      *
      * The method calls preg_split using
-     * {@see AbstractConsumer::getTokenSplitPattern()}.  The split array will
-     * not contain any empty parts and will contain the markers.
+     * {@see AbstractConsumerService::getTokenSplitPattern()}.  The split array
+     * will not contain any empty parts and will contain the markers.
      *
      * @param string $rawValue the raw string
      * @return string[] the array of tokens
@@ -253,7 +228,8 @@ abstract class AbstractConsumerService extends Logger implements IService
      * sub-consumer's parseTokenIntoParts().
      *
      * If no sub-consumer is responsible for the current token, calls
-     * {@see AbstractConsumer::getPartForToken()} and returns it in an array.
+     * {@see AbstractConsumerService::getPartForToken()} and returns it in an
+     * array.
      *
      * @param Iterator<string> $tokens
      * @return IHeaderPart[]
@@ -261,7 +237,7 @@ abstract class AbstractConsumerService extends Logger implements IService
     protected function getConsumerTokenParts(Iterator $tokens) : array
     {
         $token = $tokens->current();
-        $subConsumers = $this->getSubConsumers();
+        $subConsumers = $this->subConsumers;
         foreach ($subConsumers as $consumer) {
             if ($consumer->isStartToken($token)) {
                 $this->getLogger()->debug(
@@ -279,8 +255,8 @@ abstract class AbstractConsumerService extends Logger implements IService
      * Returns an array of IHeaderPart for the current token on the iterator.
      *
      * If the current token is a start token from a sub-consumer, the sub-
-     * consumer's {@see AbstractConsumer::parseTokensIntoParts()} method is
-     * called.
+     * consumer's {@see AbstractConsumerService::parseTokensIntoParts()} method
+     * is called.
      *
      * @param Iterator<string> $tokens The token iterator.
      * @return IHeaderPart[]
@@ -304,8 +280,6 @@ abstract class AbstractConsumerService extends Logger implements IService
      *
      * @param Iterator $tokens The token iterator.
      * @param bool $isStartToken true for the start token.
-     *
-     * @return static
      */
     protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumerService
     {
@@ -329,8 +303,8 @@ abstract class AbstractConsumerService extends Logger implements IService
      * and its returned parts are merged to the current consumer's header parts.
      *
      * After all tokens are read and an array of Header\Parts are constructed,
-     * the array is passed to AbstractConsumer::processParts for any final
-     * processing.
+     * the array is passed to {@see AbstractConsumerService::processParts} for
+     * any final processing.
      *
      * @param Iterator<string> $tokens An iterator over a string of tokens
      * @return IHeaderPart[] An array of parsed parts

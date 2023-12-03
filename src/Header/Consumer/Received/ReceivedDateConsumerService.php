@@ -12,8 +12,9 @@ use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
 /**
  * Parses the date portion of a Received header into a DatePart.
  *
- * The only difference between DateConsumer and ReceivedDateConsumer is the
- * addition of a start token, ';', and a token separator (also ';').
+ * The only difference between DateConsumerService and
+ * ReceivedDateConsumerService is the addition of a start token, ';', and a
+ * token separator (also ';').
  *
  * @author Zaahid Bateson
  */

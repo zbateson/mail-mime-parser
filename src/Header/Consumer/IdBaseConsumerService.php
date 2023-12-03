@@ -7,12 +7,13 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 
 /**
  * Serves as a base-consumer for ID headers (like Message-ID and Content-ID).
  *
- * IdBaseConsumer handles invalidly-formatted IDs not within '<' and '>'
+ * IdBaseConsumerService handles invalidly-formatted IDs not within '<' and '>'
  * characters.  Processing for validly-formatted IDs are passed on to its
  * sub-consumer, IdConsumer.
  *
@@ -20,21 +21,20 @@ use ZBateson\MailMimeParser\Header\IHeaderPart;
  */
 class IdBaseConsumerService extends AbstractConsumerService
 {
-    /**
-     * Returns the following as sub-consumers:
-     *  - {@see CommentConsumer}
-     *  - {@see QuotedStringConsumer}
-     *  - {@see IdConsumer}
-     *
-     * @return AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
-    {
-        return [
-            $this->consumerService->getCommentConsumer(),
-            $this->consumerService->getQuotedStringConsumer(),
-            $this->consumerService->getIdConsumer()
-        ];
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        CommentConsumerService $commentConsumerService,
+        QuotedStringConsumerService $quotedStringConsumerService,
+        IdConsumerService $idConsumerService
+    ) {
+        parent::__construct(
+            $partFactory,
+            [
+                $commentConsumerService,
+                $quotedStringConsumerService,
+                $idConsumerService
+            ]
+        );
     }
 
     /**
@@ -48,8 +48,8 @@ class IdBaseConsumerService extends AbstractConsumerService
     }
 
     /**
-     * IdBaseConsumer doesn't have start/end tokens, and so always returns
-     * false.
+     * IdBaseConsumerService doesn't have start/end tokens, and so always
+     * returns false.
      */
     protected function isEndToken(string $token) : bool
     {
@@ -57,8 +57,8 @@ class IdBaseConsumerService extends AbstractConsumerService
     }
 
     /**
-     * IdBaseConsumer doesn't have start/end tokens, and so always returns
-     * false.
+     * IdBaseConsumerService doesn't have start/end tokens, and so always
+     * returns false.
      *
      * @codeCoverageIgnore
      */
@@ -68,7 +68,8 @@ class IdBaseConsumerService extends AbstractConsumerService
     }
 
     /**
-     * Returns null for whitespace, and LiteralPart for anything else.
+     * Returns null for whitespace, and
+     * {@see ZBateson\MailMimeParser\Header\Part\LiteralPart} for anything else.
      *
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -

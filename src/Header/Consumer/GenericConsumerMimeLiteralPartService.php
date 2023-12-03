@@ -7,25 +7,25 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
- * The base GenericConsumerService is a consumer with CommentConsumerService and
- * QuotedStringConsumerService as sub-consumers, and splitting tokens by
- * whitespace.
+ * GenericConsumerMimeLiteralPartService uses a MimeLiteralPartFactory instead
+ * of a HeaderPartFactory.
  *
  * @author Zaahid Bateson
  */
-class GenericConsumerService extends AbstractGenericConsumerService
+class GenericConsumerMimeLiteralPartService extends GenericConsumerService
 {
     public function __construct(
-        HeaderPartFactory $partFactory,
+        MimeLiteralPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
         QuotedStringConsumerService $quotedStringConsumerService
     ) {
         parent::__construct(
             $partFactory,
-            [ $commentConsumerService, $quotedStringConsumerService ]
+            $commentConsumerService,
+            $quotedStringConsumerService
         );
     }
 }

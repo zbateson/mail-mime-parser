@@ -13,15 +13,16 @@ use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
  * Parses a single group of addresses (as a named-group part of an address
  * header).
  *
- * Finds addresses using its AddressConsumer sub-consumer separated by commas,
- * and ends processing once a semi-colon is found.
+ * Finds addresses using its AddressConsumerService sub-consumer separated by
+ * commas, and ends processing once a semi-colon is found.
  *
- * Prior to returning to its calling client, AddressGroupConsumer constructs a
- * single Part\AddressGroupPart object filling it with all located addresses,
- * and returns it.
+ * Prior to returning to its calling client, AddressGroupConsumerService
+ * constructs a single Part\AddressGroupPart object filling it with all located
+ * addresses, and returns it.
  *
- * The AddressGroupConsumer extends AddressBaseConsumer to define start/end
- * tokens, token separators, and construct a Part\AddressGroupPart to return.
+ * The AddressGroupConsumerService extends AddressBaseConsumerService to define
+ * start/end tokens, token separators, and construct a Part\AddressGroupPart to
+ * return.
  *
  * @author Zaahid Bateson
  */
@@ -39,7 +40,7 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
     }
 
     /**
-     * AddressGroupConsumer returns true if the passed token is a semi-colon.
+     * Returns true if the passed token is a semi-colon.
      */
     protected function isEndToken(string $token) : bool
     {
@@ -47,7 +48,7 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
     }
 
     /**
-     * AddressGroupConsumer returns true if the passed token is a colon.
+     * Returns true if the passed token is a colon.
      */
     protected function isStartToken(string $token) : bool
     {
@@ -57,8 +58,9 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
     /**
      * Performs post-processing on parsed parts.
      *
-     * AddressGroupConsumer returns an array with a single Part\AddressGroupPart
-     * element with all email addresses from this and any sub-groups.
+     * Returns an array with a single
+     * {@see AddressGroupPart} element with all email addresses from this and
+     * any sub-groups.
      *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return AddressGroupPart[]|array

@@ -26,18 +26,8 @@ use ZBateson\MailMimeParser\Header\IHeaderPart;
  *
  * @author Zaahid Bateson
  */
-class QuotedStringConsumerService extends GenericConsumerService
+class QuotedStringConsumerService extends AbstractGenericConsumerService
 {
-    /**
-     * QuotedStringConsumer doesn't have any sub-consumers.  This method returns
-     * an empty array.
-     *
-     */
-    public function getSubConsumers() : array
-    {
-        return [];
-    }
-
     /**
      * Returns true if the token is a double quote.
      */

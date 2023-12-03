@@ -21,20 +21,15 @@ use ZBateson\MailMimeParser\Header\Part\LiteralPart;
  */
 class AddressEmailConsumerService extends AbstractConsumerService
 {
-    /**
-     * Returns the following as sub-consumers:
-     *  - {@see AddressGroupConsumer}
-     *  - {@see CommentConsumer}
-     *  - {@see QuotedStringConsumer}
-     *
-     * @return AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
-    {
-        return [
-            $this->consumerService->getCommentConsumer(),
-            $this->consumerService->getQuotedStringConsumer(),
-        ];
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        CommentConsumerService $commentConsumerService,
+        QuotedStringConsumerService $quotedStringConsumerService
+    ) {
+        parent::__construct(
+            $partFactory,
+            [ $commentConsumerService, $quotedStringConsumerService ]
+        );
     }
 
     /**
@@ -65,9 +60,11 @@ class AddressEmailConsumerService extends AbstractConsumerService
     }
 
     /**
-     * Returns a single AddressPart with its 'email' portion set, so an
-     * AddressConsumer can identify it and create an AddressPart with both a
-     * name and email set.
+     * Returns a single {@see ZBateson\MailMimeParser\Header\Part\AddressPart}
+     * with its 'email' portion set, so an {@see AddressConsumerService} can
+     * identify it and create an
+     * {@see ZBateson\MailMimeParser\Header\Part\AddressPart} AddressPart with
+     * both a name and email set.
      *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array

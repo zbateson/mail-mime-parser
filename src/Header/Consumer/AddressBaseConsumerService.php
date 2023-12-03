@@ -14,25 +14,19 @@ use Iterator;
  * Serves as a base-consumer for recipient/sender email address headers (like
  * From and To).
  *
- * AddressBaseConsumer passes on token processing to its sub-consumer, an
- * AddressConsumer, and collects Part\AddressPart objects processed and returned
- * by AddressConsumer.
+ * AddressBaseConsumerService passes on token processing to its sub-consumer, an
+ * AddressConsumerService, and collects Part\AddressPart objects processed and
+ * returned by AddressConsumerService.
  *
  * @author Zaahid Bateson
  */
 class AddressBaseConsumerService extends AbstractConsumerService
 {
-    /**
-     * Returns \ZBateson\MailMimeParser\Header\Consumer\AddressConsumer as a
-     * sub-consumer.
-     *
-     * @return AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
-    {
-        return [
-            $this->consumerService->getAddressConsumer()
-        ];
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        AddressConsumerService $addressConsumerService
+    ) {
+        parent::__construct($partFactory, [ $addressConsumerService ]);
     }
 
     /**
@@ -48,8 +42,8 @@ class AddressBaseConsumerService extends AbstractConsumerService
     /**
      * Disables advancing for start tokens.
      *
-     * The start token for AddressBaseConsumer is part of an AddressPart (or a
-     * sub-consumer) and so must be passed on.
+     * The start token for AddressBaseConsumerService is part of an
+     * {@see AddressPart} (or a sub-consumer) and so must be passed on.
      *
      * @return static
      */
@@ -63,8 +57,8 @@ class AddressBaseConsumerService extends AbstractConsumerService
     }
 
     /**
-     * AddressBaseConsumer doesn't have start/end tokens, and so always returns
-     * false.
+     * AddressBaseConsumerService doesn't have start/end tokens, and so always
+     * returns false.
      *
      * @return false
      */
@@ -74,8 +68,8 @@ class AddressBaseConsumerService extends AbstractConsumerService
     }
 
     /**
-     * AddressBaseConsumer doesn't have start/end tokens, and so always returns
-     * false.
+     * AddressBaseConsumerService doesn't have start/end tokens, and so always
+     * returns false.
      *
      * @codeCoverageIgnore
      * @return false
@@ -87,7 +81,7 @@ class AddressBaseConsumerService extends AbstractConsumerService
 
     /**
      * Overridden so tokens aren't handled at this level, and instead are passed
-     * on to AddressConsumer.
+     * on to AddressConsumerService.
      *
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array
      */
@@ -97,8 +91,8 @@ class AddressBaseConsumerService extends AbstractConsumerService
     }
 
     /**
-     * Never reached by AddressBaseConsumer. Overridden to satisfy
-     * AbstractConsumer.
+     * Never reached by AddressBaseConsumerService. Overridden to satisfy
+     * AbstractConsumerService.
      *
      * @codeCoverageIgnore
      */

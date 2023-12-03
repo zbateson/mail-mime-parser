@@ -7,11 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use Psr\Log\LoggerInterface;
 
 /**
  * Consumes simple literal strings for parts of a Received header.
@@ -38,7 +37,7 @@ use Psr\Log\LoggerInterface;
  *
  * @author Zaahid Bateson
  */
-class GenericReceivedConsumerService extends GenericConsumerService
+class GenericReceivedConsumerService extends AbstractGenericConsumerService
 {
     /**
      * @var string the current part name being parsed.
@@ -52,20 +51,13 @@ class GenericReceivedConsumerService extends GenericConsumerService
      * Constructor overridden to include $partName parameter.
      *
      */
-    public function __construct(ConsumerService $consumerService, HeaderPartFactory $partFactory, string $partName, ?LoggerInterface $logger = null)
-    {
-        parent::__construct($consumerService, $partFactory, $logger);
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        CommentConsumerService $commentConsumerService,
+        string $partName
+    ) {
+        parent::__construct($partFactory, [ $commentConsumerService ]);
         $this->partName = $partName;
-    }
-
-    /**
-     * Overridden to return a CommentConsumer.
-     *
-     * @return \ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
-    {
-        return [$this->consumerService->getCommentConsumer()];
     }
 
     /**

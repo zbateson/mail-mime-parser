@@ -35,22 +35,22 @@ use ZBateson\MailMimeParser\Header\Part\LiteralPart;
  */
 class AddressConsumerService extends AbstractConsumerService
 {
-    /**
-     * Returns the following as sub-consumers:
-     *  - {@see AddressGroupConsumer}
-     *  - {@see CommentConsumer}
-     *  - {@see QuotedStringConsumer}
-     *
-     * @return AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
-    {
-        return [
-            $this->consumerService->getAddressGroupConsumer(),
-            $this->consumerService->getAddressEmailConsumer(),
-            $this->consumerService->getCommentConsumer(),
-            $this->consumerService->getQuotedStringConsumer(),
-        ];
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        AddressGroupConsumerService $addressGroupConsumerService,
+        AddressEmailConsumerService $addressEmailConsumerService,
+        CommentConsumerService $commentConsumerService,
+        QuotedStringConsumerService $quotedStringConsumerService
+    ) {
+        parent::__construct(
+            $partFactory,
+            [
+                $addressGroupConsumerService,
+                $addressEmailConsumerService,
+                $commentConsumerService,
+                $quotedStringConsumerService
+            ]
+        );
     }
 
     /**
@@ -68,7 +68,8 @@ class AddressConsumerService extends AbstractConsumerService
      * Returns true for commas and semi-colons.
      *
      * Although the semi-colon is not strictly the end token of an
-     * AddressConsumer, it could end a parent AddressGroupConsumer.
+     * AddressConsumerService, it could end a parent
+     * {@see AddressGroupConsumerService}.
      */
     protected function isEndToken(string $token) : bool
     {
@@ -86,14 +87,14 @@ class AddressConsumerService extends AbstractConsumerService
     /**
      * Performs final processing on parsed parts.
      *
-     * AddressConsumer's implementation looks for tokens representing the
-     * beginning of an address part, to create a Part\AddressPart out of a
+     * AddressConsumerService's implementation looks for tokens representing the
+     * beginning of an address part, to create a {@see AddressPart} out of a
      * name/address pair, or assign the name part to a parsed
-     * Part\AddressGroupPart returned from its AddressGroupConsumer
+     * {@see AddressGroupPart} returned from its AddressGroupConsumerService
      * sub-consumer.
      *
-     * The returned array consists of a single element - either a
-     * Part\AddressPart or a Part\AddressGroupPart.
+     * The returned array consists of a single element - either an
+     * {@see AddressPart} or an {@see AddressGroupPart}.
      *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]|array

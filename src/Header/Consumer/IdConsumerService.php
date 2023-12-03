@@ -8,7 +8,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use \ZBateson\MailMimeParser\Header\Part\CommentPart;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Parses a single ID from an ID header.  Begins consuming on a '<' char, and

@@ -18,8 +18,8 @@ use ZBateson\MailMimeParser\Header\Part\Token;
  * Reads headers separated into parameters consisting of an optional main value,
  * and subsequent name/value pairs - for example text/html; charset=utf-8.
  *
- * A ParameterConsumer's parts are separated by a semi-colon.  Its name/value
- * pairs are separated with an '=' character.
+ * A ParameterConsumerService's parts are separated by a semi-colon.  Its
+ * name/value pairs are separated with an '=' character.
  *
  * Parts may be mime-encoded entities.  Additionally, a value can be quoted and
  * comments may exist.

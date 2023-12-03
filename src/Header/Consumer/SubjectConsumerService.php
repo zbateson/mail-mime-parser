@@ -7,35 +7,24 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use Iterator;
 
 /**
- * Extends GenericConsumer to remove its sub consumers.
+ * Extends AbstractGenericConsumerService to use a MimeLiteralPartFactory, and
+ * to preserve all whitespace and escape sequences as-is (unlike other headers
+ * subject headers don't have escape chars such as '\\' for a backslash).
  *
- * Prior to this, subject headers were parsed using the GenericConsumer which
- * meant if the subject contained text within parentheses, it would not be
- * included as part of the returned value in a getHeaderValue.  Mime-encoded
- * parts within quotes would be ignored, and backslash characters denoted an
- * escaped character.
- *
- * From testing in ThunderBird and Outlook web mail it seems quoting parts
- * doesn't have an effect (e.g. quoting a "mime-literal" encoded part still
- * comes out decoded), and parts in parentheses (comments) are displayed
- * normally.
+ * SubjectConsumerService doesn't define any sub-consumers.
  *
  * @author Zaahid Bateson
  */
-class SubjectConsumerService extends GenericConsumerService
+class SubjectConsumerService extends AbstractGenericConsumerService
 {
-    /**
-     * Returns an empty array
-     *
-     * @return AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
+    public function __construct(MimeLiteralPartFactory $partFactory)
     {
-        return [];
+        parent::__construct($partFactory);
     }
 
     /**
@@ -63,7 +52,7 @@ class SubjectConsumerService extends GenericConsumerService
      * Returns an array of \ZBateson\MailMimeParser\Header\Part\HeaderPart for
      * the current token on the iterator.
      *
-     * Overridden from AbstractConsumer to remove special filtering for
+     * Overridden from AbstractConsumerService to remove special filtering for
      * backslash escaping, which also seems to not apply to Subject headers at
      * least in ThunderBird's implementation.
      *
@@ -76,7 +65,7 @@ class SubjectConsumerService extends GenericConsumerService
 
     /**
      * Overridden to not split out backslash characters and its next character
-     * as a special case defined in AbastractConsumer
+     * as a special case defined in AbstractConsumerService
      *
      * @return string the regex pattern
      */

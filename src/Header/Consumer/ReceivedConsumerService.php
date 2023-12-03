@@ -9,6 +9,9 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Iterator;
 use ZBateson\MailMimeParser\Header\Part\Token;
+use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
 
 /**
  * Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,
@@ -20,8 +23,34 @@ use ZBateson\MailMimeParser\Header\Part\Token;
  */
 class ReceivedConsumerService extends AbstractConsumerService
 {
+    public function __construct(
+        HeaderPartFactory $partFactory,
+        DomainConsumerService $fromDomainConsumerService,
+        DomainConsumerService $byDomainConsumerService,
+        GenericReceivedConsumerService $viaGenericReceivedConsumerService,
+        GenericReceivedConsumerService $withGenericReceivedConsumerService,
+        GenericReceivedConsumerService $idGenericReceivedConsumerService,
+        GenericReceivedConsumerService $forGenericReceivedConsumerService,
+        ReceivedDateConsumerService $receivedDateConsumerService,
+        CommentConsumerService $commentConsumerService
+    ) {
+        parent::__construct(
+            $partFactory,
+            [
+                $fromDomainConsumerService,
+                $byDomainConsumerService,
+                $viaGenericReceivedConsumerService,
+                $withGenericReceivedConsumerService,
+                $idGenericReceivedConsumerService,
+                $forGenericReceivedConsumerService,
+                $receivedDateConsumerService,
+                $commentConsumerService
+            ]
+        );
+    }
+
     /**
-     * ReceivedConsumer doesn't have any token separators of its own.
+     * ReceivedConsumerService doesn't have any token separators of its own.
      * Sub-Consumers will return separators matching 'part' word separators, for
      * example 'from' and 'by', and ';' for date, etc...
      *
@@ -33,8 +62,8 @@ class ReceivedConsumerService extends AbstractConsumerService
     }
 
     /**
-     * ReceivedConsumer doesn't have an end token, and so this just returns
-     * false.
+     * ReceivedConsumerService doesn't have an end token, and so this just
+     * returns false.
      */
     protected function isEndToken(string $token) : bool
     {
@@ -42,40 +71,15 @@ class ReceivedConsumerService extends AbstractConsumerService
     }
 
     /**
-     * ReceivedConsumer doesn't start consuming at a specific token, it's the
-     * base handler for the Received header, and so this always returns false.
+     * ReceivedConsumerService doesn't start consuming at a specific token, it's
+     * the base handler for the Received header, and so this always returns
+     * false.
      *
      * @codeCoverageIgnore
      */
     protected function isStartToken(string $token) : bool
     {
         return false;
-    }
-
-    /**
-     * Returns sub-consumers for a received consumer.
-     *
-     * - 2 {@see Received/DomainConsumer} instances, with FROM and BY as part
-     *   names.
-     * - 4 {@see Received/GenericReceivedConsumer} instances for VIA, WITH, ID,
-     *   and FOR part names.
-     * - 1 {@see Received/ReceivedDateConsumer} for the date/time stamp.
-     * - 1 {@see CommentConsumer} to consume any comments.
-     *
-     * @return AbstractConsumerService[] the sub-consumers
-     */
-    protected function getSubConsumers() : array
-    {
-        return [
-            $this->consumerService->getSubReceivedConsumer('from'),
-            $this->consumerService->getSubReceivedConsumer('by'),
-            $this->consumerService->getSubReceivedConsumer('via'),
-            $this->consumerService->getSubReceivedConsumer('with'),
-            $this->consumerService->getSubReceivedConsumer('id'),
-            $this->consumerService->getSubReceivedConsumer('for'),
-            $this->consumerService->getSubReceivedConsumer('date'),
-            $this->consumerService->getCommentConsumer()
-        ];
     }
 
     /**
@@ -101,7 +105,7 @@ class ReceivedConsumerService extends AbstractConsumerService
         if ($isStartToken) {
             $tokens->next();
         } elseif ($tokens->valid() && !$this->isEndToken($tokens->current())) {
-            foreach ($this->getSubConsumers() as $consumer) {
+            foreach ($this->subConsumers as $consumer) {
                 if ($consumer->isStartToken($tokens->current())) {
                     return $this;
                 }

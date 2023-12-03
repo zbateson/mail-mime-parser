@@ -20,9 +20,9 @@ use Iterator;
  * quoted-literals may exist with comments as well meaning a parenthesis inside
  * a quoted string would not begin or end a comment section.
  *
- * In order to satisfy these specifications, CommentConsumer inherits from
- * GenericConsumer which defines CommentConsumer and QuotedStringConsumer as
- * sub-consumers.
+ * In order to satisfy these specifications, CommentConsumerService inherits
+ * from GenericConsumerService which defines CommentConsumerService and
+ * QuotedStringConsumerService as sub-consumers.
  *
  * Examples:
  * X-Mime-Header: Some value (comment)
