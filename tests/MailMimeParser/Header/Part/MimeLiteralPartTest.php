@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,7 +21,7 @@ class MimeLiteralPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapperService();
+        $this->charsetConverter = new MbWrapper();
     }
 
     protected function assertDecoded($expected, $encodedActual) : MimeLiteralPart
@@ -159,7 +160,7 @@ class MimeLiteralPartTest extends TestCase
 
     public function testLanguageParts() : void
     {
-        $this->charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $this->charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
 

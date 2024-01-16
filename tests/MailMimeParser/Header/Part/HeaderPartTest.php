@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\ErrorBag;
 
@@ -20,7 +21,7 @@ class HeaderPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = new MbWrapperService();
+        $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder('\\' . \ZBateson\MailMimeParser\Header\Part\HeaderPart::class)
             ->setConstructorArgs([$charsetConverter])
             ->getMockForAbstractClass();

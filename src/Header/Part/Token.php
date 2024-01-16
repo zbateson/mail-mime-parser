@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
+
 /**
  * Holds a string value token that will require additional processing by a
  * consumer prior to returning to a client.
@@ -25,7 +27,7 @@ class Token extends HeaderPart
      *
      * @param string $value the token's value
      */
-    public function __construct(MbWrapperService $charsetConverter, $value)
+    public function __construct(MbWrapper $charsetConverter, $value)
     {
         parent::__construct($charsetConverter);
         $this->value = $value;

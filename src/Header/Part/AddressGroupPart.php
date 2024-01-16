@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
 use Psr\Log\LogLevel;
 
 /**
@@ -24,7 +25,7 @@ class AddressGroupPart extends MimeLiteralPart
     /**
      * @var AddressPart[] an array of AddressParts
      */
-    protected $addresses;
+    protected array $addresses;
 
     /**
      * Creates an AddressGroupPart out of the passed array of AddressParts and an
@@ -32,7 +33,7 @@ class AddressGroupPart extends MimeLiteralPart
      *
      * @param AddressPart[] $addresses
      */
-    public function __construct(MbWrapperService $charsetConverter, array $addresses, string $name = '')
+    public function __construct(MbWrapper $charsetConverter, array $addresses, string $name = '')
     {
         parent::__construct($charsetConverter, \trim($name));
         $this->addresses = $addresses;

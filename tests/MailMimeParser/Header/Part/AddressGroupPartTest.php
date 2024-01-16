@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 
+use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
 use Psr\Log\LogLevel;
 
@@ -20,7 +21,7 @@ class AddressGroupPartTest extends TestCase
 {
     public function testNameGroup() : void
     {
-        $csConverter = new MbWrapperService();
+        $csConverter = new MbWrapper();
 
         $name = 'Roman Senate';
         $members = [
@@ -40,7 +41,7 @@ class AddressGroupPartTest extends TestCase
 
     public function testValidation() : void
     {
-        $csConverter = new MbWrapperService();
+        $csConverter = new MbWrapper();
         $part = new AddressGroupPart($csConverter, []);
         $errs = $part->getErrors(true, LogLevel::NOTICE);
         $this->assertCount(2, $errs);

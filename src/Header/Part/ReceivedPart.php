@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
+
 /**
  * Represents one parameter in a parsed 'Received' header, e.g. the FROM or VIA
  * part.
@@ -20,7 +22,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 class ReceivedPart extends ParameterPart
 {
     public function __construct(
-        MbWrapperService $charsetConverter,
+        MbWrapper $charsetConverter,
         string $name,
         ?string $value
     ) {

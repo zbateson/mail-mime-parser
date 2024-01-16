@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\ErrorBag;
 
@@ -20,20 +21,21 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     /**
      * @var ?string the value of the part
      */
-    protected $value;
+    protected ?string $value;
 
     /**
      * @var MbWrapper $charsetConverter the charset converter used for
      *      converting strings in HeaderPart::convertEncoding
      */
-    protected $charsetConverter;
+    protected MbWrapper $charsetConverter;
 
     /**
      * Sets up dependencies.
      *
      */
-    public function __construct(MbWrapperService $charsetConverter)
+    public function __construct(MbWrapper $charsetConverter)
     {
+        parent::__construct();
         $this->charsetConverter = $charsetConverter;
     }
 
@@ -100,6 +102,9 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
         return $str;
     }
 
+    /**
+     * Default implementation returns an empty array.
+     */
     protected function getErrorBagChildren() : array
     {
         return [];

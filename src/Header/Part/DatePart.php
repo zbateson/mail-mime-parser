@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
 use DateTime;
 use Exception;
 use Psr\Log\LogLevel;
@@ -21,15 +22,14 @@ class DatePart extends LiteralPart
     /**
      * @var DateTime the parsed date, or null if the date could not be parsed
      */
-    protected $date = null;
+    protected ?DateTime $date = null;
 
     /**
      * Tries parsing the passed token as an RFC 2822 date, and failing that into
      * an RFC 822 date, and failing that, tries to parse it by calling
      * new DateTime($value).
-     *
      */
-    public function __construct(MbWrapperService $charsetConverter, string $token)
+    public function __construct(MbWrapper $charsetConverter, string $token)
     {
         $dateToken = \trim($token);
         // parent::__construct converts character encoding -- may cause problems sometimes.
@@ -57,19 +57,9 @@ class DatePart extends LiteralPart
 
     /**
      * Returns a DateTime object or null if it can't be parsed.
-     *
-     * @return DateTime
      */
     public function getDateTime() : ?DateTime
     {
         return $this->date;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getErrorBagChildren() : array
-    {
-        return $this->addresses;
     }
 }

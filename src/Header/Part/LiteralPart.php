@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
+
 /**
  * A literal header string part.  The value of the part is stripped of CR and LF
  * characters, but otherwise not transformed or changed in any way.
@@ -18,7 +20,7 @@ class LiteralPart extends HeaderPart
     /**
      * Creates a LiteralPart out of the passed string token
      */
-    public function __construct(MbWrapperService $charsetConverter, ?string $token = null)
+    public function __construct(MbWrapper $charsetConverter, ?string $token = null)
     {
         parent::__construct($charsetConverter);
         $this->value = $token;

@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use Psr\Log\LogLevel;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Represents a name/value pair part of a header.
@@ -34,7 +35,7 @@ class ParameterPart extends MimeLiteralPart
      * they're taken as literals as part of a SplitParameterToken.
      */
     public function __construct(
-        MbWrapperService $charsetConverter,
+        MbWrapper $charsetConverter,
         string $name,
         string $value,
         ?string $language = null

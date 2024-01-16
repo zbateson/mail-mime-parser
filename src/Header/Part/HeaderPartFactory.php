@@ -7,15 +7,15 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Constructs and returns IHeaderPart objects.
  *
  * @author Zaahid Bateson
  */
-class HeaderPartFactory implements IService
+class HeaderPartFactory
 {
     /**
      * @var MbWrapper $charsetConverter passed to IHeaderPart constructors
@@ -27,7 +27,7 @@ class HeaderPartFactory implements IService
      * Sets up dependencies.
      *
      */
-    public function __construct(MbWrapperService $charsetConverter)
+    public function __construct(MbWrapper $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
     }

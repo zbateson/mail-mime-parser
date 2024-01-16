@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MbWrapper\MbWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,13 +20,8 @@ class MimeLiteralPartFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = new MbWrapperService();
+        $charsetConverter = new MbWrapper();
         $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->headerPartFactory);
     }
 
     public function testNewInstance() : void
