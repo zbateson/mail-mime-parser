@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
@@ -15,7 +14,7 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
  *
  * @author Zaahid Bateson
  */
-class ParserPartChildrenContainerFactory implements IService
+class ParserPartChildrenContainerFactory
 {
     public function newInstance(ParserMimePartProxy $parserProxy)
     {

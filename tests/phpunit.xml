@@ -30,9 +30,6 @@
     <testsuite name="Base">
       <directory suffix="Test.php">MailMimeParser</directory>
     </testsuite>
-    <testsuite name="Container">
-      <directory suffix="Test.php">MailMimeParser/Container</directory>
-    </testsuite>
     <testsuite name="Header">
       <directory suffix="Test.php">MailMimeParser/Header</directory>
     </testsuite>

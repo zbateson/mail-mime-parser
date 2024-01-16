@@ -39,7 +39,6 @@ class ParserManagerServiceTest extends TestCase
             ->method('setParserManager')
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\ParserManagerService::class));
         $instance = new ParserManagerService($this->mimeParser, $this->nonMimeParser);
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $instance);
     }
 
     public function testSetParsersSetsParserManager() : void

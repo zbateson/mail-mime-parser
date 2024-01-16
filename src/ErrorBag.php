@@ -7,7 +7,9 @@
 
 namespace ZBateson\MailMimeParser;
 
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 use Throwable;
 
 /**
@@ -15,8 +17,11 @@ use Throwable;
  *
  * @author Zaahid Bateson
  */
-abstract class ErrorBag extends Logger implements IErrorBag
+abstract class ErrorBag implements IErrorBag
 {
+    #[Inject]
+    protected LoggerInterface $logger;
+
     /**
      * @var Error[] array of Error objects belonging to this object.
      */
@@ -26,6 +31,11 @@ abstract class ErrorBag extends Logger implements IErrorBag
      * @var bool true once the object has been validated.
      */
     private $validated = false;
+
+    public function __construct()
+    {
+        $this->logger = new NullLogger();
+    }
 
     /**
      * Returns the class name.  Override to identify objects in logs.
@@ -60,7 +70,7 @@ abstract class ErrorBag extends Logger implements IErrorBag
     {
         $error = new Error($message, $psrLogLevel, $this, $exception);
         $this->errors[] = $error;
-        $this->getLogger()->log(
+        $this->logger->log(
             $psrLogLevel,
             '${contextName} ${message} ${exception}',
             [

@@ -65,6 +65,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      */
     public function __construct(HeaderFactory $headerFactory, ?PartHeaderContainer $cloneSource = null)
     {
+        parent::__construct();
         $this->headerFactory = $headerFactory;
         if ($cloneSource !== null) {
             $this->headers = $cloneSource->headers;

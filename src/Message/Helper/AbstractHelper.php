@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 
@@ -16,7 +15,7 @@ use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
  *
  * @author Zaahid Bateson
  */
-abstract class AbstractHelper implements IService
+abstract class AbstractHelper
 {
     /**
      * @var IMimePartFactory to create parts for attachments/content

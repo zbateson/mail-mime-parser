@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory;
@@ -17,7 +16,7 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory;
  *
  * @author Zaahid Bateson
  */
-interface IParserService extends IService
+interface IParserService
 {
     /**
      * Sets up the passed ParserManager as the ParserManager for this part,

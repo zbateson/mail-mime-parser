@@ -56,6 +56,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
 
     public function __construct(?PartStreamContainer $streamContainer = null, ?IMimePart $parent = null)
     {
+        parent::__construct();
         $this->partStreamContainer = $streamContainer;
         if ($this->partStreamContainer === null) {
             $fc = new StreamFactory();

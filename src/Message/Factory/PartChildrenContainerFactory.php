@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 
 /**
@@ -15,7 +14,7 @@ use ZBateson\MailMimeParser\Message\PartChildrenContainer;
  *
  * @author Zaahid Bateson
  */
-class PartChildrenContainerFactory implements IService
+class PartChildrenContainerFactory
 {
     public function newInstance()
     {

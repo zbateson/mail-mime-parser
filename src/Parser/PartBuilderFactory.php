@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
@@ -17,7 +16,7 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
  *
  * @author Zaahid Bateson
  */
-class PartBuilderFactory implements IService
+class PartBuilderFactory
 {
     /**
      * Constructs a top-level (message) PartBuilder object and returns it

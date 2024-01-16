@@ -19,7 +19,7 @@ class HeaderFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
@@ -35,11 +35,6 @@ class HeaderFactoryTest extends TestCase
             ->setMethods(['__toString'])
             ->getMock();
         $this->headerFactory = new HeaderFactory($cs, $mlpf);
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->headerFactory);
     }
 
     public function testAddressHeaderInstance() : void

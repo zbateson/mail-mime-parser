@@ -11,18 +11,31 @@ use GuzzleHttp\Psr7\CachingStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
-use Pimple\ServiceProviderInterface;
+use DI\Container;
+use DI\ContainerBuilder;
+use DI\Definition\Source\DefinitionSource;
 use ZBateson\MailMimeParser\Parser\MessageParserService;
 
 /**
  * Parses a MIME message into an {@see IMessage} object.
  *
- * The class sets up the Pimple dependency injection container with the ability
- * to override and/or provide specialized provider
- * {@see https://pimple.symfony.com/ \Pimple\ServiceProviderInterface}
- * classes to extend default classes used by MailMimeParser.
+ * The class sets up the dependency injection container (using PHP-DI) with the
+ * ability to override and/or provide specialized classes.  To override you can:
  *
- * To invoke, call parse on a MailMimeParser object.
+ *  - Provide an array|string|DefinitionSource to the constructor to affect
+ *    classes used on a single instance of MailMimeParser
+ *  - Call MailMimeParser::setGlobalPhpDiConfiguration with an
+ *    array|string|DefinitionSource to to override it globally on all instances
+ *    of MailMimeParser
+ *  - Call MailMimeParser::getGlobalContainer(), and use set() to override
+ *    individual definitions globally.
+ *
+ * You may also provide a LoggerInterface on the constructor for a single
+ * instance, or override it globally by calling setGlobalLogger.  This is the
+ * same as setting up Psr\Log\LoggerInterface with your logger class in a Php-Di
+ * configuration in one of the above methods.
+ *
+ * To invoke the parser, call `parse` on a MailMimeParser object.
  *
  * ```php
  * $parser = new MailMimeParser();
@@ -44,63 +57,94 @@ class MailMimeParser
     public const DEFAULT_CHARSET = 'UTF-8';
 
     /**
-     * @var ServiceLocator The instance's dependency injection container.
+     * @var Container The instance's dependency injection container.
      */
-    protected $container = null;
+    protected Container $container;
+
+    /**
+     * @var Container The static global container
+     */
+    private static ?Container $globalContainer = null;
 
     /**
      * @var MessageParserService for parsing messages
      */
-    protected $messageParser;
+    protected MessageParserService $messageParser;
 
     /**
-     * Registers a
+     * Returns the global php-di container instance.
      *
-     * @param ServiceProviderInterface[] $serviceProviders
+     * @return Container
      */
-    public static function registerGlobalServiceProviders(array $serviceProviders) : void
+    public static function getGlobalContainer() : Container
     {
-        ServiceLocator::setGlobalServiceProviders($serviceProviders);
+        if (self::$globalContainer === null) {
+            $builder = new ContainerBuilder();
+            $builder->useAttributes(true);
+            $builder->addDefinitions(__DIR__ . '/di_config.php');
+            self::$globalContainer = $builder->build();
+        }
+        return self::$globalContainer;
     }
 
     /**
-     * Registers the provided logger globally
+     * Sets global configuration for php-di.
+     *
+     * @param array|string|DefinitionSource $phpDiConfig
+     * @return void
+     */
+    public static function setGlobalPhpDiConfiguration(array|string|DefinitionSource $phpDiConfig) : void
+    {
+        $container = self::getGlobalContainer();
+        $builder = new ContainerBuilder();
+        $builder->wrapContainer($container);
+        $builder->addDefinitions($phpDiConfig);
+        self::$globalContainer = $builder->build();
+    }
+
+    /**
+     * Registers the provided logger globally.
+     *
+     * @param LoggerInterface $logger
+     * @return void
      */
     public static function setGlobalLogger(LoggerInterface $logger) : void
     {
-        ServiceLocator::setGlobalLogger($logger);
+        self::getGlobalContainer()->set(LoggerInterface::class, $logger);
     }
 
     /**
-     * Provide custom ServiceProviderInterface objects to customize dependency
-     * injection for email parsing, or provide a custom logger for the new
-     * instance only.
+     * Provide custom php-di configuration to customize dependency injection, or
+     * provide a custom logger for the instance only.
      *
-     * Note 1: providing an array of service providers creates a dependency
-     * injection container <i>without</i> using any previously registered global
-     * service providers.
-     *
-     * Note 2: this only affects instances created through this instance of the
+     * Note: this only affects instances created through this instance of the
      * MailMimeParser, or the container itself.  Calling 'new MimePart()'
      * directly for instance, would use the global service locator to setup any
      * dependencies MimePart needs.  This applies to a provided $logger too --
      * it would only affect instances of objects created through the provided
      * MailMimeParser.
      *
-     * @see MailMimeParser::registerGlobalServiceProviders() to register service
-     *      providers globally
+     * @see MailMimeParser::setGlobalPhpDiConfiguration() to register
+     *      configuration globally.
      * @see MailMimeParser::setGlobalLogger() to set a global logger
-     * @param ?ServiceProviderInterface[] $serviceProviders
      * @param ?LoggerInterface $logger
+     * @param ?array[] $phpDiContainerConfig
      */
-    public function __construct(?array $serviceProviders = null, ?LoggerInterface $logger = null)
+    public function __construct(?LoggerInterface $logger = null, array|string|DefinitionSource|null $phpDiContainerConfig = null)
     {
-        if ($serviceProviders !== null || $logger !== null) {
-            $this->container = ServiceLocator::newInstance($logger, $serviceProviders);
-        } else {
-            $this->container = ServiceLocator::getGlobalInstance();
+        $this->container = self::getGlobalContainer();
+        if ($phpDiContainerConfig !== null || $logger !== null) {
+            $builder = new ContainerBuilder();
+            $builder->wrapContainer($this->container);
+            if ($phpDiContainerConfig !== null) {
+                $builder->addDefinitions($phpDiContainerConfig);
+            }
+            if ($logger !== null) {
+                $builder->addDefinitions([ LoggerInterface::class => $logger ]);
+            }
+            $this->container = $builder->build();
         }
-        $this->messageParser = $this->container[MessageParserService::class];
+        $this->messageParser = $this->container->get(MessageParserService::class);
     }
 
     /**

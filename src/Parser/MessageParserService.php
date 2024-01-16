@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 
 /**
@@ -17,7 +16,7 @@ use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
  *
  * @author Zaahid Bateson
  */
-class MessageParserService implements IService
+class MessageParserService
 {
     /**
      * @var PartHeaderContainerFactory To create a container to read the

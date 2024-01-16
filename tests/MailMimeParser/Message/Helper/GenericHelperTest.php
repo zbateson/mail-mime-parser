@@ -48,11 +48,6 @@ class GenericHelperTest extends TestCase
         return new GenericHelper($this->mockMimePartFactory, $this->mockUUEncodedPartFactory);
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->newGenericHelper());
-    }
-
     public function testCopyHeaders() : void
     {
         $helper = $this->newGenericHelper();

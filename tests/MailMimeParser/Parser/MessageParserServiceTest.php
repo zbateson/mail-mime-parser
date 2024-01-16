@@ -53,11 +53,6 @@ class MessageParserServiceTest extends TestCase
         );
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
-    }
-
     public function testParse() : void
     {
         $stream = Psr7\Utils::streamFor('test');

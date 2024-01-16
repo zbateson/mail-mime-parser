@@ -71,11 +71,6 @@ class ParserUUEncodedPartProxyFactoryTest extends TestCase
         );
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
-    }
-
     public function testNewInstance() : void
     {
         $this->partStreamContainerFactory->expects($this->once())

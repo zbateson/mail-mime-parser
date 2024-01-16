@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
 
@@ -16,7 +15,7 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
  *
  * @author Zaahid Bateson
  */
-abstract class ParserPartProxyFactory implements IService
+abstract class ParserPartProxyFactory
 {
     /**
      * Constructs a new ParserPartProxy wrapping an IMessagePart object.

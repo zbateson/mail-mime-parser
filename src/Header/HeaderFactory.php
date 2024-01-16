@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Logger;
-use ZBateson\MailMimeParser\Container\IService;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ReflectionClass;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
@@ -32,18 +32,20 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  *
  * @author Zaahid Bateson
  */
-class HeaderFactory extends Logger implements IService
+class HeaderFactory
 {
+    #[Inject]
+    protected LoggerInterface $logger;
+
     /**
-     * @var ConsumerService the passed ConsumerService providing
-     *      AbstractConsumer singletons.
+     * @var IConsumerService[] array of available consumer service classes
      */
-    protected $consumerService;
+    protected array $consumerServices;
 
     /**
      * @var MimeLiteralPartFactory for mime decoding.
      */
-    protected $mimeLiteralPartFactory;
+    protected MimeLiteralPartFactory $mimeLiteralPartFactory;
 
     /**
      * @var string[][] maps IHeader types to headers.
@@ -104,10 +106,11 @@ class HeaderFactory extends Logger implements IService
      * Instantiates member variables with the passed objects.
      *
      */
-    public function __construct(ConsumerService $consumerService, MimeLiteralPartFactory $mimeLiteralPartFactory)
+    public function __construct(array $consumerServices, MimeLiteralPartFactory $mimeLiteralPartFactory)
     {
-        $this->consumerService = $consumerService;
+        $this->consumerServices = $consumerServices;
         $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -152,7 +155,7 @@ class HeaderFactory extends Logger implements IService
     public function newInstance(string $name, string $value)
     {
         $class = $this->getClassFor($name);
-        $this->getLogger()->debug(
+        $this->logger->debug(
             'Creating ${class} for header with name "${name}" and value "${value}"',
             [ 'class' => $class, 'name' => $name, 'value' => $value ]
         );
@@ -169,14 +172,20 @@ class HeaderFactory extends Logger implements IService
      */
     public function newInstanceOf(string $name, string $value, string $iHeaderClass) : IHeader
     {
-        if (\is_a($iHeaderClass, 'ZBateson\MailMimeParser\Header\MimeEncodedHeader', true)) {
+        $ref = new ReflectionClass($iHeaderClass);
+        $params = $ref->getConstructor()->getParameters();
+        if ($ref->isSubclassOf(MimeEncodedHeader::class)) {
             return new $iHeaderClass(
                 $this->mimeLiteralPartFactory,
-                $this->consumerService,
+                $this->consumerServices[$params[1]->getClass()->getName()],
                 $name,
                 $value
             );
         }
-        return new $iHeaderClass($this->consumerService, $name, $value);
+        return new $iHeaderClass(
+            $this->consumerServices[$params[0]->getClass()->getName()],
+            $name,
+            $value
+        );
     }
 }

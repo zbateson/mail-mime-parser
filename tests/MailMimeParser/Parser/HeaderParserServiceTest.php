@@ -31,11 +31,6 @@ class HeaderParserServiceTest extends TestCase
         $this->instance = new HeaderParserService();
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
-    }
-
     public function testParseEmptyStreamDoesNothing() : void
     {
         $res = StreamWrapper::getResource(Utils::streamFor(''));

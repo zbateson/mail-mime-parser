@@ -12,7 +12,7 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\ServiceLocator;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A mime email message part.
@@ -39,8 +39,8 @@ class MimePart extends MultiPart implements IMimePart
             $streamContainer,
             $partChildrenContainer
         );
-        $di = ServiceLocator::getGlobalInstance();
-        $this->headerContainer = $headerContainer ?? new PartHeaderContainer($di[HeaderFactory::class]);
+        $di = MailMimeParser::getGlobalContainer();
+        $this->headerContainer = $headerContainer ?? new PartHeaderContainer($di->get(HeaderFactory::class));
     }
 
     /**

@@ -24,11 +24,6 @@ class PartBuilderFactoryTest extends TestCase
         $this->instance = new PartBuilderFactory();
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
-    }
-
     public function testNewPartBuilder() : void
     {
         $hc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)

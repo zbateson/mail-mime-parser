@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Parser;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 
 /**
@@ -19,7 +18,7 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
  *
  * @author Zaahid Bateson
  */
-class ParserManagerService implements IService
+class ParserManagerService
 {
     /**
      * @var IParserService[] List of parsers in order of priority (0 is highest

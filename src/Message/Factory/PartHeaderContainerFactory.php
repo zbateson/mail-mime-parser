@@ -7,7 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
@@ -16,7 +15,7 @@ use ZBateson\MailMimeParser\Message\PartHeaderContainer;
  *
  * @author Zaahid Bateson
  */
-class PartHeaderContainerFactory implements IService
+class PartHeaderContainerFactory
 {
     /**
      * @var HeaderFactory the HeaderFactory passed to HeaderContainer instances.

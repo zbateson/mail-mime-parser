@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Log\LogLevel;
-use ZBateson\MailMimeParser\Container\IService;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
 /**
@@ -16,7 +15,7 @@ use ZBateson\MailMimeParser\Message\PartHeaderContainer;
  *
  * @author Zaahid Bateson
  */
-class HeaderParserService implements IService
+class HeaderParserService
 {
     /**
      * Ensures the header isn't empty and contains a colon separator character,

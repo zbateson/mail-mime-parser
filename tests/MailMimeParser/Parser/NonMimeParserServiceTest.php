@@ -94,11 +94,6 @@ class NonMimeParserServiceTest extends TestCase
             ->getMock();
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
-    }
-
     public function testAbstractParserGetters() : void
     {
         $this->assertSame($this->messageProxyFactory, $this->instance->getParserMessageProxyFactory());

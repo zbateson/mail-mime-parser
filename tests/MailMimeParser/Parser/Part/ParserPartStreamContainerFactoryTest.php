@@ -28,11 +28,6 @@ class ParserPartStreamContainerFactoryTest extends TestCase
         $this->instance = new ParserPartChildrenContainerFactory();
     }
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->instance);
-    }
-
     public function testNewInstance() : void
     {
         $ob = $this->instance->newInstance($this->proxy);
