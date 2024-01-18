@@ -8,8 +8,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\ErrorBag;
-use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use Psr\Log\LogLevel;
 
@@ -18,9 +17,6 @@ use Psr\Log\LogLevel;
  *
  * The base class sets up the header's consumer for parsing, sets the name of
  * the header, and calls the consumer to parse the header's value.
- *
- * AbstractHeader::getConsumer is an abstract method that must be overridden to
- * return an appropriate Consumer\AbstractConsumer type.
  *
  * @author Zaahid Bateson
  */
@@ -53,18 +49,19 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
     protected $rawValue = '';
 
     /**
-     * Assigns the header's name and raw value, then calls getConsumer and
-     * setParseHeaderValue to extract a parsed value.
+     * Assigns the header's name and raw value, then calls parseHeaderValue to
+     * extract a parsed value.
      *
-     * @param ConsumerService $consumerService For parsing the value.
+     * @param IConsumerService $consumerService For parsing the value.
      * @param string $name Name of the header.
      * @param string $value Value of the header.
      */
     public function __construct(
-        AbstractConsumerService $consumerService,
+        IConsumerService $consumerService,
         string $name,
         string $value
     ) {
+        parent::__construct();
         $this->name = $name;
         $this->rawValue = $value;
         $this->parseHeaderValue($consumerService, $value);
@@ -90,7 +87,7 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      * and filters out comments from it, assigning the filtered array to
      * $this->parts by calling filterAndAssignToParts.
      */
-    protected function parseHeaderValue(AbstractConsumerService $consumer, string $value) : void
+    protected function parseHeaderValue(IConsumerService $consumer, string $value) : void
     {
         $this->allParts = $consumer($value);
         $this->filterAndAssignToParts();

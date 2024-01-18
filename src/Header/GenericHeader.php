@@ -7,7 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
 
 /**
  * Reads a generic header.
@@ -20,7 +20,7 @@ use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerService;
 class GenericHeader extends AbstractHeader
 {
     public function __construct(
-        GenericConsumerService $consumerService,
+        GenericConsumerMimeLiteralPartService $consumerService,
         string $name,
         string $value
     ) {

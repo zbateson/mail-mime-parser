@@ -3,6 +3,8 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 
 /**
  * Description of DateHeaderTest
@@ -20,19 +22,27 @@ class DateHeaderTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
+        $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
+            ->setConstructorArgs([$pf])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $ccs = $this->getMockBuilder(CommentConsumerService::class)
+            ->setConstructorArgs([$mpf, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\DateConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
     }

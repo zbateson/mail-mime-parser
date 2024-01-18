@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 
 /**

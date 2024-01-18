@@ -3,6 +3,13 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
+use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 
 /**
  * Description of HeaderFactoryTest
@@ -26,15 +33,41 @@ class HeaderFactoryTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
-            ->setMethods(['__toString'])
+        
+        $abcs = $this->getMockBuilder(AddressBaseConsumerService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
             ->getMock();
-        $this->headerFactory = new HeaderFactory($cs, $mlpf);
+        $dcs = $this->getMockBuilder(DateConsumerService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+        $gcmlpcs = $this->getMockBuilder(GenericConsumerMimeLiteralPartService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+        $idbcs = $this->getMockBuilder(IdBaseConsumerService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+        $pcs = $this->getMockBuilder(ParameterConsumerService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+        $rcs = $this->getMockBuilder(ReceivedConsumerService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+        $scs = $this->getMockBuilder(SubjectConsumerService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+
+        $this->headerFactory = new HeaderFactory($mpf, $abcs, $dcs, $gcmlpcs, $idbcs, $pcs, $rcs, $scs);
     }
 
     public function testAddressHeaderInstance() : void

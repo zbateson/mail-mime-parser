@@ -4,6 +4,12 @@ namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 
 /**
  * Description of ReceivedHeaderTest
@@ -21,19 +27,56 @@ class ReceivedHeaderTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
+        $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
+            ->setConstructorArgs([$pf])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $ccs = $this->getMockBuilder(CommentConsumerService::class)
+            ->setConstructorArgs([$mpf, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+
+        $fdcs = $this->getMockBuilder(DomainConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, 'from'])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $bdcs = $this->getMockBuilder(DomainConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, 'by'])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $vgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, 'via'])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $wgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, 'with'])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $igcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, 'id'])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $fgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, 'for'])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $rdcs = $this->getMockBuilder(ReceivedDateConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->consumerService = $this->getMockBuilder(ReceivedConsumerService::class)
+            ->setConstructorArgs([$pf, $fdcs, $bdcs, $vgcs, $wgcs, $igcs, $fgcs, $rdcs, $ccs])
             ->setMethods(['__toString'])
             ->getMock();
     }

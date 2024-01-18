@@ -88,7 +88,7 @@ class ReceivedHeader extends ParameterHeader
         string $name,
         string $value
     ) {
-        parent::__construct($consumerService, $name, $value);
+        AbstractHeader::__construct($consumerService, $name, $value);
     }
 
     /**

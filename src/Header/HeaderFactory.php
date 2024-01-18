@@ -7,10 +7,17 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
+use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ReflectionClass;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Constructs various IHeader types depending on the type of header passed.
@@ -102,15 +109,27 @@ class HeaderFactory
      */
     protected $genericType = GenericHeader::class;
 
-    /**
-     * Instantiates member variables with the passed objects.
-     *
-     */
-    public function __construct(array $consumerServices, MimeLiteralPartFactory $mimeLiteralPartFactory)
-    {
-        $this->consumerServices = $consumerServices;
-        $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
+    public function __construct(
+        MimeLiteralPartFactory $mimeLiteralPartFactory,
+        AddressBaseConsumerService $addressBaseConsumerService,
+        DateConsumerService $dateConsumerService,
+        GenericConsumerMimeLiteralPartService $genericConsumerMimeLiteralPartService,
+        IdBaseConsumerService $idBaseConsumerService,
+        ParameterConsumerService $parameterConsumerService,
+        ReceivedConsumerService $receivedConsumerService,
+        SubjectConsumerService $subjectConsumerService
+    ) {
         $this->logger = new NullLogger();
+        $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
+        $this->consumerServices = [
+            AddressBaseConsumerService::class => $addressBaseConsumerService,
+            DateConsumerService::class => $dateConsumerService,
+            GenericConsumerMimeLiteralPartService::class => $genericConsumerMimeLiteralPartService,
+            IdBaseConsumerService::class => $idBaseConsumerService,
+            ParameterConsumerService::class => $parameterConsumerService,
+            ReceivedConsumerService::class => $receivedConsumerService,
+            SubjectConsumerService::class => $subjectConsumerService
+        ];
     }
 
     /**
