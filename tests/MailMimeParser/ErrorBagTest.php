@@ -16,22 +16,12 @@ use Psr\Log\LogLevel;
  */
 class ErrorBagTest extends TestCase
 {
-    // @phpstan-ignore-next-line
-    private $mockLogger;
-
-    protected function setUp(): void
-    {
-        $this->mockLogger = $this->getMockBuilder('\\' . NullLogger::class)
-            ->getMock();
-    }
-
     private function newErrorBagStub($children = [])
     {
         $stub = $this->getMockBuilder('\\' . ErrorBag::class)
             ->getMockForAbstractClass();
         $stub->method('getErrorBagChildren')
             ->willReturn($children);
-        $stub->setLogger($this->mockLogger);
         return $stub;
     }
 
@@ -40,8 +30,6 @@ class ErrorBagTest extends TestCase
         $ob = $this->newErrorBagStub();
         $this->assertInstanceOf(ErrorBag::class, $ob);
         $this->assertInstanceOf(IErrorBag::class, $ob);
-        $this->assertInstanceOf(ILogger::class, $ob);
-        $this->assertInstanceOf(Logger::class, $ob);
     }
 
     public function testGetErrorLoggingContextName() : void
