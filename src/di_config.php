@@ -37,18 +37,4 @@ return [
             idGenericReceivedConsumerService: DI\get('idGenericReceivedConsumerService'),
             forGenericReceivedConsumerService: DI\get('forGenericReceivedConsumerService')
         ),
-
-    HeaderFactory::class => DI\autowire()
-        ->constructorParameter(
-            'consumerServices',
-            [
-                AddressBaseConsumerService::class => DI\get(AddressBaseConsumerService::class),
-                DateConsumerService::class => DI\get(DateConsumerService::class),
-                GenericConsumerMimeLiteralPartService::class => DI\get(GenericConsumerMimeLiteralPartService::class),
-                IdBaseConsumerService::class => DI\get(IdBaseConsumerService::class),
-                ParameterConsumerService::class => DI\get(ParameterConsumerService::class),
-                ReceivedConsumerService::class => DI\get(ReceivedConsumerService::class),
-                SubjectConsumerService::class => DI\get(SubjectConsumerService::class),
-            ]
-        )
 ];
