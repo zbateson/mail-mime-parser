@@ -3,6 +3,8 @@
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 
 /**
  * Description of GenericReceivedConsumerServiceTest
@@ -19,27 +21,26 @@ class GenericReceivedConsumerServiceTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
+        $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
+            ->setConstructorArgs([$pf])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->genericConsumer = new GenericReceivedConsumerService($cs, $pf, 'test');
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->genericConsumer);
+        $ccs = $this->getMockBuilder(CommentConsumerService::class)
+            ->setConstructorArgs([$mpf, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->genericConsumer = new GenericReceivedConsumerService($pf, $ccs, 'test');
     }
 
     public function testConsumeTokens() : void

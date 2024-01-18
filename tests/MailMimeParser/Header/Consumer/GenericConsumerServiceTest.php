@@ -20,27 +20,26 @@ class GenericConsumerServiceTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
+        $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
+            ->setConstructorArgs([$pf])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->genericConsumer = new GenericConsumerService($cs, $mlpf);
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->genericConsumer);
+        $ccs = $this->getMockBuilder(CommentConsumerService::class)
+            ->setConstructorArgs([$mpf, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->genericConsumer = new GenericConsumerService($pf, $ccs, $qscs);
     }
 
     public function testConsumeTokens() : void
@@ -51,15 +50,5 @@ class GenericConsumerServiceTest extends TestCase
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
         $this->assertEquals('Je  suis ici', $ret[0]);
-    }
-
-    public function testFilterSpacesBetweenMimeParts() : void
-    {
-        $value = "=?US-ASCII?Q?Je?=    =?US-ASCII?Q?suis?=\n=?US-ASCII?Q?ici?=";
-
-        $ret = $this->genericConsumer->__invoke($value);
-        $this->assertNotEmpty($ret);
-        $this->assertCount(1, $ret);
-        $this->assertEquals('Jesuisici', $ret[0]);
     }
 }

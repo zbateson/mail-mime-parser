@@ -24,8 +24,8 @@ class AbstractConsumerServiceTest extends TestCase
         $stub = $this->getMockBuilder('\\' . AbstractConsumerService::class)
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
             ->setConstructorArgs([
-                $this->getMockBuilder(ConsumerService::class)->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder(HeaderPartFactory::class)->disableOriginalConstructor()->getMock(),
+                []
             ])
             ->getMockForAbstractClass();
 
@@ -37,11 +37,6 @@ class AbstractConsumerServiceTest extends TestCase
             ->willReturn([]);
 
         $this->abstractConsumerStub = $stub;
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->abstractConsumerStub);
     }
 
     public function testSingleToken() : void

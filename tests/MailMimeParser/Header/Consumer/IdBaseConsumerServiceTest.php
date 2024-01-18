@@ -20,27 +20,30 @@ class IdBaseConsumerServiceTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
+        $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
+            ->setConstructorArgs([$pf])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->idBaseConsumer = new IdBaseConsumerService($cs, $pf);
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->idBaseConsumer);
+        $ccs = $this->getMockBuilder(CommentConsumerService::class)
+            ->setConstructorArgs([$mpf, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $idcs = $this->getMockBuilder(IdConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->idBaseConsumer = new IdBaseConsumerService($pf, $ccs, $qscs, $idcs);
     }
 
     public function testConsumeId() : void

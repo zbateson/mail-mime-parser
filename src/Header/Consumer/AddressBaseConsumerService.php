@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use Iterator;
 

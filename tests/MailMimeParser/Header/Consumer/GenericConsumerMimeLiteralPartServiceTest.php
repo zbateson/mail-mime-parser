@@ -2,22 +2,21 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use DateTime;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Description of DateConsumerServiceTest
+ * Description of GenericConsumerMimeLiteralPartServiceTest
  *
  * @group Consumers
- * @group DateConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\DateConsumerService
+ * @group GenericConsumerMimeLiteralPartService
+ * @covers ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
-class DateConsumerServiceTest extends TestCase
+class GenericConsumerMimeLiteralPartServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $dateConsumer;
+    private $genericConsumer;
 
     protected function setUp() : void
     {
@@ -40,29 +39,26 @@ class DateConsumerServiceTest extends TestCase
             ->setConstructorArgs([$mpf, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->dateConsumer = new DateConsumerService($pf, $ccs, $qscs);
+        $this->genericConsumer = new GenericConsumerMimeLiteralPartService($mpf, $ccs, $qscs);
     }
 
-    public function testConsumeDates() : void
+    public function testConsumeTokens() : void
     {
-        $date = 'Wed, 17 May 2000 19:08:29 -0400';
-        $ret = $this->dateConsumer->__invoke($date);
+        $value = "Je\ \t suis\nici";
+
+        $ret = $this->genericConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\DatePart::class, $ret[0]);
-        $this->assertEquals($date, $ret[0]->getValue());
-        $this->assertEquals($date, $ret[0]->getDateTime()->format(DateTime::RFC2822));
+        $this->assertEquals('Je  suis ici', $ret[0]);
     }
 
-    public function testConsumeDateWithComment() : void
+    public function testFilterSpacesBetweenMimeParts() : void
     {
-        $dateTest = 'Wed, 17 May 2000 19:08:29 -0400 (some comment)';
-        $actDate = 'Wed, 17 May 2000 19:08:29 -0400';
-        $ret = $this->dateConsumer->__invoke($dateTest);
+        $value = "=?US-ASCII?Q?Je?=    =?US-ASCII?Q?suis?=\n=?US-ASCII?Q?ici?=";
+
+        $ret = $this->genericConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
-        $this->assertCount(2, $ret);
-        $this->assertEquals($actDate, $ret[0]->getValue());
-        $this->assertEquals($actDate, $ret[0]->getDateTime()->format(DateTime::RFC2822));
-        $this->assertEquals('some comment', $ret[1]->getComment());
+        $this->assertCount(1, $ret);
+        $this->assertEquals('Jesuisici', $ret[0]);
     }
 }

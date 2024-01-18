@@ -20,27 +20,32 @@ class AddressGroupConsumerServiceTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
+        $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
+            ->setConstructorArgs([$pf])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->addressGroupConsumer = new AddressGroupConsumerService($cs, $pf);
-    }
+        $ccs = $this->getMockBuilder(CommentConsumerService::class)
+            ->setConstructorArgs([$mpf, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $aecs = $this->getMockBuilder(AddressEmailConsumerService::class)
+            ->setConstructorArgs([$pf, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
 
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->addressGroupConsumer);
+        $this->addressGroupConsumer = new AddressGroupConsumerService($pf);
+        new AddressConsumerService($pf, $this->addressGroupConsumer, $aecs, $ccs, $qscs);
     }
 
     public function testConsumeGroup() : void

@@ -14,6 +14,7 @@ use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Abstract base class for all header token consumers.
@@ -37,7 +38,7 @@ abstract class AbstractConsumerService implements IConsumerService
      * @var the generated token split pattern on first run, so it doesn't
      *      need to be regenerated every time.
      */
-    private string $tokenSplitPattern;
+    private ?string $tokenSplitPattern = null;
 
     /**
      * @var AbstractConsumerService[] array of sub-consumers used by this
@@ -51,6 +52,7 @@ abstract class AbstractConsumerService implements IConsumerService
      */
     public function __construct(HeaderPartFactory $partFactory, array $subConsumers = [])
     {
+        $this->logger = new NullLogger();
         $this->partFactory = $partFactory;
         $this->subConsumers = $subConsumers;
     }
@@ -168,7 +170,7 @@ abstract class AbstractConsumerService implements IConsumerService
     {
         if ($this->tokenSplitPattern === null) {
             $this->tokenSplitPattern = $this->getTokenSplitPattern();
-            $this->getLogger()->debug(
+            $this->logger->debug(
                 'Configuring ${class} with token split pattern: ${pattern}',
                 [ 'class' => static::class, 'pattern' => $this->tokenSplitPattern]
             );
@@ -240,7 +242,7 @@ abstract class AbstractConsumerService implements IConsumerService
         $subConsumers = $this->subConsumers;
         foreach ($subConsumers as $consumer) {
             if ($consumer->isStartToken($token)) {
-                $this->getLogger()->debug(
+                $this->logger->debug(
                     'Token: "${value}" in ${class} starting sub-consumer ${consumer}',
                     [ 'value' => $token, 'class' => static::class, 'consumer' => get_class($consumer) ]
                 );
@@ -313,7 +315,7 @@ abstract class AbstractConsumerService implements IConsumerService
     {
         $parts = [];
         while ($tokens->valid() && !$this->isEndToken($tokens->current())) {
-            $this->getLogger()->debug('Parsing token: ${token} in consumer: ${consumer}');
+            $this->logger->debug('Parsing token: ${token} in consumer: ${consumer}');
             $parts = \array_merge($parts, $this->getTokenParts($tokens));
             $this->advanceToNextToken($tokens, false);
         }

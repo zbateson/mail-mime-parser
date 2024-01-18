@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 
 /**
@@ -28,6 +29,22 @@ use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
  */
 class AddressGroupConsumerService extends AddressBaseConsumerService
 {
+    public function __construct(HeaderPartFactory $partFactory)
+    {
+        AbstractConsumerService::__construct($partFactory, []);
+    }
+
+    /**
+     * Needs to be called in AddressConsumerService's constructor to avoid a
+     * circular dependency.
+     * 
+     * @param AddressConsumerService $subConsumer
+     */
+    public function setAddressConsumerService(AddressConsumerService $subConsumer)
+    {
+        $this->subConsumers = [$subConsumer];
+    }
+
     /**
      * Overridden to return patterns matching the beginning and end markers of a
      * group address: colon and semi-colon (":" and ";") characters.

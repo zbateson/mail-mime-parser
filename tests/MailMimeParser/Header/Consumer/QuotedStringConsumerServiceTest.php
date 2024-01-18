@@ -20,27 +20,14 @@ class QuotedStringConsumerServiceTest extends TestCase
 
     protected function setUp() : void
     {
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MbWrapperService::class)
+        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods(['__toString'])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
-            ->getMock();
-        $cs = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ConsumerService::class)
-            ->setConstructorArgs([$pf, $mlpf])
-            ->setMethods(['__toString'])
-            ->getMock();
-        $this->quotedStringConsumer = new QuotedStringConsumerService($cs, $pf);
-    }
-
-    public function testIsService() : void
-    {
-        $this->assertInstanceOf(\ZBateson\MailMimeParser\Container\IService::class, $this->quotedStringConsumer);
+        $this->quotedStringConsumer = new QuotedStringConsumerService($pf);
     }
 
     public function testConsumeTokens() : void

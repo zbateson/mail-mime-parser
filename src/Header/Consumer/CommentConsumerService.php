@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\LiteralPart;
@@ -34,6 +35,17 @@ use Iterator;
  */
 class CommentConsumerService extends GenericConsumerService
 {
+    public function __construct(
+        MimeLiteralPartFactory $partFactory,
+        QuotedStringConsumerService $quotedStringConsumerService
+    ) {
+        parent::__construct(
+            $partFactory,
+            $this,
+            $quotedStringConsumerService
+        );
+    }
+
     /**
      * Returns patterns matching open and close parenthesis characters
      * as separators.

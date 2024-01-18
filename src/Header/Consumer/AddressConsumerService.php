@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\LiteralPart;
 
 /**
@@ -42,6 +43,7 @@ class AddressConsumerService extends AbstractConsumerService
         CommentConsumerService $commentConsumerService,
         QuotedStringConsumerService $quotedStringConsumerService
     ) {
+        $addressGroupConsumerService->setAddressConsumerService($this);
         parent::__construct(
             $partFactory,
             [
