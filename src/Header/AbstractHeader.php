@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
@@ -167,5 +168,59 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
         if (strlen(trim($this->rawValue)) === 0) {
             $this->addError('Header doesn\'t have a value', LogLevel::NOTICE);
         }
+    }
+
+    /**
+     * Checks if the passed $value parameter is null, and if so tries to parse
+     * a header line from $nameOrLine splitting on first occurrence of a ':'
+     * character.
+     *
+     * The returned array always contains two elements.  The first being the
+     * name (or blank if a ':' char wasn't found and $value is null), and the
+     * second being the value.
+     *
+     * @return string[]
+     */
+    protected static function getHeaderPartsFrom(string $nameOrLine, ?string $value = null) : array
+    {
+        $namePart = $nameOrLine;
+        $valuePart = $value;
+        if ($value === null) {
+            // full header line
+            $parts = explode(':', $nameOrLine, 2);
+            $namePart = (count($parts) > 1) ? $parts[0] : '';
+            $valuePart = trim((count($parts) > 1) ? $parts[1] : $parts[0]);
+        }
+        return [ $namePart, $valuePart ];
+    }
+
+    /**
+     * Parses the passed parameters into an IHeader object.
+     *
+     * The type of returned IHeader is determined by the name of the header.
+     * See {@see HeaderFactory::newInstance} for more details.
+     *
+     * The required $nameOrLine parameter may contain either the name of a
+     * header to parse, or a full header line, e.g. From: email@example.com.  If
+     * passing a full header line, the $value parameter must be set to null (the
+     * default).
+     *
+     * Note that more specific types can be called on directly.  For instance an
+     * AddressHeader may be created by calling AddressHeader::from() which will
+     * ignore the name of the header, and always return an AddressHeader.
+     *
+     * @param string $nameOrLine The header's name or full header line.
+     * @param string|null $value The header's value, or null if passing a full
+     *        header line to parse.
+     */
+    public static function from(string $nameOrLine, ?string $value = null) : IHeader
+    {
+        $parts = static::getHeaderPartsFrom($nameOrLine, $value);
+        $container = MailMimeParser::getGlobalContainer();
+        $hf = $container->get(HeaderFactory::class);
+        if (self::class !== static::class) {
+            return $hf->newInstanceOf($parts[0], $parts[1], static::class);
+        }
+        return $hf->newInstance($parts[0], $parts[1]);
     }
 }

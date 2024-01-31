@@ -171,7 +171,7 @@ class HeaderFactory
      * @param string $value The header value.
      * @return IHeader The created header object.
      */
-    public function newInstance(string $name, string $value)
+    public function newInstance(string $name, string $value) : IHeader
     {
         $class = $this->getClassFor($name);
         $this->logger->debug(

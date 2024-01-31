@@ -17,6 +17,7 @@ use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
  * @group Headers
  * @group HeaderFactory
  * @covers ZBateson\MailMimeParser\Header\HeaderFactory
+ * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
 class HeaderFactoryTest extends TestCase
@@ -190,5 +191,45 @@ class HeaderFactoryTest extends TestCase
             $this->assertNotNull($header);
             $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\ReceivedHeader::class, $header);
         }
+    }
+
+    public function testStaticFromNameValue() : void
+    {
+        $header = AbstractHeader::from('Subject', 'Test');
+        $this->assertInstanceOf(SubjectHeader::class, $header);
+        $this->assertEquals('Subject', $header->getName());
+        $this->assertEquals('Test', $header->getValue());
+    }
+
+    public function testStaticFromHeaderLine() : void
+    {
+        $header = AbstractHeader::from('Subject: Test');
+        $this->assertInstanceOf(SubjectHeader::class, $header);
+        $this->assertEquals('Subject', $header->getName());
+        $this->assertEquals('Test', $header->getValue());
+    }
+
+    public function testStaticFromHeaderLineNoName() : void
+    {
+        $header = AbstractHeader::from('Test');
+        $this->assertInstanceOf(GenericHeader::class, $header);
+        $this->assertEquals('', $header->getName());
+        $this->assertEquals('Test', $header->getValue());
+    }
+
+    public function testStaticFromHeaderLineMultipleColon() : void
+    {
+        $header = AbstractHeader::from('Subject: Test:Blah');
+        $this->assertInstanceOf(SubjectHeader::class, $header);
+        $this->assertEquals('Subject', $header->getName());
+        $this->assertEquals('Test:Blah', $header->getValue());
+    }
+
+    public function testStaticFromSpecializedHeader() : void
+    {
+        $header = SubjectHeader::from('From: Test:Blah');
+        $this->assertInstanceOf(SubjectHeader::class, $header);
+        $this->assertEquals('From', $header->getName());
+        $this->assertEquals('Test:Blah', $header->getValue());
     }
 }

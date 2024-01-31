@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
  * Description of HeaderContainerTest
@@ -36,6 +37,9 @@ class PartHeaderContainerTest extends TestCase
         $this->assertFalse($ob->exists('third'));
         $this->assertFalse($ob->exists('first', 1));
 
+        $mockFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
+
         $this->mockHeaderFactory
             ->expects($this->exactly(2))
             ->method('newInstance')
@@ -43,14 +47,14 @@ class PartHeaderContainerTest extends TestCase
                 ['first', 'value'],
                 ['second', 'value']
             )
-            ->willReturnOnConsecutiveCalls('first-value', 'second-value');
+            ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader);
 
-        $this->assertEquals('first-value', $ob->get('first'));
-        $this->assertEquals('second-value', $ob->get('second'));
-        $this->assertEquals('first-value', $ob->get('first', 0));
-        $this->assertEquals('first-value', $ob->get('first'));
-        $this->assertEquals('second-value', $ob->get('second', 0));
-        $this->assertEquals('second-value', $ob->get('second'));
+        $this->assertSame($mockFirstHeader, $ob->get('first'));
+        $this->assertSame($mockSecondHeader, $ob->get('second'));
+        $this->assertSame($mockFirstHeader, $ob->get('first', 0));
+        $this->assertSame($mockFirstHeader, $ob->get('first'));
+        $this->assertSame($mockSecondHeader, $ob->get('second', 0));
+        $this->assertSame($mockSecondHeader, $ob->get('second'));
 
         $this->assertNull($ob->get('other'));
         $this->assertNull($ob->get('second', 1));
@@ -73,6 +77,10 @@ class PartHeaderContainerTest extends TestCase
         $this->assertFalse($ob->exists('repeated', 3));
         $this->assertFalse($ob->exists('something-else'));
 
+        $mockFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockThirdHeader = $this->getMockBuilder(IHeader::class)->getMock();
+
         $this->mockHeaderFactory
             ->expects($this->exactly(3))
             ->method('newInstance')
@@ -81,15 +89,15 @@ class PartHeaderContainerTest extends TestCase
                 ['repeated', 'second'],
                 ['repeated', 'third']
             )
-            ->willReturnOnConsecutiveCalls('repeated-first', 'repeated-second', 'repeated-third');
+            ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader, $mockThirdHeader);
 
-        $this->assertEquals('repeated-first', $ob->get('repeated'));
-        $this->assertEquals('repeated-first', $ob->get('repeated', 0));
-        $this->assertEquals('repeated-second', $ob->get('repeated', 1));
-        $this->assertEquals('repeated-third', $ob->get('repeated', 2));
+        $this->assertSame($mockFirstHeader, $ob->get('repeated'));
+        $this->assertSame($mockFirstHeader, $ob->get('repeated', 0));
+        $this->assertSame($mockSecondHeader, $ob->get('repeated', 1));
+        $this->assertSame($mockThirdHeader, $ob->get('repeated', 2));
 
         $instanceHeaders = [
-            'repeated-first', 'repeated-second', 'repeated-third'
+            $mockFirstHeader, $mockSecondHeader, $mockThirdHeader
         ];
         $this->assertEquals($instanceHeaders, $ob->getAll('repeated'));
 
@@ -123,6 +131,12 @@ class PartHeaderContainerTest extends TestCase
         $this->assertTrue($ob->exists('second', 1));
         $this->assertTrue($ob->exists('third'));
 
+        $mockFirstUpdatedHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondUpdatedHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockThirdHeader = $this->getMockBuilder(IHeader::class)->getMock();
+
         $this->mockHeaderFactory
             ->expects($this->exactly(5))
             ->method('newInstance')
@@ -134,21 +148,21 @@ class PartHeaderContainerTest extends TestCase
                 ['third', 'value']
             )
             ->willReturnOnConsecutiveCalls(
-                'first-updated-value',
-                'second-second-updated-value',
-                'second-first-value',
-                'second-value',
-                'third-value'
+                $mockFirstUpdatedHeader,
+                $mockSecondUpdatedHeader,
+                $mockSecondFirstHeader,
+                $mockSecondHeader,
+                $mockThirdHeader
             );
 
-        $this->assertEquals('first-updated-value', $ob->get('first'));
-        $this->assertEquals('second-second-updated-value', $ob->get('second', 1));
-        $this->assertEquals('second-first-value', $ob->get('first', 1));
-        $this->assertEquals('second-value', $ob->get('second'));
-        $this->assertEquals('third-value', $ob->get('third'));
+        $this->assertSame($mockFirstUpdatedHeader, $ob->get('first'));
+        $this->assertSame($mockSecondUpdatedHeader, $ob->get('second', 1));
+        $this->assertSame($mockSecondFirstHeader, $ob->get('first', 1));
+        $this->assertSame($mockSecondHeader, $ob->get('second'));
+        $this->assertSame($mockThirdHeader, $ob->get('third'));
 
         $instanceHeaders = [
-            'first-updated-value', 'second-first-value'
+            $mockFirstUpdatedHeader, $mockSecondFirstHeader
         ];
         $this->assertEquals($instanceHeaders, $ob->getAll('first'));
 
@@ -182,7 +196,10 @@ class PartHeaderContainerTest extends TestCase
         $this->assertTrue($ob->exists('third'));
         $this->assertTrue($ob->exists('fourth'));
 
-        $oRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $mockFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockThirdHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondUpdatedHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $this->mockHeaderFactory
             ->expects($this->exactly(4))
             ->method('newInstance')
@@ -192,7 +209,7 @@ class PartHeaderContainerTest extends TestCase
                 ['fourth', 'value'],
                 ['second', 'updated']
             )
-            ->willReturnOnConsecutiveCalls('second-value', 'third-value', $oRet, 'second-updated');
+            ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader, $mockThirdHeader, $mockSecondUpdatedHeader);
 
         $custRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
         $this->mockHeaderFactory->expects($this->once())
@@ -201,9 +218,9 @@ class PartHeaderContainerTest extends TestCase
             ->willReturn($custRet);
 
         $this->assertNull($ob->get('first'));
-        $this->assertEquals('second-value', $ob->get('second'));
-        $this->assertEquals('third-value', $ob->get('third'));
-        $this->assertEquals($oRet, $ob->get('fourth'));
+        $this->assertSame($mockFirstHeader, $ob->get('second'));
+        $this->assertSame($mockSecondHeader, $ob->get('third'));
+        $this->assertSame($mockThirdHeader, $ob->get('fourth'));
         $headers = [
             ['second', 'value'],
             ['third', 'value'],
@@ -217,7 +234,7 @@ class PartHeaderContainerTest extends TestCase
             ['fourth', 'value']
         ];
         $this->assertNull($ob->get('second'));
-        $this->assertEquals('third-value', $ob->get('third'));
+        $this->assertSame($mockSecondHeader, $ob->get('third'));
         $this->assertEquals($headers, $ob->getHeaders());
 
         $ob->set('second', 'updated');
@@ -227,7 +244,7 @@ class PartHeaderContainerTest extends TestCase
             ['second', 'updated']
         ];
         $this->assertEquals($headers, $ob->getHeaders());
-        $this->assertEquals('second-updated', $ob->get('second'));
+        $this->assertSame($mockSecondUpdatedHeader, $ob->get('second'));
 
         $h = $ob->getAs('fourth', 'IHeaderClass');
         $this->assertEquals($custRet, $h);
@@ -259,6 +276,9 @@ class PartHeaderContainerTest extends TestCase
         $this->assertTrue($ob->exists('second', 2));
         $this->assertTrue($ob->exists('third'));
 
+        $mockSecondFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondThirdSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $this->mockHeaderFactory
             ->expects($this->exactly(3))
             ->method('newInstance')
@@ -267,18 +287,18 @@ class PartHeaderContainerTest extends TestCase
                 ['second', 'value'],
                 ['second', 'third-second']
             )
-            ->willReturnOnConsecutiveCalls('second-first-value', 'second-value', 'second-third-second-value');
+            ->willReturnOnConsecutiveCalls($mockSecondFirstHeader, $mockSecondHeader, $mockSecondThirdSecondHeader);
 
         $this->assertNull($ob->get('first', 1));
-        $this->assertEquals('second-first-value', $ob->get('first'));
+        $this->assertSame($mockSecondFirstHeader, $ob->get('first'));
 
         $ob->remove('second', 1);
         $this->assertTrue($ob->exists('second'));
         $this->assertTrue($ob->exists('second', 1));
         $this->assertFalse($ob->exists('second', 2));
 
-        $this->assertEquals('second-value', $ob->get('second'));
-        $this->assertEquals('second-third-second-value', $ob->get('second', 1));
+        $this->assertSame($mockSecondHeader, $ob->get('second'));
+        $this->assertSame($mockSecondThirdSecondHeader, $ob->get('second', 1));
         $this->assertNull($ob->get('second', 2));
 
         $ob->removeAll('second');
