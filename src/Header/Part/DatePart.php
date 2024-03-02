@@ -48,7 +48,7 @@ class DatePart extends LiteralPart
             $this->date = new DateTime($dateToken);
         } catch (Exception $e) {
             $this->addError(
-                "Unable to parse date from header: \"${dateToken}\"",
+                "Unable to parse date from header: \"{$dateToken}\"",
                 LogLevel::ERROR,
                 $e
             );

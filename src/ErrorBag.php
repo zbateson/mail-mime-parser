@@ -72,7 +72,7 @@ abstract class ErrorBag implements IErrorBag
         $this->errors[] = $error;
         $this->logger->log(
             $psrLogLevel,
-            '${contextName} ${message} ${exception}',
+            '{$contextName} {$message} {$exception}',
             [
                 'contextName' => $this->getErrorLoggingContextName(),
                 'message' => $message,

@@ -54,7 +54,7 @@ class DatePartTest extends TestCase
 
         $errs = $part->getErrors(false, LogLevel::ERROR);
         $this->assertCount(1, $errs);
-        $this->assertEquals("Unable to parse date from header: \"${value}\"", $errs[0]->getMessage());
+        $this->assertEquals("Unable to parse date from header: \"{$value}\"", $errs[0]->getMessage());
         $this->assertEquals(LogLevel::ERROR, $errs[0]->getPsrLevel());
     }
 }
