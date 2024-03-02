@@ -51,8 +51,6 @@ class UUEncodedPartHeaderContainer extends PartHeaderContainer
     /**
      * Returns the filename included in the uuencoded 'begin' line for this
      * part.
-     *
-     * @return string
      */
     public function getFilename() : ?string
     {

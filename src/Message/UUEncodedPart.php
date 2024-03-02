@@ -41,8 +41,6 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     /**
      * Returns the filename included in the uuencoded 'begin' line for this
      * part.
-     *
-     * @return string
      */
     public function getFilename() : ?string
     {
@@ -75,8 +73,6 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
 
     /**
      * Returns 'application/octet-stream'.
-     *
-     * @return string
      */
     public function getContentType(string $default = 'application/octet-stream') : ?string
     {

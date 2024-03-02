@@ -6,7 +6,7 @@
  *
  */
 
-$config = include 'PhpCsFixer.php';
+$config = include 'vendor/zbateson/mb-wrapper/PhpCsFixer.php';
 
 return $config->setFinder(PhpCsFixer\Finder::create()
     ->exclude('vendor')

@@ -89,9 +89,6 @@ class MailMimeParser
 
     /**
      * Sets global configuration for php-di.
-     *
-     * @param array|string|DefinitionSource $phpDiConfig
-     * @return void
      */
     public static function setGlobalPhpDiConfiguration(array|string|DefinitionSource $phpDiConfig) : void
     {
