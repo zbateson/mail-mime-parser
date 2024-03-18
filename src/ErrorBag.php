@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser;
 
+use DI\Attribute\Inject;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
