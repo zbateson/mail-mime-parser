@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group MessageParserService
  * @group Parser
- * @covers ZBateson\MailMimeParser\Message\MessageParserService
+ * @covers ZBateson\MailMimeParser\Parser\MessageParserService
  * @author Zaahid Bateson
  */
 class MessageParserServiceTest extends TestCase

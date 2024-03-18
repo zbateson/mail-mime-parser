@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Parser
  * @group ParserMessageProxy
- * @covers ZBateson\MailMimeParser\Parser\Part\ParserMessageProxy
+ * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxy
  * @author Zaahid Bateson
  */
 class ParserMessageProxyTest extends TestCase

@@ -67,8 +67,8 @@ class GenericHeaderTest extends TestCase
 
     /**
      *
-     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isStartToken
-     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumer::isEndToken
+     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService::isStartToken
+     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService::isEndToken
      */
     public function testQuotesMimeAndComments() : void
     {

@@ -10,8 +10,8 @@ use ZBateson\MailMimeParser\Header\IHeader;
  *
  * @group Parser
  * @group ParserMimePartProxy
- * @covers ZBateson\MailMimeParser\Parser\Part\ParserMimePartProxy
- * @covers ZBateson\MailMimeParser\Parser\Part\ParserPartProxy
+ * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy
+ * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy
  * @author Zaahid Bateson
  */
 class ParserMimePartProxyTest extends TestCase

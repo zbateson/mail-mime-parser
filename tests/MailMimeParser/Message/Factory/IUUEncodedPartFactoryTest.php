@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
  *
  * @group IUUEncodedPartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Parser\Part\IUUEncodedPartFactory
- * @covers ZBateson\MailMimeParser\Parser\Part\IMessagePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory
+ * @covers ZBateson\MailMimeParser\Message\Factory\IMessagePartFactory
  * @author Zaahid Bateson
  */
 class IUUEncodedPartFactoryTest extends TestCase

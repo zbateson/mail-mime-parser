@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group PartFilter
  * @group Message
- * @covers ZBateson\MailMimeParser\PartFilter
+ * @covers ZBateson\MailMimeParser\Message\PartFilter
  * @author Zaahid Bateson
  */
 class PartFilterTest extends TestCase

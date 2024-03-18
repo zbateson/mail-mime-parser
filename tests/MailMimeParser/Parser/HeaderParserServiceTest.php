@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group HeaderParserService
  * @group Parser
- * @covers ZBateson\MailMimeParser\Message\HeaderParserService
+ * @covers ZBateson\MailMimeParser\Parser\HeaderParserService
  * @author Zaahid Bateson
  */
 class HeaderParserServiceTest extends TestCase

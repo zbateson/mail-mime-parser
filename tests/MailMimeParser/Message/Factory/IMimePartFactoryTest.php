@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
  *
  * @group IMimePartFactory
  * @group MessagePart
- * @covers ZBateson\MailMimeParser\Parser\Part\IMimePartFactory
- * @covers ZBateson\MailMimeParser\Parser\Part\IMessagePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Factory\IMimePartFactory
+ * @covers ZBateson\MailMimeParser\Message\Factory\IMessagePartFactory
  * @author Zaahid Bateson
  */
 class IMimePartFactoryTest extends TestCase
