@@ -1,4 +1,4 @@
-[Home](/) - [Sponsors](/#sponsors) - [API Documentation](api/2.3) - [Upgrading to 2.0](upgrade-2.0) - [Contributors](/#contributors)
+[Home](/) - [Sponsors](/#sponsors) - [API Documentation](api/3.0) - [Upgrading to 3.0](upgrade-3.0) - [Contributors](/#contributors)
 
 ### Parsing a stream
 
