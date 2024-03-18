@@ -44,6 +44,8 @@ interface IErrorBag
      *
      * If $validate is true, additional validation may be performed on the
      * object to check for errors.
+     *
+     * @return Error[]
      */
     public function getErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array;
 
@@ -77,6 +79,8 @@ interface IErrorBag
      *
      * If $validate is true, additional validation may be performed on children
      * to check for errors.
+     *
+     * @return Error[]
      */
     public function getAllErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array;
 }

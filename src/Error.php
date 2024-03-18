@@ -39,6 +39,9 @@ class Error
      */
     protected ?Throwable $exception;
 
+    /**
+     * @var array<string, int>
+     */
     private array $levelMap = [
         LogLevel::EMERGENCY => 0,
         LogLevel::ALERT => 1,

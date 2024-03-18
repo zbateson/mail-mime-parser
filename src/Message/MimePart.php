@@ -217,7 +217,7 @@ class MimePart extends MultiPart implements IMimePart
         return $this->parent->getSignaturePart() === $this;
     }
 
-    public function getHeader($name, $offset = 0) : ?IHeader
+    public function getHeader(string $name, int $offset = 0) : ?IHeader
     {
         return $this->headerContainer->get($name, $offset);
     }
@@ -232,7 +232,7 @@ class MimePart extends MultiPart implements IMimePart
         return $this->headerContainer->getHeaderObjects();
     }
 
-    public function getAllHeadersByName($name) : array
+    public function getAllHeadersByName(string $name) : array
     {
         return $this->headerContainer->getAll($name);
     }
@@ -247,7 +247,7 @@ class MimePart extends MultiPart implements IMimePart
         return $this->headerContainer->getIterator();
     }
 
-    public function getHeaderValue($name, $defaultValue = null) : ?string
+    public function getHeaderValue(string $name, ?string $defaultValue = null) : ?string
     {
         $header = $this->getHeader($name);
         if ($header !== null) {
@@ -256,7 +256,7 @@ class MimePart extends MultiPart implements IMimePart
         return $defaultValue;
     }
 
-    public function getHeaderParameter($header, $param, $defaultValue = null) : ?string
+    public function getHeaderParameter(string $header, string $param, ?string $defaultValue = null) : ?string
     {
         $obj = $this->getHeader($header);
         if ($obj && $obj instanceof ParameterHeader) {

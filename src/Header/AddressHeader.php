@@ -110,6 +110,7 @@ class AddressHeader extends AbstractHeader
         if (!empty($this->addresses)) {
             return $this->addresses[0]->getEmail();
         }
+        return null;
     }
 
     /**

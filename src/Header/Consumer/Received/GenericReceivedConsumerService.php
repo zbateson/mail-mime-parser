@@ -106,8 +106,8 @@ class GenericReceivedConsumerService extends AbstractGenericConsumerService
      * as the first element, followed by any comment elements as subsequent
      * elements.
      *
-     * @param \ZBateson\MailMimeParser\Header\Part\IHeaderPart[] $parts
-     * @return \ZBateson\MailMimeParser\Header\Part\IHeaderPart[]
+     * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
+     * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {

@@ -8,7 +8,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
-use Iterator;
+use Traversable;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
@@ -67,7 +67,7 @@ class HeaderStream implements SplObserver, StreamInterface
      * If the part is not a MimePart, Content-Type, Content-Disposition and
      * Content-Transfer-Encoding headers are generated manually.
      */
-    private function getPartHeadersIterator() : Iterator
+    private function getPartHeadersIterator() : Traversable
     {
         if ($this->part instanceof IMimePart) {
             return $this->part->getRawHeaderIterator();

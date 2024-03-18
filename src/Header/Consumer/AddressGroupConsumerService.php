@@ -40,7 +40,7 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
      * 
      * @param AddressConsumerService $subConsumer
      */
-    public function setAddressConsumerService(AddressConsumerService $subConsumer)
+    public function setAddressConsumerService(AddressConsumerService $subConsumer) : void
     {
         $this->subConsumers = [$subConsumer];
     }

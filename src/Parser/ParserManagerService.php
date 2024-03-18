@@ -35,6 +35,7 @@ class ParserManagerService
      * Overrides the internal prioritized list of parses with the passed list,
      * calling $parser->setParserManager($this) on each one.
      *
+     * @param IParserService[] $parsers
      */
     public function setParsers(array $parsers) : static
     {

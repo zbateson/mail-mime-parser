@@ -94,7 +94,7 @@ class HeaderPartFactory
     /**
      * Initializes and returns a new AddressGroupPart
      *
-     * @param string[] $addresses
+     * @param AddressPart[] $addresses
      */
     public function newAddressGroupPart(array $addresses, string $name = '') : AddressGroupPart
     {

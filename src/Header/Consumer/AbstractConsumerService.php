@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use ArrayIterator;
 use Iterator;
 use NoRewindIterator;
+use DI\Attribute\Inject;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;

@@ -60,7 +60,7 @@ interface IMimePart extends IMultiPart
      *        given name.
      * @return ?IHeader the header object if it exists, or null if not
      */
-    public function getHeader($name, $offset = 0) : ?IHeader;
+    public function getHeader(string $name, int $offset = 0) : ?IHeader;
 
     /**
      * Returns the IHeader object for the header with the given $name, using the
@@ -128,7 +128,7 @@ interface IMimePart extends IMultiPart
      * @param string $name
      * @return IHeader[] an array of header objects
      */
-    public function getAllHeadersByName($name) : array;
+    public function getAllHeadersByName(string $name) : array;
 
     /**
      * Returns a two dimensional string array of all headers for the mime part
@@ -171,7 +171,7 @@ interface IMimePart extends IMultiPart
      *      with a certain name.
      * @see IMimePart::getRawHeaders() to retrieve the array the returned
      *      iterator iterates over.
-     * @return Traversable an iterator for raw headers
+     * @return Traversable<array<string>> an iterator for raw headers
      */
     public function getRawHeaderIterator() : Traversable;
 
@@ -193,11 +193,11 @@ interface IMimePart extends IMultiPart
      * @see IMimePart::getRawHeaderIterator() to retrieve an iterator instead of
      *      the returned two-dimensional array
      * @param string $name The name of the header
-     * @param string $defaultValue Optional default value to return if the
+     * @param ?string $defaultValue Optional default value to return if the
      *        header doesn't exist on this part.
      * @return string|null the value of the header
      */
-    public function getHeaderValue($name, $defaultValue = null) : ?string;
+    public function getHeaderValue(string $name, ?string $defaultValue = null) : ?string;
 
     /**
      * Returns the value of the parameter named $param on a header with the
@@ -222,11 +222,11 @@ interface IMimePart extends IMultiPart
      *      the returned two-dimensional array
      * @param string $header The name of the header.
      * @param string $param The name of the parameter.
-     * @param string $defaultValue Optional default value to return if the
+     * @param ?string $defaultValue Optional default value to return if the
      *        parameter doesn't exist.
      * @return string|null The value of the parameter.
      */
-    public function getHeaderParameter($header, $param, $defaultValue = null) : ?string;
+    public function getHeaderParameter(string $header, string $param, ?string $defaultValue = null) : ?string;
 
     /**
      * Adds a header with the given $name and $value.  An optional $offset may

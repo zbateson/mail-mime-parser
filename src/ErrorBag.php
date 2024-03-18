@@ -51,7 +51,7 @@ abstract class ErrorBag implements IErrorBag
     /**
      * Return any children ErrorBag objects.
      *
-     * @return ErrorBag[]
+     * @return IErrorBag[]
      */
     abstract protected function getErrorBagChildren() : array;
 

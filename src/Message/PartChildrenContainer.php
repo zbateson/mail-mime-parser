@@ -29,6 +29,9 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      */
     protected $position = 0;
 
+    /**
+     * @param IMessagePart[] $children
+     */
     public function __construct(array $children = [])
     {
         $this->children = $children;
@@ -47,7 +50,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      * If the current element points to an IMultiPart, its child iterator is
      * returned by calling {@see IMultiPart::getChildIterator()}.
      *
-     * @return RecursiveIterator|null the iterator
+     * @return RecursiveIterator<IMessagePart>|null the iterator
      */
     public function getChildren() : ?RecursiveIterator
     {
@@ -57,6 +60,9 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
         return null;
     }
 
+    /**
+     * @return IMessagePart
+     */
     public function current() : mixed
     {
         return $this->offsetGet($this->position);
@@ -121,17 +127,27 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
         return null;
     }
 
-    public function offsetExists($offset) : bool
+    /**
+     * @param int $offset
+     */
+    public function offsetExists(mixed $offset) : bool
     {
         return isset($this->children[$offset]);
     }
 
-    public function offsetGet($offset) : mixed
+    /**
+     * @param int $offset
+     */
+    public function offsetGet(mixed $offset) : mixed
     {
         return $this->offsetExists($offset) ? $this->children[$offset] : null;
     }
 
-    public function offsetSet($offset, $value) : void
+    /**
+     * @param int $offset
+     * @param IMessagePart $value
+     */
+    public function offsetSet(mixed $offset, mixed $value) : void
     {
         if (!$value instanceof IMessagePart) {
             throw new InvalidArgumentException(
@@ -145,6 +161,9 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
         }
     }
 
+    /**
+     * @param int $offset
+     */
     public function offsetUnset($offset) : void
     {
         \array_splice($this->children, $offset, 1);

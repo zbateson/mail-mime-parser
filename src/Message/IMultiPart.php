@@ -44,7 +44,7 @@ interface IMultiPart extends IMessagePart
      *        returning true if the part should be included.
      * @return IMessagePart|null A matching part, or null if not found.
      */
-    public function getPart($index, $fnFilter = null) : ?IMessagePart;
+    public function getPart(int $index, callable $fnFilter = null) : ?IMessagePart;
 
     /**
      * Returns the current part, all child parts, and child parts of all
@@ -70,7 +70,7 @@ interface IMultiPart extends IMessagePart
      *        returning true if the part should be included.
      * @return IMessagePart[] An array of matching parts.
      */
-    public function getAllParts($fnFilter = null) : array;
+    public function getAllParts(callable $fnFilter = null) : array;
 
     /**
      * Returns the total number of parts in this and all children.
@@ -93,7 +93,7 @@ interface IMultiPart extends IMessagePart
      *        returning true if the part should be included.
      * @return int The number of matching parts.
      */
-    public function getPartCount($fnFilter = null) : int;
+    public function getPartCount(callable $fnFilter = null) : int;
 
     /**
      * Returns the direct child at the given 0-based index and optional filter,
@@ -118,7 +118,7 @@ interface IMultiPart extends IMessagePart
      * @return IMessagePart|null The matching direct child part or null if not
      *         found.
      */
-    public function getChild($index, $fnFilter = null) : ?IMessagePart;
+    public function getChild(int $index, callable $fnFilter = null) : ?IMessagePart;
 
     /**
      * Returns an array of all direct child parts, optionally filtering them
@@ -140,7 +140,7 @@ interface IMultiPart extends IMessagePart
      *        returning true if the part should be included.
      * @return IMessagePart[] An array of matching child parts.
      */
-    public function getChildParts($fnFilter = null) : array;
+    public function getChildParts(callable $fnFilter = null) : array;
 
     /**
      * Returns the number of direct children under this part (optionally
@@ -163,7 +163,7 @@ interface IMultiPart extends IMessagePart
      * @return int The number of children, or number of children matching the
      *         the passed filtering callable.
      */
-    public function getChildCount($fnFilter = null) : int;
+    public function getChildCount(callable $fnFilter = null) : int;
 
     /**
      * Returns a \RecursiveIterator of child parts.
@@ -184,6 +184,7 @@ interface IMultiPart extends IMessagePart
      *      this part.
      * @see IMultiPart::getAllParts() to get an array of all parts with an
      *      optional filter.
+     * @return RecursiveIterator<IMessagePart>
      */
     public function getChildIterator() : RecursiveIterator;
 
@@ -203,7 +204,7 @@ interface IMultiPart extends IMessagePart
      * @param int $index Optional 0-based index (defaulting to '0').
      * @return IMessagePart|null The part.
      */
-    public function getPartByMimeType($mimeType, $index = 0) : ?IMessagePart;
+    public function getPartByMimeType(string $mimeType, int $index = 0) : ?IMessagePart;
 
     /**
      * Returns an array of all parts that have a content type matching the
@@ -219,7 +220,7 @@ interface IMultiPart extends IMessagePart
      * @param string $mimeType The mime type to find.
      * @return IMessagePart[] An array of matching parts.
      */
-    public function getAllPartsByMimeType($mimeType) : array;
+    public function getAllPartsByMimeType(string $mimeType) : array;
 
     /**
      * Returns the number of parts that have content types matching the passed
@@ -231,7 +232,7 @@ interface IMultiPart extends IMessagePart
      * @param string $mimeType The mime type to find.
      * @return int The number of matching parts.
      */
-    public function getCountOfPartsByMimeType($mimeType) : int;
+    public function getCountOfPartsByMimeType(string $mimeType) : int;
 
     /**
      * Returns a part that has the given Content ID, or null if not found.
@@ -241,7 +242,7 @@ interface IMultiPart extends IMessagePart
      * @param string $contentId The content ID to find a part for.
      * @return IMessagePart|null The matching part.
      */
-    public function getPartByContentId($contentId) : ?IMessagePart;
+    public function getPartByContentId(string $contentId) : ?IMessagePart;
 
     /**
      * Registers the passed part as a child of the current part.
@@ -287,5 +288,5 @@ interface IMultiPart extends IMessagePart
      *        returning true if the part should be included.
      * @return int The number of removed parts.
      */
-    public function removeAllParts($fnFilter = null) : int;
+    public function removeAllParts(callable $fnFilter = null) : int;
 }

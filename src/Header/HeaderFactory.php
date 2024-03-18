@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use DI\Attribute\Inject;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
@@ -15,6 +16,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ReflectionClass;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
