@@ -73,7 +73,7 @@ interface IMessagePart extends SplSubject, IErrorBag
      * Returns the content transfer encoding used to encode the content on this
      * part, or the value of $default if not defined.
      *
-     * @param $default Optional default value to return if not
+     * @param ?string $default Optional default value to return if not
      *        applicable/defined
      * @return string|null the transfer encoding defined for the part.
      */

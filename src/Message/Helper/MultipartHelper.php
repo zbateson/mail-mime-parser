@@ -13,6 +13,7 @@ use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Message\IMultiPart;
 use ZBateson\MailMimeParser\Message\PartFilter;
 
 /**
@@ -155,7 +156,7 @@ class MultipartHelper extends AbstractHelper
             $alternativePart = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         }
         $message->removePart($rmPart);
-        if ($alternativePart !== null) {
+        if ($alternativePart !== null && $alternativePart instanceof IMultiPart) {
             if ($alternativePart->getChildCount() === 1) {
                 $this->genericHelper->replacePart($message, $alternativePart, $alternativePart->getChild(0));
             } elseif ($alternativePart->getChildCount() === 0) {
@@ -385,7 +386,9 @@ class MultipartHelper extends AbstractHelper
             $part = $this->createContentPartForMimeType($message, $mimeType, $charset);
         } else {
             $contentType = $part->getContentType();
-            $part->setRawHeader(HeaderConsts::CONTENT_TYPE, "$contentType;\r\n\tcharset=\"$charset\"");
+            if ($part instanceof IMimePart) {
+                $part->setRawHeader(HeaderConsts::CONTENT_TYPE, "$contentType;\r\n\tcharset=\"$charset\"");
+            }
         }
         $part->setContent($stringOrHandle);
         return $this;

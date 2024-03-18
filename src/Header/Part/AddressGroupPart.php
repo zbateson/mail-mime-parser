@@ -80,7 +80,7 @@ class AddressGroupPart extends MimeLiteralPart
 
     protected function validate() : void
     {
-        if (mb_strlen($this->value) === 0) {
+        if ($this->value === null || mb_strlen($this->value) === 0) {
             $this->addError('Address group doesn\'t have a name', LogLevel::ERROR);
         }
         if (empty($this->addresses)) {

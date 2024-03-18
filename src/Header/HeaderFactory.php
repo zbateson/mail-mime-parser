@@ -182,12 +182,13 @@ class HeaderFactory
     }
 
     /**
-     * Creates an IHeader instance for the passed header name and value, and
-     * returns it.
+     * Creates an IHeader instance for the passed header name and value using
+     * the passed IHeader class, and returns it.
      *
-     * @param $name The header name.
-     * @param $value The header value.
-     * @return The created header object.
+     * @param string $name The header name.
+     * @param string $value The header value.
+     * @param string $iHeaderClass The class to use for header creation
+     * @return IHeader The created header object.
      */
     public function newInstanceOf(string $name, string $value, string $iHeaderClass) : IHeader
     {

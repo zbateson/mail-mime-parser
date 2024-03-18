@@ -114,7 +114,7 @@ class ReceivedHeader extends ParameterHeader
      * exists in this position is returned -- be it contains spaces, or invalid
      * characters, etc...
      *
-     * @return The 'FROM' name.
+     * @return ?string The 'FROM' name.
      */
     public function getFromName() : ?string
     {
@@ -131,7 +131,7 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return The 'FROM' hostname.
+     * @return ?string The 'FROM' hostname.
      */
     public function getFromHostname() : ?string
     {
@@ -148,7 +148,7 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return The 'FROM' address.
+     * @return ?string The 'FROM' address.
      */
     public function getFromAddress() : ?string
     {
@@ -165,7 +165,7 @@ class ReceivedHeader extends ParameterHeader
      * exists in this position is returned -- be it contains spaces, or invalid
      * characters, etc...
      *
-     * @return The 'BY' name.
+     * @return ?string The 'BY' name.
      */
     public function getByName() : ?string
     {
@@ -182,7 +182,7 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return The 'BY' hostname.
+     * @return ?string The 'BY' hostname.
      */
     public function getByHostname() : ?string
     {
@@ -199,7 +199,7 @@ class ReceivedHeader extends ParameterHeader
      * not be valid.  More details on how the value is parsed and extracted can
      * be found in the class description for {@see ReceivedHeader}.
      *
-     * @return The 'BY' address.
+     * @return ?string The 'BY' address.
      */
     public function getByAddress() : ?string
     {

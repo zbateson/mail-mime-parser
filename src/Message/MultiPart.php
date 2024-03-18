@@ -131,7 +131,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         });
     }
 
-    public function addChild(IMessagePart $part, ?int $position = null) : static
+    public function addChild(MessagePart $part, ?int $position = null) : static
     {
         if ($part !== $this) {
             $part->parent = $this;

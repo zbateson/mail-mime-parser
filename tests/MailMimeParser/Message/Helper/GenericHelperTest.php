@@ -36,12 +36,18 @@ class GenericHelperTest extends TestCase
 
     private function newMockIMimePart() : \ZBateson\MailMimeParser\Message\IMimePart
     {
-        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class);
+        return $this
+            ->getMockBuilder(\ZBateson\MailMimeParser\Message\MimePart::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function newMockIMessage() : \ZBateson\MailMimeParser\IMessage
     {
-        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
+        return $this
+            ->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function newGenericHelper() : GenericHelper

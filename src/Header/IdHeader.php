@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
+use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Represents a Content-ID, Message-ID, In-Reply-To or References header.

@@ -249,10 +249,10 @@ interface IMultiPart extends IMessagePart
      * If the $position parameter is non-null, adds the part at the passed
      * position index, otherwise adds it as the last child.
      *
-     * @param IMessagePart $part The part to add.
+     * @param MessagePart $part The part to add.
      * @param int $position Optional insertion position 0-based index.
      */
-    public function addChild(IMessagePart $part, ?int $position = null) : static;
+    public function addChild(MessagePart $part, ?int $position = null) : static;
 
     /**
      * Removes the child part from this part and returns its previous position

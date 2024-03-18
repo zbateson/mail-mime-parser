@@ -30,12 +30,12 @@ abstract class AbstractConsumerService implements IConsumerService
     protected LoggerInterface $logger;
 
     /**
-     * @var used to construct IHeaderPart objects
+     * @var HeaderPartFactory used to construct IHeaderPart objects
      */
     protected HeaderPartFactory $partFactory;
 
     /**
-     * @var the generated token split pattern on first run, so it doesn't
+     * @var ?string the generated token split pattern on first run, so it doesn't
      *      need to be regenerated every time.
      */
     private ?string $tokenSplitPattern = null;

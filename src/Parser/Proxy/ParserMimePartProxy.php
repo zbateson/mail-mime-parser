@@ -7,7 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Header\IHeader;
+use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use Psr\Log\LogLevel;
@@ -131,7 +131,7 @@ class ParserMimePartProxy extends ParserPartProxy
      * Returns a ParameterHeader representing the parsed Content-Type header for
      * this part.
      */
-    public function getContentType() : ?IHeader
+    public function getContentType() : ?ParameterHeader
     {
         return $this->getHeaderContainer()->get(HeaderConsts::CONTENT_TYPE);
     }

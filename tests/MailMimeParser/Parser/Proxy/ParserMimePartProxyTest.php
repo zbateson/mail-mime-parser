@@ -3,7 +3,7 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\IHeader;
+use ZBateson\MailMimeParser\Header\ParameterHeader;
 
 /**
  * ParserMimePartProxyTest
@@ -263,7 +263,9 @@ class ParserMimePartProxyTest extends TestCase
             ->method('getHeaderContainer')
             ->willReturn($this->headerContainer);
 
-        $tst = $this->getMockForAbstractClass(IHeader::class);
+        $tst = $this->getMockBuilder(ParameterHeader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->headerContainer->expects($this->any())
             ->method('get')
             ->with($this->equalTo('Content-Type'))
