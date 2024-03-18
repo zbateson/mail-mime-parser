@@ -45,7 +45,7 @@ class DateConsumerService extends GenericConsumerService
         foreach ($parts as $part) {
             $strValue .= $part->getValue();
         }
-        $comments = \array_values(\array_filter($parts, function ($part) {
+        $comments = \array_values(\array_filter($parts, function($part) {
             return ($part instanceof CommentPart);
         }));
         return \array_merge([$this->partFactory->newDatePart($strValue)], $comments);

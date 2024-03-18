@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
-use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\ErrorBag;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Abstract base class representing a single part of a parsed header.

@@ -2,9 +2,9 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\ErrorBag;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of HeaderPartTest

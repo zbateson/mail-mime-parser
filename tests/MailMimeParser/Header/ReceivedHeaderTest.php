@@ -4,8 +4,8 @@ namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;

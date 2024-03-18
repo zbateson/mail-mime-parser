@@ -34,7 +34,7 @@ class ErrorBagTest extends TestCase
     public function testGetErrorLoggingContextName() : void
     {
         $ob = $this->newErrorBagStub();
-        $this->assertEquals(get_class($ob), $ob->getErrorLoggingContextName());
+        $this->assertEquals(\get_class($ob), $ob->getErrorLoggingContextName());
     }
 
     public function testAddHasAndGetErrors() : void
@@ -65,7 +65,7 @@ class ErrorBagTest extends TestCase
         $ob = $this->newErrorBagStub();
         $mb = $this->getMockBuilder('\\' . Error::class)
             ->disableOriginalConstructor();
-        
+
         $this->assertSame($ob, $ob->addError('test1', LogLevel::ERROR));
         $this->assertSame($ob, $ob->addError('test2', LogLevel::NOTICE));
 

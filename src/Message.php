@@ -10,9 +10,9 @@ namespace ZBateson\MailMimeParser;
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
 use ZBateson\MailMimeParser\Message\PartFilter;
@@ -319,20 +319,20 @@ class Message extends MimePart implements IMessage
         return $this;
     }
 
-    public function getMessageId(): ?string
+    public function getMessageId() : ?string
     {
         return $this->getHeaderValue(HeaderConsts::MESSAGE_ID);
     }
 
-    public function getErrorLoggingContextName(): string
+    public function getErrorLoggingContextName() : string
     {
         $params = '';
         if (!empty($this->getMessageId())) {
             $params .= ', message-id=' . $this->getContentId();
         }
         $params .= ', content-type=' . $this->getContentType();
-        $nsClass = get_class($this);
-        $class = substr($nsClass, (strrpos($nsClass, '\\') ?? -1) + 1);
-        return $class . '(' . spl_object_id($this) . $params . ')';
+        $nsClass = static::class;
+        $class = \substr($nsClass, (\strrpos($nsClass, '\\') ?? -1) + 1);
+        return $class . '(' . \spl_object_id($this) . $params . ')';
     }
 }

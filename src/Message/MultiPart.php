@@ -42,12 +42,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return $iter;
     }
 
-    /**
-     *
-     * @param callable $fnFilter
-     * @return IMessagePart|null
-     */
-    private function iteratorFindAt(Iterator $iter, int $index, callable $fnFilter = null) : ?IMessagePart
+    private function iteratorFindAt(Iterator $iter, int $index, ?callable $fnFilter = null) : ?IMessagePart
     {
         $pos = 0;
         foreach ($iter as $part) {
@@ -61,7 +56,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return null;
     }
 
-    public function getPart(int $index, callable $fnFilter = null) : ?IMessagePart
+    public function getPart(int $index, ?callable $fnFilter = null) : ?IMessagePart
     {
         return $this->iteratorFindAt(
             $this->getAllPartsIterator(),
@@ -70,7 +65,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         );
     }
 
-    public function getAllParts(callable $fnFilter = null) : array
+    public function getAllParts(?callable $fnFilter = null) : array
     {
         $array = \iterator_to_array($this->getAllPartsIterator(), false);
         if ($fnFilter !== null) {
@@ -79,12 +74,12 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return $array;
     }
 
-    public function getPartCount(callable $fnFilter = null) : int
+    public function getPartCount(?callable $fnFilter = null) : int
     {
         return \count($this->getAllParts($fnFilter));
     }
 
-    public function getChild(int $index, callable $fnFilter = null) : ?IMessagePart
+    public function getChild(int $index, ?callable $fnFilter = null) : ?IMessagePart
     {
         return $this->iteratorFindAt(
             $this->partChildrenContainer,
@@ -98,7 +93,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return $this->partChildrenContainer;
     }
 
-    public function getChildParts(callable $fnFilter = null) : array
+    public function getChildParts(?callable $fnFilter = null) : array
     {
         $array = \iterator_to_array($this->partChildrenContainer, false);
         if ($fnFilter !== null) {
@@ -107,7 +102,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return $array;
     }
 
-    public function getChildCount(callable $fnFilter = null) : int
+    public function getChildCount(?callable $fnFilter = null) : int
     {
         return \count($this->getChildParts($fnFilter));
     }
@@ -160,7 +155,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return $position;
     }
 
-    public function removeAllParts(callable $fnFilter = null) : int
+    public function removeAllParts(?callable $fnFilter = null) : int
     {
         $parts = $this->getAllParts($fnFilter);
         $count = \count($parts);

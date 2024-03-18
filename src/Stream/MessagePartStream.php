@@ -27,8 +27,6 @@ class MessagePartStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
 
-    private ?StreamInterface $stream;
-
     /**
      * @var StreamFactory For creating needed stream decorators.
      */
@@ -43,6 +41,8 @@ class MessagePartStream implements SplObserver, StreamInterface
      * @var ?AppendStream
      */
     protected ?AppendStream $appendStream = null;
+
+    private ?StreamInterface $stream;
 
     /**
      * Constructor

@@ -22,9 +22,6 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory;
  */
 class NonMimeParserService extends AbstractParserService
 {
-    /**
-     * @var UUEncodedPartHeaderContainerFactory
-     */
     protected UUEncodedPartHeaderContainerFactory $partHeaderContainerFactory;
 
     public function __construct(

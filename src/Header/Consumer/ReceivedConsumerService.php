@@ -8,11 +8,11 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Iterator;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,

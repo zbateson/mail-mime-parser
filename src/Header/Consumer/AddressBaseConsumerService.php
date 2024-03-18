@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\IHeaderPart;
 use Iterator;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Serves as a base-consumer for recipient/sender email address headers (like
@@ -27,7 +27,7 @@ class AddressBaseConsumerService extends AbstractConsumerService
         HeaderPartFactory $partFactory,
         AddressConsumerService $addressConsumerService
     ) {
-        parent::__construct($partFactory, [ $addressConsumerService ]);
+        parent::__construct($partFactory, [$addressConsumerService]);
     }
 
     /**

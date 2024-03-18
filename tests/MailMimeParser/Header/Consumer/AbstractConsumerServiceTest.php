@@ -3,8 +3,8 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Part\Token;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\Token;
 
 /**
  * Description of AbstractConsumerServiceTest

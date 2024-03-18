@@ -7,13 +7,13 @@
 
 namespace ZBateson\MailMimeParser;
 
+use DI\Container;
+use DI\ContainerBuilder;
+use DI\Definition\Source\DefinitionSource;
 use GuzzleHttp\Psr7\CachingStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
-use DI\Container;
-use DI\ContainerBuilder;
-use DI\Definition\Source\DefinitionSource;
 use ZBateson\MailMimeParser\Parser\MessageParserService;
 
 /**
@@ -62,19 +62,18 @@ class MailMimeParser
     protected Container $container;
 
     /**
-     * @var Container The static global container
-     */
-    private static ?Container $globalContainer = null;
-
-    /**
      * @var MessageParserService for parsing messages
      */
     protected MessageParserService $messageParser;
 
     /**
+     * @var Container The static global container
+     */
+    private static ?Container $globalContainer = null;
+
+    /**
      * Returns the global php-di container instance.
      *
-     * @return Container
      */
     public static function getGlobalContainer() : Container
     {
@@ -102,8 +101,6 @@ class MailMimeParser
     /**
      * Registers the provided logger globally.
      *
-     * @param LoggerInterface $logger
-     * @return void
      */
     public static function setGlobalLogger(LoggerInterface $logger) : void
     {
@@ -137,7 +134,7 @@ class MailMimeParser
                 $builder->addDefinitions($phpDiContainerConfig);
             }
             if ($logger !== null) {
-                $builder->addDefinitions([ LoggerInterface::class => $logger ]);
+                $builder->addDefinitions([LoggerInterface::class => $logger]);
             }
             $this->container = $builder->build();
         }

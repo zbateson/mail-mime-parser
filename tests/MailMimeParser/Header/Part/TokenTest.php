@@ -2,8 +2,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of TokenTest

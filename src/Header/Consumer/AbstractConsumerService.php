@@ -8,14 +8,14 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ArrayIterator;
+use DI\Attribute\Inject;
 use Iterator;
 use NoRewindIterator;
-use DI\Attribute\Inject;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 /**
  * Abstract base class for all header token consumers.
@@ -36,19 +36,18 @@ abstract class AbstractConsumerService implements IConsumerService
     protected HeaderPartFactory $partFactory;
 
     /**
-     * @var ?string the generated token split pattern on first run, so it doesn't
-     *      need to be regenerated every time.
-     */
-    private ?string $tokenSplitPattern = null;
-
-    /**
      * @var AbstractConsumerService[] array of sub-consumers used by this
      *      consumer if any, or an empty array if none exist.
      */
     protected array $subConsumers = [];
 
     /**
-     * @param HeaderPartFactory $partFactory
+     * @var ?string the generated token split pattern on first run, so it doesn't
+     *      need to be regenerated every time.
+     */
+    private ?string $tokenSplitPattern = null;
+
+    /**
      * @param AbstractConsumerService[] $subConsumers
      */
     public function __construct(HeaderPartFactory $partFactory, array $subConsumers = [])
@@ -60,12 +59,12 @@ abstract class AbstractConsumerService implements IConsumerService
 
     public function __invoke(string $value) : array
     {
-        $this->logger->debug('Starting ${class} for "${value}"', [ 'class' => static::class, 'value' => $value ]);
+        $this->logger->debug('Starting ${class} for "${value}"', ['class' => static::class, 'value' => $value]);
         if ($value !== '') {
             $parts = $this->parseRawValue($value);
             $this->logger->debug(
                 'Ending ${class} for "${value}": parsed into ${cnt} header part objects',
-                [ 'class' => static::class, 'value' => $value, 'cnt' => count($parts) ]
+                ['class' => static::class, 'value' => $value, 'cnt' => \count($parts)]
             );
             return $parts;
         }
@@ -173,7 +172,7 @@ abstract class AbstractConsumerService implements IConsumerService
             $this->tokenSplitPattern = $this->getTokenSplitPattern();
             $this->logger->debug(
                 'Configuring ${class} with token split pattern: ${pattern}',
-                [ 'class' => static::class, 'pattern' => $this->tokenSplitPattern]
+                ['class' => static::class, 'pattern' => $this->tokenSplitPattern]
             );
         }
         return \preg_split(
@@ -245,7 +244,7 @@ abstract class AbstractConsumerService implements IConsumerService
             if ($consumer->isStartToken($token)) {
                 $this->logger->debug(
                     'Token: "${value}" in ${class} starting sub-consumer ${consumer}',
-                    [ 'value' => $token, 'class' => static::class, 'consumer' => get_class($consumer) ]
+                    ['value' => $token, 'class' => static::class, 'consumer' => \get_class($consumer)]
                 );
                 $this->advanceToNextToken($tokens, true);
                 return $consumer->parseTokensIntoParts($tokens);

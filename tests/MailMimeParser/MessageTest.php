@@ -2,9 +2,9 @@
 
 namespace ZBateson\MailMimeParser;
 
+use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
-use GuzzleHttp\Psr7\Utils;
 
 /**
  * Description of MessageTest

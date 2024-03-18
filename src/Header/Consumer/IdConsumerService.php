@@ -65,10 +65,10 @@ class IdConsumerService extends GenericConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $id = \array_reduce(\array_filter($parts), function ($c, $p) {
+        $id = \array_reduce(\array_filter($parts), function($c, $p) {
             return $c . $p->getValue();
         }, '');
-        return array_merge([$this->partFactory->newLiteralPart($id)], \array_values(\array_filter($parts, function ($p) {
+        return \array_merge([$this->partFactory->newLiteralPart($id)], \array_values(\array_filter($parts, function($p) {
             return ($p instanceof CommentPart);
         })));
     }

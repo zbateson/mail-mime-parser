@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
 use Psr\Log\LogLevel;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Holds a group of addresses, and an optional group name.
@@ -80,7 +80,7 @@ class AddressGroupPart extends MimeLiteralPart
 
     protected function validate() : void
     {
-        if ($this->value === null || mb_strlen($this->value) === 0) {
+        if ($this->value === null || \mb_strlen($this->value) === 0) {
             $this->addError('Address group doesn\'t have a name', LogLevel::ERROR);
         }
         if (empty($this->addresses)) {

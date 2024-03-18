@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 $value = $argv[1];
 $charset = $argv[2] ?? 'UTF-8';
 $scheme = $argv[3] ?? 'B';

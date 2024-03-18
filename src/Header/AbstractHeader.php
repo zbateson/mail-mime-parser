@@ -7,11 +7,11 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\MailMimeParser;
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
-use Psr\Log\LogLevel;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Abstract base class representing a mime email's header.
@@ -40,14 +40,14 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
     protected array $allParts = [];
 
     /**
-     * @var string[] array of comments, initialized on demand in getComments()
-     */
-    private ?array $comments = null;
-
-    /**
      * @var string the raw value
      */
     protected string $rawValue;
+
+    /**
+     * @var string[] array of comments, initialized on demand in getComments()
+     */
+    private ?array $comments = null;
 
     /**
      * Assigns the header's name and raw value, then calls parseHeaderValue to
@@ -76,7 +76,7 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      */
     protected function filterAndAssignToParts() : void
     {
-        $this->parts = \array_values(\array_filter($this->allParts, function ($p) {
+        $this->parts = \array_values(\array_filter($this->allParts, function($p) {
             return !($p instanceof CommentPart);
         }));
     }
@@ -117,10 +117,10 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
     {
         if ($this->comments === null) {
             $this->comments = \array_values(\array_map(
-                function ($p) { return $p->getComment(); },
+                function($p) { return $p->getComment(); },
                 \array_filter(
                     $this->allParts,
-                    function ($p) { return ($p instanceof CommentPart); }
+                    function($p) { return ($p instanceof CommentPart); }
                 )
             ));
         }
@@ -150,7 +150,7 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
         return "{$this->name}: {$this->rawValue}";
     }
 
-    public function getErrorLoggingContextName(): string
+    public function getErrorLoggingContextName() : string
     {
         return 'Header::' . $this->getName();
     }
@@ -162,10 +162,10 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
 
     protected function validate() : void
     {
-        if (strlen(trim($this->name)) === 0) {
+        if (\strlen(\trim($this->name)) === 0) {
             $this->addError('Header doesn\'t have a name', LogLevel::ERROR);
         }
-        if (strlen(trim($this->rawValue)) === 0) {
+        if (\strlen(\trim($this->rawValue)) === 0) {
             $this->addError('Header doesn\'t have a value', LogLevel::NOTICE);
         }
     }
@@ -187,11 +187,11 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
         $valuePart = $value;
         if ($value === null) {
             // full header line
-            $parts = explode(':', $nameOrLine, 2);
-            $namePart = (count($parts) > 1) ? $parts[0] : '';
-            $valuePart = trim((count($parts) > 1) ? $parts[1] : $parts[0]);
+            $parts = \explode(':', $nameOrLine, 2);
+            $namePart = (\count($parts) > 1) ? $parts[0] : '';
+            $valuePart = \trim((\count($parts) > 1) ? $parts[1] : $parts[0]);
         }
-        return [ $namePart, $valuePart ];
+        return [$namePart, $valuePart];
     }
 
     /**

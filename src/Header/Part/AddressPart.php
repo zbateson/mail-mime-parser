@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
 use Psr\Log\LogLevel;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Holds a single address or name/address pair.

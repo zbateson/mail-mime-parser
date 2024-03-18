@@ -7,11 +7,11 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
-use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use Psr\Http\Message\StreamInterface;
 
 /**
  * Proxy between a MessagePart and a Parser.

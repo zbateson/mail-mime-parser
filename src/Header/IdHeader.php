@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Represents a Content-ID, Message-ID, In-Reply-To or References header.
@@ -50,9 +50,10 @@ class IdHeader extends MimeEncodedHeader
     public function getIds() : array
     {
         return \array_values(\array_map(
-            function ($p) {
+            function($p) {
                 return $p->getValue();
-            }, \array_filter($this->parts, function ($p) {
+            },
+            \array_filter($this->parts, function($p) {
                 return !($p instanceof CommentPart);
             })
         ));

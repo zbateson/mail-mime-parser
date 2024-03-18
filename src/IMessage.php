@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser;
 
-use ZBateson\MailMimeParser\Message\IMimePart;
-use ZBateson\MailMimeParser\Message\IMessagePart;
 use Psr\Http\Message\StreamInterface;
+use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 
 /**
  * An interface representing an email message.

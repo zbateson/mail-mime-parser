@@ -56,7 +56,7 @@ class GenericReceivedConsumerService extends AbstractGenericConsumerService
         CommentConsumerService $commentConsumerService,
         string $partName
     ) {
-        parent::__construct($partFactory, [ $commentConsumerService ]);
+        parent::__construct($partFactory, [$commentConsumerService]);
         $this->partName = $partName;
     }
 

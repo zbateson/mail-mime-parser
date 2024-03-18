@@ -41,7 +41,6 @@ abstract class ErrorBag implements IErrorBag
     /**
      * Returns the class name.  Override to identify objects in logs.
      *
-     * @return string
      */
     public function getErrorLoggingContextName() : string
     {
@@ -83,7 +82,7 @@ abstract class ErrorBag implements IErrorBag
         return $this;
     }
 
-    public function getErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR): array
+    public function getErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array
     {
         if ($validate && !$this->validated) {
             $this->validated = true;
@@ -91,7 +90,7 @@ abstract class ErrorBag implements IErrorBag
         }
         return \array_values(\array_filter(
             $this->errors,
-            function ($e) use ($minPsrLevel) {
+            function($e) use ($minPsrLevel) {
                 return $e->isPsrLevelGreaterOrEqualTo($minPsrLevel);
             }
         ));
@@ -99,13 +98,13 @@ abstract class ErrorBag implements IErrorBag
 
     public function hasErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : bool
     {
-        return (count($this->getErrors($validate, $minPsrLevel)) > 0);
+        return (\count($this->getErrors($validate, $minPsrLevel)) > 0);
     }
 
     public function getAllErrors(bool $validate = false, string $minPsrLevel = LogLevel::ERROR) : array
     {
         $arr = \array_values(\array_map(
-            function ($e) use ($validate, $minPsrLevel) {
+            function($e) use ($validate, $minPsrLevel) {
                 return $e->getAllErrors($validate, $minPsrLevel) ?? [];
             },
             $this->getErrorBagChildren()

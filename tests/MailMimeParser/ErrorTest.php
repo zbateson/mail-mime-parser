@@ -2,9 +2,9 @@
 
 namespace ZBateson\MailMimeParser;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use InvalidArgumentException;
 
 /**
  * Description of ErrorTest
@@ -47,7 +47,7 @@ class ErrorTest extends TestCase
     public function testGetObjectAndClass() : void
     {
         $ob = new Error('', LogLevel::DEBUG, $this->errorBagMock);
-        $this->assertSame(get_class($this->errorBagMock), $ob->getClass());
+        $this->assertSame(\get_class($this->errorBagMock), $ob->getClass());
         $this->assertSame($this->errorBagMock, $ob->getObject());
     }
 

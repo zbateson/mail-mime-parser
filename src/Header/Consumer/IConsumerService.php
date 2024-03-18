@@ -22,5 +22,5 @@ interface IConsumerService
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] the array of parsed
      *         parts
      */
-    function __invoke(string $value) : array;
+    public function __invoke(string $value) : array;
 }

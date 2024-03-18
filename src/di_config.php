@@ -2,16 +2,9 @@
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
-use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 
 return [
     LoggerInterface::class => DI\autowire(NullLogger::class),

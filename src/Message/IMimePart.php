@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use ZBateson\MailMimeParser\Header\IHeader;
 use Traversable;
+use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
  * An interface representation of any MIME email part.
@@ -125,7 +125,6 @@ interface IMimePart extends IMultiPart
      *      array of raw headers in this part.
      * @see IMimePart::getRawHeaderIterator() to retrieve an iterator traversing
      *      a two-dimensional string[] array of raw headers.
-     * @param string $name
      * @return IHeader[] an array of header objects
      */
     public function getAllHeadersByName(string $name) : array;

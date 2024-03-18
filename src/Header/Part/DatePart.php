@@ -7,10 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
 use DateTime;
 use Exception;
 use Psr\Log\LogLevel;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Parses a header into a DateTime object.

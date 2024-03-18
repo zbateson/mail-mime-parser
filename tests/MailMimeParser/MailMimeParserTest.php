@@ -31,7 +31,7 @@ class MailMimeParserTest extends TestCase
             ->method('parse')
             ->willReturn($exp);
 
-        $mmp = new MailMimeParser(phpDiContainerConfig: [ MessageParserService::class => $mockParser ]);
+        $mmp = new MailMimeParser(phpDiContainerConfig: [MessageParserService::class => $mockParser]);
 
         $ret = $mmp->parse($handle, true);
         $this->assertEquals($exp, $ret);
@@ -52,7 +52,7 @@ class MailMimeParserTest extends TestCase
             ->method('parse')
             ->willReturn($exp);
 
-        $mmp = new MailMimeParser(phpDiContainerConfig: [ MessageParserService::class => $mockParser ]);
+        $mmp = new MailMimeParser(phpDiContainerConfig: [MessageParserService::class => $mockParser]);
 
         $ret = $mmp->parse(Psr7\Utils::streamFor($handle), true);
         $this->assertEquals($exp, $ret);
@@ -69,7 +69,7 @@ class MailMimeParserTest extends TestCase
             ->method('parse')
             ->willReturn($exp);
 
-        $mmp = new MailMimeParser(phpDiContainerConfig: [ MessageParserService::class => $mockParser ]);
+        $mmp = new MailMimeParser(phpDiContainerConfig: [MessageParserService::class => $mockParser]);
 
         $ret = $mmp->parse('This is a test', false);
         $this->assertEquals($exp, $ret);

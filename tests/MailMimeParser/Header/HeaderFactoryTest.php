@@ -38,7 +38,7 @@ class HeaderFactoryTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        
+
         $abcs = $this->getMockBuilder(AddressBaseConsumerService::class)
             ->disableOriginalConstructor()
             ->setMethods(['__invoke'])

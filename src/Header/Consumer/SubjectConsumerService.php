@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
-use ZBateson\MailMimeParser\Header\IHeaderPart;
 use Iterator;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Extends AbstractGenericConsumerService to use a MimeLiteralPartFactory, and

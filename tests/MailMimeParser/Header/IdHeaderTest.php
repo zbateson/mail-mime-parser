@@ -3,9 +3,9 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
 /**
  * Description of IdHeaderTest

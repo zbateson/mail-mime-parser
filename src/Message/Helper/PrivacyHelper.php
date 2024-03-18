@@ -7,12 +7,12 @@
 
 namespace ZBateson\MailMimeParser\Message\Helper;
 
+use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
-use Psr\Http\Message\StreamInterface;
 
 /**
  * Provides routines to set or retrieve the signature part of a signed message.

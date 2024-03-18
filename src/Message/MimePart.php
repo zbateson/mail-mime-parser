@@ -7,13 +7,13 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
+use Traversable;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
-use Traversable;
 
 /**
  * A mime email message part.
@@ -293,8 +293,8 @@ class MimePart extends MultiPart implements IMimePart
         return $this;
     }
 
-    public function getErrorBagChildren(): array
+    public function getErrorBagChildren() : array
     {
-        return \array_merge([ $this->headerContainer ], parent::getErrorBagChildren());
+        return \array_merge([$this->headerContainer], parent::getErrorBagChildren());
     }
 }

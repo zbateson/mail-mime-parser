@@ -7,10 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use ZBateson\MailMimeParser\Header\ParameterHeader;
-use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Message\IMessagePart;
 use Psr\Log\LogLevel;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
+use ZBateson\MailMimeParser\Header\ParameterHeader;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 
 /**
  * A bi-directional parser-to-part proxy for MimeParser and IMimeParts.
@@ -32,19 +32,6 @@ class ParserMimePartProxy extends ParserPartProxy
     protected bool $parentBoundaryFound = false;
 
     /**
-     * @var ?string NULL if the current part does not have a boundary, and
-     *      otherwise contains the value of the boundary parameter of the
-     *      content-type header if the part contains one.
-     */
-    private ?string $mimeBoundary = null;
-
-    /**
-     * @var bool FALSE if not queried for in the content-type header of this
-     *      part and set in $mimeBoundary.
-     */
-    private bool $mimeBoundaryQueried = false;
-
-    /**
      * @var bool true once all children of this part have been parsed.
      */
     protected bool $allChildrenParsed = false;
@@ -64,6 +51,19 @@ class ParserMimePartProxy extends ParserPartProxy
      * @var ParserPartProxy Reference to the last child added to this part.
      */
     protected ?ParserPartProxy $lastAddedChild = null;
+
+    /**
+     * @var ?string NULL if the current part does not have a boundary, and
+     *      otherwise contains the value of the boundary parameter of the
+     *      content-type header if the part contains one.
+     */
+    private ?string $mimeBoundary = null;
+
+    /**
+     * @var bool FALSE if not queried for in the content-type header of this
+     *      part and set in $mimeBoundary.
+     */
+    private bool $mimeBoundaryQueried = false;
 
     /**
      * Ensures that the last child added to this part is fully parsed (content
@@ -140,7 +140,6 @@ class ParserMimePartProxy extends ParserPartProxy
      * Returns the parsed boundary parameter of the Content-Type header if set
      * for a multipart message part.
      *
-     * @return string
      */
     public function getMimeBoundary() : ?string
     {
@@ -203,7 +202,6 @@ class ParserMimePartProxy extends ParserPartProxy
      * flag used by isParentBoundaryFound() to true on this part and all parent
      * parts.
      *
-     * @return static
      */
     public function setEof() : static
     {

@@ -29,7 +29,7 @@ class AddressEmailConsumerService extends AbstractConsumerService
     ) {
         parent::__construct(
             $partFactory,
-            [ $commentConsumerService, $quotedStringConsumerService ]
+            [$commentConsumerService, $quotedStringConsumerService]
         );
     }
 

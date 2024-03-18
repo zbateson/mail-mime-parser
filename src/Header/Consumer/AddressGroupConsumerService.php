@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Parses a single group of addresses (as a named-group part of an address
@@ -37,8 +37,7 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
     /**
      * Needs to be called in AddressConsumerService's constructor to avoid a
      * circular dependency.
-     * 
-     * @param AddressConsumerService $subConsumer
+     *
      */
     public function setAddressConsumerService(AddressConsumerService $subConsumer) : void
     {

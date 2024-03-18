@@ -131,7 +131,7 @@ class ParserManagerServiceTest extends TestCase
         $this->nonMimeParser->expects($this->never())
             ->method('getParserPartProxyFactory');
 
-        
+
         $proxyFactory->expects($this->once())
             ->method('newInstance')
             ->with($partBuilder, $this->mimeParser)

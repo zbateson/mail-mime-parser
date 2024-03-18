@@ -3,11 +3,11 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
 /**
  * Description of AddressHeaderTest

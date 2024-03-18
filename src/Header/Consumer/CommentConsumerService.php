@@ -7,11 +7,11 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use Iterator;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\LiteralPart;
-use Iterator;
+use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 
 /**
  * Consumes all tokens within parentheses as comments.

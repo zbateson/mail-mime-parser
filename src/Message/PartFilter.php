@@ -100,7 +100,6 @@ abstract class PartFilter
      *        passing true (defaults to false).
      * @param bool $includeSignedParts Optionally include signed parts (defaults
      *        to false).
-     * @return callable
      */
     public static function fromDisposition(string $disposition, bool $includeMultipart = false, bool $includeSignedParts = false) : callable
     {

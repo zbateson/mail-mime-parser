@@ -233,16 +233,16 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return $this->getStream()->getContents();
     }
 
-    public function getErrorLoggingContextName(): string
+    public function getErrorLoggingContextName() : string
     {
         $params = '';
         if (!empty($this->getContentId())) {
             $params .= ', content-id=' . $this->getContentId();
         }
         $params .= ', content-type=' . $this->getContentType();
-        $nsClass = get_class($this);
-        $class = substr($nsClass, (strrpos($nsClass, '\\') ?? -1) + 1);
-        return $class . '(' . spl_object_id($this) . $params . ')';
+        $nsClass = static::class;
+        $class = \substr($nsClass, (\strrpos($nsClass, '\\') ?? -1) + 1);
+        return $class . '(' . \spl_object_id($this) . $params . ')';
     }
 
     protected function getErrorBagChildren() : array

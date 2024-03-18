@@ -7,10 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
-use ZBateson\MailMimeParser\Header\Part\DatePart;
 use DateTime;
 use DateTimeImmutable;
+use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
+use ZBateson\MailMimeParser\Header\Part\DatePart;
 
 /**
  * Reads a DatePart value header in either RFC 2822 or RFC 822 format.

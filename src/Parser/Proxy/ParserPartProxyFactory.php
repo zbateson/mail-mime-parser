@@ -20,7 +20,6 @@ abstract class ParserPartProxyFactory
     /**
      * Constructs a new ParserPartProxy wrapping an IMessagePart object.
      *
-     * @return ParserPartProxy
      */
     abstract public function newInstance(PartBuilder $partBuilder, IParserService $parser) : ParserPartProxy;
 }

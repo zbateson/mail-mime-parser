@@ -26,14 +26,8 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class ParserMessageProxyFactory extends ParserMimePartProxyFactory
 {
-    /**
-     * @var MultipartHelper
-     */
     protected MultipartHelper $multipartHelper;
 
-    /**
-     * @var PrivacyHelper
-     */
     protected PrivacyHelper $privacyHelper;
 
     public function __construct(

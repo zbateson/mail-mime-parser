@@ -17,9 +17,6 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class PartStreamContainerFactory
 {
-    /**
-     * @var StreamFactory
-     */
     protected StreamFactory $streamFactory;
 
     public function __construct(StreamFactory $streamFactory)

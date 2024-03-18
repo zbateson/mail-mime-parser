@@ -8,8 +8,8 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Http\Message\StreamInterface;
-use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call

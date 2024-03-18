@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
  * Serves as a base-consumer for ID headers (like Message-ID and Content-ID).

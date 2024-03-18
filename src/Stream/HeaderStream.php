@@ -8,12 +8,12 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
-use Traversable;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
 use SplObserver;
 use SplSubject;
+use Traversable;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\IMimePart;
@@ -32,12 +32,12 @@ class HeaderStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
 
-    private ?StreamInterface $stream;
-
     /**
      * @var IMessagePart the part to read from.
      */
     protected IMessagePart $part;
+
+    private ?StreamInterface $stream;
 
     public function __construct(IMessagePart $part)
     {

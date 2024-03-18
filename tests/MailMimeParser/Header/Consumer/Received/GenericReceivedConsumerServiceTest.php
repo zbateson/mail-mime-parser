@@ -3,8 +3,8 @@
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
 /**
  * Description of GenericReceivedConsumerServiceTest

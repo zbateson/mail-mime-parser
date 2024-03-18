@@ -24,7 +24,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
  *
  * @author Zaahid Bateson
  */
-interface IMessagePart extends SplSubject, IErrorBag
+interface IMessagePart extends IErrorBag, SplSubject
 {
     /**
      * Returns this part's parent.

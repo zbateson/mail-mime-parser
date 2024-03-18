@@ -4,9 +4,8 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 
-use ZBateson\MbWrapper\MbWrapper;
-use ZBateson\MailMimeParser\Header\Part\AddressPart;
 use Psr\Log\LogLevel;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Description of AddressGroupTest
@@ -29,7 +28,7 @@ class AddressGroupPartTest extends TestCase
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock()
         ];
-        
+
         $part = new AddressGroupPart($csConverter, $members, $name);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($members, $part->getAddresses());

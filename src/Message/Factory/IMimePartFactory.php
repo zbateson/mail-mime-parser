@@ -18,14 +18,8 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class IMimePartFactory extends IMessagePartFactory
 {
-    /**
-     * @var PartHeaderContainerFactory
-     */
     protected PartHeaderContainerFactory $partHeaderContainerFactory;
 
-    /**
-     * @var PartChildrenContainerFactory
-     */
     protected PartChildrenContainerFactory $partChildrenContainerFactory;
 
     public function __construct(

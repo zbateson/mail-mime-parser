@@ -25,7 +25,7 @@ class GenericConsumerService extends AbstractGenericConsumerService
     ) {
         parent::__construct(
             $partFactory,
-            [ $commentConsumerService, $quotedStringConsumerService ]
+            [$commentConsumerService, $quotedStringConsumerService]
         );
     }
 }

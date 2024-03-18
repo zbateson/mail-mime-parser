@@ -7,8 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use ZBateson\MailMimeParser\IErrorBag;
 use Stringable;
+use ZBateson\MailMimeParser\IErrorBag;
 
 /**
  * Represents a single parsed part of a header line's value.

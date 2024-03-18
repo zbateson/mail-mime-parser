@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser;
 
-use Throwable;
 use InvalidArgumentException;
 use Psr\Log\LogLevel;
+use Throwable;
 
 /**
  * Holds information about an error or notice that happened on a specific
@@ -90,7 +90,7 @@ class Error
      */
     public function getClass() : string
     {
-        return get_class($this->object);
+        return \get_class($this->object);
     }
 
     /**

@@ -7,9 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use Traversable;
 use ArrayIterator;
 use IteratorAggregate;
+use Traversable;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;

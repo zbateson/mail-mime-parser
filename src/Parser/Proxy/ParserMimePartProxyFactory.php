@@ -28,19 +28,10 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
      */
     protected StreamFactory $streamFactory;
 
-    /**
-     * @var ParserPartStreamContainerFactory
-     */
     protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
 
-    /**
-     * @var PartHeaderContainerFactory
-     */
     protected PartHeaderContainerFactory $partHeaderContainerFactory;
 
-    /**
-     * @var ParserPartChildrenContainerFactory
-     */
     protected ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory;
 
     public function __construct(
