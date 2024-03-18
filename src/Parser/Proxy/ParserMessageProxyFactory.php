@@ -29,12 +29,12 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
     /**
      * @var MultipartHelper
      */
-    protected $multipartHelper;
+    protected MultipartHelper $multipartHelper;
 
     /**
      * @var PrivacyHelper
      */
-    protected $privacyHelper;
+    protected PrivacyHelper $privacyHelper;
 
     public function __construct(
         StreamFactory $sdf,
@@ -52,10 +52,8 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
     /**
      * Constructs a new ParserMessageProxy wrapping an IMessage object that will
      * dynamically parse a message's content and parts as they're requested.
-     *
-     * @return ParserMessageProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser) : ParserMessageProxy
     {
         $parserProxy = new ParserMessageProxy($partBuilder, $parser);
 

@@ -127,17 +127,18 @@ class MessagePartTest extends TestCase
             ->willReturn('wigidiwamwamwazzle');
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
+        $stream = Psr7\Utils::streamFor('Que tonto');
         $this->partStreamContainer->expects($this->exactly(2))
             ->method('getContentStream')
             ->withConsecutive(
                 ['wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'oooohweee!'],
                 ['wubalubadub-duuuuub', 'override', 'oooohweee!']
             )
-            ->willReturn('Que tonto');
+            ->willReturn($stream);
 
-        $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!'));
+        $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!')->getContents());
         $messagePart->setCharsetOverride('override');
-        $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!'));
+        $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!')->getContents());
     }
 
     public function testBinaryContentStream() : void

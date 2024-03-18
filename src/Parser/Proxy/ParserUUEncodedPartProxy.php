@@ -15,6 +15,15 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 class ParserUUEncodedPartProxy extends ParserPartProxy
 {
     /**
+     * Only has a single parent of type ParserNonMimeMessageProxy, overridden to
+     * specify ParserNonMimeMessageProxy as the return type.
+     */
+    public function getParent() : ParserNonMimeMessageProxy
+    {
+        return parent::getParent();
+    }
+
+    /**
      * Returns the next part's start position within the message's raw stream,
      * or null if not set, not discovered, or there are no more parts under this
      * message.
@@ -67,7 +76,7 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * setNextPartStart() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
      */
-    public function setNextPartStart(int $nextPartStart) : self
+    public function setNextPartStart(int $nextPartStart) : static
     {
         $this->getParent()->setNextPartStart($nextPartStart);
         return $this;
@@ -80,7 +89,7 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * setNextPartMode() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
      */
-    public function setNextPartMode(int $nextPartMode) : self
+    public function setNextPartMode(int $nextPartMode) : static
     {
         $this->getParent()->setNextPartMode($nextPartMode);
         return $this;
@@ -93,7 +102,7 @@ class ParserUUEncodedPartProxy extends ParserPartProxy
      * setNextPartFilename() on its parent (a ParserNonMimeMessageProxy, which
      * stores/returns this information).
      */
-    public function setNextPartFilename(string $nextPartFilename) : self
+    public function setNextPartFilename(string $nextPartFilename) : static
     {
         $this->getParent()->setNextPartFilename($nextPartFilename);
         return $this;

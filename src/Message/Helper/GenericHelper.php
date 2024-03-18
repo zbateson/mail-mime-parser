@@ -24,7 +24,7 @@ class GenericHelper extends AbstractHelper
      * @var string[] non mime content fields that are not related to the content
      *      of a part.
      */
-    private static $nonMimeContentFields = ['contentreturn', 'contentidentifier'];
+    private static array $nonMimeContentFields = ['contentreturn', 'contentidentifier'];
 
     /**
      * Returns true if the passed header's name is a Content-* header other than
@@ -44,13 +44,14 @@ class GenericHelper extends AbstractHelper
      * @param string $header
      * @param string $default
      */
-    public function copyHeader(IMimePart $from, IMimePart $to, $header, $default = null)
+    public function copyHeader(IMimePart $from, IMimePart $to, $header, $default = null) : static
     {
         $fromHeader = $from->getHeader($header);
         $set = ($fromHeader !== null) ? $fromHeader->getRawValue() : $default;
         if ($set !== null) {
             $to->setRawHeader($header, $set);
         }
+        return $this;
     }
 
     /**
@@ -60,7 +61,7 @@ class GenericHelper extends AbstractHelper
      * An exception is made for the obsolete Content-Return header, which isn't
      * isn't a MIME content field and so isn't removed.
      */
-    public function removeContentHeadersAndContent(IMimePart $part) : self
+    public function removeContentHeadersAndContent(IMimePart $part) : static
     {
         foreach ($part->getAllHeaders() as $header) {
             if ($this->isMimeContentField($header)) {
@@ -81,7 +82,7 @@ class GenericHelper extends AbstractHelper
      *
      * @param bool $move
      */
-    public function copyContentHeadersAndContent(IMimePart $from, IMimePart $to, $move = false)
+    public function copyContentHeadersAndContent(IMimePart $from, IMimePart $to, $move = false) : static
     {
         $this->copyHeader($from, $to, HeaderConsts::CONTENT_TYPE, 'text/plain; charset=utf-8');
         if ($from->getHeader(HeaderConsts::CONTENT_TYPE) === null) {
@@ -100,6 +101,7 @@ class GenericHelper extends AbstractHelper
         if ($move) {
             $this->removeContentHeadersAndContent($from);
         }
+        return $this;
     }
 
     /**
@@ -109,7 +111,7 @@ class GenericHelper extends AbstractHelper
      *
      * @return IMimePart the newly-created IMimePart
      */
-    public function createNewContentPartFrom(IMimePart $part)
+    public function createNewContentPartFrom(IMimePart $part) : IMimePart
     {
         $mime = $this->mimePartFactory->newInstance();
         $this->copyContentHeadersAndContent($part, $mime, true);
@@ -123,7 +125,7 @@ class GenericHelper extends AbstractHelper
      * removing them from $from and adding them to $to.
      *
      */
-    public function movePartContentAndChildren(IMimePart $from, IMimePart $to)
+    public function movePartContentAndChildren(IMimePart $from, IMimePart $to) : static
     {
         $this->copyContentHeadersAndContent($from, $to, true);
         if ($from->getChildCount() > 0) {
@@ -132,6 +134,7 @@ class GenericHelper extends AbstractHelper
                 $to->addChild($child);
             }
         }
+        return $this;
     }
 
     /**
@@ -142,7 +145,7 @@ class GenericHelper extends AbstractHelper
      * replaced, and instead $replacement's type headers are copied to $message,
      * and any children below $replacement are added directly below $message.
      */
-    public function replacePart(IMessage $message, IMimePart $part, IMimePart $replacement) : self
+    public function replacePart(IMessage $message, IMimePart $part, IMimePart $replacement) : static
     {
         $position = $message->removePart($replacement);
         if ($part === $message) {

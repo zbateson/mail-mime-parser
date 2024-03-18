@@ -21,17 +21,14 @@ class ParserMessageProxy extends ParserMimePartProxy
      *      for a part because the CRLF before a boundary is considered part of
      *      the boundary.
      */
-    protected $lastLineEndingLength = 0;
+    protected int $lastLineEndingLength = 0;
 
     public function getLastLineEndingLength() : int
     {
         return $this->lastLineEndingLength;
     }
 
-    /**
-     * @return static
-     */
-    public function setLastLineEndingLength(int $lastLineEndingLength)
+    public function setLastLineEndingLength(int $lastLineEndingLength) : static
     {
         $this->lastLineEndingLength = $lastLineEndingLength;
         return $this;

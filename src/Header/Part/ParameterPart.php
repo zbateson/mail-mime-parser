@@ -20,12 +20,12 @@ class ParameterPart extends MimeLiteralPart
     /**
      * @var string the name of the parameter
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string the RFC-1766 language tag if set.
      */
-    protected $language;
+    protected ?string $language = null;
 
     /**
      * Constructs a ParameterPart out of a name/value pair.  The name and

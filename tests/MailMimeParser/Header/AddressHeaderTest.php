@@ -101,6 +101,8 @@ class AddressHeaderTest extends TestCase
         $this->assertCount(1, $addresses);
         $this->assertEquals('Jürgen Schmürgen', $addresses[0]->getName());
         $this->assertEquals('schmuergen@example.com', $addresses[0]->getEmail());
+        $this->assertEquals('Jürgen Schmürgen', $header->getPersonName());
+        $this->assertEquals('schmuergen@example.com', $header->getEmail());
     }
 
     public function testComplexSingleAddress() : void

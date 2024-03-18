@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
+use GuzzleHttp\Psr7\Utils;
 
 /**
  * Description of MessageTest
@@ -133,9 +134,11 @@ class MessageTest extends TestCase
         $parts[4]->method('getContentType')
             ->willReturn('Wheeep');
 
+        $str1 = Utils::streamFor('oufa baloufa!');
+        $str2 = Utils::streamFor('tilkomore');
         $parts[1]->expects($this->once())
             ->method('getContentStream')
-            ->willReturn('oufa baloufa!');
+            ->willReturn($str1);
         $parts[1]->expects($this->once())
             ->method('getContent')
             ->with('charset')
@@ -143,7 +146,7 @@ class MessageTest extends TestCase
         $parts[3]
             ->method('getContentStream')
             ->with('charset')
-            ->willReturn('tilkomore');
+            ->willReturn($str2);
 
         $this->assertEquals(2, $message->getTextPartCount());
         $this->assertSame($parts[1], $message->getTextPart());
@@ -151,9 +154,9 @@ class MessageTest extends TestCase
         $this->assertNull($message->getTextPart(2));
         $this->assertNull($message->getTextStream(2));
         $this->assertNull($message->getTextContent(2));
-        $this->assertEquals('oufa baloufa!', $message->getTextStream());
+        $this->assertEquals($str1, $message->getTextStream());
         $this->assertEquals('shabadabada...', $message->getTextContent(0, 'charset'));
-        $this->assertEquals('tilkomore', $message->getTextStream(1, 'charset'));
+        $this->assertEquals($str2, $message->getTextStream(1, 'charset'));
     }
 
     public function testGetHtmlPartAndHtmlPartCount() : void
@@ -173,9 +176,11 @@ class MessageTest extends TestCase
         $parts[4]->method('getContentType')
             ->willReturn('Wheeep');
 
+        $str1 = Utils::streamFor('oufa baloufa!');
+        $str2 = Utils::streamFor('tilkomore');
         $parts[1]->expects($this->once())
             ->method('getContentStream')
-            ->willReturn('oufa baloufa!');
+            ->willReturn($str1);
         $parts[1]->expects($this->once())
             ->method('getContent')
             ->with('charset')
@@ -183,7 +188,7 @@ class MessageTest extends TestCase
         $parts[3]
             ->method('getContentStream')
             ->with('charset')
-            ->willReturn('tilkomore');
+            ->willReturn($str2);
 
         $this->assertEquals(2, $message->getHtmlPartCount());
         $this->assertEquals($parts[1], $message->getHtmlPart());
@@ -191,9 +196,9 @@ class MessageTest extends TestCase
         $this->assertNull($message->getHtmlPart(2));
         $this->assertNull($message->getHtmlStream(2));
         $this->assertNull($message->getHtmlContent(2));
-        $this->assertEquals('oufa baloufa!', $message->getHtmlStream());
+        $this->assertEquals($str1, $message->getHtmlStream());
         $this->assertEquals('shabadabada...', $message->getHtmlContent(0, 'charset'));
-        $this->assertEquals('tilkomore', $message->getHtmlStream(1, 'charset'));
+        $this->assertEquals($str2, $message->getHtmlStream(1, 'charset'));
     }
 
     public function testGetAndRemoveAttachmentParts() : void
@@ -291,7 +296,7 @@ class MessageTest extends TestCase
     public function testAddAttachmentPart() : void
     {
         $helper = $this->mockMultipartHelper;
-        $message = $this->newMessage();
+        $message = $this->newMessage($this->getChildrenContainerWithChildren());
         $part = $message->getPart(2);
 
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
@@ -309,7 +314,7 @@ class MessageTest extends TestCase
     public function testAddAttachmentPartUsingQuotedPrintable() : void
     {
         $helper = $this->mockMultipartHelper;
-        $message = $this->newMessage();
+        $message = $this->newMessage($this->getChildrenContainerWithChildren());
         $part = $message->getPart(2);
 
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
@@ -333,10 +338,11 @@ class MessageTest extends TestCase
             ->method('getSignedMessageAsString')
             ->with($message)
             ->willReturn('test');
+        $str1 = Utils::streamFor('test');
         $helper->expects($this->once())
             ->method('getSignedMessageStream')
             ->with($message)
-            ->willReturn('test');
+            ->willReturn($str1);
         $helper->expects($this->once())
             ->method('setMessageAsMultipartSigned')
             ->with($message, 'micalg', 'protocol');
@@ -344,7 +350,7 @@ class MessageTest extends TestCase
             ->method('setSignature')
             ->with($message, 'signature body');
 
-        $this->assertEquals('test', $message->getSignedMessageStream());
+        $this->assertEquals($str1, $message->getSignedMessageStream());
         $this->assertEquals('test', $message->getSignedMessageAsString());
         $message->setAsMultipartSigned('micalg', 'protocol');
         $message->setSignature('signature body');

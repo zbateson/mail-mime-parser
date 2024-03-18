@@ -25,12 +25,12 @@ abstract class ErrorBag implements IErrorBag
     /**
      * @var Error[] array of Error objects belonging to this object.
      */
-    private $errors = [];
+    private array $errors = [];
 
     /**
      * @var bool true once the object has been validated.
      */
-    private $validated = false;
+    private bool $validated = false;
 
     public function __construct()
     {
@@ -66,7 +66,7 @@ abstract class ErrorBag implements IErrorBag
         // do nothing
     }
 
-    public function addError(string $message, string $psrLogLevel, ?Throwable $exception = null) : IErrorBag
+    public function addError(string $message, string $psrLogLevel, ?Throwable $exception = null) : static
     {
         $error = new Error($message, $psrLogLevel, $this, $exception);
         $this->errors[] = $error;

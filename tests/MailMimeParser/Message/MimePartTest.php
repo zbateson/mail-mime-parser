@@ -3,6 +3,8 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use Traversable;
+use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
  * Description of MimePartTest
@@ -230,15 +232,19 @@ class MimePartTest extends TestCase
     public function testGetHeader() : void
     {
         $part = $this->getMimePart();
+
+        $h1 = $this->getMockForAbstractClass(IHeader::class);
+        $h2 = $this->getMockForAbstractClass(IHeader::class);
+
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('get')
             ->withConsecutive(
                 ['foist', 0],
                 ['sekint', 1]
-            )->willReturnOnConsecutiveCalls('giggidyfoist', 'giggidysekint');
-        $this->assertEquals('giggidyfoist', $part->getHeader('foist'));
-        $this->assertEquals('giggidysekint', $part->getHeader('sekint', 1));
+            )->willReturnOnConsecutiveCalls($h1, $h2);
+        $this->assertEquals($h1, $part->getHeader('foist'));
+        $this->assertEquals($h2, $part->getHeader('sekint', 1));
     }
 
     public function testGetHeaderAs() : void
@@ -260,42 +266,55 @@ class MimePartTest extends TestCase
     public function testGetAllHeaders() : void
     {
         $part = $this->getMimePart();
+        $headers = [
+            $this->getMockForAbstractClass(IHeader::class),
+            $this->getMockForAbstractClass(IHeader::class)
+        ];
         $this->mockHeaderContainer
             ->expects($this->once())
             ->method('getHeaderObjects')
-            ->willReturn('noice');
-        $this->assertEquals('noice', $part->getAllHeaders());
+            ->willReturn($headers);
+        $this->assertEquals($headers, $part->getAllHeaders());
     }
 
     public function testGetAllHeadersByName() : void
     {
         $part = $this->getMimePart();
+        $headers = [
+            $this->getMockForAbstractClass(IHeader::class),
+            $this->getMockForAbstractClass(IHeader::class)
+        ];
         $this->mockHeaderContainer
             ->expects($this->once())
             ->method('getAll')
             ->with('dahoida')
-            ->willReturn('noice');
-        $this->assertEquals('noice', $part->getAllHeadersByName('dahoida'));
+            ->willReturn($headers);
+        $this->assertEquals($headers, $part->getAllHeadersByName('dahoida'));
     }
 
     public function testGetRawHeaders() : void
     {
         $part = $this->getMimePart();
+        $headers = [
+            $this->getMockForAbstractClass(IHeader::class),
+            $this->getMockForAbstractClass(IHeader::class)
+        ];
         $this->mockHeaderContainer
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn('noice');
-        $this->assertEquals('noice', $part->getRawHeaders());
+            ->willReturn($headers);
+        $this->assertEquals($headers, $part->getRawHeaders());
     }
 
     public function testGetRawHeadersIterator() : void
     {
         $part = $this->getMimePart();
+        $iter = $this->getMockForAbstractClass(Traversable::class);
         $this->mockHeaderContainer
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn('noice');
-        $this->assertEquals('noice', $part->getRawHeaderIterator());
+            ->willReturn($iter);
+        $this->assertEquals($iter, $part->getRawHeaderIterator());
     }
 
     public function testGetHeaderValue() : void

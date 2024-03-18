@@ -17,12 +17,12 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     /**
      * @var int the unix file permission
      */
-    protected $mode = null;
+    protected ?int $mode = null;
 
     /**
      * @var string the name of the file in the uuencoding 'header'.
      */
-    protected $filename = null;
+    protected ?string $filename = null;
 
     public function __construct(
         ?int $mode = null,
@@ -47,10 +47,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         return $this->filename;
     }
 
-    /**
-     * @return static
-     */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename) : static
     {
         $this->filename = $filename;
         $this->notify();
@@ -108,10 +105,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         return $this->mode;
     }
 
-    /**
-     * @return static
-     */
-    public function setUnixFileMode(int $mode)
+    public function setUnixFileMode(int $mode) : static
     {
         $this->mode = $mode;
         $this->notify();

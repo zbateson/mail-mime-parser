@@ -24,12 +24,12 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
     /**
      * @var StreamFactory the StreamFactory instance
      */
-    protected $streamFactory;
+    protected StreamFactory $streamFactory;
 
     /**
      * @var ParserPartStreamContainerFactory
      */
-    protected $parserPartStreamContainerFactory;
+    protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
 
     public function __construct(StreamFactory $sdf, ParserPartStreamContainerFactory $parserPartStreamContainerFactory)
     {
@@ -39,10 +39,8 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
 
     /**
      * Constructs a new ParserUUEncodedPartProxy wrapping an IUUEncoded object.
-     *
-     * @return ParserPartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser) : ParserUUEncodedPartProxy
     {
         $parserProxy = new ParserUUEncodedPartProxy($partBuilder, $parser);
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);

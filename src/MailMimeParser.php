@@ -160,9 +160,8 @@ class MailMimeParser
      *        mime message.
      * @param bool $attached pass true to have it attached to the returned
      *        IMessage and destroyed with it.
-     * @return IMessage
      */
-    public function parse($resource, $attached) : IMessage
+    public function parse(mixed $resource, bool $attached) : IMessage
     {
         $stream = Utils::streamFor(
             $resource,

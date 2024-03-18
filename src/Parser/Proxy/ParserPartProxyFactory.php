@@ -22,5 +22,5 @@ abstract class ParserPartProxyFactory
      *
      * @return ParserPartProxy
      */
-    abstract public function newInstance(PartBuilder $partBuilder, IParserService $parser);
+    abstract public function newInstance(PartBuilder $partBuilder, IParserService $parser) : ParserPartProxy;
 }

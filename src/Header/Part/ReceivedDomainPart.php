@@ -34,17 +34,17 @@ class ReceivedDomainPart extends ReceivedPart
     /**
      * @var string The name used to identify the server in the EHLO line.
      */
-    protected $ehloName;
+    protected ?string $ehloName;
 
     /**
      * @var string The hostname.
      */
-    protected $hostname;
+    protected ?string $hostname;
 
     /**
      * @var string The address.
      */
-    protected $address;
+    protected ?string $address;
 
     public function __construct(
         MbWrapper $charsetConverter,

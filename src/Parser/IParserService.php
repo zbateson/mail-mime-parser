@@ -25,7 +25,7 @@ interface IParserService
      *
      * @param ParserManagerService $pm The ParserManager to set.
      */
-    public function setParserManager(ParserManagerService $pm);
+    public function setParserManager(ParserManagerService $pm) : static;
 
     /**
      * Called by the ParserManager to determine if the passed PartBuilder is a
@@ -39,10 +39,8 @@ interface IParserService
      *
      * This is called by ParserManager after 'canParse' if it returns true so
      * a ParserPartProxy can be created out of the PartBuilder.
-     *
-     * @return ParserPartProxyFactory
      */
-    public function getParserMessageProxyFactory();
+    public function getParserMessageProxyFactory() : ParserPartProxyFactory;
 
     /**
      * Returns the ParserPartProxyFactory responsible for creating IMessagePart
@@ -50,10 +48,8 @@ interface IParserService
      *
      * This is called by ParserManager after 'canParse' if it returns true so
      * a ParserPartProxy can be created out of the PartBuilder.
-     *
-     * @return ParserPartProxyFactory
      */
-    public function getParserPartProxyFactory();
+    public function getParserPartProxyFactory() : ParserPartProxyFactory;
 
     /**
      * Performs read operations for content from the stream of the passed
@@ -69,7 +65,7 @@ interface IParserService
      * message has been reached $proxy->setEof() should be called in addition to
      * setStreamContentAndPartEndPos().
      */
-    public function parseContent(ParserPartProxy $proxy);
+    public function parseContent(ParserPartProxy $proxy) : static;
 
     /**
      * Performs read operations to read children from the passed $proxy, using
@@ -91,5 +87,5 @@ interface IParserService
      * @return ParserPartProxy|null The child ParserPartProxy or null if there
      *         are no more children under $proxy.
      */
-    public function parseNextChild(ParserMimePartProxy $proxy);
+    public function parseNextChild(ParserMimePartProxy $proxy) : ?ParserPartProxy;
 }

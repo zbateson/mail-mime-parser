@@ -79,9 +79,14 @@ use ZBateson\MailMimeParser\Header\Part\DatePart;
 class ReceivedHeader extends ParameterHeader
 {
     /**
-     * @var DateTime|bool the date/time stamp in the header.
+     * @var DateTime the date/time stamp in the header.
      */
-    private $date = false;
+    private ?DateTime $date = null;
+
+    /**
+     * @var bool set to true once $date has been looked for
+     */
+    private bool $dateSet = false;
 
     public function __construct(
         ReceivedConsumerService $consumerService,
@@ -208,13 +213,13 @@ class ReceivedHeader extends ParameterHeader
      */
     public function getDateTime() : ?DateTime
     {
-        if ($this->date === false) {
-            $this->date = null;
+        if ($this->dateSet === false) {
             foreach ($this->parts as $part) {
                 if ($part instanceof DatePart) {
                     $this->date = $part->getDateTime();
                 }
             }
+            $this->dateSet = true;
         }
         return $this->date;
     }

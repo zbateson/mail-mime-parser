@@ -29,10 +29,8 @@ class StreamFactory
     /**
      * Returns a SeekingLimitStream using $part->getStreamPartLength() and
      * $part->getStreamPartStartPos()
-     *
-     * @return SeekingLimitStream
      */
-    public function getLimitedPartStream(PartBuilder $part)
+    public function getLimitedPartStream(PartBuilder $part) : StreamInterface
     {
         return $this->newLimitStream(
             $part->getStream(),
@@ -44,10 +42,8 @@ class StreamFactory
     /**
      * Returns a SeekingLimitStream using $part->getStreamContentLength() and
      * $part->getStreamContentStartPos()
-     *
-     * @return ?SeekingLimitStream
      */
-    public function getLimitedContentStream(PartBuilder $part)
+    public function getLimitedContentStream(PartBuilder $part) : ?StreamInterface
     {
         $length = $part->getStreamContentLength();
         if ($length !== 0) {
@@ -62,9 +58,8 @@ class StreamFactory
 
     /**
      * Creates and returns a SeekingLimitedStream.
-     *
      */
-    private function newLimitStream(StreamInterface $stream, int $length, int $start) : SeekingLimitStream
+    private function newLimitStream(StreamInterface $stream, int $length, int $start) : StreamInterface
     {
         return new SeekingLimitStream(
             $this->newNonClosingStream($stream),
@@ -76,20 +71,16 @@ class StreamFactory
     /**
      * Creates a non-closing stream that doesn't close it's internal stream when
      * closing/detaching.
-     *
-     * @return NonClosingStream
      */
-    public function newNonClosingStream(StreamInterface $stream)
+    public function newNonClosingStream(StreamInterface $stream) : StreamInterface
     {
         return new NonClosingStream($stream);
     }
 
     /**
      * Creates a ChunkSplitStream.
-     *
-     * @return ChunkSplitStream
      */
-    public function newChunkSplitStream(StreamInterface $stream)
+    public function newChunkSplitStream(StreamInterface $stream) : StreamInterface
     {
         return new ChunkSplitStream($stream);
     }
@@ -97,10 +88,8 @@ class StreamFactory
     /**
      * Creates and returns a Base64Stream with an internal
      * PregReplaceFilterStream that filters out non-base64 characters.
-     *
-     * @return Base64Stream
      */
-    public function newBase64Stream(StreamInterface $stream)
+    public function newBase64Stream(StreamInterface $stream) : StreamInterface
     {
         return new Base64Stream(
             new PregReplaceFilterStream($stream, '/[^a-zA-Z0-9\/\+=]/', '')
@@ -109,50 +98,40 @@ class StreamFactory
 
     /**
      * Creates and returns a QuotedPrintableStream.
-     *
-     * @return QuotedPrintableStream
      */
-    public function newQuotedPrintableStream(StreamInterface $stream)
+    public function newQuotedPrintableStream(StreamInterface $stream) : StreamInterface
     {
         return new QuotedPrintableStream($stream);
     }
 
     /**
      * Creates and returns a UUStream
-     *
-     * @return UUStream
      */
-    public function newUUStream(StreamInterface $stream)
+    public function newUUStream(StreamInterface $stream) : StreamInterface
     {
         return new UUStream($stream);
     }
 
     /**
      * Creates and returns a CharsetStream
-     *
-     * @return CharsetStream
      */
-    public function newCharsetStream(StreamInterface $stream, string $fromCharset, string $toCharset)
+    public function newCharsetStream(StreamInterface $stream, string $fromCharset, string $toCharset) : StreamInterface
     {
         return new CharsetStream($stream, $fromCharset, $toCharset);
     }
 
     /**
      * Creates and returns a MessagePartStream
-     *
-     * @return MessagePartStream
      */
-    public function newMessagePartStream(IMessagePart $part)
+    public function newMessagePartStream(IMessagePart $part) : StreamInterface
     {
         return new MessagePartStream($this, $part);
     }
 
     /**
      * Creates and returns a HeaderStream
-     *
-     * @return HeaderStream
      */
-    public function newHeaderStream(IMessagePart $part)
+    public function newHeaderStream(IMessagePart $part) : StreamInterface
     {
         return new HeaderStream($part);
     }

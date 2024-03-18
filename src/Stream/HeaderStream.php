@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
+use Iterator;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
@@ -31,15 +32,12 @@ class HeaderStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
 
-    /**
-     * @var StreamInterface
-     */
-    private $stream;
+    private ?StreamInterface $stream;
 
     /**
      * @var IMessagePart the part to read from.
      */
-    protected $part;
+    protected IMessagePart $part;
 
     public function __construct(IMessagePart $part)
     {
@@ -53,9 +51,7 @@ class HeaderStream implements SplObserver, StreamInterface
 
     public function __destruct()
     {
-        if ($this->part !== null) {
-            $this->part->detach($this);
-        }
+        $this->part->detach($this);
     }
 
     public function update(SplSubject $subject) : void
@@ -70,9 +66,8 @@ class HeaderStream implements SplObserver, StreamInterface
      *
      * If the part is not a MimePart, Content-Type, Content-Disposition and
      * Content-Transfer-Encoding headers are generated manually.
-     *
      */
-    private function getPartHeadersIterator() : \Iterator
+    private function getPartHeadersIterator() : Iterator
     {
         if ($this->part instanceof IMimePart) {
             return $this->part->getRawHeaderIterator();
@@ -89,7 +84,7 @@ class HeaderStream implements SplObserver, StreamInterface
     /**
      * Writes out headers for $this->part and follows them with an empty line.
      */
-    public function writePartHeadersTo(StreamInterface $stream) : self
+    public function writePartHeadersTo(StreamInterface $stream) : static
     {
         foreach ($this->getPartHeadersIterator() as $header) {
             $stream->write("{$header[0]}: {$header[1]}\r\n");
@@ -100,7 +95,6 @@ class HeaderStream implements SplObserver, StreamInterface
 
     /**
      * Creates the underlying stream lazily when required.
-     *
      */
     protected function createStream() : StreamInterface
     {

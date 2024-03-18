@@ -37,7 +37,7 @@ class ParameterHeader extends AbstractHeader
      * @var ParameterPart[] key map of lower-case parameter names and associated
      *      ParameterParts.
      */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     public function __construct(
         ParameterConsumerService $consumerService,

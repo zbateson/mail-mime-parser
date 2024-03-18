@@ -7,7 +7,7 @@
 
 namespace ZBateson\MailMimeParser;
 
-use Exception;
+use Throwable;
 use InvalidArgumentException;
 use Psr\Log\LogLevel;
 
@@ -22,24 +22,24 @@ class Error
     /**
      * @var string The error message.
      */
-    protected $message;
+    protected string $message;
 
     /**
      * @var string The PSR log level for this error.
      */
-    protected $psrLevel;
+    protected string $psrLevel;
 
     /**
      * @var ErrorBag The object the error/notice occurred on.
      */
-    protected $object;
+    protected ErrorBag $object;
 
     /**
-     * @var Exception An Exception object if one happened, or null if not
+     * @var ?Throwable An Exception object if one happened, or null if not
      */
-    protected $exception;
+    protected ?Throwable $exception;
 
-    private $levelMap = [
+    private array $levelMap = [
         LogLevel::EMERGENCY => 0,
         LogLevel::ALERT => 1,
         LogLevel::CRITICAL => 2,
@@ -55,7 +55,7 @@ class Error
      * @throws InvalidArgumentException if the passed $psrLogLevelAsErrorLevel
      *         is not a known PSR log level (see \Psr\Log\LogLevel)
      */
-    public function __construct(string $message, string $psrLogLevelAsErrorLevel, ErrorBag $object, ?Exception $exception = null)
+    public function __construct(string $message, string $psrLogLevelAsErrorLevel, ErrorBag $object, ?Throwable $exception = null)
     {
         if (!isset($this->levelMap[$psrLogLevelAsErrorLevel])) {
             throw new InvalidArgumentException($psrLogLevelAsErrorLevel . ' is not a known PSR Log Level');
@@ -68,8 +68,6 @@ class Error
 
     /**
      * Returns the error message.
-     *
-     * @return string
      */
     public function getMessage() : string
     {
@@ -78,8 +76,6 @@ class Error
 
     /**
      * Returns the PSR string log level for this error message.
-     *
-     * @return string
      */
     public function getPsrLevel() : string
     {
@@ -88,21 +84,14 @@ class Error
 
     /**
      * Returns the class type the error occurred on.
-     *
-     * @return string
      */
     public function getClass() : string
     {
-        if ($this->object !== null) {
-            return get_class($this->object);
-        }
-        return null;
+        return get_class($this->object);
     }
 
     /**
      * Returns the object the error occurred on.
-     *
-     * @return ErrorBag
      */
     public function getObject() : ErrorBag
     {
@@ -111,10 +100,8 @@ class Error
 
     /**
      * Returns the exception that occurred, if any, or null.
-     * 
-     * @return Exception|null
      */
-    public function getException() : ?Exception
+    public function getException() : ?Throwable
     {
         return $this->exception;
     }
@@ -123,9 +110,6 @@ class Error
      * Returns true if the PSR log level for this error is equal to or greater
      * than the one passed, e.g. passing LogLevel::ERROR would return true for
      * LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.
-     *
-     * @param string $minLevel
-     * @return bool
      */
     public function isPsrLevelGreaterOrEqualTo(string $minLevel) : bool
     {

@@ -20,7 +20,7 @@ class PartHeaderContainerFactory
     /**
      * @var HeaderFactory the HeaderFactory passed to HeaderContainer instances.
      */
-    protected $headerFactory;
+    protected HeaderFactory $headerFactory;
 
     /**
      * Constructor
@@ -33,10 +33,8 @@ class PartHeaderContainerFactory
 
     /**
      * Creates and returns a PartHeaderContainer.
-     *
-     * @return PartHeaderContainer
      */
-    public function newInstance(?PartHeaderContainer $from = null)
+    public function newInstance(?PartHeaderContainer $from = null) : PartHeaderContainer
     {
         return new PartHeaderContainer($this->headerFactory, $from);
     }

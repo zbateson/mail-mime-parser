@@ -23,32 +23,32 @@ class SplitParameterToken extends HeaderPart
     /**
      * @var string name of the parameter.
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string[] keeps encoded parts values that need to be decoded.  Keys
      *      are set to the index part of the split parameter and used for
      *      sorting before decoding/concatenating.
      */
-    protected $encodedParts = [];
+    protected array $encodedParts = [];
 
     /**
      * @var string[] contains literal parts that don't require any decoding (and
      *      are therefore ISO-8859-1 (technically should be 7bit US-ASCII but
      *      allowing 8bit shouldn't be an issue as elsewhere in MMP).
      */
-    protected $literalParts = [];
+    protected array $literalParts = [];
 
     /**
      * @var string RFC-1766 (or subset) language code with optional subtags,
      *      regions, etc...
      */
-    protected $language;
+    protected ?string $language = null;
 
     /**
      * @var string charset of content in $encodedParts.
      */
-    protected $charset = 'ISO-8859-1';
+    protected string $charset = 'ISO-8859-1';
 
     /**
      * Initializes a SplitParameterToken.
@@ -66,7 +66,7 @@ class SplitParameterToken extends HeaderPart
      * current object if $index is 0 and adds the value part to the encodedParts
      * array.
      */
-    protected function extractMetaInformationAndValue(string $value, int $index) : self
+    protected function extractMetaInformationAndValue(string $value, int $index) : static
     {
         if (\preg_match('~^([^\']*)\'([^\']*)\'(.*)$~', $value, $matches)) {
             if ($index === 0) {
@@ -93,7 +93,7 @@ class SplitParameterToken extends HeaderPart
      * @param bool $isEncoded
      * @param int $index
      */
-    public function addPart($value, $isEncoded, $index) : self
+    public function addPart($value, $isEncoded, $index) : static
     {
         if (empty($index)) {
             $index = 0;
@@ -163,20 +163,16 @@ class SplitParameterToken extends HeaderPart
 
     /**
      * Returns the name of the parameter.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
      * Returns the language of the parameter if set, or null if not.
-     *
-     * @return string
      */
-    public function getLanguage()
+    public function getLanguage() : ?string
     {
         return $this->language;
     }

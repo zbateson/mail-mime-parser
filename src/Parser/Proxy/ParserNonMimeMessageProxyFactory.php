@@ -21,10 +21,8 @@ class ParserNonMimeMessageProxyFactory extends ParserMessageProxyFactory
 {
     /**
      * Constructs a new ParserNonMimeMessageProxy wrapping an IMessage object.
-     *
-     * @return ParserMimePartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser) : ParserNonMimeMessageProxy
     {
         $parserProxy = new ParserNonMimeMessageProxy($partBuilder, $parser);
 

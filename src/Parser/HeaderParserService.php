@@ -25,7 +25,7 @@ class HeaderParserService
      * @param string $header the header line
      * @param PartHeaderContainer $headerContainer the container
      */
-    private function addRawHeaderToPart(int $offset, string $header, PartHeaderContainer $headerContainer) : self
+    private function addRawHeaderToPart(int $offset, string $header, PartHeaderContainer $headerContainer) : static
     {
         if ($header !== '') {
             if (\strpos($header, ':') !== false) {
@@ -48,7 +48,7 @@ class HeaderParserService
      * @param resource $handle The resource handle to read from.
      * @param PartHeaderContainer $container the container to add headers to.
      */
-    public function parse($handle, PartHeaderContainer $container) : self
+    public function parse($handle, PartHeaderContainer $container) : static
     {
         $header = '';
         do {

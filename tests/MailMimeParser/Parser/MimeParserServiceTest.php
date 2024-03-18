@@ -361,9 +361,9 @@ class MimeParserServiceTest extends TestCase
         $this->parserManager->expects($this->once())
             ->method('createParserProxyFor')
             ->with($this->partBuilder)
-            ->willReturn('groot');
+            ->willReturn($this->parserPartProxy);
 
-        $this->assertSame('groot', $this->instance->parseNextChild($this->parserPartProxy));
+        $this->assertSame($this->parserPartProxy, $this->instance->parseNextChild($this->parserPartProxy));
     }
 
     public function testParseNextChildWhenParentBoundaryFoundReturnsNull() : void

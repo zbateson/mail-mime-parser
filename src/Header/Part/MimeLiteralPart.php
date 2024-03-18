@@ -32,12 +32,12 @@ class MimeLiteralPart extends LiteralPart
     /**
      * @var bool set to true to ignore spaces before this part
      */
-    protected $canIgnoreSpacesBefore = false;
+    protected bool $canIgnoreSpacesBefore = false;
 
     /**
      * @var bool set to true to ignore spaces after this part
      */
-    protected $canIgnoreSpacesAfter = false;
+    protected bool $canIgnoreSpacesAfter = false;
 
     /**
      * @var array<int,array<string,string>> maintains an array mapping rfc1766
@@ -46,7 +46,7 @@ class MimeLiteralPart extends LiteralPart
      * Each array element is an array containing two elements, one with key
      * 'lang', and another with key 'value'.
      */
-    protected $languages = [];
+    protected array $languages = [];
 
     /**
      * Decoding the passed token value if it's mime-encoded and assigns the
@@ -155,7 +155,7 @@ class MimeLiteralPart extends LiteralPart
     /**
      * Adds the passed part into the languages array with the given language.
      */
-    protected function addToLanguage(string $part, ?string $language = null) : self
+    protected function addToLanguage(string $part, ?string $language = null) : static
     {
         $this->languages[] = [
             'lang' => $language,

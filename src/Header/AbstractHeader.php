@@ -26,28 +26,28 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
     /**
      * @var string the name of the header
      */
-    protected $name = '';
+    protected string $name;
 
     /**
      * @var IHeaderPart[] all parts not including CommentParts.
      */
-    protected $parts = [];
+    protected array $parts = [];
 
     /**
      * @var IHeaderPart[] the header's parts (as returned from the consumer),
      *      including commentParts
      */
-    protected $allParts = [];
+    protected array $allParts = [];
 
     /**
      * @var string[] array of comments, initialized on demand in getComments()
      */
-    private $comments;
+    private ?array $comments = null;
 
     /**
      * @var string the raw value
      */
-    protected $rawValue = '';
+    protected string $rawValue;
 
     /**
      * Assigns the header's name and raw value, then calls parseHeaderValue to

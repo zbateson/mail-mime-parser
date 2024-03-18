@@ -22,7 +22,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
     /**
      * @var MimeLiteralPartFactory for mime decoding.
      */
-    protected $mimeLiteralPartFactory;
+    protected MimeLiteralPartFactory $mimeLiteralPartFactory;
 
     public function __construct(
         MimeLiteralPartFactory $mimeLiteralPartFactory,

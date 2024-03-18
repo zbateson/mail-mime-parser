@@ -20,12 +20,12 @@ abstract class AbstractHelper
     /**
      * @var IMimePartFactory to create parts for attachments/content
      */
-    protected $mimePartFactory;
+    protected IMimePartFactory $mimePartFactory;
 
     /**
      * @var IUUEncodedPartFactory to create parts for attachments
      */
-    protected $uuEncodedPartFactory;
+    protected IUUEncodedPartFactory $uuEncodedPartFactory;
 
     public function __construct(
         IMimePartFactory $mimePartFactory,

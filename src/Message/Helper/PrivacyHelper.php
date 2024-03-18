@@ -12,6 +12,7 @@ use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\IMessagePart;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Provides routines to set or retrieve the signature part of a signed message.
@@ -23,12 +24,12 @@ class PrivacyHelper extends AbstractHelper
     /**
      * @var GenericHelper a GenericHelper instance
      */
-    private $genericHelper;
+    private GenericHelper $genericHelper;
 
     /**
      * @var MultipartHelper a MultipartHelper instance
      */
-    private $multipartHelper;
+    private MultipartHelper $multipartHelper;
 
     public function __construct(
         IMimePartFactory $mimePartFactory,
@@ -49,7 +50,7 @@ class PrivacyHelper extends AbstractHelper
      * @param string $micalg
      * @param string $protocol
      */
-    public function setMessageAsMultipartSigned(IMessage $message, $micalg, $protocol)
+    public function setMessageAsMultipartSigned(IMessage $message, $micalg, $protocol) : static
     {
         if (\strcasecmp($message->getContentType(), 'multipart/signed') !== 0) {
             $this->multipartHelper->enforceMime($message);
@@ -64,6 +65,7 @@ class PrivacyHelper extends AbstractHelper
         }
         $this->overwrite8bitContentEncoding($message);
         $this->setSignature($message, 'Empty');
+        return $this;
     }
 
     /**
@@ -72,7 +74,7 @@ class PrivacyHelper extends AbstractHelper
      *
      * @param string $body
      */
-    public function setSignature(IMessage $message, $body)
+    public function setSignature(IMessage $message, $body) : static
     {
         $signedPart = $message->getSignaturePart();
         if ($signedPart === null) {
@@ -84,6 +86,7 @@ class PrivacyHelper extends AbstractHelper
             $message->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'protocol')
         );
         $signedPart->setContent($body);
+        return $this;
     }
 
     /**
@@ -93,9 +96,8 @@ class PrivacyHelper extends AbstractHelper
      *
      * Used for multipart/signed messages which doesn't support 8bit transfer
      * encodings.
-     *
      */
-    public function overwrite8bitContentEncoding(IMessage $message)
+    public function overwrite8bitContentEncoding(IMessage $message) : static
     {
         $parts = $message->getAllParts(function(IMessagePart $part) {
             return \strcasecmp($part->getContentTransferEncoding(), '8bit') === 0;
@@ -109,6 +111,7 @@ class PrivacyHelper extends AbstractHelper
                 'base64'
             );
         }
+        return $this;
     }
 
     /**
@@ -122,10 +125,9 @@ class PrivacyHelper extends AbstractHelper
      * Note that unlike getSignedMessageAsString, getSignedMessageStream doesn't
      * replace new lines.
      *
-     * @return \Psr\Http\Message\StreamInterface or null if the message doesn't
-     *         have any children
+     * @return ?StreamInterface null if the message doesn't have any children
      */
-    public function getSignedMessageStream(IMessage $message)
+    public function getSignedMessageStream(IMessage $message) : ?StreamInterface
     {
         $child = $message->getChild(0);
         if ($child !== null) {
@@ -140,9 +142,9 @@ class PrivacyHelper extends AbstractHelper
      *
      * Non-CRLF new lines are replaced to always be CRLF.
      *
-     * @return string or null if the message doesn't have any children
+     * @return ?string null if the message doesn't have any children
      */
-    public function getSignedMessageAsString(IMessage $message)
+    public function getSignedMessageAsString(IMessage $message) : ?string
     {
         $stream = $this->getSignedMessageStream($message);
         if ($stream !== null) {

@@ -140,7 +140,7 @@ class PrivacyHelperTest extends TestCase
 
         $this->mockMultipartHelper->expects($this->once())
             ->method('enforceMime')
-            ->willReturn($message);
+            ->willReturn($this->mockMultipartHelper);
 
         $this->mockMimePartFactory
             ->expects($this->once())
@@ -153,7 +153,7 @@ class PrivacyHelperTest extends TestCase
 
         $message->expects($this->once())
             ->method('addChild')
-            ->willReturn($messagePart);
+            ->willReturn($message);
         $this->mockMultipartHelper->expects($this->once())
             ->method('getUniqueBoundary')
             ->with('multipart/signed')
@@ -188,12 +188,14 @@ class PrivacyHelperTest extends TestCase
             ->method('getChild')
             ->with(0)
             ->willReturnOnConsecutiveCalls(null, $part);
+
+        $stream = Psr7\Utils::streamFor('test');
         $part->expects($this->once())
             ->method('getStream')
-            ->willReturn('test');
+            ->willReturn($stream);
 
         $this->assertNull($helper->getSignedMessageStream($message));
-        $this->assertEquals('test', $helper->getSignedMessageStream($message));
+        $this->assertEquals($stream, $helper->getSignedMessageStream($message));
     }
 
     public function testSignedMessageAsString() : void

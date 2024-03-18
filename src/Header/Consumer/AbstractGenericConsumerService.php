@@ -73,7 +73,7 @@ abstract class AbstractGenericConsumerService extends AbstractConsumerService
      * @param HeaderPart[] $parts
      * @param HeaderPart[] $retParts
      */
-    private function addSpaceToRetParts(array $parts, array &$retParts, int $curIndex, HeaderPart &$spacePart, HeaderPart $lastPart) : self
+    private function addSpaceToRetParts(array $parts, array &$retParts, int $curIndex, HeaderPart &$spacePart, HeaderPart $lastPart) : static
     {
         $nextPart = $parts[$curIndex];
         if ($this->shouldAddSpace($nextPart, $lastPart)) {
@@ -93,7 +93,7 @@ abstract class AbstractGenericConsumerService extends AbstractConsumerService
      * @param HeaderPart[] $parts
      * @param HeaderPart[] $retParts
      */
-    private function addSpaces(array $parts, array &$retParts, int $curIndex, ?HeaderPart &$spacePart = null) : self
+    private function addSpaces(array $parts, array &$retParts, int $curIndex, ?HeaderPart &$spacePart = null) : static
     {
         $lastPart = \end($retParts);
         if ($spacePart !== null && $curIndex < \count($parts) && $parts[$curIndex]->getValue() !== '' && $lastPart !== false) {

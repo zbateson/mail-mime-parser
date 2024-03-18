@@ -25,12 +25,12 @@ class MimeParserService extends AbstractParserService
      * @var PartHeaderContainerFactory Factory service for creating
      *      PartHeaderContainers for headers.
      */
-    protected $partHeaderContainerFactory;
+    protected PartHeaderContainerFactory $partHeaderContainerFactory;
 
     /**
      * @var HeaderParserService The HeaderParser service.
      */
-    protected $headerParser;
+    protected HeaderParserService $headerParser;
 
     public function __construct(
         ParserMessageProxyFactory $parserMessageProxyFactory,
@@ -92,7 +92,7 @@ class MimeParserService extends AbstractParserService
      * the passed $handle's read pos before the boundary and its line separator
      * were read.
      */
-    private function findContentBoundary(ParserMimePartProxy $proxy) : self
+    private function findContentBoundary(ParserMimePartProxy $proxy) : static
     {
         $handle = $proxy->getMessageResourceHandle();
         // last separator before a boundary belongs to the boundary, and is not
@@ -111,10 +111,7 @@ class MimeParserService extends AbstractParserService
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function parseContent(ParserPartProxy $proxy)
+    public function parseContent(ParserPartProxy $proxy) : static
     {
         $proxy->setStreamContentStartPos($proxy->getMessageResourceHandlePos());
         $this->findContentBoundary($proxy);
@@ -141,10 +138,8 @@ class MimeParserService extends AbstractParserService
      * In this case, $this->parserPartProxyFactory is called directly to create
      * a part, $this->parseContent is called immediately to parse it and discard
      * it, and null is returned.
-     *
-     * @return ParserPartProxy|null
      */
-    private function createPart(ParserMimePartProxy $parent, PartHeaderContainer $headerContainer, PartBuilder $child)
+    private function createPart(ParserMimePartProxy $parent, PartHeaderContainer $headerContainer, PartBuilder $child) : ?ParserPartProxy
     {
         if (!$parent->isEndBoundaryFound()) {
             $this->headerParser->parse(
@@ -160,7 +155,7 @@ class MimeParserService extends AbstractParserService
         return null;
     }
 
-    public function parseNextChild(ParserMimePartProxy $proxy)
+    public function parseNextChild(ParserMimePartProxy $proxy) : ?ParserPartProxy
     {
         if ($proxy->isParentBoundaryFound()) {
             return null;

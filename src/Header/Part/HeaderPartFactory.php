@@ -21,7 +21,7 @@ class HeaderPartFactory
      * @var MbWrapper $charsetConverter passed to IHeaderPart constructors
      *      for converting strings in IHeaderPart::convertEncoding
      */
-    protected $charsetConverter;
+    protected MbWrapper $charsetConverter;
 
     /**
      * Sets up dependencies.

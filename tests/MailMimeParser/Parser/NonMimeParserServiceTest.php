@@ -222,7 +222,7 @@ class NonMimeParserServiceTest extends TestCase
         $this->parserManager->expects($this->once())
             ->method('createParserProxyFor')
             ->with($this->partBuilder)
-            ->willReturn('A little somefin');
+            ->willReturn($this->parserMessageProxy);
 
         $this->partBuilder->expects($this->once())
             ->method('setStreamPartStartPos')
@@ -234,7 +234,7 @@ class NonMimeParserServiceTest extends TestCase
         $this->parserMessageProxy->expects($this->once())
             ->method('clearNextPart');
 
-        $this->assertSame('A little somefin', $this->instance->parseNextChild($this->parserMessageProxy));
+        $this->assertSame($this->parserMessageProxy, $this->instance->parseNextChild($this->parserMessageProxy));
     }
 
     public function testParseNextChildWithNullNextPartStartOrHandleAtEof() : void

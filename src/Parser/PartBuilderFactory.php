@@ -19,22 +19,18 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
 class PartBuilderFactory
 {
     /**
-     * Constructs a top-level (message) PartBuilder object and returns it
-     *
-     * @return PartBuilder
+     * Constructs a top-level (message) PartBuilder object and returns it.
      */
-    public function newPartBuilder(PartHeaderContainer $headerContainer, StreamInterface $messageStream)
+    public function newPartBuilder(PartHeaderContainer $headerContainer, StreamInterface $messageStream) : PartBuilder
     {
         return new PartBuilder($headerContainer, $messageStream);
     }
 
     /**
      * Constructs a child PartBuilder object with the passed $parent as its
-     * parent, and returns it
-     *
-     * @return PartBuilder
+     * parent, and returns it.
      */
-    public function newChildPartBuilder(PartHeaderContainer $headerContainer, ParserPartProxy $parent)
+    public function newChildPartBuilder(PartHeaderContainer $headerContainer, ParserPartProxy $parent) : PartBuilder
     {
         return new PartBuilder(
             $headerContainer,

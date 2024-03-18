@@ -27,25 +27,22 @@ class MessagePartStream implements SplObserver, StreamInterface
 {
     use StreamDecoratorTrait;
 
-    /**
-     * @var StreamInterface
-     */
-    private $stream;
+    private ?StreamInterface $stream;
 
     /**
      * @var StreamFactory For creating needed stream decorators.
      */
-    protected $streamFactory;
+    protected StreamFactory $streamFactory;
 
     /**
      * @var IMessagePart The part to read from.
      */
-    protected $part;
+    protected IMessagePart $part;
 
     /**
      * @var ?AppendStream
      */
-    protected $appendStream = null;
+    protected ?AppendStream $appendStream = null;
 
     /**
      * Constructor
@@ -64,9 +61,7 @@ class MessagePartStream implements SplObserver, StreamInterface
 
     public function __destruct()
     {
-        if ($this->part !== null) {
-            $this->part->detach($this);
-        }
+        $this->part->detach($this);
     }
 
     public function update(SplSubject $subject) : void
@@ -109,7 +104,6 @@ class MessagePartStream implements SplObserver, StreamInterface
      * o QuotedPrintableStream
      * o Base64Stream
      * o UUStream
-     *
      */
     private function getTransferEncodingDecoratorForStream(StreamInterface $stream) : StreamInterface
     {
@@ -138,7 +132,7 @@ class MessagePartStream implements SplObserver, StreamInterface
      * Writes out the content portion of the attached mime part to the passed
      * $stream.
      */
-    private function writePartContentTo(StreamInterface $stream) : self
+    private function writePartContentTo(StreamInterface $stream) : static
     {
         $contentStream = $this->part->getContentStream();
         if ($contentStream !== null) {
@@ -205,7 +199,6 @@ class MessagePartStream implements SplObserver, StreamInterface
 
     /**
      * Creates the underlying stream lazily when required.
-     *
      */
     protected function createStream() : StreamInterface
     {

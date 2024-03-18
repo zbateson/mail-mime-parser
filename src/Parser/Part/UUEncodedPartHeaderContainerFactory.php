@@ -20,7 +20,7 @@ class UUEncodedPartHeaderContainerFactory
      * @var HeaderFactory the HeaderFactory passed to
      *      UUEncodedPartHeaderContainer instances.
      */
-    protected $headerFactory;
+    protected HeaderFactory $headerFactory;
 
     /**
      * Constructor
@@ -33,10 +33,8 @@ class UUEncodedPartHeaderContainerFactory
 
     /**
      * Creates and returns a UUEncodedPartHeaderContainer.
-     *
-     * @return UUEncodedPartHeaderContainer
      */
-    public function newInstance(int $mode, string $filename)
+    public function newInstance(int $mode, string $filename) : UUEncodedPartHeaderContainer
     {
         $container = new UUEncodedPartHeaderContainer($this->headerFactory);
         $container->setUnixFileMode($mode);

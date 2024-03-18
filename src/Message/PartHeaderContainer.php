@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
+use Traversable;
 use ArrayIterator;
 use IteratorAggregate;
 use ZBateson\MailMimeParser\ErrorBag;
@@ -280,7 +281,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      * @param string $value
      * @param int $offset
      */
-    public function set($name, $value, $offset = 0) : self
+    public function set($name, $value, $offset = 0) : static
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (!isset($this->headerMap[$s][$offset])) {
@@ -328,11 +329,8 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      * the second to its value:
      *
      * [ 'Header-Name', 'Header Value' ]
-     *
-     * @return ArrayIterator
      */
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator() : Traversable
     {
         return new ArrayIterator($this->getHeaders());
     }

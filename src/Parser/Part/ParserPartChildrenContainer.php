@@ -22,13 +22,13 @@ class ParserPartChildrenContainer extends PartChildrenContainer
      * @var ParserMimePartProxy The parser to proxy requests to when trying to
      *      get child parts.
      */
-    protected $parserProxy;
+    protected ParserMimePartProxy $parserProxy;
 
     /**
      * @var bool Set to true once all parts have been parsed, and requests to
      *      the proxy won't result in any more child parts.
      */
-    private $allParsed = false;
+    private bool $allParsed = false;
 
     public function __construct(ParserMimePartProxy $parserProxy)
     {

@@ -27,32 +27,32 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
     /**
      * @var ?IMimePart parent part
      */
-    protected $parent;
+    protected ?IMimePart $parent;
 
     /**
      * @var PartStreamContainer holds 'stream' and 'content stream'.
      */
-    protected $partStreamContainer;
+    protected PartStreamContainer $partStreamContainer;
 
     /**
      * @var ?string can be used to set an override for content's charset in cases
      *      where a user knows the charset on the content is not what it claims
      *      to be.
      */
-    protected $charsetOverride;
+    protected ?string $charsetOverride = null;
 
     /**
      * @var bool set to true when a user attaches a stream manually, it's
      *      assumed to already be decoded or to have relevant transfer encoding
      *      decorators attached already.
      */
-    protected $ignoreTransferEncoding;
+    protected bool $ignoreTransferEncoding = false;
 
     /**
      * @var SplObjectStorage attached observers that need to be notified of
      *      modifications to this part.
      */
-    protected $observers;
+    protected SplObjectStorage $observers;
 
     public function __construct(?PartStreamContainer $streamContainer = null, ?IMimePart $parent = null)
     {
@@ -87,7 +87,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         }
     }
 
-    public function getParent()
+    public function getParent() : ?IMimePart
     {
         return $this->parent;
     }
@@ -102,10 +102,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    /**
-     * @return static
-     */
-    public function setCharsetOverride(string $charsetOverride, bool $onlyIfNoCharset = false)
+    public function setCharsetOverride(string $charsetOverride, bool $onlyIfNoCharset = false) : static
     {
         if (!$onlyIfNoCharset || $this->getCharset() === null) {
             $this->charsetOverride = $charsetOverride;
@@ -113,7 +110,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return $this;
     }
 
-    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET)
+    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?StreamInterface
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
@@ -127,7 +124,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    public function getBinaryContentStream()
+    public function getBinaryContentStream() : ?StreamInterface
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
@@ -136,7 +133,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    public function getBinaryContentResourceHandle()
+    public function getBinaryContentResourceHandle() : mixed
     {
         $stream = $this->getBinaryContentStream();
         if ($stream !== null) {
@@ -145,7 +142,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    public function saveContent($filenameResourceOrStream) : self
+    public function saveContent($filenameResourceOrStream) : static
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {
@@ -173,10 +170,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    /**
-     * @return static
-     */
-    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET)
+    public function attachContentStream(StreamInterface $stream, string $streamCharset = MailMimeParser::DEFAULT_CHARSET) : static
     {
         $ch = $this->charsetOverride ?? $this->getCharset();
         if ($ch !== null && $streamCharset !== $ch) {
@@ -188,20 +182,14 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function detachContentStream()
+    public function detachContentStream() : static
     {
         $this->partStreamContainer->setContentStream(null);
         $this->notify();
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET)
+    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET) : static
     {
         $stream = Utils::streamFor($resource);
         $this->attachContentStream($stream, $charset);
@@ -209,20 +197,17 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return $this;
     }
 
-    public function getResourceHandle()
+    public function getResourceHandle() : mixed
     {
         return StreamWrapper::getResource($this->getStream());
     }
 
-    public function getStream()
+    public function getStream() : StreamInterface
     {
         return $this->partStreamContainer->getStream();
     }
 
-    /**
-     * @return static
-     */
-    public function save($filenameResourceOrStream, string $filemode = 'w+')
+    public function save($filenameResourceOrStream, string $filemode = 'w+') : static
     {
         $resourceOrStream = $filenameResourceOrStream;
         if (\is_string($filenameResourceOrStream)) {

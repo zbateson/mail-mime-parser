@@ -26,26 +26,26 @@ abstract class AbstractParserService implements IParserService
      *      responsible for creating an IMessage part wrapped in a
      *      ParserPartProxy.
      */
-    protected $parserMessageProxyFactory;
+    protected ParserPartProxyFactory $parserMessageProxyFactory;
 
     /**
      * @var ParserPartProxyFactory the parser's part proxy factory service
      *      responsible for creating IMessagePart parts wrapped in a
      *      ParserPartProxy.
      */
-    protected $parserPartProxyFactory;
+    protected ParserPartProxyFactory $parserPartProxyFactory;
 
     /**
      * @var PartBuilderFactory Service for creating PartBuilder objects for new
      *      children.
      */
-    protected $partBuilderFactory;
+    protected PartBuilderFactory $partBuilderFactory;
 
     /**
      * @var ParserManagerService the ParserManager, which should call setParserManager
      *      when the parser is added.
      */
-    protected $parserManager;
+    protected ParserManagerService $parserManager;
 
     public function __construct(
         ParserPartProxyFactory $parserMessageProxyFactory,
@@ -57,21 +57,18 @@ abstract class AbstractParserService implements IParserService
         $this->partBuilderFactory = $partBuilderFactory;
     }
 
-    /**
-     * @return static
-     */
-    public function setParserManager(ParserManagerService $pm)
+    public function setParserManager(ParserManagerService $pm) : static
     {
         $this->parserManager = $pm;
         return $this;
     }
 
-    public function getParserMessageProxyFactory()
+    public function getParserMessageProxyFactory() : ParserPartProxyFactory
     {
         return $this->parserMessageProxyFactory;
     }
 
-    public function getParserPartProxyFactory()
+    public function getParserPartProxyFactory() : ParserPartProxyFactory
     {
         return $this->parserPartProxyFactory;
     }

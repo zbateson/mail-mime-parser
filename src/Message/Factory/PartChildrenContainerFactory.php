@@ -16,7 +16,7 @@ use ZBateson\MailMimeParser\Message\PartChildrenContainer;
  */
 class PartChildrenContainerFactory
 {
-    public function newInstance()
+    public function newInstance() : PartChildrenContainer
     {
         return new PartChildrenContainer();
     }

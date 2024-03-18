@@ -22,7 +22,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      * @var IMessagePart[] array of child parts of the IMultiPart object that is
      *      holding this container.
      */
-    protected $children;
+    protected array $children;
 
     /**
      * @var int current key position within $children for iteration.
@@ -35,14 +35,12 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
     }
 
     /**
-     * Returns true if the current element is an IMultiPart and doesn't return
-     * null for {@see IMultiPart::getChildIterator()}.  Note that the iterator
-     * may still be empty.
+     * Returns true if the current element is an IMultiPart.  Note that the
+     * iterator may still be empty.
      */
     public function hasChildren() : bool
     {
-        return ($this->current() instanceof IMultiPart
-            && $this->current()->getChildIterator() !== null);
+        return ($this->current() instanceof IMultiPart);
     }
 
     /**
@@ -59,8 +57,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
         return null;
     }
 
-    #[\ReturnTypeWillChange]
-    public function current()
+    public function current() : mixed
     {
         return $this->offsetGet($this->position);
     }
@@ -95,7 +92,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      * @param int $position An optional index position (0-based) to add the
      *        child at.
      */
-    public function add(IMessagePart $part, $position = null)
+    public function add(IMessagePart $part, $position = null) : static
     {
         $index = $position ?? \count($this->children);
         \array_splice(
@@ -104,6 +101,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
             0,
             [$part]
         );
+        return $this;
     }
 
     /**
@@ -128,8 +126,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
         return isset($this->children[$offset]);
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset) : mixed
     {
         return $this->offsetExists($offset) ? $this->children[$offset] : null;
     }

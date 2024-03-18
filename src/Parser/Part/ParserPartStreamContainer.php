@@ -34,30 +34,24 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
     /**
      * @var ParserPartProxy The parser proxy to ferry requests to on-demand.
      */
-    protected $parserProxy;
+    protected ParserPartProxy $parserProxy;
 
     /**
      * @var StreamInterface the original stream for a parsed message, used when
      *      the message hasn't changed
      */
-    protected $parsedStream;
-
-    /**
-     * @var bool true if the stream should be detached when this container is
-     *      destroyed (thereby not closing the stream).
-     */
-    protected $detachParsedStream = false;
+    protected ?StreamInterface $parsedStream = null;
 
     /**
      * @var bool set to true if the part's been updated since it was created.
      */
-    protected $partUpdated = false;
+    protected bool $partUpdated = false;
 
     /**
      * @var bool false if the content for the part represented by this container
      *      has not yet been requested from the parser.
      */
-    protected $contentParseRequested = false;
+    protected bool $contentParseRequested = false;
 
     public function __construct(StreamFactory $streamFactory, ParserPartProxy $parserProxy)
     {
@@ -76,7 +70,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      * Requests content from the parser if not previously requested, and calls
      * PartStreamContainer::setContentStream().
      */
-    protected function requestParsedContentStream() : self
+    protected function requestParsedContentStream() : static
     {
         if (!$this->contentParseRequested) {
             $this->contentParseRequested = true;
@@ -93,7 +87,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      * $this->parsedStream to the original parsed stream (or a limited part of
      * it corresponding to the current part this stream container belongs to).
      */
-    protected function requestParsedStream() : self
+    protected function requestParsedStream() : static
     {
         if ($this->parsedStream === null) {
             $this->parserProxy->parseAll();
@@ -113,7 +107,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::hasContent();
     }
 
-    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset)
+    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset) : ?StreamInterface
     {
         $this->requestParsedContentStream();
         return parent::getContentStream($transferEncoding, $fromCharset, $toCharset);
@@ -125,7 +119,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::getBinaryContentStream($transferEncoding);
     }
 
-    public function setContentStream(?StreamInterface $contentStream = null) : self
+    public function setContentStream(?StreamInterface $contentStream = null) : static
     {
         // has to be overridden because requestParsedContentStream calls
         // parent::setContentStream as well, so needs to be parsed before
@@ -135,7 +129,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return $this;
     }
 
-    public function getStream()
+    public function getStream() : StreamInterface
     {
         $this->requestParsedStream();
         if (!$this->partUpdated) {

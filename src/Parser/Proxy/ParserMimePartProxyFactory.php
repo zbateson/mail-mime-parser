@@ -26,22 +26,22 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
     /**
      * @var StreamFactory the StreamFactory instance
      */
-    protected $streamFactory;
+    protected StreamFactory $streamFactory;
 
     /**
      * @var ParserPartStreamContainerFactory
      */
-    protected $parserPartStreamContainerFactory;
+    protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
 
     /**
      * @var PartHeaderContainerFactory
      */
-    protected $partHeaderContainerFactory;
+    protected PartHeaderContainerFactory $partHeaderContainerFactory;
 
     /**
      * @var ParserPartChildrenContainerFactory
      */
-    protected $parserPartChildrenContainerFactory;
+    protected ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory;
 
     public function __construct(
         StreamFactory $sdf,
@@ -59,10 +59,8 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
      * Constructs a new ParserMimePartProxy wrapping an IMimePart object that
      * will dynamically parse a message's content and parts as they're
      * requested.
-     *
-     * @return ParserMimePartProxy
      */
-    public function newInstance(PartBuilder $partBuilder, IParserService $parser)
+    public function newInstance(PartBuilder $partBuilder, IParserService $parser) : ParserMimePartProxy
     {
         $parserProxy = new ParserMimePartProxy($partBuilder, $parser);
 

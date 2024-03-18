@@ -27,7 +27,7 @@ class ParserPartStreamContainerFactory
         $this->streamFactory = $streamFactory;
     }
 
-    public function newInstance(ParserPartProxy $parserProxy)
+    public function newInstance(ParserPartProxy $parserProxy) : ParserPartStreamContainer
     {
         return new ParserPartStreamContainer($this->streamFactory, $parserProxy);
     }

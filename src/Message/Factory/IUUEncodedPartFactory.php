@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
+use ZBateson\MailMimeParser\Message\IUUEncodedPart;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 
 /**
@@ -18,10 +19,8 @@ class IUUEncodedPartFactory extends IMessagePartFactory
 {
     /**
      * Constructs a new UUEncodedPart object and returns it
-     *
-     * @return \ZBateson\MailMimeParser\Message\IUUEncodedPart
      */
-    public function newInstance()
+    public function newInstance() : IUUEncodedPart
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $part = new UUEncodedPart(

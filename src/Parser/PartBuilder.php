@@ -34,48 +34,49 @@ class PartBuilder
      * @var int The offset read start position for this part (beginning of
      * headers) in the message's stream.
      */
-    private $streamPartStartPos = null;
+    private int $streamPartStartPos;
 
     /**
      * @var int The offset read end position for this part.  If the part is a
      * multipart mime part, the end position is after all of this parts
      * children.
      */
-    private $streamPartEndPos = null;
+    private int $streamPartEndPos;
 
     /**
-     * @var int The offset read start position in the message's stream for the
+     * @var ?int The offset read start position in the message's stream for the
      * beginning of this part's content (body).
      */
-    private $streamContentStartPos = null;
+    private ?int $streamContentStartPos = null;
 
     /**
-     * @var int The offset read end position in the message's stream for the
+     * @var ?int The offset read end position in the message's stream for the
      * end of this part's content (body).
      */
-    private $streamContentEndPos = null;
+    private ?int $streamContentEndPos = null;
 
     /**
      * @var PartHeaderContainer The parsed part's headers.
      */
-    private $headerContainer;
+    private PartHeaderContainer $headerContainer;
 
     /**
      * @var StreamInterface the raw message input stream for a message, or null
      *      for a child part.
      */
-    private $messageStream = null;
+    private ?StreamInterface $messageStream = null;
 
     /**
      * @var resource the raw message input stream handle constructed from
      *      $messageStream or null for a child part
      */
-    private $messageHandle = null;
+    private mixed $messageHandle = null;
 
     /**
-     * @var ParserPartProxy The parent ParserPartProxy.
+     * @var ParserPartProxy The parent ParserPartProxy if one is set, or null if
+     *      part doesn't have a parent.
      */
-    private $parent = null;
+    private ?ParserPartProxy $parent = null;
 
     public function __construct(PartHeaderContainer $headerContainer, ?StreamInterface $messageStream = null, ?ParserPartProxy $parent = null)
     {
@@ -97,20 +98,16 @@ class PartBuilder
 
     /**
      * The ParserPartProxy parent of this PartBuilder.
-     *
-     * @return ParserPartProxy
      */
-    public function getParent()
+    public function getParent() : ?ParserPartProxy
     {
         return $this->parent;
     }
 
     /**
      * Returns this part's PartHeaderContainer.
-     *
-     * @return PartHeaderContainer the container
      */
-    public function getHeaderContainer()
+    public function getHeaderContainer() : PartHeaderContainer
     {
         return $this->headerContainer;
     }
@@ -118,10 +115,8 @@ class PartBuilder
     /**
      * Returns the raw message StreamInterface for a message, getting it from
      * the parent part if this is a child part.
-     *
-     * @return StreamInterface
      */
-    public function getStream()
+    public function getStream() : StreamInterface
     {
         return ($this->messageStream === null && $this->parent !== null) ?
             $this->parent->getStream() :
@@ -134,7 +129,7 @@ class PartBuilder
      *
      * @return resource
      */
-    public function getMessageResourceHandle()
+    public function getMessageResourceHandle() : mixed
     {
         return ($this->messageHandle === null && $this->parent !== null) ?
             $this->parent->getMessageResourceHandle() :
@@ -143,7 +138,6 @@ class PartBuilder
 
     /**
      * Shortcut for calling ftell($partBuilder->getMessageResourceHandle()).
-     *
      */
     public function getMessageResourceHandlePos() : int
     {
@@ -152,9 +146,9 @@ class PartBuilder
 
     /**
      * Returns the byte offset start position for this part within the message
-     * stream if it's been set, or null otherwise.
+     * stream.
      */
-    public function getStreamPartStartPos() : ?int
+    public function getStreamPartStartPos() : int
     {
         return $this->streamPartStartPos;
     }
@@ -198,10 +192,8 @@ class PartBuilder
     /**
      * Sets the byte offset start position of the part in the raw message
      * stream.
-     *
-     * @return static
      */
-    public function setStreamPartStartPos(int $streamPartStartPos)
+    public function setStreamPartStartPos(int $streamPartStartPos) : static
     {
         $this->streamPartStartPos = $streamPartStartPos;
         return $this;
@@ -211,10 +203,8 @@ class PartBuilder
      * Sets the byte offset end position of the part in the raw message stream,
      * and also calls its parent's setParentStreamPartEndPos to expand to parent
      * PartBuilders.
-     *
-     * @return static
      */
-    public function setStreamPartEndPos(int $streamPartEndPos)
+    public function setStreamPartEndPos(int $streamPartEndPos) : static
     {
         $this->streamPartEndPos = $streamPartEndPos;
         if ($this->parent !== null) {
@@ -226,10 +216,8 @@ class PartBuilder
     /**
      * Sets the byte offset start position of the content in the raw message
      * stream.
-     *
-     * @return static
      */
-    public function setStreamContentStartPos(int $streamContentStartPos)
+    public function setStreamContentStartPos(int $streamContentStartPos) : static
     {
         $this->streamContentStartPos = $streamContentStartPos;
         return $this;
@@ -238,10 +226,8 @@ class PartBuilder
     /**
      * Sets the byte offset end position of the content and part in the raw
      * message stream.
-     *
-     * @return static
      */
-    public function setStreamPartAndContentEndPos(int $streamContentEndPos)
+    public function setStreamPartAndContentEndPos(int $streamContentEndPos) : static
     {
         $this->streamContentEndPos = $streamContentEndPos;
         $this->setStreamPartEndPos($streamContentEndPos);
@@ -252,9 +238,9 @@ class PartBuilder
      * Returns true if the byte offset positions for this part's content have
      * been set.
      *
-     * @return ?bool true if set.
+     * @return bool true if set.
      */
-    public function isContentParsed() : ?bool
+    public function isContentParsed() : bool
     {
         return ($this->streamContentEndPos !== null);
     }

@@ -88,12 +88,17 @@ class ParserManagerServiceTest extends TestCase
         $this->nonMimeParser->expects($this->once())
             ->method('getParserMessageProxyFactory')
             ->willReturn($proxyFactory);
+
+        $parserPartProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $proxyFactory->expects($this->once())
             ->method('newInstance')
             ->with($partBuilder, $this->nonMimeParser)
-            ->willReturn('t000st');
+            ->willReturn($parserPartProxy);
 
-        $this->assertSame('t000st', $instance->createParserProxyFor($partBuilder));
+        $this->assertSame($parserPartProxy, $instance->createParserProxyFor($partBuilder));
     }
 
     public function testCreateParserProxyForPart() : void
@@ -105,13 +110,17 @@ class ParserManagerServiceTest extends TestCase
             ->getMock();
         $proxyFactory = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
 
+        $parserPartProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->mimeParser->expects($this->once())
             ->method('canParse')
             ->with($partBuilder)
             ->willReturn(true);
         $partBuilder->expects($this->once())
             ->method('getParent')
-            ->willReturn('non null');
+            ->willReturn($parserPartProxy);
         $this->mimeParser->expects($this->never())
             ->method('getParserMessageProxyFactory');
         $this->mimeParser->expects($this->once())
@@ -121,11 +130,13 @@ class ParserManagerServiceTest extends TestCase
             ->method('canParse');
         $this->nonMimeParser->expects($this->never())
             ->method('getParserPartProxyFactory');
+
+        
         $proxyFactory->expects($this->once())
             ->method('newInstance')
             ->with($partBuilder, $this->mimeParser)
-            ->willReturn('t000st');
+            ->willReturn($parserPartProxy);
 
-        $this->assertSame('t000st', $instance->createParserProxyFor($partBuilder));
+        $this->assertSame($parserPartProxy, $instance->createParserProxyFor($partBuilder));
     }
 }

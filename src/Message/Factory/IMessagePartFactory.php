@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 
 /**
  * Abstract factory for subclasses of IMessagePart.
@@ -19,12 +20,12 @@ abstract class IMessagePartFactory
     /**
      * @var StreamFactory
      */
-    protected $streamFactory;
+    protected StreamFactory $streamFactory;
 
     /**
      * @var PartStreamContainerFactory
      */
-    protected $partStreamContainerFactory;
+    protected PartStreamContainerFactory $partStreamContainerFactory;
 
     public function __construct(
         StreamFactory $streamFactory,
@@ -36,8 +37,6 @@ abstract class IMessagePartFactory
 
     /**
      * Constructs a new IMessagePart object and returns it
-     *
-     * @return \ZBateson\MailMimeParser\Message\IMessagePart
      */
-    abstract public function newInstance();
+    abstract public function newInstance() : IMessagePart;
 }

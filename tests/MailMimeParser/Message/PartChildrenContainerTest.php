@@ -37,8 +37,6 @@ class PartChildrenContainerTest extends TestCase
         $this->assertFalse($this->instance->hasChildren());
         $part = $this->getIMultiPart();
         $this->instance->add($part);
-        $this->assertFalse($this->instance->hasChildren());
-        $this->assertNull($this->instance->getChildren());
 
         $part->method('getChildIterator')->willReturn($this->instance);
         $this->assertTrue($this->instance->hasChildren());

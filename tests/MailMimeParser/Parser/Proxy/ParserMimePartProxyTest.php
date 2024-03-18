@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
  * ParserMimePartProxyTest
@@ -98,7 +99,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
-            ->willReturnOnConsecutiveCalls(true);
+            ->willReturn(true);
 
         $c = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor();
@@ -177,7 +178,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
-            ->willReturnOnConsecutiveCalls(true);
+            ->willReturn(true);
 
         $c = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor();
@@ -202,7 +203,7 @@ class ParserMimePartProxyTest extends TestCase
         $this->partBuilder
             ->expects($this->any())
             ->method('isContentParsed')
-            ->willReturnOnConsecutiveCalls(true);
+            ->willReturn(true);
 
         $c = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor();
@@ -261,11 +262,13 @@ class ParserMimePartProxyTest extends TestCase
         $this->partBuilder->expects($this->once())
             ->method('getHeaderContainer')
             ->willReturn($this->headerContainer);
+
+        $tst = $this->getMockForAbstractClass(IHeader::class);
         $this->headerContainer->expects($this->any())
             ->method('get')
             ->with($this->equalTo('Content-Type'))
-            ->willReturn('Fruity');
-        $this->assertSame('Fruity', $instance->getContentType());
+            ->willReturn($tst);
+        $this->assertSame($tst, $instance->getContentType());
     }
 
     public function testGetMimeBoundary() : void

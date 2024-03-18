@@ -16,7 +16,7 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
  */
 class ParserPartChildrenContainerFactory
 {
-    public function newInstance(ParserMimePartProxy $parserProxy)
+    public function newInstance(ParserMimePartProxy $parserProxy) : ParserPartChildrenContainer
     {
         return new ParserPartChildrenContainer($parserProxy);
     }

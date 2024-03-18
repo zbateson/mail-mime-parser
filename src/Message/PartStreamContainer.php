@@ -32,40 +32,40 @@ class PartStreamContainer
      * @var StreamFactory used to apply psr7 stream decorators to the
      *      attached StreamInterface based on encoding.
      */
-    protected $streamFactory;
+    protected StreamFactory $streamFactory;
 
     /**
      * @var StreamInterface stream containing the part's headers, content and
      *      children
      */
-    protected $stream;
+    protected StreamInterface $stream;
 
     /**
      * @var StreamInterface a stream containing this part's content
      */
-    protected $contentStream;
+    protected ?StreamInterface $contentStream = null;
 
     /**
      * @var StreamInterface the content stream after attaching transfer encoding
      *      streams to $contentStream.
      */
-    protected $decodedStream;
+    protected ?StreamInterface $decodedStream = null;
 
     /**
      * @var StreamInterface attached charset stream to $decodedStream
      */
-    protected $charsetStream;
+    protected ?StreamInterface $charsetStream = null;
 
     /**
      * @var bool true if the stream should be detached when this container is
      *      destroyed.
      */
-    protected $detachParsedStream;
+    protected bool $detachParsedStream = false;
 
     /**
      * @var array<string, null> map of the active encoding filter on the current handle.
      */
-    private $encoding = [
+    private array $encoding = [
         'type' => null,
         'filter' => null
     ];
@@ -73,7 +73,7 @@ class PartStreamContainer
     /**
      * @var array<string, null> map of the active charset filter on the current handle.
      */
-    private $charset = [
+    private array $charset = [
         'from' => null,
         'to' => null,
         'filter' => null
@@ -89,18 +89,17 @@ class PartStreamContainer
      * children.
      *
      */
-    public function setStream(StreamInterface $stream)
+    public function setStream(StreamInterface $stream) : static
     {
         $this->stream = $stream;
+        return $this;
     }
 
     /**
      * Returns the part's stream containing the part's headers, content, and
      * children.
-     *
-     * @return StreamInterface
      */
-    public function getStream()
+    public function getStream() : StreamInterface
     {
         // error out if called before setStream, getStream should never return
         // null.
@@ -131,11 +130,12 @@ class PartStreamContainer
      * setContentStream can be called with 'null' to indicate the IMessagePart
      * does not contain any content.
      */
-    public function setContentStream(?StreamInterface $contentStream = null)
+    public function setContentStream(?StreamInterface $contentStream = null) : static
     {
         $this->contentStream = $contentStream;
         $this->decodedStream = null;
         $this->charsetStream = null;
+        return $this;
     }
 
     /**
@@ -163,7 +163,7 @@ class PartStreamContainer
      * Attaches a decoding filter to the attached content handle, for the passed
      * $transferEncoding.
      */
-    protected function attachTransferEncodingFilter(?string $transferEncoding) : self
+    protected function attachTransferEncodingFilter(?string $transferEncoding) : static
     {
         if ($this->decodedStream !== null) {
             $this->encoding['type'] = $transferEncoding;
@@ -193,7 +193,7 @@ class PartStreamContainer
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
      */
-    protected function attachCharsetFilter(string $fromCharset, string $toCharset) : self
+    protected function attachCharsetFilter(string $fromCharset, string $toCharset) : static
     {
         if ($this->charsetStream !== null) {
             $this->charsetStream = new CachingStream($this->streamFactory->newCharsetStream(
@@ -210,7 +210,7 @@ class PartStreamContainer
     /**
      * Resets just the charset stream, and rewinds the decodedStream.
      */
-    private function resetCharsetStream() : self
+    private function resetCharsetStream() : static
     {
         $this->charset = [
             'from' => null,
@@ -225,7 +225,7 @@ class PartStreamContainer
     /**
      * Resets cached encoding and charset streams, and rewinds the stream.
      */
-    public function reset()
+    public function reset() : static
     {
         $this->encoding = [
             'type' => null,
@@ -239,6 +239,7 @@ class PartStreamContainer
         $this->contentStream->rewind();
         $this->decodedStream = $this->contentStream;
         $this->charsetStream = $this->contentStream;
+        return $this;
     }
 
     /**
@@ -249,9 +250,8 @@ class PartStreamContainer
      * @param string $transferEncoding the transfer encoding
      * @param string $fromCharset the character set the content is encoded in
      * @param string $toCharset the target encoding to return
-     * @return ?StreamInterface
      */
-    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset)
+    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset) : ?StreamInterface
     {
         if ($this->contentStream === null) {
             return null;

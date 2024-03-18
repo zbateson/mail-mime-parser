@@ -10,6 +10,8 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\PartBuilder;
+use ZBateson\MailMimeParser\Message\PartHeaderContainer;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Proxy between a MessagePart and a Parser.
@@ -25,17 +27,17 @@ abstract class ParserPartProxy extends PartBuilder
     /**
      * @var IParserService The parser.
      */
-    protected $parser;
+    protected IParserService $parser;
 
     /**
      * @var PartBuilder The part's PartBuilder.
      */
-    protected $partBuilder;
+    protected PartBuilder $partBuilder;
 
     /**
      * @var IMessagePart The part.
      */
-    private $part;
+    private IMessagePart $part;
 
     public function __construct(PartBuilder $partBuilder, IParserService $parser)
     {
@@ -48,7 +50,7 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * @param IMessagePart $part The part
      */
-    public function setPart(IMessagePart $part) : self
+    public function setPart(IMessagePart $part) : static
     {
         $this->part = $part;
         return $this;
@@ -59,7 +61,7 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * @return IMessagePart the part.
      */
-    public function getPart()
+    public function getPart() : IMessagePart
     {
         return $this->part;
     }
@@ -71,10 +73,8 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * The method first checks to see if the content has already been parsed,
      * and is safe to call multiple times.
-     *
-     * @return static
      */
-    public function parseContent()
+    public function parseContent() : static
     {
         if (!$this->isContentParsed()) {
             $this->parser->parseContent($this);
@@ -87,31 +87,32 @@ abstract class ParserPartProxy extends PartBuilder
      *
      * For ParserPartProxy, this is just content, but sub-classes may override
      * this to parse all children as well for example.
-     *
-     * @return static
      */
-    public function parseAll()
+    public function parseAll() : static
     {
         $this->parseContent();
         return $this;
     }
 
-    public function getParent()
+    public function getParent() : ?ParserPartProxy
     {
         return $this->partBuilder->getParent();
     }
 
-    public function getHeaderContainer()
+    public function getHeaderContainer() : PartHeaderContainer
     {
         return $this->partBuilder->getHeaderContainer();
     }
 
-    public function getStream()
+    public function getStream() : StreamInterface
     {
         return $this->partBuilder->getStream();
     }
 
-    public function getMessageResourceHandle()
+    /**
+     * @return resource
+     */
+    public function getMessageResourceHandle() : mixed
     {
         return $this->partBuilder->getMessageResourceHandle();
     }
@@ -141,43 +142,31 @@ abstract class ParserPartProxy extends PartBuilder
         return $this->partBuilder->getStreamContentLength();
     }
 
-    /**
-     * @return static
-     */
-    public function setStreamPartStartPos(int $streamPartStartPos)
+    public function setStreamPartStartPos(int $streamPartStartPos) : static
     {
         $this->partBuilder->setStreamPartStartPos($streamPartStartPos);
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setStreamPartEndPos(int $streamPartEndPos)
+    public function setStreamPartEndPos(int $streamPartEndPos) : static
     {
         $this->partBuilder->setStreamPartEndPos($streamPartEndPos);
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setStreamContentStartPos(int $streamContentStartPos)
+    public function setStreamContentStartPos(int $streamContentStartPos) : static
     {
         $this->partBuilder->setStreamContentStartPos($streamContentStartPos);
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setStreamPartAndContentEndPos(int $streamContentEndPos)
+    public function setStreamPartAndContentEndPos(int $streamContentEndPos) : static
     {
         $this->partBuilder->setStreamPartAndContentEndPos($streamContentEndPos);
         return $this;
     }
 
-    public function isContentParsed() : ?bool
+    public function isContentParsed() : bool
     {
         return $this->partBuilder->isContentParsed();
     }

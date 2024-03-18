@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Parser;
 
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
+use ZBateson\MailMimeParser\IMessage;
 
 /**
  * Parses a mail mime message into its component parts.  To invoke, call
@@ -22,24 +23,24 @@ class MessageParserService
      * @var PartHeaderContainerFactory To create a container to read the
      *      message's headers into.
      */
-    protected $partHeaderContainerFactory;
+    protected PartHeaderContainerFactory $partHeaderContainerFactory;
 
     /**
      * @var ParserManagerService To figure out what parser is responsible for parsing a
      *      message.
      */
-    protected $parserManager;
+    protected ParserManagerService $parserManager;
 
     /**
      * @var PartBuilderFactory To create a PartBuilder representing this
      *      message, and to pass it to ParserManager.
      */
-    protected $partBuilderFactory;
+    protected PartBuilderFactory $partBuilderFactory;
 
     /**
      * @var HeaderParserService To parse the headers into a PartHeaderContainer.
      */
-    protected $headerParser;
+    protected HeaderParserService $headerParser;
 
     public function __construct(
         PartBuilderFactory $pbf,
@@ -62,9 +63,9 @@ class MessageParserService
      * returned.
      *
      * @param resource $handle
-     * @return string|bool the read line or false on EOF or on error.
+     * @return string|false the read line or false on EOF or on error.
      */
-    public static function readLine($handle)
+    public static function readLine($handle) : string|false
     {
         $size = 4096;
         $ret = $line = \fgets($handle, $size);
@@ -79,9 +80,8 @@ class MessageParserService
      * object and returns it.
      *
      * @param StreamInterface $stream the stream to parse the message from
-     * @return \ZBateson\MailMimeParser\IMessage
      */
-    public function parse(StreamInterface $stream)
+    public function parse(StreamInterface $stream) : IMessage
     {
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
         $partBuilder = $this->partBuilderFactory->newPartBuilder($headerContainer, $stream);

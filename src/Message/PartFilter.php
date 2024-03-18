@@ -23,10 +23,8 @@ abstract class PartFilter
      *    disposition
      *  - any part that returns true for isMultiPart()
      *  - any part that returns true for isSignaturePart()
-     *
-     * @return callable
      */
-    public static function fromAttachmentFilter()
+    public static function fromAttachmentFilter() : callable
     {
         return function(IMessagePart $part) {
             $type = $part->getContentType();

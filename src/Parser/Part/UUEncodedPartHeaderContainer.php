@@ -19,14 +19,14 @@ use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 class UUEncodedPartHeaderContainer extends PartHeaderContainer
 {
     /**
-     * @var int the unix file permission
+     * @var ?int the unix file permission
      */
-    protected $mode = null;
+    protected ?int $mode = null;
 
     /**
-     * @var string the name of the file in the uuencoding 'header'.
+     * @var ?string the name of the file in the uuencoding 'header'.
      */
-    protected $filename = null;
+    protected ?string $filename = null;
 
     /**
      * Returns the file mode included in the uuencoded 'begin' line for this
@@ -39,10 +39,8 @@ class UUEncodedPartHeaderContainer extends PartHeaderContainer
 
     /**
      * Sets the unix file mode for the uuencoded 'begin' line.
-     *
-     * @return static
      */
-    public function setUnixFileMode(int $mode)
+    public function setUnixFileMode(int $mode) : static
     {
         $this->mode = $mode;
         return $this;
@@ -59,10 +57,8 @@ class UUEncodedPartHeaderContainer extends PartHeaderContainer
 
     /**
      * Sets the filename included in the uuencoded 'begin' line.
-     *
-     * @return static
      */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename) : static
     {
         $this->filename = $filename;
         return $this;

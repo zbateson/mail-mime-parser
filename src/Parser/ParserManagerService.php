@@ -24,7 +24,7 @@ class ParserManagerService
      * @var IParserService[] List of parsers in order of priority (0 is highest
      *      priority).
      */
-    protected $parsers = [];
+    protected array $parsers = [];
 
     public function __construct(MimeParserService $mimeParser, NonMimeParserService $nonMimeParser)
     {
@@ -36,7 +36,7 @@ class ParserManagerService
      * calling $parser->setParserManager($this) on each one.
      *
      */
-    public function setParsers(array $parsers) : self
+    public function setParsers(array $parsers) : static
     {
         foreach ($parsers as $parser) {
             $parser->setParserManager($this);
@@ -51,7 +51,7 @@ class ParserManagerService
      *
      * @param IParserService $parser The parser to add.
      */
-    public function prependParser(IParserService $parser) : self
+    public function prependParser(IParserService $parser) : static
     {
         $parser->setParserManager($this);
         \array_unshift($this->parsers, $parser);
@@ -73,10 +73,10 @@ class ParserManagerService
      *        an IParser
      * @throws CompatibleParserNotFoundException if a compatible parser for the
      *         type is not configured.
-     * @return ?ParserPartProxy The created ParserPartProxy tied to a new
+     * @return ParserPartProxy The created ParserPartProxy tied to a new
      *         IMessagePart and associated IParser.
      */
-    public function createParserProxyFor(PartBuilder $partBuilder)
+    public function createParserProxyFor(PartBuilder $partBuilder) : ParserPartProxy
     {
         foreach ($this->parsers as $parser) {
             if ($parser->canParse($partBuilder)) {

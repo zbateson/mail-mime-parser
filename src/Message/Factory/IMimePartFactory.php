@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -20,12 +21,12 @@ class IMimePartFactory extends IMessagePartFactory
     /**
      * @var PartHeaderContainerFactory
      */
-    protected $partHeaderContainerFactory;
+    protected PartHeaderContainerFactory $partHeaderContainerFactory;
 
     /**
      * @var PartChildrenContainerFactory
      */
-    protected $partChildrenContainerFactory;
+    protected PartChildrenContainerFactory $partChildrenContainerFactory;
 
     public function __construct(
         StreamFactory $streamFactory,
@@ -40,10 +41,8 @@ class IMimePartFactory extends IMessagePartFactory
 
     /**
      * Constructs a new IMimePart object and returns it
-     *
-     * @return \ZBateson\MailMimeParser\Message\IMimePart
      */
-    public function newInstance()
+    public function newInstance() : IMimePart
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $headerContainer = $this->partHeaderContainerFactory->newInstance();

@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use RecursiveArrayIterator;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
@@ -241,7 +242,7 @@ class GenericHelperTest extends TestCase
 
         $to->expects($this->once())
             ->method('getChildIterator')
-            ->willReturn([$child1, $child2]);
+            ->willReturn(new RecursiveArrayIterator([$child1, $child2]));
         $to->expects($this->once())
             ->method('getChildCount')
             ->willReturn(2);

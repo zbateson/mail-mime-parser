@@ -20,14 +20,14 @@ class PartStreamContainerFactory
     /**
      * @var StreamFactory
      */
-    protected $streamFactory;
+    protected StreamFactory $streamFactory;
 
     public function __construct(StreamFactory $streamFactory)
     {
         $this->streamFactory = $streamFactory;
     }
 
-    public function newInstance()
+    public function newInstance() : PartStreamContainer
     {
         return new PartStreamContainer($this->streamFactory);
     }

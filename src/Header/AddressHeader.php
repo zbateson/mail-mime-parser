@@ -29,12 +29,12 @@ class AddressHeader extends AbstractHeader
      * @var AddressPart[] array of addresses, included all addresses contained
      *      in groups.
      */
-    protected $addresses = [];
+    protected array $addresses = [];
 
     /**
      * @var AddressGroupPart[] array of address groups (lists).
      */
-    protected $groups = [];
+    protected array $groups = [];
 
     public function __construct(
         AddressBaseConsumerService $consumerService,
@@ -108,7 +108,7 @@ class AddressHeader extends AbstractHeader
     public function getEmail() : ?string
     {
         if (!empty($this->addresses)) {
-            return $this->addresses->getEmail();
+            return $this->addresses[0]->getEmail();
         }
     }
 
