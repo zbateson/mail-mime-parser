@@ -155,7 +155,7 @@ child parts.</p>
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartChildrenContainer.html#property_children">$children</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -190,21 +190,21 @@ child parts.</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartChildrenContainer.html#method_add">add()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Adds the passed IMessagePart to the container in the passed position.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartChildrenContainer.html#method_current">current()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartChildrenContainer.html#method_getChildren">getChildren()</a>
     <span>
-                                &nbsp;: <abbr title="\RecursiveIterator">RecursiveIterator</abbr>|null    </span>
+                                &nbsp;: <abbr title="\RecursiveIterator">RecursiveIterator</abbr>&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;|null    </span>
 </dt>
 <dd>If the current element points to an IMultiPart, its child iterator is
 returned by calling {@see IMultiPart::getChildIterator()}.</dd>
@@ -214,9 +214,8 @@ returned by calling {@see IMultiPart::getChildIterator()}.</dd>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
-<dd>Returns true if the current element is an IMultiPart and doesn&#039;t return
-null for {@see IMultiPart::getChildIterator()}.  Note that the iterator
-may still be empty.</dd>
+<dd>Returns true if the current element is an IMultiPart.  Note that the
+iterator may still be empty.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartChildrenContainer.html#method_key">key()</a>
@@ -316,7 +315,7 @@ may still be empty.</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$children</span>
     </code>
 
@@ -461,8 +460,7 @@ the proxy won't result in any more child parts.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parserProxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -496,7 +494,7 @@ the proxy won't result in any more child parts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">98</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 
     </aside>
 
@@ -504,7 +502,7 @@ the proxy won't result in any more child parts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">add</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$position</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">add</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$position</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>If position is not passed or null, the part is added to the end, as the
 last child in the container.</p>
@@ -536,7 +534,7 @@ child at.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -554,22 +552,21 @@ child at.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">current</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">current</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span>
             &mdash;
         
     
@@ -587,7 +584,7 @@ child at.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 
@@ -596,14 +593,14 @@ returned by calling {@see IMultiPart::getChildIterator()}.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr>&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;|null</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr>|null</span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr>&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;|null</span>
             &mdash;
             <section class="phpdocumentor-description"><p>the iterator</p>
 </section>
@@ -623,13 +620,12 @@ returned by calling {@see IMultiPart::getChildIterator()}.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns true if the current element is an IMultiPart and doesn&#039;t return
-null for {@see IMultiPart::getChildIterator()}.  Note that the iterator
-may still be empty.</p>
+        <p class="phpdocumentor-summary">Returns true if the current element is an IMultiPart.  Note that the
+iterator may still be empty.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -658,7 +654,7 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">71</span>
 
     </aside>
 
@@ -691,7 +687,7 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">73</span>
+    <span class="phpdocumentor-element-found-in__line">76</span>
 
     </aside>
 
@@ -733,8 +729,7 @@ may still be empty.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">offsetExists</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -742,8 +737,7 @@ may still be empty.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -768,26 +762,24 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">131</span>
+    <span class="phpdocumentor-element-found-in__line">141</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">offsetGet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">offsetGet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$offset</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -812,34 +804,31 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">137</span>
+    <span class="phpdocumentor-element-found-in__line">150</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">offsetSet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">offsetSet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$offset</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -864,26 +853,24 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">151</span>
+    <span class="phpdocumentor-element-found-in__line">167</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">offsetUnset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">offsetUnset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$offset</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -908,7 +895,7 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">119</span>
 
     </aside>
 
@@ -955,7 +942,7 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">78</span>
+    <span class="phpdocumentor-element-found-in__line">81</span>
 
     </aside>
 
@@ -988,7 +975,7 @@ may still be empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartChildrenContainer.php"><a href="files/message-partchildrencontainer.html"><abbr title="Message/PartChildrenContainer.php">PartChildrenContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">83</span>
+    <span class="phpdocumentor-element-found-in__line">86</span>
 
     </aside>
 

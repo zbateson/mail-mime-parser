@@ -232,7 +232,7 @@ parts for this parser.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_parseNextChild">parseNextChild()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null    </span>
 </dt>
 <dd></dd>
 
@@ -256,7 +256,7 @@ $this-&gt;parserManager-&gt;createParserProxyFor($child);</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_findContentBoundary">findContentBoundary()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Reads 2048-byte lines from the passed $handle, calling
 $partBuilder-&gt;setEndBoundaryFound with the passed line until it returns
@@ -634,7 +634,7 @@ PartHeaderContainers for headers.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/AbstractParserService.php"><a href="files/parser-abstractparserservice.html"><abbr title="Parser/AbstractParserService.php">AbstractParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
@@ -671,7 +671,7 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/AbstractParserService.php"><a href="files/parser-abstractparserservice.html"><abbr title="Parser/AbstractParserService.php">AbstractParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
+    <span class="phpdocumentor-element-found-in__line">71</span>
 
     </aside>
 
@@ -708,7 +708,7 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">117</span>
+    <span class="phpdocumentor-element-found-in__line">114</span>
 
     </aside>
 
@@ -717,7 +717,8 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">parseContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -751,14 +752,14 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">163</span>
+    <span class="phpdocumentor-element-found-in__line">158</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">parseNextChild</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">parseNextChild</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -777,7 +778,7 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span>
             &mdash;
         
     
@@ -795,7 +796,7 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/AbstractParserService.php"><a href="files/parser-abstractparserservice.html"><abbr title="Parser/AbstractParserService.php">AbstractParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
@@ -842,7 +843,7 @@ read and a PartBuilder is created from it.)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">147</span>
+    <span class="phpdocumentor-element-found-in__line">142</span>
 
     </aside>
 
@@ -927,7 +928,7 @@ true or the stream is at EOF.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">findContentBoundary</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">findContentBoundary</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>setEndBoundaryFound returns true if the passed line matches a boundary
 for the $partBuilder itself or any of its parents.</p>
@@ -953,7 +954,7 @@ were read.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

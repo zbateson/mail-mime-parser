@@ -161,18 +161,18 @@ addresses in an address header, or parameters in a parameter header).</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-IErrorBag.html#method_addError">addError()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Creates and adds an Error object to this ErrorBag.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-IErrorBag.html#method_getAllErrors">getAllErrors()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns any errors on this object, and all IErrorBag children of this
-object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).</dd>
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-IHeader.html#method_getAllParts">getAllParts()</a>
@@ -201,10 +201,10 @@ logs.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-IErrorBag.html#method_getErrors">getErrors()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns any local errors this object has at or above the passed PSR log
-level (defaulting to LogLevel::ERROR).</dd>
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-IHeader.html#method_getName">getName()</a>
@@ -242,11 +242,11 @@ parsed into, excluding any
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Returns true if there are errors on this object, or any IErrorBag child
-of this object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).  Note that this will stop after finding the first error
-and return, so may be slightly more performant if an error actually
-exists over calling getAllErrors if only interested in whether an error
-exists.</dd>
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-IErrorBag.html#method_hasErrors">hasErrors()</a>
@@ -318,7 +318,7 @@ additional validation may be performed.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="IErrorBag.php"><a href="files/ierrorbag.html"><abbr title="IErrorBag.php">IErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -326,7 +326,7 @@ additional validation may be performed.</dd>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -360,7 +360,7 @@ additional validation may be performed.</dd>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -378,17 +378,17 @@ additional validation may be performed.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="IErrorBag.php"><a href="files/ierrorbag.html"><abbr title="IErrorBag.php">IErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">100</span>
+    <span class="phpdocumentor-element-found-in__line">85</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">Returns any errors on this object, and all IErrorBag children of this
-object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).</p>
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>Care should be taken using this if the intention is to only 'preview' a
 message without parsing it entirely, since this will cause the whole
@@ -405,21 +405,23 @@ to check for errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -507,7 +509,7 @@ comments in the header, an empty array is returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="IErrorBag.php"><a href="files/ierrorbag.html"><abbr title="IErrorBag.php">IErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
@@ -541,16 +543,16 @@ logs.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="IErrorBag.php"><a href="files/ierrorbag.html"><abbr title="IErrorBag.php">IErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">50</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">Returns any local errors this object has at or above the passed PSR log
-level (defaulting to LogLevel::ERROR).</p>
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>If $validate is true, additional validation may be performed on the
 object to check for errors.</p>
@@ -563,21 +565,23 @@ object to check for errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -743,16 +747,16 @@ first parsed part that isn't a comment.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="IErrorBag.php"><a href="files/ierrorbag.html"><abbr title="IErrorBag.php">IErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">81</span>
+    <span class="phpdocumentor-element-found-in__line">68</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">Returns true if there are errors on this object, or any IErrorBag child
-of this object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).  Note that this will stop after finding the first error
-and return, so may be slightly more performant if an error actually
-exists over calling getAllErrors if only interested in whether an error
-exists.</p>
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -773,14 +777,16 @@ errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -805,7 +811,7 @@ errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="IErrorBag.php"><a href="files/ierrorbag.html"><abbr title="IErrorBag.php">IErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">39</span>
 
     </aside>
 
@@ -817,7 +823,9 @@ additional validation may be performed.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">hasErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>The PSR levels are defined in Psr\Log\LogLevel.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -825,14 +833,16 @@ additional validation may be performed.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 

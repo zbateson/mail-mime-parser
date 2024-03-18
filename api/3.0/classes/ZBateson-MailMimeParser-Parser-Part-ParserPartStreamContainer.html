@@ -178,7 +178,7 @@ any changes.</p>
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_charsetStream">$charsetStream</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>            </span>
+                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
 </dt>
 <dd></dd>
 
@@ -192,19 +192,19 @@ any changes.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_contentStream">$contentStream</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>            </span>
+                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_decodedStream">$decodedStream</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>            </span>
+                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#property_detachParsedStream">$detachParsedStream</a>
+    <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_detachParsedStream">$detachParsedStream</a>
     <span>
                         &nbsp;: bool            </span>
 </dt>
@@ -213,7 +213,7 @@ any changes.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#property_parsedStream">$parsedStream</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>            </span>
+                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
 </dt>
 <dd></dd>
 
@@ -248,14 +248,14 @@ any changes.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_charset">$charset</a>
     <span>
-                        &nbsp;: array&lt;string, null&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_encoding">$encoding</a>
     <span>
-                        &nbsp;: array&lt;string, null&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -276,7 +276,7 @@ any changes.</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#method_getBinaryContentStream">getBinaryContentStream()</a>
     <span>
-                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null    </span>
 </dt>
 <dd>Checks what transfer-encoding decoder stream is attached on the
 underlying stream, and resets it if the requested arguments differ.</dd>
@@ -308,14 +308,14 @@ children.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_reset">reset()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Resets cached encoding and charset streams, and rewinds the stream.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#method_setContentStream">setContentStream()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Attaches the passed stream as the content portion of this
 StreamContainer.</dd>
@@ -323,7 +323,7 @@ StreamContainer.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_setStream">setStream()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Sets the part&#039;s stream containing the part&#039;s headers, content, and
 children.</dd>
@@ -338,7 +338,7 @@ children.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_attachCharsetFilter">attachCharsetFilter()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Attaches a charset conversion filter to the attached content handle, for
 the passed arguments.</dd>
@@ -346,7 +346,7 @@ the passed arguments.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_attachTransferEncodingFilter">attachTransferEncodingFilter()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Attaches a decoding filter to the attached content handle, for the passed
 $transferEncoding.</dd>
@@ -354,7 +354,7 @@ $transferEncoding.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#method_requestParsedContentStream">requestParsedContentStream()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Requests content from the parser if not previously requested, and calls
 PartStreamContainer::setContentStream().</dd>
@@ -362,7 +362,7 @@ PartStreamContainer::setContentStream().</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#method_requestParsedStream">requestParsedStream()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Ensures the parser has parsed the entire part, and sets
 $this-&gt;parsedStream to the original parsed stream (or a limited part of
@@ -388,7 +388,7 @@ on the current handle is different from the one passed as an argument.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_resetCharsetStream">resetCharsetStream()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Resets just the charset stream, and rewinds the decodedStream.</dd>
 
@@ -427,9 +427,9 @@ on the current handle is different from the one passed as an argument.</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$charsetStream</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>attached charset stream to $decodedStream</p>
@@ -454,7 +454,7 @@ on the current handle is different from the one passed as an argument.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">54</span>
 
     </aside>
 
@@ -496,9 +496,9 @@ has not yet been requested from the parser.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$contentStream</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>a stream containing this part's content</p>
@@ -530,9 +530,9 @@ has not yet been requested from the parser.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$decodedStream</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>the content stream after attaching transfer encoding
@@ -551,14 +551,14 @@ streams to $contentStream.</p>
 >
     <h4 class="phpdocumentor-element__name" id="property_detachParsedStream">
         $detachParsedStream
-        <a href="classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#property_detachParsedStream" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_detachParsedStream" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
@@ -571,7 +571,7 @@ streams to $contentStream.</p>
 
     
         <section class="phpdocumentor-description"><p>true if the stream should be detached when this container is
-destroyed (thereby not closing the stream).</p>
+destroyed.</p>
 </section>
 
     
@@ -600,9 +600,9 @@ destroyed (thereby not closing the stream).</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$parsedStream</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>the original stream for a parsed message, used when
@@ -662,7 +662,7 @@ the message hasn't changed</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">48</span>
 
     </aside>
 
@@ -773,7 +773,7 @@ attached StreamInterface based on encoding.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string, null&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$charset</span>
      = <span class="phpdocumentor-signature__default-value">[&#039;from&#039; =&gt; null, &#039;to&#039; =&gt; null, &#039;filter&#039; =&gt; null]</span></code>
 
@@ -807,7 +807,7 @@ attached StreamInterface based on encoding.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string, null&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$encoding</span>
      = <span class="phpdocumentor-signature__default-value">[&#039;type&#039; =&gt; null, &#039;filter&#039; =&gt; null]</span></code>
 
@@ -838,7 +838,7 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">56</span>
 
     </aside>
 
@@ -890,7 +890,7 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
     </aside>
 
@@ -923,7 +923,7 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">122</span>
+    <span class="phpdocumentor-element-found-in__line">116</span>
 
     </aside>
 
@@ -932,7 +932,7 @@ underlying stream, and resets it if the requested arguments differ.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getBinaryContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getBinaryContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -942,14 +942,15 @@ underlying stream, and resets it if the requested arguments differ.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
             &mdash;
         
     
@@ -967,7 +968,7 @@ underlying stream, and resets it if the requested arguments differ.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
     </aside>
 
@@ -1032,7 +1033,7 @@ them if the requested arguments differ from the currently assigned ones.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">138</span>
+    <span class="phpdocumentor-element-found-in__line">132</span>
 
     </aside>
 
@@ -1066,7 +1067,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">110</span>
+    <span class="phpdocumentor-element-found-in__line">104</span>
 
     </aside>
 
@@ -1099,7 +1100,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">234</span>
+    <span class="phpdocumentor-element-found-in__line">228</span>
 
     </aside>
 
@@ -1107,14 +1108,14 @@ children.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">reset</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">reset</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1132,7 +1133,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">128</span>
+    <span class="phpdocumentor-element-found-in__line">122</span>
 
     </aside>
 
@@ -1141,7 +1142,7 @@ StreamContainer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$contentStream</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">setContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$contentStream</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>The content stream would represent the content portion of $this-&gt;stream.</p>
 <p>If the content is overridden, $this-&gt;stream should point to a dynamic
@@ -1159,14 +1160,15 @@ does not contain any content.</p>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1193,7 +1195,7 @@ children.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">setStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1211,7 +1213,7 @@ children.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1229,7 +1231,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">150</span>
+    <span class="phpdocumentor-element-found-in__line">144</span>
 
     </aside>
 
@@ -1273,7 +1275,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">202</span>
+    <span class="phpdocumentor-element-found-in__line">196</span>
 
     </aside>
 
@@ -1282,7 +1284,7 @@ the passed arguments.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">attachCharsetFilter</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">attachCharsetFilter</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1310,7 +1312,7 @@ the passed arguments.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1328,7 +1330,7 @@ the passed arguments.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">172</span>
+    <span class="phpdocumentor-element-found-in__line">166</span>
 
     </aside>
 
@@ -1337,24 +1339,25 @@ $transferEncoding.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">attachTransferEncodingFilter</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">attachTransferEncodingFilter</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$transferEncoding</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1372,7 +1375,7 @@ $transferEncoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">79</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 
     </aside>
 
@@ -1381,14 +1384,14 @@ PartStreamContainer::setContentStream().</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">requestParsedContentStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">requestParsedContentStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1406,7 +1409,7 @@ PartStreamContainer::setContentStream().</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Part/ParserPartStreamContainer.php"><a href="files/parser-part-parserpartstreamcontainer.html"><abbr title="Parser/Part/ParserPartStreamContainer.php">ParserPartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">96</span>
+    <span class="phpdocumentor-element-found-in__line">90</span>
 
     </aside>
 
@@ -1416,14 +1419,14 @@ it corresponding to the current part this stream container belongs to).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">requestParsedStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">requestParsedStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1441,7 +1444,7 @@ it corresponding to the current part this stream container belongs to).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">160</span>
+    <span class="phpdocumentor-element-found-in__line">156</span>
 
     </aside>
 
@@ -1495,7 +1498,7 @@ arguments.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
+    <span class="phpdocumentor-element-found-in__line">145</span>
 
     </aside>
 
@@ -1504,17 +1507,18 @@ on the current handle is different from the one passed as an argument.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">isTransferEncodingFilterChanged</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">isTransferEncodingFilterChanged</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$transferEncoding</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -1539,7 +1543,7 @@ on the current handle is different from the one passed as an argument.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">219</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 
@@ -1547,14 +1551,14 @@ on the current handle is different from the one passed as an argument.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">resetCharsetStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">resetCharsetStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

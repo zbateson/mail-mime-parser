@@ -118,7 +118,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -217,7 +217,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_errors">$errors</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -246,14 +246,14 @@ children.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MultiPart.html#method_addChild">addChild()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Registers the passed part as a child of the current part.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_addError">addError()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Creates and adds an Error object to this ErrorBag.</dd>
 
@@ -290,11 +290,11 @@ destroyed.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getAllErrors">getAllErrors()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns any errors on this object, and all IErrorBag children of this
-object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).</dd>
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MultiPart.html#method_getAllParts">getAllParts()</a>
@@ -347,7 +347,7 @@ counting only filtered items if a callable filter is passed).</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MultiPart.html#method_getChildIterator">getChildIterator()</a>
     <span>
-                                &nbsp;: <abbr title="\RecursiveIterator">RecursiveIterator</abbr>    </span>
+                                &nbsp;: <abbr title="\RecursiveIterator">RecursiveIterator</abbr>&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns a \RecursiveIterator of child parts.</dd>
 
@@ -393,10 +393,10 @@ mime type.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrors">getErrors()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns any local errors this object has at or above the passed PSR log
-level (defaulting to LogLevel::ERROR).</dd>
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MessagePart.html#method_getFilename">getFilename()</a>
@@ -408,7 +408,7 @@ level (defaulting to LogLevel::ERROR).</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MessagePart.html#method_getParent">getParent()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>|null    </span>
 </dt>
 <dd>Returns this part&#039;s parent.</dd>
 
@@ -465,11 +465,11 @@ part, containing its headers, content and children.</dd>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Returns true if there are errors on this object, or any IErrorBag child
-of this object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).  Note that this will stop after finding the first error
-and return, so may be slightly more performant if an error actually
-exists over calling getAllErrors if only interested in whether an error
-exists.</dd>
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MessagePart.html#method_hasContent">hasContent()</a>
@@ -522,7 +522,7 @@ content and children to the passed file, resource, or stream.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-MessagePart.html#method_saveContent">saveContent()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Saves the binary content of the stream to the passed file, resource or
 stream.</dd>
@@ -546,7 +546,7 @@ specified.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-MultiPart.html#method_getErrorBagChildren">getErrorBagChildren()</a>
     <span>
-                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;    </span>
 </dt>
 <dd>Return any children ErrorBag objects.</dd>
 
@@ -567,7 +567,7 @@ specified.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Message-MultiPart.html#method_iteratorFindAt">iteratorFindAt()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null    </span>
 </dt>
 <dd></dd>
 
@@ -608,7 +608,7 @@ specified.</dd>
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string|null</span>
     <span class="phpdocumentor-signature__name">$charsetOverride</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>can be used to set an override for content's charset in cases
@@ -644,7 +644,7 @@ to be.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">bool</span>
     <span class="phpdocumentor-signature__name">$ignoreTransferEncoding</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
 
     
         <section class="phpdocumentor-description"><p>set to true when a user attaches a stream manually, it's
@@ -671,7 +671,7 @@ decorators attached already.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -774,7 +774,7 @@ modifications to this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -842,14 +842,14 @@ modifications to this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$errors</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
@@ -876,7 +876,7 @@ modifications to this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
     </aside>
 
@@ -914,7 +914,7 @@ modifications to this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
@@ -974,7 +974,7 @@ modifications to this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">246</span>
+    <span class="phpdocumentor-element-found-in__line">231</span>
 
     </aside>
 
@@ -1011,7 +1011,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">132</span>
+    <span class="phpdocumentor-element-found-in__line">134</span>
 
     </aside>
 
@@ -1019,7 +1019,7 @@ children.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">addChild</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$position</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">addChild</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-MessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\MessagePart">MessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$position</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>If the $position parameter is non-null, adds the part at the passed
 position index, otherwise adds it as the last child.</p>
@@ -1029,7 +1029,7 @@ position index, otherwise adds it as the last child.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$part</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-MessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\MessagePart">MessagePart</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The part to add.</p>
@@ -1050,7 +1050,7 @@ position index, otherwise adds it as the last child.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1076,7 +1076,7 @@ position index, otherwise adds it as the last child.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1110,7 +1110,7 @@ position index, otherwise adds it as the last child.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1172,7 +1172,7 @@ position index, otherwise adds it as the last child.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">179</span>
+    <span class="phpdocumentor-element-found-in__line">173</span>
 
     </aside>
 
@@ -1272,7 +1272,7 @@ destroyed.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">194</span>
+    <span class="phpdocumentor-element-found-in__line">185</span>
 
     </aside>
 
@@ -1310,12 +1310,12 @@ destroyed.</p>
     </aside>
 
         <p class="phpdocumentor-summary">Returns any errors on this object, and all IErrorBag children of this
-object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).</p>
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>Care should be taken using this if the intention is to only 'preview' a
 message without parsing it entirely, since this will cause the whole
@@ -1332,21 +1332,23 @@ to check for errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -1364,7 +1366,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">66</span>
+    <span class="phpdocumentor-element-found-in__line">68</span>
 
     </aside>
 
@@ -1373,7 +1375,7 @@ children optionally filtering them with the provided PartFilter.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getAllParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getAllParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>Note that the first part returned is the current part itself.  This is
 often desirable for queries with a passed filter, e.g. looking for an
@@ -1389,7 +1391,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -1422,7 +1424,7 @@ returning true if the part should be included.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">113</span>
+    <span class="phpdocumentor-element-found-in__line">115</span>
 
     </aside>
 
@@ -1431,7 +1433,7 @@ passed mime type.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getAllPartsByMimeType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeType</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getAllPartsByMimeType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeType</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>Creates a filter that looks at the return value of
 <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentType"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart::getContentType()">IMessagePart::getContentType()</abbr></a> for all parts (including the
@@ -1442,7 +1444,7 @@ current part), returning an array of matching parts.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$mimeType</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The mime type to find.</p>
@@ -1474,7 +1476,7 @@ current part), returning an array of matching parts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">139</span>
+    <span class="phpdocumentor-element-found-in__line">136</span>
 
     </aside>
 
@@ -1513,7 +1515,7 @@ and returns a resource handle for the returned Stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">130</span>
+    <span class="phpdocumentor-element-found-in__line">127</span>
 
     </aside>
 
@@ -1562,7 +1564,7 @@ link for example).</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">80</span>
+    <span class="phpdocumentor-element-found-in__line">82</span>
 
     </aside>
 
@@ -1571,7 +1573,7 @@ or null if none exist or do not match.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getChild</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getChild</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
 
         <section class="phpdocumentor-description"><p>The passed callable must accept an <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a> as an argument,
 and return true if it should be accepted, or false to filter the part
@@ -1583,7 +1585,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$index</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>0-based index</p>
@@ -1592,7 +1594,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -1626,7 +1628,7 @@ found.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">103</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
@@ -1635,7 +1637,7 @@ counting only filtered items if a callable filter is passed).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getChildCount</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">getChildCount</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
         <section class="phpdocumentor-description"><p>The passed callable must accept an <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a> as an argument,
 and return true if it should be accepted, or false to filter the part
@@ -1647,7 +1649,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -1681,7 +1683,7 @@ the passed filtering callable.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">89</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -1689,7 +1691,7 @@ the passed filtering callable.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getChildIterator</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getChildIterator</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr>&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>The <a href="https://www.php.net/manual/en/class.recursiveiterator.php"><abbr title="https://www.php.net/manual/en/class.recursiveiterator.php">https://www.php.net/manual/en/class.recursiveiterator.php</abbr></a>
 allows iterating over direct children, or using
@@ -1701,7 +1703,7 @@ to iterate over direct children, and all their children.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\RecursiveIterator">RecursiveIterator</abbr>&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -1719,7 +1721,7 @@ to iterate over direct children, and all their children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">94</span>
+    <span class="phpdocumentor-element-found-in__line">96</span>
 
     </aside>
 
@@ -1728,7 +1730,7 @@ with a passed callable.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getChildParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getChildParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>The passed callable must accept an <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a> as an argument,
 and return true if it should be accepted, or false to filter the part
@@ -1740,7 +1742,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -1773,7 +1775,7 @@ returning true if the part should be included.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">167</span>
+    <span class="phpdocumentor-element-found-in__line">164</span>
 
     </aside>
 
@@ -1823,7 +1825,7 @@ null if the part doesn&#039;t have a content stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">113</span>
 
     </aside>
 
@@ -1896,7 +1898,7 @@ bytes reads the same first 4.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">118</span>
+    <span class="phpdocumentor-element-found-in__line">120</span>
 
     </aside>
 
@@ -1905,14 +1907,14 @@ mime type.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getCountOfPartsByMimeType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeType</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">getCountOfPartsByMimeType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeType</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$mimeType</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The mime type to find.</p>
@@ -1982,11 +1984,11 @@ mime type.</p>
     </aside>
 
         <p class="phpdocumentor-summary">Returns any local errors this object has at or above the passed PSR log
-level (defaulting to LogLevel::ERROR).</p>
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>If $validate is true, additional validation may be performed on the
 object to check for errors.</p>
@@ -1999,21 +2001,23 @@ object to check for errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -2074,18 +2078,16 @@ object to check for errors.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">getParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>|null</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>the parent part</p>
-</section>
-
+        
     
 </article>
                     <article
@@ -2101,7 +2103,7 @@ object to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">59</span>
 
     </aside>
 
@@ -2110,7 +2112,7 @@ all parts under it, or null if not found with the passed filter function.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
 
         <section class="phpdocumentor-description"><p>Note that the first part returned is the current part itself.  This is
 usually desirable for queries with a passed filter, e.g. looking for an
@@ -2126,7 +2128,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$index</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The 0-based index (0 being this part if $fnFilter is
@@ -2136,7 +2138,7 @@ null or this part is satisfied by the filter).</p>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -2169,7 +2171,7 @@ returning true if the part should be included.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">125</span>
 
     </aside>
 
@@ -2177,7 +2179,7 @@ returning true if the part should be included.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getPartByContentId</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$contentId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getPartByContentId</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$contentId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
 
         <section class="phpdocumentor-description"><p>Calls <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentId"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart::getContentId()">IMessagePart::getContentId()</abbr></a> to find a matching part.</p>
 </section>
@@ -2186,7 +2188,7 @@ returning true if the part should be included.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$contentId</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The content ID to find a part for.</p>
@@ -2218,7 +2220,7 @@ returning true if the part should be included.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
     </aside>
 
@@ -2227,7 +2229,7 @@ the given index, or null if there are no matching parts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getPartByMimeType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeType</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getPartByMimeType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeType</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
 
         <section class="phpdocumentor-description"><p>Creates a filter that looks at the return value of
 <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getContentType"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart::getContentType()">IMessagePart::getContentType()</abbr></a> for all parts (including the
@@ -2238,7 +2240,7 @@ current part) and returns a matching one at the given 0-based index.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$mimeType</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The mime type to find.</p>
@@ -2247,7 +2249,7 @@ current part) and returns a matching one at the given 0-based index.</p>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$index</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional 0-based index (defaulting to '0').</p>
@@ -2279,7 +2281,7 @@ current part) and returns a matching one at the given 0-based index.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">75</span>
+    <span class="phpdocumentor-element-found-in__line">77</span>
 
     </aside>
 
@@ -2287,7 +2289,7 @@ current part) and returns a matching one at the given 0-based index.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getPartCount</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">getPartCount</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
         <section class="phpdocumentor-description"><p>Note that the current part is considered, so the minimum getPartCount is
 1 without a filter.</p>
@@ -2301,7 +2303,7 @@ callables in <a href="classes/ZBateson-MailMimeParser-Message-PartFilter.html"><
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -2334,7 +2336,7 @@ returning true if the part should be included.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">212</span>
+    <span class="phpdocumentor-element-found-in__line">200</span>
 
     </aside>
 
@@ -2386,7 +2388,7 @@ header from the original email or part may not be compliant.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">217</span>
+    <span class="phpdocumentor-element-found-in__line">205</span>
 
     </aside>
 
@@ -2442,11 +2444,11 @@ header from the original email or part may not be compliant.</li>
     </aside>
 
         <p class="phpdocumentor-summary">Returns true if there are errors on this object, or any IErrorBag child
-of this object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).  Note that this will stop after finding the first error
-and return, so may be slightly more performant if an error actually
-exists over calling getAllErrors if only interested in whether an error
-exists.</p>
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -2467,14 +2469,16 @@ errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -2544,7 +2548,9 @@ additional validation may be performed.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">hasErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>The PSR levels are defined in Psr\Log\LogLevel.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2552,14 +2558,16 @@ additional validation may be performed.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -2617,7 +2625,7 @@ additional validation may be performed.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">155</span>
+    <span class="phpdocumentor-element-found-in__line">158</span>
 
     </aside>
 
@@ -2627,7 +2635,7 @@ removed parts is returned.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">removeAllParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">removeAllParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
         <section class="phpdocumentor-description"><p>Note: the current part will not be removed.  Although the function naming
 matches getAllParts, which returns the current part, it also doesn't only
@@ -2639,7 +2647,7 @@ getAllParts but the current part is filtered out if returned.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Optional function accepting an IMessagePart and
@@ -2672,7 +2680,7 @@ returning true if the part should be included.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">141</span>
+    <span class="phpdocumentor-element-found-in__line">144</span>
 
     </aside>
 
@@ -2729,7 +2737,7 @@ parent.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">225</span>
+    <span class="phpdocumentor-element-found-in__line">210</span>
 
     </aside>
 
@@ -2740,7 +2748,26 @@ content and children to the passed file, resource, or stream.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">save</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filenameResourceOrStream</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filemode</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;w+&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>If the part has not been modified and represents a parsed part, the
+original stream should be written to the file.  Otherwise a stream
+representation of the part including its modifications should be written.
+This insures that an unmodified, signed message could be passed on this
+way even after parsing and reading.</p>
+<p>The written stream is not guaranteed to be RFC822 (or greater) compliant
+for the following reasons:</p>
+<ul>
+<li>The original email or part, if not modified, is returned as-is and may
+not be compliant.</li>
+<li>Although certain parts may have been modified, an original unmodified
+header from the original email or part may not be compliant.</li>
+<li>A user may set headers in a non-compliant format.</li>
+</ul>
+<p>If the passed $filenameResourceOrStream is a string, it's assumed to be a
+filename to write to.</p>
+<p>When passing a resource or Psr7 Stream, the resource is not closed, nor
+rewound after being written to.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2786,7 +2813,7 @@ $filenameResourceOrStream is a string)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">145</span>
 
     </aside>
 
@@ -2795,7 +2822,7 @@ stream.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">saveContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filenameResourceOrStream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">saveContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filenameResourceOrStream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>Note that charset conversion is not performed in this case, and the
 contents of the part are saved in their binary format as transmitted (but
@@ -2821,7 +2848,7 @@ rewound.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -2839,7 +2866,7 @@ rewound.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
@@ -2851,7 +2878,17 @@ specified.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">setCharsetOverride</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetOverride</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$onlyIfNoCharset</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>If set, the returned value from <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html#method_getCharset"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart::getCharset()">IMessagePart::getCharset()</abbr></a> must be
+ignored during subsequent read operations and streams created out of this
+part's content.</p>
+<p>Note that setting an override on an
+<a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a> and calling getTextStream,
+getTextContent, getHtmlStream or getHtmlContent will not be applied to
+those sub-parts, unless the text/html part is the IMessage itself.
+Instead, <a href="classes/ZBateson-MailMimeParser-IMessage.html#method_getTextPart"><abbr title="\ZBateson\MailMimeParser\IMessage::getTextPart()">IMessage::getTextPart()</abbr></a> should
+be called, and setCharsetOverride called on the returned IMessagePart.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2896,7 +2933,7 @@ getCharset returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MessagePart.php"><a href="files/message-messagepart.html"><abbr title="Message/MessagePart.php">MessagePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">204</span>
+    <span class="phpdocumentor-element-found-in__line">192</span>
 
     </aside>
 
@@ -2949,7 +2986,7 @@ getCharset returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">172</span>
 
     </aside>
 
@@ -2957,14 +2994,14 @@ getCharset returns null.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">getErrorBagChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getErrorBagChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -3019,7 +3056,7 @@ getAllErrors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">37</span>
 
     </aside>
 
@@ -3052,14 +3089,14 @@ getAllErrors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/MultiPart.php"><a href="files/message-multipart.html"><abbr title="Message/MultiPart.php">MultiPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">iteratorFindAt</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$iter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">iteratorFindAt</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$iter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">callable|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnFilter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -3075,7 +3112,7 @@ getAllErrors.</p>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$index</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -3083,7 +3120,7 @@ getAllErrors.</p>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$fnFilter</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -3094,7 +3131,7 @@ getAllErrors.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>|null</span>
             &mdash;
         
     

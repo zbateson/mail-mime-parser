@@ -150,7 +150,7 @@
                         <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_getLimitedContentStream">getLimitedContentStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr>|null    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null    </span>
 </dt>
 <dd>Returns a SeekingLimitStream using $part-&gt;getStreamContentLength() and
 $part-&gt;getStreamContentStartPos()</dd>
@@ -158,7 +158,7 @@ $part-&gt;getStreamContentStartPos()</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_getLimitedPartStream">getLimitedPartStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Returns a SeekingLimitStream using $part-&gt;getStreamPartLength() and
 $part-&gt;getStreamPartStartPos()</dd>
@@ -166,7 +166,7 @@ $part-&gt;getStreamPartStartPos()</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newBase64Stream">newBase64Stream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\Base64Stream">Base64Stream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a Base64Stream with an internal
 PregReplaceFilterStream that filters out non-base64 characters.</dd>
@@ -174,35 +174,35 @@ PregReplaceFilterStream that filters out non-base64 characters.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newCharsetStream">newCharsetStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\CharsetStream">CharsetStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a CharsetStream</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newChunkSplitStream">newChunkSplitStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\ChunkSplitStream">ChunkSplitStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates a ChunkSplitStream.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newHeaderStream">newHeaderStream()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-HeaderStream.html"><abbr title="\ZBateson\MailMimeParser\Stream\HeaderStream">HeaderStream</abbr></a>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a HeaderStream</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newMessagePartStream">newMessagePartStream()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStream">MessagePartStream</abbr></a>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a MessagePartStream</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newNonClosingStream">newNonClosingStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\NonClosingStream">NonClosingStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates a non-closing stream that doesn&#039;t close it&#039;s internal stream when
 closing/detaching.</dd>
@@ -210,21 +210,21 @@ closing/detaching.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newQuotedPrintableStream">newQuotedPrintableStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\QuotedPrintableStream">QuotedPrintableStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a QuotedPrintableStream.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newUUStream">newUUStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\UUStream">UUStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a UUStream</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newLimitStream">newLimitStream()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
 </dt>
 <dd>Creates and returns a SeekingLimitedStream.</dd>
 
@@ -254,7 +254,7 @@ closing/detaching.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">46</span>
 
     </aside>
 
@@ -263,7 +263,7 @@ $part-&gt;getStreamContentStartPos()</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLimitedContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilder">PartBuilder</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getLimitedContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilder">PartBuilder</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -281,7 +281,7 @@ $part-&gt;getStreamContentStartPos()</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr>|null</span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
             &mdash;
         
     
@@ -299,7 +299,7 @@ $part-&gt;getStreamContentStartPos()</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -308,7 +308,7 @@ $part-&gt;getStreamPartStartPos()</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLimitedPartStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilder">PartBuilder</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getLimitedPartStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilder">PartBuilder</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -326,7 +326,7 @@ $part-&gt;getStreamPartStartPos()</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -344,7 +344,7 @@ $part-&gt;getStreamPartStartPos()</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">103</span>
+    <span class="phpdocumentor-element-found-in__line">92</span>
 
     </aside>
 
@@ -353,7 +353,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newBase64Stream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\Base64Stream">Base64Stream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newBase64Stream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -371,7 +371,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\Base64Stream">Base64Stream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -389,7 +389,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">135</span>
+    <span class="phpdocumentor-element-found-in__line">118</span>
 
     </aside>
 
@@ -397,7 +397,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newCharsetStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\CharsetStream">CharsetStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newCharsetStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -431,7 +431,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\CharsetStream">CharsetStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -449,7 +449,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">92</span>
+    <span class="phpdocumentor-element-found-in__line">83</span>
 
     </aside>
 
@@ -457,7 +457,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newChunkSplitStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\ChunkSplitStream">ChunkSplitStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newChunkSplitStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -475,7 +475,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\ChunkSplitStream">ChunkSplitStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -493,7 +493,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">155</span>
+    <span class="phpdocumentor-element-found-in__line">134</span>
 
     </aside>
 
@@ -501,7 +501,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newHeaderStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-HeaderStream.html"><abbr title="\ZBateson\MailMimeParser\Stream\HeaderStream">HeaderStream</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newHeaderStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -519,7 +519,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-HeaderStream.html"><abbr title="\ZBateson\MailMimeParser\Stream\HeaderStream">HeaderStream</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -537,7 +537,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">145</span>
+    <span class="phpdocumentor-element-found-in__line">126</span>
 
     </aside>
 
@@ -545,7 +545,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newMessagePartStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStream">MessagePartStream</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newMessagePartStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -563,7 +563,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStream">MessagePartStream</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -581,7 +581,7 @@ PregReplaceFilterStream that filters out non-base64 characters.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">75</span>
 
     </aside>
 
@@ -590,7 +590,7 @@ closing/detaching.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newNonClosingStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\NonClosingStream">NonClosingStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newNonClosingStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -608,7 +608,7 @@ closing/detaching.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\NonClosingStream">NonClosingStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -626,7 +626,7 @@ closing/detaching.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">102</span>
 
     </aside>
 
@@ -634,7 +634,7 @@ closing/detaching.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newQuotedPrintableStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\QuotedPrintableStream">QuotedPrintableStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newQuotedPrintableStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -652,7 +652,7 @@ closing/detaching.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\QuotedPrintableStream">QuotedPrintableStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -670,7 +670,7 @@ closing/detaching.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">125</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
     </aside>
 
@@ -678,7 +678,7 @@ closing/detaching.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newUUStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\UUStream">UUStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newUUStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -696,7 +696,7 @@ closing/detaching.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\UUStream">UUStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     
@@ -714,7 +714,7 @@ closing/detaching.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/StreamFactory.php"><a href="files/stream-streamfactory.html"><abbr title="Stream/StreamFactory.php">StreamFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
     </aside>
 
@@ -722,7 +722,7 @@ closing/detaching.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">newLimitStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$length</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$start</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">newLimitStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$length</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$start</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -756,7 +756,7 @@ closing/detaching.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\StreamDecorators\SeekingLimitStream">SeekingLimitStream</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
             &mdash;
         
     

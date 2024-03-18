@@ -112,7 +112,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
@@ -194,7 +194,7 @@ object and returns it.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-MessageParserService.html#method_readLine">readLine()</a>
     <span>
-                                &nbsp;: string|bool    </span>
+                                &nbsp;: string|false    </span>
 </dt>
 <dd>Convenience method to read a line of up to 4096 characters from the
 passed resource handle.</dd>
@@ -227,7 +227,7 @@ passed resource handle.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">43</span>
 
     </aside>
 
@@ -261,7 +261,7 @@ passed resource handle.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
@@ -296,7 +296,7 @@ message.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">37</span>
+    <span class="phpdocumentor-element-found-in__line">38</span>
 
     </aside>
 
@@ -331,7 +331,7 @@ message, and to pass it to ParserManager.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -370,7 +370,7 @@ message's headers into.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -484,7 +484,7 @@ object and returns it.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MessageParserService.php"><a href="files/parser-messageparserservice.html"><abbr title="Parser/MessageParserService.php">MessageParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">68</span>
 
     </aside>
 
@@ -493,7 +493,7 @@ passed resource handle.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">readLine</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">resource&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handle</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|bool</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">readLine</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">resource&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handle</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|false</span></code>
 
         <section class="phpdocumentor-description"><p>If the line is larger than 4096 characters, the remaining characters in
 the line are read and discarded, and only the first 4096 characters are
@@ -514,7 +514,7 @@ returned.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|bool</span>
+    <span class="phpdocumentor-signature__response_type">string|false</span>
             &mdash;
             <section class="phpdocumentor-description"><p>the read line or false on EOF or on error.</p>
 </section>

@@ -98,7 +98,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003AgetErrors\u0028\u0029",
             "name": "getErrors",
-            "summary": "Returns\u0020any\u0020local\u0020errors\u0020this\u0020object\u0020has\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\nlevel\u0020\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
+            "summary": "Returns\u0020any\u0020local\u0020errors\u0020this\u0020object\u0020has\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\nlevel\u0020in\u0020Psr\\Log\\LogLevel\u0020\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
             "url": "classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrors"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003AhasErrors\u0028\u0029",
@@ -108,12 +108,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003AgetAllErrors\u0028\u0029",
             "name": "getAllErrors",
-            "summary": "Returns\u0020any\u0020errors\u0020on\u0020this\u0020object,\u0020and\u0020all\u0020IErrorBag\u0020children\u0020of\u0020this\nobject\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020\u0028defaulting\u0020to\nLogLevel\u003A\u003AERROR\u0029.",
+            "summary": "Returns\u0020any\u0020errors\u0020on\u0020this\u0020object,\u0020and\u0020all\u0020IErrorBag\u0020children\u0020of\u0020this\nobject\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020from\u0020Psr\\Log\\LogLevel\n\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
             "url": "classes/ZBateson-MailMimeParser-ErrorBag.html#method_getAllErrors"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003AhasAnyErrors\u0028\u0029",
             "name": "hasAnyErrors",
-            "summary": "Returns\u0020true\u0020if\u0020there\u0020are\u0020errors\u0020on\u0020this\u0020object,\u0020or\u0020any\u0020IErrorBag\u0020child\nof\u0020this\u0020object\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020\u0028defaulting\u0020to\nLogLevel\u003A\u003AERROR\u0029.\u0020\u0020Note\u0020that\u0020this\u0020will\u0020stop\u0020after\u0020finding\u0020the\u0020first\u0020error\nand\u0020return,\u0020so\u0020may\u0020be\u0020slightly\u0020more\u0020performant\u0020if\u0020an\u0020error\u0020actually\nexists\u0020over\u0020calling\u0020getAllErrors\u0020if\u0020only\u0020interested\u0020in\u0020whether\u0020an\u0020error\nexists.",
+            "summary": "Returns\u0020true\u0020if\u0020there\u0020are\u0020errors\u0020on\u0020this\u0020object,\u0020or\u0020any\u0020IErrorBag\u0020child\nof\u0020this\u0020object\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020in\u0020Psr\\Log\\LogLevel\n\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.\u0020\u0020Note\u0020that\u0020this\u0020will\u0020stop\u0020after\u0020finding\nthe\u0020first\u0020error\u0020and\u0020return,\u0020so\u0020may\u0020be\u0020slightly\u0020more\u0020performant\u0020if\u0020an\nerror\u0020actually\u0020exists\u0020over\u0020calling\u0020getAllErrors\u0020if\u0020only\u0020interested\u0020in\nwhether\u0020an\u0020error\u0020exists.",
             "url": "classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasAnyErrors"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003A\u0024logger",
@@ -226,15 +226,15 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_allParts"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\AbstractHeader\u003A\u003A\u0024comments",
-            "name": "comments",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_comments"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\AbstractHeader\u003A\u003A\u0024rawValue",
             "name": "rawValue",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_rawValue"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\AbstractHeader\u003A\u003A\u0024comments",
+            "name": "comments",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_comments"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\AddressHeader",
             "name": "AddressHeader",
@@ -381,15 +381,15 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#property_partFactory"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractConsumerService\u003A\u003A\u0024tokenSplitPattern",
-            "name": "tokenSplitPattern",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#property_tokenSplitPattern"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractConsumerService\u003A\u003A\u0024subConsumers",
             "name": "subConsumers",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#property_subConsumers"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractConsumerService\u003A\u003A\u0024tokenSplitPattern",
+            "name": "tokenSplitPattern",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#property_tokenSplitPattern"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService",
             "name": "AbstractGenericConsumerService",
@@ -1198,7 +1198,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\HeaderFactory\u003A\u003AnewInstanceOf\u0028\u0029",
             "name": "newInstanceOf",
-            "summary": "Creates\u0020an\u0020IHeader\u0020instance\u0020for\u0020the\u0020passed\u0020header\u0020name\u0020and\u0020value,\u0020and\nreturns\u0020it.",
+            "summary": "Creates\u0020an\u0020IHeader\u0020instance\u0020for\u0020the\u0020passed\u0020header\u0020name\u0020and\u0020value\u0020using\nthe\u0020passed\u0020IHeader\u0020class,\u0020and\u0020returns\u0020it.",
             "url": "classes/ZBateson-MailMimeParser-Header-HeaderFactory.html#method_newInstanceOf"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\HeaderFactory\u003A\u003A\u0024logger",
@@ -1891,6 +1891,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_date"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\ReceivedHeader\u003A\u003A\u0024dateSet",
+            "name": "dateSet",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_dateSet"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\SubjectHeader",
             "name": "SubjectHeader",
             "summary": "Reads\u0020a\u0020subject\u0020header.",
@@ -1923,17 +1928,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\IErrorBag\u003A\u003AgetErrors\u0028\u0029",
             "name": "getErrors",
-            "summary": "Returns\u0020any\u0020local\u0020errors\u0020this\u0020object\u0020has\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\nlevel\u0020\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
+            "summary": "Returns\u0020any\u0020local\u0020errors\u0020this\u0020object\u0020has\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\nlevel\u0020in\u0020Psr\\Log\\LogLevel\u0020\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
             "url": "classes/ZBateson-MailMimeParser-IErrorBag.html#method_getErrors"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\IErrorBag\u003A\u003AhasAnyErrors\u0028\u0029",
             "name": "hasAnyErrors",
-            "summary": "Returns\u0020true\u0020if\u0020there\u0020are\u0020errors\u0020on\u0020this\u0020object,\u0020or\u0020any\u0020IErrorBag\u0020child\nof\u0020this\u0020object\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020\u0028defaulting\u0020to\nLogLevel\u003A\u003AERROR\u0029.\u0020\u0020Note\u0020that\u0020this\u0020will\u0020stop\u0020after\u0020finding\u0020the\u0020first\u0020error\nand\u0020return,\u0020so\u0020may\u0020be\u0020slightly\u0020more\u0020performant\u0020if\u0020an\u0020error\u0020actually\nexists\u0020over\u0020calling\u0020getAllErrors\u0020if\u0020only\u0020interested\u0020in\u0020whether\u0020an\u0020error\nexists.",
+            "summary": "Returns\u0020true\u0020if\u0020there\u0020are\u0020errors\u0020on\u0020this\u0020object,\u0020or\u0020any\u0020IErrorBag\u0020child\nof\u0020this\u0020object\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020in\u0020Psr\\Log\\LogLevel\n\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.\u0020\u0020Note\u0020that\u0020this\u0020will\u0020stop\u0020after\u0020finding\nthe\u0020first\u0020error\u0020and\u0020return,\u0020so\u0020may\u0020be\u0020slightly\u0020more\u0020performant\u0020if\u0020an\nerror\u0020actually\u0020exists\u0020over\u0020calling\u0020getAllErrors\u0020if\u0020only\u0020interested\u0020in\nwhether\u0020an\u0020error\u0020exists.",
             "url": "classes/ZBateson-MailMimeParser-IErrorBag.html#method_hasAnyErrors"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\IErrorBag\u003A\u003AgetAllErrors\u0028\u0029",
             "name": "getAllErrors",
-            "summary": "Returns\u0020any\u0020errors\u0020on\u0020this\u0020object,\u0020and\u0020all\u0020IErrorBag\u0020children\u0020of\u0020this\nobject\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020\u0028defaulting\u0020to\nLogLevel\u003A\u003AERROR\u0029.",
+            "summary": "Returns\u0020any\u0020errors\u0020on\u0020this\u0020object,\u0020and\u0020all\u0020IErrorBag\u0020children\u0020of\u0020this\nobject\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\u0020level\u0020from\u0020Psr\\Log\\LogLevel\n\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
             "url": "classes/ZBateson-MailMimeParser-IErrorBag.html#method_getAllErrors"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\IMessage",
@@ -2111,15 +2116,15 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#property_container"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003A\u0024globalContainer",
-            "name": "globalContainer",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#property_globalContainer"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003A\u0024messageParser",
             "name": "messageParser",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#property_messageParser"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003A\u0024globalContainer",
+            "name": "globalContainer",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#property_globalContainer"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\IMessagePartFactory",
             "name": "IMessagePartFactory",
@@ -3148,7 +3153,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\PartChildrenContainer\u003A\u003AhasChildren\u0028\u0029",
             "name": "hasChildren",
-            "summary": "Returns\u0020true\u0020if\u0020the\u0020current\u0020element\u0020is\u0020an\u0020IMultiPart\u0020and\u0020doesn\u0027t\u0020return\nnull\u0020for\u0020\u007B\u0040see\u0020IMultiPart\u003A\u003AgetChildIterator\u0028\u0029\u007D.\u0020\u0020Note\u0020that\u0020the\u0020iterator\nmay\u0020still\u0020be\u0020empty.",
+            "summary": "Returns\u0020true\u0020if\u0020the\u0020current\u0020element\u0020is\u0020an\u0020IMultiPart.\u0020\u0020Note\u0020that\u0020the\niterator\u0020may\u0020still\u0020be\u0020empty.",
             "url": "classes/ZBateson-MailMimeParser-Message-PartChildrenContainer.html#method_hasChildren"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\PartChildrenContainer\u003A\u003AgetChildren\u0028\u0029",
@@ -4066,11 +4071,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#property_parsedStream"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\ParserPartStreamContainer\u003A\u003A\u0024detachParsedStream",
-            "name": "detachParsedStream",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainer.html#property_detachParsedStream"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\ParserPartStreamContainer\u003A\u003A\u0024partUpdated",
             "name": "partUpdated",
             "summary": "",
@@ -4198,7 +4198,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\PartBuilder\u003A\u003AgetStreamPartStartPos\u0028\u0029",
             "name": "getStreamPartStartPos",
-            "summary": "Returns\u0020the\u0020byte\u0020offset\u0020start\u0020position\u0020for\u0020this\u0020part\u0020within\u0020the\u0020message\nstream\u0020if\u0020it\u0027s\u0020been\u0020set,\u0020or\u0020null\u0020otherwise.",
+            "summary": "Returns\u0020the\u0020byte\u0020offset\u0020start\u0020position\u0020for\u0020this\u0020part\u0020within\u0020the\u0020message\nstream.",
             "url": "classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getStreamPartStartPos"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\PartBuilder\u003A\u003AgetStreamPartLength\u0028\u0029",
@@ -4293,12 +4293,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\PartBuilderFactory\u003A\u003AnewPartBuilder\u0028\u0029",
             "name": "newPartBuilder",
-            "summary": "Constructs\u0020a\u0020top\u002Dlevel\u0020\u0028message\u0029\u0020PartBuilder\u0020object\u0020and\u0020returns\u0020it",
+            "summary": "Constructs\u0020a\u0020top\u002Dlevel\u0020\u0028message\u0029\u0020PartBuilder\u0020object\u0020and\u0020returns\u0020it.",
             "url": "classes/ZBateson-MailMimeParser-Parser-PartBuilderFactory.html#method_newPartBuilder"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\PartBuilderFactory\u003A\u003AnewChildPartBuilder\u0028\u0029",
             "name": "newChildPartBuilder",
-            "summary": "Constructs\u0020a\u0020child\u0020PartBuilder\u0020object\u0020with\u0020the\u0020passed\u0020\u0024parent\u0020as\u0020its\nparent,\u0020and\u0020returns\u0020it",
+            "summary": "Constructs\u0020a\u0020child\u0020PartBuilder\u0020object\u0020with\u0020the\u0020passed\u0020\u0024parent\u0020as\u0020its\nparent,\u0020and\u0020returns\u0020it.",
             "url": "classes/ZBateson-MailMimeParser-Parser-PartBuilderFactory.html#method_newChildPartBuilder"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMessageProxy",
@@ -4436,11 +4436,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_parentBoundaryFound"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003A\u0024mimeBoundary",
-            "name": "mimeBoundary",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_mimeBoundary"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003A\u0024allChildrenParsed",
             "name": "allChildrenParsed",
             "summary": "",
@@ -4460,6 +4455,16 @@ Search.appendIndex(
             "name": "lastAddedChild",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_lastAddedChild"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003A\u0024mimeBoundary",
+            "name": "mimeBoundary",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_mimeBoundary"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003A\u0024mimeBoundaryQueried",
+            "name": "mimeBoundaryQueried",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_mimeBoundaryQueried"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxyFactory",
             "name": "ParserMimePartProxyFactory",
@@ -4618,7 +4623,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserPartProxy\u003A\u003AgetStreamPartStartPos\u0028\u0029",
             "name": "getStreamPartStartPos",
-            "summary": "Returns\u0020the\u0020byte\u0020offset\u0020start\u0020position\u0020for\u0020this\u0020part\u0020within\u0020the\u0020message\nstream\u0020if\u0020it\u0027s\u0020been\u0020set,\u0020or\u0020null\u0020otherwise.",
+            "summary": "Returns\u0020the\u0020byte\u0020offset\u0020start\u0020position\u0020for\u0020this\u0020part\u0020within\u0020the\u0020message\nstream.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html#method_getStreamPartStartPos"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserPartProxy\u003A\u003AgetStreamPartLength\u0028\u0029",
@@ -4700,6 +4705,11 @@ Search.appendIndex(
             "name": "ParserUUEncodedPartProxy",
             "summary": "A\u0020bi\u002Ddirectional\u0020parser\u002Dto\u002Dpart\u0020proxy\u0020for\u0020NonMimeParser\u0020and\u0020IUUEncodedParts.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserUUEncodedPartProxy\u003A\u003AgetParent\u0028\u0029",
+            "name": "getParent",
+            "summary": "Only\u0020has\u0020a\u0020single\u0020parent\u0020of\u0020type\u0020ParserNonMimeMessageProxy,\u0020overridden\u0020to\nspecify\u0020ParserNonMimeMessageProxy\u0020as\u0020the\u0020return\u0020type.",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_getParent"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserUUEncodedPartProxy\u003A\u003AgetNextPartStart\u0028\u0029",
             "name": "getNextPartStart",
@@ -4801,15 +4811,15 @@ Search.appendIndex(
             "summary": "Creates\u0020the\u0020underlying\u0020stream\u0020lazily\u0020when\u0020required.",
             "url": "classes/ZBateson-MailMimeParser-Stream-HeaderStream.html#method_createStream"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\HeaderStream\u003A\u003A\u0024stream",
-            "name": "stream",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Stream-HeaderStream.html#property_stream"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\HeaderStream\u003A\u003A\u0024part",
             "name": "part",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Stream-HeaderStream.html#property_part"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\HeaderStream\u003A\u003A\u0024stream",
+            "name": "stream",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-HeaderStream.html#property_stream"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream",
             "name": "MessagePartStream",
@@ -4861,11 +4871,6 @@ Search.appendIndex(
             "summary": "Creates\u0020the\u0020underlying\u0020stream\u0020lazily\u0020when\u0020required.",
             "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_createStream"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A\u0024stream",
-            "name": "stream",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_stream"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
             "summary": "",
@@ -4880,6 +4885,11 @@ Search.appendIndex(
             "name": "appendStream",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_appendStream"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A\u0024stream",
+            "name": "stream",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_stream"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory",
             "name": "StreamFactory",

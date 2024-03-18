@@ -175,21 +175,21 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_messageHandle">$messageHandle</a>
     <span>
-                        &nbsp;: resource            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_messageStream">$messageStream</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>            </span>
+                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_parent">$parent</a>
     <span>
-                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>            </span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null            </span>
 </dt>
 <dd></dd>
 
@@ -203,14 +203,14 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_streamContentEndPos">$streamContentEndPos</a>
     <span>
-                        &nbsp;: int            </span>
+                        &nbsp;: int|null            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_streamContentStartPos">$streamContentStartPos</a>
     <span>
-                        &nbsp;: int            </span>
+                        &nbsp;: int|null            </span>
 </dt>
 <dd></dd>
 
@@ -305,11 +305,12 @@ or null if not set, not discovered, or there are no more parts under this
 message.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getParent">getParent()</a>
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_getParent">getParent()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserNonMimeMessageProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy">ParserNonMimeMessageProxy</abbr></a>    </span>
 </dt>
-<dd>The ParserPartProxy parent of this PartBuilder.</dd>
+<dd>Only has a single parent of type ParserNonMimeMessageProxy, overridden to
+specify ParserNonMimeMessageProxy as the return type.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html#method_getPart">getPart()</a>
@@ -351,10 +352,10 @@ the main raw message stream, or null if not set.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getStreamPartStartPos">getStreamPartStartPos()</a>
     <span>
-                                &nbsp;: int|null    </span>
+                                &nbsp;: int    </span>
 </dt>
 <dd>Returns the byte offset start position for this part within the message
-stream if it&#039;s been set, or null otherwise.</dd>
+stream.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_getUnixFileMode">getUnixFileMode()</a>
@@ -367,7 +368,7 @@ part.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_isContentParsed">isContentParsed()</a>
     <span>
-                                &nbsp;: bool|null    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>Returns true if the byte offset positions for this part&#039;s content have
 been set.</dd>
@@ -399,28 +400,28 @@ the main message&#039;s raw stream.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_setNextPartFilename">setNextPartFilename()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Sets the next part&#039;s filename from its &#039;begin&#039; line.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_setNextPartMode">setNextPartMode()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Sets the next part&#039;s unix file mode from its &#039;begin&#039; line.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_setNextPartStart">setNextPartStart()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Sets the next part&#039;s start position within the message&#039;s raw stream.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html#method_setPart">setPart()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Sets the associated part.</dd>
 
@@ -485,7 +486,7 @@ stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -519,7 +520,7 @@ stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -594,7 +595,7 @@ stream.</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">resource</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$messageHandle</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
@@ -629,7 +630,7 @@ $messageStream or null for a child part</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$messageStream</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
@@ -657,19 +658,20 @@ for a child part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">78</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a></span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span>
     <span class="phpdocumentor-signature__name">$parent</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
-        <section class="phpdocumentor-description"><p>The parent ParserPartProxy.</p>
+        <section class="phpdocumentor-description"><p>The parent ParserPartProxy if one is set, or null if
+part doesn't have a parent.</p>
 </section>
 
     
@@ -691,7 +693,7 @@ for a child part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 
     </aside>
 
@@ -732,7 +734,7 @@ for a child part.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
     <span class="phpdocumentor-signature__name">$streamContentEndPos</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
@@ -767,7 +769,7 @@ end of this part's content (body).</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
     <span class="phpdocumentor-signature__name">$streamContentStartPos</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
@@ -804,7 +806,7 @@ beginning of this part's content (body).</p>
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$streamPartEndPos</span>
-     = <span class="phpdocumentor-signature__default-value">null</span></code>
+    </code>
 
     
         <section class="phpdocumentor-description"><p>The offset read end position for this part.  If the part is a
@@ -840,7 +842,7 @@ children.</p>
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$streamPartStartPos</span>
-     = <span class="phpdocumentor-signature__default-value">null</span></code>
+    </code>
 
     
         <section class="phpdocumentor-description"><p>The offset read start position for this part (beginning of
@@ -870,7 +872,7 @@ headers) in the message's stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">80</span>
+    <span class="phpdocumentor-element-found-in__line">81</span>
 
     </aside>
 
@@ -930,7 +932,7 @@ headers) in the message's stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
+    <span class="phpdocumentor-element-found-in__line">92</span>
 
     </aside>
 
@@ -963,7 +965,7 @@ headers) in the message's stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">190</span>
+    <span class="phpdocumentor-element-found-in__line">179</span>
 
     </aside>
 
@@ -1015,7 +1017,7 @@ headers) in the message's stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">124</span>
 
     </aside>
 
@@ -1049,7 +1051,7 @@ part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">113</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
     </aside>
 
@@ -1066,9 +1068,7 @@ part.</p>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html"><abbr title="\ZBateson\MailMimeParser\Message\PartHeaderContainer">PartHeaderContainer</abbr></a></span>
             &mdash;
-            <section class="phpdocumentor-description"><p>the container</p>
-</section>
-
+        
     
 </article>
                     <article
@@ -1084,7 +1084,7 @@ part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">137</span>
+    <span class="phpdocumentor-element-found-in__line">132</span>
 
     </aside>
 
@@ -1118,7 +1118,7 @@ the parent part if this is a child part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">142</span>
 
     </aside>
 
@@ -1151,7 +1151,7 @@ the parent part if this is a child part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
+    <span class="phpdocumentor-element-found-in__line">67</span>
 
     </aside>
 
@@ -1191,7 +1191,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
@@ -1231,7 +1231,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">37</span>
 
     </aside>
 
@@ -1267,27 +1267,28 @@ stores/returns this information).</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getParent">
         getParent()
-        <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getParent" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxy.html#method_getParent" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">103</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">The ParserPartProxy parent of this PartBuilder.</p>
+        <p class="phpdocumentor-summary">Only has a single parent of type ParserNonMimeMessageProxy, overridden to
+specify ParserNonMimeMessageProxy as the return type.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">getParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserNonMimeMessageProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy">ParserNonMimeMessageProxy</abbr></a></span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserNonMimeMessageProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy">ParserNonMimeMessageProxy</abbr></a></span>
             &mdash;
         
     
@@ -1305,7 +1306,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
@@ -1340,7 +1341,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">124</span>
+    <span class="phpdocumentor-element-found-in__line">119</span>
 
     </aside>
 
@@ -1374,7 +1375,7 @@ the parent part if this is a child part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">193</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 
@@ -1411,7 +1412,7 @@ before being set and are still null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">180</span>
+    <span class="phpdocumentor-element-found-in__line">174</span>
 
     </aside>
 
@@ -1445,7 +1446,7 @@ the main raw message stream, or null if not set.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">170</span>
+    <span class="phpdocumentor-element-found-in__line">164</span>
 
     </aside>
 
@@ -1482,23 +1483,23 @@ being set and are still null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">157</span>
+    <span class="phpdocumentor-element-found-in__line">151</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">Returns the byte offset start position for this part within the message
-stream if it&#039;s been set, or null otherwise.</p>
+stream.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getStreamPartStartPos</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|null</span></code>
+                    <span class="phpdocumentor-signature__name">getStreamPartStartPos</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">int|null</span>
+    <span class="phpdocumentor-signature__response_type">int</span>
             &mdash;
         
     
@@ -1516,7 +1517,7 @@ stream if it&#039;s been set, or null otherwise.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">106</span>
+    <span class="phpdocumentor-element-found-in__line">115</span>
 
     </aside>
 
@@ -1550,7 +1551,7 @@ part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">257</span>
+    <span class="phpdocumentor-element-found-in__line">243</span>
 
     </aside>
 
@@ -1559,14 +1560,14 @@ been set.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">isContentParsed</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool|null</span></code>
+                    <span class="phpdocumentor-signature__name">isContentParsed</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool|null</span>
+    <span class="phpdocumentor-signature__response_type">bool</span>
             &mdash;
             <section class="phpdocumentor-description"><p>true if set.</p>
 </section>
@@ -1586,7 +1587,7 @@ been set.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">268</span>
+    <span class="phpdocumentor-element-found-in__line">254</span>
 
     </aside>
 
@@ -1622,7 +1623,7 @@ MIME-Version header set.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">93</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -1696,7 +1697,7 @@ and is safe to call multiple times.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">96</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
@@ -1704,7 +1705,7 @@ and is safe to call multiple times.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setNextPartFilename</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPartFilename</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">setNextPartFilename</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPartFilename</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>As this is a message-wide setting, ParserUUEncodedPartProxy calls
 setNextPartFilename() on its parent (a ParserNonMimeMessageProxy, which
@@ -1726,7 +1727,7 @@ stores/returns this information).</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1744,7 +1745,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">83</span>
+    <span class="phpdocumentor-element-found-in__line">92</span>
 
     </aside>
 
@@ -1752,7 +1753,7 @@ stores/returns this information).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setNextPartMode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPartMode</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">setNextPartMode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPartMode</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>As this is a message-wide setting, ParserUUEncodedPartProxy calls
 setNextPartMode() on its parent (a ParserNonMimeMessageProxy, which
@@ -1774,7 +1775,7 @@ stores/returns this information).</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1792,7 +1793,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserUUEncodedPartProxy.php"><a href="files/parser-proxy-parseruuencodedpartproxy.html"><abbr title="Parser/Proxy/ParserUUEncodedPartProxy.php">ParserUUEncodedPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">70</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
@@ -1800,7 +1801,7 @@ stores/returns this information).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setNextPartStart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPartStart</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">setNextPartStart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPartStart</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>As this is a message-wide setting, ParserUUEncodedPartProxy calls
 setNextPartStart() on its parent (a ParserNonMimeMessageProxy, which
@@ -1822,7 +1823,7 @@ stores/returns this information).</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1840,7 +1841,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserPartProxy.php"><a href="files/parser-proxy-parserpartproxy.html"><abbr title="Parser/Proxy/ParserPartProxy.php">ParserPartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
@@ -1848,7 +1849,7 @@ stores/returns this information).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">setPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1867,7 +1868,7 @@ stores/returns this information).</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1885,7 +1886,7 @@ stores/returns this information).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">232</span>
+    <span class="phpdocumentor-element-found-in__line">220</span>
 
     </aside>
 
@@ -1930,7 +1931,7 @@ stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">244</span>
+    <span class="phpdocumentor-element-found-in__line">230</span>
 
     </aside>
 
@@ -1975,7 +1976,7 @@ message stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">217</span>
+    <span class="phpdocumentor-element-found-in__line">207</span>
 
     </aside>
 
@@ -2021,7 +2022,7 @@ PartBuilders.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/PartBuilder.php"><a href="files/parser-partbuilder.html"><abbr title="Parser/PartBuilder.php">PartBuilder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">204</span>
+    <span class="phpdocumentor-element-found-in__line">196</span>
 
     </aside>
 

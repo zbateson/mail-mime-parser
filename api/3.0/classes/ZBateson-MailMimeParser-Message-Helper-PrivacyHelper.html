@@ -116,7 +116,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
@@ -189,7 +189,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-PrivacyHelper.html#method_getSignedMessageAsString">getSignedMessageAsString()</a>
     <span>
-                                &nbsp;: string    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns a string containing the entire body (content) of a signed message
 for verification or calculating a signature.</dd>
@@ -197,7 +197,7 @@ for verification or calculating a signature.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-PrivacyHelper.html#method_getSignedMessageStream">getSignedMessageStream()</a>
     <span>
-                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null    </span>
 </dt>
 <dd>Returns a stream that can be used to read the content part of a signed
 message, which can be used to sign an email or verify a signature.</dd>
@@ -205,7 +205,7 @@ message, which can be used to sign an email or verify a signature.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-PrivacyHelper.html#method_overwrite8bitContentEncoding">overwrite8bitContentEncoding()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Loops over parts of the message and sets the content-transfer-encoding
 header to quoted-printable for text/* mime parts, and to base64
@@ -214,7 +214,7 @@ otherwise for parts that are &#039;8bit&#039; encoded.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-PrivacyHelper.html#method_setMessageAsMultipartSigned">setMessageAsMultipartSigned()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>The passed message is set as multipart/signed, and a new part is created
 below it with content headers, content and children copied from the
@@ -223,7 +223,7 @@ message.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-PrivacyHelper.html#method_setSignature">setSignature()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Sets the signature of the message to $body, creating a signature part if
 one doesn&#039;t exist.</dd>
@@ -324,7 +324,7 @@ one doesn&#039;t exist.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">26</span>
+    <span class="phpdocumentor-element-found-in__line">27</span>
 
     </aside>
 
@@ -358,7 +358,7 @@ one doesn&#039;t exist.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
@@ -396,7 +396,7 @@ one doesn&#039;t exist.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
     </aside>
 
@@ -464,7 +464,7 @@ one doesn&#039;t exist.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">145</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 
     </aside>
 
@@ -473,7 +473,7 @@ for verification or calculating a signature.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getSignedMessageAsString</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getSignedMessageAsString</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>Non-CRLF new lines are replaced to always be CRLF.</p>
 </section>
@@ -493,9 +493,9 @@ for verification or calculating a signature.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>or null if the message doesn't have any children</p>
+            <section class="phpdocumentor-description"><p>null if the message doesn't have any children</p>
 </section>
 
     
@@ -513,7 +513,7 @@ for verification or calculating a signature.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">128</span>
+    <span class="phpdocumentor-element-found-in__line">130</span>
 
     </aside>
 
@@ -522,7 +522,7 @@ message, which can be used to sign an email or verify a signature.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getSignedMessageStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getSignedMessageStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span></code>
 
         <section class="phpdocumentor-description"><p>The method simply returns the stream for the first child.  No
 verification of whether the message is in fact a signed message is
@@ -546,10 +546,9 @@ replace new lines.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>or null if the message doesn't
-have any children</p>
+            <section class="phpdocumentor-description"><p>null if the message doesn't have any children</p>
 </section>
 
     
@@ -567,7 +566,7 @@ have any children</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">98</span>
+    <span class="phpdocumentor-element-found-in__line">100</span>
 
     </aside>
 
@@ -577,7 +576,7 @@ otherwise for parts that are &#039;8bit&#039; encoded.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">overwrite8bitContentEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">overwrite8bitContentEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>Used for multipart/signed messages which doesn't support 8bit transfer
 encodings.</p>
@@ -598,7 +597,7 @@ encodings.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -616,7 +615,7 @@ encodings.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
@@ -626,7 +625,7 @@ message.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setMessageAsMultipartSigned</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$micalg</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$protocol</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">setMessageAsMultipartSigned</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$micalg</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$protocol</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -658,7 +657,7 @@ message.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -676,7 +675,7 @@ message.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/PrivacyHelper.php"><a href="files/message-helper-privacyhelper.html"><abbr title="Message/Helper/PrivacyHelper.php">PrivacyHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">75</span>
+    <span class="phpdocumentor-element-found-in__line">77</span>
 
     </aside>
 
@@ -685,7 +684,7 @@ one doesn&#039;t exist.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setSignature</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$body</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">setSignature</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$body</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -710,7 +709,7 @@ one doesn&#039;t exist.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

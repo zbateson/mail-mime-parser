@@ -150,7 +150,7 @@ object.</p>
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Error.html#property_exception">$exception</a>
     <span>
-                        &nbsp;: <abbr title="\Exception">Exception</abbr>            </span>
+                        &nbsp;: <abbr title="\Throwable">Throwable</abbr>|null            </span>
 </dt>
 <dd></dd>
 
@@ -178,7 +178,7 @@ object.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Error.html#property_levelMap">$levelMap</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -199,7 +199,7 @@ object.</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Error.html#method_getException">getException()</a>
     <span>
-                                &nbsp;: <abbr title="\Exception">Exception</abbr>|null    </span>
+                                &nbsp;: <abbr title="\Throwable">Throwable</abbr>|null    </span>
 </dt>
 <dd>Returns the exception that occurred, if any, or null.</dd>
 
@@ -268,7 +268,7 @@ LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Exception">Exception</abbr></span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Throwable">Throwable</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$exception</span>
     </code>
 
@@ -397,21 +397,19 @@ LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$levelMap</span>
      = <span class="phpdocumentor-signature__default-value">[\Psr\Log\LogLevel::EMERGENCY =&gt; 0, \Psr\Log\LogLevel::ALERT =&gt; 1, \Psr\Log\LogLevel::CRITICAL =&gt; 2, \Psr\Log\LogLevel::ERROR =&gt; 3, \Psr\Log\LogLevel::WARNING =&gt; 4, \Psr\Log\LogLevel::NOTICE =&gt; 5, \Psr\Log\LogLevel::INFO =&gt; 6, \Psr\Log\LogLevel::DEBUG =&gt; 7]</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -435,14 +433,14 @@ LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevelAsErrorLevel</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$object</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevelAsErrorLevel</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$object</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -473,7 +471,7 @@ LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.</dd>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$exception</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr>|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -519,7 +517,7 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">94</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -552,7 +550,7 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">117</span>
+    <span class="phpdocumentor-element-found-in__line">107</span>
 
     </aside>
 
@@ -560,14 +558,14 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getException</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Exception">Exception</abbr>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getException</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Throwable">Throwable</abbr>|null</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Exception">Exception</abbr>|null</span>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Throwable">Throwable</abbr>|null</span>
             &mdash;
         
     
@@ -585,7 +583,7 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
+    <span class="phpdocumentor-element-found-in__line">75</span>
 
     </aside>
 
@@ -618,7 +616,7 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">107</span>
+    <span class="phpdocumentor-element-found-in__line">99</span>
 
     </aside>
 
@@ -651,7 +649,7 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">84</span>
+    <span class="phpdocumentor-element-found-in__line">83</span>
 
     </aside>
 
@@ -684,7 +682,7 @@ is not a known PSR log level (see \Psr\Log\LogLevel)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Error.php"><a href="files/error.html"><abbr title="Error.php">Error.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">130</span>
+    <span class="phpdocumentor-element-found-in__line">117</span>
 
     </aside>
 
@@ -704,7 +702,8 @@ LogLevel::ERROR and LogLevel::CRITICAL, ALERT and EMERGENCY.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 

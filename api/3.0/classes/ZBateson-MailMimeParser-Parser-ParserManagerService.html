@@ -154,7 +154,7 @@ NonMimeParser in priority 1.</p>
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Parser-ParserManagerService.html#property_parsers">$parsers</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Parser-IParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\IParserService">IParserService</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -168,7 +168,7 @@ NonMimeParser in priority 1.</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-ParserManagerService.html#method_createParserProxyFor">createParserProxyFor()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>    </span>
 </dt>
 <dd>Creates a ParserPartProxy for the passed $partBuilder using a compatible
 IParser.</dd>
@@ -176,7 +176,7 @@ IParser.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-ParserManagerService.html#method_prependParser">prependParser()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Adds an IParser at the highest priority (up front), calling
 $parser-&gt;setParserManager($this) on it.</dd>
@@ -184,7 +184,7 @@ $parser-&gt;setParserManager($this) on it.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-ParserManagerService.html#method_setParsers">setParsers()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Overrides the internal prioritized list of parses with the passed list,
 calling $parser-&gt;setParserManager($this) on each one.</dd>
@@ -224,7 +224,7 @@ calling $parser-&gt;setParserManager($this) on each one.</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Parser-IParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\IParserService">IParserService</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$parsers</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
@@ -308,7 +308,7 @@ priority).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/ParserManagerService.php"><a href="files/parser-parsermanagerservice.html"><abbr title="Parser/ParserManagerService.php">ParserManagerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">79</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -317,7 +317,7 @@ IParser.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">createParserProxyFor</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilder">PartBuilder</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partBuilder</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span></code>
+                    <span class="phpdocumentor-signature__name">createParserProxyFor</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilder">PartBuilder</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partBuilder</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a></span></code>
 
         <section class="phpdocumentor-description"><p>Loops through registered IParsers calling 'canParse()' on each with the
 passed PartBuilder, then calling either 'getParserMessageProxyFactory()'
@@ -361,7 +361,7 @@ type is not configured.</p>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a></span>
             &mdash;
             <section class="phpdocumentor-description"><p>The created ParserPartProxy tied to a new
 IMessagePart and associated IParser.</p>
@@ -382,7 +382,7 @@ IMessagePart and associated IParser.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/ParserManagerService.php"><a href="files/parser-parsermanagerservice.html"><abbr title="Parser/ParserManagerService.php">ParserManagerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 
@@ -391,7 +391,7 @@ $parser-&gt;setParserManager($this) on it.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">prependParser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-IParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\IParserService">IParserService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">prependParser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-IParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\IParserService">IParserService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -410,7 +410,7 @@ $parser-&gt;setParserManager($this) on it.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -428,7 +428,7 @@ $parser-&gt;setParserManager($this) on it.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/ParserManagerService.php"><a href="files/parser-parsermanagerservice.html"><abbr title="Parser/ParserManagerService.php">ParserManagerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">39</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 
     </aside>
 
@@ -437,25 +437,24 @@ calling $parser-&gt;setParserManager($this) on each one.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setParsers</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parsers</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">setParsers</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Parser-IParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\IParserService">IParserService</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parsers</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$parsers</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Parser-IParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\IParserService">IParserService</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

@@ -168,7 +168,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-GenericHelper.html#property_nonMimeContentFields">$nonMimeContentFields</a>
     <span>
-                        &nbsp;: array&lt;string|int, string&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -182,7 +182,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-GenericHelper.html#method_copyContentHeadersAndContent">copyContentHeadersAndContent()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Copies Content-* headers from the $from header into the $to header. If
 the Content-Type header isn&#039;t defined in $from, defaults to text/plain
@@ -191,7 +191,7 @@ with utf-8 and quoted-printable as its Content-Transfer-Encoding.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-GenericHelper.html#method_copyHeader">copyHeader()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Copies the passed $header from $from, to $to or sets the header to
 $default if it doesn&#039;t exist in $from.</dd>
@@ -208,7 +208,7 @@ mime message).</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-GenericHelper.html#method_movePartContentAndChildren">movePartContentAndChildren()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Copies type headers (Content-Type, Content-Disposition,
 Content-Transfer-Encoding) from the $from MimePart to $to.  Attaches the
@@ -218,7 +218,7 @@ removing them from $from and adding them to $to.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-GenericHelper.html#method_removeContentHeadersAndContent">removeContentHeadersAndContent()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Removes Content-* headers from the passed part, then detaches its content
 stream.</dd>
@@ -226,7 +226,7 @@ stream.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-Helper-GenericHelper.html#method_replacePart">replacePart()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Replaces the $part IMimePart with $replacement.</dd>
 
@@ -341,7 +341,7 @@ one defined in the static $nonMimeContentFields</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$nonMimeContentFields</span>
      = <span class="phpdocumentor-signature__default-value">[&#039;contentreturn&#039;, &#039;contentidentifier&#039;]</span></code>
 
@@ -425,7 +425,7 @@ of a part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/GenericHelper.php"><a href="files/message-helper-generichelper.html"><abbr title="Message/Helper/GenericHelper.php">GenericHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">84</span>
+    <span class="phpdocumentor-element-found-in__line">85</span>
 
     </aside>
 
@@ -435,7 +435,7 @@ with utf-8 and quoted-printable as its Content-Transfer-Encoding.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">copyContentHeadersAndContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$move</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">copyContentHeadersAndContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$move</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>An exception is made for the obsolete Content-Return header, which isn't
 isn't a MIME content field and so isn't copied.</p>
@@ -471,7 +471,7 @@ isn't a MIME content field and so isn't copied.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -498,7 +498,7 @@ $default if it doesn&#039;t exist in $from.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">copyHeader</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$header</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$default</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">copyHeader</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$header</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$default</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -538,7 +538,7 @@ $default if it doesn&#039;t exist in $from.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -556,7 +556,7 @@ $default if it doesn&#039;t exist in $from.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/GenericHelper.php"><a href="files/message-helper-generichelper.html"><abbr title="Message/Helper/GenericHelper.php">GenericHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">112</span>
+    <span class="phpdocumentor-element-found-in__line">114</span>
 
     </aside>
 
@@ -604,7 +604,7 @@ mime message).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/GenericHelper.php"><a href="files/message-helper-generichelper.html"><abbr title="Message/Helper/GenericHelper.php">GenericHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">126</span>
+    <span class="phpdocumentor-element-found-in__line">128</span>
 
     </aside>
 
@@ -615,7 +615,7 @@ removing them from $from and adding them to $to.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">movePartContentAndChildren</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">movePartContentAndChildren</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -641,7 +641,7 @@ removing them from $from and adding them to $to.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -659,7 +659,7 @@ removing them from $from and adding them to $to.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/GenericHelper.php"><a href="files/message-helper-generichelper.html"><abbr title="Message/Helper/GenericHelper.php">GenericHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
@@ -668,7 +668,7 @@ stream.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">removeContentHeadersAndContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">removeContentHeadersAndContent</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>An exception is made for the obsolete Content-Return header, which isn't
 isn't a MIME content field and so isn't removed.</p>
@@ -689,7 +689,7 @@ isn't a MIME content field and so isn't removed.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -707,7 +707,7 @@ isn't a MIME content field and so isn't removed.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/GenericHelper.php"><a href="files/message-helper-generichelper.html"><abbr title="Message/Helper/GenericHelper.php">GenericHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">145</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
@@ -715,7 +715,7 @@ isn't a MIME content field and so isn't removed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">replacePart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$replacement</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">replacePart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-IMessage.html"><abbr title="\ZBateson\MailMimeParser\IMessage">IMessage</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$replacement</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>Essentially removes $part from its parent, and adds $replacement in its
 same position.  If $part is the IMessage, then $part can't be removed and
@@ -754,7 +754,7 @@ and any children below $replacement are added directly below $message.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

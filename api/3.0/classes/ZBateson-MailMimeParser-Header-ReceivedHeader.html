@@ -204,7 +204,7 @@ encryption information or other details in non-standardized comments.</p>
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_allParts">$allParts</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -225,14 +225,14 @@ encryption information or other details in non-standardized comments.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-ParameterHeader.html#property_parameters">$parameters</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_parts">$parts</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -246,21 +246,28 @@ encryption information or other details in non-standardized comments.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#property_comments">$comments</a>
     <span>
-                        &nbsp;: array&lt;string|int, string&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|null            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_date">$date</a>
     <span>
-                        &nbsp;: <abbr title="\DateTime">DateTime</abbr>|bool            </span>
+                        &nbsp;: <abbr title="\DateTime">DateTime</abbr>|null            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_dateSet">$dateSet</a>
+    <span>
+                        &nbsp;: bool            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_errors">$errors</a>
     <span>
-                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
@@ -289,7 +296,7 @@ extract a parsed value.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_addError">addError()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Creates and adds an Error object to this ErrorBag.</dd>
 
@@ -303,11 +310,11 @@ extract a parsed value.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getAllErrors">getAllErrors()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns any errors on this object, and all IErrorBag children of this
-object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).</dd>
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_getAllParts">getAllParts()</a>
@@ -320,7 +327,7 @@ parsed into, including any CommentParts.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByAddress">getByAddress()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr>    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the address part of a parenthesized BY part or null if not
 defined or the format wasn&#039;t parsed.</dd>
@@ -328,7 +335,7 @@ defined or the format wasn&#039;t parsed.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByHostname">getByHostname()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr>    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the hostname part of a parenthesized BY part or null if not
 defined or the format wasn&#039;t parsed.</dd>
@@ -336,7 +343,7 @@ defined or the format wasn&#039;t parsed.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getByName">getByName()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr>    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the name identified in the BY part of the header or null if not
 defined or the format wasn&#039;t parsed.</dd>
@@ -367,15 +374,15 @@ otherwise.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrors">getErrors()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns any local errors this object has at or above the passed PSR log
-level (defaulting to LogLevel::ERROR).</dd>
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromAddress">getFromAddress()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr>    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the address part of a parenthesized FROM part or null if not
 defined or the format wasn&#039;t parsed.</dd>
@@ -383,7 +390,7 @@ defined or the format wasn&#039;t parsed.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromHostname">getFromHostname()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr>    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the hostname part of a parenthesized FROM part or null if not
 defined or the format wasn&#039;t parsed.</dd>
@@ -391,7 +398,7 @@ defined or the format wasn&#039;t parsed.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#method_getFromName">getFromName()</a>
     <span>
-                                &nbsp;: <abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr>    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the name identified in the FROM part of the header or null if not
 defined or the format wasn&#039;t parsed.</dd>
@@ -441,11 +448,11 @@ if not set.</dd>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Returns true if there are errors on this object, or any IErrorBag child
-of this object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).  Note that this will stop after finding the first error
-and return, so may be slightly more performant if an error actually
-exists over calling getAllErrors if only interested in whether an error
-exists.</dd>
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasErrors">hasErrors()</a>
@@ -474,7 +481,7 @@ and assignes it.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorBagChildren">getErrorBagChildren()</a>
     <span>
-                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&gt;    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;    </span>
 </dt>
 <dd>Return any children ErrorBag objects.</dd>
 
@@ -536,7 +543,7 @@ character.</dd>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$allParts</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
@@ -564,7 +571,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -607,7 +614,7 @@ including commentParts</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$name</span>
-     = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
+    </code>
 
     
         <section class="phpdocumentor-description"><p>the name of the header</p>
@@ -639,7 +646,7 @@ including commentParts</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$parameters</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
@@ -674,7 +681,7 @@ ParameterParts.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$parts</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
@@ -701,7 +708,7 @@ ParameterParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -710,7 +717,7 @@ ParameterParts.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$rawValue</span>
-     = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
+    </code>
 
     
         <section class="phpdocumentor-description"><p>the raw value</p>
@@ -735,16 +742,16 @@ ParameterParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">50</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;|null</span>
     <span class="phpdocumentor-signature__name">$comments</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>array of comments, initialized on demand in getComments()</p>
@@ -776,12 +783,46 @@ ParameterParts.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\DateTime">DateTime</abbr>|bool</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\DateTime">DateTime</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$date</span>
-     = <span class="phpdocumentor-signature__default-value">false</span></code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
         <section class="phpdocumentor-description"><p>the date/time stamp in the header.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_dateSet">
+        $dateSet
+        <a href="classes/ZBateson-MailMimeParser-Header-ReceivedHeader.html#property_dateSet" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">89</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$dateSet</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>set to true once $date has been looked for</p>
 </section>
 
     
@@ -803,14 +844,14 @@ ParameterParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$errors</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
@@ -837,7 +878,7 @@ ParameterParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
     </aside>
 
@@ -875,7 +916,7 @@ ParameterParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">86</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -984,7 +1025,7 @@ extract a parsed value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1018,7 +1059,7 @@ extract a parsed value.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -1106,12 +1147,12 @@ header line to parse.</p>
     </aside>
 
         <p class="phpdocumentor-summary">Returns any errors on this object, and all IErrorBag children of this
-object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).</p>
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>Care should be taken using this if the intention is to only 'preview' a
 message without parsing it entirely, since this will cause the whole
@@ -1128,21 +1169,23 @@ to check for errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -1194,7 +1237,7 @@ parsed into, including any CommentParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">199</span>
+    <span class="phpdocumentor-element-found-in__line">204</span>
 
     </aside>
 
@@ -1203,7 +1246,7 @@ defined or the format wasn&#039;t parsed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getByAddress</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getByAddress</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>For example, &quot;BY name ([1.2.3.4])&quot; would return the string &quot;1.2.3.4&quot;.
 Validation of the address is not performed, and the returned value may
@@ -1215,9 +1258,9 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>'BY' address.</p>
+            <section class="phpdocumentor-description"><p>The 'BY' address.</p>
 </section>
 
     
@@ -1235,7 +1278,7 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">182</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 
@@ -1244,7 +1287,7 @@ defined or the format wasn&#039;t parsed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getByHostname</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getByHostname</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>For example, &quot;BY name (host.name)&quot; would return the string &quot;host.name&quot;.
 Validation of the hostname is not performed, and the returned value may
@@ -1256,9 +1299,9 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>'BY' hostname.</p>
+            <section class="phpdocumentor-description"><p>The 'BY' hostname.</p>
 </section>
 
     
@@ -1276,7 +1319,7 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">165</span>
+    <span class="phpdocumentor-element-found-in__line">170</span>
 
     </aside>
 
@@ -1285,7 +1328,7 @@ defined or the format wasn&#039;t parsed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getByName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>The returned value may either be a name or an address in the form
 &quot;[1.2.3.4]&quot;.  Validation is not performed on this value, and so whatever
@@ -1297,9 +1340,9 @@ characters, etc...</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>'BY' name.</p>
+            <section class="phpdocumentor-description"><p>The 'BY' name.</p>
 </section>
 
     
@@ -1351,7 +1394,7 @@ comments in the header, an empty array is returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">209</span>
+    <span class="phpdocumentor-element-found-in__line">214</span>
 
     </aside>
 
@@ -1423,11 +1466,11 @@ otherwise.</p>
     </aside>
 
         <p class="phpdocumentor-summary">Returns any local errors this object has at or above the passed PSR log
-level (defaulting to LogLevel::ERROR).</p>
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>If $validate is true, additional validation may be performed on the
 object to check for errors.</p>
@@ -1440,21 +1483,23 @@ object to check for errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -1472,7 +1517,7 @@ object to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">153</span>
 
     </aside>
 
@@ -1481,7 +1526,7 @@ defined or the format wasn&#039;t parsed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getFromAddress</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getFromAddress</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>For example, &quot;FROM name ([1.2.3.4])&quot; would return the string &quot;1.2.3.4&quot;.
 Validation of the address is not performed, and the returned value may
@@ -1493,9 +1538,9 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>'FROM' address.</p>
+            <section class="phpdocumentor-description"><p>The 'FROM' address.</p>
 </section>
 
     
@@ -1513,7 +1558,7 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">131</span>
+    <span class="phpdocumentor-element-found-in__line">136</span>
 
     </aside>
 
@@ -1522,7 +1567,7 @@ defined or the format wasn&#039;t parsed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getFromHostname</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getFromHostname</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>For example, &quot;FROM name (host.name)&quot; would return the string &quot;host.name&quot;.
 Validation of the hostname is not performed, and the returned value may
@@ -1534,9 +1579,9 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>'FROM' hostname.</p>
+            <section class="phpdocumentor-description"><p>The 'FROM' hostname.</p>
 </section>
 
     
@@ -1554,7 +1599,7 @@ be found in the class description for <a href="classes/ZBateson-MailMimeParser-H
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">114</span>
+    <span class="phpdocumentor-element-found-in__line">119</span>
 
     </aside>
 
@@ -1563,7 +1608,7 @@ defined or the format wasn&#039;t parsed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getFromName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getFromName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"><p>The returned value may either be a name or an address in the form
 &quot;[1.2.3.4]&quot;.  Validation is not performed on this value, and so whatever
@@ -1575,9 +1620,9 @@ characters, etc...</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\ZBateson\MailMimeParser\Header\The">The</abbr></span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>'FROM' name.</p>
+            <section class="phpdocumentor-description"><p>The 'FROM' name.</p>
 </section>
 
     
@@ -1700,7 +1745,7 @@ parsed into, excluding any
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/ReceivedHeader.php"><a href="files/header-receivedheader.html"><abbr title="Header/ReceivedHeader.php">ReceivedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">98</span>
+    <span class="phpdocumentor-element-found-in__line">103</span>
 
     </aside>
 
@@ -1797,11 +1842,11 @@ not provided).</p>
     </aside>
 
         <p class="phpdocumentor-summary">Returns true if there are errors on this object, or any IErrorBag child
-of this object at or above the passed PSR log level (defaulting to
-LogLevel::ERROR).  Note that this will stop after finding the first error
-and return, so may be slightly more performant if an error actually
-exists over calling getAllErrors if only interested in whether an error
-exists.</p>
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1822,14 +1867,16 @@ errors.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -1866,7 +1913,9 @@ additional validation may be performed.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">hasErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>The PSR levels are defined in Psr\Log\LogLevel.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1874,14 +1923,16 @@ additional validation may be performed.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -1995,14 +2046,14 @@ and assignes it.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__abstract">abstract</span>                <span class="phpdocumentor-signature__name">getErrorBagChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&gt;</span></code>
+    <span class="phpdocumentor-signature__abstract">abstract</span>                <span class="phpdocumentor-signature__name">getErrorBagChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;</span>
             &mdash;
         
     
