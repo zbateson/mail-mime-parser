@@ -196,13 +196,13 @@ class HeaderFactory
         if ($ref->isSubclassOf(MimeEncodedHeader::class)) {
             return new $iHeaderClass(
                 $this->mimeLiteralPartFactory,
-                $this->consumerServices[$params[1]->getClass()->getName()],
+                $this->consumerServices[$params[1]->getType()->getName()],
                 $name,
                 $value
             );
         }
         return new $iHeaderClass(
-            $this->consumerServices[$params[0]->getClass()->getName()],
+            $this->consumerServices[$params[0]->getType()->getName()],
             $name,
             $value
         );
