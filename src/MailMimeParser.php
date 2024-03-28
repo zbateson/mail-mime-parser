@@ -24,7 +24,7 @@ use ZBateson\MailMimeParser\Parser\MessageParserService;
  *
  *  - Provide an array|string|DefinitionSource to the constructor to affect
  *    classes used on a single instance of MailMimeParser
- *  - Call MailMimeParser::setGlobalPhpDiConfiguration with an
+ *  - Call MailMimeParser::addGlobalContainerDefinition with an
  *    array|string|DefinitionSource to to override it globally on all instances
  *    of MailMimeParser
  *  - Call MailMimeParser::getGlobalContainer(), and use set() to override
@@ -57,6 +57,11 @@ class MailMimeParser
     public const DEFAULT_CHARSET = 'UTF-8';
 
     /**
+     * @var string the default definition file.
+     */
+    private const DEFAULT_DEFINITIONS_FILE = __DIR__ . '/di_config.php';
+
+    /**
      * @var Container The instance's dependency injection container.
      */
     protected Container $container;
@@ -72,30 +77,64 @@ class MailMimeParser
     private static ?Container $globalContainer = null;
 
     /**
+     * @var array<array|string|DefinitionSource> an array of global definitions
+     *      being used.
+     */
+    private static array $globalDefinitions = [ self::DEFAULT_DEFINITIONS_FILE ];
+
+    /**
+     * Returns the default ContainerBuilder with default loaded definitions.
+     */
+    private static function getGlobalContainerBuilder() : ContainerBuilder
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAttributes(true);
+        foreach (self::$globalDefinitions as $def) {
+            $builder->addDefinitions($def);
+        }
+        return $builder;
+    }
+
+    /**
+     * Sets global configuration for php-di.  Overrides all previously set
+     * definitions.  You can optionally not use the default MMP definitions file
+     * by passing 'false' to the $useDefaultDefinitionsFile argument.
+     *
+     * @var array<array|string|DefinitionSource> array of definitions
+     */
+    public static function setGlobalPhpDiConfigurations(array $phpDiConfigs, bool $useDefaultDefinitionsFile = true) : void
+    {
+        self::$globalDefinitions = array_merge(
+            ($useDefaultDefinitionsFile) ? [ self::DEFAULT_DEFINITIONS_FILE ] : [],
+            $phpDiConfigs
+        );
+        self::$globalContainer = null;
+    }
+
+
+    public static function addGlobalPhpDiContainerDefinition(array|string|DefinitionSource $phpDiConfig) : void
+    {
+        self::$globalDefinitions[] = $phpDiConfig;
+        self::$globalContainer = null;
+    }
+
+    public static function resetGlobalPhpDiContainerDefinitions() : void
+    {
+        self::$globalDefinitions = [ self::DEFAULT_DEFINITIONS_FILE ];
+        self::$globalContainer = null;
+    }
+
+    /**
      * Returns the global php-di container instance.
      *
      */
     public static function getGlobalContainer() : Container
     {
         if (self::$globalContainer === null) {
-            $builder = new ContainerBuilder();
-            $builder->useAttributes(true);
-            $builder->addDefinitions(__DIR__ . '/di_config.php');
+            $builder = self::getGlobalContainerBuilder();
             self::$globalContainer = $builder->build();
         }
         return self::$globalContainer;
-    }
-
-    /**
-     * Sets global configuration for php-di.
-     */
-    public static function setGlobalPhpDiConfiguration(array|string|DefinitionSource $phpDiConfig) : void
-    {
-        $container = self::getGlobalContainer();
-        $builder = new ContainerBuilder();
-        $builder->wrapContainer($container);
-        $builder->addDefinitions($phpDiConfig);
-        self::$globalContainer = $builder->build();
     }
 
     /**
@@ -104,7 +143,8 @@ class MailMimeParser
      */
     public static function setGlobalLogger(LoggerInterface $logger) : void
     {
-        self::getGlobalContainer()->set(LoggerInterface::class, $logger);
+        self::$globalDefinitions[] = [ LoggerInterface::class => $logger ];
+        self::$globalContainer = null;
     }
 
     /**
@@ -118,18 +158,27 @@ class MailMimeParser
      * it would only affect instances of objects created through the provided
      * MailMimeParser.
      *
+     * Passing false to $useGlobalDefinitions will cause MMP to not use any
+     * global definitions.  The default definitions file
+     * MailMimeParser::DEFAULT_DEFINITIONS_FILE will still be added though.
+     *
      * @see MailMimeParser::setGlobalPhpDiConfiguration() to register
      *      configuration globally.
      * @see MailMimeParser::setGlobalLogger() to set a global logger
-     * @param ?LoggerInterface $logger
-     * @param ?array[] $phpDiContainerConfig
      */
-    public function __construct(?LoggerInterface $logger = null, array|string|DefinitionSource|null $phpDiContainerConfig = null)
-    {
-        $this->container = self::getGlobalContainer();
+    public function __construct(
+        ?LoggerInterface $logger = null,
+        array|string|DefinitionSource|null $phpDiContainerConfig = null,
+        bool $useGlobalDefinitions = true
+    ) {
         if ($phpDiContainerConfig !== null || $logger !== null) {
-            $builder = new ContainerBuilder();
-            $builder->wrapContainer($this->container);
+            if ($useGlobalDefinitions) {
+                $builder = self::getGlobalContainerBuilder();
+            } else {
+                $builder = new ContainerBuilder();
+                $builder->useAttributes(true);
+                $builder->addDefinitions(self::DEFAULT_DEFINITIONS_FILE);
+            }
             if ($phpDiContainerConfig !== null) {
                 $builder->addDefinitions($phpDiContainerConfig);
             }
@@ -137,6 +186,8 @@ class MailMimeParser
                 $builder->addDefinitions([LoggerInterface::class => $logger]);
             }
             $this->container = $builder->build();
+        } else {
+            $this->container = self::getGlobalContainer();
         }
         $this->messageParser = $this->container->get(MessageParserService::class);
     }

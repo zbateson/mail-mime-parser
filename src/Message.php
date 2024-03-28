@@ -55,8 +55,8 @@ class Message extends MimePart implements IMessage
         );
         if ($multipartHelper === null || $privacyHelper === null) {
             $di = MailMimeParser::getGlobalContainer();
-            $multipartHelper = $di[\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class];
-            $privacyHelper = $di[\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class];
+            $multipartHelper = $di->get(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class);
+            $privacyHelper = $di->get(\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class);
         }
         $this->multipartHelper = $multipartHelper;
         $this->privacyHelper = $privacyHelper;
