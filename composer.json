@@ -20,9 +20,9 @@
     },
     "require": {
         "php": ">=8.0",
-        "guzzlehttp/psr7": "^1.9|^2.0",
-        "zbateson/mb-wrapper": "^1.0.1",
-        "zbateson/stream-decorators": "^1.0.6",
+        "guzzlehttp/psr7": "^2.0",
+        "zbateson/mb-wrapper": "^2.0",
+        "zbateson/stream-decorators": "^2.1",
         "php-di/php-di": "^7.0",
         "psr/log": "^1|^2|^3"
     },
