@@ -5,7 +5,6 @@ namespace ZBateson\MailMimeParser\Message;
 use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
-use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,12 +20,8 @@ class MessagePartTest extends TestCase
     // @phpstan-ignore-next-line
     protected $partStreamContainer;
 
-    // @phpstan-ignore-next-line
-    private $vfs;
-
     protected function setUp() : void
     {
-        $this->vfs = vfsStream::setup('root');
         $this->partStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -180,9 +175,10 @@ class MessagePartTest extends TestCase
             ->method('getBinaryContentStream')
             ->willReturnOnConsecutiveCalls($f, $s);
 
-        $content = vfsStream::newFile('part')->at($this->vfs);
-        $messagePart->saveContent($content->url());
-        $this->assertEquals('Que tonto', \file_get_contents($content->url()));
+        $file = tempnam(sys_get_temp_dir(), 'mmp_test_save_content');
+        $messagePart->saveContent($file);
+        $this->assertEquals('Que tonto', \file_get_contents($file));
+        unlink($file);
     }
 
     public function testSaveContentToStream() : void
@@ -312,8 +308,9 @@ class MessagePartTest extends TestCase
             Psr7\Utils::streamFor('other demons')
         );
 
-        $part = vfsStream::newFile('part')->at($this->vfs);
-        $messagePart->save($part->url());
-        $this->assertEquals('Demigorgon', \file_get_contents($part->url()));
+        $file = tempnam(sys_get_temp_dir(), 'mmp_test_save_to_file');
+        $messagePart->save($file);
+        $this->assertEquals('Demigorgon', \file_get_contents($file));
+        unlink($file);
     }
 }

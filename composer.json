@@ -27,7 +27,6 @@
         "psr/log": "^1|^2|^3"
     },
     "require-dev": {
-        "mikey179/vfsstream": "^1.6.0",
         "phpunit/phpunit": "<10",
         "friendsofphp/php-cs-fixer": "*",
         "phpstan/phpstan": "*",
