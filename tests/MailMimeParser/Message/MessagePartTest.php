@@ -6,6 +6,7 @@ use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * MessagePartTest
@@ -29,8 +30,12 @@ class MessagePartTest extends TestCase
 
     private function getMessagePart($handle = 'habibi', $contentHandle = null, $parent = null) : \ZBateson\MailMimeParser\Message\MessagePart
     {
+        $streamPartMock = $this->getMockForAbstractClass(
+            \ZBateson\MailMimeParser\Message\MessagePart::class,
+            [$this->partStreamContainer, $parent]
+        );
         if ($contentHandle !== null) {
-            $contentHandle = Psr7\Utils::streamFor($contentHandle);
+            $contentHandle = new MessagePartStreamDecorator($streamPartMock, Psr7\Utils::streamFor($contentHandle));
             $this->partStreamContainer
                 ->method('getContentStream')
                 ->willReturnCallback(function() use ($contentHandle) {
@@ -43,7 +48,7 @@ class MessagePartTest extends TestCase
                 });
         }
         if ($handle !== null) {
-            $handle = Psr7\Utils::streamFor($handle);
+            $handle = new MessagePartStreamDecorator($streamPartMock, Psr7\Utils::streamFor($handle));
             $this->partStreamContainer
                 ->method('getStream')
                 ->willReturnCallback(function() use ($handle) {
@@ -122,12 +127,12 @@ class MessagePartTest extends TestCase
             ->willReturn('wigidiwamwamwazzle');
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
-        $stream = Psr7\Utils::streamFor('Que tonto');
+        $stream = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
         $this->partStreamContainer->expects($this->exactly(2))
             ->method('getContentStream')
             ->withConsecutive(
-                ['wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'oooohweee!'],
-                ['wubalubadub-duuuuub', 'override', 'oooohweee!']
+                [$messagePart, 'wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'oooohweee!'],
+                [$messagePart, 'wubalubadub-duuuuub', 'override', 'oooohweee!']
             )
             ->willReturn($stream);
 
@@ -138,10 +143,10 @@ class MessagePartTest extends TestCase
 
     public function testBinaryContentStream() : void
     {
-        $f = Psr7\Utils::streamFor('First');
-        $s = Psr7\Utils::streamFor('Second');
-
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
+        $f = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('First'));
+        $s = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Second'));
+
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
 
@@ -163,8 +168,8 @@ class MessagePartTest extends TestCase
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        $f = Psr7\Utils::streamFor('Que tonto');
-        $s = Psr7\Utils::streamFor('Que tonto');
+        $f = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
+        $s = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
@@ -186,8 +191,8 @@ class MessagePartTest extends TestCase
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        $f = Psr7\Utils::streamFor('Que tonto');
-        $s = Psr7\Utils::streamFor('Que tonto');
+        $f = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
+        $s = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
@@ -210,8 +215,8 @@ class MessagePartTest extends TestCase
         $messagePart = $this->getMessagePart('Que tonta', 'Setup');
         $messagePart->method('getContentTransferEncoding')
             ->willReturn('wubalubadub-duuuuub');
-        $f = Psr7\Utils::streamFor('Que tonto');
-        $s = Psr7\Utils::streamFor('Que tonto');
+        $f = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
+        $s = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
 
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
@@ -264,10 +269,10 @@ class MessagePartTest extends TestCase
         $this->partStreamContainer
             ->method('getContentStream')
             ->withConsecutive(
-                ['', 'charset', 'a-charset']
+                [$messagePart, '', 'charset', 'a-charset']
             );
 
-        $this->assertSame($ms, $messagePart->getStream());
+        $this->assertEquals('message', $messagePart->getStream()->getContents());
 
         $this->partStreamContainer
             ->method('setContentStream')

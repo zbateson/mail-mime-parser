@@ -316,6 +316,6 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
 
     public function getErrorBagChildren() : array
     {
-        return $this->headerObjects;
+        return \array_values(\array_filter($this->headerObjects));
     }
 }

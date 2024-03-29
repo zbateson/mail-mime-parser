@@ -2,8 +2,11 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
+use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * PartStreamFilterManagerTest
@@ -23,13 +26,18 @@ class PartStreamContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockStreamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)->getMock();
-        $this->instance = new PartStreamContainer($this->mockStreamFactory);
+        $this->mockStreamFactory = $this
+            ->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
+            ->setConstructorArgs([true])
+            ->getMock();
+        $this->instance = new PartStreamContainer($this->mockStreamFactory, new MbWrapper(), new NullLogger(), false);
     }
 
     public function testSetAndGetStream() : void
     {
-        $stream = $this->getMockForAbstractClass(\Psr\Http\Message\StreamInterface::class, [], '', false);
+        $stream = $this->getMockBuilder(MessagePartStreamDecorator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->instance->setStream($stream);
         $stream->expects($this->once())->method('rewind');
         $this->assertSame($stream, $this->instance->getStream());
@@ -37,10 +45,13 @@ class PartStreamContainerTest extends TestCase
 
     public function testSetContentStreamAndHasContent() : void
     {
-        $stream = $this->getMockForAbstractClass(\Psr\Http\Message\StreamInterface::class, [], '', false);
+        $stream = $this->getMockBuilder(MessagePartStreamDecorator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertFalse($this->instance->hasContent());
-        $this->assertNull($this->instance->getContentStream('', '', ''));
-        $this->assertNull($this->instance->getBinaryContentStream(''));
+        $this->assertNull($this->instance->getContentStream($streamPartMock, '', '', ''));
+        $this->assertNull($this->instance->getBinaryContentStream($streamPartMock, ''));
         $this->instance->setContentStream($stream);
         $this->assertTrue($this->instance->hasContent());
     }
@@ -48,43 +59,54 @@ class PartStreamContainerTest extends TestCase
     public function testGetBinaryStream() : void
     {
         $stream = Psr7\Utils::streamFor('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
-            ->willReturn($stream);
-        $stream->rewind();
-
         $stream2 = Psr7\Utils::streamFor('test2');
         $stream3 = Psr7\Utils::streamFor('test3');
-        $this->mockStreamFactory->expects($this->exactly(2))
-            ->method('newUUStream')
-            ->with($stream)
-            ->willReturnOnConsecutiveCalls($stream2, $stream3);
+        $this->mockStreamFactory->expects($this->exactly(3))
+            ->method('getTransferEncodingDecoratedStream')
+            ->withConsecutive(
+                [$stream, 'x-uuencode', null],
+                [$stream, 'quoted-printable', null],
+                [$stream, 'x-uuencode', null]
+            )
+            ->willReturnOnConsecutiveCalls($stream2, $stream, $stream3);
+
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
+
         $this->instance->setContentStream($stream);
 
         $manager = $this->instance;
-        $this->assertEquals('test2', $manager->getBinaryContentStream('x-uuencode')->getContents());
-        $this->assertEquals('test2', $manager->getBinaryContentStream('x-uuencode')->getContents());
-        $this->assertEquals('test2', $manager->getBinaryContentStream('x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryContentStream($streamPartMock, 'x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryContentStream($streamPartMock, 'x-uuencode')->getContents());
+        $this->assertEquals('test2', $manager->getBinaryContentStream($streamPartMock, 'x-uuencode')->getContents());
 
-        $this->assertEquals('test', $manager->getBinaryContentStream('quoted-printable')->getContents());
-        $this->assertEquals('test', $manager->getBinaryContentStream('quoted-printable')->getContents());
+        $this->assertEquals('test', $manager->getBinaryContentStream($streamPartMock, 'quoted-printable')->getContents());
+        $this->assertEquals('test', $manager->getBinaryContentStream($streamPartMock, 'quoted-printable')->getContents());
 
-        $this->assertEquals('test3', $manager->getBinaryContentStream('x-uuencode')->getContents());
+        $this->assertEquals('test3', $manager->getBinaryContentStream($streamPartMock, 'x-uuencode')->getContents());
     }
 
     public function testGetContentStreamWithQuotedPrintableDecoderTransferEncoding() : void
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($stream, 'quoted-printable')
             ->willReturn($stream);
-        $this->assertNull($this->instance->getContentStream('quoted-printable', null, null));
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
 
+        $this->assertNull($this->instance->getContentStream($streamPartMock, 'quoted-printable', null, null));
         $this->instance->setContentStream($stream);
-        $managerStream = $this->instance->getContentStream('quoted-printable', null, null);
-        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
+        $managerStream = $this->instance->getContentStream($streamPartMock, 'quoted-printable', null, null);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
@@ -92,12 +114,17 @@ class PartStreamContainerTest extends TestCase
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newBase64Stream')
-            ->with($stream)
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($stream, 'base64')
             ->willReturn($stream);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
         $this->instance->setContentStream($stream);
-        $managerStream = $this->instance->getContentStream('base64', null, null);
-        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $managerStream = $this->instance->getContentStream($streamPartMock, 'base64', null, null);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
@@ -105,12 +132,17 @@ class PartStreamContainerTest extends TestCase
     {
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newUUStream')
-            ->with($stream)
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($stream, 'x-uuencode')
             ->willReturn($stream);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
         $this->instance->setContentStream($stream);
-        $managerStream = $this->instance->getContentStream('x-uuencode', null, null);
-        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $managerStream = $this->instance->getContentStream($streamPartMock, 'x-uuencode', null, null);
         $this->assertEquals('test', $managerStream->getContents());
     }
 
@@ -119,63 +151,82 @@ class PartStreamContainerTest extends TestCase
         $stream = Psr7\Utils::streamFor('test');
         $this->mockStreamFactory->expects($this->exactly(1))
             ->method('newCharsetStream')
-            ->with($stream, 'US-ASCII', 'UTF-8')
+            ->with($this->anything(), 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
         $this->instance->setContentStream($stream);
-        $managerStream = $this->instance->getContentStream(null, 'US-ASCII', 'UTF-8');
-        $this->assertInstanceOf('\\' . \GuzzleHttp\Psr7\CachingStream::class, $managerStream);
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $managerStream = $this->instance->getContentStream($streamPartMock, null, 'US-ASCII', 'UTF-8');
         $this->assertEquals('test', $managerStream->getContents());
     }
 
     public function testGetContentStreamWithReAttachedTransferEncodingDecoder() : void
     {
         $stream = Psr7\Utils::streamFor('test');
-        $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
-            ->willReturn($stream);
-        $stream->rewind();
-
         $stream2 = Psr7\Utils::streamFor('test2');
         $stream3 = Psr7\Utils::streamFor('test3');
-        $this->mockStreamFactory->expects($this->exactly(2))
-            ->method('newUUStream')
-            ->with($stream)
-            ->willReturnOnConsecutiveCalls($stream2, $stream3);
+        $this->mockStreamFactory->expects($this->exactly(3))
+            ->method('getTransferEncodingDecoratedStream')
+            ->withConsecutive(
+                [$stream, 'x-uuencode', null],
+                [$stream, 'quoted-printable', null],
+                [$stream, 'x-uuencode', null]
+            )
+            ->willReturnOnConsecutiveCalls($stream2, $stream, $stream3);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
+        
         $this->instance->setContentStream($stream);
 
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $manager = $this->instance;
-        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
-        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
-        $this->assertEquals('test2', $manager->getContentStream('x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream($streamPartMock, 'x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream($streamPartMock, 'x-uuencode', null, null)->getContents());
+        $this->assertEquals('test2', $manager->getContentStream($streamPartMock, 'x-uuencode', null, null)->getContents());
 
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', null, null)->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', null, null)->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', null, null)->getContents());
 
-        $this->assertEquals('test3', $manager->getContentStream('x-uuencode', null, null)->getContents());
+        $this->assertEquals('test3', $manager->getContentStream($streamPartMock, 'x-uuencode', null, null)->getContents());
     }
 
     public function testGetContentStreamWithReAttachedCharsetConversionDecoder() : void
     {
         $stream = Psr7\Utils::streamFor('test');
+        $stream2 = Psr7\Utils::streamFor('test2');
+        $stream3 = Psr7\Utils::streamFor('test3');
+        $stream4 = Psr7\Utils::streamFor('test4');
         $this->mockStreamFactory->expects($this->exactly(4))
             ->method('newCharsetStream')
             ->withConsecutive(
-                [$stream, 'US-ASCII', 'UTF-8'],
-                [$stream, 'US-ASCII', 'WINDOWS-1252'],
-                [$stream, 'ISO-8859-1', 'WINDOWS-1252'],
-                [$stream, 'WINDOWS-1252', 'UTF-8']
+                [$this->anything(), 'US-ASCII', 'UTF-8'],
+                [$this->anything(), 'US-ASCII', 'WINDOWS-1252'],
+                [$this->anything(), 'ISO-8859-1', 'WINDOWS-1252'],
+                [$this->anything(), 'WINDOWS-1252', 'UTF-8']
             )
-            ->willReturn($stream);
+            ->willReturnOnConsecutiveCalls($stream, $stream2, $stream3, $stream4);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
         $this->instance->setContentStream($stream);
 
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $manager = $this->instance;
-        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'US-ASCII', 'WINDOWS-1252')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
-        $this->assertEquals('test', $manager->getContentStream(null, 'WINDOWS-1252', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, null, 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, null, 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test2', $manager->getContentStream($streamPartMock, null, 'US-ASCII', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test3', $manager->getContentStream($streamPartMock, null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test3', $manager->getContentStream($streamPartMock, null, 'ISO-8859-1', 'WINDOWS-1252')->getContents());
+        $this->assertEquals('test4', $manager->getContentStream($streamPartMock, null, 'WINDOWS-1252', 'UTF-8')->getContents());
     }
 
     public function testGetContentStreamWithCharsetAndTransferEncoding() : void
@@ -186,14 +237,21 @@ class PartStreamContainerTest extends TestCase
             ->with($this->anything(), 'US-ASCII', 'UTF-8')
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->exactly(1))
-            ->method('newQuotedPrintableStream')
-            ->with($stream)
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($stream, 'quoted-printable')
             ->willReturn($stream);
+        $this->mockStreamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
+
         $this->instance->setContentStream($stream);
 
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $manager = $this->instance;
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
-        $this->assertEquals('test', $manager->getContentStream('quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
+        $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
     }
 }

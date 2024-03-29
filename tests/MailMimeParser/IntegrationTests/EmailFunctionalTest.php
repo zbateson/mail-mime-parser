@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\IMimePart;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamReadException;
+use ZBateson\MbWrapper\UnsupportedCharsetException;
 
 /**
  * Description of EmailFunctionalTest
@@ -2747,5 +2749,91 @@ class EmailFunctionalTest extends TestCase
         $this->assertEquals('Normal', $message->getHeaderValue('Importance'));
         $this->assertNotEmpty($message->getHeaderValue('X-Test-Long-Header'));
         $this->assertEquals('A-OK', $message->getHeaderValue('X-Test-Next-Header'));
+    }
+
+    public function testParseEmailInvalidCharset() : void
+    {
+        $this->expectException(MessagePartStreamReadException::class);
+        $parser = new MailMimeParser(null, [
+            'throwExceptionReadingPartContentFromUnsupportedCharsets' => true
+        ]);
+        $handle = \fopen($this->messageDir . '/invalid-charset.txt', 'r');
+        $message = $parser->parse($handle, true);
+
+        $failMessage = 'Failed while parsing invalid-charset';
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Test invalid charset',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com',
+            'text' => 'hareandtortoise.txt',
+            'parts' => [
+                'text/plain'
+            ],
+        ];
+        $this->runEmailTestForMessage($message, $props, $failMessage);
+
+        $errors = $message->getAllErrors();
+        $this->assertCount(1, $errors);
+        $this->assertInstanceOf(UnsupportedCharsetException::class, $errors[0]->getException());
+
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/invalid-charset", 'w+');
+
+        $parts = $message->getAllParts();
+        foreach ($parts as $part) {
+            $part->notify();
+        }
+
+        $message->save($tmpSaved);
+    }
+
+    public function testParseEmailInvalidCharsetNoExceptionOption() : void
+    {
+        $parser = new MailMimeParser();
+        $handle = \fopen($this->messageDir . '/invalid-charset.txt', 'r');
+        $message = $parser->parse($handle, true);
+
+        $failMessage = 'Failed while parsing invalid-charset';
+        $props = [
+            'From' => [
+                'name' => 'Doug Sauder',
+                'email' => 'doug@example.com'
+            ],
+            'To' => [
+                'name' => 'Jürgen Schmürgen',
+                'email' => 'schmuergen@example.com'
+            ],
+            'Subject' => 'Test invalid charset',
+            'Message-ID' => 'NDBBIAKOPKHFGPLCODIGIEKBCHAA.doug@example.com',
+            'text' => 'hareandtortoise.txt',
+            'parts' => [
+                'text/plain'
+            ],
+        ];
+        $this->runEmailTestForMessage($message, $props, $failMessage);
+
+        $errors = $message->getAllErrors();
+        $this->assertCount(1, $errors);
+        $this->assertInstanceOf(UnsupportedCharsetException::class, $errors[0]->getException());
+
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/invalid-charset", 'w+');
+
+        $parts = $message->getAllParts();
+        foreach ($parts as $part) {
+            $part->notify();
+        }
+
+        $message->save($tmpSaved);
+        \rewind($tmpSaved);
+
+        $messageWritten = $parser->parse($tmpSaved, true);
+        $failMessage = 'Failed while parsing saved message for invalid-charset';
+        $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
 }

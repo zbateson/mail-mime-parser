@@ -2,8 +2,11 @@
 
 namespace ZBateson\MailMimeParser\Parser\Part;
 
+use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MbWrapper\MbWrapper;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * ParserPartStreamContainerTest
@@ -26,14 +29,18 @@ class ParserPartStreamContainerTest extends TestCase
 
     protected function setUp() : void
     {
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
-            ->setMethods(['parseAll', 'parseContent'])
+            ->setMethods(['parseAll', 'parseContent', 'getPart'])
             ->getMockForAbstractClass();
         $this->streamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
+        $this->proxy->expects($this->any())
+            ->method('getPart')
+            ->willReturn($streamPartMock);
+        $this->instance = new ParserPartStreamContainer($this->streamFactory, new MbWrapper(), new NullLogger(), false, $this->proxy);
     }
 
     public function testHasContentRequestsContentStream() : void
@@ -75,9 +82,10 @@ class ParserPartStreamContainerTest extends TestCase
             ->with($this->proxy)
             ->willReturn(null);
 
-        $this->assertNull($this->instance->getContentStream('7bit', '', ''));
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $this->assertNull($this->instance->getContentStream($streamPartMock, '7bit', '', ''));
         // doesn't call parseContent again
-        $this->assertNull($this->instance->getContentStream('7bit', '', ''));
+        $this->assertNull($this->instance->getContentStream($streamPartMock, '7bit', '', ''));
     }
 
     public function testGetContentRequestsContentStreamReturnsStream() : void
@@ -90,10 +98,20 @@ class ParserPartStreamContainerTest extends TestCase
             ->method('getLimitedContentStream')
             ->with($this->proxy)
             ->willReturn($stream);
+        $this->streamFactory->expects($this->once())
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($this->anything(), '7bit')
+            ->willReturn($stream);
+        $this->streamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
 
-        $this->assertSame('Fighting bears', $this->instance->getContentStream('7bit', '', '')->getContents());
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $this->assertSame('Fighting bears', $this->instance->getContentStream($streamPartMock, '7bit', '', '')->getContents());
         // doesn't call parseContent again
-        $this->assertSame('Fighting bears', $this->instance->getContentStream('7bit', '', '')->getContents());
+        $this->assertSame('Fighting bears', $this->instance->getContentStream($streamPartMock, '7bit', '', '')->getContents());
     }
 
     public function testGetBinaryContentRequestsContentStream() : void
@@ -105,9 +123,10 @@ class ParserPartStreamContainerTest extends TestCase
             ->with($this->proxy)
             ->willReturn(null);
 
-        $this->assertNull($this->instance->getBinaryContentStream('7bit'));
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $this->assertNull($this->instance->getBinaryContentStream($streamPartMock, '7bit'));
         // doesn't call parseContent again
-        $this->assertNull($this->instance->getBinaryContentStream('7bit'));
+        $this->assertNull($this->instance->getBinaryContentStream($streamPartMock, '7bit'));
     }
 
     public function testGetBinaryContentRequestsContentStreamReturnsStream() : void
@@ -121,9 +140,20 @@ class ParserPartStreamContainerTest extends TestCase
             ->with($this->proxy)
             ->willReturn($stream);
 
-        $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream('7bit')->getContents());
+        $this->streamFactory->expects($this->once())
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($this->anything(), '7bit')
+            ->willReturn($stream);
+        $this->streamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
+
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream($streamPartMock, '7bit')->getContents());
         // doesn't call parseContent again
-        $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream('7bit')->getContents());
+        $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream($streamPartMock, '7bit')->getContents());
     }
 
     public function testSetContentStreamRequestsContentStream() : void
@@ -150,16 +180,22 @@ class ParserPartStreamContainerTest extends TestCase
             ->method('getLimitedPartStream')
             ->with($this->proxy)
             ->willReturn($stream);
+        $this->streamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
 
-        $this->assertSame($stream, $this->instance->getStream());
+        $this->assertEquals('Fighting bears', $this->instance->getStream()->getContents());
         // doesn't call parseAll again
-        $this->assertSame($stream, $this->instance->getStream());
+        $this->assertSame('Fighting bears', $this->instance->getStream()->getContents());
     }
 
     public function testGetStreamAfterUpdate() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars');
-        $stream = Utils::streamFor('Fighting bears');
+        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $stream = new MessagePartStreamDecorator($streamPartMock, Utils::streamFor('Fighting bears'));
 
         $this->proxy->expects($this->once())
             ->method('parseAll');
@@ -167,6 +203,11 @@ class ParserPartStreamContainerTest extends TestCase
             ->method('getLimitedPartStream')
             ->with($this->proxy)
             ->willReturn($parsedStream);
+        $this->streamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
 
         $this->instance->setStream($stream);
         $this->assertSame('Fighting bOars', $this->instance->getStream()->getContents());
@@ -175,13 +216,12 @@ class ParserPartStreamContainerTest extends TestCase
             ->getMockForAbstractClass();
         $this->instance->update($subject);
         // doesn't call parseAll again, returns $stream
-        $this->assertSame($stream, $this->instance->getStream());
+        $this->assertSame('Fighting bears', $this->instance->getStream()->getContents());
     }
 
     public function testDetachedParsedStream() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => true]]);
-        $instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
 
         $this->proxy->expects($this->once())
             ->method('parseAll');
@@ -189,28 +229,37 @@ class ParserPartStreamContainerTest extends TestCase
             ->method('getLimitedPartStream')
             ->with($this->proxy)
             ->willReturn($parsedStream);
+        $this->streamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
 
-        $this->assertSame('Fighting bOars', $instance->getStream()->getContents());
+        $this->assertSame('Fighting bOars', $this->instance->getStream()->getContents());
         $this->assertTrue($parsedStream->isReadable());
-        unset($instance);
+        unset($this->instance);
         $this->assertFalse($parsedStream->isReadable());
     }
 
     public function testAttachedParsedStream() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => false]]);
-        $instance = new ParserPartStreamContainer($this->streamFactory, $this->proxy);
-
+        
         $this->proxy->expects($this->once())
             ->method('parseAll');
         $this->streamFactory->expects($this->once())
             ->method('getLimitedPartStream')
             ->with($this->proxy)
             ->willReturn($parsedStream);
+        $this->streamFactory->expects($this->atLeastOnce())
+            ->method('newDecoratedMessagePartStream')
+            ->willReturnCallback(function ($arg, $arg2) {
+                return new MessagePartStreamDecorator($arg, $arg2);
+            });
 
-        $this->assertSame('Fighting bOars', $instance->getStream()->getContents());
+        $this->assertSame('Fighting bOars', $this->instance->getStream()->getContents());
         $this->assertTrue($parsedStream->isReadable());
-        unset($instance);
+        unset($this->instance);
         $this->assertTrue($parsedStream->isReadable());
     }
 }

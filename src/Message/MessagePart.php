@@ -15,7 +15,8 @@ use SplObserver;
 
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * Most basic representation of a single part of an email.
@@ -59,8 +60,9 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         parent::__construct();
         $this->partStreamContainer = $streamContainer;
         if ($this->partStreamContainer === null) {
-            $fc = new StreamFactory();
-            $this->partStreamContainer = new PartStreamContainer($fc);
+            $di = MailMimeParser::getGlobalContainer();
+            $fc = $di->get(PartStreamContainerFactory::class);
+            $this->partStreamContainer = $fc->newInstance();
             $this->partStreamContainer->setStream($fc->newMessagePartStream($this));
         }
         $this->parent = $parent;
@@ -110,12 +112,13 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return $this;
     }
 
-    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?StreamInterface
+    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?MessagePartStreamDecorator
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
             $ch = $this->charsetOverride ?? $this->getCharset();
             return $this->partStreamContainer->getContentStream(
+                $this,
                 $tr,
                 $ch,
                 $charset
@@ -124,11 +127,11 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    public function getBinaryContentStream() : ?StreamInterface
+    public function getBinaryContentStream() : ?MessagePartStreamDecorator
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
-            return $this->partStreamContainer->getBinaryContentStream($tr);
+            return $this->partStreamContainer->getBinaryContentStream($this, $tr);
         }
         return null;
     }
@@ -247,6 +250,8 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
 
     protected function getErrorBagChildren() : array
     {
-        return [];
+        return [
+            $this->partStreamContainer
+        ];
     }
 }

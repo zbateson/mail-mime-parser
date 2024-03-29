@@ -28,20 +28,16 @@ use ZBateson\MailMimeParser\Message\IMimePart;
  *
  * @author Zaahid Bateson
  */
-class HeaderStream implements SplObserver, StreamInterface
+class HeaderStream extends MessagePartStreamDecorator implements SplObserver, StreamInterface
 {
-    use StreamDecoratorTrait;
-
     /**
      * @var IMessagePart the part to read from.
      */
     protected IMessagePart $part;
 
-    private ?StreamInterface $stream;
-
     public function __construct(IMessagePart $part)
     {
-        $this->part = $part;
+        parent::__construct($part);
         $part->attach($this);
 
         // unsetting the property forces the first access to go through

@@ -8,11 +8,15 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 use SplObserver;
 use SplSubject;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
+use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * A part stream container that proxies requests for content streams to a parser
@@ -37,10 +41,11 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
     protected ParserPartProxy $parserProxy;
 
     /**
-     * @var StreamInterface the original stream for a parsed message, used when
-     *      the message hasn't changed
+     * @var MessagePartStreamDecorator the original stream for a parsed message,
+     *      wrapped in a MessagePartStreamDecorator, and used when the message
+     *      hasn't changed
      */
-    protected ?StreamInterface $parsedStream = null;
+    protected ?MessagePartStreamDecorator $parsedStream = null;
 
     /**
      * @var bool set to true if the part's been updated since it was created.
@@ -53,9 +58,14 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
      */
     protected bool $contentParseRequested = false;
 
-    public function __construct(StreamFactory $streamFactory, ParserPartProxy $parserProxy)
-    {
-        parent::__construct($streamFactory);
+    public function __construct(
+        StreamFactory $streamFactory,
+        MbWrapper $mbWrapper,
+        LoggerInterface $logger,
+        bool $throwExceptionReadingPartContentFromUnsupportedCharsets,
+        ParserPartProxy $parserProxy
+    ) {
+        parent::__construct($streamFactory, $mbWrapper, $logger, $throwExceptionReadingPartContentFromUnsupportedCharsets);
         $this->parserProxy = $parserProxy;
     }
 
@@ -91,8 +101,11 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
     {
         if ($this->parsedStream === null) {
             $this->parserProxy->parseAll();
-            $this->parsedStream = $this->streamFactory->getLimitedPartStream(
-                $this->parserProxy
+            $this->parsedStream = $this->streamFactory->newDecoratedMessagePartStream(
+                $this->parserProxy->getPart(),
+                $this->streamFactory->getLimitedPartStream(
+                    $this->parserProxy
+                )
             );
             if ($this->parsedStream !== null) {
                 $this->detachParsedStream = ($this->parsedStream->getMetadata('mmp-detached-stream') === true);
@@ -107,16 +120,16 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::hasContent();
     }
 
-    public function getContentStream(?string $transferEncoding, ?string $fromCharset, ?string $toCharset) : ?StreamInterface
+    public function getContentStream(IMessagePart $part, ?string $transferEncoding, ?string $fromCharset, ?string $toCharset) : ?MessagePartStreamDecorator
     {
         $this->requestParsedContentStream();
-        return parent::getContentStream($transferEncoding, $fromCharset, $toCharset);
+        return parent::getContentStream($part, $transferEncoding, $fromCharset, $toCharset);
     }
 
-    public function getBinaryContentStream(?string $transferEncoding = null) : ?StreamInterface
+    public function getBinaryContentStream(IMessagePart $part, ?string $transferEncoding = null) : ?MessagePartStreamDecorator
     {
         $this->requestParsedContentStream();
-        return parent::getBinaryContentStream($transferEncoding);
+        return parent::getBinaryContentStream($part, $transferEncoding);
     }
 
     public function setContentStream(?StreamInterface $contentStream = null) : static
@@ -129,7 +142,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return $this;
     }
 
-    public function getStream() : StreamInterface
+    public function getStream() : MessagePartStreamDecorator
     {
         $this->requestParsedStream();
         if (!$this->partUpdated) {

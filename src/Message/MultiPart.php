@@ -171,6 +171,6 @@ abstract class MultiPart extends MessagePart implements IMultiPart
 
     protected function getErrorBagChildren() : array
     {
-        return $this->getChildParts();
+        return \array_merge(parent::getErrorBagChildren(), $this->getChildParts());
     }
 }

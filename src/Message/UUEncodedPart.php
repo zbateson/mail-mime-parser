@@ -111,9 +111,4 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         $this->notify();
         return $this;
     }
-
-    public function getErrorBagChildren() : array
-    {
-        return \array_merge([]);
-    }
 }

@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
 use RecursiveArrayIterator;
 use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * GenericHelperTest
@@ -145,7 +146,9 @@ class GenericHelperTest extends TestCase
             $returnMap[] = [$name, $mock];
         }
 
-        $fromStream = Psr7\Utils::streamFor('test');
+        $fromStream = $this->getMockBuilder(MessagePartStreamDecorator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $from->expects($this->once())
             ->method('hasContent')
             ->willReturn(true);
@@ -238,7 +241,9 @@ class GenericHelperTest extends TestCase
             $returnMap[] = [$name, $mock];
         }
 
-        $toStream = Psr7\Utils::streamFor('test');
+        $toStream = $this->getMockBuilder(MessagePartStreamDecorator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $to->expects($this->once())
             ->method('hasContent')
             ->willReturn(true);

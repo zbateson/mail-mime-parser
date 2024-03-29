@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * PartStreamContainerFactoryTest
@@ -19,12 +20,9 @@ class PartStreamContainerFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $mocksdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->instance = new PartStreamContainerFactory(
-            $mocksdf
-        );
+        // using container because LoggerInterface is '#[Inject]'ed
+        $container = MailMimeParser::getGlobalContainer();
+        $this->instance = $container->get(PartStreamContainerFactory::class);
     }
 
     public function testNewInstance() : void

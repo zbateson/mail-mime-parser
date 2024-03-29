@@ -39,7 +39,7 @@ class StreamFactoryTest extends TestCase
             ->willReturn(Psr7\Utils::streamFor('test'));
 
 
-        $factory = new StreamFactory();
+        $factory = new StreamFactory(true);
 
         $this->assertInstanceOf(\ZBateson\StreamDecorators\SeekingLimitStream::class, $factory->getLimitedPartStream($partBuilder));
         $this->assertInstanceOf(\ZBateson\StreamDecorators\SeekingLimitStream::class, $factory->getLimitedContentStream($partBuilder));

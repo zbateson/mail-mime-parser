@@ -295,6 +295,6 @@ class MimePart extends MultiPart implements IMimePart
 
     public function getErrorBagChildren() : array
     {
-        return \array_merge([$this->headerContainer], parent::getErrorBagChildren());
+        return \array_merge(parent::getErrorBagChildren(), [$this->headerContainer]);
     }
 }

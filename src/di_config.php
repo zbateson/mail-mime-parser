@@ -1,13 +1,25 @@
 <?php
+/**
+ * This file is part of the ZBateson\MailMimeParser project.
+ *
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ */
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
+use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
+use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 return [
     LoggerInterface::class => DI\autowire(NullLogger::class),
+
+    // only affects reading part content, not for instance decoding mime encoded
+    // header parts
+    'throwExceptionReadingPartContentFromUnsupportedCharsets' => false,
 
     'fromDomainConsumerService' => DI\autowire(DomainConsumerService::class)
         ->constructorParameter('partName', 'from'),
@@ -29,5 +41,17 @@ return [
             withGenericReceivedConsumerService: DI\get('withGenericReceivedConsumerService'),
             idGenericReceivedConsumerService: DI\get('idGenericReceivedConsumerService'),
             forGenericReceivedConsumerService: DI\get('forGenericReceivedConsumerService')
+        ),
+    PartStreamContainerFactory::class => DI\autowire()
+        ->constructor(
+            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
+        ),
+    ParserPartStreamContainerFactory::class => DI\autowire()
+        ->constructor(
+            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
+        ),
+    StreamFactory::class => DI\autowire()
+        ->constructor(
+            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
         ),
 ];

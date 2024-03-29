@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * ParserMessageProxyFactoryTest
@@ -113,7 +114,9 @@ class ParserMessageProxyFactoryTest extends TestCase
             ->method('newInstance')
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class))
             ->willReturn($this->partChildrenContainer);
-        $stream = Utils::streamFor('test');
+        $stream = $this->getMockBuilder(MessagePartStreamDecorator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->streamFactory->expects($this->once())
             ->method('newMessagePartStream')
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\IMessage::class))

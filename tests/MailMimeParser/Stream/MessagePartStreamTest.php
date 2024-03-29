@@ -4,7 +4,10 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
-use ZBateson\StreamDecorators\NonClosingStream;
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\StreamDecorators\DecoratedCachingStream;
+use ZBateson\StreamDecorators\CharsetStream;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * MessagePartStreamTest
@@ -40,13 +43,6 @@ class MessagePartStreamTest extends TestCase
             ->getMock();
     }
 
-    private function newMockUUEncodedPart() : \ZBateson\MailMimeParser\Message\UUEncodedPart
-    {
-        return $this->getMockBuilder(\ZBateson\MailMimeParser\Message\UUEncodedPart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     public function testReadMimeMessageWithChildren() : void
     {
         $testContents = '';
@@ -54,31 +50,30 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\Utils::streamFor('test'));
+            ->willReturn(new MessagePartStreamDecorator($message, Psr7\Utils::streamFor('test')));
 
         $this->mockStreamFactory->expects($this->once())
-            ->method('newNonClosingStream')
-            ->willReturnCallback(function($stream) {
-                return new NonClosingStream($stream);
+            ->method('newDecoratedCachingStream')
+            ->willReturnCallback(function($stream, $callable) {
+                return new DecoratedCachingStream($stream, $callable);
             });
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newSeekingStream')
+            ->willReturnArgument(0);
 
         $message->expects($this->once())
             ->method('getContentTransferEncoding')
             ->willReturn('quoted-printable');
-        $this->mockStreamFactory->expects($this->once())
-            ->method('newQuotedPrintableStream')
-            ->willReturnCallback(function($stream) {
-                return $stream;
-            });
+        $this->mockStreamFactory->expects($this->exactly(1))
+            ->method('getTransferEncodingDecoratedStream')
+            ->willReturnArgument(0);
 
         $message->expects($this->once())
             ->method('getCharset')
             ->willReturn('ISO-8859-1');
         $this->mockStreamFactory->expects($this->once())
             ->method('newCharsetStream')
-            ->willReturnCallback(function($stream) {
-                return $stream;
-            });
+            ->willReturnArgument(0);
 
         $testContents .= 'test';
 
@@ -120,7 +115,7 @@ class MessagePartStreamTest extends TestCase
         $testContents .= 'c2';
         $testContents .= "\r\n--ze-boundary--\r\n";
 
-        $ms = new MessagePartStream($this->mockStreamFactory, $message);
+        $ms = new MessagePartStream($this->mockStreamFactory, $message, true);
         $this->assertEquals($testContents, $ms->getContents());
     }
 
@@ -131,27 +126,25 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\Utils::streamFor('test'));
+            ->willReturn(new MessagePartStreamDecorator($message, Psr7\Utils::streamFor('test')));
 
         $this->mockStreamFactory->expects($this->once())
-            ->method('newNonClosingStream')
+            ->method('newDecoratedCachingStream')
+            ->willReturnCallback(function($stream, $callable) {
+                return new DecoratedCachingStream($stream, $callable);
+            });
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newSeekingStream')
             ->willReturnCallback(function($stream) {
-                return new NonClosingStream($stream);
+                return $stream;
             });
 
         $message->expects($this->once())
             ->method('getContentTransferEncoding')
             ->willReturn('base64');
         $this->mockStreamFactory->expects($this->once())
-            ->method('newChunkSplitStream')
-            ->willReturnCallback(function($stream) {
-                return $stream;
-            });
-        $this->mockStreamFactory->expects($this->once())
-            ->method('newBase64Stream')
-            ->willReturnCallback(function($stream) {
-                return $stream;
-            });
+            ->method('getTransferEncodingDecoratedStream')
+            ->willReturnArgument(0);
 
         $message->expects($this->once())
             ->method('getCharset')
@@ -167,7 +160,7 @@ class MessagePartStreamTest extends TestCase
 
         $testContents = 'hs' . $testContents;
 
-        $ms = new MessagePartStream($this->mockStreamFactory, $message);
+        $ms = new MessagePartStream($this->mockStreamFactory, $message, false);
         $this->assertEquals($testContents, $ms->getContents());
     }
 
@@ -178,12 +171,17 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\Utils::streamFor('test'));
+            ->willReturn(new MessagePartStreamDecorator($message, Psr7\Utils::streamFor('test')));
 
         $this->mockStreamFactory->expects($this->once())
-            ->method('newNonClosingStream')
+            ->method('newDecoratedCachingStream')
+            ->willReturnCallback(function($stream, $callable) {
+                return new DecoratedCachingStream($stream, $callable);
+            });
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newSeekingStream')
             ->willReturnCallback(function($stream) {
-                return new NonClosingStream($stream);
+                return $stream;
             });
 
         $message->expects($this->once())
@@ -196,17 +194,9 @@ class MessagePartStreamTest extends TestCase
             ->method('getFilename')
             ->willReturn('la-file');
         $this->mockStreamFactory->expects($this->once())
-            ->method('newUUStream')
-            ->willReturnCallback(function($stream) {
-                $mock = $this->getMockBuilder(\ZBateson\StreamDecorators\NonClosingStream::class)
-                    ->setConstructorArgs([$stream])
-                    ->setMethods(['setFilename'])
-                    ->getMock();
-                $mock->expects($this->once())
-                    ->method('setFilename')
-                    ->with('la-file');
-                return $mock;
-            });
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($this->anything(), 'x-uuencode', 'la-file')
+            ->willReturnArgument(0);
 
         $message->expects($this->once())
             ->method('getCharset')
@@ -245,7 +235,7 @@ class MessagePartStreamTest extends TestCase
         $testContents .= 'c1';
         $testContents .= 'c2';
 
-        $ms = new MessagePartStream($this->mockStreamFactory, $message);
+        $ms = new MessagePartStream($this->mockStreamFactory, $message, false);
         $this->assertEquals($testContents, $ms->getContents());
     }
 
@@ -256,25 +246,26 @@ class MessagePartStreamTest extends TestCase
         $message = $this->newMockMessage();
         $message->expects($this->once())
             ->method('getContentStream')
-            ->willReturn(Psr7\Utils::streamFor('test'));
+            ->willReturn(new MessagePartStreamDecorator($message, Psr7\Utils::streamFor('test')));
 
         $this->mockStreamFactory->expects($this->once())
-            ->method('newNonClosingStream')
+            ->method('newDecoratedCachingStream')
+            ->willReturnCallback(function($stream, $callable) {
+                return new DecoratedCachingStream($stream, $callable);
+            });
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newSeekingStream')
             ->willReturnCallback(function($stream) {
-                return new NonClosingStream($stream);
+                return $stream;
             });
 
         $message->expects($this->once())
             ->method('getContentTransferEncoding')
             ->willReturn('7bit');
-        $this->mockStreamFactory->expects($this->never())
-            ->method('newChunkSplitStream');
-        $this->mockStreamFactory->expects($this->never())
-            ->method('newBase64Stream');
-        $this->mockStreamFactory->expects($this->never())
-            ->method('newUUStream');
-        $this->mockStreamFactory->expects($this->never())
-            ->method('newQuotedPrintableStream');
+        $this->mockStreamFactory->expects($this->once())
+            ->method('getTransferEncodingDecoratedStream')
+            ->with($this->anything(), '7bit')
+            ->willReturnArgument(0);
 
         $message->expects($this->once())
             ->method('getCharset')
@@ -290,7 +281,66 @@ class MessagePartStreamTest extends TestCase
 
         $testContents = 'hs' . $testContents;
 
-        $ms = new MessagePartStream($this->mockStreamFactory, $message);
+        $ms = new MessagePartStream($this->mockStreamFactory, $message, false);
         $this->assertEquals($testContents, $ms->getContents());
+    }
+
+    private function setupForInvalidCharsetTests() : IMessage
+    {
+        $testContents = '';
+
+        $message = $this->newMockMessage();
+        $message->expects($this->once())
+            ->method('getContentStream')
+            ->willReturn(new MessagePartStreamDecorator($message, Psr7\Utils::streamFor('test')));
+
+        $this->mockStreamFactory->expects($this->once())
+            ->method('getTransferEncodingDecoratedStream')
+            ->willReturnArgument(0);
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newDecoratedCachingStream')
+            ->willReturnCallback(function($stream, $callable) {
+                return new DecoratedCachingStream($stream, $callable);
+            });
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newSeekingStream')
+            ->willReturnCallback(function($stream) {
+                return $stream;
+            });
+
+        $message->expects($this->once())
+            ->method('getCharset')
+            ->willReturn('asdf');
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newCharsetStream')
+            ->willReturnCallback(function($stream) {
+                return new CharsetStream($stream, 'invalid-charset');
+            });
+
+        $testContents .= 'test';
+
+        $hs = Psr7\Utils::streamFor('hs');
+        $this->mockStreamFactory->expects($this->once())
+            ->method('newHeaderStream')
+            ->with($message)
+            ->willReturn($hs);
+
+        $testContents = 'hs' . $testContents;
+        return $message;
+    }
+
+    public function testReadMessageWithInvalidCharsetThrowsException() : void
+    {
+        $message = $this->setupForInvalidCharsetTests();
+        $this->expectException(MessagePartStreamReadException::class);
+        $ms = new MessagePartStream($this->mockStreamFactory, $message, true);
+        $ms->getContents();
+    }
+
+    public function testReadMessageWithInvalidCharsetDoesntThrowExceptionWithOption() : void
+    {
+        $message = $this->setupForInvalidCharsetTests();
+        $ms = new MessagePartStream($this->mockStreamFactory, $message, false);
+        $this->assertEquals('hstest', $ms->getContents());
     }
 }

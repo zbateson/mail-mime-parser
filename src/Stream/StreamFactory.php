@@ -13,6 +13,7 @@ use ZBateson\MailMimeParser\Parser\PartBuilder;
 use ZBateson\StreamDecorators\Base64Stream;
 use ZBateson\StreamDecorators\CharsetStream;
 use ZBateson\StreamDecorators\ChunkSplitStream;
+use ZBateson\StreamDecorators\DecoratedCachingStream;
 use ZBateson\StreamDecorators\NonClosingStream;
 use ZBateson\StreamDecorators\PregReplaceFilterStream;
 use ZBateson\StreamDecorators\QuotedPrintableStream;
@@ -26,6 +27,17 @@ use ZBateson\StreamDecorators\UUStream;
  */
 class StreamFactory
 {
+    /**
+     * @var bool if true, saving a content stream with an unsupported charset
+     *      will be written in the default charset.
+     */
+    protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets;
+
+    public function __construct(bool $throwExceptionReadingPartContentFromUnsupportedCharsets)
+    {
+        $this->throwExceptionReadingPartContentFromUnsupportedCharsets = $throwExceptionReadingPartContentFromUnsupportedCharsets;
+    }
+
     /**
      * Returns a SeekingLimitStream using $part->getStreamPartLength() and
      * $part->getStreamPartStartPos()
@@ -66,6 +78,16 @@ class StreamFactory
             $length,
             $start
         );
+    }
+
+    /**
+     * Creates and returns a SeekingLimitedStream without limits, so it's a
+     * stream that preserves its current position on the underlying stream it
+     * reads from.
+     */
+    public function newSeekingStream(StreamInterface $stream) : StreamInterface
+    {
+        return new SeekingLimitStream($this->newNonClosingStream($stream));
     }
 
     /**
@@ -112,20 +134,53 @@ class StreamFactory
         return new UUStream($stream);
     }
 
+    public function getTransferEncodingDecoratedStream(StreamInterface $stream, ?string $transferEncoding, ?string $filename = null) : StreamInterface
+    {
+        $decorated = null;
+        switch ($transferEncoding) {
+            case 'quoted-printable':
+                $decorated = $this->newQuotedPrintableStream($stream);
+                break;
+            case 'base64':
+                $decorated = $this->newBase64Stream(
+                    $this->newChunkSplitStream($stream)
+                );
+                break;
+            case 'x-uuencode':
+                $decorated = $this->newUUStream($stream);
+                if ($filename !== null) {
+                    $decorated->setFilename($filename);
+                }
+                break;
+            default:
+                return $stream;
+        }
+        return $decorated;
+    }
+
     /**
      * Creates and returns a CharsetStream
      */
-    public function newCharsetStream(StreamInterface $stream, string $fromCharset, string $toCharset) : StreamInterface
+    public function newCharsetStream(StreamInterface $stream, string $streamCharset, string $stringCharset) : StreamInterface
     {
-        return new CharsetStream($stream, $fromCharset, $toCharset);
+        return new CharsetStream($stream, $streamCharset, $stringCharset);
     }
 
     /**
      * Creates and returns a MessagePartStream
      */
-    public function newMessagePartStream(IMessagePart $part) : StreamInterface
+    public function newMessagePartStream(IMessagePart $part) : MessagePartStreamDecorator
     {
-        return new MessagePartStream($this, $part);
+        return new MessagePartStream($this, $part, $this->throwExceptionReadingPartContentFromUnsupportedCharsets);
+    }
+
+    /**
+     * Creates and returns a DecoratedCachingStream
+     */
+    public function newDecoratedCachingStream(StreamInterface $stream, callable $decorator) : StreamInterface
+    {
+        // seems to perform best locally, would be good to test this out more
+        return new DecoratedCachingStream($stream, $decorator, 204800);
     }
 
     /**
@@ -134,5 +189,10 @@ class StreamFactory
     public function newHeaderStream(IMessagePart $part) : StreamInterface
     {
         return new HeaderStream($part);
+    }
+
+    public function newDecoratedMessagePartStream(IMessagePart $part, StreamInterface $stream) : MessagePartStreamDecorator
+    {
+        return new MessagePartStreamDecorator($part, $stream);
     }
 }
