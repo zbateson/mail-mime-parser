@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Parses a date header into a Part\DatePart taking care of comment and quoted
@@ -27,7 +26,7 @@ class DateConsumerService extends GenericConsumerService
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        return $this->partFactory->newLiteralPart($token);
+        return $this->partFactory->newToken($token, true);
     }
 
     /**
@@ -41,13 +40,6 @@ class DateConsumerService extends GenericConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $strValue = '';
-        foreach ($parts as $part) {
-            $strValue .= $part->getValue();
-        }
-        $comments = \array_values(\array_filter($parts, function($part) {
-            return ($part instanceof CommentPart);
-        }));
-        return \array_merge([$this->partFactory->newDatePart($strValue)], $comments);
+        return [$this->partFactory->newDatePart($parts)];
     }
 }

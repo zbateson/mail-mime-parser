@@ -9,9 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Iterator;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
-use ZBateson\MailMimeParser\Header\Part\LiteralPart;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * Consumes all tokens within parentheses as comments.
@@ -36,7 +34,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 class CommentConsumerService extends GenericConsumerService
 {
     public function __construct(
-        MimeLiteralPartFactory $partFactory,
+        MimeTokenPartFactory $partFactory,
         QuotedStringConsumerService $quotedStringConsumerService
     ) {
         parent::__construct(
@@ -93,7 +91,7 @@ class CommentConsumerService extends GenericConsumerService
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumerService
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {
         $tokens->next();
         return $this;
@@ -109,17 +107,6 @@ class CommentConsumerService extends GenericConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $comment = '';
-        foreach ($parts as $part) {
-            // order is important here - CommentPart extends LiteralPart
-            if ($part instanceof CommentPart) {
-                $comment .= '(' . $part->getComment() . ')';
-            } elseif ($part instanceof LiteralPart) {
-                $comment .= '"' . \str_replace('(["\\])', '\$1', $part->getValue()) . '"';
-            } else {
-                $comment .= $part->getValue();
-            }
-        }
-        return [$this->partFactory->newCommentPart($comment)];
+        return [$this->partFactory->newCommentPart($parts)];
     }
 }

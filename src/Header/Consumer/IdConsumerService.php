@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
 
 /**
  * Parses a single ID from an ID header.  Begins consuming on a '<' char, and
@@ -53,23 +52,6 @@ class IdConsumerService extends GenericConsumerService
         if (\preg_match('/^\s+$/', $token)) {
             return null;
         }
-        return $this->partFactory->newLiteralPart($token);
-    }
-
-    /**
-     * Overridden to combine non-comment parts into a single part and return
-     * any comment parts after.
-     *
-     * @param IHeaderPart[] $parts
-     * @return IHeaderPart[]
-     */
-    protected function processParts(array $parts) : array
-    {
-        $id = \array_reduce(\array_filter($parts), function($c, $p) {
-            return $c . $p->getValue();
-        }, '');
-        return \array_merge([$this->partFactory->newLiteralPart($id)], \array_values(\array_filter($parts, function($p) {
-            return ($p instanceof CommentPart);
-        })));
+        return $this->partFactory->newToken($token, true);
     }
 }

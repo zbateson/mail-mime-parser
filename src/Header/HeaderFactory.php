@@ -19,7 +19,7 @@ use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * Constructs various IHeader types depending on the type of header passed.
@@ -52,9 +52,9 @@ class HeaderFactory
     protected array $consumerServices;
 
     /**
-     * @var MimeLiteralPartFactory for mime decoding.
+     * @var MimeTokenPartFactory for mime decoding.
      */
-    protected MimeLiteralPartFactory $mimeLiteralPartFactory;
+    protected MimeTokenPartFactory $mimeTokenPartFactory;
 
     /**
      * @var string[][] maps IHeader types to headers.
@@ -112,7 +112,7 @@ class HeaderFactory
     protected $genericType = GenericHeader::class;
 
     public function __construct(
-        MimeLiteralPartFactory $mimeLiteralPartFactory,
+        MimeTokenPartFactory $mimeTokenPartFactory,
         AddressBaseConsumerService $addressBaseConsumerService,
         DateConsumerService $dateConsumerService,
         GenericConsumerMimeLiteralPartService $genericConsumerMimeLiteralPartService,
@@ -122,7 +122,7 @@ class HeaderFactory
         SubjectConsumerService $subjectConsumerService
     ) {
         $this->logger = new NullLogger();
-        $this->mimeLiteralPartFactory = $mimeLiteralPartFactory;
+        $this->mimeTokenPartFactory = $mimeTokenPartFactory;
         $this->consumerServices = [
             AddressBaseConsumerService::class => $addressBaseConsumerService,
             DateConsumerService::class => $dateConsumerService,
@@ -198,7 +198,7 @@ class HeaderFactory
         $params = $ref->getConstructor()->getParameters();
         if ($ref->isSubclassOf(MimeEncodedHeader::class)) {
             return new $iHeaderClass(
-                $this->mimeLiteralPartFactory,
+                $this->mimeTokenPartFactory,
                 $this->consumerServices[$params[1]->getType()->getName()],
                 $name,
                 $value

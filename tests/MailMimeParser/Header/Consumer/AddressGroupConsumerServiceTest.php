@@ -27,7 +27,7 @@ class AddressGroupConsumerServiceTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -45,7 +45,7 @@ class AddressGroupConsumerServiceTest extends TestCase
             ->getMock();
 
         $this->addressGroupConsumer = new AddressGroupConsumerService($pf);
-        new AddressConsumerService($pf, $this->addressGroupConsumer, $aecs, $ccs, $qscs);
+        new AddressConsumerService($mpf, $this->addressGroupConsumer, $aecs, $ccs, $qscs);
     }
 
     public function testConsumeGroup() : void

@@ -26,4 +26,11 @@ interface IHeaderPart extends IErrorBag, Stringable
      * @return string The value of the part
      */
     public function getValue() : ?string;
+
+    /**
+     * Returns any CommentParts under this part container.
+     *
+     * @return CommentPart[]
+     */
+    public function getCommentParts() : array;
 }

@@ -7,10 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
- * GenericConsumerMimeLiteralPartService uses a MimeLiteralPartFactory instead
+ * GenericConsumerMimeLiteralPartService uses a MimeTokenPartFactory instead
  * of a HeaderPartFactory.
  *
  * @author Zaahid Bateson
@@ -18,7 +18,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 class GenericConsumerMimeLiteralPartService extends GenericConsumerService
 {
     public function __construct(
-        MimeLiteralPartFactory $partFactory,
+        MimeTokenPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
         QuotedStringConsumerService $quotedStringConsumerService
     ) {

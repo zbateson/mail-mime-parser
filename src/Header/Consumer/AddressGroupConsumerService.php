@@ -83,15 +83,6 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $emails = [];
-        foreach ($parts as $part) {
-            if ($part instanceof AddressGroupPart) {
-                $emails = \array_merge($emails, $part->getAddresses());
-                continue;
-            }
-            $emails[] = $part;
-        }
-        $group = $this->partFactory->newAddressGroupPart($emails);
-        return [$group];
+        return [$this->partFactory->newAddressGroupPart([], $parts)];
     }
 }

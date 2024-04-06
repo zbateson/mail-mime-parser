@@ -18,53 +18,73 @@ use ZBateson\MbWrapper\MbWrapper;
 class ParameterPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $charsetConverter;
+    private $mb;
+    private $hpf;
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapper();
+        $this->mb = new MbWrapper();
+        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
+            ->setConstructorArgs([$this->mb])
+            ->setMethods()
+            ->getMock();
+    }
+
+    private function getToken(string $value) : Token
+    {
+        return $this->getMockBuilder(Token::class)
+            ->setConstructorArgs([$this->mb, $value])
+            ->setMethods()
+            ->getMock();
+    }
+
+    private function assertNameValue($expectedName, $expectedValue, $actualName = null, $actualValue = null) : ParameterPart
+    {
+        if ($actualName === null) {
+            $actualName = $expectedName;
+        }
+        if ($actualValue === null) {
+            $actualValue = $expectedValue;
+        }
+        $part = new ParameterPart($this->mb, $this->hpf, [$this->getToken($actualName)], $this->getToken($actualValue));
+        $this->assertEquals($expectedName, $part->getName());
+        $this->assertEquals($expectedValue, $part->getValue());
+        return $part;
     }
 
     public function testBasicNameValuePair() : void
     {
-        $part = new ParameterPart($this->charsetConverter, 'Name', 'Value');
-        $this->assertEquals('Name', $part->getName());
-        $this->assertEquals('Value', $part->getValue());
+        $this->assertNameValue('Name', 'Value');
     }
 
-    public function testMimeValue() : void
+    public function testEncodedValues() : void
     {
-        $part = new ParameterPart($this->charsetConverter, 'name', '=?US-ASCII?Q?Kilgore_Trout?=');
-        $this->assertEquals('name', $part->getName());
-        $this->assertEquals('Kilgore Trout', $part->getValue());
+        $this->assertNameValue('name', 'Khal Drogo', 'name*', 'Khal%20Drogo');
+        $this->assertNameValue('name', 'Khal Drogo', 'name*', '\'\'Khal%20Drogo');
     }
 
-    public function testMimeName() : void
+    public function testEncodedValueWithCharset() : void
     {
-        $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', 'Kilgore');
-        $this->assertEquals('name', $part->getName());
-        $this->assertEquals('Kilgore', $part->getValue());
-    }
-
-    public function testNameValueNotDecodedWithLanguage() : void
-    {
-        $part = new ParameterPart($this->charsetConverter, '=?US-ASCII?Q?name?=', '=?US-ASCII?Q?Kilgore_Trout?=', 'Kurty');
-        $this->assertEquals('=?US-ASCII?Q?name?=', $part->getName());
-        $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
+        $part = $this->assertNameValue('name', 'Khal Drogo', 'name*', 'UTF-8\'\'Khal%20Drogo');
+        $this->assertEquals('UTF-8', $part->getCharset());
     }
 
     public function testGetLanguage() : void
     {
-        $part = new ParameterPart($this->charsetConverter, 'name', 'Drogo', 'Dothraki');
-        $this->assertEquals('Dothraki', $part->getLanguage());
+        $part = $this->assertNameValue('name', 'Khal Drogo', 'name*', '\'en-CA\'Khal%20Drogo');
+        $this->assertNull($part->getCharset());
+        $this->assertEquals('en-CA', $part->getLanguage());
+        $part = $this->assertNameValue('name', 'Khal Drogo', 'name*', 'UTF-8\'en-CA\'Khal%20Drogo');
+        $this->assertEquals('UTF-8', $part->getCharset());
+        $this->assertEquals('en-CA', $part->getLanguage());
     }
 
     public function testValidation() : void
     {
-        $part = new ParameterPart($this->charsetConverter, 'name', '');
+        $part = $this->assertNameValue('name', '');
         $errs = $part->getErrors(true, LogLevel::NOTICE);
         $this->assertCount(1, $errs);
-        $this->assertEquals('Parameter part value is empty', $errs[0]->getMessage());
+        $this->assertEquals('NameValuePart value is empty', $errs[0]->getMessage());
         $this->assertEquals(LogLevel::NOTICE, $errs[0]->getPsrLevel());
     }
 }

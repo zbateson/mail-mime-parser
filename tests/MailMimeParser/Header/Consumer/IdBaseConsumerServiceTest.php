@@ -27,7 +27,7 @@ class IdBaseConsumerServiceTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -53,7 +53,7 @@ class IdBaseConsumerServiceTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $address);
         $this->assertEquals('id123@host.name', $address->getValue());
     }
 
@@ -77,16 +77,16 @@ class IdBaseConsumerServiceTest extends TestCase
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[0]);
         $this->assertEquals('first', $ret[0]->getComment());
 
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[1]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $ret[1]);
         $this->assertEquals('first-id', $ret[1]->getValue());
 
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[2]);
         $this->assertEquals('comment', $ret[2]->getComment());
 
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[3]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $ret[3]);
         $this->assertEquals('second-id@asdf', $ret[3]->getValue());
 
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[4]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $ret[4]);
         $this->assertEquals('third-id', $ret[4]->getValue());
     }
 }

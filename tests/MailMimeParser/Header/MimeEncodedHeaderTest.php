@@ -24,7 +24,7 @@ class MimeEncodedHeaderTest extends TestCase
     protected $consumerService;
 
     // @phpstan-ignore-next-line
-    protected $mimeLiteralPartFactory;
+    protected $mimeTokenPartFactory;
 
     protected function setUp() : void
     {
@@ -35,7 +35,7 @@ class MimeEncodedHeaderTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -44,13 +44,13 @@ class MimeEncodedHeaderTest extends TestCase
             ->setMethods(['__toString'])
             ->getMock();
         $this->consumerService = $qscs;
-        $this->mimeLiteralPartFactory = $mpf;
+        $this->mimeTokenPartFactory = $mpf;
     }
 
     private function newMimeEncodedHeader($name, $value) : MimeEncodedHeaderImpl
     {
         return new MimeEncodedHeaderImpl(
-            $this->mimeLiteralPartFactory,
+            $this->mimeTokenPartFactory,
             $this->consumerService,
             $name,
             $value
@@ -80,5 +80,12 @@ class MimeEncodedHeaderTest extends TestCase
             $t
         );
         $this->assertEquals('Kilgore  TEST Tro ut', $header->getValue());
+    }
+
+    public function testDecodeInvalidCharset() : void
+    {
+        $header = $this->newMimeEncodedHeader('Test', '=?NAAHT-GOOD?Q?Kilgore_Trout?=');
+        $this->assertEquals('Kilgore Trout', $header->getValue());
+        $this->assertEquals(['Kilgore Trout'], \array_map(fn ($e) => $e->getObject()->getValue(), $header->getAllErrors()));
     }
 }

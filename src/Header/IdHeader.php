@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Header;
 
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * Represents a Content-ID, Message-ID, In-Reply-To or References header.
@@ -23,12 +23,12 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
 class IdHeader extends MimeEncodedHeader
 {
     public function __construct(
-        MimeLiteralPartFactory $mimeLiteralPartFactory,
+        MimeTokenPartFactory $mimeTokenPartFactory,
         IdBaseConsumerService $consumerService,
         string $name,
         string $value
     ) {
-        parent::__construct($mimeLiteralPartFactory, $consumerService, $name, $value);
+        parent::__construct($mimeTokenPartFactory, $consumerService, $name, $value);
     }
 
     /**

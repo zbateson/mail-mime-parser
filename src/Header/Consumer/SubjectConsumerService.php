@@ -9,10 +9,10 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Iterator;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
- * Extends AbstractGenericConsumerService to use a MimeLiteralPartFactory, and
+ * Extends AbstractGenericConsumerService to use a MimeTokenPartFactory, and
  * to preserve all whitespace and escape sequences as-is (unlike other headers
  * subject headers don't have escape chars such as '\\' for a backslash).
  *
@@ -22,7 +22,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory;
  */
 class SubjectConsumerService extends AbstractGenericConsumerService
 {
-    public function __construct(MimeLiteralPartFactory $partFactory)
+    public function __construct(MimeTokenPartFactory $partFactory)
     {
         parent::__construct($partFactory);
     }
@@ -38,12 +38,9 @@ class SubjectConsumerService extends AbstractGenericConsumerService
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if ($isLiteral) {
-            return $this->partFactory->newLiteralPart($token);
+            return $this->partFactory->newToken($token, true);
         } elseif (\preg_match('/^\s+$/', $token)) {
-            if (\preg_match('/^[\r\n]/', $token)) {
-                return $this->partFactory->newToken(' ');
-            }
-            return $this->partFactory->newToken($token);
+            return $this->partFactory->newToken(' ');
         }
         return $this->partFactory->newInstance($token);
     }
@@ -73,24 +70,5 @@ class SubjectConsumerService extends AbstractGenericConsumerService
     {
         $sChars = \implode('|', $this->getAllTokenSeparators());
         return '~(' . $sChars . ')~';
-    }
-
-    /**
-     * Overridden to combine all part values into a single string and return it
-     * as an array with a single element.
-     *
-     * The returned IHeaderParts are all LiteralParts.
-     *
-     * @param IHeaderPart[] $parts
-     * @return IHeaderPart[]
-     */
-    protected function processParts(array $parts) : array
-    {
-        $strValue = '';
-        $filtered = $this->filterIgnoredSpaces($parts);
-        foreach ($filtered as $part) {
-            $strValue .= $part->getValue();
-        }
-        return [$this->partFactory->newLiteralPart($strValue)];
     }
 }

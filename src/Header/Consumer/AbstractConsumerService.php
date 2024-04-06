@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\MimeLiteralPart;
+use ZBateson\MailMimeParser\Header\Part\MimeToken;
 
 /**
  * Abstract base class for all header token consumers.
@@ -152,7 +152,7 @@ abstract class AbstractConsumerService implements IConsumerService
     protected function getTokenSplitPattern() : string
     {
         $sChars = \implode('|', $this->getAllTokenSeparators());
-        $mimePartPattern = MimeLiteralPart::MIME_PART_PATTERN;
+        $mimePartPattern = MimeToken::MIME_PART_PATTERN;
         return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
     }
 
@@ -216,7 +216,7 @@ abstract class AbstractConsumerService implements IConsumerService
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
         if ($isLiteral) {
-            return $this->partFactory->newLiteralPart($token);
+            return $this->partFactory->newToken($token, true);
         } elseif (\preg_match('/^\s+$/', $token)) {
             return $this->partFactory->newToken(' ');
         }
@@ -250,7 +250,8 @@ abstract class AbstractConsumerService implements IConsumerService
                 return $consumer->parseTokensIntoParts($tokens);
             }
         }
-        return [$this->getPartForToken($token, false)];
+        $part = $this->getPartForToken($token, false);
+        return ($part !== null) ? [$part] : [];
     }
 
     /**
@@ -267,7 +268,8 @@ abstract class AbstractConsumerService implements IConsumerService
     {
         $token = $tokens->current();
         if (\strlen($token) === 2 && $token[0] === '\\') {
-            return [$this->getPartForToken(\substr($token, 1), true)];
+            $part = $this->getPartForToken(\substr($token, 1), true);
+            return ($part !== null) ? [$part] : [];
         }
         return $this->getConsumerTokenParts($tokens);
     }
@@ -283,7 +285,7 @@ abstract class AbstractConsumerService implements IConsumerService
      * @param Iterator $tokens The token iterator.
      * @param bool $isStartToken true for the start token.
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumerService
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {
         $checkEndToken = (!$isStartToken && $tokens->valid());
         $isEndToken = ($checkEndToken && $this->isEndToken($tokens->current()));
@@ -306,7 +308,7 @@ abstract class AbstractConsumerService implements IConsumerService
      *
      * After all tokens are read and an array of Header\Parts are constructed,
      * the array is passed to {@see AbstractConsumerService::processParts} for
-     * any final processing.
+     * any final processing if there are any parts.
      *
      * @param Iterator<string> $tokens An iterator over a string of tokens
      * @return IHeaderPart[] An array of parsed parts
@@ -319,12 +321,13 @@ abstract class AbstractConsumerService implements IConsumerService
             $parts = \array_merge($parts, $this->getTokenParts($tokens));
             $this->advanceToNextToken($tokens, false);
         }
-        return $this->processParts($parts);
+        return (empty($parts)) ? [] : $this->processParts($parts);
     }
 
     /**
      * Performs any final processing on the array of parsed parts before
-     * returning it to the consumer client.
+     * returning it to the consumer client.  The passed $parts array is
+     * guaranteed to not be empty.
      *
      * The default implementation simply returns the passed array after
      * filtering out null/empty parts.
@@ -334,6 +337,6 @@ abstract class AbstractConsumerService implements IConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        return \array_values(\array_filter($parts));
+        return $parts;
     }
 }

@@ -18,11 +18,24 @@ use ZBateson\MbWrapper\MbWrapper;
 class DatePartTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $charsetConverter;
+    private $mb;
+    private $hpf;
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapper();
+        $this->mb = new MbWrapper();
+        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
+            ->setConstructorArgs([$this->mb])
+            ->setMethods()
+            ->getMock();
+    }
+
+    private function getTokenMock(string $name) : Token
+    {
+        return $this->getMockBuilder(Token::class)
+            ->setConstructorArgs([$this->mb, $name])
+            ->setMethods()
+            ->getMock();
     }
 
     public function testDateString() : void
@@ -37,7 +50,7 @@ class DatePartTest extends TestCase
 
         foreach ($values as $value) {
             [$expected, $raw] = $value;
-            $part = new DatePart($this->charsetConverter, $raw);
+            $part = new DatePart($this->mb, $this->hpf, [$this->getTokenMock($raw)]);
             $this->assertEquals($raw, $part->getValue(), 'Testing ' . $raw);
             $this->assertNotEmpty($part->getDateTime(), 'Testing ' . $raw);
             $this->assertEquals($expected, $part->getDateTime()->format(\DateTime::ISO8601), 'Testing ' . $raw);
@@ -47,7 +60,7 @@ class DatePartTest extends TestCase
     public function testInvalidDate() : void
     {
         $value = 'Invalid Date';
-        $part = new DatePart($this->charsetConverter, $value);
+        $part = new DatePart($this->mb, $this->hpf, [$this->getTokenMock($value)]);
         $this->assertEquals($value, $part->getValue());
         $date = $part->getDateTime();
         $this->assertNull($date);

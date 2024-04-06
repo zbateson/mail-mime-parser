@@ -7,9 +7,11 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
+use ZBateson\MbWrapper\UnsupportedCharsetException;
 
 /**
  * Abstract base class representing a single part of a parsed header.
@@ -19,9 +21,9 @@ use ZBateson\MbWrapper\MbWrapper;
 abstract class HeaderPart extends ErrorBag implements IHeaderPart
 {
     /**
-     * @var ?string the value of the part
+     * @var string the value of the part
      */
-    protected ?string $value;
+    protected string $value;
 
     /**
      * @var MbWrapper $charsetConverter the charset converter used for
@@ -30,13 +32,25 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     protected MbWrapper $charsetConverter;
 
     /**
-     * Sets up dependencies.
-     *
+     * @var bool set to true to ignore spaces before this part
      */
-    public function __construct(MbWrapper $charsetConverter)
+    protected bool $canIgnoreSpacesBefore = false;
+
+    /**
+     * @var bool set to true to ignore spaces after this part
+     */
+    protected bool $canIgnoreSpacesAfter = false;
+
+    /**
+     * True if the part is a space token
+     */
+    protected bool $isSpace = false;
+
+    public function __construct(MbWrapper $charsetConverter, string $value)
     {
         parent::__construct();
         $this->charsetConverter = $charsetConverter;
+        $this->value = $value;
     }
 
     /**
@@ -44,7 +58,7 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
      *
      * @return ?string the value of the part
      */
-    public function getValue() : ?string
+    public function getValue() : string
     {
         return $this->value;
     }
@@ -57,28 +71,6 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     public function __toString() : string
     {
         return $this->value;
-    }
-
-    /**
-     * Returns true if spaces before this part should be ignored.  True is only
-     * returned for MimeLiterals if the part begins with a mime-encoded string,
-     * Tokens if the Token's value is a single space, and for CommentParts.
-     *
-     */
-    public function ignoreSpacesBefore() : bool
-    {
-        return false;
-    }
-
-    /**
-     * Returns true if spaces after this part should be ignored.  True is only
-     * returned for MimeLiterals if the part ends with a mime-encoded string
-     * Tokens if the Token's value is a single space, and for CommentParts.
-     *
-     */
-    public function ignoreSpacesAfter() : bool
-    {
-        return false;
     }
 
     /**
@@ -96,10 +88,20 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
             // mime header part decoding will force it.  This is necessary for
             // UTF-7 because mb_check_encoding will return true
             if ($force || !($this->charsetConverter->checkEncoding($str, 'UTF-8'))) {
-                return $this->charsetConverter->convert($str, $from, 'UTF-8');
+                try {
+                    return $this->charsetConverter->convert($str, $from, 'UTF-8');
+                } catch (UnsupportedCharsetException $ce) {
+                    $this->addError('Unable to convert charset', LogLevel::ERROR, $ce);
+                    return $this->charsetConverter->convert($str, 'ISO-8859-1', 'UTF-8');
+                }
             }
         }
         return $str;
+    }
+
+    public function getCommentParts(): array
+    {
+        return [];
     }
 
     /**

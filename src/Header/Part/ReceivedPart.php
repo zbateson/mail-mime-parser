@@ -19,16 +19,18 @@ use ZBateson\MbWrapper\MbWrapper;
  *
  * @author Zaahid Bateson
  */
-class ReceivedPart extends ParameterPart
+class ReceivedPart extends NameValuePart
 {
+    /**
+     * @param HeaderPart[] $children
+     */
     public function __construct(
         MbWrapper $charsetConverter,
+        HeaderPartFactory $headerPartFactory,
         string $name,
-        ?string $value
+        array $children
     ) {
-        // parent tries to mime decode, $name/$value cannot be mime encoded
-        parent::__construct($charsetConverter, '', '');
-        $this->name = \trim($name);
-        $this->value = $value ? \trim($value) : $value;
+        parent::__construct($charsetConverter, $headerPartFactory, [], $children);
+        $this->name = $name;
     }
 }

@@ -20,7 +20,7 @@ use ZBateson\MbWrapper\MbWrapper;
  *
  * @author Zaahid Bateson
  */
-class AddressGroupPart extends MimeLiteralPart
+class AddressGroupPart extends NameValuePart
 {
     /**
      * @var AddressPart[] an array of AddressParts
@@ -28,15 +28,30 @@ class AddressGroupPart extends MimeLiteralPart
     protected array $addresses;
 
     /**
-     * Creates an AddressGroupPart out of the passed array of AddressParts and an
-     * optional name (which may be mime-encoded).
+     * Creates an AddressGroupPart out of the passed array of AddressParts/
+     * AddressGroupParts and name.
      *
-     * @param AddressPart[] $addresses
+     * @param HeaderPart[] $nameParts
+     * @param AddressPart[]|AddressGroupPart[] $addressesAndGroupParts
      */
-    public function __construct(MbWrapper $charsetConverter, array $addresses, string $name = '')
-    {
-        parent::__construct($charsetConverter, \trim($name));
-        $this->addresses = $addresses;
+    public function __construct(
+        MbWrapper $charsetConverter,
+        HeaderPartFactory $headerPartFactory,
+        array $nameParts,
+        array $addressesAndGroupParts
+    ) {
+        parent::__construct(
+            $charsetConverter,
+            $headerPartFactory,
+            $nameParts,
+            $addressesAndGroupParts
+        );
+        $this->addresses = \array_merge(...\array_map(
+            fn ($p) => ($p instanceof AddressGroupPart) ? $p->getAddresses() : [$p],
+            $addressesAndGroupParts
+        ));
+        // for backwards compatibility
+        $this->value = $this->name;
     }
 
     /**
@@ -63,24 +78,9 @@ class AddressGroupPart extends MimeLiteralPart
         return $this->addresses[$index];
     }
 
-    /**
-     * Returns the name of the group
-     *
-     * @return string The name
-     */
-    public function getName() : string
-    {
-        return $this->value;
-    }
-
-    protected function getErrorBagChildren() : array
-    {
-        return $this->addresses;
-    }
-
     protected function validate() : void
     {
-        if ($this->value === null || \mb_strlen($this->value) === 0) {
+        if ($this->name === null || \mb_strlen($this->name) === 0) {
             $this->addError('Address group doesn\'t have a name', LogLevel::ERROR);
         }
         if (empty($this->addresses)) {

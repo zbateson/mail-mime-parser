@@ -7,9 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\LiteralPart;
 
 /**
  * Parses the Address portion of an email address header, for an address part
@@ -64,7 +62,7 @@ class AddressEmailConsumerService extends AbstractConsumerService
      * Returns a single {@see ZBateson\MailMimeParser\Header\Part\AddressPart}
      * with its 'email' portion set, so an {@see AddressConsumerService} can
      * identify it and create an
-     * {@see ZBateson\MailMimeParser\Header\Part\AddressPart} AddressPart with
+     * {@see ZBateson\MailMimeParser\Header\Part\AddressPart} Address with
      * both a name and email set.
      *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
@@ -72,16 +70,6 @@ class AddressEmailConsumerService extends AbstractConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $strEmail = '';
-        foreach ($parts as $p) {
-            $val = $p->getValue();
-            if ((($p instanceof LiteralPart) && !($p instanceof CommentPart)) && $val !== '') {
-                $val = '"' . \preg_replace('/(["\\\])/', '\\\$1', $val) . '"';
-            } else {
-                $val = \preg_replace('/\s+/', '', $val);
-            }
-            $strEmail .= $val;
-        }
-        return [$this->partFactory->newAddressPart('', $strEmail)];
+        return [$this->partFactory->newAddress([], $parts)];
     }
 }

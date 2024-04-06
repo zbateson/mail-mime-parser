@@ -5,6 +5,8 @@ namespace ZBateson\MailMimeParser\Header;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
 
 /**
  * Description of ParametersHeaderTest
@@ -29,7 +31,7 @@ class ParameterHeaderTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -41,8 +43,16 @@ class ParameterHeaderTest extends TestCase
             ->setConstructorArgs([$mpf, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
+        $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
+            ->setConstructorArgs([$mpf, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)
+            ->setConstructorArgs([$mpf, $pvcs, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
         $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, $qscs])
+            ->setConstructorArgs([$pf, $pnvcs, $ccs, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
     }

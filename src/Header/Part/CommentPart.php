@@ -15,23 +15,34 @@ use ZBateson\MbWrapper\MbWrapper;
  *
  * @author Zaahid Bateson
  */
-class CommentPart extends MimeLiteralPart
+class CommentPart extends ContainerPart
 {
     /**
      * @var string the contents of the comment
      */
     protected string $comment;
 
-    /**
-     * Constructs a MimeLiteralPart, decoding the value if it's mime-encoded.
-     */
-    public function __construct(MbWrapper $charsetConverter, string $token)
+    public function __construct(MbWrapper $charsetConverter, HeaderPartFactory $partFactory, array $children)
     {
-        parent::__construct($charsetConverter, $token);
-        $this->comment = $this->value;
-        $this->value = '';
+        parent::__construct($charsetConverter, $partFactory, $children);
         $this->canIgnoreSpacesBefore = true;
         $this->canIgnoreSpacesAfter = true;
+    }
+
+    protected function getValueFromParts(array $parts) : string
+    {
+        $partFactory = $this->partFactory;
+        return parent::getValueFromParts(\array_map(
+            function ($p) use ($partFactory) {
+                if ($p instanceof CommentPart) {
+                    return $partFactory->newQuotedLiteralPart([$partFactory->newToken('(' . $p->getComment() . ')')]);
+                } elseif ($p instanceof QuotedLiteralPart) {
+                    return $partFactory->newQuotedLiteralPart([$partFactory->newToken('"' . \str_replace('(["\\])', '\$1', $p->getValue()) . '"')]);
+                }
+                return $p;
+            },
+            $parts
+        ));
     }
 
     /**
@@ -39,6 +50,14 @@ class CommentPart extends MimeLiteralPart
      */
     public function getComment() : string
     {
-        return $this->comment;
+        return $this->value;
+    }
+
+    /**
+     * Returns an empty string.
+     */
+    public function getValue() : string
+    {
+        return '';
     }
 }

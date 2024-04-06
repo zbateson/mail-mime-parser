@@ -7,8 +7,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
-
 /**
  * Parses a so-called "extended-domain" (from and by) part of a Received header.
  *
@@ -56,30 +54,6 @@ class DomainConsumerService extends GenericReceivedConsumerService
     }
 
     /**
-     * Attempts to match a parenthesized expression to find a hostname and an
-     * address.  Returns true if the expression matched, and either hostname or
-     * address were found.
-     */
-    private function matchHostPart(string $value, ?string &$hostname, ?string &$address) : bool
-    {
-        $matches = [];
-        $pattern = '~^(\[(IPv[64])?(?P<addr1>[a-f\d\.\:]+)\])?\s*(helo=)?(?P<name>[a-z0-9\-]+[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr2>[a-f\d\.\:]+)\])?$~i';
-        if (\preg_match($pattern, $value, $matches)) {
-            if (!empty($matches['name'])) {
-                $hostname = $matches['name'];
-            }
-            if (!empty($matches['addr1'])) {
-                $address = $matches['addr1'];
-            }
-            if (!empty($matches['addr2'])) {
-                $address = $matches['addr2'];
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Creates a single ReceivedDomainPart out of matched parts.  If an
      * unmatched parenthesized expression was found, it's returned as a
      * CommentPart.
@@ -89,33 +63,6 @@ class DomainConsumerService extends GenericReceivedConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $ehloName = null;
-        $hostname = null;
-        $address = null;
-        $commentPart = null;
-
-        $filtered = $this->filterIgnoredSpaces($parts);
-        foreach ($filtered as $part) {
-            if ($part instanceof CommentPart) {
-                $commentPart = $part;
-                continue;
-            }
-            $ehloName .= $part->getValue();
-        }
-
-        $strValue = $ehloName;
-        if ($commentPart !== null && $this->matchHostPart($commentPart->getComment(), $hostname, $address)) {
-            $strValue .= ' (' . $commentPart->getComment() . ')';
-            $commentPart = null;
-        }
-
-        $domainPart = $this->partFactory->newReceivedDomainPart(
-            $this->partName,
-            $strValue,
-            $ehloName,
-            $hostname,
-            $address
-        );
-        return \array_values(\array_filter([$domainPart, $commentPart]));
+        return [$this->partFactory->newReceivedDomainPart($this->partName, $parts)];
     }
 }

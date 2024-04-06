@@ -32,7 +32,7 @@ class AddressHeaderTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -53,7 +53,7 @@ class AddressHeaderTest extends TestCase
             ->setMethods(['__toString'])
             ->getMock();
         $acs = $this->getMockBuilder(AddressConsumerService::class)
-            ->setConstructorArgs([$pf, $agcs, $aecs, $ccs, $qscs])
+            ->setConstructorArgs([$mpf, $agcs, $aecs, $ccs, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
         $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService::class)
@@ -148,7 +148,7 @@ class AddressHeaderTest extends TestCase
         $this->assertEquals('therose@pureawesome.com', $addresses[3]->getEmail());
     }
 
-    public function testAddressGroups() : void
+    public function testAddressGroupParts() : void
     {
         $header = new AddressHeader(
             $this->consumerService,

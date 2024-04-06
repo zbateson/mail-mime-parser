@@ -9,9 +9,8 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
-use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
-use ZBateson\MailMimeParser\Header\Part\LiteralPart;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeToken;
 
 /**
  * Parses a single part of an address header.
@@ -37,7 +36,7 @@ use ZBateson\MailMimeParser\Header\Part\LiteralPart;
 class AddressConsumerService extends AbstractConsumerService
 {
     public function __construct(
-        HeaderPartFactory $partFactory,
+        MimeTokenPartFactory $partFactory,
         AddressGroupConsumerService $addressGroupConsumerService,
         AddressEmailConsumerService $addressEmailConsumerService,
         CommentConsumerService $commentConsumerService,
@@ -103,25 +102,25 @@ class AddressConsumerService extends AbstractConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $strName = '';
-        $strEmail = '';
-        foreach ($parts as $part) {
-            if ($part instanceof AddressGroupPart) {
-                return [
-                    $this->partFactory->newAddressGroupPart(
-                        $part->getAddresses(),
-                        $strName
-                    )
-                ];
-            } elseif ($part instanceof AddressPart) {
-                return [$this->partFactory->newAddressPart($strName, $part->getEmail())];
-            } elseif ((($part instanceof LiteralPart) && !($part instanceof CommentPart)) && $part->getValue() !== '') {
-                $strEmail .= '"' . \preg_replace('/(["\\\])/', '\\\$1', $part->getValue()) . '"';
-            } else {
-                $strEmail .= \preg_replace('/\s+/', '', $part->getValue());
+        $popped = $parts;
+        $lastPart = \array_pop($popped);
+        if ($lastPart instanceof AddressGroupPart || $lastPart instanceof AddressPart) {
+            if ($lastPart instanceof AddressGroupPart) {
+                return [$this->partFactory->newAddressGroupPart(
+                    $popped,
+                    [$lastPart]
+                )];
             }
-            $strName .= $part->getValue();
+            return [$this->partFactory->newAddress(
+                $popped,
+                [$lastPart]
+            )];
         }
-        return [$this->partFactory->newAddressPart('', $strEmail)];
+        return [
+            $this->partFactory->newAddress(
+                [],
+                \array_map(fn ($p) => ($p instanceof MimeToken) ? $this->partFactory->newToken($p->getRawValue()) : $p, $parts)
+            )
+        ];
     }
 }

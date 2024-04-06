@@ -27,7 +27,7 @@ class AddressBaseConsumerServiceTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -48,7 +48,7 @@ class AddressBaseConsumerServiceTest extends TestCase
             ->setMethods(['__toString'])
             ->getMock();
         $acs = $this->getMockBuilder(AddressConsumerService::class)
-            ->setConstructorArgs([$pf, $agcs, $aecs, $ccs, $qscs])
+            ->setConstructorArgs([$mpf, $agcs, $aecs, $ccs, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
         $this->addressBaseConsumer = new AddressBaseConsumerService($pf, $acs);

@@ -10,18 +10,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 
 /**
- * Extends HeaderPartFactory to instantiate MimeLiteralParts for its newInstance
- * function.
+ * Extends HeaderPartFactory to instantiate MimeTokens for its
+ * newInstance method.
  *
  * @author Zaahid Bateson
  */
-class MimeLiteralPartFactory extends HeaderPartFactory
+class MimeTokenPartFactory extends HeaderPartFactory
 {
     /**
-     * Creates and returns a MimeLiteralPart.
+     * Creates and returns a MimeToken.
      */
     public function newInstance(string $value) : IHeaderPart
     {
-        return $this->newMimeLiteralPart($value);
+        return $this->newMimeToken($value);
     }
 }

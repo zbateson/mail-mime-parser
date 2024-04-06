@@ -27,7 +27,7 @@ class AddressConsumerServiceTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -52,7 +52,7 @@ class AddressConsumerServiceTest extends TestCase
             ->method('setAddressConsumerService')
             ->with($this->isInstanceOf(AddressConsumerService::class));
 
-        $this->addressConsumer = new AddressConsumerService($pf, $agcs, $aecs, $ccs, $qscs);
+        $this->addressConsumer = new AddressConsumerService($mpf, $agcs, $aecs, $ccs, $qscs);
     }
 
     public function testConsumeEmail() : void
@@ -150,6 +150,6 @@ class AddressConsumerServiceTest extends TestCase
 
         $addressGroup = $ret[0];
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $addressGroup);
-        $this->assertEquals('Senate', $addressGroup->getName());
+        $this->assertEquals('Senate', $AddressGroupPart->getName());
     }
 }

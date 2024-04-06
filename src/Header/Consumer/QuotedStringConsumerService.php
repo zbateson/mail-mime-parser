@@ -55,16 +55,6 @@ class QuotedStringConsumerService extends AbstractGenericConsumerService
     }
 
     /**
-     * No ignored spaces in a quoted part.  Returns the passed $parts param
-     * as-is.
-     *
-     */
-    protected function filterIgnoredSpaces(array $parts) : array
-    {
-        return $parts;
-    }
-
-    /**
      * Constructs a LiteralPart and returns it.
      *
      * @param bool $isLiteral not used - everything in a quoted string is a
@@ -72,25 +62,21 @@ class QuotedStringConsumerService extends AbstractGenericConsumerService
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        return $this->partFactory->newLiteralPart($token);
+        return $this->partFactory->newToken($token, true);
     }
 
     /**
      * Overridden to combine all part values into a single string and return it
      * as an array with a single element.
      *
-     * The returned IHeaderParts are all LiteralParts.
+     * The returned IHeaderParts is an array containing a single
+     * QuotedLiteralPart.
      *
      * @param IHeaderPart[] $parts
      * @return IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {
-        $strValue = '';
-        $filtered = $this->filterIgnoredSpaces($parts);
-        foreach ($filtered as $part) {
-            $strValue .= $part->getValue();
-        }
-        return [$this->partFactory->newLiteralPart($strValue)];
+        return [$this->partFactory->newQuotedLiteralPart($parts)];
     }
 }

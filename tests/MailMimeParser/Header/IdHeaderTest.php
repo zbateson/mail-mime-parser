@@ -22,7 +22,7 @@ class IdHeaderTest extends TestCase
     protected $consumerService;
 
     // @phpstan-ignore-next-line
-    protected $mimeLiteralPartFactory;
+    protected $mimeTokenPartFactory;
 
     protected function setUp() : void
     {
@@ -33,7 +33,7 @@ class IdHeaderTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -53,45 +53,45 @@ class IdHeaderTest extends TestCase
             ->setConstructorArgs([$pf, $ccs, $qscs, $idcs])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->mimeLiteralPartFactory = $mpf;
+        $this->mimeTokenPartFactory = $mpf;
     }
 
     public function testGetId() : void
     {
-        $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'Content-ID', ' <1337@example.com> ');
+        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'Content-ID', ' <1337@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
     }
 
     public function testGetIdWithInvalidId() : void
     {
-        $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'Content-ID', 'Test');
+        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'Content-ID', 'Test');
         $this->assertEquals('Test', $header->getValue());
     }
 
     public function testGetIdWithEmptyValue() : void
     {
-        $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'Content-ID', '');
+        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'Content-ID', '');
         $this->assertNull($header->getValue());
         $this->assertEquals([], $header->getIds());
     }
 
     public function testGetIds() : void
     {
-        $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'References', ' <1337@example.com> <7331@example.com> <4@example.com> ');
+        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'References', ' <1337@example.com> <7331@example.com> <4@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
         $this->assertEquals(['1337@example.com', '7331@example.com', '4@example.com'], $header->getIds());
     }
 
     public function testGetIdsWithComments() : void
     {
-        $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'References', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
+        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'References', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
         $this->assertEquals(['1337@example.com', '7331@example.com', '4@example.com'], $header->getIds());
     }
 
     public function testGetIdsWithInvalidValue() : void
     {
-        $header = new IdHeader($this->mimeLiteralPartFactory, $this->consumerService, 'In-Reply-To', 'Blah Blah');
+        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'In-Reply-To', 'Blah Blah');
         $this->assertEquals('Blah', $header->getValue());
         $this->assertEquals(['Blah', 'Blah'], $header->getIds());
     }
@@ -99,7 +99,7 @@ class IdHeaderTest extends TestCase
     public function testGetIdsWithMimeLiteralParts() : void
     {
         $header = new IdHeader(
-            $this->mimeLiteralPartFactory,
+            $this->mimeTokenPartFactory,
             $this->consumerService,
             'References',
             '=?us-ascii?Q?<CACrVqsLQjPe0y=3DE4q0auFowDoY+9Z27R63OA=5F1fn-?= '
@@ -122,7 +122,7 @@ class IdHeaderTest extends TestCase
     public function testReferencesHeader() : void
     {
         $header = new IdHeader(
-            $this->mimeLiteralPartFactory,
+            $this->mimeTokenPartFactory,
             $this->consumerService,
             'References',
             '=?us-ascii?Q?' . "\r\n"

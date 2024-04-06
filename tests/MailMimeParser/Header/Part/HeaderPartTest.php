@@ -22,8 +22,8 @@ class HeaderPartTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
-        $stub = $this->getMockBuilder('\\' . \ZBateson\MailMimeParser\Header\Part\HeaderPart::class)
-            ->setConstructorArgs([$charsetConverter])
+        $stub = $this->getMockBuilder(HeaderPart::class)
+            ->setConstructorArgs([$charsetConverter, 'toost'])
             ->getMockForAbstractClass();
         $this->abstractHeaderPartStub = $stub;
     }
@@ -33,9 +33,9 @@ class HeaderPartTest extends TestCase
         $this->assertInstanceOf(ErrorBag::class, $this->abstractHeaderPartStub);
     }
 
-    public function testIgnoreSpaces() : void
+    public function testValue() : void
     {
-        $this->assertFalse($this->abstractHeaderPartStub->ignoreSpacesBefore());
-        $this->assertFalse($this->abstractHeaderPartStub->ignoreSpacesAfter());
+        $this->assertEquals('toost', $this->abstractHeaderPartStub->getValue());
+        $this->assertEquals('toost', $this->abstractHeaderPartStub->__toString());
     }
 }

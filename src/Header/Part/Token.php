@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -22,38 +23,11 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class Token extends HeaderPart
 {
-    /**
-     * Initializes a token.
-     *
-     * @param string $value the token's value
-     */
-    public function __construct(MbWrapper $charsetConverter, $value)
+    public function __construct(MbWrapper $charsetConverter, string $value, bool $isLiteral = false)
     {
-        parent::__construct($charsetConverter);
-        $this->value = $value;
-    }
-
-    /**
-     * Returns true if the value of the token is equal to a single space.
-     */
-    public function isSpace() : bool
-    {
-        return ($this->value !== null && \preg_match('/^\s+$/', $this->value) === 1);
-    }
-
-    /**
-     * Returns true if the value is a space.
-     */
-    public function ignoreSpacesBefore() : bool
-    {
-        return $this->isSpace();
-    }
-
-    /**
-     * Returns true if the value is a space.
-     */
-    public function ignoreSpacesAfter() : bool
-    {
-        return $this->isSpace();
+        parent::__construct($charsetConverter, $value);
+        $this->value = \preg_replace('/\r|\n/', '', $this->convertEncoding($value));
+        $this->isSpace = (!$isLiteral && $this->value !== null && \preg_match('/^\s+$/', $this->value) === 1);
+        $this->canIgnoreSpacesAfter = $this->canIgnoreSpacesAfter = $this->isSpace;
     }
 }

@@ -9,7 +9,7 @@ use ZBateson\MailMimeParser\MailMimeParser;
  * Description of ParserHeadersIntegrationTest
  *
  * @group ParserHeadersIntegrationTest
- * @group Base
+ * @group Functional
  * @coversNothing
  * @author Zaahid Bateson
  */
@@ -70,5 +70,18 @@ class ParserHeadersIntegrationTest extends TestCase
         $this->assertEquals('Технические работы (ERP Галактика и Отчеты ТД)', $message->getHeaderValue('Test'));
 
         $this->assertEquals('FAMILY eCarsharing GAUTING STA-CL51E - Buchung geändert Text', $message->getHeaderValue('Subject-X'));
+    }
+
+    public function testParsingHeadersWithInvalidCharset() : void
+    {
+        $parser = new MailMimeParser();
+        $message = $parser->parse(\fopen(\dirname(__DIR__, 2) . '/' . TEST_DATA_DIR . '/headers/invalid-charset', 'r'), true);
+        $header = $message->getHeader('subject');
+        $this->assertEquals('TEST ¡Hola, señor!', $header->getValue());
+        $errs = $message->getAllErrors();
+        $this->assertCount(1, $errs);
+        $err = $errs[0];
+        $this->assertInstanceOf(\ZBateson\MailMimeParser\Header\Part\MimeToken::class, $err->getObject());
+        $this->assertInstanceOf(\ZBateson\MbWrapper\UnsupportedCharsetException::class, $err->getException());
     }
 }

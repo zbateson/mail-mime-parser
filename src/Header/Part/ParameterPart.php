@@ -7,61 +7,99 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Represents a name/value pair part of a header.
+ * Represents a name/value parameter part of a header.
  *
  * @author Zaahid Bateson
  */
-class ParameterPart extends MimeLiteralPart
+class ParameterPart extends NameValuePart
 {
-    /**
-     * @var string the name of the parameter
-     */
-    protected string $name;
-
     /**
      * @var string the RFC-1766 language tag if set.
      */
     protected ?string $language = null;
 
     /**
-     * Constructs a ParameterPart out of a name/value pair.  The name and
-     * value are both mime-decoded if necessary.
-     *
-     * If $language is provided, $name and $value are not mime-decoded. Instead,
-     * they're taken as literals as part of a SplitParameterToken.
+     * @var string charset of content if set.
+     */
+    protected ?string $charset = null;
+
+    /**
+     * @var int the zero-based index of the part if part of a 'continuation' in
+     *      an RFC-2231 split parameter.
+     */
+    protected ?int $index = null;
+
+    /**
+     * @var bool true if the part is an RFC-2231 encoded part, and the value
+     *      needs to be decoded.
+     */
+    protected bool $encoded = false;
+
+    /**
+     * @param HeaderPart[] $nameParts
      */
     public function __construct(
         MbWrapper $charsetConverter,
-        string $name,
-        string $value,
-        ?string $language = null
+        HeaderPartFactory $headerPartFactory,
+        array $nameParts,
+        HeaderPart $valuePart
     ) {
-        if ($language !== null) {
-            parent::__construct($charsetConverter, '');
-            $this->name = $name;
-            $this->value = $value;
-            $this->language = $language;
-        } else {
-            parent::__construct($charsetConverter, \trim($value));
-            $this->name = $this->decodeMime(\trim($name));
-        }
+        parent::__construct($charsetConverter, $headerPartFactory, $nameParts, [$valuePart]);
     }
 
-    /**
-     * Returns the name of the parameter.
-     */
-    public function getName() : string
+    protected function getNameFromParts(array $parts) : string
     {
-        return $this->name;
+        $name = parent::getNameFromParts($parts);
+        if (\preg_match('~^\s*([^\*]+)\*(\d*)(\*)?$~', $name, $matches)) {
+            $name = $matches[1];
+            $this->index = ($matches[2] !== '') ? intval($matches[2]) : null;
+            $this->encoded = (($matches[2] === '') || !empty($matches[3]));
+        } else {
+            $name = \trim($name);
+        }
+        return $name;
+    }
+
+    protected function decodePartValue(string $value, ?string $charset = null) : string
+    {
+        if ($charset !== null) {
+            return $this->convertEncoding(\rawurldecode($value), $charset, true);
+        }
+        return $this->convertEncoding(\rawurldecode($value));
+    }
+
+    protected function getValueFromParts(array $parts) : string
+    {
+        $value = parent::getValueFromParts($parts);
+        $index = intval($this->index);
+        if ($this->encoded && \preg_match('~^([^\']*)\'?([^\']*)\'?(.*)$~', $value, $matches)) {
+            $this->charset = (!empty($matches[1]) && !empty($matches[3])) ? $matches[1] : $this->charset;
+            $this->language = (!empty($matches[2])) ? $matches[2] : $this->language;
+            $ev = (empty($matches[3])) ? $matches[1] : $matches[3];
+            if ($index === 0) {
+                // subsequent parts are decoded as a SplitParameterPart since only
+                // the first part are supposed to have charset/language fields
+                return $this->decodePartValue($ev, $this->charset);
+            }
+            return $ev;
+        }
+        return $value;
     }
 
     /**
-     * Returns the RFC-1766 (or subset) language tag, if the parameter is a
-     * split RFC-2231 part with a language tag set.
+     * Returns the charset if the part is an RFC-2231 part with a charset set.
+     */
+    public function getCharset() : ?string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * Returns the RFC-1766 (or subset) language tag, if the parameter is an
+     * RFC-2231 part with a language tag set.
      *
      * @return ?string the language if set, or null if not
      */
@@ -70,10 +108,8 @@ class ParameterPart extends MimeLiteralPart
         return $this->language;
     }
 
-    protected function validate() : void
+    public function getIndex() : ?int
     {
-        if ($this->value === '') {
-            $this->addError('Parameter part value is empty', LogLevel::NOTICE);
-        }
+        return $this->index;
     }
 }

@@ -18,25 +18,38 @@ use ZBateson\MbWrapper\MbWrapper;
 class AddressPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $charsetConverter;
+    private $mb;
+    private $hpf;
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapper();
+        $this->mb = new MbWrapper();
+        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
+            ->setConstructorArgs([$this->mb])
+            ->setMethods(['__toString'])
+            ->getMock();
+    }
+
+    private function getTokenMock(string $name) : Token
+    {
+        return $this->getMockBuilder(Token::class)
+            ->setConstructorArgs([$this->mb, $name])
+            ->setMethods()
+            ->getMock();
     }
 
     public function testNameEmail() : void
     {
         $name = 'Julius Caeser';
         $email = 'gaius@altavista.com';
-        $part = new AddressPart($this->charsetConverter, $name, $email);
+        $part = new AddressPart($this->mb, $this->hpf, [$this->getTokenMock($name)], [$this->getTokenMock($email)]);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
     }
 
     public function testValidation() : void
     {
-        $part = new AddressPart($this->charsetConverter, '', '');
+        $part = new AddressPart($this->mb, $this->hpf, [], []);
         $errs = $part->getErrors(true, LogLevel::ERROR);
         $this->assertCount(1, $errs);
         $this->assertEquals('AddressPart doesn\'t contain an email address', $errs[0]->getMessage());

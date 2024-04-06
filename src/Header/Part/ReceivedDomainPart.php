@@ -34,30 +34,39 @@ class ReceivedDomainPart extends ReceivedPart
     /**
      * @var string The name used to identify the server in the EHLO line.
      */
-    protected ?string $ehloName;
+    protected ?string $ehloName = null;
 
     /**
      * @var string The hostname.
      */
-    protected ?string $hostname;
+    protected ?string $hostname = null;
 
     /**
      * @var string The address.
      */
-    protected ?string $address;
+    protected ?string $address = null;
 
+    /**
+     * @param HeaderPart[] $subParts
+     */
     public function __construct(
         MbWrapper $charsetConverter,
+        HeaderPartFactory $headerPartFactory,
         string $name,
-        ?string $value = null,
-        ?string $ehloName = null,
-        ?string $hostname = null,
-        ?string $address = null
+        array $children
     ) {
-        parent::__construct($charsetConverter, $name, $value);
-        $this->ehloName = $ehloName;
-        $this->hostname = $hostname;
-        $this->address = $address;
+        parent::__construct($charsetConverter, $headerPartFactory, $name, $children);
+
+        $this->ehloName = $this->value;
+        $cps = $this->getCommentParts();
+        $commentPart = (!empty($cps)) ? $cps[0] : null;
+
+        $pattern = '~^(\[(IPv[64])?(?P<addr1>[a-f\d\.\:]+)\])?\s*(helo=)?(?P<name>[a-z0-9\-]+[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr2>[a-f\d\.\:]+)\])?$~i';
+        if ($commentPart !== null && \preg_match($pattern, $commentPart->getComment(), $matches)) {
+            $this->value .= ' (' . $commentPart->getComment() . ')';
+            $this->hostname = (!empty($matches['name'])) ? $matches['name'] : null;
+            $this->address = (!empty($matches['addr1'])) ? $matches['addr1'] : ((!empty($matches['addr2'])) ? $matches['addr2'] : null);
+        }
     }
 
     /**

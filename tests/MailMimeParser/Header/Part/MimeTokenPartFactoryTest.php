@@ -6,14 +6,14 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Description of MimeLiteralPartFactoryTest
+ * Description of MimeTokenPartFactoryTest
  *
  * @group HeaderParts
- * @group MimeLiteralPartFactory
- * @covers ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory
+ * @group MimeTokenPartFactory
+ * @covers ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory
  * @author Zaahid Bateson
  */
-class MimeLiteralPartFactoryTest extends TestCase
+class MimeTokenPartFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $headerPartFactory;
@@ -21,13 +21,13 @@ class MimeLiteralPartFactoryTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
-        $this->headerPartFactory = new MimeLiteralPartFactory($charsetConverter);
+        $this->headerPartFactory = new MimeTokenPartFactory($charsetConverter);
     }
 
     public function testNewInstance() : void
     {
         $token = $this->headerPartFactory->newInstance('Test');
         $this->assertNotNull($token);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::class, $token);
+        $this->assertInstanceOf(MimeToken::class, $token);
     }
 }

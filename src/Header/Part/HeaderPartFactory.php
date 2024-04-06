@@ -23,10 +23,6 @@ class HeaderPartFactory
      */
     protected MbWrapper $charsetConverter;
 
-    /**
-     * Sets up dependencies.
-     *
-     */
     public function __construct(MbWrapper $charsetConverter)
     {
         $this->charsetConverter = $charsetConverter;
@@ -46,102 +42,123 @@ class HeaderPartFactory
     /**
      * Initializes and returns a new Token.
      */
-    public function newToken(string $value) : Token
+    public function newToken(string $value, bool $isLiteral = false) : Token
     {
-        return new Token($this->charsetConverter, $value);
+        return new Token($this->charsetConverter, $value, $isLiteral);
     }
 
     /**
-     * Instantiates and returns a SplitParameterToken with the given name.
+     * Initializes and returns a new Token.
      */
-    public function newSplitParameterToken(string $name) : SplitParameterToken
+    public function newMimeToken(string $value) : Token
     {
-        return new SplitParameterToken($this->charsetConverter, $name);
+        return new MimeToken($this->charsetConverter, $value);
     }
 
     /**
-     * Initializes and returns a new LiteralPart.
+     * Initializes and returns a new ContainerPart.
+     *
+     * @param HeaderPart[] $children
      */
-    public function newLiteralPart(string $value) : LiteralPart
+    public function newContainerPart(array $children) : ContainerPart
     {
-        return new LiteralPart($this->charsetConverter, $value);
+        return new ContainerPart($this->charsetConverter, $this, $children);
     }
 
     /**
-     * Initializes and returns a new MimeLiteralPart.
+     * Instantiates and returns a SplitParameterPart.
+     *
+     * @param ParameterPart[] $children
      */
-    public function newMimeLiteralPart(string $value) : MimeLiteralPart
+    public function newSplitParameterPart(array $children) : SplitParameterPart
     {
-        return new MimeLiteralPart($this->charsetConverter, $value);
+        return new SplitParameterPart($this->charsetConverter, $this, $children);
+    }
+
+    /**
+     * Initializes and returns a new QuotedLiteralPart.
+     *
+     * @param HeaderPart[] $children
+     */
+    public function newQuotedLiteralPart(array $parts) : QuotedLiteralPart
+    {
+        return new QuotedLiteralPart($this->charsetConverter, $this, $parts);
     }
 
     /**
      * Initializes and returns a new CommentPart.
+     *
+     * @param HeaderPart[] $children
      */
-    public function newCommentPart(string $value) : CommentPart
+    public function newCommentPart(array $children) : CommentPart
     {
-        return new CommentPart($this->charsetConverter, $value);
+        return new CommentPart($this->charsetConverter, $this, $children);
     }
 
     /**
      * Initializes and returns a new AddressPart.
+     *
+     * @param HeaderPart[] $nameParts
+     * @param HeaderPart[] $emailParts
      */
-    public function newAddressPart(string $name, string $email) : AddressPart
+    public function newAddress(array $nameParts, array $emailParts) : AddressPart
     {
-        return new AddressPart($this->charsetConverter, $name, $email);
+        return new AddressPart($this->charsetConverter, $this, $nameParts, $emailParts);
     }
 
     /**
      * Initializes and returns a new AddressGroupPart
      *
-     * @param AddressPart[] $addresses
+     * @param HeaderPart[] $nameParts
+     * @param AddressPart[]|AddressGroupPart[] $addressesAndGroups
      */
-    public function newAddressGroupPart(array $addresses, string $name = '') : AddressGroupPart
+    public function newAddressGroupPart(array $nameParts, array $addressesAndGroups) : AddressGroupPart
     {
-        return new AddressGroupPart($this->charsetConverter, $addresses, $name);
+        return new AddressGroupPart($this->charsetConverter, $this, $nameParts, $addressesAndGroups);
     }
 
     /**
      * Initializes and returns a new DatePart
+     *
+     * @param HeaderPart[] $children
      */
-    public function newDatePart(string $value) : DatePart
+    public function newDatePart(array $children) : DatePart
     {
-        return new DatePart($this->charsetConverter, $value);
+        return new DatePart($this->charsetConverter, $this, $children);
     }
 
     /**
      * Initializes and returns a new ParameterPart.
+     *
+     * @param HeaderPart[] $nameParts
      */
-    public function newParameterPart(string $name, string $value, ?string $language = null) : ParameterPart
+    public function newParameterPart(array $nameParts, HeaderPart $valuePart) : ParameterPart
     {
-        return new ParameterPart($this->charsetConverter, $name, $value, $language);
+        return new ParameterPart($this->charsetConverter, $this, $nameParts, $valuePart);
     }
 
     /**
      * Initializes and returns a new ReceivedPart.
+     *
+     * @param HeaderPart[] $children
      */
-    public function newReceivedPart(string $name, string $value) : ReceivedPart
+    public function newReceivedPart(string $name, array $children) : ReceivedPart
     {
-        return new ReceivedPart($this->charsetConverter, $name, $value);
+        return new ReceivedPart($this->charsetConverter, $this, $name, $children);
     }
 
     /**
      * Initializes and returns a new ReceivedDomainPart.
+     *
+     * @param HeaderPart[] $children
      */
-    public function newReceivedDomainPart(
-        string $name,
-        ?string $value = null,
-        ?string $ehloName = null,
-        ?string $hostName = null,
-        ?string $hostAddress = null
-    ) : ReceivedDomainPart {
+    public function newReceivedDomainPart(string $name, array $children) : ReceivedDomainPart
+    {
         return new ReceivedDomainPart(
             $this->charsetConverter,
+            $this,
             $name,
-            $value,
-            $ehloName,
-            $hostName,
-            $hostAddress
+            $children
         );
     }
 }

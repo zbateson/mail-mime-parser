@@ -17,16 +17,29 @@ use ZBateson\MbWrapper\MbWrapper;
 class ReceivedPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $charsetConverter;
+    private $mb;
+    private $hpf;
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapper();
+        $this->mb = new MbWrapper();
+        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
+            ->setConstructorArgs([$this->mb])
+            ->setMethods()
+            ->getMock();
+    }
+
+    private function getTokenArray(string $name) : array
+    {
+        return [$this->getMockBuilder(MimeToken::class)
+            ->setConstructorArgs([$this->mb, $name])
+            ->setMethods()
+            ->getMock()];
     }
 
     public function testBasicNameValuePair() : void
     {
-        $part = new ReceivedPart($this->charsetConverter, 'Name', 'Value');
+        $part = new ReceivedPart($this->mb, $this->hpf, 'Name', $this->getTokenArray('Value'));
         $this->assertEquals('Name', $part->getName());
         $this->assertEquals('Value', $part->getValue());
     }

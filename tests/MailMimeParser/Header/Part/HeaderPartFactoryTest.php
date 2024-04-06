@@ -16,102 +16,112 @@ use ZBateson\MbWrapper\MbWrapper;
 class HeaderPartFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line
+    private $mb;
     private $headerPartFactory;
 
     protected function setUp() : void
     {
-        $charsetConverter = new MbWrapper();
-        $this->headerPartFactory = new HeaderPartFactory($charsetConverter);
+        $this->mb = new MbWrapper();
+        $this->headerPartFactory = new HeaderPartFactory($this->mb);
+    }
+
+    private function getTokenArray(string $name) : array
+    {
+        return [$this->getMockBuilder(Token::class)
+            ->setConstructorArgs([$this->mb, $name])
+            ->setMethods()
+            ->getMock()];
     }
 
     public function testNewInstance() : void
     {
         $token = $this->headerPartFactory->newInstance('Test');
         $this->assertNotNull($token);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\Token::class, $token);
+        $this->assertInstanceOf('\\' . Token::class, $token);
     }
 
     public function testNewToken() : void
     {
         $token = $this->headerPartFactory->newToken('Test');
         $this->assertNotNull($token);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\Token::class, $token);
+        $this->assertInstanceOf('\\' . Token::class, $token);
     }
 
     public function testNewSplitParameterToken() : void
     {
-        $token = $this->headerPartFactory->newSplitParameterToken('Test');
+        $param = [$this->getMockBuilder(ParameterPart::class)
+            ->setConstructorArgs([$this->mb, $this->headerPartFactory, $this->getTokenArray('Test'), $this->getTokenArray('Value')[0]])
+            ->setMethods([])
+            ->getMock()];
+        $token = $this->headerPartFactory->newSplitParameterPart($param);
         $this->assertNotNull($token);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\SplitParameterToken::class, $token);
+        $this->assertInstanceOf('\\' . SplitParameterPart::class, $token);
     }
 
-    public function testNewLiteralPart() : void
+    public function testNewContainerPart() : void
     {
-        $part = $this->headerPartFactory->newLiteralPart('Test');
+        $part = $this->headerPartFactory->newContainerPart($this->getTokenArray('Test'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $part);
+        $this->assertInstanceOf('\\' . ContainerPart::class, $part);
     }
 
-    public function testNewMimeLiteralPart() : void
+    public function testNewMimeToken() : void
     {
-        $part = $this->headerPartFactory->newMimeLiteralPart('Test');
+        $part = $this->headerPartFactory->newMimeToken('Test');
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\MimeLiteralPart::class, $part);
+        $this->assertInstanceOf('\\' . MimeToken::class, $part);
     }
 
     public function testNewCommentPart() : void
     {
-        $part = $this->headerPartFactory->newCommentPart('Test');
+        $part = $this->headerPartFactory->newCommentPart($this->getTokenArray('Test'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $part);
+        $this->assertInstanceOf('\\' . CommentPart::class, $part);
     }
 
-    public function testNewAddressPart() : void
+    public function testNewAddress() : void
     {
-        $part = $this->headerPartFactory->newAddressPart('Test', 'Test');
+        $part = $this->headerPartFactory->newAddress($this->getTokenArray('Test'), $this->getTokenArray('Test'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressPart::class, $part);
+        $this->assertInstanceOf('\\' . AddressPart::class, $part);
     }
 
     public function testNewAddressGroupPart() : void
     {
-        $part = $this->headerPartFactory->newAddressGroupPart(['Test']);
+        $part = $this->headerPartFactory->newAddressGroupPart($this->getTokenArray('Test'), $this->getTokenArray('Test'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $part);
+        $this->assertInstanceOf('\\' . AddressGroupPart::class, $part);
     }
 
     public function testNewDatePart() : void
     {
-        $part = $this->headerPartFactory->newDatePart('Test');
+        $part = $this->headerPartFactory->newDatePart($this->getTokenArray('Test'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\DatePart::class, $part);
+        $this->assertInstanceOf('\\' . DatePart::class, $part);
     }
 
     public function testNewParameterPart() : void
     {
-        $part = $this->headerPartFactory->newParameterPart('Test', 'Value');
+        $part = $this->headerPartFactory->newParameterPart($this->getTokenArray('Test'), $this->getTokenArray('Test')[0]);
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ParameterPart::class, $part);
+        $this->assertInstanceOf('\\' . ParameterPart::class, $part);
     }
 
     public function testNewReceivedPart() : void
     {
-        $part = $this->headerPartFactory->newReceivedPart('Test', 'Value');
+        $part = $this->headerPartFactory->newReceivedPart('Test', $this->getTokenArray('Value'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedPart::class, $part);
+        $this->assertInstanceOf('\\' . ReceivedPart::class, $part);
         $this->assertEquals('Test', $part->getName());
         $this->assertEquals('Value', $part->getValue());
     }
 
     public function testNewReceivedDomainPart() : void
     {
-        $part = $this->headerPartFactory->newReceivedDomainPart('Test', 'Value', 'ehlo', 'host', 'addr');
+        $part = $this->headerPartFactory->newReceivedDomainPart('Test', $this->getTokenArray('Value'));
         $this->assertNotNull($part);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart::class, $part);
+        $this->assertInstanceOf('\\' . ReceivedDomainPart::class, $part);
         $this->assertEquals('Test', $part->getName());
         $this->assertEquals('Value', $part->getValue());
-        $this->assertEquals('ehlo', $part->getEhloName());
-        $this->assertEquals('host', $part->getHostname());
-        $this->assertEquals('addr', $part->getAddress());
     }
 }

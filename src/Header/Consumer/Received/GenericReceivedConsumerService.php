@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
-use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
 /**
@@ -102,26 +101,11 @@ class GenericReceivedConsumerService extends AbstractGenericConsumerService
     }
 
     /**
-     * Overridden to combine all part values into a single string and return it
-     * as the first element, followed by any comment elements as subsequent
-     * elements.
-     *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {
-        $strValue = '';
-        $ret = [];
-        $filtered = $this->filterIgnoredSpaces($parts);
-        foreach ($filtered as $part) {
-            if ($part instanceof CommentPart) {
-                $ret[] = $part;
-                continue;    // getValue() is empty anyway, but for clarity...
-            }
-            $strValue .= $part->getValue();
-        }
-        \array_unshift($ret, $this->partFactory->newReceivedPart($this->partName, $strValue));
-        return $ret;
+        return [$this->partFactory->newReceivedPart($this->partName, $parts)];
     }
 }

@@ -27,7 +27,7 @@ class IdConsumerServiceTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -49,7 +49,7 @@ class IdConsumerServiceTest extends TestCase
         $this->assertCount(1, $ret);
 
         $address = $ret[0];
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $address);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $address);
         $this->assertEquals('id123@host.name', $address->getValue());
     }
 
@@ -68,7 +68,7 @@ class IdConsumerServiceTest extends TestCase
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
 
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $ret[0]);
         $this->assertEquals('firstquoted', $ret[0]->getValue());
         $this->assertEquals('comment', $ret[1]->getComment());
     }

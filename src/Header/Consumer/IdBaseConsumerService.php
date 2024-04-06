@@ -82,6 +82,6 @@ class IdBaseConsumerService extends AbstractConsumerService
         if (\preg_match('/^\s+$/', $token)) {
             return null;
         }
-        return $this->partFactory->newLiteralPart($token);
+        return $this->partFactory->newToken($token, true);
     }
 }

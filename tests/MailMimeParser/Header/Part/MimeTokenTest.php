@@ -6,15 +6,15 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Description of MimeLiteralTest
+ * Description of MimeTokenTest
  *
  * @group HeaderParts
- * @group MimeLiteralPart
- * @covers ZBateson\MailMimeParser\Header\Part\MimeLiteralPart
+ * @group MimeToken
+ * @covers ZBateson\MailMimeParser\Header\Part\MimeToken
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class MimeLiteralPartTest extends TestCase
+class MimeTokenTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $charsetConverter;
@@ -24,9 +24,9 @@ class MimeLiteralPartTest extends TestCase
         $this->charsetConverter = new MbWrapper();
     }
 
-    protected function assertDecoded($expected, $encodedActual) : MimeLiteralPart
+    protected function assertDecoded($expected, $encodedActual) : MimeToken
     {
-        $part = new MimeLiteralPart($this->charsetConverter, $encodedActual);
+        $part = new MimeToken($this->charsetConverter, $encodedActual);
         $this->assertEquals($expected, $part->getValue());
 
         return $part;
@@ -37,12 +37,11 @@ class MimeLiteralPartTest extends TestCase
         $this->assertDecoded('Step', 'Step');
     }
 
-    public function testNullLanguage() : void
+    public function testNullLanguageAndCharset() : void
     {
         $part = $this->assertDecoded('Step', 'Step');
-        $this->assertEquals([
-            ['lang' => null, 'value' => 'Step']
-        ], $part->getLanguageArray());
+        $this->assertNull($part->getLanguage());
+        $this->assertNull($part->getCharset());
     }
 
     public function testMimeEncoding() : void
@@ -56,12 +55,11 @@ class MimeLiteralPartTest extends TestCase
         $this->assertDecoded('', '=?utf-8?Q??=');
     }
 
-    public function testMimeEncodingNullLanguage() : void
+    public function testMimeDecodingNullLanguageAndCharset() : void
     {
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
-        $this->assertEquals([
-            ['lang' => null, 'value' => 'Kilgore Trout']
-        ], $part->getLanguageArray());
+        $this->assertNull($part->getLanguage());
+        $this->assertNull($part->getCharset());
     }
 
     public function testEncodingTwoParts() : void
@@ -137,43 +135,27 @@ class MimeLiteralPartTest extends TestCase
             =?iso-2022-jp?Q?)(=1B$B%G%b=1B(B)=1B$B7h:QLsDj$N$*CN$i$;=1B(B?=');
     }
 
-    public function testIgnoreSpacesBefore() : void
+    public function testLanguageAndCharset() : void
     {
-        $part = new MimeLiteralPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=Blah');
-        $this->assertTrue($part->ignoreSpacesBefore(), 'ignore spaces before');
-        $this->assertFalse($part->ignoreSpacesAfter(), 'ignore spaces after');
-    }
-
-    public function testIgnoreSpacesAfter() : void
-    {
-        $part = new MimeLiteralPart($this->charsetConverter, 'Blah=?US-ASCII?Q?Kilgore_Trout?=');
-        $this->assertFalse($part->ignoreSpacesBefore(), 'ignore spaces before');
-        $this->assertTrue($part->ignoreSpacesAfter(), 'ignore spaces after');
-    }
-
-    public function testIgnoreSpacesBeforeAndAfter() : void
-    {
-        $part = new MimeLiteralPart($this->charsetConverter, '=?US-ASCII?Q?Kilgore_Trout?=');
-        $this->assertTrue($part->ignoreSpacesBefore(), 'ignore spaces before');
-        $this->assertTrue($part->ignoreSpacesAfter(), 'ignore spaces after');
-    }
-
-    public function testLanguageParts() : void
-    {
-        $this->charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
-            ->getMock();
-
         $part = $this->assertDecoded(
-            'Hello and bonjour mi amici. Welcome!',
-            'Hello and =?UTF-8*fr-be?Q?bonjou?= =?UTF-8*it?Q?r_mi amici?=. Welcome!'
+            'bonjour mi amici',
+            '=?UTF-8*fr-be?Q?bonjour_mi amici?='
         );
-        $expectedLang = [
-            ['lang' => null, 'value' => 'Hello and '],
-            ['lang' => 'fr-be', 'value' => 'bonjou'],
-            ['lang' => 'it', 'value' => 'r mi amici'],
-            ['lang' => null, 'value' => '. Welcome!']
-        ];
-        $this->assertEquals($expectedLang, $part->getLanguageArray());
+        $this->assertEquals('fr-be', $part->getLanguage());
+        $this->assertEquals('UTF-8', $part->getCharset());
+    }
+
+    public function testErrorAddedForUnsupportedCharset() : void
+    {
+        $part = $this->assertDecoded(
+            'Kilgore Trout',
+            '=?BLAH-BLOOH?Q?Kilgore_Trout?='
+        );
+        $this->assertEquals('Kilgore Trout', $part->getValue());
+        $errs = $part->getAllErrors();
+        $this->assertCount(1, $errs);
+        $err = $errs[0];
+        $this->assertSame($part, $err->getObject());
+        $this->assertInstanceOf(\ZBateson\MbWrapper\UnsupportedCharsetException::class, $err->getException());
     }
 }

@@ -27,7 +27,7 @@ class ParameterConsumerServiceTest extends TestCase
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
-        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory::class)
+        $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$charsetConverter])
             ->setMethods(['__toString'])
             ->getMock();
@@ -39,7 +39,15 @@ class ParameterConsumerServiceTest extends TestCase
             ->setConstructorArgs([$mpf, $qscs])
             ->setMethods(['__toString'])
             ->getMock();
-        $this->parameterConsumer = new ParameterConsumerService($pf, $ccs, $qscs);
+        $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
+            ->setConstructorArgs([$mpf, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)
+            ->setConstructorArgs([$mpf, $pvcs, $ccs, $qscs])
+            ->setMethods(['__toString'])
+            ->getMock();
+        $this->parameterConsumer = new ParameterConsumerService($pf, $pnvcs, $ccs, $qscs);
     }
 
     public function testConsumeTokens() : void
@@ -47,7 +55,7 @@ class ParameterConsumerServiceTest extends TestCase
         $ret = $this->parameterConsumer->__invoke('text/html; charset=utf8');
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\LiteralPart::class, $ret[0]);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ContainerPart::class, $ret[0]);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ParameterPart::class, $ret[1]);
         $this->assertEquals('text/html', $ret[0]->getValue());
         $this->assertEquals('charset', $ret[1]->getName());

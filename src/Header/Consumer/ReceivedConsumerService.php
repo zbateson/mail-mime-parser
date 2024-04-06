@@ -101,7 +101,7 @@ class ReceivedConsumerService extends AbstractConsumerService
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumerService
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {
         if ($isStartToken) {
             $tokens->next();
@@ -117,21 +117,12 @@ class ReceivedConsumerService extends AbstractConsumerService
     }
 
     /**
-     * Overridden to combine all part values into a single string and return it
-     * as an array with a single element.
-     *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
      */
     protected function processParts(array $parts) : array
     {
-        $ret = [];
-        foreach ($parts as $part) {
-            if ($part instanceof Token) {
-                continue;
-            }
-            $ret[] = $part;
-        }
-        return $ret;
+        // filtering out tokens but is that needed?
+        return \array_filter($parts, fn ($p) => !$p instanceof Token);
     }
 }

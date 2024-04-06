@@ -6,15 +6,15 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Description of ReceivedDomainTest
+ * Description of LiteralTest
  *
  * @group HeaderParts
- * @group ReceivedDomainPart
- * @covers ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart
+ * @group ContainerPart
+ * @covers ZBateson\MailMimeParser\Header\Part\ContainerPart
  * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
-class ReceivedDomainPartTest extends TestCase
+class ContainerPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
@@ -37,13 +37,13 @@ class ReceivedDomainPartTest extends TestCase
             ->getMock()];
     }
 
-    public function testBasicNameValueAndDomainParts() : void
+    public function testInstance() : void
     {
-        $part = new ReceivedDomainPart($this->mb, $this->hpf, 'Name', $this->getTokenArray('Value'));
-        $this->assertEquals('Name', $part->getName());
-        $this->assertEquals('Value', $part->getValue());
-        $this->assertEquals('Value', $part->getEhloName());
-        $this->assertNull($part->getHostname());
-        $this->assertNull($part->getAddress());
+        $part = new ContainerPart($this->mb, $this->hpf, $this->getTokenArray('"'));
+        $this->assertNotNull($part);
+        $this->assertEquals('"', $part->getValue());
+
+        $part = new ContainerPart($this->mb, $this->hpf, $this->getTokenArray('=?US-ASCII?Q?Kilgore_Trout?='));
+        $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
     }
 }

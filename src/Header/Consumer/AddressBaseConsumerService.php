@@ -48,7 +48,7 @@ class AddressBaseConsumerService extends AbstractConsumerService
      *
      * @return static
      */
-    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : AbstractConsumerService
+    protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {
         if ($isStartToken) {
             return $this;
