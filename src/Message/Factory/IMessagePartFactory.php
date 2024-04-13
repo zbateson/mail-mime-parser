@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -17,14 +19,18 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 abstract class IMessagePartFactory
 {
+    protected LoggerInterface $logger;
+
     protected StreamFactory $streamFactory;
 
     protected PartStreamContainerFactory $partStreamContainerFactory;
 
     public function __construct(
+        LoggerInterface $logger,
         StreamFactory $streamFactory,
         PartStreamContainerFactory $partStreamContainerFactory
     ) {
+        $this->logger = $logger;
         $this->streamFactory = $streamFactory;
         $this->partStreamContainerFactory = $partStreamContainerFactory;
     }
@@ -32,5 +38,5 @@ abstract class IMessagePartFactory
     /**
      * Constructs a new IMessagePart object and returns it
      */
-    abstract public function newInstance() : IMessagePart;
+    abstract public function newInstance(IMimePart $parent = null) : IMessagePart;
 }

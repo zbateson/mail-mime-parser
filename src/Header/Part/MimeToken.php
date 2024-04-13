@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -44,9 +45,9 @@ class MimeToken extends Token
      */
     protected string $rawValue = '';
 
-    public function __construct(MbWrapper $charsetConverter, $value)
+    public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter, $value)
     {
-        parent::__construct($charsetConverter, $value);
+        parent::__construct($logger, $charsetConverter, $value);
         $this->rawValue = $this->value;
         // don't use $this->value or $this->rawValue which already had a call
         // to 'convertEncoding' and causes issues.

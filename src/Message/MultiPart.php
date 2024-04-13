@@ -12,6 +12,7 @@ use ArrayIterator;
 use Iterator;
 use RecursiveIterator;
 use RecursiveIteratorIterator;
+use Psr\Log\LoggerInterface;
 
 /**
  * A message part that contains children.
@@ -26,12 +27,13 @@ abstract class MultiPart extends MessagePart implements IMultiPart
     protected PartChildrenContainer $partChildrenContainer;
 
     public function __construct(
-        ?IMimePart $parent = null,
-        ?PartStreamContainer $streamContainer = null,
-        ?PartChildrenContainer $partChildrenContainer = null
+        LoggerInterface $logger,
+        PartStreamContainer $streamContainer,
+        PartChildrenContainer $partChildrenContainer,
+        ?IMimePart $parent = null
     ) {
-        parent::__construct($streamContainer, $parent);
-        $this->partChildrenContainer = $partChildrenContainer ?? new PartChildrenContainer();
+        parent::__construct($logger, $streamContainer, $parent);
+        $this->partChildrenContainer = $partChildrenContainer;
     }
 
     private function getAllPartsIterator() : AppendIterator

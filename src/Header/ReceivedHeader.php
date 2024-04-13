@@ -8,6 +8,8 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
 
@@ -89,11 +91,18 @@ class ReceivedHeader extends ParameterHeader
     private bool $dateSet = false;
 
     public function __construct(
-        ReceivedConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?ReceivedConsumerService $consumerService = null
     ) {
-        AbstractHeader::__construct($consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        AbstractHeader::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $consumerService ?? $di->get(ReceivedConsumerService::class),
+            $name,
+            $value
+        );
     }
 
     /**

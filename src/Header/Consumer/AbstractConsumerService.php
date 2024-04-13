@@ -8,11 +8,9 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ArrayIterator;
-use DI\Attribute\Inject;
 use Iterator;
 use NoRewindIterator;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
@@ -27,7 +25,6 @@ use ZBateson\MailMimeParser\Header\Part\MimeToken;
  */
 abstract class AbstractConsumerService implements IConsumerService
 {
-    #[Inject]
     protected LoggerInterface $logger;
 
     /**
@@ -50,9 +47,9 @@ abstract class AbstractConsumerService implements IConsumerService
     /**
      * @param AbstractConsumerService[] $subConsumers
      */
-    public function __construct(HeaderPartFactory $partFactory, array $subConsumers = [])
+    public function __construct(LoggerInterface $logger, HeaderPartFactory $partFactory, array $subConsumers = [])
     {
-        $this->logger = new NullLogger();
+        $this->logger = $logger;
         $this->partFactory = $partFactory;
         $this->subConsumers = $subConsumers;
     }

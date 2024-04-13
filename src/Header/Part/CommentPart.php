@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -22,9 +23,13 @@ class CommentPart extends ContainerPart
      */
     protected string $comment;
 
-    public function __construct(MbWrapper $charsetConverter, HeaderPartFactory $partFactory, array $children)
-    {
-        parent::__construct($charsetConverter, $partFactory, $children);
+    public function __construct(
+        LoggerInterface $logger,
+        MbWrapper $charsetConverter,
+        HeaderPartFactory $partFactory,
+        array $children
+    ) {
+        parent::__construct($logger, $charsetConverter, $partFactory, $children);
         $this->canIgnoreSpacesBefore = true;
         $this->canIgnoreSpacesAfter = true;
     }

@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -35,12 +36,14 @@ class AddressGroupPart extends NameValuePart
      * @param AddressPart[]|AddressGroupPart[] $addressesAndGroupParts
      */
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         array $nameParts,
         array $addressesAndGroupParts
     ) {
         parent::__construct(
+            $logger,
             $charsetConverter,
             $headerPartFactory,
             $nameParts,

@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 
 /**
@@ -20,10 +22,17 @@ use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 class SubjectHeader extends AbstractHeader
 {
     public function __construct(
-        SubjectConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?SubjectConsumerService $consumerService = null
     ) {
-        parent::__construct($consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $consumerService ?? $di->get(SubjectConsumerService::class),
+            $name,
+            $value
+        );
     }
 }

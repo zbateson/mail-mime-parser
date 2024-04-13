@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Message;
 use ArrayIterator;
 use IteratorAggregate;
 use Traversable;
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
@@ -64,9 +65,12 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      * @param PartHeaderContainer $cloneSource the original container to clone
      *        from
      */
-    public function __construct(HeaderFactory $headerFactory, ?PartHeaderContainer $cloneSource = null)
-    {
-        parent::__construct();
+    public function __construct(
+        LoggerInterface $logger,
+        HeaderFactory $headerFactory,
+        ?PartHeaderContainer $cloneSource = null
+    ) {
+        parent::__construct($logger);
         $this->headerFactory = $headerFactory;
         if ($cloneSource !== null) {
             $this->headers = $cloneSource->headers;

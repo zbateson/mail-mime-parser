@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser;
 
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\Helper\MultipartHelper;
 use ZBateson\MailMimeParser\Message\Helper\PrivacyHelper;
@@ -41,6 +42,7 @@ class Message extends MimePart implements IMessage
     private PrivacyHelper $privacyHelper;
 
     public function __construct(
+        ?LoggerInterface $logger = null,
         ?PartStreamContainer $streamContainer = null,
         ?PartHeaderContainer $headerContainer = null,
         ?PartChildrenContainer $partChildrenContainer = null,
@@ -49,17 +51,14 @@ class Message extends MimePart implements IMessage
     ) {
         parent::__construct(
             null,
+            $logger,
             $streamContainer,
             $headerContainer,
             $partChildrenContainer
         );
-        if ($multipartHelper === null || $privacyHelper === null) {
-            $di = MailMimeParser::getGlobalContainer();
-            $multipartHelper = $di->get(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class);
-            $privacyHelper = $di->get(\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class);
-        }
-        $this->multipartHelper = $multipartHelper;
-        $this->privacyHelper = $privacyHelper;
+        $di = MailMimeParser::getGlobalContainer();
+        $this->multipartHelper = $multipartHelper ?? $di->get(MultipartHelper::class);
+        $this->privacyHelper = $privacyHelper ?? $di->get(PrivacyHelper::class);
     }
 
     /**

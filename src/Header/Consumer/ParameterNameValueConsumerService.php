@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 use ZBateson\MailMimeParser\Header\Part\ContainerPart;
@@ -17,12 +18,14 @@ use ZBateson\MailMimeParser\Header\Part\ContainerPart;
 class ParameterNameValueConsumerService extends AbstractGenericConsumerService
 {
     public function __construct(
+        LoggerInterface $logger,
         MimeTokenPartFactory $partFactory,
         ParameterValueConsumerService $parameterValueConsumerService,
         CommentConsumerService $commentConsumerService,
         QuotedStringConsumerService $quotedStringConsumerService
     ) {
         parent::__construct(
+            $logger,
             $partFactory,
             [$parameterValueConsumerService, $commentConsumerService, $quotedStringConsumerService]
         );

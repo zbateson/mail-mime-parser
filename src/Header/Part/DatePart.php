@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use DateTime;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -33,12 +34,13 @@ class DatePart extends ContainerPart
      * @param HeaderPart[] $children
      */
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         array $children
     ) {
         // parent::__construct converts character encoding -- may cause problems sometimes.
-        parent::__construct($charsetConverter, $headerPartFactory, $children);
+        parent::__construct($logger, $charsetConverter, $headerPartFactory, $children);
         $dateToken = $this->value;
 
         // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)

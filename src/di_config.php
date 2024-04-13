@@ -10,6 +10,7 @@ use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
@@ -41,6 +42,10 @@ return [
             withGenericReceivedConsumerService: DI\get('withGenericReceivedConsumerService'),
             idGenericReceivedConsumerService: DI\get('idGenericReceivedConsumerService'),
             forGenericReceivedConsumerService: DI\get('forGenericReceivedConsumerService')
+        ),
+    PartStreamContainer::class => DI\autowire()
+        ->constructor(
+            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
         ),
     PartStreamContainerFactory::class => DI\autowire()
         ->constructor(

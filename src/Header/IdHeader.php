@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
@@ -23,12 +25,20 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 class IdHeader extends MimeEncodedHeader
 {
     public function __construct(
-        MimeTokenPartFactory $mimeTokenPartFactory,
-        IdBaseConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?MimeTokenPartFactory $mimeTokenPartFactory = null,
+        ?IdBaseConsumerService $consumerService = null
     ) {
-        parent::__construct($mimeTokenPartFactory, $consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $mimeTokenPartFactory ?? $di->get(MimeTokenPartFactory::class),
+            $consumerService ?? $di->get(IdBaseConsumerService::class),
+            $name,
+            $value
+        );
     }
 
     /**

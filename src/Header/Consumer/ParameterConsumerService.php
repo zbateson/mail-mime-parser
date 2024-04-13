@@ -7,10 +7,11 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Iterator;
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
-use Iterator;
 
 /**
  * Reads headers separated into parameters consisting of an optional main value,
@@ -27,12 +28,14 @@ use Iterator;
 class ParameterConsumerService extends AbstractGenericConsumerService
 {
     public function __construct(
+        LoggerInterface $logger,
         HeaderPartFactory $partFactory,
         ParameterNameValueConsumerService $parameterNameValueConsumerService,
         CommentConsumerService $commentConsumerService,
         QuotedStringConsumerService $quotedStringConsumerService
     ) {
         parent::__construct(
+            $logger,
             $partFactory,
             [$parameterNameValueConsumerService, $commentConsumerService, $quotedStringConsumerService]
         );

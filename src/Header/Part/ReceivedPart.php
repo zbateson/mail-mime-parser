@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -25,12 +26,13 @@ class ReceivedPart extends NameValuePart
      * @param HeaderPart[] $children
      */
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         string $name,
         array $children
     ) {
-        parent::__construct($charsetConverter, $headerPartFactory, [], $children);
+        parent::__construct($logger, $charsetConverter, $headerPartFactory, [], $children);
         $this->name = $name;
     }
 }

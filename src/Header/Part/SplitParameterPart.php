@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -26,11 +27,12 @@ class SplitParameterPart extends ParameterPart
      * @param ParameterPart[] $children
      */
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         array $children
     ) {
-        parent::__construct($charsetConverter, $headerPartFactory, [$children[0]], $children[0]);
+        parent::__construct($logger, $charsetConverter, $headerPartFactory, [$children[0]], $children[0]);
         $this->children = $children;
         $this->value = $this->getValueFromParts($children);
     }

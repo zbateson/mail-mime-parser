@@ -31,6 +31,7 @@ class ParserNonMimeMessageProxyFactory extends ParserMessageProxyFactory
         $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 
         $message = new Message(
+            $this->logger,
             $streamContainer,
             $headerContainer,
             $childrenContainer,

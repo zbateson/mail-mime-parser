@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 
 /**
@@ -16,6 +17,8 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
  */
 class UUEncodedPartHeaderContainerFactory
 {
+    protected LoggerInterface $logger;
+
     /**
      * @var HeaderFactory the HeaderFactory passed to
      *      UUEncodedPartHeaderContainer instances.
@@ -26,8 +29,9 @@ class UUEncodedPartHeaderContainerFactory
      * Constructor
      *
      */
-    public function __construct(HeaderFactory $headerFactory)
+    public function __construct(LoggerInterface $logger, HeaderFactory $headerFactory)
     {
+        $this->logger = $logger;
         $this->headerFactory = $headerFactory;
     }
 
@@ -36,7 +40,7 @@ class UUEncodedPartHeaderContainerFactory
      */
     public function newInstance(int $mode, string $filename) : UUEncodedPartHeaderContainer
     {
-        $container = new UUEncodedPartHeaderContainer($this->headerFactory);
+        $container = new UUEncodedPartHeaderContainer($this->logger, $this->headerFactory);
         $container->setUnixFileMode($mode);
         $container->setFilename($filename);
         return $container;

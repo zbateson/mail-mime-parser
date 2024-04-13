@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Message\UUEncodedPart;
 use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
@@ -21,15 +22,18 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
 {
-    /**
-     * @var StreamFactory the StreamFactory instance
-     */
+    protected LoggerInterface $logger;
+
     protected StreamFactory $streamFactory;
 
     protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
 
-    public function __construct(StreamFactory $sdf, ParserPartStreamContainerFactory $parserPartStreamContainerFactory)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        StreamFactory $sdf,
+        ParserPartStreamContainerFactory $parserPartStreamContainerFactory
+    ) {
+        $this->logger = $logger;
         $this->streamFactory = $sdf;
         $this->parserPartStreamContainerFactory = $parserPartStreamContainerFactory;
     }
@@ -46,6 +50,7 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
             $parserProxy->getUnixFileMode(),
             $parserProxy->getFileName(),
             $partBuilder->getParent()->getPart(),
+            $this->logger,
             $streamContainer
         );
         $parserProxy->setPart($part);

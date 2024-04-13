@@ -7,10 +7,8 @@
 
 namespace ZBateson\MailMimeParser;
 
-use DI\Attribute\Inject;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
 use Throwable;
 
 /**
@@ -20,7 +18,6 @@ use Throwable;
  */
 abstract class ErrorBag implements IErrorBag
 {
-    #[Inject]
     protected LoggerInterface $logger;
 
     /**
@@ -33,9 +30,9 @@ abstract class ErrorBag implements IErrorBag
      */
     private bool $validated = false;
 
-    public function __construct()
+    public function __construct(LoggerInterface $logger)
     {
-        $this->logger = new NullLogger();
+        $this->logger = $logger;
     }
 
     /**

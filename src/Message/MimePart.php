@@ -8,12 +8,12 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use Traversable;
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
-use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A mime email message part.
@@ -31,17 +31,19 @@ class MimePart extends MultiPart implements IMimePart
 
     public function __construct(
         ?IMimePart $parent = null,
+        ?LoggerInterface $logger = null,
         ?PartStreamContainer $streamContainer = null,
         ?PartHeaderContainer $headerContainer = null,
         ?PartChildrenContainer $partChildrenContainer = null
     ) {
-        parent::__construct(
-            $parent,
-            $streamContainer,
-            $partChildrenContainer
-        );
         $di = MailMimeParser::getGlobalContainer();
-        $this->headerContainer = $headerContainer ?? new PartHeaderContainer($di->get(HeaderFactory::class));
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $streamContainer ?? $di->get(PartStreamContainer::class),
+            $partChildrenContainer ?? $di->get(PartChildrenContainer::class),
+            $parent
+        );
+        $this->headerContainer = $headerContainer ?? $di->get(PartHeaderContainer::class);
     }
 
     /**

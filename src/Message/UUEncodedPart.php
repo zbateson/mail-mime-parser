@@ -7,6 +7,9 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
+
 /**
  * Implementation of a non-mime message's uuencoded attachment part.
  *
@@ -28,10 +31,13 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         ?int $mode = null,
         ?string $filename = null,
         ?IMimePart $parent = null,
+        ?LoggerInterface $logger = null,
         ?PartStreamContainer $streamContainer = null
     ) {
+        $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
-            $streamContainer,
+            $logger ?? $di->get(LoggerInterface::class),
+            $streamContainer ?? $di->get(PartStreamContainer::class),
             $parent
         );
         $this->mode = $mode;

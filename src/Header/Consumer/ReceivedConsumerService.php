@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Iterator;
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
@@ -25,6 +26,7 @@ use ZBateson\MailMimeParser\Header\Part\Token;
 class ReceivedConsumerService extends AbstractConsumerService
 {
     public function __construct(
+        LoggerInterface $logger,
         HeaderPartFactory $partFactory,
         DomainConsumerService $fromDomainConsumerService,
         DomainConsumerService $byDomainConsumerService,
@@ -36,6 +38,7 @@ class ReceivedConsumerService extends AbstractConsumerService
         CommentConsumerService $commentConsumerService
     ) {
         parent::__construct(
+            $logger,
             $partFactory,
             [
                 $fromDomainConsumerService,

@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
@@ -37,11 +39,18 @@ class AddressHeader extends AbstractHeader
     protected array $groups = [];
 
     public function __construct(
-        AddressBaseConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?AddressBaseConsumerService $consumerService = null
     ) {
-        parent::__construct($consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $consumerService ?? $di->get(AddressBaseConsumerService::class),
+            $name,
+            $value
+        );
     }
 
     /**

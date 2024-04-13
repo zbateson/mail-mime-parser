@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Iterator;
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
@@ -22,9 +23,9 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
  */
 class SubjectConsumerService extends AbstractGenericConsumerService
 {
-    public function __construct(MimeTokenPartFactory $partFactory)
+    public function __construct(LoggerInterface $logger, MimeTokenPartFactory $partFactory)
     {
-        parent::__construct($partFactory);
+        parent::__construct($logger, $partFactory);
     }
 
     /**

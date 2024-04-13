@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -50,12 +51,13 @@ class ReceivedDomainPart extends ReceivedPart
      * @param HeaderPart[] $subParts
      */
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         string $name,
         array $children
     ) {
-        parent::__construct($charsetConverter, $headerPartFactory, $name, $children);
+        parent::__construct($logger, $charsetConverter, $headerPartFactory, $name, $children);
 
         $this->ehloName = $this->value;
         $cps = $this->getCommentParts();

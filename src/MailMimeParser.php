@@ -139,7 +139,6 @@ class MailMimeParser
 
     /**
      * Registers the provided logger globally.
-     *
      */
     public static function setGlobalLogger(LoggerInterface $logger) : void
     {

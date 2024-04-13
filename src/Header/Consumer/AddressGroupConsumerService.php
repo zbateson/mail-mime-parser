@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
@@ -29,9 +30,9 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
  */
 class AddressGroupConsumerService extends AddressBaseConsumerService
 {
-    public function __construct(HeaderPartFactory $partFactory)
+    public function __construct(LoggerInterface $logger, HeaderPartFactory $partFactory)
     {
-        AbstractConsumerService::__construct($partFactory, []);
+        AbstractConsumerService::__construct($logger, $partFactory, []);
     }
 
     /**

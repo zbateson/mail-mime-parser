@@ -9,6 +9,8 @@ namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
 use DateTimeImmutable;
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
 
@@ -20,11 +22,18 @@ use ZBateson\MailMimeParser\Header\Part\DatePart;
 class DateHeader extends AbstractHeader
 {
     public function __construct(
-        DateConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?DateConsumerService $consumerService = null
     ) {
-        parent::__construct($consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $consumerService ?? $di->get(DateConsumerService::class),
+            $name,
+            $value
+        );
     }
 
     /**

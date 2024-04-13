@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
@@ -31,13 +32,14 @@ abstract class MimeEncodedHeader extends AbstractHeader
     protected $mimeEncodedParsedParts = [];
 
     public function __construct(
+        LoggerInterface $logger,
         MimeTokenPartFactory $mimeTokenPartFactory,
         IConsumerService $consumerService,
-        $name,
-        $value
+        string $name,
+        string $value
     ) {
         $this->mimeTokenPartFactory = $mimeTokenPartFactory;
-        parent::__construct($consumerService, $name, $value);
+        parent::__construct($logger, $consumerService, $name, $value);
     }
 
     /**

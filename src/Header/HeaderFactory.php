@@ -7,9 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use DI\Attribute\Inject;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use ReflectionClass;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
@@ -43,7 +41,6 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
  */
 class HeaderFactory
 {
-    #[Inject]
     protected LoggerInterface $logger;
 
     /**
@@ -112,6 +109,7 @@ class HeaderFactory
     protected $genericType = GenericHeader::class;
 
     public function __construct(
+        LoggerInterface $logger,
         MimeTokenPartFactory $mimeTokenPartFactory,
         AddressBaseConsumerService $addressBaseConsumerService,
         DateConsumerService $dateConsumerService,
@@ -121,7 +119,7 @@ class HeaderFactory
         ReceivedConsumerService $receivedConsumerService,
         SubjectConsumerService $subjectConsumerService
     ) {
-        $this->logger = new NullLogger();
+        $this->logger = $logger;
         $this->mimeTokenPartFactory = $mimeTokenPartFactory;
         $this->consumerServices = [
             AddressBaseConsumerService::class => $addressBaseConsumerService,
@@ -198,16 +196,18 @@ class HeaderFactory
         $params = $ref->getConstructor()->getParameters();
         if ($ref->isSubclassOf(MimeEncodedHeader::class)) {
             return new $iHeaderClass(
-                $this->mimeTokenPartFactory,
-                $this->consumerServices[$params[1]->getType()->getName()],
                 $name,
-                $value
+                $value,
+                $this->logger,
+                $this->mimeTokenPartFactory,
+                $this->consumerServices[$params[4]->getType()->getName()]
             );
         }
         return new $iHeaderClass(
-            $this->consumerServices[$params[0]->getType()->getName()],
             $name,
-            $value
+            $value,
+            $this->logger,
+            $this->consumerServices[$params[3]->getType()->getName()]
         );
     }
 }

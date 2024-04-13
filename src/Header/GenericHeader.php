@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
 
 /**
@@ -20,11 +22,19 @@ use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartServic
 class GenericHeader extends AbstractHeader
 {
     public function __construct(
-        GenericConsumerMimeLiteralPartService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?GenericConsumerMimeLiteralPartService $consumerService = null
     ) {
-        parent::__construct($consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $consumerService ?? $di->get(DateConsumerService::class),
+            $name,
+            $value
+        );
+        parent::__construct($logger, $consumerService, $name, $value);
     }
 
     public function getValue() : ?string

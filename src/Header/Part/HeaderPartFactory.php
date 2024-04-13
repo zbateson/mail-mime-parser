@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -23,8 +24,11 @@ class HeaderPartFactory
      */
     protected MbWrapper $charsetConverter;
 
-    public function __construct(MbWrapper $charsetConverter)
+    protected LoggerInterface $logger;
+
+    public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter)
     {
+        $this->logger = $logger;
         $this->charsetConverter = $charsetConverter;
     }
 
@@ -44,7 +48,7 @@ class HeaderPartFactory
      */
     public function newToken(string $value, bool $isLiteral = false) : Token
     {
-        return new Token($this->charsetConverter, $value, $isLiteral);
+        return new Token($this->logger, $this->charsetConverter, $value, $isLiteral);
     }
 
     /**
@@ -52,7 +56,7 @@ class HeaderPartFactory
      */
     public function newMimeToken(string $value) : Token
     {
-        return new MimeToken($this->charsetConverter, $value);
+        return new MimeToken($this->logger, $this->charsetConverter, $value);
     }
 
     /**
@@ -62,7 +66,7 @@ class HeaderPartFactory
      */
     public function newContainerPart(array $children) : ContainerPart
     {
-        return new ContainerPart($this->charsetConverter, $this, $children);
+        return new ContainerPart($this->logger, $this->charsetConverter, $this, $children);
     }
 
     /**
@@ -72,7 +76,7 @@ class HeaderPartFactory
      */
     public function newSplitParameterPart(array $children) : SplitParameterPart
     {
-        return new SplitParameterPart($this->charsetConverter, $this, $children);
+        return new SplitParameterPart($this->logger, $this->charsetConverter, $this, $children);
     }
 
     /**
@@ -82,7 +86,7 @@ class HeaderPartFactory
      */
     public function newQuotedLiteralPart(array $parts) : QuotedLiteralPart
     {
-        return new QuotedLiteralPart($this->charsetConverter, $this, $parts);
+        return new QuotedLiteralPart($this->logger, $this->charsetConverter, $this, $parts);
     }
 
     /**
@@ -92,7 +96,7 @@ class HeaderPartFactory
      */
     public function newCommentPart(array $children) : CommentPart
     {
-        return new CommentPart($this->charsetConverter, $this, $children);
+        return new CommentPart($this->logger, $this->charsetConverter, $this, $children);
     }
 
     /**
@@ -103,7 +107,7 @@ class HeaderPartFactory
      */
     public function newAddress(array $nameParts, array $emailParts) : AddressPart
     {
-        return new AddressPart($this->charsetConverter, $this, $nameParts, $emailParts);
+        return new AddressPart($this->logger, $this->charsetConverter, $this, $nameParts, $emailParts);
     }
 
     /**
@@ -114,7 +118,7 @@ class HeaderPartFactory
      */
     public function newAddressGroupPart(array $nameParts, array $addressesAndGroups) : AddressGroupPart
     {
-        return new AddressGroupPart($this->charsetConverter, $this, $nameParts, $addressesAndGroups);
+        return new AddressGroupPart($this->logger, $this->charsetConverter, $this, $nameParts, $addressesAndGroups);
     }
 
     /**
@@ -124,7 +128,7 @@ class HeaderPartFactory
      */
     public function newDatePart(array $children) : DatePart
     {
-        return new DatePart($this->charsetConverter, $this, $children);
+        return new DatePart($this->logger, $this->charsetConverter, $this, $children);
     }
 
     /**
@@ -134,7 +138,7 @@ class HeaderPartFactory
      */
     public function newParameterPart(array $nameParts, HeaderPart $valuePart) : ParameterPart
     {
-        return new ParameterPart($this->charsetConverter, $this, $nameParts, $valuePart);
+        return new ParameterPart($this->logger, $this->charsetConverter, $this, $nameParts, $valuePart);
     }
 
     /**
@@ -144,7 +148,7 @@ class HeaderPartFactory
      */
     public function newReceivedPart(string $name, array $children) : ReceivedPart
     {
-        return new ReceivedPart($this->charsetConverter, $this, $name, $children);
+        return new ReceivedPart($this->logger, $this->charsetConverter, $this, $name, $children);
     }
 
     /**
@@ -155,6 +159,7 @@ class HeaderPartFactory
     public function newReceivedDomainPart(string $name, array $children) : ReceivedDomainPart
     {
         return new ReceivedDomainPart(
+            $this->logger,
             $this->charsetConverter,
             $this,
             $name,

@@ -7,15 +7,14 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
+use SplObjectStorage;
+use SplObserver;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
-use SplObjectStorage;
-use SplObserver;
-
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
@@ -55,16 +54,13 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
      */
     protected SplObjectStorage $observers;
 
-    public function __construct(?PartStreamContainer $streamContainer = null, ?IMimePart $parent = null)
-    {
-        parent::__construct();
+    public function __construct(
+        LoggerInterface $logger,
+        PartStreamContainer $streamContainer,
+        ?IMimePart $parent = null
+    ) {
+        parent::__construct($logger);
         $this->partStreamContainer = $streamContainer;
-        if ($this->partStreamContainer === null) {
-            $di = MailMimeParser::getGlobalContainer();
-            $fc = $di->get(PartStreamContainerFactory::class);
-            $this->partStreamContainer = $fc->newInstance();
-            $this->partStreamContainer->setStream($fc->newMessagePartStream($this));
-        }
         $this->parent = $parent;
         $this->observers = new SplObjectStorage();
     }

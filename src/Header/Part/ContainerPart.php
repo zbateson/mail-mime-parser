@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MailMimeParser\ErrorBag;
 
@@ -29,15 +30,18 @@ class ContainerPart extends HeaderPart
     protected $children = [];
 
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         array $children
     ) {
+        ErrorBag::__construct($logger);
         $this->charsetConverter = $charsetConverter;
         $this->partFactory = $headerPartFactory;
         $this->children = $children;
         $str = (!empty($children)) ? $this->getValueFromParts($children) : '';
         parent::__construct(
+            $logger,
             $this->charsetConverter,
             $str
         );

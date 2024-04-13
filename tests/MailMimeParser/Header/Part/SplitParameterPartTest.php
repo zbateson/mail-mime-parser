@@ -50,7 +50,8 @@ class SplitParameterPartTest extends TestCase
 
     private function assertNameValue(string $expectedName, string $expectedValue, string|array|null $actualNames = null, string|array|null $actualValues = null) : SplitParameterPart
     {
-        var_dump($this->container->get(LoggerInterface::class));
+        $logger = $this->container->get(LoggerInterface::class);
+        $logger->
         exit;
         if ($actualNames === null) {
             $actualNames = $expectedName;

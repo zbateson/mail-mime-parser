@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Parser\IParserService;
@@ -23,9 +24,8 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class ParserMimePartProxyFactory extends ParserPartProxyFactory
 {
-    /**
-     * @var StreamFactory the StreamFactory instance
-     */
+    protected LoggerInterface $logger;
+
     protected StreamFactory $streamFactory;
 
     protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
@@ -35,11 +35,13 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
     protected ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory;
 
     public function __construct(
+        LoggerInterface $logger,
         StreamFactory $sdf,
         PartHeaderContainerFactory $phcf,
         ParserPartStreamContainerFactory $pscf,
         ParserPartChildrenContainerFactory $ppccf
     ) {
+        $this->logger = $logger;
         $this->streamFactory = $sdf;
         $this->partHeaderContainerFactory = $phcf;
         $this->parserPartStreamContainerFactory = $pscf;
@@ -61,6 +63,7 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
 
         $part = new MimePart(
             $partBuilder->getParent()->getPart(),
+            $this->logger,
             $streamContainer,
             $headerContainer,
             $childrenContainer

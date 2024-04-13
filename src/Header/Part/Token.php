@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -23,9 +24,13 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class Token extends HeaderPart
 {
-    public function __construct(MbWrapper $charsetConverter, string $value, bool $isLiteral = false)
-    {
-        parent::__construct($charsetConverter, $value);
+    public function __construct(
+        LoggerInterface $logger,
+        MbWrapper $charsetConverter,
+        string $value,
+        bool $isLiteral = false
+    ) {
+        parent::__construct($logger, $charsetConverter, $value);
         $this->value = \preg_replace('/\r|\n/', '', $this->convertEncoding($value));
         $this->isSpace = (!$isLiteral && $this->value !== null && \preg_match('/^\s+$/', $this->value) === 1);
         $this->canIgnoreSpacesAfter = $this->canIgnoreSpacesAfter = $this->isSpace;

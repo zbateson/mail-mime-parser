@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
@@ -51,11 +52,12 @@ class GenericReceivedConsumerService extends AbstractGenericConsumerService
      *
      */
     public function __construct(
+        LoggerInterface $logger,
         HeaderPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
         string $partName
     ) {
-        parent::__construct($partFactory, [$commentConsumerService]);
+        parent::__construct($logger, $partFactory, [$commentConsumerService]);
         $this->partName = $partName;
     }
 

@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
@@ -46,9 +47,9 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
      */
     protected bool $isSpace = false;
 
-    public function __construct(MbWrapper $charsetConverter, string $value)
+    public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter, string $value)
     {
-        parent::__construct();
+        parent::__construct($logger);
         $this->charsetConverter = $charsetConverter;
         $this->value = $value;
     }

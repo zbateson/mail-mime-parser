@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
@@ -58,11 +59,12 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      * @param string $value Value of the header.
      */
     public function __construct(
+        LoggerInterface $logger,
         IConsumerService $consumerService,
         string $name,
         string $value
     ) {
-        parent::__construct();
+        parent::__construct($logger);
         $this->name = $name;
         $this->rawValue = $value;
         $this->parseHeaderValue($consumerService, $value);
@@ -203,7 +205,8 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      *
      * Note that more specific types can be called on directly.  For instance an
      * AddressHeader may be created by calling AddressHeader::from() which will
-     * ignore the name of the header, and always return an AddressHeader.
+     * ignore the name of the header, and always return an AddressHeader, or by
+     * calling `new AddressHeader('name', 'value')` directly.
      *
      * @param string $nameOrLine The header's name or full header line.
      * @param string|null $value The header's value, or null if passing a full

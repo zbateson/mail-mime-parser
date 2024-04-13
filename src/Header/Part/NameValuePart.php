@@ -7,8 +7,10 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use ZBateson\MbWrapper\MbWrapper;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use ZBateson\MailMimeParser\ErrorBag;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Represents a name/value pair part of a header.
@@ -23,15 +25,17 @@ class NameValuePart extends ContainerPart
     protected string $name;
 
     public function __construct(
+        LoggerInterface $logger,
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         array $nameParts,
         array $valueParts
     ) {
+        ErrorBag::__construct($logger);
         $this->charsetConverter = $charsetConverter;
         $this->partFactory = $headerPartFactory;
         $this->name = (!empty($nameParts)) ? $this->getNameFromParts($nameParts) : '';
-        parent::__construct($charsetConverter, $headerPartFactory, $valueParts);
+        parent::__construct($logger, $charsetConverter, $headerPartFactory, $valueParts);
         \array_unshift($this->children, ...$nameParts);
     }
 

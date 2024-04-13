@@ -100,15 +100,14 @@ class PartStreamContainer extends ErrorBag
     ];
 
     public function __construct(
+        LoggerInterface $logger,
         StreamFactory $streamFactory,
         MbWrapper $mbWrapper,
-        LoggerInterface $logger,
         bool $throwExceptionReadingPartContentFromUnsupportedCharsets
     ) {
-        parent::__construct();
+        parent::__construct($logger);
         $this->streamFactory = $streamFactory;
         $this->mbWrapper = $mbWrapper;
-        $this->logger = $logger;
         $this->throwExceptionReadingPartContentFromUnsupportedCharsets = $throwExceptionReadingPartContentFromUnsupportedCharsets;
     }
 

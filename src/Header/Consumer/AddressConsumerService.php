@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
@@ -36,6 +37,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeToken;
 class AddressConsumerService extends AbstractConsumerService
 {
     public function __construct(
+        LoggerInterface $logger,
         MimeTokenPartFactory $partFactory,
         AddressGroupConsumerService $addressGroupConsumerService,
         AddressEmailConsumerService $addressEmailConsumerService,
@@ -44,6 +46,7 @@ class AddressConsumerService extends AbstractConsumerService
     ) {
         $addressGroupConsumerService->setAddressConsumerService($this);
         parent::__construct(
+            $logger,
             $partFactory,
             [
                 $addressGroupConsumerService,

@@ -7,6 +7,8 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
+use Psr\Log\LoggerInterface;
+use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
@@ -40,11 +42,18 @@ class ParameterHeader extends AbstractHeader
     protected array $parameters = [];
 
     public function __construct(
-        ParameterConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?LoggerInterface $logger = null,
+        ?ParameterConsumerService $consumerService = null
     ) {
-        parent::__construct($consumerService, $name, $value);
+        $di = MailMimeParser::getGlobalContainer();
+        parent::__construct(
+            $logger ?? $di->get(LoggerInterface::class),
+            $consumerService ?? $di->get(ParameterConsumerService::class),
+            $name,
+            $value
+        );
     }
 
     /**
