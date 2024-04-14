@@ -34,7 +34,7 @@ class AddressPart extends NameValuePart
             function ($p) {
                 if ($p instanceof AddressPart) {
                     return $p->getValue();
-                } elseif ($p instanceof ILiteral && $p->getValue() !== '') {
+                } elseif ($p instanceof QuotedLiteralPart && $p->getValue() !== '') {
                     return '"' . \preg_replace('/(["\\\])/', '\\\$1', $p->getValue()) . '"';
                 } else {
                     return \preg_replace('/\s+/', '', $p->getValue());

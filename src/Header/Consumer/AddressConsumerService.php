@@ -105,20 +105,30 @@ class AddressConsumerService extends AbstractConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        $popped = $parts;
-        $lastPart = \array_pop($popped);
-        if ($lastPart instanceof AddressGroupPart || $lastPart instanceof AddressPart) {
-            if ($lastPart instanceof AddressGroupPart) {
+        $found = null;
+        $revved = \array_reverse($parts, true);
+        foreach ($revved as $key => $part) {
+            if ($part instanceof AddressGroupPart || $part instanceof AddressPart) {
+                $found = $part;
+                // purposefully ignoring anything after
+                \array_splice($parts, $key);
+                break;
+            }
+        }
+
+        if ($found !== null) {
+            if ($found instanceof AddressGroupPart) {
                 return [$this->partFactory->newAddressGroupPart(
-                    $popped,
-                    [$lastPart]
+                    $parts,
+                    [$found]
                 )];
             }
             return [$this->partFactory->newAddress(
-                $popped,
-                [$lastPart]
+                $parts,
+                [$found]
             )];
         }
+
         return [
             $this->partFactory->newAddress(
                 [],
