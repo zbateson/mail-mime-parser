@@ -3,11 +3,8 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
-
-class MimeEncodedHeaderImpl extends MimeEncodedHeader
-{
-}
 
 /**
  * Description of MimeEncodedHeaderTest
@@ -24,37 +21,43 @@ class MimeEncodedHeaderTest extends TestCase
     protected $consumerService;
 
     // @phpstan-ignore-next-line
-    protected $mimeTokenPartFactory;
+    protected $mpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $this->consumerService = $qscs;
-        $this->mimeTokenPartFactory = $mpf;
+        $this->mpf = $mpf;
     }
 
-    private function newMimeEncodedHeader($name, $value) : MimeEncodedHeaderImpl
+    private function newMimeEncodedHeader($name, $value) : MimeEncodedHeader
     {
-        return new MimeEncodedHeaderImpl(
-            $this->mimeTokenPartFactory,
-            $this->consumerService,
-            $name,
-            $value
-        );
+        return $this->getMockBuilder(MimeEncodedHeader::class)
+            ->setMethods()
+            ->setConstructorArgs([
+                $this->logger,
+                $this->mpf,
+                $this->consumerService,
+                $name,
+                $value
+            ])
+            ->getMockForAbstractClass();
     }
 
     public function testGetDecoded() : void

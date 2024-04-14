@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,37 +18,39 @@ class ParameterConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $parameterConsumer;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
         $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
-            ->setConstructorArgs([$mpf, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
         $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)
-            ->setConstructorArgs([$mpf, $pvcs, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $pvcs, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
-        $this->parameterConsumer = new ParameterConsumerService($pf, $pnvcs, $ccs, $qscs);
+        $this->parameterConsumer = new ParameterConsumerService($this->logger, $pf, $pnvcs, $ccs, $qscs);
     }
 
     public function testConsumeTokens() : void

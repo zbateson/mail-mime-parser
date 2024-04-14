@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Traversable;
 use ZBateson\MailMimeParser\Header\IHeader;
 
@@ -29,13 +30,13 @@ class MimePartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->mockPartStreamContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
+        $this->mockPartStreamContainer = $this->getMockBuilder(PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockHeaderContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
+        $this->mockHeaderContainer = $this->getMockBuilder(PartHeaderContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockPartChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)
+        $this->mockPartChildrenContainer = $this->getMockBuilder(PartChildrenContainer::class)
             ->getMock();
     }
 
@@ -50,7 +51,7 @@ class MimePartTest extends TestCase
         if ($streamContainer === null) {
             $streamContainer = $this->mockPartStreamContainer;
         }
-        return new MimePart($parent, $streamContainer, $headerContainer, $childrenContainer);
+        return new MimePart($parent, new NullLogger(), $streamContainer, $headerContainer, $childrenContainer);
     }
 
     protected function getMockedParameterHeader($name, $value, $parameterValue = null) : \ZBateson\MailMimeParser\Header\ParameterHeader
@@ -215,11 +216,12 @@ class MimePartTest extends TestCase
 
         $message = $this->getMockBuilder(\ZBateson\MailMimeParser\Message::class)
             ->setConstructorArgs([
-                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartChildrenContainer::class)->getMock(),
-                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\MultipartHelper::class)->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder(\ZBateson\MailMimeParser\Message\Helper\PrivacyHelper::class)->disableOriginalConstructor()->getMock()
+                new NullLogger(),
+                $this->getMockBuilder(PartStreamContainer::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(PartHeaderContainer::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(PartChildrenContainer::class)->getMock(),
+                $this->getMockBuilder(Helper\MultipartHelper::class)->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder(Helper\PrivacyHelper::class)->disableOriginalConstructor()->getMock()
             ])
             ->setMethods(['getSignaturePart'])
             ->getMock();

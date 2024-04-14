@@ -3,6 +3,8 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
+use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumerService;
@@ -22,56 +24,63 @@ class AddressHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
         $agcs = $this->getMockBuilder(AddressGroupConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $aecs = $this->getMockBuilder(AddressEmailConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
         $acs = $this->getMockBuilder(AddressConsumerService::class)
-            ->setConstructorArgs([$mpf, $agcs, $aecs, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $agcs, $aecs, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
-        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService::class)
-            ->setConstructorArgs([$pf, $acs])
-            ->setMethods(['__toString'])
+        $this->consumerService = $this->getMockBuilder(AddressBaseConsumerService::class)
+            ->setConstructorArgs([$this->logger, $pf, $acs])
+            ->setMethods()
             ->getMock();
+    }
+
+    private function newAddressHeader($name, $value)
+    {
+        return new AddressHeader($name, $value, $this->logger, $this->consumerService);
     }
 
     public function testEmptyHeader() : void
     {
-        $header = new AddressHeader($this->consumerService, 'TO', '');
+        $header = $this->newAddressHeader('TO', '');
         $this->assertEquals('', $header->getValue());
         $this->assertNull($header->getPersonName());
     }
 
     public function testSingleAddress() : void
     {
-        $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
+        $header = $this->newAddressHeader('From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
         $this->assertEmpty($header->getPersonName());
         $this->assertEquals('From', $header->getName());
@@ -79,13 +88,13 @@ class AddressHeaderTest extends TestCase
 
     public function testAddressHeaderToString() : void
     {
-        $header = new AddressHeader($this->consumerService, 'From', 'koolaid@dontdrinkit.com');
+        $header = $this->newAddressHeader('From', 'koolaid@dontdrinkit.com');
         $this->assertEquals('From: koolaid@dontdrinkit.com', $header);
     }
 
     public function testSingleAddressWithName() : void
     {
-        $header = new AddressHeader($this->consumerService, 'From', 'Kool Aid <koolaid@dontdrinkit.com>');
+        $header = $this->newAddressHeader('From', 'Kool Aid <koolaid@dontdrinkit.com>');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
         $this->assertEquals('Kool Aid', $header->getPersonName());
         $addresses = $header->getParts();
@@ -96,7 +105,7 @@ class AddressHeaderTest extends TestCase
 
     public function testSingleAddressWithQuotedName() : void
     {
-        $header = new AddressHeader($this->consumerService, 'To', '"Jürgen Schmürgen" <schmuergen@example.com>');
+        $header = $this->newAddressHeader('To', '"Jürgen Schmürgen" <schmuergen@example.com>');
         $addresses = $header->getParts();
         $this->assertCount(1, $addresses);
         $this->assertEquals('Jürgen Schmürgen', $addresses[0]->getName());
@@ -108,8 +117,7 @@ class AddressHeaderTest extends TestCase
     public function testComplexSingleAddress() : void
     {
         // the domain is invalid here
-        $header = new AddressHeader(
-            $this->consumerService,
+        $header = $this->newAddressHeader(
             'From',
             '=?US-ASCII?Q?Kilgore?= "Trout" <kilgore (writer) trout@"ilium" .ny. us>'
         );
@@ -121,7 +129,7 @@ class AddressHeaderTest extends TestCase
 
     public function testSingleAddressWithEscapedToken() : void
     {
-        $header = new AddressHeader($this->consumerService, 'From', '\"Kool Aid\" <koolaid@dontdrinkit.com>');
+        $header = $this->newAddressHeader('From', '\"Kool Aid\" <koolaid@dontdrinkit.com>');
         $this->assertEquals('koolaid@dontdrinkit.com', $header->getValue());
         $this->assertEquals('"Kool Aid"', $header->getPersonName());
         $addresses = $header->getParts();
@@ -132,8 +140,7 @@ class AddressHeaderTest extends TestCase
 
     public function testMultipleAddresses() : void
     {
-        $header = new AddressHeader(
-            $this->consumerService,
+        $header = $this->newAddressHeader(
             'To',
             'thepilot@earth.com, The Little   Prince <theprince@ihatebaobabs.com> , '
             . '"The Fox"    <thefox@ilovetheprince.com>   ,    therose@pureawesome.com'
@@ -150,8 +157,7 @@ class AddressHeaderTest extends TestCase
 
     public function testAddressGroupParts() : void
     {
-        $header = new AddressHeader(
-            $this->consumerService,
+        $header = $this->newAddressHeader(
             'Cc',
             '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
             . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
@@ -171,8 +177,7 @@ class AddressHeaderTest extends TestCase
 
     public function testHasAddress() : void
     {
-        $header = new AddressHeader(
-            $this->consumerService,
+        $header = $this->newAddressHeader(
             'Cc',
             '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
             . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
@@ -188,8 +193,7 @@ class AddressHeaderTest extends TestCase
 
     public function testGetAddresses() : void
     {
-        $header = new AddressHeader(
-            $this->consumerService,
+        $header = $this->newAddressHeader(
             'Cc',
             '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
             . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'
@@ -213,8 +217,7 @@ class AddressHeaderTest extends TestCase
 
     public function testGetGroups() : void
     {
-        $header = new AddressHeader(
-            $this->consumerService,
+        $header = $this->newAddressHeader(
             'Cc',
             '=?US-ASCII?Q?House?= Stark: Arya Stark <arya(strong:personality)@winterfell.com>, robb@winterfell.com,'
             . 'Jon Snow <jsnow(that\'s right;)@nightswatch.com>; "House Lannister": tywin@lannister.com,'

@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -19,12 +20,14 @@ class CommentPartTest extends TestCase
     // @phpstan-ignore-next-line
     private $mb;
     private $hpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->mb])
+            ->setConstructorArgs([$this->logger, $this->mb])
             ->setMethods()
             ->getMock();
     }
@@ -32,22 +35,27 @@ class CommentPartTest extends TestCase
     private function getTokenMock(string $name) : Token
     {
         return $this->getMockBuilder(MimeToken::class)
-            ->setConstructorArgs([$this->mb, $name])
+            ->setConstructorArgs([$this->logger, $this->mb, $name])
             ->setMethods()
             ->getMock();
+    }
+
+    private function newCommentPart($childParts)
+    {
+        return new CommentPart($this->logger, $this->mb, $this->hpf, $childParts);
     }
 
     public function testBasicComment() : void
     {
         $comment = 'Some silly comment made about my moustache';
-        $part = new CommentPart($this->mb, $this->hpf, [$this->getTokenMock($comment)]);
+        $part = $this->newCommentPart([$this->getTokenMock($comment)]);
         $this->assertEquals('', $part->getValue());
         $this->assertEquals($comment, $part->getComment());
     }
 
     public function testMimeEncoding() : void
     {
-        $part = new CommentPart($this->mb, $this->hpf, [$this->getTokenMock('=?US-ASCII?Q?Kilgore_Trout?=')]);
+        $part = $this->newCommentPart([$this->getTokenMock('=?US-ASCII?Q?Kilgore_Trout?=')]);
         $this->assertEquals('', $part->getValue());
         $this->assertEquals('Kilgore Trout', $part->getComment());
     }

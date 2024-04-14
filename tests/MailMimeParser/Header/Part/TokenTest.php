@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -17,32 +18,23 @@ use ZBateson\MbWrapper\MbWrapper;
 class TokenTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $charsetConverter;
+    private $mb;
 
     protected function setUp() : void
     {
-        $this->charsetConverter = new MbWrapper();
+        $this->mb = new MbWrapper();
+    }
+
+    private function newToken($value, $isLiteral = false)
+    {
+        return new Token(new NullLogger(), $this->mb, $value, $isLiteral);
     }
 
     public function testInstance() : void
     {
-        $token = new Token($this->charsetConverter, 'testing');
+        $token = $this->newToken('testing');
         $this->assertNotNull($token);
         $this->assertEquals('testing', $token->getValue());
         $this->assertEquals('testing', (string) $token);
-    }
-
-    public function testSpaceTokenValue() : void
-    {
-        $token = new Token($this->charsetConverter, ' ');
-        $this->assertTrue($token->ignoreSpacesBefore());
-        $this->assertTrue($token->ignoreSpacesAfter());
-    }
-
-    public function testNonSpaceTokenValue() : void
-    {
-        $token = new Token($this->charsetConverter, 'Anything');
-        $this->assertFalse($token->ignoreSpacesBefore());
-        $this->assertFalse($token->ignoreSpacesAfter());
     }
 }

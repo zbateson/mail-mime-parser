@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
@@ -16,19 +17,21 @@ use ZBateson\MailMimeParser\Header\IHeader;
 class PartHeaderContainerTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    protected $mockHeaderFactory;
+    protected $mhf;
+    protected $instance;
 
     protected function setUp() : void
     {
-        $this->mockHeaderFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
+        $this->mhf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['newInstance', 'newInstanceOf'])
             ->getMock();
+        $this->instance = new PartHeaderContainer(new NullLogger(), $this->mhf);
     }
 
     public function testAddExistsGet() : void
     {
-        $ob = new PartHeaderContainer($this->mockHeaderFactory);
+        $ob = $this->instance;
         $ob->add('first', 'value');
         $ob->add('second', 'value');
 
@@ -40,7 +43,7 @@ class PartHeaderContainerTest extends TestCase
         $mockFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
 
-        $this->mockHeaderFactory
+        $this->mhf
             ->expects($this->exactly(2))
             ->method('newInstance')
             ->withConsecutive(
@@ -65,7 +68,7 @@ class PartHeaderContainerTest extends TestCase
 
     public function testAddExistsGetSameName() : void
     {
-        $ob = new PartHeaderContainer($this->mockHeaderFactory);
+        $ob = $this->instance;
         $ob->add('repeated', 'first');
         $ob->add('repeated', 'second');
         $ob->add('repeated', 'third');
@@ -81,7 +84,7 @@ class PartHeaderContainerTest extends TestCase
         $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockThirdHeader = $this->getMockBuilder(IHeader::class)->getMock();
 
-        $this->mockHeaderFactory
+        $this->mhf
             ->expects($this->exactly(3))
             ->method('newInstance')
             ->withConsecutive(
@@ -114,7 +117,7 @@ class PartHeaderContainerTest extends TestCase
 
     public function testAddSetExistsGet() : void
     {
-        $ob = new PartHeaderContainer($this->mockHeaderFactory);
+        $ob = $this->instance;
         $ob->set('first', 'value');
         $ob->set('second', 'value');
         $ob->set('third', 'value');
@@ -137,7 +140,7 @@ class PartHeaderContainerTest extends TestCase
         $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockThirdHeader = $this->getMockBuilder(IHeader::class)->getMock();
 
-        $this->mockHeaderFactory
+        $this->mhf
             ->expects($this->exactly(5))
             ->method('newInstance')
             ->withConsecutive(
@@ -178,7 +181,7 @@ class PartHeaderContainerTest extends TestCase
 
     public function testAddRemoveGetGetAs() : void
     {
-        $ob = new PartHeaderContainer($this->mockHeaderFactory);
+        $ob = $this->instance;
         $ob->add('first', 'value');
         $ob->add('second', 'value');
         $ob->add('third', 'value');
@@ -200,7 +203,7 @@ class PartHeaderContainerTest extends TestCase
         $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockThirdHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockSecondUpdatedHeader = $this->getMockBuilder(IHeader::class)->getMock();
-        $this->mockHeaderFactory
+        $this->mhf
             ->expects($this->exactly(4))
             ->method('newInstance')
             ->withConsecutive(
@@ -212,7 +215,7 @@ class PartHeaderContainerTest extends TestCase
             ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader, $mockThirdHeader, $mockSecondUpdatedHeader);
 
         $custRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
-        $this->mockHeaderFactory->expects($this->once())
+        $this->mhf->expects($this->once())
             ->method('newInstanceOf')
             ->with('fourth', 'value', 'IHeaderClass')
             ->willReturn($custRet);
@@ -252,7 +255,7 @@ class PartHeaderContainerTest extends TestCase
 
     public function testAddRemoveAllGet() : void
     {
-        $ob = new PartHeaderContainer($this->mockHeaderFactory);
+        $ob = $this->instance;
         $ob->add('first', 'value');
         $ob->add('first', 'second-first');
         $ob->add('second', 'value');
@@ -279,7 +282,7 @@ class PartHeaderContainerTest extends TestCase
         $mockSecondFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
         $mockSecondThirdSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
-        $this->mockHeaderFactory
+        $this->mhf
             ->expects($this->exactly(3))
             ->method('newInstance')
             ->withConsecutive(

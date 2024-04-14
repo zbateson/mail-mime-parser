@@ -2,7 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use GuzzleHttp\Psr7\Utils;
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
@@ -88,6 +88,7 @@ class ParserMessageProxyFactoryTest extends TestCase
         $this->parser = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\IParserService::class);
 
         $this->instance = new ParserMessageProxyFactory(
+            new NullLogger(),
             $this->streamFactory,
             $this->headerContainerFactory,
             $this->partStreamContainerFactory,
@@ -108,11 +109,11 @@ class ParserMessageProxyFactoryTest extends TestCase
             ->willReturn($this->headerContainer);
         $this->partStreamContainerFactory->expects($this->once())
             ->method('newInstance')
-            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class))
+            ->with($this->isInstanceOf(ParserMimePartProxy::class))
             ->willReturn($this->partStreamContainer);
         $this->partChildrenContainerFactory->expects($this->once())
             ->method('newInstance')
-            ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class))
+            ->with($this->isInstanceOf(ParserMimePartProxy::class))
             ->willReturn($this->partChildrenContainer);
         $stream = $this->getMockBuilder(MessagePartStreamDecorator::class)
             ->disableOriginalConstructor()
@@ -127,7 +128,7 @@ class ParserMessageProxyFactoryTest extends TestCase
 
         $ob = $this->instance->newInstance($this->partBuilder, $this->parser);
         $this->assertInstanceOf(
-            '\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxy::class,
+            ParserMessageProxy::class,
             $ob
         );
         $this->assertInstanceOf(

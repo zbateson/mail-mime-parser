@@ -32,7 +32,7 @@ class ParserPartStreamContainerFactoryTest extends TestCase
     {
         $ob = $this->instance->newInstance($this->proxy);
         $this->assertInstanceOf(
-            '\\' . \ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer::class,
+            ParserPartChildrenContainer::class,
             $ob
         );
         // make sure proxy is attached

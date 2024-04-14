@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -21,7 +22,7 @@ class MimeTokenPartFactoryTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
-        $this->headerPartFactory = new MimeTokenPartFactory($charsetConverter);
+        $this->headerPartFactory = new MimeTokenPartFactory(new NullLogger(), $charsetConverter);
     }
 
     public function testNewInstance() : void

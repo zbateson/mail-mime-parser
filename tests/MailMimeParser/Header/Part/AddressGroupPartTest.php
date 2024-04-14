@@ -5,6 +5,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -20,26 +21,35 @@ class AddressGroupPartTest extends TestCase
 {
     private $mb;
     private $hpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$this->mb])
-            ->setMethods(['__toString'])
+        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
+            ->setConstructorArgs([$this->logger, $this->mb])
+            ->setMethods()
             ->getMock();
+    }
+
+    private function newAddressGroupPart($nameParts, $addressAndGroupParts)
+    {
+        return new AddressGroupPart(
+            $this->logger, $this->mb, $this->hpf, $nameParts, $addressAndGroupParts
+        );
     }
 
     public function testNameGroup() : void
     {
-        $name = $this->getMockForAbstractClass(HeaderPart::class, [$this->mb, 'Roman Senate']);
+        $name = $this->getMockForAbstractClass(HeaderPart::class, [$this->logger, $this->mb, 'Roman Senate']);
         $members = [
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock()
         ];
 
-        $part = new AddressGroupPart($this->mb, $this->hpf, [$name], $members);
+        $part = $this->newAddressGroupPart([$name], $members);
         $this->assertEquals('Roman Senate', $part->getName());
         $this->assertEquals($members, $part->getAddresses());
         $this->assertEquals($members[0], $part->getAddress(0));
@@ -50,7 +60,7 @@ class AddressGroupPartTest extends TestCase
 
     public function testValidation() : void
     {
-        $part = new AddressGroupPart($this->mb, $this->hpf, [], []);
+        $part = $this->newAddressGroupPart([], []);
         $errs = $part->getErrors(true, LogLevel::NOTICE);
         $this->assertCount(2, $errs);
         $this->assertEquals('Address group doesn\'t have a name', $errs[0]->getMessage());

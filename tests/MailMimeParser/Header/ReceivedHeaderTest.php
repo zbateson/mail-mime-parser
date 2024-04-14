@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
@@ -24,66 +25,73 @@ class ReceivedHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
 
         $fdcs = $this->getMockBuilder(DomainConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'from'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'from'])
+            ->setMethods()
             ->getMock();
         $bdcs = $this->getMockBuilder(DomainConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'by'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'by'])
+            ->setMethods()
             ->getMock();
         $vgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'via'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'via'])
+            ->setMethods()
             ->getMock();
         $wgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'with'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'with'])
+            ->setMethods()
             ->getMock();
         $igcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'id'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'id'])
+            ->setMethods()
             ->getMock();
         $fgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'for'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'for'])
+            ->setMethods()
             ->getMock();
         $rdcs = $this->getMockBuilder(ReceivedDateConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
         $this->consumerService = $this->getMockBuilder(ReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $fdcs, $bdcs, $vgcs, $wgcs, $igcs, $fgcs, $rdcs, $ccs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $fdcs, $bdcs, $vgcs, $wgcs, $igcs, $fgcs, $rdcs, $ccs])
+            ->setMethods()
             ->getMock();
+    }
+
+    private function newReceivedHeader($name, $value)
+    {
+        return new ReceivedHeader($name, $value, $this->logger, $this->consumerService);
     }
 
     public function testParsingWithFromName() : void
     {
-        $header = new ReceivedHeader($this->consumerService, 'Received', 'From JonSnow');
+        $header = $this->newReceivedHeader('Received', 'From JonSnow');
         $this->assertEquals('JonSnow', $header->getFromName());
         $this->assertNull($header->getFromHostname());
         $this->assertNull($header->getFromAddress());
@@ -94,7 +102,7 @@ class ReceivedHeaderTest extends TestCase
 
     public function testParsingFromExtended() : void
     {
-        $header = new ReceivedHeader($this->consumerService, 'Received', 'FROM JonSnow (domain.com [1.2.3.4]) (Crow Crow)');
+        $header = $this->newReceivedHeader('Received', 'FROM JonSnow (domain.com [1.2.3.4]) (Crow Crow)');
         $this->assertEquals('JonSnow', $header->getFromName());
         $this->assertEquals('domain.com', $header->getFromHostname());
         $this->assertEquals('1.2.3.4', $header->getFromAddress());
@@ -104,7 +112,7 @@ class ReceivedHeaderTest extends TestCase
 
     public function testParsingByExtended() : void
     {
-        $header = new ReceivedHeader($this->consumerService, 'Received', 'FROM JonSnow by Ygritte.local (name.com [1.2.3.4])');
+        $header = $this->newReceivedHeader('Received', 'FROM JonSnow by Ygritte.local (name.com [1.2.3.4])');
         $this->assertEquals('JonSnow', $header->getFromName());
         $this->assertNull($header->getFromHostname());
         $this->assertNull($header->getFromAddress());
@@ -115,7 +123,7 @@ class ReceivedHeaderTest extends TestCase
 
     public function testParsingWithMissingDomainParts() : void
     {
-        $header = new ReceivedHeader($this->consumerService, 'Received', 'with TEST; Wed, 17 May 2000 19:08:29 -0400');
+        $header = $this->newReceivedHeader('Received', 'with TEST; Wed, 17 May 2000 19:08:29 -0400');
         $this->assertEquals('TEST', $header->getValueFor('WITH'));
         $dt = $header->getDateTime();
         $this->assertNotNull($dt);
@@ -126,7 +134,7 @@ class ReceivedHeaderTest extends TestCase
     {
         $value = "FROM LeComputer (blah.host) by MyComputer ([1.2.2.2]) WITH\n"
             . 'ESMTP (TLS BLAH) ID 123; Wed, 17 May 2000 19:08:29 -0400';
-        $header = new ReceivedHeader($this->consumerService, 'Received', $value);
+        $header = $this->newReceivedHeader('Received', $value);
 
         $this->assertEquals('LeComputer', $header->getFromName());
         $this->assertEquals('blah.host', $header->getFromHostname());
@@ -153,7 +161,7 @@ class ReceivedHeaderTest extends TestCase
             . "(envelope-from <noreply@domain.example.idd>)\n"
             . "id unique-string\n"
             . 'for i.am.your.father@jediforce.example.com; Sun, 28 Nov 2021 16:54:15 +0100';
-        $header = new ReceivedHeader($this->consumerService, 'Received', $value);
+        $header = $this->newReceivedHeader('Received', $value);
 
         $this->assertEquals('domain.example.id', $header->getFromName());
         $this->assertEquals('111.222.333.444', $header->getFromAddress());

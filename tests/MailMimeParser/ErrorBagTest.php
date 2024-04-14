@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Psr\Log\LogLevel;
 
 /**
@@ -18,6 +19,7 @@ class ErrorBagTest extends TestCase
     private function newErrorBagStub($children = [])
     {
         $stub = $this->getMockBuilder('\\' . ErrorBag::class)
+            ->setConstructorArgs([new NullLogger()])
             ->getMockForAbstractClass();
         $stub->method('getErrorBagChildren')
             ->willReturn($children);

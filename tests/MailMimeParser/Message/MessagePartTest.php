@@ -6,6 +6,7 @@ use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
@@ -31,8 +32,8 @@ class MessagePartTest extends TestCase
     private function getMessagePart($handle = 'habibi', $contentHandle = null, $parent = null) : \ZBateson\MailMimeParser\Message\MessagePart
     {
         $streamPartMock = $this->getMockForAbstractClass(
-            \ZBateson\MailMimeParser\Message\MessagePart::class,
-            [$this->partStreamContainer, $parent]
+            MessagePart::class,
+            [new NullLogger(), $this->partStreamContainer, $parent]
         );
         if ($contentHandle !== null) {
             $contentHandle = new MessagePartStreamDecorator($streamPartMock, Psr7\Utils::streamFor($contentHandle));
@@ -61,8 +62,8 @@ class MessagePartTest extends TestCase
                 });
         }
         return $this->getMockForAbstractClass(
-            \ZBateson\MailMimeParser\Message\MessagePart::class,
-            [$this->partStreamContainer, $parent]
+            MessagePart::class,
+            [new NullLogger(), $this->partStreamContainer, $parent]
         );
     }
 

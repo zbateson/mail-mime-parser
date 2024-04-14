@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * Description of UUEncodedPartTest
@@ -22,7 +23,7 @@ class UUEncodedPartTest extends TestCase
         $psc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->instance = new UUEncodedPart(null, null, null, $psc);
+        $this->instance = new UUEncodedPart(null, null, null, new NullLogger(), $psc);
     }
 
     public function testGetAndSetFileName() : void

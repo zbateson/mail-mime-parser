@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * UUEncodedPartHeaderContainerTest
@@ -22,7 +23,7 @@ class UUEncodedPartHeaderContainerTest extends TestCase
         $hf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->instance = new UUEncodedPartHeaderContainer($hf);
+        $this->instance = new UUEncodedPartHeaderContainer(new NullLogger(), $hf);
     }
 
     public function testGetSetUnixFileMode() : void

@@ -22,14 +22,14 @@ class PartChildrenContainerTest extends TestCase
         $this->instance = new PartChildrenContainer();
     }
 
-    private function getIMessagePart() : \ZBateson\MailMimeParser\Message\IMessagePart
+    private function getIMessagePart() : IMessagePart
     {
-        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        return $this->getMockForAbstractClass(IMessagePart::class);
     }
 
-    private function getIMultiPart() : \ZBateson\MailMimeParser\Message\IMultiPart
+    private function getIMultiPart() : IMultiPart
     {
-        return $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMultiPart::class);
+        return $this->getMockForAbstractClass(IMultiPart::class);
     }
 
     public function testHasAndGetChildren() : void

@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * PartHeaderContainerFactoryTest
@@ -23,6 +24,7 @@ class PartHeaderContainerFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartHeaderContainerFactory(
+            new NullLogger(),
             $mockhf
         );
     }

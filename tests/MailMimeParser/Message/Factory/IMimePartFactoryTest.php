@@ -2,8 +2,8 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Stream\MessagePartStream;
 
 /**
@@ -31,9 +31,9 @@ class IMimePartFactoryTest extends TestCase
 
     public function testNewInstance() : void
     {
-        $psc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
-        $phc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory::class, \ZBateson\MailMimeParser\Message\PartHeaderContainer::class);
-        $pcc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartChildrenContainerFactory::class, \ZBateson\MailMimeParser\Message\PartChildrenContainer::class);
+        $psc = $this->getMockForFactoryExpectsOnce(PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
+        $phc = $this->getMockForFactoryExpectsOnce(PartHeaderContainerFactory::class, \ZBateson\MailMimeParser\Message\PartHeaderContainer::class);
+        $pcc = $this->getMockForFactoryExpectsOnce(PartChildrenContainerFactory::class, \ZBateson\MailMimeParser\Message\PartChildrenContainer::class);
 
         $sdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
@@ -46,7 +46,7 @@ class IMimePartFactoryTest extends TestCase
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Message\MimePart::class))
             ->willReturn($msp);
 
-        $instance = new IMimePartFactory($sdf, $psc, $phc, $pcc);
+        $instance = new IMimePartFactory(new NullLogger(), $sdf, $psc, $phc, $pcc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\\' . \ZBateson\MailMimeParser\Message\MimePart::class,

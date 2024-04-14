@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,17 +18,19 @@ class QuotedStringConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $quotedStringConsumer;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
-        $this->quotedStringConsumer = new QuotedStringConsumerService($pf);
+        $this->quotedStringConsumer = new QuotedStringConsumerService($this->logger, $pf);
     }
 
     public function testConsumeTokens() : void

@@ -2,6 +2,7 @@
 
 namespace ZBateson\MailMimeParser;
 
+use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
@@ -102,6 +103,7 @@ class MessageTest extends TestCase
     private function newMessage($childrenContainer = null) : Message
     {
         return new Message(
+            new NullLogger(),
             $this->mockPartStreamContainer,
             $this->mockHeaderContainer,
             ($childrenContainer) ?: $this->mockPartChildrenContainer,

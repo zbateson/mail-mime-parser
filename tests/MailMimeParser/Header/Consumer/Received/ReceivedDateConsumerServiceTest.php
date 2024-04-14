@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
@@ -20,29 +21,31 @@ class ReceivedDateConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $dateConsumer;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
-        $this->dateConsumer = new ReceivedDateConsumerService($pf, $ccs, $qscs);
+        $this->dateConsumer = new ReceivedDateConsumerService($this->logger, $pf, $ccs, $qscs);
     }
 
     public function testConsumeDates() : void

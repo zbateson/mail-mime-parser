@@ -3,10 +3,12 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 
 /**
  * Description of ParametersHeaderTest
@@ -21,58 +23,65 @@ class ParameterHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
         $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
-            ->setConstructorArgs([$mpf, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
         $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)
-            ->setConstructorArgs([$mpf, $pvcs, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $pvcs, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
-        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService::class)
-            ->setConstructorArgs([$pf, $pnvcs, $ccs, $qscs])
-            ->setMethods(['__toString'])
+        $this->consumerService = $this->getMockBuilder(ParameterConsumerService::class)
+            ->setConstructorArgs([$this->logger, $pf, $pnvcs, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
+    }
+
+    private function newParameterHeader($name, $value)
+    {
+        return new ParameterHeader($name, $value, $this->logger, $this->consumerService);
     }
 
     public function testParsingContentTypeWithoutParameters() : void
     {
-        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html');
+        $header = $this->newParameterHeader('Content-Type', 'text/html');
         $this->assertEquals('text/html', $header->getValue());
     }
 
     public function testParsingContentType() : void
     {
-        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
+        $header = $this->newParameterHeader('Content-Type', 'text/html; CHARSET="utf-8"');
         $this->assertEquals('text/html', $header->getValue());
         $this->assertEquals('utf-8', $header->getValueFor('charset'));
     }
 
     public function testParsingMultipleParts() : void
     {
-        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'TEXT/html; CHARSET=utf-8; Boundary="blooh";answer-to-everything=42');
+        $header = $this->newParameterHeader('Content-Type', 'TEXT/html; CHARSET=utf-8; Boundary="blooh";answer-to-everything=42');
         $this->assertEquals('TEXT/html', $header->getValue());
         $this->assertEquals('utf-8', $header->getValueFor('charset'));
         $this->assertEquals('blooh', $header->getValueFor('boundary'));
@@ -81,7 +90,7 @@ class ParameterHeaderTest extends TestCase
 
     public function testParsingHeaderWithNoValue() : void
     {
-        $header = new ParameterHeader($this->consumerService, 'Autocrypt', 'addr=brosif@example.com; keydata=example');
+        $header = $this->newParameterHeader('Autocrypt', 'addr=brosif@example.com; keydata=example');
         $this->assertEquals('brosif@example.com', $header->getValue());
         $this->assertEquals('brosif@example.com', $header->getValueFor('addr'));
         $this->assertEquals('example', $header->getValueFor('keydata'));
@@ -89,14 +98,14 @@ class ParameterHeaderTest extends TestCase
 
     public function testDefaultParameterValue() : void
     {
-        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
+        $header = $this->newParameterHeader('Content-Type', 'text/html; CHARSET="utf-8"');
         $this->assertEquals(null, $header->getValueFor('boundary'));
         $this->assertEquals('default', $header->getValueFor('test', 'default'));
     }
 
     public function testParameterHeaderToString() : void
     {
-        $header = new ParameterHeader($this->consumerService, 'Content-Type', 'text/html; CHARSET="utf-8"');
+        $header = $this->newParameterHeader('Content-Type', 'text/html; CHARSET="utf-8"');
         $this->assertEquals('Content-Type: text/html; CHARSET="utf-8"', $header);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Message\Helper;
 
-use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
 use RecursiveArrayIterator;
 use ZBateson\MailMimeParser\MailMimeParser;

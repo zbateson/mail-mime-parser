@@ -2,8 +2,8 @@
 
 namespace ZBateson\MailMimeParser\Message\Factory;
 
-use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Stream\MessagePartStream;
 
 /**
@@ -31,7 +31,7 @@ class IUUEncodedPartFactoryTest extends TestCase
 
     public function testNewInstance() : void
     {
-        $psc = $this->getMockForFactoryExpectsOnce(\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
+        $psc = $this->getMockForFactoryExpectsOnce(PartStreamContainerFactory::class, \ZBateson\MailMimeParser\Message\PartStreamContainer::class);
 
         $sdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
@@ -44,7 +44,7 @@ class IUUEncodedPartFactoryTest extends TestCase
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Message\UUEncodedPart::class))
             ->willReturn($msp);
 
-        $instance = new IUUEncodedPartFactory($sdf, $psc);
+        $instance = new IUUEncodedPartFactory(new NullLogger(), $sdf, $psc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\\' . \ZBateson\MailMimeParser\Message\UUEncodedPart::class,

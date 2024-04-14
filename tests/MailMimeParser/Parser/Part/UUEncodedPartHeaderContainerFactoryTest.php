@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * UUEncodedPartHeaderContainerFactoryTest
@@ -22,14 +23,14 @@ class UUEncodedPartHeaderContainerFactoryTest extends TestCase
         $hf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->instance = new UUEncodedPartHeaderContainerFactory($hf);
+        $this->instance = new UUEncodedPartHeaderContainerFactory(new NullLogger(), $hf);
     }
 
     public function testNewInstance() : void
     {
         $ob = $this->instance->newInstance(0777, 'test0r');
         $this->assertInstanceOf(
-            '\\' . \ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainer::class,
+            UUEncodedPartHeaderContainer::class,
             $ob
         );
         // make sure params are passed

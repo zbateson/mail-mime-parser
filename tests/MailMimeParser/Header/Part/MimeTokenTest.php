@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -26,7 +27,7 @@ class MimeTokenTest extends TestCase
 
     protected function assertDecoded($expected, $encodedActual) : MimeToken
     {
-        $part = new MimeToken($this->charsetConverter, $encodedActual);
+        $part = new MimeToken(new NullLogger(), $this->charsetConverter, $encodedActual);
         $this->assertEquals($expected, $part->getValue());
 
         return $part;

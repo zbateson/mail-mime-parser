@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -19,12 +20,14 @@ class ReceivedDomainPartTest extends TestCase
     // @phpstan-ignore-next-line
     private $mb;
     private $hpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->mb])
+            ->setConstructorArgs([$this->logger, $this->mb])
             ->setMethods()
             ->getMock();
     }
@@ -32,14 +35,14 @@ class ReceivedDomainPartTest extends TestCase
     private function getTokenArray(string $name) : array
     {
         return [$this->getMockBuilder(MimeToken::class)
-            ->setConstructorArgs([$this->mb, $name])
+            ->setConstructorArgs([$this->logger, $this->mb, $name])
             ->setMethods()
             ->getMock()];
     }
 
     public function testBasicNameValueAndDomainParts() : void
     {
-        $part = new ReceivedDomainPart($this->mb, $this->hpf, 'Name', $this->getTokenArray('Value'));
+        $part = new ReceivedDomainPart($this->logger, $this->mb, $this->hpf, 'Name', $this->getTokenArray('Value'));
         $this->assertEquals('Name', $part->getName());
         $this->assertEquals('Value', $part->getValue());
         $this->assertEquals('Value', $part->getEhloName());

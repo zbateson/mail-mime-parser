@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * Description of MultiPartTest
@@ -93,7 +94,7 @@ class MultiPartTest extends TestCase
         if ($streamContainer === null) {
             $streamContainer = $this->mockPartStreamContainer;
         }
-        return new MimePart($parent, $streamContainer, $headerContainer, $childrenContainer);
+        return new MimePart($parent, new NullLogger(), $streamContainer, $headerContainer, $childrenContainer);
     }
 
     protected function getMockedParameterHeader($name, $value, $parameterValue = null) : \ZBateson\MailMimeParser\Header\ParameterHeader

@@ -30,7 +30,7 @@ class PartStreamContainerTest extends TestCase
             ->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->setConstructorArgs([true])
             ->getMock();
-        $this->instance = new PartStreamContainer($this->mockStreamFactory, new MbWrapper(), new NullLogger(), false);
+        $this->instance = new PartStreamContainer(new NullLogger(), $this->mockStreamFactory, new MbWrapper(), false);
     }
 
     public function testSetAndGetStream() : void

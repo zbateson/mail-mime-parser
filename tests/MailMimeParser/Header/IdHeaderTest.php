@@ -3,7 +3,9 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
@@ -22,85 +24,90 @@ class IdHeaderTest extends TestCase
     protected $consumerService;
 
     // @phpstan-ignore-next-line
-    protected $mimeTokenPartFactory;
+    protected $mpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
         $idcs = $this->getMockBuilder(IdConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
-        $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, $qscs, $idcs])
-            ->setMethods(['__toString'])
+        $this->consumerService = $this->getMockBuilder(IdBaseConsumerService::class)
+            ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs, $idcs])
+            ->setMethods()
             ->getMock();
-        $this->mimeTokenPartFactory = $mpf;
+        $this->mpf = $mpf;
+    }
+
+    private function newIdHeader($name, $value)
+    {
+        return new IdHeader($name, $value, $this->logger, $this->mpf, $this->consumerService);
     }
 
     public function testGetId() : void
     {
-        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'Content-ID', ' <1337@example.com> ');
+        $header = $this->newIdHeader('Content-ID', ' <1337@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
     }
 
     public function testGetIdWithInvalidId() : void
     {
-        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'Content-ID', 'Test');
+        $header = $this->newIdHeader('Content-ID', 'Test');
         $this->assertEquals('Test', $header->getValue());
     }
 
     public function testGetIdWithEmptyValue() : void
     {
-        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'Content-ID', '');
+        $header = $this->newIdHeader('Content-ID', '');
         $this->assertNull($header->getValue());
         $this->assertEquals([], $header->getIds());
     }
 
     public function testGetIds() : void
     {
-        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'References', ' <1337@example.com> <7331@example.com> <4@example.com> ');
+        $header = $this->newIdHeader('References', ' <1337@example.com> <7331@example.com> <4@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
         $this->assertEquals(['1337@example.com', '7331@example.com', '4@example.com'], $header->getIds());
     }
 
     public function testGetIdsWithComments() : void
     {
-        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'References', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
+        $header = $this->newIdHeader('References', '(blah)<1337@example(test).com>(wha<asdf>t!)<"7331"@example.com><4(test)@example.com> ');
         $this->assertEquals('1337@example.com', $header->getValue());
         $this->assertEquals(['1337@example.com', '7331@example.com', '4@example.com'], $header->getIds());
     }
 
     public function testGetIdsWithInvalidValue() : void
     {
-        $header = new IdHeader($this->mimeTokenPartFactory, $this->consumerService, 'In-Reply-To', 'Blah Blah');
+        $header = $this->newIdHeader('In-Reply-To', 'Blah Blah');
         $this->assertEquals('Blah', $header->getValue());
         $this->assertEquals(['Blah', 'Blah'], $header->getIds());
     }
 
     public function testGetIdsWithMimeLiteralParts() : void
     {
-        $header = new IdHeader(
-            $this->mimeTokenPartFactory,
-            $this->consumerService,
+        $header = $this->newIdHeader(
             'References',
             '=?us-ascii?Q?<CACrVqsLQjPe0y=3DE4q0auFowDoY+9Z27R63OA=5F1fn-?= '
             . '=?us-ascii?Q?mGPG9Zc3Q@example.com>_<a1527a80a42422457ebe?= '
@@ -121,9 +128,7 @@ class IdHeaderTest extends TestCase
 
     public function testReferencesHeader() : void
     {
-        $header = new IdHeader(
-            $this->mimeTokenPartFactory,
-            $this->consumerService,
+        $header = $this->newIdHeader(
             'References',
             '=?us-ascii?Q?' . "\r\n"
             . '<86c6f658-a49a-709a-5089-75c73560128b@local.test>_'

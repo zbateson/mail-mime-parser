@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use DateTime;
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
@@ -23,59 +24,63 @@ class ReceivedConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $receivedConsumer;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods(['__toString'])
+            ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$charsetConverter])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
-            ->setConstructorArgs([$pf])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
-            ->setConstructorArgs([$mpf, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $mpf, $qscs])
+            ->setMethods()
             ->getMock();
 
         $fdcs = $this->getMockBuilder(DomainConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'from'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'from'])
+            ->setMethods()
             ->getMock();
         $bdcs = $this->getMockBuilder(DomainConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'by'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'by'])
+            ->setMethods()
             ->getMock();
         $vgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'via'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'via'])
+            ->setMethods()
             ->getMock();
         $wgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'with'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'with'])
+            ->setMethods()
             ->getMock();
         $igcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'id'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'id'])
+            ->setMethods()
             ->getMock();
         $fgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, 'for'])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, 'for'])
+            ->setMethods()
             ->getMock();
         $rdcs = $this->getMockBuilder(ReceivedDateConsumerService::class)
-            ->setConstructorArgs([$pf, $ccs, $qscs])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
+            ->setMethods()
             ->getMock();
 
-        $this->receivedConsumer = new ReceivedConsumerService($pf, $fdcs, $bdcs, $vgcs, $wgcs, $igcs, $fgcs, $rdcs, $ccs);
+        $this->receivedConsumer = new ReceivedConsumerService(
+            $this->logger, $pf, $fdcs, $bdcs, $vgcs, $wgcs, $igcs, $fgcs, $rdcs, $ccs
+        );
     }
 
     public function testInvalidLine() : void

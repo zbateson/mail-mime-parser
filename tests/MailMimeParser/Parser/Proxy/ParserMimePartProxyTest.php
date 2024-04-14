@@ -46,7 +46,7 @@ class ParserMimePartProxyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+        $this->parent = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -101,7 +101,7 @@ class ParserMimePartProxyTest extends TestCase
             ->method('isContentParsed')
             ->willReturn(true);
 
-        $c = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+        $c = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor();
         $first = $c->getMock();
         $second = $c->getMock();
@@ -180,7 +180,7 @@ class ParserMimePartProxyTest extends TestCase
             ->method('isContentParsed')
             ->willReturn(true);
 
-        $c = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+        $c = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor();
         $first = $c->getMock();
         $second = $c->getMock();
@@ -205,7 +205,7 @@ class ParserMimePartProxyTest extends TestCase
             ->method('isContentParsed')
             ->willReturn(true);
 
-        $c = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+        $c = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor();
         $first = $c->getMock();
         $second = $c->getMock();
@@ -402,7 +402,7 @@ class ParserMimePartProxyTest extends TestCase
 
     public function testSetGetLastLineEndingLength() : void
     {
-        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
+        $parent = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->partBuilder->method('getParent')->willReturn($parent);

@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -20,12 +21,14 @@ class DatePartTest extends TestCase
     // @phpstan-ignore-next-line
     private $mb;
     private $hpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->mb])
+            ->setConstructorArgs([$this->logger, $this->mb])
             ->setMethods()
             ->getMock();
     }
@@ -33,9 +36,14 @@ class DatePartTest extends TestCase
     private function getTokenMock(string $name) : Token
     {
         return $this->getMockBuilder(Token::class)
-            ->setConstructorArgs([$this->mb, $name])
+            ->setConstructorArgs([$this->logger, $this->mb, $name])
             ->setMethods()
             ->getMock();
+    }
+
+    private function newDatePart($childParts)
+    {
+        return new DatePart($this->logger, $this->mb, $this->hpf, $childParts);
     }
 
     public function testDateString() : void
@@ -50,7 +58,7 @@ class DatePartTest extends TestCase
 
         foreach ($values as $value) {
             [$expected, $raw] = $value;
-            $part = new DatePart($this->mb, $this->hpf, [$this->getTokenMock($raw)]);
+            $part = $this->newDatePart([$this->getTokenMock($raw)]);
             $this->assertEquals($raw, $part->getValue(), 'Testing ' . $raw);
             $this->assertNotEmpty($part->getDateTime(), 'Testing ' . $raw);
             $this->assertEquals($expected, $part->getDateTime()->format(\DateTime::ISO8601), 'Testing ' . $raw);
@@ -60,7 +68,7 @@ class DatePartTest extends TestCase
     public function testInvalidDate() : void
     {
         $value = 'Invalid Date';
-        $part = new DatePart($this->mb, $this->hpf, [$this->getTokenMock($value)]);
+        $part = $this->newDatePart([$this->getTokenMock($value)]);
         $this->assertEquals($value, $part->getValue());
         $date = $part->getDateTime();
         $this->assertNull($date);

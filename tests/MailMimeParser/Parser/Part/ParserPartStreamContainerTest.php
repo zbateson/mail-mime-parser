@@ -40,7 +40,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->proxy->expects($this->any())
             ->method('getPart')
             ->willReturn($streamPartMock);
-        $this->instance = new ParserPartStreamContainer($this->streamFactory, new MbWrapper(), new NullLogger(), false, $this->proxy);
+        $this->instance = new ParserPartStreamContainer(new NullLogger(), $this->streamFactory, new MbWrapper(), false, $this->proxy);
     }
 
     public function testHasContentRequestsContentStream() : void

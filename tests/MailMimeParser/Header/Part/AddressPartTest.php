@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -20,20 +21,27 @@ class AddressPartTest extends TestCase
     // @phpstan-ignore-next-line
     private $mb;
     private $hpf;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->mb])
-            ->setMethods(['__toString'])
+            ->setConstructorArgs([$this->logger, $this->mb])
+            ->setMethods()
             ->getMock();
+    }
+
+    private function newAddressPart($nameParts, $valueParts)
+    {
+        return new AddressPart($this->logger, $this->mb, $this->hpf, $nameParts, $valueParts);
     }
 
     private function getTokenMock(string $name) : Token
     {
         return $this->getMockBuilder(Token::class)
-            ->setConstructorArgs([$this->mb, $name])
+            ->setConstructorArgs([$this->logger, $this->mb, $name])
             ->setMethods()
             ->getMock();
     }
@@ -42,14 +50,14 @@ class AddressPartTest extends TestCase
     {
         $name = 'Julius Caeser';
         $email = 'gaius@altavista.com';
-        $part = new AddressPart($this->mb, $this->hpf, [$this->getTokenMock($name)], [$this->getTokenMock($email)]);
+        $part = $this->newAddressPart([$this->getTokenMock($name)], [$this->getTokenMock($email)]);
         $this->assertEquals($name, $part->getName());
         $this->assertEquals($email, $part->getEmail());
     }
 
     public function testValidation() : void
     {
-        $part = new AddressPart($this->mb, $this->hpf, [], []);
+        $part = $this->newAddressPart([], []);
         $errs = $part->getErrors(true, LogLevel::ERROR);
         $this->assertCount(1, $errs);
         $this->assertEquals('AddressPart doesn\'t contain an email address', $errs[0]->getMessage());

@@ -2,7 +2,7 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use GuzzleHttp\Psr7\Utils;
+use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
@@ -83,6 +83,7 @@ class ParserMimePartProxyFactoryTest extends TestCase
             ->getMock();
 
         $this->instance = new ParserMimePartProxyFactory(
+            new NullLogger(),
             $this->streamFactory,
             $this->headerContainerFactory,
             $this->partStreamContainerFactory,

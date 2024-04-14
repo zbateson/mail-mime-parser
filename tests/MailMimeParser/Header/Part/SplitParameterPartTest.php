@@ -4,9 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
-use DI;
-use DI\ContainerBuilder;
-use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
@@ -21,38 +18,30 @@ use Psr\Log\NullLogger;
 class SplitParameterPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
+    private $logger;
     private $mb;
     private $hpf;
-    private $container;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->mb])
+            ->setConstructorArgs([$this->logger, $this->mb])
             ->setMethods()
             ->getMock();
-
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions([LoggerInterface::class => new NullLogger()]);
-        $builder->useAttributes(true);
-        $builder->useAutowiring(true);
-        $this->container = $builder->build();
     }
 
     private function getToken(string $value) : Token
     {
         return $this->getMockBuilder(Token::class)
-            ->setConstructorArgs([$this->mb, $value])
+            ->setConstructorArgs([$this->logger, $this->mb, $value])
             ->setMethods()
             ->getMock();
     }
 
     private function assertNameValue(string $expectedName, string $expectedValue, string|array|null $actualNames = null, string|array|null $actualValues = null) : SplitParameterPart
     {
-        $logger = $this->container->get(LoggerInterface::class);
-        $logger->
-        exit;
         if ($actualNames === null) {
             $actualNames = $expectedName;
         }
@@ -69,17 +58,12 @@ class SplitParameterPartTest extends TestCase
             $actualNames = array_fill(count($actualNames), count($actualValues), $expectedName);
         }
 
-        $container = $this->container;
         $mapped = \array_map(
-            fn ($arr) => new ParameterPart($this->mb, $this->hpf, [$this->getToken($arr[0])], $this->getToken($arr[1])),
+            fn ($arr) => new ParameterPart($this->logger, $this->mb, $this->hpf, [$this->getToken($arr[0])], $this->getToken($arr[1])),
             \array_map(null, $actualNames, $actualValues)
         );
-        \array_walk($mapped, function($part) use ($container) {
-            $container->injectOn($part);
-        });
-
-        $part = new SplitParameterPart($this->mb, $this->hpf, $mapped);
-        $container->injectOn($part);
+        
+        $part = new SplitParameterPart($this->logger, $this->mb, $this->hpf, $mapped);
         $this->assertEquals($expectedName, $part->getName());
         $this->assertEquals($expectedValue, $part->getValue());
         return $part;
@@ -138,8 +122,8 @@ class SplitParameterPartTest extends TestCase
         $this->assertEquals('ar-bh', $part->getLanguage());
         $children = $part->getChildParts();
         $this->assertCount(4, $children);
-        $this->assertEquals('CP1256', $child[1]->getCharset());
-        $this->assertEquals('ar-eg', $child[1]->getLanguage());
+        $this->assertEquals('CP1256', $children[1]->getCharset());
+        $this->assertEquals('ar-eg', $children[1]->getLanguage());
     }
 
     public function testErrorOnUnsupportedCharset() : void

@@ -3,6 +3,7 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -18,12 +19,14 @@ class HeaderPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $abstractHeaderPartStub;
+    private $logger;
 
     protected function setUp() : void
     {
+        $this->logger = new NullLogger();
         $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder(HeaderPart::class)
-            ->setConstructorArgs([$charsetConverter, 'toost'])
+            ->setConstructorArgs([$this->logger, $charsetConverter, 'toost'])
             ->getMockForAbstractClass();
         $this->abstractHeaderPartStub = $stub;
     }
