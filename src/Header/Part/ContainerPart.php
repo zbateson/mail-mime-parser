@@ -77,6 +77,35 @@ class ContainerPart extends HeaderPart
     }
 
     /**
+     * Trims any 'space' tokens from the beginning and end of an array of parts.
+     *
+     * @param HeaderPart[] $parts
+     * @return HeaderPart[]
+     */
+    protected function trim(array $parts): array
+    {
+        $dost = true;
+        $doet = true;
+        do {
+
+            $st = ($dost) ? \array_shift($parts) : null;
+            $et = ($doet) ? \array_pop($parts) : null;
+            if ($st !== null && !$st->isSpace) {
+                \array_unshift($parts, $st);
+                $st = null;
+            }
+            if ($et !== null && !$et->isSpace) {
+                \array_push($parts, $et);
+                $et = null;
+            }
+            $dost = ($st !== null);
+            $doet = ($et !== null);
+
+        } while ($dost || $doet);
+        return $parts;
+    }
+
+    /**
      * Creates the string value representation of this part constructed from the
      * child parts passed to it.
      *

@@ -25,7 +25,7 @@ class AddressPart extends NameValuePart
 {
     protected function getNameFromParts(array $parts) : string
     {
-        return \trim(parent::getNameFromParts($parts));
+        return parent::getNameFromParts($this->trim($parts));
     }
 
     protected function getValueFromParts(array $parts) : string
