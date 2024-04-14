@@ -56,11 +56,11 @@ abstract class AbstractConsumerService implements IConsumerService
 
     public function __invoke(string $value) : array
     {
-        $this->logger->debug('Starting ${class} for "${value}"', ['class' => static::class, 'value' => $value]);
+        $this->logger->debug('Starting {class} for "{value}"', ['class' => static::class, 'value' => $value]);
         if ($value !== '') {
             $parts = $this->parseRawValue($value);
             $this->logger->debug(
-                'Ending ${class} for "${value}": parsed into ${cnt} header part objects',
+                'Ending {class} for "{value}": parsed into {cnt} header part objects',
                 ['class' => static::class, 'value' => $value, 'cnt' => \count($parts)]
             );
             return $parts;
@@ -168,7 +168,7 @@ abstract class AbstractConsumerService implements IConsumerService
         if ($this->tokenSplitPattern === null) {
             $this->tokenSplitPattern = $this->getTokenSplitPattern();
             $this->logger->debug(
-                'Configuring ${class} with token split pattern: ${pattern}',
+                'Configuring {class} with token split pattern: {pattern}',
                 ['class' => static::class, 'pattern' => $this->tokenSplitPattern]
             );
         }
@@ -240,7 +240,7 @@ abstract class AbstractConsumerService implements IConsumerService
         foreach ($subConsumers as $consumer) {
             if ($consumer->isStartToken($token)) {
                 $this->logger->debug(
-                    'Token: "${value}" in ${class} starting sub-consumer ${consumer}',
+                    'Token: "{value}" in {class} starting sub-consumer {consumer}',
                     ['value' => $token, 'class' => static::class, 'consumer' => \get_class($consumer)]
                 );
                 $this->advanceToNextToken($tokens, true);
@@ -314,7 +314,7 @@ abstract class AbstractConsumerService implements IConsumerService
     {
         $parts = [];
         while ($tokens->valid() && !$this->isEndToken($tokens->current())) {
-            $this->logger->debug('Parsing token: ${token} in consumer: ${consumer}');
+            $this->logger->debug('Parsing token: {token} in class: {consumer}', ['token' => $tokens->current(), 'consumer' => static::class]);
             $parts = \array_merge($parts, $this->getTokenParts($tokens));
             $this->advanceToNextToken($tokens, false);
         }
@@ -334,6 +334,7 @@ abstract class AbstractConsumerService implements IConsumerService
      */
     protected function processParts(array $parts) : array
     {
+        $this->logger->debug('Processing parts array {parts} in {consumer}', ['parts' => $parts, 'consumer' => static::class]);
         return $parts;
     }
 }

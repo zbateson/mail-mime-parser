@@ -175,7 +175,7 @@ class HeaderFactory
     {
         $class = $this->getClassFor($name);
         $this->logger->debug(
-            'Creating {$class} for header with name "{$name}" and value "{$value}"',
+            'Creating {class} for header with name "{name}" and value "{value}"',
             ['class' => $class, 'name' => $name, 'value' => $value]
         );
         return $this->newInstanceOf($name, $value, $class);
