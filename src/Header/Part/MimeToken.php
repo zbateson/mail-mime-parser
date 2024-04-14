@@ -45,7 +45,7 @@ class MimeToken extends Token
      */
     protected string $rawValue = '';
 
-    public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter, $value)
+    public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter, string $value)
     {
         parent::__construct($logger, $charsetConverter, $value);
         $this->rawValue = $this->value;
