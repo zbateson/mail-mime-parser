@@ -23,7 +23,7 @@ class HeaderPartFactoryTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->logger = new NullLogger();
+        $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
         $this->headerPartFactory = new HeaderPartFactory($this->logger, $this->mb);
     }

@@ -24,7 +24,7 @@ class PartHeaderContainerFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartHeaderContainerFactory(
-            new NullLogger(),
+            \mmpGetTestLogger(),
             $mockhf
         );
     }

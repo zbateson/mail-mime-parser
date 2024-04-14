@@ -83,7 +83,7 @@ class ParserMimePartProxyFactoryTest extends TestCase
             ->getMock();
 
         $this->instance = new ParserMimePartProxyFactory(
-            new NullLogger(),
+            \mmpGetTestLogger(),
             $this->streamFactory,
             $this->headerContainerFactory,
             $this->partStreamContainerFactory,

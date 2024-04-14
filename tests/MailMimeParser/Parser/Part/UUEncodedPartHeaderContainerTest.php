@@ -23,7 +23,7 @@ class UUEncodedPartHeaderContainerTest extends TestCase
         $hf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->instance = new UUEncodedPartHeaderContainer(new NullLogger(), $hf);
+        $this->instance = new UUEncodedPartHeaderContainer(\mmpGetTestLogger(), $hf);
     }
 
     public function testGetSetUnixFileMode() : void

@@ -103,7 +103,7 @@ class MessageTest extends TestCase
     private function newMessage($childrenContainer = null) : Message
     {
         return new Message(
-            new NullLogger(),
+            \mmpGetTestLogger(),
             $this->mockPartStreamContainer,
             $this->mockHeaderContainer,
             ($childrenContainer) ?: $this->mockPartChildrenContainer,

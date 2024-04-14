@@ -27,7 +27,7 @@ class MimeTokenTest extends TestCase
 
     protected function assertDecoded($expected, $encodedActual) : MimeToken
     {
-        $part = new MimeToken(new NullLogger(), $this->charsetConverter, $encodedActual);
+        $part = new MimeToken(\mmpGetTestLogger(), $this->charsetConverter, $encodedActual);
         $this->assertEquals($expected, $part->getValue());
 
         return $part;

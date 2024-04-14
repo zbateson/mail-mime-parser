@@ -22,7 +22,7 @@ class ErrorTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->errorBagMock = $this->getMockForAbstractClass(ErrorBag::class, [new NullLogger()]);
+        $this->errorBagMock = $this->getMockForAbstractClass(ErrorBag::class, [\mmpGetTestLogger()]);
     }
 
     public function testGetMessage() : void

@@ -94,7 +94,7 @@ class MultiPartTest extends TestCase
         if ($streamContainer === null) {
             $streamContainer = $this->mockPartStreamContainer;
         }
-        return new MimePart($parent, new NullLogger(), $streamContainer, $headerContainer, $childrenContainer);
+        return new MimePart($parent, \mmpGetTestLogger(), $streamContainer, $headerContainer, $childrenContainer);
     }
 
     protected function getMockedParameterHeader($name, $value, $parameterValue = null) : \ZBateson\MailMimeParser\Header\ParameterHeader

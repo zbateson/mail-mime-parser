@@ -22,7 +22,7 @@ class MimeTokenPartFactoryTest extends TestCase
     protected function setUp() : void
     {
         $charsetConverter = new MbWrapper();
-        $this->headerPartFactory = new MimeTokenPartFactory(new NullLogger(), $charsetConverter);
+        $this->headerPartFactory = new MimeTokenPartFactory(\mmpGetTestLogger(), $charsetConverter);
     }
 
     public function testNewInstance() : void

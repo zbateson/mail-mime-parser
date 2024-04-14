@@ -23,7 +23,7 @@ class UUEncodedPartTest extends TestCase
         $psc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartStreamContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->instance = new UUEncodedPart(null, null, null, new NullLogger(), $psc);
+        $this->instance = new UUEncodedPart(null, null, null, \mmpGetTestLogger(), $psc);
     }
 
     public function testGetAndSetFileName() : void

@@ -27,7 +27,7 @@ class TokenTest extends TestCase
 
     private function newToken($value, $isLiteral = false)
     {
-        return new Token(new NullLogger(), $this->mb, $value, $isLiteral);
+        return new Token(\mmpGetTestLogger(), $this->mb, $value, $isLiteral);
     }
 
     public function testInstance() : void

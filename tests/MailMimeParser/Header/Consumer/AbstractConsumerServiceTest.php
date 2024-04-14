@@ -2,8 +2,8 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\Token;
 
@@ -25,7 +25,7 @@ class AbstractConsumerServiceTest extends TestCase
         $stub = $this->getMockBuilder('\\' . AbstractConsumerService::class)
             ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
             ->setConstructorArgs([
-                new NullLogger(),
+                \mmpGetTestLogger(),
                 $this->getMockBuilder(HeaderPartFactory::class)->disableOriginalConstructor()->getMock(),
                 []
             ])
@@ -48,7 +48,8 @@ class AbstractConsumerServiceTest extends TestCase
 
         $stub->expects($this->once())
             ->method('getPartForToken')
-            ->with($value);
+            ->with($value)
+            ->willReturn($this->getMockForAbstractClass(IHeaderPart::class));
         $stub->method('processParts')
             ->willReturn([$value]);
 

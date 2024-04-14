@@ -44,7 +44,7 @@ class IUUEncodedPartFactoryTest extends TestCase
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Message\UUEncodedPart::class))
             ->willReturn($msp);
 
-        $instance = new IUUEncodedPartFactory(new NullLogger(), $sdf, $psc);
+        $instance = new IUUEncodedPartFactory(\mmpGetTestLogger(), $sdf, $psc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\\' . \ZBateson\MailMimeParser\Message\UUEncodedPart::class,

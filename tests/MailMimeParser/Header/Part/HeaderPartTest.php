@@ -23,7 +23,7 @@ class HeaderPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->logger = new NullLogger();
+        $this->logger = \mmpGetTestLogger();
         $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder(HeaderPart::class)
             ->setConstructorArgs([$this->logger, $charsetConverter, 'toost'])

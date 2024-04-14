@@ -23,7 +23,7 @@ class GenericReceivedConsumerServiceTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->logger = new NullLogger();
+        $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods()
             ->getMock();

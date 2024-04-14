@@ -67,7 +67,7 @@ class ParserUUEncodedPartProxyFactoryTest extends TestCase
             ->getMock();
 
         $this->instance = new ParserUUEncodedPartProxyFactory(
-            new NullLogger(),
+            \mmpGetTestLogger(),
             $this->streamFactory,
             $this->partStreamContainerFactory
         );

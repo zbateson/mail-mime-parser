@@ -26,7 +26,7 @@ class PartHeaderContainerTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['newInstance', 'newInstanceOf'])
             ->getMock();
-        $this->instance = new PartHeaderContainer(new NullLogger(), $this->mhf);
+        $this->instance = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf);
     }
 
     public function testAddExistsGet() : void

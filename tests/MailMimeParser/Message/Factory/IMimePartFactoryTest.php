@@ -46,7 +46,7 @@ class IMimePartFactoryTest extends TestCase
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Message\MimePart::class))
             ->willReturn($msp);
 
-        $instance = new IMimePartFactory(new NullLogger(), $sdf, $psc, $phc, $pcc);
+        $instance = new IMimePartFactory(\mmpGetTestLogger(), $sdf, $psc, $phc, $pcc);
         $part = $instance->newInstance();
         $this->assertInstanceOf(
             '\\' . \ZBateson\MailMimeParser\Message\MimePart::class,

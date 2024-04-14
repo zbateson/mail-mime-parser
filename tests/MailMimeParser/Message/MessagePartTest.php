@@ -33,7 +33,7 @@ class MessagePartTest extends TestCase
     {
         $streamPartMock = $this->getMockForAbstractClass(
             MessagePart::class,
-            [new NullLogger(), $this->partStreamContainer, $parent]
+            [\mmpGetTestLogger(), $this->partStreamContainer, $parent]
         );
         if ($contentHandle !== null) {
             $contentHandle = new MessagePartStreamDecorator($streamPartMock, Psr7\Utils::streamFor($contentHandle));
@@ -63,7 +63,7 @@ class MessagePartTest extends TestCase
         }
         return $this->getMockForAbstractClass(
             MessagePart::class,
-            [new NullLogger(), $this->partStreamContainer, $parent]
+            [\mmpGetTestLogger(), $this->partStreamContainer, $parent]
         );
     }
 

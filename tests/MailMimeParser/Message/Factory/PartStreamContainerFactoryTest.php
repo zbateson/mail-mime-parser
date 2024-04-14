@@ -25,7 +25,7 @@ class PartStreamContainerFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->instance = new PartStreamContainerFactory(
-            new NullLogger(),
+            \mmpGetTestLogger(),
             $mocksdf,
             new MbWrapper(),
             true

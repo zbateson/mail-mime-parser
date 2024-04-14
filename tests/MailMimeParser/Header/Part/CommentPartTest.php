@@ -24,7 +24,7 @@ class CommentPartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->logger = new NullLogger();
+        $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $this->mb])
