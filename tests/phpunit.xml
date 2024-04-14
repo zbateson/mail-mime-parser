@@ -21,6 +21,7 @@
   <php>
     <const name="TEST_DATA_DIR" value="_data"/>
     <const name="TEST_OUTPUT_DIR" value="_output"/>
+    <const name="TEST_LOG_FILE" value="_output/debug.log"/>
   </php>
   <!--
     Files specified in order for code coverage reporting - for example, Container
