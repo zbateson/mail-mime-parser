@@ -136,7 +136,7 @@ class HeaderPartFactory
      *
      * @param HeaderPart[] $nameParts
      */
-    public function newParameterPart(array $nameParts, HeaderPart $valuePart) : ParameterPart
+    public function newParameterPart(array $nameParts, ContainerPart $valuePart) : ParameterPart
     {
         return new ParameterPart($this->logger, $this->charsetConverter, $this, $nameParts, $valuePart);
     }

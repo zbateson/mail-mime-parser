@@ -30,6 +30,7 @@ class CommentPart extends ContainerPart
         array $children
     ) {
         parent::__construct($logger, $charsetConverter, $partFactory, $children);
+        $this->isSpace = true;
         $this->canIgnoreSpacesBefore = true;
         $this->canIgnoreSpacesAfter = true;
     }

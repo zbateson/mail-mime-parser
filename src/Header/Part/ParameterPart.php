@@ -47,20 +47,18 @@ class ParameterPart extends NameValuePart
         MbWrapper $charsetConverter,
         HeaderPartFactory $headerPartFactory,
         array $nameParts,
-        HeaderPart $valuePart
+        ContainerPart $valuePart
     ) {
-        parent::__construct($logger, $charsetConverter, $headerPartFactory, $nameParts, [$valuePart]);
+        parent::__construct($logger, $charsetConverter, $headerPartFactory, $nameParts, $valuePart->children);
     }
 
     protected function getNameFromParts(array $parts) : string
     {
-        $name = parent::getNameFromParts($parts);
+        $name = parent::getNameFromParts($this->trim($parts));
         if (\preg_match('~^\s*([^\*]+)\*(\d*)(\*)?$~', $name, $matches)) {
             $name = $matches[1];
             $this->index = ($matches[2] !== '') ? intval($matches[2]) : null;
             $this->encoded = (($matches[2] === '') || !empty($matches[3]));
-        } else {
-            $name = \trim($name);
         }
         return $name;
     }
@@ -75,7 +73,7 @@ class ParameterPart extends NameValuePart
 
     protected function getValueFromParts(array $parts) : string
     {
-        $value = parent::getValueFromParts($parts);
+        $value = parent::getValueFromParts($this->trim($parts));
         $index = intval($this->index);
         if ($this->encoded && \preg_match('~^([^\']*)\'?([^\']*)\'?(.*)$~', $value, $matches)) {
             $this->charset = (!empty($matches[1]) && !empty($matches[3])) ? $matches[1] : $this->charset;
