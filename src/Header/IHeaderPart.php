@@ -32,5 +32,5 @@ interface IHeaderPart extends IErrorBag, Stringable
      *
      * @return CommentPart[]
      */
-    public function getCommentParts() : array;
+    public function getComments() : array;
 }

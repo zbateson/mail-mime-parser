@@ -126,10 +126,10 @@ class ContainerPart extends HeaderPart
         return $this->children;
     }
 
-    public function getCommentParts() : array
+    public function getComments() : array
     {
         return \array_merge(...\array_filter(\array_map(
-            fn ($p) => ($p instanceof CommentPart) ? [$p] : $p->getCommentParts(),
+            fn ($p) => ($p instanceof CommentPart) ? [$p] : $p->getComments(),
             $this->children
         )));
     }

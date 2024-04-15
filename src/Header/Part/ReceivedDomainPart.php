@@ -60,7 +60,7 @@ class ReceivedDomainPart extends ReceivedPart
         parent::__construct($logger, $charsetConverter, $headerPartFactory, $name, $children);
 
         $this->ehloName = $this->value;
-        $cps = $this->getCommentParts();
+        $cps = $this->getComments();
         $commentPart = (!empty($cps)) ? $cps[0] : null;
 
         $pattern = '~^(\[(IPv[64])?(?P<addr1>[a-f\d\.\:]+)\])?\s*(helo=)?(?P<name>[a-z0-9\-]+[a-z0-9\-\.]+)?\s*(\[(IPv[64])?(?P<addr2>[a-f\d\.\:]+)\])?$~i';
