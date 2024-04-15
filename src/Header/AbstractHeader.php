@@ -118,9 +118,10 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
     public function getComments() : array
     {
         if ($this->comments === null) {
-            $this->comments = \array_merge(...\array_map(
-                fn ($p) => ($p instanceof CommentPart) ? [$p] : $p->getAllComments(),
-            ));
+            $this->comments = \array_map(fn ($c) => $c->getComment(), \array_merge(...\array_map(
+                fn ($p) => ($p instanceof CommentPart) ? [$p] : $p->getComments(),
+                $this->allParts
+            )));
         }
         return $this->comments;
     }
