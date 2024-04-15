@@ -31,7 +31,11 @@ class Token extends HeaderPart
         bool $isLiteral = false
     ) {
         parent::__construct($logger, $charsetConverter, $value);
-        $this->value = \preg_replace('/\r|\n/', '', $this->convertEncoding($value));
+        if (!$isLiteral) {
+            $this->value = \preg_replace('/\r|\n/', '', $this->convertEncoding($value));
+        } else {
+            $this->value = $this->convertEncoding($value);
+        }
         $this->isSpace = ($this->value === '' || (!$isLiteral && \preg_match('/^\s*$/', $this->value) === 1));
         $this->canIgnoreSpacesAfter = $this->canIgnoreSpacesAfter = $this->isSpace;
     }
