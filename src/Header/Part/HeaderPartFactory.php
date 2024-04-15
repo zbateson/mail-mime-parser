@@ -52,9 +52,17 @@ class HeaderPartFactory
     }
 
     /**
-     * Initializes and returns a new Token.
+     * Initializes and returns a new SubjectToken.
      */
-    public function newMimeToken(string $value) : Token
+    public function newSubjectToken(string $value) : SubjectToken
+    {
+        return new SubjectToken($this->logger, $this->charsetConverter, $value);
+    }
+
+    /**
+     * Initializes and returns a new MimeToken.
+     */
+    public function newMimeToken(string $value) : MimeToken
     {
         return new MimeToken($this->logger, $this->charsetConverter, $value);
     }

@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use Iterator;
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\MimeToken;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
@@ -38,12 +39,10 @@ class SubjectConsumerService extends AbstractGenericConsumerService
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        if ($isLiteral) {
-            return $this->partFactory->newToken($token, true);
-        } elseif (\preg_match('/^\s+$/', $token)) {
-            return $this->partFactory->newToken(' ');
+        if (\preg_match('/' . MimeToken::MIME_PART_PATTERN . '/', $token)) {
+            return $this->partFactory->newMimeToken($token);
         }
-        return $this->partFactory->newInstance($token);
+        return $this->partFactory->newSubjectToken($token);
     }
 
     /**
@@ -59,17 +58,5 @@ class SubjectConsumerService extends AbstractGenericConsumerService
     protected function getTokenParts(Iterator $tokens) : array
     {
         return $this->getConsumerTokenParts($tokens);
-    }
-
-    /**
-     * Overridden to not split out backslash characters and its next character
-     * as a special case defined in AbstractConsumerService
-     *
-     * @return string the regex pattern
-     */
-    protected function getTokenSplitPattern() : string
-    {
-        $sChars = \implode('|', $this->getAllTokenSeparators());
-        return '~(' . $sChars . ')~';
     }
 }

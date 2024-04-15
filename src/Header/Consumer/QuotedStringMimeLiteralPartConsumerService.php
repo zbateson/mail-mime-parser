@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\MimeToken;
 
 /**
  * Allows for mime-encoded parts inside a quoted part.
@@ -24,9 +25,9 @@ class QuotedStringMimeLiteralPartConsumerService extends QuotedStringConsumerSer
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        if (!$isLiteral) {
+        if (!$isLiteral && \preg_match('/' . MimeToken::MIME_PART_PATTERN . '/', $token)) {
             return $this->partFactory->newMimeToken($token);
         }
-        return $this->partFactory->newToken($token, true);
+        return $this->partFactory->newToken($token, $isLiteral);
     }
 }
