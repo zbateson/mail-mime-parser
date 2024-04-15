@@ -20,7 +20,7 @@ function mmpGetTestLogger() : Logger {
     if ($logger === null) {
         $logger = new Logger('testing');
         $logger->pushProcessor(new PsrLogMessageProcessor(removeUsedContextFields: true));
-        \unlink(__DIR__ . '/' . TEST_LOG_FILE);
+        @\unlink(__DIR__ . '/' . TEST_LOG_FILE);
         $logger->pushHandler(new StreamHandler(__DIR__ . '/' . TEST_LOG_FILE, 'debug'));
         $logger->pushHandler(mmpGetAndClearTestHandler());
     }
