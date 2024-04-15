@@ -48,10 +48,10 @@ class MimeToken extends Token
     public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter, string $value)
     {
         parent::__construct($logger, $charsetConverter, $value);
-        $this->rawValue = $this->value;
+        $this->rawValue = $value;
         // don't use $this->value or $this->rawValue which already had a call
         // to 'convertEncoding' and causes issues.
-        $this->value = $this->decodeMime($value);
+        $this->value = $this->decodeMime(\preg_replace('/\r|\n/', '', $value));
         $pattern = self::MIME_PART_PATTERN;
         $this->canIgnoreSpacesBefore = (bool) \preg_match("/^\s*{$pattern}/", $this->rawValue);
         $this->canIgnoreSpacesAfter = (bool) \preg_match("/{$pattern}\s*\$/", $this->rawValue);
