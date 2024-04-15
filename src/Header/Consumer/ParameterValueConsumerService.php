@@ -7,13 +7,29 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
+use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * @author Zaahid Bateson
  */
 class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartService
 {
+    public function __construct(
+        LoggerInterface $logger,
+        MimeTokenPartFactory $partFactory,
+        CommentConsumerService $commentConsumerService,
+        QuotedStringMimeLiteralPartConsumerService $quotedStringConsumerService
+    ) {
+        parent::__construct(
+            $logger,
+            $partFactory,
+            $commentConsumerService,
+            $quotedStringConsumerService
+        );
+    }
+
     /**
      * Returns semi-colon and equals char as token separators.
      *
@@ -25,7 +41,7 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
     }
     
     /**
-     * Returns true if the token is an
+     * Returns true if the token is an '=' character.
      */
     protected function isStartToken(string $token) : bool
     {
@@ -33,7 +49,7 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
     }
 
     /**
-     * Returns true if the token is a
+     * Returns true if the token is a ';' character.
      */
     protected function isEndToken(string $token) : bool
     {
