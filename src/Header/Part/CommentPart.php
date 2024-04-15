@@ -19,6 +19,11 @@ use ZBateson\MbWrapper\MbWrapper;
 class CommentPart extends ContainerPart
 {
     /**
+     * @var HeaderPartFactory used to create intermediate parts.
+     */
+    protected HeaderPartFactory $partFactory;
+
+    /**
      * @var string the contents of the comment
      */
     protected string $comment;
@@ -29,7 +34,8 @@ class CommentPart extends ContainerPart
         HeaderPartFactory $partFactory,
         array $children
     ) {
-        parent::__construct($logger, $charsetConverter, $partFactory, $children);
+        $this->partFactory = $partFactory;
+        parent::__construct($logger, $charsetConverter, $children);
         $this->isSpace = true;
         $this->canIgnoreSpacesBefore = true;
         $this->canIgnoreSpacesAfter = true;

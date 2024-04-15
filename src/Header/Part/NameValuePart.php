@@ -27,15 +27,13 @@ class NameValuePart extends ContainerPart
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
-        HeaderPartFactory $headerPartFactory,
         array $nameParts,
         array $valueParts
     ) {
         ErrorBag::__construct($logger);
         $this->charsetConverter = $charsetConverter;
-        $this->partFactory = $headerPartFactory;
         $this->name = (!empty($nameParts)) ? $this->getNameFromParts($nameParts) : '';
-        parent::__construct($logger, $charsetConverter, $headerPartFactory, $valueParts);
+        parent::__construct($logger, $charsetConverter, $valueParts);
         \array_unshift($this->children, ...$nameParts);
     }
 

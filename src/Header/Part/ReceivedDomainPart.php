@@ -53,11 +53,10 @@ class ReceivedDomainPart extends ReceivedPart
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
-        HeaderPartFactory $headerPartFactory,
         string $name,
         array $children
     ) {
-        parent::__construct($logger, $charsetConverter, $headerPartFactory, $name, $children);
+        parent::__construct($logger, $charsetConverter, $name, $children);
 
         $this->ehloName = $this->value;
         $cps = $this->getComments();

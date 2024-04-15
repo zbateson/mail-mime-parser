@@ -28,11 +28,10 @@ class ReceivedPart extends NameValuePart
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
-        HeaderPartFactory $headerPartFactory,
         string $name,
         array $children
     ) {
-        parent::__construct($logger, $charsetConverter, $headerPartFactory, [], $children);
-        $this->name = $name;
+        parent::__construct($logger, $charsetConverter, [], $children);
+        $this->name = trim($name);
     }
 }

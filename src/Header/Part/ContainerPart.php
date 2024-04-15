@@ -19,11 +19,6 @@ use ZBateson\MailMimeParser\ErrorBag;
 class ContainerPart extends HeaderPart
 {
     /**
-     * @var HeaderPartFactory used to create intermediate parts.
-     */
-    protected HeaderPartFactory $partFactory;
-
-    /**
      * @var HeaderPart[] parts that were used to create this part, collected for
      *      proper error reporting and validation.
      */
@@ -32,12 +27,10 @@ class ContainerPart extends HeaderPart
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
-        HeaderPartFactory $headerPartFactory,
         array $children
     ) {
         ErrorBag::__construct($logger);
         $this->charsetConverter = $charsetConverter;
-        $this->partFactory = $headerPartFactory;
         $this->children = $children;
         $str = (!empty($children)) ? $this->getValueFromParts($children) : '';
         parent::__construct(
@@ -58,7 +51,7 @@ class ContainerPart extends HeaderPart
      */
     protected function filterIgnoredSpaces(array $parts) : array
     {
-        $space = $this->partFactory->newToken(' ');
+        $space = (object) ['isSpace' => true, 'canIgnoreSpacesAfter' => true, 'canIgnoreSpacesBefore' => true];
         // creates an array of 3 parts, the first consisting of $parts shifted
         // one to the right starting with a space, the second $parts itself,
         // the 3rd $parts shifted one to the left and with a space after

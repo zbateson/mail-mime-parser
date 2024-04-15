@@ -46,9 +46,9 @@ class HeaderPartFactory
     /**
      * Initializes and returns a new Token.
      */
-    public function newToken(string $value, bool $isLiteral = false) : Token
+    public function newToken(string $value, bool $isLiteral = false, bool $preserveSpaces = false) : Token
     {
-        return new Token($this->logger, $this->charsetConverter, $value, $isLiteral);
+        return new Token($this->logger, $this->charsetConverter, $value, $isLiteral, $preserveSpaces);
     }
 
     /**
@@ -66,7 +66,7 @@ class HeaderPartFactory
      */
     public function newContainerPart(array $children) : ContainerPart
     {
-        return new ContainerPart($this->logger, $this->charsetConverter, $this, $children);
+        return new ContainerPart($this->logger, $this->charsetConverter, $children);
     }
 
     /**
@@ -86,7 +86,7 @@ class HeaderPartFactory
      */
     public function newQuotedLiteralPart(array $parts) : QuotedLiteralPart
     {
-        return new QuotedLiteralPart($this->logger, $this->charsetConverter, $this, $parts);
+        return new QuotedLiteralPart($this->logger, $this->charsetConverter, $parts);
     }
 
     /**
@@ -107,7 +107,7 @@ class HeaderPartFactory
      */
     public function newAddress(array $nameParts, array $emailParts) : AddressPart
     {
-        return new AddressPart($this->logger, $this->charsetConverter, $this, $nameParts, $emailParts);
+        return new AddressPart($this->logger, $this->charsetConverter, $nameParts, $emailParts);
     }
 
     /**
@@ -118,7 +118,7 @@ class HeaderPartFactory
      */
     public function newAddressGroupPart(array $nameParts, array $addressesAndGroups) : AddressGroupPart
     {
-        return new AddressGroupPart($this->logger, $this->charsetConverter, $this, $nameParts, $addressesAndGroups);
+        return new AddressGroupPart($this->logger, $this->charsetConverter, $nameParts, $addressesAndGroups);
     }
 
     /**
@@ -128,7 +128,7 @@ class HeaderPartFactory
      */
     public function newDatePart(array $children) : DatePart
     {
-        return new DatePart($this->logger, $this->charsetConverter, $this, $children);
+        return new DatePart($this->logger, $this->charsetConverter, $children);
     }
 
     /**
@@ -138,7 +138,7 @@ class HeaderPartFactory
      */
     public function newParameterPart(array $nameParts, ContainerPart $valuePart) : ParameterPart
     {
-        return new ParameterPart($this->logger, $this->charsetConverter, $this, $nameParts, $valuePart);
+        return new ParameterPart($this->logger, $this->charsetConverter, $nameParts, $valuePart);
     }
 
     /**
@@ -148,7 +148,7 @@ class HeaderPartFactory
      */
     public function newReceivedPart(string $name, array $children) : ReceivedPart
     {
-        return new ReceivedPart($this->logger, $this->charsetConverter, $this, $name, $children);
+        return new ReceivedPart($this->logger, $this->charsetConverter, $name, $children);
     }
 
     /**
@@ -161,7 +161,6 @@ class HeaderPartFactory
         return new ReceivedDomainPart(
             $this->logger,
             $this->charsetConverter,
-            $this,
             $name,
             $children
         );

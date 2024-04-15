@@ -38,14 +38,12 @@ class AddressGroupPart extends NameValuePart
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
-        HeaderPartFactory $headerPartFactory,
         array $nameParts,
         array $addressesAndGroupParts
     ) {
         parent::__construct(
             $logger,
             $charsetConverter,
-            $headerPartFactory,
             $nameParts,
             $addressesAndGroupParts
         );
