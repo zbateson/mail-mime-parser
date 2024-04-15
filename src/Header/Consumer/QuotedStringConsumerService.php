@@ -26,7 +26,7 @@ use ZBateson\MailMimeParser\Header\IHeaderPart;
  *
  * @author Zaahid Bateson
  */
-class QuotedStringConsumerService extends AbstractGenericConsumerService
+class QuotedStringConsumerService extends AbstractConsumerService
 {
     /**
      * Returns true if the token is a double quote.

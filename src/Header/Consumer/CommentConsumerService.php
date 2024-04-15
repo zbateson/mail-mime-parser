@@ -55,7 +55,7 @@ class CommentConsumerService extends GenericConsumerService
      */
     protected function getTokenSeparators() : array
     {
-        return ['\(', '\)'];
+        return \array_merge(parent::getTokenSeparators(), ['\(', '\)']);
     }
 
     /**

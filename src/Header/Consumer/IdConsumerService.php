@@ -25,7 +25,7 @@ class IdConsumerService extends GenericConsumerService
      */
     public function getTokenSeparators() : array
     {
-        return ['\s+', '<', '>'];
+        return \array_merge(parent::getTokenSeparators(), ['<', '>']);
     }
 
     /**

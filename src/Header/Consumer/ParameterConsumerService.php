@@ -11,6 +11,7 @@ use Iterator;
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
+use ZBateson\MailMimeParser\Header\Part\MimeToken;
 use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
@@ -53,6 +54,24 @@ class ParameterConsumerService extends AbstractGenericConsumerService
         }
         parent::advanceToNextToken($tokens, $isStartToken);
         return $this;
+    }
+
+    /**
+     * Overridden to use a specialized regex for finding mime-encoded parts
+     * (RFC 2047).
+     *
+     * Some implementations seem to place mime-encoded parts within quoted
+     * parameters, and split the mime-encoded parts across multiple split
+     * parameters.  The specialized regex doesn't allow double quotes inside a
+     * mime encoded part, so it can be "continued" in another parameter.
+     *
+     * @return string the regex pattern
+     */
+    protected function getTokenSplitPattern() : string
+    {
+        $sChars = \implode('|', $this->getAllTokenSeparators());
+        $mimePartPattern = MimeToken::MIME_PART_PATTERN_NO_QUOTES;
+        return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
     }
 
     /**

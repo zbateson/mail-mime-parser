@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\MimeToken;
 
 /**
  * @author Zaahid Bateson
@@ -22,7 +21,7 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
      */
     protected function getTokenSeparators() : array
     {
-        return ['='];
+        return \array_merge(parent::getTokenSeparators(), ['=']);
     }
     
     /**
@@ -39,24 +38,6 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
     protected function isEndToken(string $token) : bool
     {
         return ($token === ';');
-    }
-
-    /**
-     * Overridden to use a specialized regex for finding mime-encoded parts
-     * (RFC 2047).
-     *
-     * Some implementations seem to place mime-encoded parts within quoted
-     * parameters, and split the mime-encoded parts across multiple split
-     * parameters.  The specialized regex doesn't allow double quotes inside a
-     * mime encoded part, so it can be "continued" in another parameter.
-     *
-     * @return string the regex pattern
-     */
-    protected function getTokenSplitPattern() : string
-    {
-        $sChars = \implode('|', $this->getAllTokenSeparators());
-        $mimePartPattern = MimeToken::MIME_PART_PATTERN_NO_QUOTES;
-        return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
     }
 
     /**

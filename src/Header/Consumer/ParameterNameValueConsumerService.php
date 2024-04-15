@@ -38,7 +38,7 @@ class ParameterNameValueConsumerService extends AbstractGenericConsumerService
      */
     protected function getTokenSeparators() : array
     {
-        return [';'];
+        return \array_merge(parent::getTokenSeparators(), [';']);
     }
     
     /**
