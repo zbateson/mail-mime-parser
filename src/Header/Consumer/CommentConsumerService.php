@@ -82,7 +82,7 @@ class CommentConsumerService extends GenericConsumerService
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        return $this->partFactory->newToken($token);
+        return $this->partFactory->newInstance($token);
     }
 
     /**
