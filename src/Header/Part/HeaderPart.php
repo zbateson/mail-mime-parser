@@ -22,9 +22,16 @@ use ZBateson\MbWrapper\UnsupportedCharsetException;
 abstract class HeaderPart extends ErrorBag implements IHeaderPart
 {
     /**
-     * @var string the value of the part
+     * @var string the representative value of the part after any conversion or
+     *      processing has been done on it (e.g. removing new lines, converting,
+     *      whatever else).
      */
     protected string $value;
+
+    /**
+     * @var string the raw value of the part.
+     */
+    protected string $rawValue;
 
     /**
      * @var MbWrapper $charsetConverter the charset converter used for
@@ -51,13 +58,12 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     {
         parent::__construct($logger);
         $this->charsetConverter = $charsetConverter;
-        $this->value = $value;
+        $this->value = $this->rawValue = $value;
     }
 
     /**
-     * Returns the part's value.
-     *
-     * @return ?string the value of the part
+     * Returns the part's representative value after any necessary processing
+     * has been performed.  For the raw value, call getRawValue().
      */
     public function getValue() : string
     {
@@ -72,6 +78,14 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     public function __toString() : string
     {
         return $this->value;
+    }
+
+    /**
+     * Returns the part's raw value.
+     */
+    public function getRawValue() : string
+    {
+        return $this->rawValue;
     }
 
     /**

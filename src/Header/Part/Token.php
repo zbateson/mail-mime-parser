@@ -28,15 +28,26 @@ class Token extends HeaderPart
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
         string $value,
-        bool $isLiteral = false
+        bool $isLiteral = false,
+        bool $preserveSpaces = false
     ) {
         parent::__construct($logger, $charsetConverter, $value);
         if (!$isLiteral) {
-            $this->value = \preg_replace('/\r|\n/', '', $this->convertEncoding($value));
-        } else {
-            $this->value = $this->convertEncoding($value);
+            $this->value = \preg_replace('/\r|\n/', '', $value);
+            if (!$preserveSpaces) {
+                $this->value = \preg_replace('/^\s+$/m', ' ', $this->value);
+            }
         }
-        $this->isSpace = ($this->value === '' || (!$isLiteral && \preg_match('/^\s*$/', $this->value) === 1));
+        $this->isSpace = ($this->value === '' || (!$isLiteral && \preg_match('/^\s*$/m', $this->value) === 1));
         $this->canIgnoreSpacesAfter = $this->canIgnoreSpacesAfter = $this->isSpace;
+    }
+
+    /**
+     * Returns the part's representative value after any necessary processing
+     * has been performed.  For the raw value, call getRawValue().
+     */
+    public function getValue() : string
+    {
+        return $this->convertEncoding($this->value);
     }
 }
