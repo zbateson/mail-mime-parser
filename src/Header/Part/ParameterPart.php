@@ -45,11 +45,10 @@ class ParameterPart extends NameValuePart
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
-        HeaderPartFactory $headerPartFactory,
         array $nameParts,
         ContainerPart $valuePart
     ) {
-        parent::__construct($logger, $charsetConverter, $headerPartFactory, $nameParts, $valuePart->children);
+        parent::__construct($logger, $charsetConverter, $nameParts, $valuePart->children);
     }
 
     protected function getNameFromParts(array $parts) : string
@@ -74,12 +73,12 @@ class ParameterPart extends NameValuePart
     protected function getValueFromParts(array $parts) : string
     {
         $value = parent::getValueFromParts($this->trim($parts));
-        $index = intval($this->index);
         if ($this->encoded && \preg_match('~^([^\']*)\'?([^\']*)\'?(.*)$~', $value, $matches)) {
             $this->charset = (!empty($matches[1]) && !empty($matches[3])) ? $matches[1] : $this->charset;
             $this->language = (!empty($matches[2])) ? $matches[2] : $this->language;
             $ev = (empty($matches[3])) ? $matches[1] : $matches[3];
-            if ($index === 0) {
+            // only if it's not part of a SplitParameterPart
+            if ($this->index === null) {
                 // subsequent parts are decoded as a SplitParameterPart since only
                 // the first part are supposed to have charset/language fields
                 return $this->decodePartValue($ev, $this->charset);
@@ -106,6 +105,11 @@ class ParameterPart extends NameValuePart
     public function getLanguage() : ?string
     {
         return $this->language;
+    }
+
+    public function isUrlEncoded() : bool
+    {
+        return $this->encoded;
     }
 
     public function getIndex() : ?int

@@ -22,6 +22,11 @@ use ZBateson\MbWrapper\MbWrapper;
 class SplitParameterPart extends ParameterPart
 {
     /**
+     * @var HeaderPartFactory used to create combined MimeToken parts.
+     */
+    protected HeaderPartFactory $partFactory;
+
+    /**
      * Initializes a SplitParameterToken.
      *
      * @param ParameterPart[] $children
@@ -32,9 +37,9 @@ class SplitParameterPart extends ParameterPart
         HeaderPartFactory $headerPartFactory,
         array $children
     ) {
-        parent::__construct($logger, $charsetConverter, $headerPartFactory, [$children[0]], $children[0]);
+        $this->partFactory = $headerPartFactory;
+        NameValuePart::__construct($logger, $charsetConverter, [$children[0]], $children);
         $this->children = $children;
-        $this->value = $this->getValueFromParts($children);
     }
 
     protected function getNameFromParts(array $parts) : string
@@ -42,23 +47,56 @@ class SplitParameterPart extends ParameterPart
         return $parts[0]->getName();
     }
 
+    private function getMimeTokens(string $value) : array
+    {
+        $pattern = MimeToken::MIME_PART_PATTERN;
+        // remove whitespace between two adjacent mime encoded parts
+        $normed = \preg_replace("/($pattern)\\s+(?=$pattern)/", '$1', $value);
+        // with PREG_SPLIT_DELIM_CAPTURE, matched and unmatched parts are returned
+        $aMimeParts = \preg_split("/($pattern)/", $normed, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        return \array_map(
+            fn ($p) => (preg_match("/$pattern/", $p)) ? $this->partFactory->newMimeToken($p) : $this->partFactory->newToken($p),
+            $aMimeParts
+        );
+    }
+
+    private function combineAdjacentUnencodedParts(array $parts) : array
+    {
+        $runningValue = '';
+        $returnedParts = [];
+        foreach ($parts as $part) {
+            if (!$part->encoded) {
+                $runningValue .= $part->value;
+                continue;
+            }
+            if (!empty($runningValue)) {
+                $returnedParts = \array_merge($returnedParts, $this->getMimeTokens($runningValue));
+                $runningValue = '';
+            }
+            $returnedParts[] = $part;
+        }
+        if (!empty($runningValue)) {
+            $returnedParts = \array_merge($returnedParts, $this->getMimeTokens($runningValue));
+        }
+        return $returnedParts;
+    }
+
     protected function getValueFromParts(array $parts) : string
     {
         $sorted = $parts;
-        \usort($sorted, fn ($a, $b) => $a->getIndex() <=> $b->getIndex());
-        $first = \array_shift($sorted);
+        \usort($sorted, fn ($a, $b) => $a->index <=> $b->index);
+
+        $first = $sorted[0];
         $this->language = $first->language;
         $charset = $this->charset = $first->charset;
 
-        // intval to match ParameterPart's check, so a null would match on 0
-        if (intval($first->index) !== 0) {
-            // wouldn't have been decoded.
-            \array_unshift($sorted, $first);
-        }
+        $combined = $this->combineAdjacentUnencodedParts($sorted);
 
-        return $first->getValue() . implode(\array_map(
-            fn ($p) => ($p->encoded) ? $this->decodePartValue($p->value, ($p->charset === null) ? $charset : $p->charset) : $p->value,
-            $sorted
+        return \implode(\array_map(
+            fn ($p) => ($p instanceof ParameterPart && $p->encoded)
+                ? $this->decodePartValue($p->value, ($p->charset === null) ? $charset : $p->charset)
+                : $p->value,
+            $combined
         ));
     }
 }
