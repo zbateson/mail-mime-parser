@@ -32,6 +32,6 @@ class ReceivedPart extends NameValuePart
         array $children
     ) {
         parent::__construct($logger, $charsetConverter, [], $children);
-        $this->name = trim($name);
+        $this->name = $name;
     }
 }

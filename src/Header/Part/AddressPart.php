@@ -23,11 +23,6 @@ use Psr\Log\LogLevel;
  */
 class AddressPart extends NameValuePart
 {
-    protected function getNameFromParts(array $parts) : string
-    {
-        return parent::getNameFromParts($this->trim($parts));
-    }
-
     protected function getValueFromParts(array $parts) : string
     {
         return \implode(\array_map(

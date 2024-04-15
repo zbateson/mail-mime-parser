@@ -53,7 +53,7 @@ class ParameterPart extends NameValuePart
 
     protected function getNameFromParts(array $parts) : string
     {
-        $name = parent::getNameFromParts($this->trim($parts));
+        $name = parent::getNameFromParts($parts);
         if (\preg_match('~^\s*([^\*]+)\*(\d*)(\*)?$~', $name, $matches)) {
             $name = $matches[1];
             $this->index = ($matches[2] !== '') ? intval($matches[2]) : null;
@@ -72,7 +72,7 @@ class ParameterPart extends NameValuePart
 
     protected function getValueFromParts(array $parts) : string
     {
-        $value = parent::getValueFromParts($this->trim($parts));
+        $value = parent::getValueFromParts($parts);
         if ($this->encoded && \preg_match('~^([^\']*)\'?([^\']*)\'?(.*)$~', $value, $matches)) {
             $this->charset = (!empty($matches[1]) && !empty($matches[3])) ? $matches[1] : $this->charset;
             $this->language = (!empty($matches[2])) ? $matches[2] : $this->language;

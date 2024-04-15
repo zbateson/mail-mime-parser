@@ -15,7 +15,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
  */
 class QuotedLiteralPart extends ContainerPart
 {
-    protected function filterIgnoreSpaces(array $parts) : array
+    protected function filterIgnoredSpaces(array $parts) : array
     {
         return $parts;
     }

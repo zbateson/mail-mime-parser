@@ -55,11 +55,6 @@ class AddressGroupPart extends NameValuePart
         $this->value = $this->name;
     }
 
-    protected function getNameFromParts(array $parts) : string
-    {
-        return parent::getNameFromParts($this->trim($parts));
-    }
-
     /**
      * Return the AddressGroupPart's array of addresses.
      *

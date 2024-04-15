@@ -51,51 +51,29 @@ class ContainerPart extends HeaderPart
      */
     protected function filterIgnoredSpaces(array $parts) : array
     {
-        $space = (object) ['isSpace' => true, 'canIgnoreSpacesAfter' => true, 'canIgnoreSpacesBefore' => true];
-        // creates an array of 3 parts, the first consisting of $parts shifted
-        // one to the right starting with a space, the second $parts itself,
-        // the 3rd $parts shifted one to the left and with a space after
-        $zipped = \array_map(
-            null,
-            \array_slice(\array_merge([$space], $parts), 0, -1),
-            $parts,
-            \array_merge(\array_slice($parts, 1), [$space])
-        );
-        // reassembles $parts using the $zipped array, the \array_filter callback
-        // gets an array of 'before'/'current'/'after' elements
-        $filtered = \array_map(fn ($arr) => $arr[1], \array_filter($zipped, function ($arr) {
-            return (!$arr[1]->isSpace || !$arr[0]->canIgnoreSpacesAfter || !$arr[2]->canIgnoreSpacesBefore);
-        }));
+        $ends = (object) ['isSpace' => true, 'canIgnoreSpacesAfter' => true, 'canIgnoreSpacesBefore' => true, 'value' => ''];
+
+        $spaced = \array_merge($parts, [$ends]);
+        $filtered = \array_slice(\array_reduce(
+            \array_slice(\array_keys($spaced), 0, -1),
+            function ($carry, $key) use ($spaced, $ends) {
+                $p = $spaced[$key];
+                $l = \end($carry);
+                $a = $spaced[$key + 1];
+                if ($p->isSpace && $a === $ends) {
+                    // trim
+                    if ($l->isSpace) {
+                        \array_pop($carry);
+                    }
+                    return $carry;
+                } elseif ($p->isSpace && ($l->isSpace || ($l->canIgnoreSpacesAfter && $a->canIgnoreSpacesBefore))) {
+                    return $carry;
+                }
+                return \array_merge($carry, [$p]);
+            },
+            [$ends]
+        ), 1);
         return $filtered;
-    }
-
-    /**
-     * Trims any 'space' tokens from the beginning and end of an array of parts.
-     *
-     * @param HeaderPart[] $parts
-     * @return HeaderPart[]
-     */
-    protected function trim(array $parts): array
-    {
-        $dost = true;
-        $doet = true;
-        do {
-
-            $st = ($dost) ? \array_shift($parts) : null;
-            $et = ($doet) ? \array_pop($parts) : null;
-            if ($st !== null && !$st->isSpace) {
-                \array_unshift($parts, $st);
-                $st = null;
-            }
-            if ($et !== null && !$et->isSpace) {
-                \array_push($parts, $et);
-                $et = null;
-            }
-            $dost = ($st !== null);
-            $doet = ($et !== null);
-
-        } while ($dost || $doet);
-        return $parts;
     }
 
     /**

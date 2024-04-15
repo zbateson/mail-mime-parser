@@ -58,7 +58,7 @@ class ReceivedDomainPart extends ReceivedPart
     ) {
         parent::__construct($logger, $charsetConverter, $name, $children);
 
-        $this->ehloName = $this->value;
+        $this->ehloName = ($this->value !== '') ? $this->value : null;
         $cps = $this->getComments();
         $commentPart = (!empty($cps)) ? $cps[0] : null;
 

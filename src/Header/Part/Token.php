@@ -33,13 +33,13 @@ class Token extends HeaderPart
     ) {
         parent::__construct($logger, $charsetConverter, $value);
         if (!$isLiteral) {
-            $this->value = \preg_replace('/\r|\n/', '', $value);
+            $this->value = \preg_replace(['/(\r|\n)+(\s)/', '/(\r|\n)+/'], ['$2', ' '], $value);
             if (!$preserveSpaces) {
                 $this->value = \preg_replace('/^\s+$/m', ' ', $this->value);
             }
         }
         $this->isSpace = ($this->value === '' || (!$isLiteral && \preg_match('/^\s*$/m', $this->value) === 1));
-        $this->canIgnoreSpacesAfter = $this->canIgnoreSpacesAfter = $this->isSpace;
+        $this->canIgnoreSpacesBefore = $this->canIgnoreSpacesAfter = $this->isSpace;
     }
 
     /**

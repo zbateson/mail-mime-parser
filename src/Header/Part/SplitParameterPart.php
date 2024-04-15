@@ -55,7 +55,7 @@ class SplitParameterPart extends ParameterPart
         // with PREG_SPLIT_DELIM_CAPTURE, matched and unmatched parts are returned
         $aMimeParts = \preg_split("/($pattern)/", $normed, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         return \array_map(
-            fn ($p) => (preg_match("/$pattern/", $p)) ? $this->partFactory->newMimeToken($p) : $this->partFactory->newToken($p),
+            fn ($p) => (\preg_match("/$pattern/", $p)) ? $this->partFactory->newMimeToken($p) : $this->partFactory->newToken($p, true, true),
             $aMimeParts
         );
     }
@@ -94,8 +94,8 @@ class SplitParameterPart extends ParameterPart
 
         return \implode(\array_map(
             fn ($p) => ($p instanceof ParameterPart && $p->encoded)
-                ? $this->decodePartValue($p->value, ($p->charset === null) ? $charset : $p->charset)
-                : $p->value,
+                ? $this->decodePartValue($p->getValue(), ($p->charset === null) ? $charset : $p->charset)
+                : $p->getValue(),
             $combined
         ));
     }

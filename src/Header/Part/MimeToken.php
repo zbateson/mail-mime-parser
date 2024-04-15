@@ -45,8 +45,8 @@ class MimeToken extends Token
         parent::__construct($logger, $charsetConverter, $value);
         $this->value = $this->decodeMime(\preg_replace('/\r|\n/', '', $this->value));
         $pattern = self::MIME_PART_PATTERN;
-        $this->canIgnoreSpacesBefore = (bool) \preg_match("/^\s*{$pattern}/", $this->rawValue);
-        $this->canIgnoreSpacesAfter = (bool) \preg_match("/{$pattern}\s*\$/", $this->rawValue);
+        $this->canIgnoreSpacesBefore = (bool) \preg_match("/^\s*{$pattern}|\s+/", $this->rawValue);
+        $this->canIgnoreSpacesAfter = (bool) \preg_match("/{$pattern}\s*|\s+\$/", $this->rawValue);
     }
 
     /**

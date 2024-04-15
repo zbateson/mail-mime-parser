@@ -36,6 +36,8 @@ class CommentPart extends ContainerPart
     ) {
         $this->partFactory = $partFactory;
         parent::__construct($logger, $charsetConverter, $children);
+        $this->comment = $this->value;
+        $this->value = '';
         $this->isSpace = true;
         $this->canIgnoreSpacesBefore = true;
         $this->canIgnoreSpacesAfter = true;
@@ -62,7 +64,7 @@ class CommentPart extends ContainerPart
      */
     public function getComment() : string
     {
-        return $this->value;
+        return $this->comment;
     }
 
     /**
