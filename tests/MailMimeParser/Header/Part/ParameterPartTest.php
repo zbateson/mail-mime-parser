@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -20,23 +19,26 @@ class ParameterPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
-    private $hpf;
     private $logger;
 
     protected function setUp() : void
     {
         $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
-            ->getMock();
     }
 
     private function getToken(string $value) : Token
     {
         return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $value])
+            ->setMethods()
+            ->getMock();
+    }
+
+    private function getContainerPart(string $value) : ContainerPart
+    {
+        return $this->getMockBuilder(ContainerPart::class)
+            ->setConstructorArgs([$this->logger, $this->mb, [$this->getToken($value)]])
             ->setMethods()
             ->getMock();
     }
@@ -52,9 +54,8 @@ class ParameterPartTest extends TestCase
         $part = new ParameterPart(
             $this->logger,
             $this->mb,
-            $this->hpf,
             [$this->getToken($actualName)],
-            $this->getToken($actualValue)
+            $this->getContainerPart($actualValue)
         );
         $this->assertEquals($expectedName, $part->getName());
         $this->assertEquals($expectedValue, $part->getValue());

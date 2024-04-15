@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -53,7 +52,7 @@ class HeaderPartFactoryTest extends TestCase
     public function testNewSplitParameterToken() : void
     {
         $param = [$this->getMockBuilder(ParameterPart::class)
-            ->setConstructorArgs([$this->logger, $this->mb, $this->headerPartFactory, $this->getTokenArray('Test'), $this->getTokenArray('Value')[0]])
+            ->setConstructorArgs([$this->logger, $this->mb, $this->getTokenArray('Test'), $this->headerPartFactory->newContainerPart($this->getTokenArray('Value'))])
             ->setMethods([])
             ->getMock()];
         $token = $this->headerPartFactory->newSplitParameterPart($param);
@@ -105,7 +104,7 @@ class HeaderPartFactoryTest extends TestCase
 
     public function testNewParameterPart() : void
     {
-        $part = $this->headerPartFactory->newParameterPart($this->getTokenArray('Test'), $this->getTokenArray('Test')[0]);
+        $part = $this->headerPartFactory->newParameterPart($this->getTokenArray('Test'), $this->headerPartFactory->newContainerPart($this->getTokenArray('Test')));
         $this->assertNotNull($part);
         $this->assertInstanceOf('\\' . ParameterPart::class, $part);
     }

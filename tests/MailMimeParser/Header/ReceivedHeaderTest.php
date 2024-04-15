@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
@@ -106,8 +105,8 @@ class ReceivedHeaderTest extends TestCase
         $this->assertEquals('JonSnow', $header->getFromName());
         $this->assertEquals('domain.com', $header->getFromHostname());
         $this->assertEquals('1.2.3.4', $header->getFromAddress());
-        $this->assertCount(1, $header->getComments());
-        $this->assertEquals('Crow Crow', $header->getComments()[0]);
+        $this->assertCount(2, $header->getComments());
+        $this->assertEquals('Crow Crow', $header->getComments()[1]);
     }
 
     public function testParsingByExtended() : void

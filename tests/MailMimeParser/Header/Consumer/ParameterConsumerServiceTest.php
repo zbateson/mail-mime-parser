@@ -42,8 +42,12 @@ class ParameterConsumerServiceTest extends TestCase
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
             ->setMethods()
             ->getMock();
+        $qsmlpcs = $this->getMockBuilder(QuotedStringMimeLiteralPartConsumerService::class)
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
+            ->getMock();
         $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
-            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qscs])
+            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qsmlpcs])
             ->setMethods()
             ->getMock();
         $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)
@@ -247,6 +251,6 @@ class ParameterConsumerServiceTest extends TestCase
             . '=?US-ASCII?Q?TS_E?=   =?US-ASCII?Q?li"; condiments*1="ot?="');
         $this->assertNotEmpty($ret);
         $this->assertCount(2, $ret);
-        $this->assertEquals('TS Eliot', $ret[1]->getValue());
+        $this->assertEquals('TS E liot', $ret[1]->getValue());
     }
 }

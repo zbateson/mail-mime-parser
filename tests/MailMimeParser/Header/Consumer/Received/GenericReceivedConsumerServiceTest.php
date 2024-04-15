@@ -48,12 +48,12 @@ class GenericReceivedConsumerServiceTest extends TestCase
 
     public function testConsumeTokens() : void
     {
-        $value = "Je \t suis\nici";
+        $value = "Je \t suis\n ici";
 
         $ret = $this->genericConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertEquals('Je suis ici', $ret[0]);
+        $this->assertEquals('Je suis ici', $ret[0]->getValue());
     }
 
     public function testEndsAtViaWithIdAndFor() : void
@@ -77,9 +77,9 @@ class GenericReceivedConsumerServiceTest extends TestCase
         $str = 'sweet (via sugar) bee';
         $ret = $this->genericConsumer->__invoke($str);
         $this->assertNotEmpty($ret);
-        $this->assertCount(2, $ret);
-        $this->assertEquals('sweet bee', $ret[0]);
-        $this->assertEquals('via sugar', $ret[1]->getComment());
+        $this->assertCount(1, $ret);
+        $this->assertEquals('sweet bee', $ret[0]->getValue());
+        $this->assertEquals('via sugar', $ret[0]->getComments()[0]->getComment());
     }
 
     public function testWithMultipleComments() : void
@@ -87,11 +87,13 @@ class GenericReceivedConsumerServiceTest extends TestCase
         $str = 'sweet (as can) (surely) bee (innit)';
         $ret = $this->genericConsumer->__invoke($str);
         $this->assertNotEmpty($ret);
-        $this->assertCount(4, $ret);
-        $this->assertEquals('sweet bee', $ret[0]);
-        $this->assertEquals('as can', $ret[1]->getComment());
-        $this->assertEquals('surely', $ret[2]->getComment());
-        $this->assertEquals('innit', $ret[3]->getComment());
+        $this->assertCount(1, $ret);
+        $this->assertEquals('sweet bee', $ret[0]->getValue());
+        $comms = $ret[0]->getComments();
+        $this->assertCount(3, $comms);
+        $this->assertEquals('as can', $comms[0]->getComment());
+        $this->assertEquals('surely', $comms[1]->getComment());
+        $this->assertEquals('innit', $comms[2]->getComment());
     }
 
     public function testWithSeparatorInWords() : void

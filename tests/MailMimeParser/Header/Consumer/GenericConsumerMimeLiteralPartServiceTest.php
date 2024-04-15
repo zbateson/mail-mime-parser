@@ -47,12 +47,12 @@ class GenericConsumerMimeLiteralPartServiceTest extends TestCase
 
     public function testConsumeTokens() : void
     {
-        $value = "Je\ \t suis\nici";
+        $value = "Je\ \t suis\n ici";
 
         $ret = $this->genericConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertEquals('Je  suis ici', $ret[0]);
+        $this->assertEquals('Je  suis ici', $ret[0]->getValue());
     }
 
     public function testFilterSpacesBetweenMimeParts() : void
@@ -64,4 +64,42 @@ class GenericConsumerMimeLiteralPartServiceTest extends TestCase
         $this->assertCount(1, $ret);
         $this->assertEquals('Jesuisici', $ret[0]);
     }
+
+    protected function assertDecoded($expected, $encodedActual)
+    {
+        $ret = $this->genericConsumer->__invoke($encodedActual);
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertEquals($expected, $ret[0]->getValue());
+    }
+
+    public function testDecodingTwoParts() : void
+    {
+        $kilgore = '=?US-ASCII?Q?Kilgore_Trout?=';
+        $snow = '=?US-ASCII?Q?Jon_Snow?=';
+
+        $this->assertDecoded(
+            'Kilgore TroutJon Snow',
+            " $kilgore   $snow "
+        );
+        $this->assertDecoded(
+            'Kilgore TroutJon Snow',
+            "{$kilgore}{$snow}"
+        );
+        $this->assertDecoded(
+            'Kilgore Trout Jon',
+            "$kilgore   Jon"
+        );
+        $this->assertDecoded(
+            'Kilgore Jon Snow',
+            "Kilgore   $snow"
+        );
+        $this->assertDecoded(
+            'KilgoreJon SnowTrout',
+            "Kilgore{$snow}Trout"
+        );
+        $this->assertDecoded('外為ｵﾝﾗｲﾝﾃﾞﾓ(25)(デモ)決済約定のお知らせ', '=?iso-2022-jp?Q?=1B$B300Y=1B(I5]W2]C^S=1B(B(25?=
+            =?iso-2022-jp?Q?)(=1B$B%G%b=1B(B)=1B$B7h:QLsDj$N$*CN$i$;=1B(B?=');
+    }
+
 }

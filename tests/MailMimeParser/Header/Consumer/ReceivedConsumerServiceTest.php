@@ -134,12 +134,14 @@ class ReceivedConsumerServiceTest extends TestCase
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
-        $this->assertCount(2, $ret);
+        $this->assertCount(1, $ret);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedPart::class, $ret[0]);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[1]);
+
+        $comments = $ret[0]->getComments();
+        $this->assertCount(1, $comments);
         $this->assertEquals('with', $ret[0]->getName());
         $this->assertEquals('ESMTP', $ret[0]->getValue());
-        $this->assertEquals('TLS1.2', $ret[1]->getComment());
+        $this->assertEquals('TLS1.2', $comments[0]->getComment());
     }
 
     public function testWithId() : void
@@ -148,12 +150,14 @@ class ReceivedConsumerServiceTest extends TestCase
 
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
-        $this->assertCount(2, $ret);
+        $this->assertCount(1, $ret);
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\ReceivedPart::class, $ret[0]);
-        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[1]);
+
+        $comments = $ret[0]->getComments();
+        $this->assertCount(1, $comments);
         $this->assertEquals('id', $ret[0]->getName());
         $this->assertEquals('123', $ret[0]->getValue());
-        $this->assertEquals('blah', $ret[1]->getComment());
+        $this->assertEquals('blah', $comments[0]->getComment());
     }
 
     public function testWithVia() : void
@@ -204,7 +208,7 @@ class ReceivedConsumerServiceTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
 
-        $this->assertCount(6, $ret);
+        $this->assertCount(5, $ret);
 
         $this->assertEquals('from', $ret[0]->getName());
         $this->assertEquals('LeComputer', $ret[0]->getEhloName());
@@ -217,12 +221,13 @@ class ReceivedConsumerServiceTest extends TestCase
         $this->assertEquals('with', $ret[2]->getName());
         $this->assertEquals('ESMTP', $ret[2]->getValue());
 
-        $this->assertEquals('TLS BLAH', $ret[3]->getComment());
+        $this->assertCount(1, $ret[2]->getComments());
+        $this->assertEquals('TLS BLAH', $ret[2]->getComments()[0]->getComment());
 
-        $this->assertEquals('id', $ret[4]->getName());
-        $this->assertEquals('123', $ret[4]->getValue());
+        $this->assertEquals('id', $ret[3]->getName());
+        $this->assertEquals('123', $ret[3]->getValue());
 
-        $dt = $ret[5]->getDateTime();
+        $dt = $ret[4]->getDateTime();
         $this->assertEquals('2000-05-17T19:08:29-04:00', $dt->format(DateTime::RFC3339));
     }
 
@@ -235,7 +240,7 @@ class ReceivedConsumerServiceTest extends TestCase
         $ret = $this->receivedConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
 
-        $this->assertCount(8, $ret);
+        $this->assertCount(6, $ret);
 
         $this->assertEquals('from', $ret[0]->getName());
         $this->assertEquals('xcv.gurbuzsrc.com', $ret[0]->getEhloName());
@@ -247,13 +252,13 @@ class ReceivedConsumerServiceTest extends TestCase
         $this->assertEquals('with', $ret[2]->getName());
         $this->assertEquals('esmtp', $ret[2]->getValue());
 
-        $this->assertEquals('id', $ret[5]->getName());
-        $this->assertEquals('1kfCyx-0002Zp-BY', $ret[5]->getValue());
+        $this->assertEquals('id', $ret[3]->getName());
+        $this->assertEquals('1kfCyx-0002Zp-BY', $ret[3]->getValue());
 
-        $this->assertEquals('for', $ret[6]->getName());
-        $this->assertEquals('vbc@yetiforce.com', $ret[6]->getValue());
+        $this->assertEquals('for', $ret[4]->getName());
+        $this->assertEquals('vbc@yetiforce.com', $ret[4]->getValue());
 
-        $dt = $ret[7]->getDateTime();
+        $dt = $ret[5]->getDateTime();
         $this->assertEquals('2020-11-18T03:14:03+01:00', $dt->format(DateTime::RFC3339));
     }
 }

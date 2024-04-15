@@ -40,7 +40,7 @@ class SubjectConsumerServiceTest extends TestCase
         $ret = $this->subjectConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertEquals("Je\ \t suis ici", $ret[0]);
+        $this->assertEquals("Je\ \t suis ici", $ret[0]->getValue());
     }
 
     public function testFilterSpacesBetweenMimeParts() : void
@@ -50,6 +50,6 @@ class SubjectConsumerServiceTest extends TestCase
         $ret = $this->subjectConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertEquals('Jesuisici', $ret[0]);
+        $this->assertEquals('Jesuisici', $ret[0]->getValue());
     }
 }

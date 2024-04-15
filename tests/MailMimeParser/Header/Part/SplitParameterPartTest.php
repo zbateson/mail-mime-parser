@@ -40,6 +40,14 @@ class SplitParameterPartTest extends TestCase
             ->getMock();
     }
 
+    private function getContainerPart(string $value) : ContainerPart
+    {
+        return $this->getMockBuilder(ContainerPart::class)
+            ->setConstructorArgs([$this->logger, $this->mb, [$this->getToken($value)]])
+            ->setMethods()
+            ->getMock();
+    }
+
     private function assertNameValue(string $expectedName, string $expectedValue, string|array|null $actualNames = null, string|array|null $actualValues = null) : SplitParameterPart
     {
         if ($actualNames === null) {
@@ -59,7 +67,7 @@ class SplitParameterPartTest extends TestCase
         }
 
         $mapped = \array_map(
-            fn ($arr) => new ParameterPart($this->logger, $this->mb, $this->hpf, [$this->getToken($arr[0])], $this->getToken($arr[1])),
+            fn ($arr) => new ParameterPart($this->logger, $this->mb, [$this->getToken($arr[0])], $this->getContainerPart($arr[1])),
             \array_map(null, $actualNames, $actualValues)
         );
         
@@ -102,10 +110,10 @@ class SplitParameterPartTest extends TestCase
         $part = $this->assertNameValue('header', 'هلا هلا شخبار؟', ['header*0*', 'header*1*', 'header*2*'], ['utf-8\'ar-bh\'%D9%87%D9%84%D8%A7%20', '%D9%87%D9%84%D8%A7%20', '%D8%B4%D8%AE%D8%A8%D8%A7%D8%B1%D8%9F']);
         $this->assertEquals('utf-8', $part->getCharset());
         $this->assertEquals('ar-bh', $part->getLanguage());
-        $part = $this->assertNameValue('header', 'دنت كبتن والله', ['header*0*', 'header*1*', 'header*2', 'header*3*'], ['CP1256\'ar-eg\'%CF%E4%CA%20', '%DF%C8%CA%E4', ' ', '%E6%C7%E1%E1%E5']);
+        $part = $this->assertNameValue('header', 'دنت كبتن والله', ['header*0*', 'header*1*', 'header*2*', 'header*3*'], ['CP1256\'ar-eg\'%CF%E4%CA%20', '%DF%C8%CA%E4', '%20', '%E6%C7%E1%E1%E5']);
         $this->assertEquals('CP1256', $part->getCharset());
         $this->assertEquals('ar-eg', $part->getLanguage());
-        $part = $this->assertNameValue('header', 'دنت كبتن والله', ['header*3*', 'header*1*', 'header*2', 'header*0*'], ['%E6%C7%E1%E1%E5', '%DF%C8%CA%E4', ' ', 'CP1256\'ar-eg\'%CF%E4%CA%20']);
+        $part = $this->assertNameValue('header', 'دنت كبتن والله', ['header*3*', 'header*1*', 'header*2*', 'header*0*'], ['%E6%C7%E1%E1%E5', '%DF%C8%CA%E4', '%20', 'CP1256\'ar-eg\'%CF%E4%CA%20']);
         $this->assertEquals('CP1256', $part->getCharset());
         $this->assertEquals('ar-eg', $part->getLanguage());
     }
@@ -130,9 +138,10 @@ class SplitParameterPartTest extends TestCase
     {
         $part = $this->assertNameValue('header', 'seems good', ['header*0*', 'header*1*'], ['unknown\'\'seems%20', 'good']);
         $errs = $part->getAllErrors();
-        $this->assertCount(1, $errs);
+        $this->assertCount(2, $errs);
         $err = $errs[0];
         $this->assertSame($part, $err->getObject());
         $this->assertInstanceOf(\ZBateson\MbWrapper\UnsupportedCharsetException::class, $err->getException());
+        $this->assertInstanceOf(\ZBateson\MbWrapper\UnsupportedCharsetException::class, $errs[1]->getException());
     }
 }

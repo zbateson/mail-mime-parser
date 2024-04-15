@@ -26,10 +26,6 @@ class ReceivedPartTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
-            ->getMock();
     }
 
     private function getTokenArray(string $name) : array
@@ -42,7 +38,7 @@ class ReceivedPartTest extends TestCase
 
     private function newReceivedPart($name, $childParts)
     {
-        return new ReceivedPart($this->logger, $this->mb, $this->hpf, $name, $childParts);
+        return new ReceivedPart($this->logger, $this->mb, $name, $childParts);
     }
 
     public function testBasicNameValuePair() : void

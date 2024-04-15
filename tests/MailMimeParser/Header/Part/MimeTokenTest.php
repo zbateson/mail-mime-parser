@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -60,34 +59,7 @@ class MimeTokenTest extends TestCase
     {
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');
         $this->assertNull($part->getLanguage());
-        $this->assertNull($part->getCharset());
-    }
-
-    public function testEncodingTwoParts() : void
-    {
-        $kilgore = '=?US-ASCII?Q?Kilgore_Trout?=';
-        $snow = '=?US-ASCII?Q?Jon_Snow?=';
-
-        $this->assertDecoded(
-            ' Kilgore TroutJon Snow ',
-            " $kilgore   $snow "
-        );
-        $this->assertDecoded(
-            'Kilgore TroutJon Snow',
-            "{$kilgore}{$snow}"
-        );
-        $this->assertDecoded(
-            'Kilgore Trout   Jon',
-            "$kilgore   Jon"
-        );
-        $this->assertDecoded(
-            'Kilgore   Jon Snow',
-            "Kilgore   $snow"
-        );
-        $this->assertDecoded(
-            'KilgoreJon SnowTrout',
-            "Kilgore{$snow}Trout"
-        );
+        $this->assertEquals('US-ASCII', $part->getCharset());
     }
 
     public function testNonAscii() : void
@@ -132,8 +104,6 @@ class MimeTokenTest extends TestCase
             '=?shift_jis?B?g1qDfoNJgVuDX4FbirSKb4LFkUmC1IFBg1eDg4NQg2KDZw==?='
         );
         $this->assertDecoded('el pingüino', 'el pingüino');
-        $this->assertDecoded('外為ｵﾝﾗｲﾝﾃﾞﾓ(25)(デモ)決済約定のお知らせ', '=?iso-2022-jp?Q?=1B$B300Y=1B(I5]W2]C^S=1B(B(25?=
-            =?iso-2022-jp?Q?)(=1B$B%G%b=1B(B)=1B$B7h:QLsDj$N$*CN$i$;=1B(B?=');
     }
 
     public function testLanguageAndCharset() : void

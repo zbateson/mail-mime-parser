@@ -20,23 +20,18 @@ use ZBateson\MbWrapper\MbWrapper;
 class AddressGroupPartTest extends TestCase
 {
     private $mb;
-    private $hpf;
     private $logger;
 
     protected function setUp() : void
     {
         $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
-            ->getMock();
     }
 
     private function newAddressGroupPart($nameParts, $addressAndGroupParts)
     {
         return new AddressGroupPart(
-            $this->logger, $this->mb, $this->hpf, $nameParts, $addressAndGroupParts
+            $this->logger, $this->mb, $nameParts, $addressAndGroupParts
         );
     }
 

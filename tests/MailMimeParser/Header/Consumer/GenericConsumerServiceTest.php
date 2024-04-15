@@ -47,11 +47,11 @@ class GenericConsumerServiceTest extends TestCase
 
     public function testConsumeTokens() : void
     {
-        $value = "Je\ \t suis\nici";
+        $value = "Je\ \t suis\n ici";
 
         $ret = $this->genericConsumer->__invoke($value);
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertEquals('Je  suis ici', $ret[0]);
+        $this->assertEquals('Je  suis ici', $ret[0]->getValue());
     }
 }

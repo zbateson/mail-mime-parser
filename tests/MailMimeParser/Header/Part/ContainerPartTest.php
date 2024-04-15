@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -19,17 +18,12 @@ class ContainerPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
-    private $hpf;
     private $logger;
 
     protected function setUp() : void
     {
         $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
-            ->getMock();
     }
 
     private function getTokenArray(string $name) : array
@@ -42,7 +36,7 @@ class ContainerPartTest extends TestCase
 
     private function newContainerPart($childParts)
     {
-        return new ContainerPart($this->logger, $this->mb, $this->hpf, $childParts);
+        return new ContainerPart($this->logger, $this->mb, $childParts);
     }
 
     public function testInstance() : void
@@ -52,6 +46,6 @@ class ContainerPartTest extends TestCase
         $this->assertEquals('"', $part->getValue());
 
         $part = $this->newContainerPart($this->getTokenArray('=?US-ASCII?Q?Kilgore_Trout?='));
-        $this->assertEquals('=?US-ASCII?Q?Kilgore_Trout?=', $part->getValue());
+        $this->assertEquals('Kilgore Trout', $part->getValue());
     }
 }

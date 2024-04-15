@@ -3,9 +3,9 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
@@ -47,8 +47,13 @@ class ParameterHeaderTest extends TestCase
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
             ->setMethods()
             ->getMock();
+
+        $qsmlpcs = $this->getMockBuilder(QuotedStringMimeLiteralPartConsumerService::class)
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
+            ->getMock();
         $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
-            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qscs])
+            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qsmlpcs])
             ->setMethods()
             ->getMock();
         $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)

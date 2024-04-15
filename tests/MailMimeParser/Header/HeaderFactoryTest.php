@@ -17,6 +17,7 @@ use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
@@ -81,8 +82,12 @@ class HeaderFactoryTest extends TestCase
             ->setMethods()
             ->getMock();
 
+        $qsmlpcs = $this->getMockBuilder(QuotedStringMimeLiteralPartConsumerService::class)
+            ->setConstructorArgs([$this->logger, $pf])
+            ->setMethods()
+            ->getMock();
         $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
-            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qscs])
+            ->setConstructorArgs([$this->logger, $mpf, $ccs, $qsmlpcs])
             ->setMethods()
             ->getMock();
         $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)

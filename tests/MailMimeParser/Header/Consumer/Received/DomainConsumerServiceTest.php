@@ -69,7 +69,7 @@ class DomainConsumerServiceTest extends TestCase
         foreach ($aTests as $test) {
             $ret = $this->domainConsumer->__invoke($test[0]);
             $this->assertNotEmpty($ret, $test[0]);
-            $this->assertCount(1 + \count($test[2]), $ret, $test[0]);
+            $this->assertCount(1, $ret, $test[0], $test);
 
             $pt = $test[1];
             $domPart = $ret[0];
@@ -92,9 +92,10 @@ class DomainConsumerServiceTest extends TestCase
             }
 
             foreach ($test[2] as $comment) {
-                $this->assertNotNull($ret[1], $test[0]);
-                $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $ret[1], $test[0]);
-                $this->assertEquals($comment, $ret[1]->getComment(), $test[0]);
+                $comms = $ret[0]->getComments();
+                $this->assertNotEmpty($comms, $test[0]);
+                $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\CommentPart::class, $comms[0], $test[0]);
+                $this->assertEquals($comment, $comms[0]->getComment(), $test[0]);
             }
         }
     }

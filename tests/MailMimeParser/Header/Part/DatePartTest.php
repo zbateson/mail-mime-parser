@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -20,17 +19,12 @@ class DatePartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
-    private $hpf;
     private $logger;
 
     protected function setUp() : void
     {
         $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
-            ->getMock();
     }
 
     private function getTokenMock(string $name) : Token
@@ -43,7 +37,7 @@ class DatePartTest extends TestCase
 
     private function newDatePart($childParts)
     {
-        return new DatePart($this->logger, $this->mb, $this->hpf, $childParts);
+        return new DatePart($this->logger, $this->mb, $childParts);
     }
 
     public function testDateString() : void

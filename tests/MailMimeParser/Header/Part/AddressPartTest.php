@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -20,22 +19,17 @@ class AddressPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
-    private $hpf;
     private $logger;
 
     protected function setUp() : void
     {
         $this->logger = \mmpGetTestLogger();
         $this->mb = new MbWrapper();
-        $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
-            ->getMock();
     }
 
     private function newAddressPart($nameParts, $valueParts)
     {
-        return new AddressPart($this->logger, $this->mb, $this->hpf, $nameParts, $valueParts);
+        return new AddressPart($this->logger, $this->mb, $nameParts, $valueParts);
     }
 
     private function getTokenMock(string $name) : Token
@@ -60,7 +54,7 @@ class AddressPartTest extends TestCase
         $part = $this->newAddressPart([], []);
         $errs = $part->getErrors(true, LogLevel::ERROR);
         $this->assertCount(1, $errs);
-        $this->assertEquals('AddressPart doesn\'t contain an email address', $errs[0]->getMessage());
+        $this->assertEquals('Address doesn\'t contain an email address', $errs[0]->getMessage());
         $this->assertEquals(LogLevel::ERROR, $errs[0]->getPsrLevel());
     }
 }
