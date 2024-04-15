@@ -57,12 +57,11 @@ class QuotedStringConsumerService extends AbstractConsumerService
     /**
      * Constructs a LiteralPart and returns it.
      *
-     * @param bool $isLiteral not used - everything in a quoted string is a
-     *        literal
+     * @param bool $isLiteral
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        return $this->partFactory->newToken($token, true);
+        return $this->partFactory->newToken($token, $isLiteral, true);
     }
 
     /**

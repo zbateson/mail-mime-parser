@@ -150,7 +150,7 @@ abstract class AbstractConsumerService implements IConsumerService
     {
         $sChars = \implode('|', $this->getAllTokenSeparators());
         $mimePartPattern = MimeToken::MIME_PART_PATTERN;
-        return '~(' . $mimePartPattern . '|\\\\.|' . $sChars . ')~';
+        return '~(' . $mimePartPattern . '|\\\\\r\n|\\\\.|' . $sChars . ')~ms';
     }
 
     /**
@@ -214,8 +214,6 @@ abstract class AbstractConsumerService implements IConsumerService
     {
         if ($isLiteral) {
             return $this->partFactory->newToken($token, true);
-        } elseif (\preg_match('/^\s+$/', $token)) {
-            return $this->partFactory->newToken(' ');
         }
         // can be overridden with custom PartFactory
         return $this->partFactory->newInstance($token);
@@ -264,7 +262,7 @@ abstract class AbstractConsumerService implements IConsumerService
     protected function getTokenParts(Iterator $tokens) : array
     {
         $token = $tokens->current();
-        if (\strlen($token) === 2 && $token[0] === '\\') {
+        if ($token === "\\\r\n" || (\strlen($token) === 2 && $token[0] === '\\')) {
             $part = $this->getPartForToken(\substr($token, 1), true);
             return ($part !== null) ? [$part] : [];
         }
