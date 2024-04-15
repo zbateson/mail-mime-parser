@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
-use ZBateson\MailMimeParser\Header\Part\ParameterPart;
+use ZBateson\MailMimeParser\Header\Part\NameValuePart;
 
 /**
  * Represents a header containing an optional main value part and subsequent
@@ -64,7 +64,7 @@ class ParameterHeader extends AbstractHeader
     {
         parent::parseHeaderValue($consumer, $value);
         foreach ($this->parts as $part) {
-            if ($part instanceof ParameterPart) {
+            if ($part instanceof NameValuePart) {
                 $this->parameters[\strtolower($part->getName())] = $part;
             }
         }
