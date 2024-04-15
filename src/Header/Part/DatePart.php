@@ -41,7 +41,7 @@ class DatePart extends ContainerPart
     ) {
         // parent::__construct converts character encoding -- may cause problems sometimes.
         parent::__construct($logger, $charsetConverter, $headerPartFactory, $children);
-        $dateToken = $this->value;
+        $this->value = $dateToken = \trim($this->value);
 
         // Missing "+" in timezone definition. eg: Thu, 13 Mar 2014 15:02:47 0000 (not RFC compliant)
         // Won't result in an Exception, but in a valid DateTime in year `0000` - therefore we need to check this first:
