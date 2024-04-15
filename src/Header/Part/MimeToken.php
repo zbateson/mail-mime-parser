@@ -79,7 +79,7 @@ class MimeToken extends Token
             $body = \base64_decode($body);
         }
         $this->charset = $matches[1];
-        $this->language = $matches[2];
+        $this->language = (!empty($matches[2])) ? $matches[2] : null;
         if ($this->charset !== null) {
             return $this->convertEncoding($body, $this->charset, true);
         }
