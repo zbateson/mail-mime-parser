@@ -79,13 +79,17 @@ class ParameterConsumerServiceTest extends TestCase
     {
         $ret = $this->parameterConsumer->__invoke('hotdogs; weiner="all-beef";toppings=sriracha (boo-yah!)');
         $this->assertNotEmpty($ret);
-        $this->assertCount(4, $ret);
+        $this->assertCount(3, $ret);
+        $comments = $ret[2]->getComments();
+        $this->assertNotEmpty($comments);
+        $this->assertCount(1, $comments);
+
         $this->assertEquals('hotdogs', $ret[0]->getValue());
         $this->assertEquals('weiner', $ret[1]->getName());
         $this->assertEquals('all-beef', $ret[1]->getValue());
-        $this->assertEquals('boo-yah!', $ret[2]->getComment());
-        $this->assertEquals('toppings', $ret[3]->getName());
-        $this->assertEquals('sriracha', $ret[3]->getValue());
+        $this->assertEquals('boo-yah!', $comments[0]->getComment());
+        $this->assertEquals('toppings', $ret[2]->getName());
+        $this->assertEquals('sriracha', $ret[2]->getValue());
     }
 
     public function testQuotedWithRfc2047Value() : void
