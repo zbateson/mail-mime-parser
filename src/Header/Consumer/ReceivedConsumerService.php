@@ -125,7 +125,7 @@ class ReceivedConsumerService extends AbstractConsumerService
      */
     protected function processParts(array $parts) : array
     {
-        // filtering out tokens but is that needed?
-        return \array_filter($parts, fn ($p) => !$p instanceof Token);
+        // filtering out tokens (filters out the names, e.g. 'by' or 'with')
+        return \array_values(\array_filter($parts, fn ($p) => !$p instanceof Token));
     }
 }
