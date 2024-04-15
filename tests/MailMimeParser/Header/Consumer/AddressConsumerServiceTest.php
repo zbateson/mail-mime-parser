@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,15 +22,15 @@ class AddressConsumerServiceTest extends TestCase
     protected function setUp() : void
     {
         $this->logger = \mmpGetTestLogger();
-        $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
+        $mb = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
             ->setMethods()
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
-            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setConstructorArgs([$this->logger, $mb])
             ->setMethods()
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
-            ->setConstructorArgs([$this->logger, $charsetConverter])
+            ->setConstructorArgs([$this->logger, $mb])
             ->setMethods()
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
@@ -44,16 +43,12 @@ class AddressConsumerServiceTest extends TestCase
             ->getMock();
         $agcs = $this->getMockBuilder(AddressGroupConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods(['__toString', 'setAddressConsumerService'])
+            ->setMethods()
             ->getMock();
         $aecs = $this->getMockBuilder(AddressEmailConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
             ->setMethods()
             ->getMock();
-
-        $agcs->expects($this->once())
-            ->method('setAddressConsumerService')
-            ->with($this->isInstanceOf(AddressConsumerService::class));
 
         $this->addressConsumer = new AddressConsumerService($this->logger, $mpf, $agcs, $aecs, $ccs, $qscs);
     }
@@ -153,6 +148,6 @@ class AddressConsumerServiceTest extends TestCase
 
         $addressGroup = $ret[0];
         $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\AddressGroupPart::class, $addressGroup);
-        $this->assertEquals('Senate', $AddressGroupPart->getName());
+        $this->assertEquals('Senate', $addressGroup->getName());
     }
 }
