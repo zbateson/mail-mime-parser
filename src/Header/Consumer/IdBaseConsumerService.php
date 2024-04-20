@@ -72,7 +72,7 @@ class IdBaseConsumerService extends AbstractConsumerService
 
     /**
      * Returns null for whitespace, and
-     * {@see ZBateson\MailMimeParser\Header\Part\LiteralPart} for anything else.
+     * {@see ZBateson\MailMimeParser\Header\Part\Token} for anything else.
      *
      * @param string $token the token
      * @param bool $isLiteral set to true if the token represents a literal -

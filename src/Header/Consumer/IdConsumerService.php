@@ -45,7 +45,7 @@ class IdConsumerService extends GenericConsumerService
     }
 
     /**
-     * Returns null for whitespace, and LiteralPart for anything else.
+     * Returns null for whitespace, and Token for anything else.
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {

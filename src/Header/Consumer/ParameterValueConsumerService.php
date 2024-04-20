@@ -8,10 +8,16 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
+ * Starts processing tokens after a '=' character is found, indicating the
+ * 'value' portion of a name/value pair in a parameter header.
+ *
+ * The value portion will consist of all tokens, quoted parts, and comment parts
+ * parsed up to a semi-colon token indicating control should be returned to the
+ * parent ParameterNameValueConsumerService.
+ *
  * @author Zaahid Bateson
  */
 class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartService
@@ -37,7 +43,7 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
      */
     protected function getTokenSeparators() : array
     {
-        return \array_merge(parent::getTokenSeparators(), ['=']);
+        return \array_merge(parent::getTokenSeparators(), ['=', ';']);
     }
     
     /**
@@ -54,17 +60,5 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
     protected function isEndToken(string $token) : bool
     {
         return ($token === ';');
-    }
-
-    /**
-     * Post processing involves creating Part\LiteralPart or Part\ParameterPart
-     * objects out of created Token and LiteralParts.
-     *
-     * @param IHeaderPart[] $parts The parsed parts.
-     * @return IHeaderPart[] Array of resulting final parts.
-     */
-    protected function processParts(array $parts) : array
-    {
-        return [$this->partFactory->newContainerPart($parts)];
     }
 }

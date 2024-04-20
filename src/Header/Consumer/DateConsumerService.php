@@ -30,8 +30,8 @@ class DateConsumerService extends GenericConsumerService
     }
 
     /**
-     * Concatenates the passed parts and constructs a single Part\DatePart,
-     * returning it in an array with a single element.
+     * Constructs a single Part\DatePart of any parsed parts returning it in an
+     * array with a single element.
      *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts The parsed
      *        parts.

@@ -20,8 +20,12 @@ use ZBateson\MailMimeParser\Header\Part\ParameterPart;
  * A ParameterConsumerService's parts are separated by a semi-colon.  Its
  * name/value pairs are separated with an '=' character.
  *
- * Parts may be mime-encoded entities.  Additionally, a value can be quoted and
- * comments may exist.
+ * Parts may be mime-encoded entities, or RFC-2231 split/encoded parts.
+ * Additionally, a value can be quoted and comments may exist.
+ *
+ * Actual processing of parameters is done in ParameterNameValueConsumerService,
+ * with ParameterConsumerService processing all collected parts into split
+ * parameter parts as necessary.
  *
  * @author Zaahid Bateson
  */
@@ -58,8 +62,9 @@ class ParameterConsumerService extends AbstractGenericConsumerService
     }
 
     /**
-     * Post processing involves creating Part\LiteralPart or Part\ParameterPart
-     * objects out of created Token and LiteralParts.
+     * Post processing involves looking for split parameter parts with matching
+     * names and combining them into a SplitParameterPart, and otherwise
+     * returning ParameterParts from ParameterNameValueConsumer as-is.
      *
      * @param IHeaderPart[] $parts The parsed parts.
      * @return IHeaderPart[] Array of resulting final parts.
@@ -76,6 +81,11 @@ class ParameterConsumerService extends AbstractGenericConsumerService
             },
             \array_merge_recursive(...\array_map(
                 function ($p) {
+                    // if $p->getIndex is non-null, it's a split-parameter part
+                    // and an array of one element consisting of name => ParameterPart
+                    // is returned, which is then merged into name => array-of-parameter-parts
+                    // or ';' object_id . ';' for non-split parts with a value of a single
+                    // element array of [ParameterPart]
                     if ($p instanceOf ParameterPart && $p->getIndex() !== null) {
                         return [strtolower($p->getName()) => [$p]];
                     } else {

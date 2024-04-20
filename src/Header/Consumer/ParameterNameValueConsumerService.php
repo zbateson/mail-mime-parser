@@ -13,6 +13,19 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 use ZBateson\MailMimeParser\Header\Part\ContainerPart;
 
 /**
+ * Parses an individual part of a parameter header.
+ *
+ * 'isStartToken' always returns true, so control is taken from
+ * ParameterConsumerService always, and returned when a ';' is encountered (and
+ * so processes a single part and returns it, then gets control back).0
+ *
+ * If an '=' is encountered, the ParameterValueConsumerService sub-consumer
+ * takes control and parses the value of a parameter.
+ *
+ * If no '=' is encountered, it's assumed to be a single value element, which
+ * should be the first part of a parameter header, e.g. 'text/html' in
+ * Content-Type: text/html; charset=utf-8
+ *
  * @author Zaahid Bateson
  */
 class ParameterNameValueConsumerService extends AbstractGenericConsumerService
@@ -32,7 +45,8 @@ class ParameterNameValueConsumerService extends AbstractGenericConsumerService
     }
 
     /**
-     * Returns semi-colon and equals char as token separators.
+     * Returns semi-colon as a token separator, in addition to parent token
+     * separators.
      *
      * @return string[]
      */
@@ -40,9 +54,10 @@ class ParameterNameValueConsumerService extends AbstractGenericConsumerService
     {
         return \array_merge(parent::getTokenSeparators(), [';']);
     }
-    
+
     /**
-     * Returns true if the token is an
+     * Always returns true to grab control from its parent
+     * ParameterConsumerService.
      */
     protected function isStartToken(string $token) : bool
     {
@@ -50,7 +65,7 @@ class ParameterNameValueConsumerService extends AbstractGenericConsumerService
     }
 
     /**
-     * Returns true if the token is a
+     * Returns true if the token is a ';' char.
      */
     protected function isEndToken(string $token) : bool
     {
@@ -58,8 +73,11 @@ class ParameterNameValueConsumerService extends AbstractGenericConsumerService
     }
 
     /**
-     * Post processing involves creating Part\LiteralPart or Part\ParameterPart
-     * objects out of created Token and LiteralParts.
+     * Creates either a ContainerPart if an '=' wasn't encountered, indicating
+     * this to be the main 'value' part of a header (or a malformed part of a
+     * parameter header), or a ParameterPart if the last IHeaderPart in the
+     * passed $parts array is already a ContainerPart (indicating it was parsed
+     * in ParameterValueConsumerService.)
      *
      * @param IHeaderPart[] $parts The parsed parts.
      * @return IHeaderPart[] Array of resulting final parts.

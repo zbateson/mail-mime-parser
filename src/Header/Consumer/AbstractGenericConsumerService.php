@@ -56,7 +56,8 @@ abstract class AbstractGenericConsumerService extends AbstractConsumerService
      * Overridden to combine all part values into a single string and return it
      * as an array with a single element.
      *
-     * The returned IHeaderParts are all LiteralParts.
+     * The returned IHeaderPart array consists of a single ContainerPart created
+     * out of all passed IHeaderParts.
      *
      * @param \ZBateson\MailMimeParser\Header\IHeaderPart[] $parts
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[]
