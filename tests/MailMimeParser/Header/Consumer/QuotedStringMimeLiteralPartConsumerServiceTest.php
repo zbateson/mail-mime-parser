@@ -3,21 +3,21 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Header\Part\QuotedLiteralPart;
 
 /**
- * Description of GenericConsumerServiceTest
+ * Description of QuotedStringMimeLiteralPartConsumerServiceTest
  *
  * @group Consumers
- * @group GenericConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\GenericConsumerService
+ * @group QuotedStringMimeLiteralPartConsumerService
+ * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService
  * @author Zaahid Bateson
  */
-class GenericConsumerServiceTest extends TestCase
+class QuotedStringMimeLiteralPartConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
-    private $genericConsumer;
+    private $consumer;
     private $logger;
 
     protected function setUp() : void
@@ -42,16 +42,24 @@ class GenericConsumerServiceTest extends TestCase
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
             ->setMethods()
             ->getMock();
-        $this->genericConsumer = new GenericConsumerService($this->logger, $pf, $ccs, $qscs);
+        $this->consumer = new QuotedStringMimeLiteralPartConsumerService($this->logger, $pf);
     }
 
-    public function testConsumeTokens() : void
+    public function testConsumeValue() : void
     {
-        $value = "Je\ \t suis\n ici";
-
-        $ret = $this->genericConsumer->__invoke($value);
+        $ret = $this->consumer->__invoke('value');
         $this->assertNotEmpty($ret);
         $this->assertCount(1, $ret);
-        $this->assertEquals('Je  suis ici', $ret[0]->getValue());
+        $this->assertInstanceOf(QuotedLiteralPart::class, $ret[0]);
+        $this->assertEquals('value', $ret[0]->getValue());
+    }
+
+    public function testConsumeMimeEncodedValue() : void
+    {
+        $ret = $this->consumer->__invoke('=?US-ASCII?Q?Kilgore_Trout?=');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertInstanceOf(QuotedLiteralPart::class, $ret[0]);
+        $this->assertEquals('Kilgore Trout', $ret[0]->getValue());
     }
 }

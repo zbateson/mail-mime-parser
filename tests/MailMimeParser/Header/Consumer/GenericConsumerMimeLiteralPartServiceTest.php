@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,6 +11,7 @@ use PHPUnit\Framework\TestCase;
  * @group GenericConsumerMimeLiteralPartService
  * @covers ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService
  * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
+ * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService
  * @author Zaahid Bateson
  */
 class GenericConsumerMimeLiteralPartServiceTest extends TestCase

@@ -253,4 +253,13 @@ class ParameterConsumerServiceTest extends TestCase
         $this->assertCount(2, $ret);
         $this->assertEquals('TS E liot', $ret[1]->getValue());
     }
+
+    public function testSplitHeaderWithContinuedRfc2047AcrossParts() : void
+    {
+        $ret = $this->parameterConsumer->__invoke('hotdogs; condiments*0="'
+            . '=?US-ASCII?Q?TS_E"; condiments*1="liot?="');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('TS Eliot', $ret[1]->getValue());
+    }
 }
