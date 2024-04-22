@@ -12,12 +12,7 @@ use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Holds a group of addresses, and an optional group name.
- *
- * Because AddressGroupConsumer is only called once a colon (":") character is
- * found, an AddressGroupPart is initially constructed without a $name.  Once it
- * is returned to AddressConsumer, a new AddressGroupPart is created out of
- * AddressGroupConsumer's AddressGroupPart.
+ * Holds a group of addresses and a group name.
  *
  * @author Zaahid Bateson
  */

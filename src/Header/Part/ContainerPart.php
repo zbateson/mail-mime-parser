@@ -14,6 +14,14 @@ use ZBateson\MailMimeParser\ErrorBag;
 /**
  * Base HeaderPart for a part that consists of other parts.
  *
+ * The base container part constructs a string value out of the passed parts by
+ * concatenating their values, discarding whitespace between parts that can be
+ * ignored (in general allows for a single space but removes extras.)
+ *
+ * A ContainerPart can also contain any number of child comment parts.  The
+ * CommentParts in this and all child parts can be returned by calling
+ * getComments.
+ *
  * @author Zaahid Bateson
  */
 class ContainerPart extends HeaderPart
@@ -79,6 +87,9 @@ class ContainerPart extends HeaderPart
     /**
      * Creates the string value representation of this part constructed from the
      * child parts passed to it.
+     *
+     * The default implementation filters out ignorable whitespace between
+     * parts, and concatenates parts calling 'getValue'.
      *
      * @param HeaderParts[] $parts
      */

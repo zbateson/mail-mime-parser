@@ -8,17 +8,15 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
- * Holds a string value token that will require additional processing by a
- * consumer prior to returning to a client.
+ * Specialized token for subjects that preserves whitespace, except for new
+ * lines.
  *
- * A Token is meant to hold a value for further processing -- for instance when
- * consuming an address list header (like From or To) -- before it's known what
- * type of IHeaderPart it is (could be an email address, could be a name, or
- * could be a group.)
+ * New lines are either discarded if followed by a whitespace as should happen
+ * with folding whitespace, or replaced by a single space character if somehow
+ * aren't followed by whitespace.
  *
  * @author Zaahid Bateson
  */
@@ -35,10 +33,6 @@ class SubjectToken extends Token
         $this->canIgnoreSpacesBefore = $this->canIgnoreSpacesAfter = $this->isSpace;
     }
 
-    /**
-     * Returns the part's representative value after any necessary processing
-     * has been performed.  For the raw value, call getRawValue().
-     */
     public function getValue() : string
     {
         return $this->convertEncoding($this->value);
