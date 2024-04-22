@@ -29,11 +29,6 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     protected string $value;
 
     /**
-     * @var string the raw value of the part.
-     */
-    protected string $rawValue;
-
-    /**
      * @var MbWrapper $charsetConverter the charset converter used for
      *      converting strings in HeaderPart::convertEncoding
      */
@@ -58,7 +53,7 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     {
         parent::__construct($logger);
         $this->charsetConverter = $charsetConverter;
-        $this->value = $this->rawValue = $value;
+        $this->value = $value;
     }
 
     /**
@@ -78,14 +73,6 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
     public function __toString() : string
     {
         return $this->value;
-    }
-
-    /**
-     * Returns the part's raw value.
-     */
-    public function getRawValue() : string
-    {
-        return $this->rawValue;
     }
 
     /**

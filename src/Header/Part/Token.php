@@ -24,6 +24,11 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class Token extends HeaderPart
 {
+    /**
+     * @var string the raw value of the part.
+     */
+    protected string $rawValue;
+
     public function __construct(
         LoggerInterface $logger,
         MbWrapper $charsetConverter,
@@ -32,6 +37,7 @@ class Token extends HeaderPart
         bool $preserveSpaces = false
     ) {
         parent::__construct($logger, $charsetConverter, $value);
+        $this->rawValue = $value;
         if (!$isLiteral) {
             $this->value = \preg_replace(['/(\r|\n)+(\s)/', '/(\r|\n)+/'], ['$2', ' '], $value);
             if (!$preserveSpaces) {
@@ -49,5 +55,13 @@ class Token extends HeaderPart
     public function getValue() : string
     {
         return $this->convertEncoding($this->value);
+    }
+
+    /**
+     * Returns the part's raw value.
+     */
+    public function getRawValue() : string
+    {
+        return $this->rawValue;
     }
 }
