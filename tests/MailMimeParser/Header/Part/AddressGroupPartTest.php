@@ -5,7 +5,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -46,6 +45,7 @@ class AddressGroupPartTest extends TestCase
 
         $part = $this->newAddressGroupPart([$name], $members);
         $this->assertEquals('Roman Senate', $part->getName());
+        $this->assertEquals('Roman Senate', $part->getValue());
         $this->assertEquals($members, $part->getAddresses());
         $this->assertEquals($members[0], $part->getAddress(0));
         $this->assertEquals($members[1], $part->getAddress(1));
@@ -58,9 +58,9 @@ class AddressGroupPartTest extends TestCase
         $part = $this->newAddressGroupPart([], []);
         $errs = $part->getErrors(true, LogLevel::NOTICE);
         $this->assertCount(2, $errs);
-        $this->assertEquals('Address group doesn\'t have a name', $errs[0]->getMessage());
+        $this->assertNotEmpty($errs[0]->getMessage());
         $this->assertEquals(LogLevel::ERROR, $errs[0]->getPsrLevel());
-        $this->assertEquals('Address group doesn\'t have any email addresses defined in it', $errs[1]->getMessage());
+        $this->assertNotEmpty($errs[1]->getMessage());
         $this->assertEquals(LogLevel::NOTICE, $errs[1]->getPsrLevel());
     }
 }

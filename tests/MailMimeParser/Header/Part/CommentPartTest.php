@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Part;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -34,8 +33,16 @@ class CommentPartTest extends TestCase
 
     private function getTokenMock(string $name) : Token
     {
-        return $this->getMockBuilder(MimeToken::class)
+        return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $name])
+            ->setMethods()
+            ->getMock();
+    }
+
+    private function getQuotedMock(string $name) : QuotedLiteralPart
+    {
+        return $this->getMockBuilder(QuotedLiteralPart::class)
+            ->setConstructorArgs([$this->logger, $this->mb, [$this->getTokenMock($name)]])
             ->setMethods()
             ->getMock();
     }
@@ -53,10 +60,17 @@ class CommentPartTest extends TestCase
         $this->assertEquals($comment, $part->getComment());
     }
 
-    public function testMimeEncoding() : void
+    public function testNestedCommentPartStringValue() : void
     {
-        $part = $this->newCommentPart([$this->getTokenMock('=?US-ASCII?Q?Kilgore_Trout?=')]);
+        $comment = 'Some ((very) silly) "comment" made about my moustache';
+        $part = $this->newCommentPart([
+            $this->getTokenMock('Some '),
+            $this->newCommentPart([$this->newCommentPart([$this->getTokenMock('very')]), $this->getTokenMock(' silly')]),
+            $this->getTokenMock(' '),
+            $this->getQuotedMock('comment'),
+            $this->getTokenMock(' made about my moustache')
+        ]);
         $this->assertEquals('', $part->getValue());
-        $this->assertEquals('Kilgore Trout', $part->getComment());
+        $this->assertEquals($comment, $part->getComment());
     }
 }
