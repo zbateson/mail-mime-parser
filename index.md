@@ -49,7 +49,7 @@ manipulation routines.
 use ZBateson\MailMimeParser\Message;
 
 $message = Message::from($handleOrStreamOrString, true);
-$subject = $message->getHeaderValue('Subject');
+$subject = $message->getSubject();
 $text = $message->getTextContent();
 $html = $message->getHtmlContent();
 $from = $message->getHeader('From');
@@ -108,7 +108,7 @@ There are numerous advantages over other libraries:
 * PSR-compliant, unit and functionally tested.
 
 
-## Usage Guide
+## Previous Versions
 
 > For the 0.4 usage guide, [click here](usage-guide-0.4.html)
 > For the 1.0 usage guide, [click here](usage-guide-1.0.html)
@@ -263,6 +263,41 @@ echo $htmlStream->getContents();
 // or if you know you want a string:
 echo $message->getHtmlContent();
 ```
+
+### Error reporting and logging
+
+Some basic logging has been added, and a logger can be provided either globally
+or to an instance of MailMimeParser.
+
+```php
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\IMessage;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$logger = new Logger('mail-parser');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/mmp.log', 'debug'));
+
+// set it globally, calling new Message() would use the 'globally-provided'
+// LoggerInterface
+MailMimeParser::setGlobalLogger($logger);
+
+// or set it on an instance, any instances created through this via parsing,
+// etc... would use the provided logger, but calling 'new Message()' yourself
+// would require passing it manually
+$parser = new MailMimeParser($logger);
+
+$message = Message::from($string, false);
+```
+
+[IMessagePart](api/3.0/classes/ZBateson-MailMimeParser-Message-IMessagePart.htmlIMessagePart) (and therefore all interfaces that inherit from it, IMimePart IMessage),
+[IHeader](api/3.0/classes/ZBateson-MailMimeParser-Header-IHeader.html), and
+[IHeaderPart](api/3.0/classes/ZBateson-MailMimeParser-Header-IHeaderPart.html) all inherit from
+[IErrorBag](api/3.0/classes/ZBateson-MailMimeParser-IErrorBag.html).  Errors that occur on any child can be inspected at the top-level IMessage with a call to
+[IErrorBag::getAllErrors()](api/3.0/classes/ZBateson-MailMimeParser-IErrorBag.html#method_getAllErrors) which will return all
+[Error](3.0/classes/ZBateson-MailMimeParser-Error.html) objects that have occurred.  Optionally passing 'true' to validate getAllErrors may perform additional
+validation on objects, and a PSR level can be provided to retrieve objects logged at different levels.  The Error class has a 'getObject()' method to retrieve the
+object the error occurred on (helpful if calling getAllErrors at a top-level, and you want to know which object it actually occurred on).
 
 ## API Documentation
 * [Current (3.0)](api/3.0)
