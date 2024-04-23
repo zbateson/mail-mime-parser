@@ -40,7 +40,7 @@ The header class method 'getAllParts' includes comment parts in 3.0.
 
 Error, validation, and logging support has been added.
 
-For a more complete list of changes, please visit the [3.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-3.0).
+For a more complete list of changes, please visit the [3.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-3.0) and the [Usage Guide](https://mail-mime-parser.org/).
 
 ## Requirements
 
