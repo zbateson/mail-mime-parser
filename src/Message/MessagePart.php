@@ -7,12 +7,12 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use SplObjectStorage;
-use SplObserver;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
+use SplObjectStorage;
+use SplObserver;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;

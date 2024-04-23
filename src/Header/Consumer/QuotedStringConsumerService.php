@@ -56,8 +56,6 @@ class QuotedStringConsumerService extends AbstractConsumerService
 
     /**
      * Constructs a LiteralPart and returns it.
-     *
-     * @param bool $isLiteral
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {

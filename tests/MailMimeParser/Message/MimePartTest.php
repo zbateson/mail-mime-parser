@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Traversable;
 use ZBateson\MailMimeParser\Header\IHeader;
 

@@ -40,8 +40,6 @@ class MessagePartStreamDecorator implements StreamInterface
      * Overridden to wrap exceptions in MessagePartReadException which provides
      * 'getPart' to inspect the part the error occurs on.
      *
-     * @param int $length
-     * @return string
      * @throws MessagePartStreamReadException
      */
     public function read(int $length) : string

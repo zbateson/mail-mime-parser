@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,6 +17,7 @@ class AddressEmailConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $addressConsumer;
+
     private $logger;
 
     protected function setUp() : void

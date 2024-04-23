@@ -92,7 +92,7 @@ class SplitParameterPart extends ParameterPart
 
         $combined = $this->combineAdjacentUnencodedParts($sorted);
 
-        return \implode(\array_map(
+        return \implode('', \array_map(
             fn ($p) => ($p instanceof ParameterPart && $p->encoded)
                 ? $this->decodePartValue($p->getValue(), ($p->charset === null) ? $charset : $p->charset)
                 : $p->getValue(),

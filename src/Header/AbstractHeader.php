@@ -72,7 +72,7 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
 
     /**
      * Filters $this->allParts into the parts required by $this->parts
-     * and assignes it.
+     * and assigns it.
      *
      * The AbstractHeader::filterAndAssignToParts method filters out CommentParts.
      */
@@ -118,7 +118,7 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
     public function getComments() : array
     {
         if ($this->comments === null) {
-            $this->comments = \array_map(fn ($c) => $c->getComment(), \array_merge(...\array_map(
+            $this->comments = \array_map(fn (IHeaderPart $c) => $c->getComment(), \array_merge(...\array_map(
                 fn ($p) => ($p instanceof CommentPart) ? [$p] : $p->getComments(),
                 $this->allParts
             )));

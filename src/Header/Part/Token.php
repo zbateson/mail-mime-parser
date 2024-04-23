@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\Header\Part\HeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**

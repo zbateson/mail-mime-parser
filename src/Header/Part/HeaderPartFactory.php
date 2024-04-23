@@ -90,7 +90,7 @@ class HeaderPartFactory
     /**
      * Initializes and returns a new QuotedLiteralPart.
      *
-     * @param HeaderPart[] $children
+     * @param HeaderPart[] $parts
      */
     public function newQuotedLiteralPart(array $parts) : QuotedLiteralPart
     {

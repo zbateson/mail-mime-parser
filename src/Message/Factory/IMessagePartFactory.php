@@ -8,8 +8,8 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\IMessagePart;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 /**
@@ -38,5 +38,5 @@ abstract class IMessagePartFactory
     /**
      * Constructs a new IMessagePart object and returns it
      */
-    abstract public function newInstance(IMimePart $parent = null) : IMessagePart;
+    abstract public function newInstance(?IMimePart $parent = null) : IMessagePart;
 }

@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser;
 
-use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;

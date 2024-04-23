@@ -45,7 +45,7 @@ class ParameterValueConsumerService extends GenericConsumerMimeLiteralPartServic
     {
         return \array_merge(parent::getTokenSeparators(), ['=', ';']);
     }
-    
+
     /**
      * Returns true if the token is an '=' character.
      */

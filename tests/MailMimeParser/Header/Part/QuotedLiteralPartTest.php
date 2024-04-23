@@ -18,7 +18,9 @@ class QuotedLiteralPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
+
     private $hpf;
+
     private $logger;
 
     protected function setUp() : void
@@ -45,9 +47,9 @@ class QuotedLiteralPartTest extends TestCase
     private function getCommentPart(string $comment) : CommentPart
     {
         return $this->getMockBuilder(CommentPart::class)
-                ->setConstructorArgs([$this->logger, $this->mb, $this->hpf, $this->getTokenArray($comment)])
-                ->setMethods()
-                ->getMock();
+            ->setConstructorArgs([$this->logger, $this->mb, $this->hpf, $this->getTokenArray($comment)])
+            ->setMethods()
+            ->getMock();
     }
 
     private function newQuotedLiteralPart($childParts) : QuotedLiteralPart
@@ -64,7 +66,7 @@ class QuotedLiteralPartTest extends TestCase
 
     public function testNotIgnorableSpaces() : void
     {
-        $part = $this->newQuotedLiteralPart($this->getTokenArray(' ', 'Kilgore', ' ' , ' ', "\n\t", ' ', 'Trout', ' ', "\n ", ' '));
+        $part = $this->newQuotedLiteralPart($this->getTokenArray(' ', 'Kilgore', ' ', ' ', "\n\t", ' ', 'Trout', ' ', "\n ", ' '));
         $this->assertNotNull($part);
         $this->assertEquals(" Kilgore  \t Trout   ", $part->getValue());
     }

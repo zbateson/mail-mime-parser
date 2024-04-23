@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
 use SplObserver;
 use SplSubject;

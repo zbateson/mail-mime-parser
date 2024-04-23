@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumerService;
@@ -24,6 +23,7 @@ class AddressHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+
     private $logger;
 
     protected function setUp() : void

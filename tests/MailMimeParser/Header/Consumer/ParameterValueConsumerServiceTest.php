@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Part\ContainerPart;
-use ZBateson\MailMimeParser\Header\Part\ParameterPart;
 
 /**
  * Description of ParameterValueConsumerServiceTest
@@ -19,6 +18,7 @@ class ParameterValueConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $consumer;
+
     private $logger;
 
     protected function setUp() : void

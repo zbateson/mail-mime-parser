@@ -18,7 +18,9 @@ class ContainerPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
+
     private $hpf;
+
     private $logger;
 
     protected function setUp() : void
@@ -45,9 +47,9 @@ class ContainerPartTest extends TestCase
     private function getCommentPart(string $comment) : CommentPart
     {
         return $this->getMockBuilder(CommentPart::class)
-                ->setConstructorArgs([$this->logger, $this->mb, $this->hpf, $this->getTokenArray($comment)])
-                ->setMethods()
-                ->getMock();
+            ->setConstructorArgs([$this->logger, $this->mb, $this->hpf, $this->getTokenArray($comment)])
+            ->setMethods()
+            ->getMock();
     }
 
     private function newContainerPart($childParts) : ContainerPart
@@ -64,7 +66,7 @@ class ContainerPartTest extends TestCase
 
     public function testIgnorableSpaces() : void
     {
-        $part = $this->newContainerPart($this->getTokenArray(' ', 'Kilgore', ' ' , ' ', "\n\t ", 'Trout', ' ', "\n ", ' '));
+        $part = $this->newContainerPart($this->getTokenArray(' ', 'Kilgore', ' ', ' ', "\n\t ", 'Trout', ' ', "\n ", ' '));
         $this->assertNotNull($part);
         $this->assertEquals('Kilgore Trout', $part->getValue());
     }
@@ -84,7 +86,7 @@ class ContainerPartTest extends TestCase
 
     public function testGetChildParts() : void
     {
-        $children = $this->getTokenArray(' ', 'Kilgore', ' ' , ' ', "\n\t ", 'Trout', ' ', "\n ", ' ');
+        $children = $this->getTokenArray(' ', 'Kilgore', ' ', ' ', "\n\t ", 'Trout', ' ', "\n ", ' ');
         $part = $this->newContainerPart($children);
         $this->assertNotNull($part);
         $this->assertEquals('Kilgore Trout', $part->getValue());

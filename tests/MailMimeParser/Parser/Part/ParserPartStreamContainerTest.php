@@ -2,11 +2,10 @@
 
 namespace ZBateson\MailMimeParser\Parser\Part;
 
-use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
-use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * ParserPartStreamContainerTest
@@ -104,7 +103,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->streamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
@@ -146,7 +145,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->streamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
@@ -182,7 +181,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->streamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
@@ -205,7 +204,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->willReturn($parsedStream);
         $this->streamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
@@ -231,7 +230,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->willReturn($parsedStream);
         $this->streamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
@@ -244,7 +243,7 @@ class ParserPartStreamContainerTest extends TestCase
     public function testAttachedParsedStream() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars', ['metadata' => ['mmp-detached-stream' => false]]);
-        
+
         $this->proxy->expects($this->once())
             ->method('parseAll');
         $this->streamFactory->expects($this->once())
@@ -253,7 +252,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->willReturn($parsedStream);
         $this->streamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 

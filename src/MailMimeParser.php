@@ -80,7 +80,7 @@ class MailMimeParser
      * @var array<array|string|DefinitionSource> an array of global definitions
      *      being used.
      */
-    private static array $globalDefinitions = [ self::DEFAULT_DEFINITIONS_FILE ];
+    private static array $globalDefinitions = [self::DEFAULT_DEFINITIONS_FILE];
 
     /**
      * Returns the default ContainerBuilder with default loaded definitions.
@@ -104,13 +104,12 @@ class MailMimeParser
      */
     public static function setGlobalPhpDiConfigurations(array $phpDiConfigs, bool $useDefaultDefinitionsFile = true) : void
     {
-        self::$globalDefinitions = array_merge(
-            ($useDefaultDefinitionsFile) ? [ self::DEFAULT_DEFINITIONS_FILE ] : [],
+        self::$globalDefinitions = \array_merge(
+            ($useDefaultDefinitionsFile) ? [self::DEFAULT_DEFINITIONS_FILE] : [],
             $phpDiConfigs
         );
         self::$globalContainer = null;
     }
-
 
     public static function addGlobalPhpDiContainerDefinition(array|string|DefinitionSource $phpDiConfig) : void
     {
@@ -120,7 +119,7 @@ class MailMimeParser
 
     public static function resetGlobalPhpDiContainerDefinitions() : void
     {
-        self::$globalDefinitions = [ self::DEFAULT_DEFINITIONS_FILE ];
+        self::$globalDefinitions = [self::DEFAULT_DEFINITIONS_FILE];
         self::$globalContainer = null;
     }
 
@@ -142,7 +141,7 @@ class MailMimeParser
      */
     public static function setGlobalLogger(LoggerInterface $logger) : void
     {
-        self::$globalDefinitions[] = [ LoggerInterface::class => $logger ];
+        self::$globalDefinitions[] = [LoggerInterface::class => $logger];
         self::$globalContainer = null;
     }
 

@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
@@ -19,6 +18,7 @@ class GenericReceivedConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $genericConsumer;
+
     private $logger;
 
     protected function setUp() : void

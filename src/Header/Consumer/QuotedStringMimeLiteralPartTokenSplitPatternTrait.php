@@ -10,7 +10,8 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
 
 /**
- * 
+ * Provides a getTokenSplitPattern for consumers that could have quoted parts
+ * that are mime-header-encoded.
  *
  * @author Zaahid Bateson
  */

@@ -10,9 +10,9 @@ namespace ZBateson\MailMimeParser\Message;
 use AppendIterator;
 use ArrayIterator;
 use Iterator;
+use Psr\Log\LoggerInterface;
 use RecursiveIterator;
 use RecursiveIteratorIterator;
-use Psr\Log\LoggerInterface;
 
 /**
  * A message part that contains children.

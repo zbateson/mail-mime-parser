@@ -24,6 +24,7 @@ class ReceivedHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+
     private $logger;
 
     protected function setUp() : void

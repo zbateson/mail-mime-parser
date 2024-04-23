@@ -18,7 +18,9 @@ class CommentPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
+
     private $hpf;
+
     private $logger;
 
     protected function setUp() : void

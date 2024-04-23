@@ -5,9 +5,8 @@ namespace ZBateson\MailMimeParser\Stream;
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\IMessage;
-use ZBateson\StreamDecorators\DecoratedCachingStream;
 use ZBateson\StreamDecorators\CharsetStream;
-use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use ZBateson\StreamDecorators\DecoratedCachingStream;
 
 /**
  * MessagePartStreamTest

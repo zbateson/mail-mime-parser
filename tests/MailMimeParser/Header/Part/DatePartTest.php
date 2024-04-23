@@ -19,6 +19,7 @@ class DatePartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
+
     private $logger;
 
     protected function setUp() : void

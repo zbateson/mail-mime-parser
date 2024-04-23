@@ -10,8 +10,8 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
-use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * Parses a single part of an address header.

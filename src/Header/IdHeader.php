@@ -8,10 +8,10 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Represents a Content-ID, Message-ID, In-Reply-To or References header.

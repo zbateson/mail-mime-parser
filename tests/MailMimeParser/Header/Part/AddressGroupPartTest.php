@@ -19,6 +19,7 @@ use ZBateson\MbWrapper\MbWrapper;
 class AddressGroupPartTest extends TestCase
 {
     private $mb;
+
     private $logger;
 
     protected function setUp() : void
@@ -30,7 +31,10 @@ class AddressGroupPartTest extends TestCase
     private function newAddressGroupPart($nameParts, $addressAndGroupParts)
     {
         return new AddressGroupPart(
-            $this->logger, $this->mb, $nameParts, $addressAndGroupParts
+            $this->logger,
+            $this->mb,
+            $nameParts,
+            $addressAndGroupParts
         );
     }
 

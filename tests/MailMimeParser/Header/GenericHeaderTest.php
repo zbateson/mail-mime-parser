@@ -4,9 +4,8 @@ namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
-use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
 /**
@@ -22,6 +21,7 @@ class GenericHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+
     private $logger;
 
     protected function setUp() : void

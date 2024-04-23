@@ -19,6 +19,7 @@ class ParameterNameValueConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $consumer;
+
     private $logger;
 
     protected function setUp() : void

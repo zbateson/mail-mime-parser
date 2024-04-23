@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 
 /**
  * UUEncodedPartHeaderContainerFactoryTest

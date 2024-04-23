@@ -10,8 +10,8 @@ use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
-use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
+use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 

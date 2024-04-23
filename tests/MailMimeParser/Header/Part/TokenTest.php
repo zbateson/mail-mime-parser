@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**
@@ -57,7 +56,7 @@ class TokenTest extends TestCase
         $token = $this->newToken('   ');
         $this->assertNotNull($token);
         $this->assertEquals(' ', $token->getValue());
-        
+
         $token = $this->newToken("\n   ", false, true);
         $this->assertNotNull($token);
         $this->assertEquals('   ', $token->getValue());

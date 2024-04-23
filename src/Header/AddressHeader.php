@@ -8,10 +8,10 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A header containing one or more email addresses and/or groups of addresses.

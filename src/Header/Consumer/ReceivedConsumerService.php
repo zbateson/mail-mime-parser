@@ -101,8 +101,6 @@ class ReceivedConsumerService extends AbstractConsumerService
     /**
      * Overridden to /not/ advance when the end token matches a start token for
      * a sub-consumer.
-     *
-     * @return static
      */
     protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {

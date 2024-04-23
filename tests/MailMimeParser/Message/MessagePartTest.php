@@ -6,7 +6,6 @@ use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
@@ -181,10 +180,10 @@ class MessagePartTest extends TestCase
             ->method('getBinaryContentStream')
             ->willReturnOnConsecutiveCalls($f, $s);
 
-        $file = tempnam(sys_get_temp_dir(), 'mmp_test_save_content');
+        $file = \tempnam(\sys_get_temp_dir(), 'mmp_test_save_content');
         $messagePart->saveContent($file);
         $this->assertEquals('Que tonto', \file_get_contents($file));
-        unlink($file);
+        \unlink($file);
     }
 
     public function testSaveContentToStream() : void
@@ -314,9 +313,9 @@ class MessagePartTest extends TestCase
             Psr7\Utils::streamFor('other demons')
         );
 
-        $file = tempnam(sys_get_temp_dir(), 'mmp_test_save_to_file');
+        $file = \tempnam(\sys_get_temp_dir(), 'mmp_test_save_to_file');
         $messagePart->save($file);
         $this->assertEquals('Demigorgon', \file_get_contents($file));
-        unlink($file);
+        \unlink($file);
     }
 }

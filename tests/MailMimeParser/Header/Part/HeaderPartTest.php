@@ -18,6 +18,7 @@ class HeaderPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $abstractHeaderPartStub;
+
     private $logger;
 
     protected function setUp() : void

@@ -8,8 +8,8 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Reads a generic header.

@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\IHeader;
 
 /**
@@ -18,6 +17,7 @@ class PartHeaderContainerTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $mhf;
+
     protected $instance;
 
     protected function setUp() : void

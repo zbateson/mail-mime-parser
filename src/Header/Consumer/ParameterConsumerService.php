@@ -49,8 +49,6 @@ class ParameterConsumerService extends AbstractGenericConsumerService
 
     /**
      * Disables advancing for start tokens.
-     *
-     * @return static
      */
     protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {
@@ -73,24 +71,23 @@ class ParameterConsumerService extends AbstractGenericConsumerService
     {
         $factory = $this->partFactory;
         return \array_values(\array_map(
-            function ($partsArray) use ($factory) {
-                if (count($partsArray) > 1) {
+            function($partsArray) use ($factory) {
+                if (\count($partsArray) > 1) {
                     return $factory->newSplitParameterPart($partsArray);
                 }
                 return $partsArray[0];
             },
             \array_merge_recursive(...\array_map(
-                function ($p) {
+                function($p) {
                     // if $p->getIndex is non-null, it's a split-parameter part
                     // and an array of one element consisting of name => ParameterPart
                     // is returned, which is then merged into name => array-of-parameter-parts
                     // or ';' object_id . ';' for non-split parts with a value of a single
                     // element array of [ParameterPart]
-                    if ($p instanceOf ParameterPart && $p->getIndex() !== null) {
-                        return [strtolower($p->getName()) => [$p]];
-                    } else {
-                        return [';' . spl_object_id($p) . ';' => [$p]];
+                    if ($p instanceof ParameterPart && $p->getIndex() !== null) {
+                        return [\strtolower($p->getName()) => [$p]];
                     }
+                    return [';' . \spl_object_id($p) . ';' => [$p]];
                 },
                 $parts
             ))

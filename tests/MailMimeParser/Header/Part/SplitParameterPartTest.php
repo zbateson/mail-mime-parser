@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
-use Psr\Log\NullLogger;
 
 /**
  * Description of ParameterTest
@@ -19,7 +18,9 @@ class SplitParameterPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $logger;
+
     private $mb;
+
     private $hpf;
 
     protected function setUp() : void
@@ -56,21 +57,21 @@ class SplitParameterPartTest extends TestCase
         if ($actualValues === null) {
             $actualValues = [$expectedValue];
         }
-        if (!is_array($actualValues)) {
+        if (!\is_array($actualValues)) {
             $actualValues = [$actualValues];
         }
-        if (!is_array($actualNames)) {
+        if (!\is_array($actualNames)) {
             $actualNames = [$actualNames];
         }
-        if (count($actualNames) < count($actualValues)) {
-            $actualNames = array_fill(count($actualNames), count($actualValues), $expectedName);
+        if (\count($actualNames) < \count($actualValues)) {
+            $actualNames = \array_fill(\count($actualNames), \count($actualValues), $expectedName);
         }
 
         $mapped = \array_map(
             fn ($arr) => new ParameterPart($this->logger, $this->mb, [$this->getToken($arr[0])], $this->getContainerPart($arr[1])),
             \array_map(null, $actualNames, $actualValues)
         );
-        
+
         $part = new SplitParameterPart($this->logger, $this->mb, $this->hpf, $mapped);
         $this->assertEquals($expectedName, $part->getName());
         $this->assertEquals($expectedValue, $part->getValue());

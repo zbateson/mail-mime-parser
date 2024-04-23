@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use DateTime;
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,6 +18,7 @@ class DateConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $dateConsumer;
+
     private $logger;
 
     protected function setUp() : void

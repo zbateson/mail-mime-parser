@@ -8,8 +8,8 @@
 namespace ZBateson\MailMimeParser\Header\Part;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MailMimeParser\ErrorBag;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * Base HeaderPart for a part that consists of other parts.
@@ -64,7 +64,7 @@ class ContainerPart extends HeaderPart
         $spaced = \array_merge($parts, [$ends]);
         $filtered = \array_slice(\array_reduce(
             \array_slice(\array_keys($spaced), 0, -1),
-            function ($carry, $key) use ($spaced, $ends) {
+            function($carry, $key) use ($spaced, $ends) {
                 $p = $spaced[$key];
                 $l = \end($carry);
                 $a = $spaced[$key + 1];

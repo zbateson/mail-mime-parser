@@ -18,6 +18,7 @@ class GenericConsumerMimeLiteralPartServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $genericConsumer;
+
     private $logger;
 
     protected function setUp() : void
@@ -101,5 +102,4 @@ class GenericConsumerMimeLiteralPartServiceTest extends TestCase
         $this->assertDecoded('外為ｵﾝﾗｲﾝﾃﾞﾓ(25)(デモ)決済約定のお知らせ', '=?iso-2022-jp?Q?=1B$B300Y=1B(I5]W2]C^S=1B(B(25?=
             =?iso-2022-jp?Q?)(=1B$B%G%b=1B(B)=1B$B7h:QLsDj$N$*CN$i$;=1B(B?=');
     }
-
 }

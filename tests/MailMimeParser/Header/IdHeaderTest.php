@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdConsumerService;
@@ -25,6 +24,7 @@ class IdHeaderTest extends TestCase
 
     // @phpstan-ignore-next-line
     protected $mpf;
+
     private $logger;
 
     protected function setUp() : void

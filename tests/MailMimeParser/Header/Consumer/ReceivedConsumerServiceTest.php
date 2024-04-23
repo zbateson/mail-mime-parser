@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use DateTime;
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
@@ -24,6 +23,7 @@ class ReceivedConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $receivedConsumer;
+
     private $logger;
 
     protected function setUp() : void
@@ -79,7 +79,16 @@ class ReceivedConsumerServiceTest extends TestCase
             ->getMock();
 
         $this->receivedConsumer = new ReceivedConsumerService(
-            $this->logger, $pf, $fdcs, $bdcs, $vgcs, $wgcs, $igcs, $fgcs, $rdcs, $ccs
+            $this->logger,
+            $pf,
+            $fdcs,
+            $bdcs,
+            $vgcs,
+            $wgcs,
+            $igcs,
+            $fgcs,
+            $rdcs,
+            $ccs
         );
     }
 

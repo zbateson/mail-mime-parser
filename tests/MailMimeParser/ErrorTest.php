@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Psr\Log\LogLevel;
 
 /**

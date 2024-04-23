@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**

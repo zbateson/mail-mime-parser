@@ -21,7 +21,7 @@ class IUUEncodedPartFactory extends IMessagePartFactory
     /**
      * Constructs a new UUEncodedPart object and returns it
      */
-    public function newInstance(IMimePart $parent = null) : IUUEncodedPart
+    public function newInstance(?IMimePart $parent = null) : IUUEncodedPart
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $part = new UUEncodedPart(

@@ -9,12 +9,11 @@ namespace ZBateson\MailMimeParser\Message;
 
 use GuzzleHttp\Psr7\CachingStream;
 use Psr\Http\Message\StreamInterface;
-use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
-use ZBateson\MailMimeParser\Message\IMessagePart;
-use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MbWrapper\UnsupportedCharsetException;
 

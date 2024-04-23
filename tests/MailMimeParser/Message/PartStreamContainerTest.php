@@ -2,11 +2,10 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
-use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use ZBateson\MbWrapper\MbWrapper;
 
 /**
  * PartStreamFilterManagerTest
@@ -73,7 +72,7 @@ class PartStreamContainerTest extends TestCase
         $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
@@ -99,7 +98,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
@@ -119,7 +118,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
@@ -137,7 +136,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
@@ -155,7 +154,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
@@ -179,10 +178,10 @@ class PartStreamContainerTest extends TestCase
             ->willReturnOnConsecutiveCalls($stream2, $stream, $stream3);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
-        
+
         $this->instance->setContentStream($stream);
 
         $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
@@ -214,7 +213,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturnOnConsecutiveCalls($stream, $stream2, $stream3, $stream4);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
@@ -242,7 +241,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturn($stream);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
-            ->willReturnCallback(function ($arg, $arg2) {
+            ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 

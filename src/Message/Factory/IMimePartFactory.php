@@ -38,7 +38,7 @@ class IMimePartFactory extends IMessagePartFactory
     /**
      * Constructs a new IMimePart object and returns it
      */
-    public function newInstance(IMimePart $parent = null) : IMimePart
+    public function newInstance(?IMimePart $parent = null) : IMimePart
     {
         $streamContainer = $this->partStreamContainerFactory->newInstance();
         $headerContainer = $this->partHeaderContainerFactory->newInstance();

@@ -9,9 +9,9 @@ namespace ZBateson\MailMimeParser\Header;
 
 use DateTime;
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Represents a Received header.

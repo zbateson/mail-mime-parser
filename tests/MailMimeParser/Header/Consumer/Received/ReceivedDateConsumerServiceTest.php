@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 
@@ -21,6 +20,7 @@ class ReceivedDateConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $dateConsumer;
+
     private $logger;
 
     protected function setUp() : void

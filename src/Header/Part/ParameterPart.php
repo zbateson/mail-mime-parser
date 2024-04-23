@@ -56,7 +56,7 @@ class ParameterPart extends NameValuePart
         $name = parent::getNameFromParts($parts);
         if (\preg_match('~^\s*([^\*]+)\*(\d*)(\*)?$~', $name, $matches)) {
             $name = $matches[1];
-            $this->index = ($matches[2] !== '') ? intval($matches[2]) : null;
+            $this->index = ($matches[2] !== '') ? (int) ($matches[2]) : null;
             $this->encoded = (($matches[2] === '') || !empty($matches[3]));
         }
         return $name;

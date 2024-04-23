@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 

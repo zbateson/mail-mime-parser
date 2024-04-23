@@ -17,6 +17,7 @@ class AddressBaseConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $addressBaseConsumer;
+
     private $logger;
 
     protected function setUp() : void

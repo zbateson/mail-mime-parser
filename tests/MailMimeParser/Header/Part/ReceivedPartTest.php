@@ -4,7 +4,6 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
-use Psr\Log\NullLogger;
 
 /**
  * Description of ReceivedTest
@@ -19,7 +18,9 @@ class ReceivedPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
+
     private $hpf;
+
     private $logger;
 
     protected function setUp() : void

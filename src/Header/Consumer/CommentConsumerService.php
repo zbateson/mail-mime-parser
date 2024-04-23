@@ -91,8 +91,6 @@ class CommentConsumerService extends GenericConsumerService
      * The default implementation checks if the current token is an end token,
      * and will not advance past it.  Because a comment part of a header can be
      * nested, its implementation must advance past its own 'end' token.
-     *
-     * @return static
      */
     protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {

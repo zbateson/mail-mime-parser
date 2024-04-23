@@ -18,6 +18,7 @@ class GenericConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $genericConsumer;
+
     private $logger;
 
     protected function setUp() : void

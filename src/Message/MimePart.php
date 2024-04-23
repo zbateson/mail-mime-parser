@@ -7,13 +7,13 @@
 
 namespace ZBateson\MailMimeParser\Message;
 
-use Traversable;
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
+use Traversable;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Header\IHeader;
 use ZBateson\MailMimeParser\Header\ParameterHeader;
 use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A mime email message part.

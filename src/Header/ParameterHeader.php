@@ -8,10 +8,10 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
-use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Part\NameValuePart;
+use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Represents a header containing an optional main value part and subsequent

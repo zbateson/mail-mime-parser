@@ -9,8 +9,8 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
-use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 use ZBateson\MailMimeParser\Header\Part\ContainerPart;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * Parses an individual part of a parameter header.

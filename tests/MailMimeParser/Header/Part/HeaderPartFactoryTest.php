@@ -17,7 +17,9 @@ class HeaderPartFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line
     private $mb;
+
     private $headerPartFactory;
+
     private $logger;
 
     protected function setUp() : void

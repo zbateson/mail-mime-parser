@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Psr\Log\LogLevel;
 
 /**

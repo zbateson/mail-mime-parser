@@ -9,8 +9,8 @@ namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
-use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
+use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 
 /**
  * Allows a header to be mime-encoded and be decoded with a consumer after
@@ -55,12 +55,12 @@ abstract class MimeEncodedHeader extends AbstractHeader
         $this->mimeEncodedParsedParts = \array_map([$this->mimeTokenPartFactory, 'newInstance'], $aMimeParts);
         parent::parseHeaderValue(
             $consumer,
-            \implode(\array_map(fn ($part) => $part->getValue(), $this->mimeEncodedParsedParts))
+            \implode('', \array_map(fn ($part) => $part->getValue(), $this->mimeEncodedParsedParts))
         );
     }
 
     protected function getErrorBagChildren() : array
     {
-        return \array_values(\array_filter(array_merge($this->getAllParts(), $this->mimeEncodedParsedParts)));
+        return \array_values(\array_filter(\array_merge($this->getAllParts(), $this->mimeEncodedParsedParts)));
     }
 }

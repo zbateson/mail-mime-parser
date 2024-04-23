@@ -101,7 +101,7 @@ abstract class HeaderPart extends ErrorBag implements IHeaderPart
         return $str;
     }
 
-    public function getComments(): array
+    public function getComments() : array
     {
         return [];
     }

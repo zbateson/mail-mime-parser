@@ -2,7 +2,6 @@
 
 namespace ZBateson\MailMimeParser\Header;
 
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,6 +17,7 @@ class SubjectHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+
     private $logger;
 
     protected function setUp() : void

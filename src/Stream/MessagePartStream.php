@@ -154,7 +154,7 @@ class MessagePartStream extends MessagePartStreamDecorator implements SplObserve
             // ContentStream could be rewound, etc...
             $contentStream = $this->streamFactory->newDecoratedCachingStream(
                 $this->streamFactory->newSeekingStream($contentStream),
-                function ($stream) {
+                function($stream) {
                     $es = $this->streamFactory->getTransferEncodingDecoratedStream(
                         $stream,
                         $this->part->getContentTransferEncoding(),
@@ -165,9 +165,9 @@ class MessagePartStream extends MessagePartStreamDecorator implements SplObserve
                 }
             );
         }
-        
+
         $streams = [$this->streamFactory->newHeaderStream($this->part), $contentStream ?: Psr7\Utils::streamFor()];
-        
+
         if ($this->part instanceof IMimePart && $this->part->getChildCount() > 0) {
             $streams = \array_merge($streams, $this->getBoundaryAndChildStreams($this->part));
         }

@@ -2783,7 +2783,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertCount(1, $errors);
         $this->assertInstanceOf(UnsupportedCharsetException::class, $errors[0]->getException());
 
-        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/invalid-charset", 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/invalid-charset', 'w+');
 
         $parts = $message->getAllParts();
         foreach ($parts as $part) {
@@ -2822,7 +2822,7 @@ class EmailFunctionalTest extends TestCase
         $this->assertCount(1, $errors);
         $this->assertInstanceOf(UnsupportedCharsetException::class, $errors[0]->getException());
 
-        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . "/invalid-charset", 'w+');
+        $tmpSaved = \fopen(\dirname(__DIR__, 2) . '/' . TEST_OUTPUT_DIR . '/invalid-charset', 'w+');
 
         $parts = $message->getAllParts();
         foreach ($parts as $part) {

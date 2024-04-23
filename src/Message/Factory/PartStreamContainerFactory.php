@@ -24,7 +24,7 @@ class PartStreamContainerFactory
     protected StreamFactory $streamFactory;
 
     protected MbWrapper $mbWrapper;
-    
+
     protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets;
 
     public function __construct(

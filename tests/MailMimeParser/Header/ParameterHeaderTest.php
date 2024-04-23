@@ -4,11 +4,11 @@ namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 
 /**
  * Description of ParametersHeaderTest
@@ -23,6 +23,7 @@ class ParameterHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $consumerService;
+
     private $logger;
 
     protected function setUp() : void

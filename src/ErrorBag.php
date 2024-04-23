@@ -102,10 +102,10 @@ abstract class ErrorBag implements IErrorBag
     {
         $arr = \array_values(\array_map(
             function($e) use ($validate, $minPsrLevel) {
-                return $e->getAllErrors($validate, $minPsrLevel) ?? [];
+                return $e->getAllErrors($validate, $minPsrLevel);
             },
             $this->getErrorBagChildren()
-        )) ?? [];
+        ));
         return \array_merge($this->getErrors($validate, $minPsrLevel), ...$arr);
     }
 

@@ -47,7 +47,7 @@ class CommentPart extends ContainerPart
     {
         $partFactory = $this->partFactory;
         return parent::getValueFromParts(\array_map(
-            function ($p) use ($partFactory) {
+            function($p) use ($partFactory) {
                 if ($p instanceof CommentPart) {
                     return $partFactory->newQuotedLiteralPart([$partFactory->newToken('(' . $p->getComment() . ')')]);
                 } elseif ($p instanceof QuotedLiteralPart) {

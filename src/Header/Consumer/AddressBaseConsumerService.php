@@ -47,8 +47,6 @@ class AddressBaseConsumerService extends AbstractConsumerService
      *
      * The start token for AddressBaseConsumerService is part of an
      * {@see AddressPart} (or a sub-consumer) and so must be passed on.
-     *
-     * @return static
      */
     protected function advanceToNextToken(Iterator $tokens, bool $isStartToken) : static
     {

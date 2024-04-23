@@ -3,7 +3,6 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumerService;
@@ -14,15 +13,15 @@ use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartServic
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
-use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
+use ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService;
 
 /**
  * Description of HeaderFactoryTest
@@ -37,6 +36,7 @@ class HeaderFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line
     protected $headerFactory;
+
     private $logger;
 
     protected function setUp() : void
@@ -136,7 +136,7 @@ class HeaderFactoryTest extends TestCase
             ->setConstructorArgs([$this->logger, $mpf])
             ->setMethods()
             ->getMock();
-        
+
         $agcs = $this->getMockBuilder(AddressGroupConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
             ->setMethods()
@@ -155,7 +155,15 @@ class HeaderFactoryTest extends TestCase
             ->getMock();
 
         $this->headerFactory = new HeaderFactory(
-            $this->logger, $mpf, $abcs, $dcs, $gcmlpcs, $idbcs, $pcs, $rcs, $scs
+            $this->logger,
+            $mpf,
+            $abcs,
+            $dcs,
+            $gcmlpcs,
+            $idbcs,
+            $pcs,
+            $rcs,
+            $scs
         );
     }
 

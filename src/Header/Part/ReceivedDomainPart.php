@@ -48,7 +48,7 @@ class ReceivedDomainPart extends ReceivedPart
     protected ?string $address = null;
 
     /**
-     * @param HeaderPart[] $subParts
+     * @param HeaderPart[] $children
      */
     public function __construct(
         LoggerInterface $logger,

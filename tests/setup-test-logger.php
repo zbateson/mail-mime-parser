@@ -1,8 +1,8 @@
 <?php
 
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
 
 function mmpGetAndClearTestHandler() : TestHandler {
@@ -22,7 +22,7 @@ function mmpGetTestLogger() : Logger {
         $logger->pushProcessor(new PsrLogMessageProcessor(removeUsedContextFields: true));
         @\unlink(__DIR__ . '/' . TEST_LOG_FILE);
         $logger->pushHandler(new StreamHandler(__DIR__ . '/' . TEST_LOG_FILE, 'debug'));
-        $logger->pushHandler(mmpGetAndClearTestHandler());
+        $logger->pushHandler(\mmpGetAndClearTestHandler());
     }
     return $logger;
 }
