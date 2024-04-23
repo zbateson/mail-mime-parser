@@ -100,7 +100,7 @@
     ReceivedPart
 
         <span class="phpdocumentor-element__extends">
-        extends <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>
+        extends <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\NameValuePart">NameValuePart</abbr></a>
     </span>
     
             <div class="phpdocumentor-element__package">
@@ -116,7 +116,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ReceivedPart.php"><a href="files/header-part-receivedpart.html"><abbr title="Header/Part/ReceivedPart.php">ReceivedPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -156,29 +156,15 @@ from them.</p>
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#constant_MIME_PART_PATTERN">MIME_PART_PATTERN</a>
-    <span>
-        &nbsp;= &#039;=\\?[^?=]+\\?[QBqb]\\?[^\\?]+\\?=&#039;                            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#constant_MIME_PART_PATTERN_NO_QUOTES">MIME_PART_PATTERN_NO_QUOTES</a>
-    <span>
-        &nbsp;= &#039;=\\?[^\\?=]+\\?[QBqb]\\?[^\\?&quot;]+\\?=&#039;                            </span>
-</dt>
-<dd></dd>
-
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_canIgnoreSpacesAfter">$canIgnoreSpacesAfter</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesAfter">$canIgnoreSpacesAfter</a>
     <span>
                         &nbsp;: bool            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_canIgnoreSpacesBefore">$canIgnoreSpacesBefore</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesBefore">$canIgnoreSpacesBefore</a>
     <span>
                         &nbsp;: bool            </span>
 </dt>
@@ -192,18 +178,18 @@ from them.</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_language">$language</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#property_children">$children</a>
     <span>
-                        &nbsp;: string|null            </span>
+                        &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_languages">$languages</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_isSpace">$isSpace</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
+                        &nbsp;: bool            </span>
 </dt>
-<dd></dd>
+<dd>True if the part is a space token</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_logger">$logger</a>
@@ -213,7 +199,7 @@ from them.</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_name">$name</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#property_name">$name</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
@@ -222,7 +208,7 @@ from them.</p>
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_value">$value</a>
     <span>
-                        &nbsp;: string|null            </span>
+                        &nbsp;: string            </span>
 </dt>
 <dd></dd>
 
@@ -245,8 +231,7 @@ from them.</p>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Constructs a ParameterPart out of a name/value pair.  The name and
-value are both mime-decoded if necessary.</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method___toString">__toString()</a>
@@ -272,6 +257,20 @@ object at or above the passed PSR log level from Psr\Log\LogLevel
 (defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getChildParts">getChildParts()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\IHeaderPart">IHeaderPart</abbr>&gt;    </span>
+</dt>
+<dd>Returns the child parts this container part consists of.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getComments">getComments()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\CommentPart">CommentPart</abbr>&gt;    </span>
+</dt>
+<dd>Returns any CommentParts under this part container.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorLoggingContextName">getErrorLoggingContextName()</a>
     <span>
                                 &nbsp;: string    </span>
@@ -287,34 +286,19 @@ object at or above the passed PSR log level from Psr\Log\LogLevel
 level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getLanguage">getLanguage()</a>
-    <span>
-                                &nbsp;: string|null    </span>
-</dt>
-<dd>Returns the RFC-1766 (or subset) language tag, if the parameter is a
-split RFC-2231 part with a language tag set.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_getLanguageArray">getLanguageArray()</a>
-    <span>
-                                &nbsp;: array&lt;int, array&lt;string, string&gt;&gt;    </span>
-</dt>
-<dd>Returns an array of parts mapped to languages in the header value, for
-instance the string:</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getName">getName()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_getName">getName()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Returns the name of the parameter.</dd>
+<dd>Returns the name of the name/value part.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getValue">getValue()</a>
     <span>
-                                &nbsp;: string|null    </span>
+                                &nbsp;: string    </span>
 </dt>
-<dd>Returns the part&#039;s value.</dd>
+<dd>Returns the part&#039;s representative value after any necessary processing
+has been performed.  For the raw value, call getRawValue().</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasAnyErrors">hasAnyErrors()</a>
@@ -337,31 +321,6 @@ whether an error exists.</dd>
 the passed $minPsrLevel (defaults to ERROR).  If $validate is true,
 additional validation may be performed.</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesAfter">ignoreSpacesAfter()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Returns true if spaces after this part should be ignored.  True is only
-returned for MimeLiterals if the part ends with a mime-encoded string
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesBefore">ignoreSpacesBefore()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Returns true if spaces before this part should be ignored.  True is only
-returned for MimeLiterals if the part begins with a mime-encoded string,
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_addToLanguage">addToLanguage()</a>
-    <span>
-                                &nbsp;: static    </span>
-</dt>
-<dd>Adds the passed part into the languages array with the given language.</dd>
-
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_convertEncoding">convertEncoding()</a>
     <span>
@@ -370,11 +329,11 @@ Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
 <dd>Ensures the encoding of the passed string is set to UTF-8.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeMime">decodeMime()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_filterIgnoredSpaces">filterIgnoredSpaces()</a>
     <span>
-                                &nbsp;: string    </span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;    </span>
 </dt>
-<dd>Finds and replaces mime parts with their values.</dd>
+<dd>Filters out ignorable space tokens.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorBagChildren">getErrorBagChildren()</a>
@@ -384,96 +343,33 @@ Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
 <dd>Return any children ErrorBag objects.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_getNameFromParts">getNameFromParts()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Creates the string &#039;name&#039; representation of this part constructed from
+the child name parts passed to it.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getValueFromParts">getValueFromParts()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Creates the string value representation of this part constructed from the
+child parts passed to it.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_validate">validate()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 <dd>Perform any extra validation and call &#039;addError&#039;.</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeMatchedEntity">decodeMatchedEntity()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>Decodes a matched mime entity part into a string and returns it, after
-adding the string into the languages array.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeSplitPart">decodeSplitPart()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>Decodes a single mime-encoded entity.</dd>
-
         </dl>
 
 
 
         
-    <section class="phpdocumentor-constants">
-        <h3 class="phpdocumentor-elements__header" id="constants">
-            Constants
-            <a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedPart.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
-        </h3>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_MIME_PART_PATTERN">
-        MIME_PART_PATTERN
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#constant_MIME_PART_PATTERN" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">25</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">MIME_PART_PATTERN</span>
-    = <span class="phpdocumentor-signature__default-value">&#039;=\\?[^?=]+\\?[QBqb]\\?[^\\?]+\\?=&#039;</span>
-</code>
-
-
-    
-        <section class="phpdocumentor-description"><p>regex pattern matching a mime-encoded part</p>
-</section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_MIME_PART_PATTERN_NO_QUOTES">
-        MIME_PART_PATTERN_NO_QUOTES
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#constant_MIME_PART_PATTERN_NO_QUOTES" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">30</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">MIME_PART_PATTERN_NO_QUOTES</span>
-    = <span class="phpdocumentor-signature__default-value">&#039;=\\?[^\\?=]+\\?[QBqb]\\?[^\\?&quot;]+\\?=&#039;</span>
-</code>
-
-
-    
-        <section class="phpdocumentor-description"><p>regex pattern used when parsing parameterized headers</p>
-</section>
-
-    
-
-</article>
-            </section>
 
         
     <section class="phpdocumentor-properties">
@@ -490,14 +386,14 @@ adding the string into the languages array.</dd>
 >
     <h4 class="phpdocumentor-element__name" id="property_canIgnoreSpacesAfter">
         $canIgnoreSpacesAfter
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_canIgnoreSpacesAfter" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesAfter" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -524,14 +420,14 @@ adding the string into the languages array.</dd>
 >
     <h4 class="phpdocumentor-element__name" id="property_canIgnoreSpacesBefore">
         $canIgnoreSpacesBefore
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_canIgnoreSpacesBefore" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesBefore" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 
     </aside>
 
@@ -565,7 +461,7 @@ adding the string into the languages array.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -591,28 +487,29 @@ converting strings in HeaderPart::convertEncoding</p>
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_language">
-        $language
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_language" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_children">
+        $children
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#property_children" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ParameterPart.php"><a href="files/header-part-parameterpart.html"><abbr title="Header/Part/ParameterPart.php">ParameterPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ContainerPart.php"><a href="files/header-part-containerpart.html"><abbr title="Header/Part/ContainerPart.php">ContainerPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string|null</span>
-    <span class="phpdocumentor-signature__name">$language</span>
-     = <span class="phpdocumentor-signature__default-value">null</span></code>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__name">$children</span>
+     = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
     
-        <section class="phpdocumentor-description"><p>the RFC-1766 language tag if set.</p>
+        <section class="phpdocumentor-description"><p>parts that were used to create this part, collected for
+proper error reporting and validation.</p>
 </section>
 
     
@@ -625,32 +522,29 @@ converting strings in HeaderPart::convertEncoding</p>
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_languages">
-        $languages
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_languages" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_isSpace">
+        $isSpace
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_isSpace" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">50</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">True if the part is a space token</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
-    <span class="phpdocumentor-signature__name">$languages</span>
-     = <span class="phpdocumentor-signature__default-value">[]</span></code>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$isSpace</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
 
     
-        <section class="phpdocumentor-description"><p>maintains an array mapping rfc1766
-language tags to parts of text in the value.</p>
-<p>Each array element is an array containing two elements, one with key
-'lang', and another with key 'value'.</p>
-</section>
+        <section class="phpdocumentor-description"></section>
 
     
 
@@ -671,7 +565,7 @@ language tags to parts of text in the value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -698,14 +592,14 @@ language tags to parts of text in the value.</p>
 >
     <h4 class="phpdocumentor-element__name" id="property_name">
         $name
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_name" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#property_name" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ParameterPart.php"><a href="files/header-part-parameterpart.html"><abbr title="Header/Part/ParameterPart.php">ParameterPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/NameValuePart.php"><a href="files/header-part-namevaluepart.html"><abbr title="Header/Part/NameValuePart.php">NameValuePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
@@ -717,7 +611,7 @@ language tags to parts of text in the value.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"><p>the name of the parameter</p>
+        <section class="phpdocumentor-description"><p>the name of the part</p>
 </section>
 
     
@@ -739,19 +633,21 @@ language tags to parts of text in the value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string|null</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$value</span>
     </code>
 
     
-        <section class="phpdocumentor-description"><p>the value of the part</p>
+        <section class="phpdocumentor-description"><p>the representative value of the part after any conversion or
+processing has been done on it (e.g. removing new lines, converting,
+whatever else).</p>
 </section>
 
     
@@ -773,7 +669,7 @@ language tags to parts of text in the value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -807,7 +703,7 @@ language tags to parts of text in the value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">34</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
@@ -845,23 +741,26 @@ language tags to parts of text in the value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ReceivedPart.php"><a href="files/header-part-receivedpart.html"><abbr title="Header/Part/ReceivedPart.php">ReceivedPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Constructs a ParameterPart out of a name/value pair.  The name and
-value are both mime-decoded if necessary.</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetConverter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetConverter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"><p>If $language is provided, $name and $value are not mime-decoded. Instead,
-they're taken as literals as part of a SplitParameterToken.</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$charsetConverter</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr></span>
@@ -879,12 +778,11 @@ they're taken as literals as part of a SplitParameterToken.</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -909,7 +807,7 @@ they're taken as literals as part of a SplitParameterToken.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 
     </aside>
 
@@ -944,7 +842,7 @@ they're taken as literals as part of a SplitParameterToken.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
@@ -1004,7 +902,7 @@ they're taken as literals as part of a SplitParameterToken.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">104</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 
     </aside>
 
@@ -1058,6 +956,72 @@ to check for errors.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getChildParts">
+        getChildParts()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getChildParts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ContainerPart.php"><a href="files/header-part-containerpart.html"><abbr title="Header/Part/ContainerPart.php">ContainerPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">106</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the child parts this container part consists of.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getChildParts</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\IHeaderPart">IHeaderPart</abbr>&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\IHeaderPart">IHeaderPart</abbr>&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getComments">
+        getComments()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getComments" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns any CommentParts under this part container.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getComments</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\CommentPart">CommentPart</abbr>&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\CommentPart">CommentPart</abbr>&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getErrorLoggingContextName">
         getErrorLoggingContextName()
         <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorLoggingContextName" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1065,7 +1029,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
@@ -1098,7 +1062,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">82</span>
 
     </aside>
 
@@ -1147,98 +1111,18 @@ object to check for errors.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getLanguage">
-        getLanguage()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getLanguage" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ParameterPart.php"><a href="files/header-part-parameterpart.html"><abbr title="Header/Part/ParameterPart.php">ParameterPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">68</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns the RFC-1766 (or subset) language tag, if the parameter is a
-split RFC-2231 part with a language tag set.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLanguage</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|null</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>the language if set, or null if not</p>
-</section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_getLanguageArray">
-        getLanguageArray()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_getLanguageArray" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">186</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns an array of parts mapped to languages in the header value, for
-instance the string:</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLanguageArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, array&lt;string, string&gt;&gt;</span></code>
-
-        <section class="phpdocumentor-description"><p>'Hello and =?UTF-8<em>fr-be?Q?bonjour_?= =?UTF-8</em>it?Q?mi amici?=. Welcome!'</p>
-<p>Would be mapped in the returned array as follows:</p>
-<pre class="prettyprint"><code class="language-php">[
-    0 =&gt; [ 'lang' =&gt; null, 'value' =&gt; 'Hello and ' ],
-    1 =&gt; [ 'lang' =&gt; 'fr-be', 'value' =&gt; 'bonjour ' ],
-    3 =&gt; [ 'lang' =&gt; 'it', 'value' =&gt; 'mi amici' ],
-    4 =&gt; [ 'lang' =&gt; null, 'value' =&gt; ' Welcome!' ]
-]
-</code></pre>
-</section>
-
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;int, array&lt;string, string&gt;&gt;</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
     <h4 class="phpdocumentor-element__name" id="method_getName">
         getName()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getName" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_getName" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ParameterPart.php"><a href="files/header-part-parameterpart.html"><abbr title="Header/Part/ParameterPart.php">ParameterPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/NameValuePart.php"><a href="files/header-part-namevaluepart.html"><abbr title="Header/Part/NameValuePart.php">NameValuePart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">54</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the name of the parameter.</p>
+        <p class="phpdocumentor-summary">Returns the name of the name/value part.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1267,24 +1151,25 @@ instance the string:</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the part&#039;s value.</p>
+        <p class="phpdocumentor-summary">Returns the part&#039;s representative value after any necessary processing
+has been performed.  For the raw value, call getRawValue().</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getValue</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
+                    <span class="phpdocumentor-signature__name">getValue</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|null</span>
+    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>the value of the part</p>
+            <section class="phpdocumentor-description"><p>The value of the part</p>
 </section>
 
     
@@ -1302,7 +1187,7 @@ instance the string:</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">112</span>
 
     </aside>
 
@@ -1366,7 +1251,7 @@ errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">99</span>
+    <span class="phpdocumentor-element-found-in__line">96</span>
 
     </aside>
 
@@ -1412,128 +1297,6 @@ additional validation may be performed.</p>
                     <article
         class="phpdocumentor-element
             -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_ignoreSpacesAfter">
-        ignoreSpacesAfter()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesAfter" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">79</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns true if spaces after this part should be ignored.  True is only
-returned for MimeLiterals if the part ends with a mime-encoded string
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">ignoreSpacesAfter</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_ignoreSpacesBefore">
-        ignoreSpacesBefore()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesBefore" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">68</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns true if spaces before this part should be ignored.  True is only
-returned for MimeLiterals if the part begins with a mime-encoded string,
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">ignoreSpacesBefore</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_addToLanguage">
-        addToLanguage()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_addToLanguage" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">158</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Adds the passed part into the languages array with the given language.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">addToLanguage</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$language</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$part</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$language</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">static</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
             -protected
                                                         "
 >
@@ -1544,7 +1307,7 @@ Tokens if the Token&#039;s value is a single space, and for CommentParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">93</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 
     </aside>
 
@@ -1603,44 +1366,42 @@ for 'UTF-8'.</p>
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_decodeMime">
-        decodeMime()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeMime" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_filterIgnoredSpaces">
+        filterIgnoredSpaces()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_filterIgnoredSpaces" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ContainerPart.php"><a href="files/header-part-containerpart.html"><abbr title="Header/Part/ContainerPart.php">ContainerPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">76</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Finds and replaces mime parts with their values.</p>
+        <p class="phpdocumentor-summary">Filters out ignorable space tokens.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">decodeMime</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">filterIgnoredSpaces</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span></code>
 
-        <section class="phpdocumentor-description"><p>The method splits the token value into an array on mime-part-patterns,
-either replacing a mime part with its value by calling iconv_mime_decode
-or converts the encoding on the text part by calling convertEncoding.</p>
+        <section class="phpdocumentor-description"><p>Spaces are removed if parts on either side of it have their
+canIgnoreSpaceAfter/canIgnoreSpaceBefore properties set to true.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$parts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -1658,7 +1419,7 @@ or converts the encoding on the text part by calling convertEncoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
@@ -1684,6 +1445,97 @@ or converts the encoding on the text part by calling convertEncoding.</p>
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getNameFromParts">
+        getNameFromParts()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_getNameFromParts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/NameValuePart.php"><a href="files/header-part-namevaluepart.html"><abbr title="Header/Part/NameValuePart.php">NameValuePart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">46</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Creates the string &#039;name&#039; representation of this part constructed from
+the child name parts passed to it.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">getNameFromParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderParts">HeaderParts</abbr>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$parts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderParts">HeaderParts</abbr>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getValueFromParts">
+        getValueFromParts()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getValueFromParts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/ContainerPart.php"><a href="files/header-part-containerpart.html"><abbr title="Header/Part/ContainerPart.php">ContainerPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">96</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Creates the string value representation of this part constructed from the
+child parts passed to it.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">getValueFromParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderParts">HeaderParts</abbr>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"><p>The default implementation filters out ignorable whitespace between
+parts, and concatenates parts calling 'getValue'.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$parts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderParts">HeaderParts</abbr>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_validate">
         validate()
         <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_validate" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1691,7 +1543,7 @@ or converts the encoding on the text part by calling convertEncoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
     </aside>
 
@@ -1711,100 +1563,6 @@ getAllErrors.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_decodeMatchedEntity">
-        decodeMatchedEntity()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeMatchedEntity" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">96</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Decodes a matched mime entity part into a string and returns it, after
-adding the string into the languages array.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">decodeMatchedEntity</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$matches</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$matches</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, string&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_decodeSplitPart">
-        decodeSplitPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeSplitPart" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/MimeLiteralPart.php"><a href="files/header-part-mimeliteralpart.html"><abbr title="Header/Part/MimeLiteralPart.php">MimeLiteralPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">121</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Decodes a single mime-encoded entity.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">decodeSplitPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-        <section class="phpdocumentor-description"><p>Unfortunately, mb_decode_header fails for many charsets on PHP 5.4 and
-PHP 5.5 (even if they're listed as supported).  iconv_mime_decode doesn't
-support all charsets.</p>
-<p>Parsing out the charset and body of the encoded entity seems to be the
-way to go to support the most charsets.</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$entity</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
         
     

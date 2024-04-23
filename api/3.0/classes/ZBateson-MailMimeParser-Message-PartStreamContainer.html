@@ -98,6 +98,9 @@
         <h2 class="phpdocumentor-content__title">
     PartStreamContainer
 
+        <span class="phpdocumentor-element__extends">
+        extends <a href="classes/ZBateson-MailMimeParser-ErrorBag.html"><abbr title="\ZBateson\MailMimeParser\ErrorBag">ErrorBag</abbr></a>
+    </span>
     
             <div class="phpdocumentor-element__package">
             in package
@@ -112,7 +115,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -185,9 +188,23 @@ it in ZBateson\StreamDecorators\SeekingLimitStream objects for each part.</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_logger">$logger</a>
+    <span>
+                        &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_mbWrapper">$mbWrapper</a>
+    <span>
+                        &nbsp;: <abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_stream">$stream</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>            </span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>            </span>
 </dt>
 <dd></dd>
 
@@ -195,6 +212,13 @@ it in ZBateson\StreamDecorators\SeekingLimitStream objects for each part.</p>
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_streamFactory">$streamFactory</a>
     <span>
                         &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets">$throwExceptionReadingPartContentFromUnsupportedCharsets</a>
+    <span>
+                        &nbsp;: bool            </span>
 </dt>
 <dd></dd>
 
@@ -212,6 +236,20 @@ it in ZBateson\StreamDecorators\SeekingLimitStream objects for each part.</p>
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_errors">$errors</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_validated">$validated</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method___construct">__construct()</a>
     <span>
@@ -220,9 +258,25 @@ it in ZBateson\StreamDecorators\SeekingLimitStream objects for each part.</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_addError">addError()</a>
+    <span>
+                                &nbsp;: static    </span>
+</dt>
+<dd>Creates and adds an Error object to this ErrorBag.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getAllErrors">getAllErrors()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
+</dt>
+<dd>Returns any errors on this object, and all IErrorBag children of this
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getBinaryContentStream">getBinaryContentStream()</a>
     <span>
-                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>|null    </span>
 </dt>
 <dd>Checks what transfer-encoding decoder stream is attached on the
 underlying stream, and resets it if the requested arguments differ.</dd>
@@ -230,19 +284,46 @@ underlying stream, and resets it if the requested arguments differ.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getContentStream">getContentStream()</a>
     <span>
-                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>|null    </span>
 </dt>
 <dd>Checks what transfer-encoding decoder stream and charset conversion
 stream are currently attached on the underlying contentStream, and resets
 them if the requested arguments differ from the currently assigned ones.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorLoggingContextName">getErrorLoggingContextName()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Returns the class name.  Override to identify objects in logs.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrors">getErrors()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;    </span>
+</dt>
+<dd>Returns any local errors this object has at or above the passed PSR log
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getStream">getStream()</a>
     <span>
-                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>    </span>
 </dt>
 <dd>Returns the part&#039;s stream containing the part&#039;s headers, content, and
 children.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasAnyErrors">hasAnyErrors()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Returns true if there are errors on this object, or any IErrorBag child
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_hasContent">hasContent()</a>
@@ -250,6 +331,15 @@ children.</dd>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Returns true if there&#039;s a content stream associated with the part.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasErrors">hasErrors()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Returns true if this object has an error in its error bag at or above
+the passed $minPsrLevel (defaults to ERROR).  If $validate is true,
+additional validation may be performed.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_reset">reset()</a>
@@ -289,6 +379,20 @@ the passed arguments.</dd>
 </dt>
 <dd>Attaches a decoding filter to the attached content handle, for the passed
 $transferEncoding.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getErrorBagChildren">getErrorBagChildren()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;    </span>
+</dt>
+<dd>Return any children ErrorBag objects.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_validate">validate()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Perform any extra validation and call &#039;addError&#039;.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_isCharsetFilterChanged">isCharsetFilterChanged()</a>
@@ -342,7 +446,7 @@ on the current handle is different from the one passed as an argument.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">76</span>
 
     </aside>
 
@@ -376,7 +480,7 @@ on the current handle is different from the one passed as an argument.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">65</span>
 
     </aside>
 
@@ -410,7 +514,7 @@ on the current handle is different from the one passed as an argument.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">71</span>
 
     </aside>
 
@@ -445,7 +549,7 @@ streams to $contentStream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">82</span>
 
     </aside>
 
@@ -471,6 +575,74 @@ destroyed.</p>
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_logger">
+        $logger
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">21</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+    <span class="phpdocumentor-signature__name">$logger</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_mbWrapper">
+        $mbWrapper
+        <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_mbWrapper" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">40</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr></span>
+    <span class="phpdocumentor-signature__name">$mbWrapper</span>
+    </code>
+
+    
+        <section class="phpdocumentor-description"><p>to test charsets and see if they're supported.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_stream">
         $stream
         <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_stream" class="headerlink"><i class="fas fa-link"></i></a>
@@ -480,20 +652,20 @@ destroyed.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a></span>
     <span class="phpdocumentor-signature__name">$stream</span>
     </code>
 
     
-        <section class="phpdocumentor-description"><p>stream containing the part's headers, content and
-children</p>
+        <section class="phpdocumentor-description"><p>stream containing the part's headers,
+content and children wrapped in a MessagePartStreamDecorator</p>
 </section>
 
     
@@ -515,7 +687,7 @@ children</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">54</span>
 
     </aside>
 
@@ -538,6 +710,43 @@ attached StreamInterface based on encoding.</p>
         class="
             phpdocumentor-element
             -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_throwExceptionReadingPartContentFromUnsupportedCharsets">
+        $throwExceptionReadingPartContentFromUnsupportedCharsets
+        <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">48</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$throwExceptionReadingPartContentFromUnsupportedCharsets</span>
+    </code>
+
+    
+        <section class="phpdocumentor-description"><p>if false, reading from a content stream with an unsupported
+charset will be tried with the default charset, otherwise the stream
+created with the unsupported charset, and an exception will be
+thrown when read from.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
             -private
                                                         "
 >
@@ -550,7 +759,7 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">76</span>
+    <span class="phpdocumentor-element-found-in__line">95</span>
 
     </aside>
 
@@ -584,7 +793,7 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 
     </aside>
 
@@ -597,6 +806,74 @@ attached StreamInterface based on encoding.</p>
 
     
         <section class="phpdocumentor-description"><p>map of the active encoding filter on the current handle.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_errors">
+        $errors
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_errors" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">26</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$errors</span>
+     = <span class="phpdocumentor-signature__default-value">[]</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>array of Error objects belonging to this object.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_validated">
+        $validated
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_validated" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">31</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$validated</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>true once the object has been validated.</p>
 </section>
 
     
@@ -622,22 +899,46 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$streamFactory</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$streamFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mbWrapper</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$throwExceptionReadingPartContentFromUnsupportedCharsets</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$streamFactory</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$mbWrapper</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$throwExceptionReadingPartContentFromUnsupportedCharsets</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -659,6 +960,127 @@ attached StreamInterface based on encoding.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_addError">
+        addError()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_addError" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">66</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Creates and adds an Error object to this ErrorBag.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">addError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$psrLogLevel</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$psrLogLevel</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$exception</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">static</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getAllErrors">
+        getAllErrors()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getAllErrors" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">101</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns any errors on this object, and all IErrorBag children of this
+object at or above the passed PSR log level from Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getAllErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>Care should be taken using this if the intention is to only 'preview' a
+message without parsing it entirely, since this will cause the whole
+message to be parsed as it traverses children, and could be slow on
+messages with large attachments, etc...</p>
+<p>If $validate is true, additional validation may be performed on children
+to check for errors.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$validate</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getBinaryContentStream">
         getBinaryContentStream()
         <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getBinaryContentStream" class="headerlink"><i class="fas fa-link"></i></a>
@@ -666,7 +1088,7 @@ attached StreamInterface based on encoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">281</span>
+    <span class="phpdocumentor-element-found-in__line">317</span>
 
     </aside>
 
@@ -675,11 +1097,19 @@ underlying stream, and resets it if the requested arguments differ.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getBinaryContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getBinaryContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>|null</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$part</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$transferEncoding</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
@@ -693,7 +1123,7 @@ underlying stream, and resets it if the requested arguments differ.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>|null</span>
             &mdash;
         
     
@@ -711,7 +1141,7 @@ underlying stream, and resets it if the requested arguments differ.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">254</span>
+    <span class="phpdocumentor-element-found-in__line">283</span>
 
     </aside>
 
@@ -721,11 +1151,20 @@ them if the requested arguments differ from the currently assigned ones.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getContentStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$transferEncoding</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fromCharset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$toCharset</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>|null</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$part</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>the part the stream belongs to</p>
+</section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$transferEncoding</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
@@ -758,7 +1197,96 @@ them if the requested arguments differ from the currently assigned ones.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>|null</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getErrorLoggingContextName">
+        getErrorLoggingContextName()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorLoggingContextName" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">42</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the class name.  Override to identify objects in logs.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getErrorLoggingContextName</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getErrors">
+        getErrors()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrors" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">82</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns any local errors this object has at or above the passed PSR log
+level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>If $validate is true, additional validation may be performed on the
+object to check for errors.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$validate</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Error.html"><abbr title="\ZBateson\MailMimeParser\Error">Error</abbr></a>&gt;</span>
             &mdash;
         
     
@@ -776,7 +1304,7 @@ them if the requested arguments differ from the currently assigned ones.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">102</span>
+    <span class="phpdocumentor-element-found-in__line">127</span>
 
     </aside>
 
@@ -785,14 +1313,78 @@ children.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
+                    <span class="phpdocumentor-signature__name">getStream</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a></span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_hasAnyErrors">
+        hasAnyErrors()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasAnyErrors" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">112</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns true if there are errors on this object, or any IErrorBag child
+of this object at or above the passed PSR log level in Psr\Log\LogLevel
+(defaulting to LogLevel::ERROR).  Note that this will stop after finding
+the first error and return, so may be slightly more performant if an
+error actually exists over calling getAllErrors if only interested in
+whether an error exists.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">hasAnyErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"><p>Care should be taken using this if the intention is to only 'preview' a
+message without parsing it entirely, since this will cause the whole
+message to be parsed as it traverses children, and could be slow on
+messages with large attachments, etc...</p>
+<p>If $validate is true, additional validation may be performed to check for
+errors.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$validate</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
             &mdash;
         
     
@@ -810,7 +1402,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">114</span>
+    <span class="phpdocumentor-element-found-in__line">138</span>
 
     </aside>
 
@@ -836,6 +1428,62 @@ children.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_hasErrors">
+        hasErrors()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasErrors" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">96</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns true if this object has an error in its error bag at or above
+the passed $minPsrLevel (defaults to ERROR).  If $validate is true,
+additional validation may be performed.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">hasErrors</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$validate</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$minPsrLevel</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"><p>The PSR levels are defined in Psr\Log\LogLevel.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$validate</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$minPsrLevel</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">LogLevel::ERROR</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_reset">
         reset()
         <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_reset" class="headerlink"><i class="fas fa-link"></i></a>
@@ -843,7 +1491,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">228</span>
+    <span class="phpdocumentor-element-found-in__line">256</span>
 
     </aside>
 
@@ -876,7 +1524,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">133</span>
+    <span class="phpdocumentor-element-found-in__line">157</span>
 
     </aside>
 
@@ -929,7 +1577,7 @@ does not contain any content.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">92</span>
+    <span class="phpdocumentor-element-found-in__line">117</span>
 
     </aside>
 
@@ -938,14 +1586,14 @@ children.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
+                    <span class="phpdocumentor-signature__name">setStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$stream</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -974,7 +1622,7 @@ children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">196</span>
+    <span class="phpdocumentor-element-found-in__line">209</span>
 
     </aside>
 
@@ -1029,7 +1677,7 @@ the passed arguments.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">166</span>
+    <span class="phpdocumentor-element-found-in__line">190</span>
 
     </aside>
 
@@ -1064,6 +1712,76 @@ $transferEncoding.</p>
                     <article
         class="phpdocumentor-element
             -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getErrorBagChildren">
+        getErrorBagChildren()
+        <a href="classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getErrorBagChildren" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">331</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Return any children ErrorBag objects.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">getErrorBagChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-IErrorBag.html"><abbr title="\ZBateson\MailMimeParser\IErrorBag">IErrorBag</abbr></a>&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_validate">
+        validate()
+        <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_validate" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">61</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Perform any extra validation and call &#039;addError&#039;.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">validate</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"><p>getErrors and getAllErrors call validate() if their $validate parameter
+is true.  validate() is only called once on an object with getErrors
+getAllErrors.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
             -private
                                                         "
 >
@@ -1074,7 +1792,7 @@ $transferEncoding.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">156</span>
+    <span class="phpdocumentor-element-found-in__line">180</span>
 
     </aside>
 
@@ -1128,7 +1846,7 @@ arguments.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">145</span>
+    <span class="phpdocumentor-element-found-in__line">169</span>
 
     </aside>
 
@@ -1173,7 +1891,7 @@ on the current handle is different from the one passed as an argument.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartStreamContainer.php"><a href="files/message-partstreamcontainer.html"><abbr title="Message/PartStreamContainer.php">PartStreamContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">213</span>
+    <span class="phpdocumentor-element-found-in__line">241</span>
 
     </aside>
 

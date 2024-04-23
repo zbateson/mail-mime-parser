@@ -116,7 +116,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Factory/IUUEncodedPartFactory.php"><a href="files/message-factory-iuuencodedpartfactory.html"><abbr title="Message/Factory/IUUEncodedPartFactory.php">IUUEncodedPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">18</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -152,6 +152,13 @@
 
 <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Message-Factory-IMessagePartFactory.html#property_logger">$logger</a>
+    <span>
+                        &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Message-Factory-IMessagePartFactory.html#property_partStreamContainerFactory">$partStreamContainerFactory</a>
     <span>
                         &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory">PartStreamContainerFactory</abbr></a>            </span>
@@ -198,6 +205,40 @@
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_logger">
+        $logger
+        <a href="classes/ZBateson-MailMimeParser-Message-Factory-IMessagePartFactory.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/Factory/IMessagePartFactory.php"><a href="files/message-factory-imessagepartfactory.html"><abbr title="Message/Factory/IMessagePartFactory.php">IMessagePartFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">22</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+    <span class="phpdocumentor-signature__name">$logger</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_partStreamContainerFactory">
         $partStreamContainerFactory
         <a href="classes/ZBateson-MailMimeParser-Message-Factory-IMessagePartFactory.html#property_partStreamContainerFactory" class="headerlink"><i class="fas fa-link"></i></a>
@@ -207,7 +248,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Factory/IMessagePartFactory.php"><a href="files/message-factory-imessagepartfactory.html"><abbr title="Message/Factory/IMessagePartFactory.php">IMessagePartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -241,7 +282,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Factory/IMessagePartFactory.php"><a href="files/message-factory-imessagepartfactory.html"><abbr title="Message/Factory/IMessagePartFactory.php">IMessagePartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">24</span>
 
     </aside>
 
@@ -279,19 +320,27 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Factory/IMessagePartFactory.php"><a href="files/message-factory-imessagepartfactory.html"><abbr title="Message/Factory/IMessagePartFactory.php">IMessagePartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$streamFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory">PartStreamContainerFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partStreamContainerFactory</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$streamFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory">PartStreamContainerFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partStreamContainerFactory</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$streamFactory</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a></span>
@@ -331,7 +380,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Factory/IUUEncodedPartFactory.php"><a href="files/message-factory-iuuencodedpartfactory.html"><abbr title="Message/Factory/IUUEncodedPartFactory.php">IUUEncodedPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">24</span>
 
     </aside>
 
@@ -339,10 +388,21 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newInstance</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IUUEncodedPart.html"><abbr title="\ZBateson\MailMimeParser\Message\IUUEncodedPart">IUUEncodedPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newInstance</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parent</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-IUUEncodedPart.html"><abbr title="\ZBateson\MailMimeParser\Message\IUUEncodedPart">IUUEncodedPart</abbr></a></span></code>
 
     
-    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$parent</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMimePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMimePart">IMimePart</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>

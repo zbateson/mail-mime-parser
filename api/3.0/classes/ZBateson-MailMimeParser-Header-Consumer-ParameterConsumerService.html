@@ -100,7 +100,7 @@
     ParameterConsumerService
 
         <span class="phpdocumentor-element__extends">
-        extends <a href="classes/ZBateson-MailMimeParser-Header-Consumer-GenericConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\GenericConsumerService">GenericConsumerService</abbr></a>
+        extends <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService">AbstractGenericConsumerService</abbr></a>
     </span>
     
             <div class="phpdocumentor-element__package">
@@ -111,12 +111,15 @@
         </div>
     
     
+            <span class="phpdocumentor-element__extends">
+            Uses
+                            <a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartTokenSplitPatternTrait.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartTokenSplitPatternTrait">QuotedStringMimeLiteralPartTokenSplitPatternTrait</abbr></a>                    </span>
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
@@ -125,8 +128,11 @@ and subsequent name/value pairs - for example text/html; charset=utf-8.</p>
 
     <section class="phpdocumentor-description"><p>A ParameterConsumerService's parts are separated by a semi-colon.  Its
 name/value pairs are separated with an '=' character.</p>
-<p>Parts may be mime-encoded entities.  Additionally, a value can be quoted and
-comments may exist.</p>
+<p>Parts may be mime-encoded entities, or RFC-2231 split/encoded parts.
+Additionally, a value can be quoted and comments may exist.</p>
+<p>Actual processing of parameters is done in ParameterNameValueConsumerService,
+with ParameterConsumerService processing all collected parts into split
+parameter parts as necessary.</p>
 </section>
 
 
@@ -186,7 +192,7 @@ comments may exist.</p>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method___construct">__construct()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
@@ -200,19 +206,11 @@ comments may exist.</p>
 <dd>Invokes parsing of a header&#039;s value into header parts.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_advanceToNextToken">advanceToNextToken()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_advanceToNextToken">advanceToNextToken()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a>    </span>
+                                &nbsp;: static    </span>
 </dt>
-<dd>Determines if the iterator should be advanced to the next token after
-reading tokens or finding a start token.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_filterIgnoredSpaces">filterIgnoredSpaces()</a>
-    <span>
-                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;    </span>
-</dt>
-<dd>Filters out ignorable spaces between parts in the passed array.</dd>
+<dd>Disables advancing for start tokens.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getAllConsumers">getAllConsumers()</a>
@@ -239,13 +237,11 @@ token triggers a sub-consumer&#039;s start token and passes control onto that
 sub-consumer&#039;s parseTokenIntoParts().</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getPartForToken">getPartForToken()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getPartForToken">getPartForToken()</a>
     <span>
                                 &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>|null    </span>
 </dt>
-<dd>Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
-the passed string token and returns it, unless the token is an escaped
-literal, in which case a LiteralPart is returned.</dd>
+<dd>Constructs and returns an IHeaderPart for the passed string token.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getTokenParts">getTokenParts()</a>
@@ -255,19 +251,19 @@ literal, in which case a LiteralPart is returned.</dd>
 <dd>Returns an array of IHeaderPart for the current token on the iterator.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getTokenSeparators">getTokenSeparators()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getTokenSeparators">getTokenSeparators()</a>
     <span>
                                 &nbsp;: array&lt;string|int, string&gt;    </span>
 </dt>
-<dd>Returns semi-colon and equals char as token separators.</dd>
+<dd>Returns an array of regular expression separators specific to this
+consumer.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getTokenSplitPattern">getTokenSplitPattern()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getTokenSplitPattern">getTokenSplitPattern()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Overridden to use a specialized regex for finding mime-encoded parts
-(RFC 2047).</dd>
+<dd>Returns a regex pattern used to split the input header string.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_isEndToken">isEndToken()</a>
@@ -298,8 +294,9 @@ IHeaderPart objects.</dd>
     <span>
                                 &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;    </span>
 </dt>
-<dd>Post processing involves creating Part\LiteralPart or Part\ParameterPart
-objects out of created Token and LiteralParts.</dd>
+<dd>Post processing involves looking for split parameter parts with matching
+names and combining them into a SplitParameterPart, and otherwise
+returning ParameterParts from ParameterNameValueConsumer as-is.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_splitRawValue">splitRawValue()</a>
@@ -309,76 +306,11 @@ objects out of created Token and LiteralParts.</dd>
 <dd>Returns an array of split tokens from the input string.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_addSpaces">addSpaces()</a>
-    <span>
-                                &nbsp;: static    </span>
-</dt>
-<dd>Checks if the passed space part should be added to the returned parts and
-adds it.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_addSpaceToRetParts">addSpaceToRetParts()</a>
-    <span>
-                                &nbsp;: static    </span>
-</dt>
-<dd>Loops over the $parts array from the current position, checks if the
-space should be added, then adds it to $retParts and returns.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_addToSplitPart">addToSplitPart()</a>
-    <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterToken">SplitParameterToken</abbr></a>|null    </span>
-</dt>
-<dd>Adds the passed parameter with the given name and value to a
-SplitParameterToken, at the passed index. If one with the given name
-doesn&#039;t exist, it is created.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_finalizeParameterParts">finalizeParameterParts()</a>
-    <span>
-                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;    </span>
-</dt>
-<dd>Loops over parts in the passed array, creating ParameterParts out of any
-parsed SplitParameterTokens, replacing them in the array.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getPartFor">getPartFor()</a>
-    <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>|null    </span>
-</dt>
-<dd>Instantiates and returns either a MimeLiteralPart if $strName is empty,
-a SplitParameterToken if the parameter is a split parameter and is the
-first in a series, null if it&#039;s a split parameter but is not the first
-part in its series, or a ParameterPart is returned otherwise.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_isSpaceToken">isSpaceToken()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Returns true if the passed HeaderPart is a Token instance and a space.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_parseRawValue">parseRawValue()</a>
     <span>
                                 &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;    </span>
 </dt>
 <dd>Parses the raw header value into header parts.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_processTokenPart">processTokenPart()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Handles parameter separator tokens during final processing.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_shouldAddSpace">shouldAddSpace()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Returns true if a space should be added based on the passed last and next
-parts.</dd>
 
         </dl>
 
@@ -408,7 +340,7 @@ parts.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
@@ -442,7 +374,7 @@ parts.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -476,7 +408,7 @@ parts.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">39</span>
 
     </aside>
 
@@ -511,7 +443,7 @@ consumer if any, or an empty array if none exist.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -545,23 +477,32 @@ need to be regenerated every time.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partFactory</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$subConsumers</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService">ParameterNameValueConsumerService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parameterNameValueConsumerService</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService">CommentConsumerService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$commentConsumerService</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService">QuotedStringConsumerService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$quotedStringConsumerService</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$partFactory</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a></span>
@@ -571,11 +512,28 @@ need to be regenerated every time.</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$subConsumers</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a>&gt;</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+                <span class="phpdocumentor-signature__argument__name">$parameterNameValueConsumerService</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService">ParameterNameValueConsumerService</abbr></a></span>
+                            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$commentConsumerService</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService">CommentConsumerService</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$quotedStringConsumerService</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService">QuotedStringConsumerService</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -600,7 +558,7 @@ need to be regenerated every time.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
 
     </aside>
 
@@ -643,27 +601,22 @@ parts</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_advanceToNextToken">
         advanceToNextToken()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_advanceToNextToken" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_advanceToNextToken" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">286</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Determines if the iterator should be advanced to the next token after
-reading tokens or finding a start token.</p>
+        <p class="phpdocumentor-summary">Disables advancing for start tokens.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">advanceToNextToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokens</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isStartToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">advanceToNextToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokens</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isStartToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
-        <section class="phpdocumentor-description"><p>The default implementation will advance for a start token, but not
-advance on the end token of the current consumer, allowing the end token
-to be passed up to a higher-level consumer.</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -671,8 +624,7 @@ to be passed up to a higher-level consumer.</p>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The token iterator.</p>
-</section>
+                    <section class="phpdocumentor-description"></section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
@@ -680,8 +632,7 @@ to be passed up to a higher-level consumer.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>true for the start token.</p>
-</section>
+                    <section class="phpdocumentor-description"></section>
 
             </dd>
             </dl>
@@ -689,55 +640,7 @@ to be passed up to a higher-level consumer.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a></span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_filterIgnoredSpaces">
-        filterIgnoredSpaces()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_filterIgnoredSpaces" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractGenericConsumerService.php"><a href="files/header-consumer-abstractgenericconsumerservice.html"><abbr title="Header/Consumer/AbstractGenericConsumerService.php">AbstractGenericConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">125</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Filters out ignorable spaces between parts in the passed array.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">filterIgnoredSpaces</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span></code>
-
-        <section class="phpdocumentor-description"><p>Spaces with parts on either side of it that specify they can be ignored
-are filtered out.  filterIgnoredSpaces is called from within
-processParts, and if needed by an implementing class that overrides
-processParts, must be specifically called.</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$parts</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -755,7 +658,7 @@ processParts, must be specifically called.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
@@ -793,7 +696,7 @@ all unique consumers, and returns them in an array.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">133</span>
+    <span class="phpdocumentor-element-found-in__line">130</span>
 
     </aside>
 
@@ -829,7 +732,7 @@ sub-consumers by calling getTokenSeparators().</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">239</span>
+    <span class="phpdocumentor-element-found-in__line">234</span>
 
     </aside>
 
@@ -873,24 +776,26 @@ array.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getPartForToken">
         getPartForToken()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getPartForToken" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getPartForToken" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Creates and returns a \ZBateson\MailMimeParser\Header\Part\Token out of
-the passed string token and returns it, unless the token is an escaped
-literal, in which case a LiteralPart is returned.</p>
+        <p class="phpdocumentor-summary">Constructs and returns an IHeaderPart for the passed string token.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">getPartForToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$token</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isLiteral</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>|null</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>If the token should be ignored, the function must return null.</p>
+<p>The default created part uses the instance's partFactory-&gt;newInstance
+method.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -898,7 +803,8 @@ literal, in which case a LiteralPart is returned.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
+                    <section class="phpdocumentor-description"><p>the token</p>
+</section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
@@ -906,7 +812,9 @@ literal, in which case a LiteralPart is returned.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
+                    <section class="phpdocumentor-description"><p>set to true if the token represents a literal -
+e.g. an escaped token</p>
+</section>
 
             </dd>
             </dl>
@@ -916,7 +824,10 @@ literal, in which case a LiteralPart is returned.</p>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>|null</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>The constructed header part or null if the token
+should be ignored.</p>
+</section>
+
     
 </article>
                     <article
@@ -932,7 +843,7 @@ literal, in which case a LiteralPart is returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">266</span>
+    <span class="phpdocumentor-element-found-in__line">262</span>
 
     </aside>
 
@@ -972,33 +883,42 @@ is called.</p>
         class="phpdocumentor-element
             -method
             -protected
-                                                        "
+                        -abstract                                "
 >
     <h4 class="phpdocumentor-element__name" id="method_getTokenSeparators">
         getTokenSeparators()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getTokenSeparators" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getTokenSeparators" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">122</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns semi-colon and equals char as token separators.</p>
+        <p class="phpdocumentor-summary">Returns an array of regular expression separators specific to this
+consumer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">getTokenSeparators</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
+    <span class="phpdocumentor-signature__abstract">abstract</span>                <span class="phpdocumentor-signature__name">getTokenSeparators</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>The returned patterns are used to split the header value into tokens for
+the consumer to parse into parts.</p>
+<p>Each array element makes part of a generated regular expression that is
+used in a call to preg_split().  RegEx patterns can be used, and care
+should be taken to escape special characters.</p>
+</section>
+
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>Array of regex patterns.</p>
+</section>
+
     
 </article>
                     <article
@@ -1009,26 +929,24 @@ is called.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getTokenSplitPattern">
         getTokenSplitPattern()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getTokenSplitPattern" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getTokenSplitPattern" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">149</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Overridden to use a specialized regex for finding mime-encoded parts
-(RFC 2047).</p>
+        <p class="phpdocumentor-summary">Returns a regex pattern used to split the input header string.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">getTokenSplitPattern</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"><p>Some implementations seem to place mime-encoded parts within quoted
-parameters, and split the mime-encoded parts across multiple split
-parameters.  The specialized regex doesn't allow double quotes inside a
-mime encoded part, so it can be &quot;continued&quot; in another parameter.</p>
+        <section class="phpdocumentor-description"><p>The default implementation calls
+<a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_getAllTokenSeparators"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService::getAllTokenSeparators()">AbstractConsumerService::getAllTokenSeparators()</abbr></a> and implodes the
+returned array with the regex OR '|' character as its glue.</p>
 </section>
 
     
@@ -1055,7 +973,7 @@ mime encoded part, so it can be &quot;continued&quot; in another parameter.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">200</span>
+    <span class="phpdocumentor-element-found-in__line">197</span>
 
     </aside>
 
@@ -1101,7 +1019,7 @@ current consumer.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">192</span>
+    <span class="phpdocumentor-element-found-in__line">189</span>
 
     </aside>
 
@@ -1147,7 +1065,7 @@ the current consumer.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">314</span>
+    <span class="phpdocumentor-element-found-in__line">311</span>
 
     </aside>
 
@@ -1165,7 +1083,7 @@ processing.</p>
 and its returned parts are merged to the current consumer's header parts.</p>
 <p>After all tokens are read and an array of Header\Parts are constructed,
 the array is passed to <abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService::processParts">AbstractConsumerService::processParts</abbr> for
-any final processing.</p>
+any final processing if there are any parts.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1204,12 +1122,13 @@ any final processing.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">173</span>
+    <span class="phpdocumentor-element-found-in__line">70</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Post processing involves creating Part\LiteralPart or Part\ParameterPart
-objects out of created Token and LiteralParts.</p>
+        <p class="phpdocumentor-summary">Post processing involves looking for split parameter parts with matching
+names and combining them into a SplitParameterPart, and otherwise
+returning ParameterParts from ParameterNameValueConsumer as-is.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
@@ -1252,7 +1171,7 @@ objects out of created Token and LiteralParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">166</span>
 
     </aside>
 
@@ -1296,387 +1215,6 @@ will not contain any empty parts and will contain the markers.</p>
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_addSpaces">
-        addSpaces()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_addSpaces" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractGenericConsumerService.php"><a href="files/header-consumer-abstractgenericconsumerservice.html"><abbr title="Header/Consumer/AbstractGenericConsumerService.php">AbstractGenericConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">96</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Checks if the passed space part should be added to the returned parts and
-adds it.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">addSpaces</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$retParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$curIndex</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$spacePart</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
-
-        <section class="phpdocumentor-description"><p>Never adds a space if it's the first part, otherwise only add it if
-either part isn't set to ignore the space</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$parts</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$retParts</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$curIndex</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$spacePart</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">static</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_addSpaceToRetParts">
-        addSpaceToRetParts()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_addSpaceToRetParts" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractGenericConsumerService.php"><a href="files/header-consumer-abstractgenericconsumerservice.html"><abbr title="Header/Consumer/AbstractGenericConsumerService.php">AbstractGenericConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">76</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Loops over the $parts array from the current position, checks if the
-space should be added, then adds it to $retParts and returns.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">addSpaceToRetParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$retParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$curIndex</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$spacePart</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$lastPart</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$parts</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$retParts</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$curIndex</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$spacePart</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$lastPart</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">static</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_addToSplitPart">
-        addToSplitPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_addToSplitPart" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">77</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Adds the passed parameter with the given name and value to a
-SplitParameterToken, at the passed index. If one with the given name
-doesn&#039;t exist, it is created.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">addToSplitPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$splitParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isEncoded</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterToken">SplitParameterToken</abbr></a>|null</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$splitParts</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$index</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$isEncoded</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterToken">SplitParameterToken</abbr></a>|null</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_finalizeParameterParts">
-        finalizeParameterParts()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_finalizeParameterParts" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">152</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Loops over parts in the passed array, creating ParameterParts out of any
-parsed SplitParameterTokens, replacing them in the array.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">finalizeParameterParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$combined</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span></code>
-
-        <section class="phpdocumentor-description"><p>The method then calls filterIgnoreSpaces to filter out empty elements in
-the combined array and returns an array.</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$combined</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_getPartFor">
-        getPartFor()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getPartFor" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">102</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Instantiates and returns either a MimeLiteralPart if $strName is empty,
-a SplitParameterToken if the parameter is a split parameter and is the
-first in a series, null if it&#039;s a split parameter but is not the first
-part in its series, or a ParameterPart is returned otherwise.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">getPartFor</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$strName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$strValue</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$splitParts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>|null</span></code>
-
-        <section class="phpdocumentor-description"><p>If the part is a SplitParameterToken, it's added to the passed
-$splitParts as well with its name as a key.</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$strName</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$strValue</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$splitParts</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>|null</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_isSpaceToken">
-        isSpaceToken()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_isSpaceToken" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractGenericConsumerService.php"><a href="files/header-consumer-abstractgenericconsumerservice.html"><abbr title="Header/Consumer/AbstractGenericConsumerService.php">AbstractGenericConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">109</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns true if the passed HeaderPart is a Token instance and a space.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">isSpaceToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$part</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
     <h4 class="phpdocumentor-element__name" id="method_parseRawValue">
         parseRawValue()
         <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_parseRawValue" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1684,7 +1222,7 @@ $splitParts as well with its name as a key.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">106</span>
+    <span class="phpdocumentor-element-found-in__line">103</span>
 
     </aside>
 
@@ -1719,140 +1257,6 @@ parseParts to parse the returned array.</p>
 parts</p>
 </section>
 
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_processTokenPart">
-        processTokenPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_processTokenPart" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/ParameterConsumerService.php"><a href="files/header-consumer-parameterconsumerservice.html"><abbr title="Header/Consumer/ParameterConsumerService.php">ParameterConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">128</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Handles parameter separator tokens during final processing.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">processTokenPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokenValue</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$combined</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$splitParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$strName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$strCat</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-        <section class="phpdocumentor-description"><p>If the end token is found, a new IHeaderPart is assigned to the passed
-$combined array.  If an '=' character is found, $strCat is assigned to
-$strName and emptied.</p>
-<p>Returns true if the token was processed, and false otherwise.</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$tokenValue</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$combined</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$splitParts</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ArrayObject">ArrayObject</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$strName</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$strCat</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_shouldAddSpace">
-        shouldAddSpace()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_shouldAddSpace" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractGenericConsumerService.php"><a href="files/header-consumer-abstractgenericconsumerservice.html"><abbr title="Header/Consumer/AbstractGenericConsumerService.php">AbstractGenericConsumerService.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">64</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns true if a space should be added based on the passed last and next
-parts.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">shouldAddSpace</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nextPart</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$lastPart</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$nextPart</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$lastPart</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
     
 </article>
             </section>

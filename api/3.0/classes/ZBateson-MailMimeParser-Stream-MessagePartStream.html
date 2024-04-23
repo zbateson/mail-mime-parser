@@ -98,6 +98,9 @@
         <h2 class="phpdocumentor-content__title">
     MessagePartStream
 
+        <span class="phpdocumentor-element__extends">
+        extends <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator">MessagePartStreamDecorator</abbr></a>
+    </span>
     
             <div class="phpdocumentor-element__package">
             in package
@@ -110,9 +113,6 @@
             implements
                             <abbr title="\SplObserver">SplObserver</abbr>,                             <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>                    </span>
     
-            <span class="phpdocumentor-element__extends">
-            Uses
-                            <abbr title="\GuzzleHttp\Psr7\StreamDecoratorTrait">StreamDecoratorTrait</abbr>                    </span>
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
@@ -182,16 +182,23 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#property_stream">$stream</a>
+    <span>
+                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_streamFactory">$streamFactory</a>
     <span>
                         &nbsp;: <a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>            </span>
 </dt>
 <dd></dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_stream">$stream</a>
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets">$throwExceptionReadingPartContentFromUnsupportedCharsets</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null            </span>
+                        &nbsp;: bool            </span>
 </dt>
 <dd></dd>
 
@@ -200,7 +207,7 @@
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Constructor</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method___destruct">__destruct()</a>
@@ -208,6 +215,14 @@
                                 &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#method_read">read()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Overridden to wrap exceptions in MessagePartReadException which provides
+&#039;getPart&#039; to inspect the part the error occurs on.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_update">update()</a>
@@ -246,22 +261,6 @@ direct children.</dd>
 </dt>
 <dd>Attaches and returns a CharsetStream decorator to the passed $stream.</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_getTransferEncodingDecoratorForStream">getTransferEncodingDecoratorForStream()</a>
-    <span>
-                                &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
-</dt>
-<dd>Attaches and returns a transfer encoding stream decorator to the passed
-$stream.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_writePartContentTo">writePartContentTo()</a>
-    <span>
-                                &nbsp;: static    </span>
-</dt>
-<dd>Writes out the content portion of the attached mime part to the passed
-$stream.</dd>
-
         </dl>
 
 
@@ -290,7 +289,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 
     </aside>
 
@@ -322,7 +321,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
@@ -347,6 +346,40 @@ $stream.</dd>
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_stream">
+        $stream
+        <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#property_stream" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStreamDecorator.php"><a href="files/stream-messagepartstreamdecorator.html"><abbr title="Stream/MessagePartStreamDecorator.php">MessagePartStreamDecorator.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">31</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
+    <span class="phpdocumentor-signature__name">$stream</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_streamFactory">
         $streamFactory
         <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_streamFactory" class="headerlink"><i class="fas fa-link"></i></a>
@@ -356,7 +389,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
@@ -378,32 +411,35 @@ $stream.</dd>
         class="
             phpdocumentor-element
             -property
-            -private
+            -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_stream">
-        $stream
-        <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_stream" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_throwExceptionReadingPartContentFromUnsupportedCharsets">
+        $throwExceptionReadingPartContentFromUnsupportedCharsets
+        <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null</span>
-    <span class="phpdocumentor-signature__name">$stream</span>
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$throwExceptionReadingPartContentFromUnsupportedCharsets</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+        <section class="phpdocumentor-description"><p>if false, saving a content stream with an unsupported charset
+will be written in the default charset, otherwise the stream will be
+created with the unsupported charset, and an exception will be
+thrown when read from.</p>
+</section>
 
     
 
@@ -432,13 +468,13 @@ $stream.</dd>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Constructor</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sdf</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"><abbr title="\ZBateson\MailMimeParser\Stream\StreamFactory">StreamFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sdf</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$part</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$throwExceptionReadingPartContentFromUnsupportedCharsets</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -452,6 +488,14 @@ $stream.</dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$part</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$throwExceptionReadingPartContentFromUnsupportedCharsets</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -480,7 +524,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
@@ -506,6 +550,65 @@ $stream.</dd>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_read">
+        read()
+        <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#method_read" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStreamDecorator.php"><a href="files/stream-messagepartstreamdecorator.html"><abbr title="Stream/MessagePartStreamDecorator.php">MessagePartStreamDecorator.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">45</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Overridden to wrap exceptions in MessagePartReadException which provides
+&#039;getPart&#039; to inspect the part the error occurs on.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">read</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$length</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$length</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStreamReadException.html"><abbr title="\ZBateson\MailMimeParser\Stream\MessagePartStreamReadException">MessagePartStreamReadException</abbr></a></span>
+                                                            
+                                             
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_update">
         update()
         <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_update" class="headerlink"><i class="fas fa-link"></i></a>
@@ -513,7 +616,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 
     </aside>
 
@@ -557,7 +660,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">203</span>
+    <span class="phpdocumentor-element-found-in__line">181</span>
 
     </aside>
 
@@ -590,7 +693,7 @@ $stream.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">156</span>
+    <span class="phpdocumentor-element-found-in__line">119</span>
 
     </aside>
 
@@ -637,7 +740,7 @@ as IMessagePart</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">186</span>
+    <span class="phpdocumentor-element-found-in__line">149</span>
 
     </aside>
 
@@ -671,7 +774,7 @@ direct children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">83</span>
+    <span class="phpdocumentor-element-found-in__line">84</span>
 
     </aside>
 
@@ -701,103 +804,6 @@ is returned as-is.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_getTransferEncodingDecoratorForStream">
-        getTransferEncodingDecoratorForStream()
-        <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_getTransferEncodingDecoratorForStream" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">108</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Attaches and returns a transfer encoding stream decorator to the passed
-$stream.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">getTransferEncodingDecoratorForStream</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span></code>
-
-        <section class="phpdocumentor-description"><p>The attached stream decorator is based on the attached part's returned
-value from MessagePart::getContentTransferEncoding, using one of the
-following stream decorators as appropriate:</p>
-<p>o QuotedPrintableStream
-o Base64Stream
-o UUStream</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$stream</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_writePartContentTo">
-        writePartContentTo()
-        <a href="classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_writePartContentTo" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Stream/MessagePartStream.php"><a href="files/stream-messagepartstream.html"><abbr title="Stream/MessagePartStream.php">MessagePartStream.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">135</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Writes out the content portion of the attached mime part to the passed
-$stream.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">writePartContentTo</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stream</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$stream</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

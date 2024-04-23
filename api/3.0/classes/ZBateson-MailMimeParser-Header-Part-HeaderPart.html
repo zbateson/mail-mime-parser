@@ -119,7 +119,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
@@ -167,11 +167,32 @@
 
 <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesAfter">$canIgnoreSpacesAfter</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesBefore">$canIgnoreSpacesBefore</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_charsetConverter">$charsetConverter</a>
     <span>
                         &nbsp;: <abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>            </span>
 </dt>
 <dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_isSpace">$isSpace</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd>True if the part is a space token</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_logger">$logger</a>
@@ -183,7 +204,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_value">$value</a>
     <span>
-                        &nbsp;: string|null            </span>
+                        &nbsp;: string            </span>
 </dt>
 <dd></dd>
 
@@ -206,7 +227,7 @@
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Sets up dependencies.</dd>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method___toString">__toString()</a>
@@ -232,6 +253,13 @@ object at or above the passed PSR log level from Psr\Log\LogLevel
 (defaulting to LogLevel::ERROR).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getComments">getComments()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\CommentPart">CommentPart</abbr>&gt;    </span>
+</dt>
+<dd>Returns any CommentParts under this part container.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorLoggingContextName">getErrorLoggingContextName()</a>
     <span>
                                 &nbsp;: string    </span>
@@ -249,9 +277,10 @@ level in Psr\Log\LogLevel (defaulting to LogLevel::ERROR).</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getValue">getValue()</a>
     <span>
-                                &nbsp;: string|null    </span>
+                                &nbsp;: string    </span>
 </dt>
-<dd>Returns the part&#039;s value.</dd>
+<dd>Returns the part&#039;s representative value after any necessary processing
+has been performed.  For the raw value, call getRawValue().</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_hasAnyErrors">hasAnyErrors()</a>
@@ -273,24 +302,6 @@ whether an error exists.</dd>
 <dd>Returns true if this object has an error in its error bag at or above
 the passed $minPsrLevel (defaults to ERROR).  If $validate is true,
 additional validation may be performed.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesAfter">ignoreSpacesAfter()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Returns true if spaces after this part should be ignored.  True is only
-returned for MimeLiterals if the part ends with a mime-encoded string
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesBefore">ignoreSpacesBefore()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>Returns true if spaces before this part should be ignored.  True is only
-returned for MimeLiterals if the part begins with a mime-encoded string,
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_convertEncoding">convertEncoding()</a>
@@ -332,6 +343,74 @@ Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_canIgnoreSpacesAfter">
+        $canIgnoreSpacesAfter
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesAfter" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">45</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$canIgnoreSpacesAfter</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>set to true to ignore spaces after this part</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_canIgnoreSpacesBefore">
+        $canIgnoreSpacesBefore
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesBefore" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">40</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$canIgnoreSpacesBefore</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>set to true to ignore spaces before this part</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_charsetConverter">
         $charsetConverter
         <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_charsetConverter" class="headerlink"><i class="fas fa-link"></i></a>
@@ -341,7 +420,7 @@ Tokens if the Token&#039;s value is a single space, and for CommentParts.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -367,6 +446,40 @@ converting strings in HeaderPart::convertEncoding</p>
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_isSpace">
+        $isSpace
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_isSpace" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">50</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">True if the part is a space token</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$isSpace</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_logger">
         $logger
         <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
@@ -376,7 +489,7 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -410,19 +523,21 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string|null</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$value</span>
     </code>
 
     
-        <section class="phpdocumentor-description"><p>the value of the part</p>
+        <section class="phpdocumentor-description"><p>the representative value of the part after any conversion or
+processing has been done on it (e.g. removing new lines, converting,
+whatever else).</p>
 </section>
 
     
@@ -444,7 +559,7 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -478,7 +593,7 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">34</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
@@ -516,22 +631,38 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Sets up dependencies.</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetConverter</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetConverter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$charsetConverter</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -560,7 +691,7 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 
     </aside>
 
@@ -595,7 +726,7 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
@@ -655,7 +786,7 @@ converting strings in HeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">104</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 
     </aside>
 
@@ -709,6 +840,39 @@ to check for errors.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getComments">
+        getComments()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getComments" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns any CommentParts under this part container.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getComments</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\CommentPart">CommentPart</abbr>&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\CommentPart">CommentPart</abbr>&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getErrorLoggingContextName">
         getErrorLoggingContextName()
         <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorLoggingContextName" class="headerlink"><i class="fas fa-link"></i></a>
@@ -716,7 +880,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
@@ -749,7 +913,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">82</span>
 
     </aside>
 
@@ -805,24 +969,25 @@ object to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the part&#039;s value.</p>
+        <p class="phpdocumentor-summary">Returns the part&#039;s representative value after any necessary processing
+has been performed.  For the raw value, call getRawValue().</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getValue</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
+                    <span class="phpdocumentor-signature__name">getValue</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|null</span>
+    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>the value of the part</p>
+            <section class="phpdocumentor-description"><p>The value of the part</p>
 </section>
 
     
@@ -840,7 +1005,7 @@ object to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">112</span>
 
     </aside>
 
@@ -904,7 +1069,7 @@ errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">99</span>
+    <span class="phpdocumentor-element-found-in__line">96</span>
 
     </aside>
 
@@ -950,76 +1115,6 @@ additional validation may be performed.</p>
                     <article
         class="phpdocumentor-element
             -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_ignoreSpacesAfter">
-        ignoreSpacesAfter()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesAfter" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">79</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns true if spaces after this part should be ignored.  True is only
-returned for MimeLiterals if the part ends with a mime-encoded string
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">ignoreSpacesAfter</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_ignoreSpacesBefore">
-        ignoreSpacesBefore()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesBefore" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">68</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Returns true if spaces before this part should be ignored.  True is only
-returned for MimeLiterals if the part begins with a mime-encoded string,
-Tokens if the Token&#039;s value is a single space, and for CommentParts.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">ignoreSpacesBefore</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
             -protected
                                                         "
 >
@@ -1030,7 +1125,7 @@ Tokens if the Token&#039;s value is a single space, and for CommentParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">93</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 
     </aside>
 
@@ -1096,7 +1191,7 @@ for 'UTF-8'.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPart.php"><a href="files/header-part-headerpart.html"><abbr title="Header/Part/HeaderPart.php">HeaderPart.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">112</span>
 
     </aside>
 
@@ -1129,7 +1224,7 @@ for 'UTF-8'.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
     </aside>
 

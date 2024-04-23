@@ -113,7 +113,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">18</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -155,12 +155,26 @@
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#property_logger">$logger</a>
+    <span>
+                        &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Sets up dependencies.</dd>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddress">newAddress()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a>    </span>
+</dt>
+<dd>Initializes and returns a new AddressPart.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddressGroupPart">newAddressGroupPart()</a>
@@ -170,18 +184,18 @@
 <dd>Initializes and returns a new AddressGroupPart</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddressPart">newAddressPart()</a>
-    <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a>    </span>
-</dt>
-<dd>Initializes and returns a new AddressPart.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newCommentPart">newCommentPart()</a>
     <span>
                                 &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\CommentPart">CommentPart</abbr></a>    </span>
 </dt>
 <dd>Initializes and returns a new CommentPart.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newContainerPart">newContainerPart()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a>    </span>
+</dt>
+<dd>Initializes and returns a new ContainerPart.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newDatePart">newDatePart()</a>
@@ -199,18 +213,11 @@
 subclass factories for specialized IHeaderParts.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newLiteralPart">newLiteralPart()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newMimeToken">newMimeToken()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-LiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\LiteralPart">LiteralPart</abbr></a>    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeToken">MimeToken</abbr></a>    </span>
 </dt>
-<dd>Initializes and returns a new LiteralPart.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newMimeLiteralPart">newMimeLiteralPart()</a>
-    <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart">MimeLiteralPart</abbr></a>    </span>
-</dt>
-<dd>Initializes and returns a new MimeLiteralPart.</dd>
+<dd>Initializes and returns a new MimeToken.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newParameterPart">newParameterPart()</a>
@@ -218,6 +225,13 @@ subclass factories for specialized IHeaderParts.</dd>
                                 &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>    </span>
 </dt>
 <dd>Initializes and returns a new ParameterPart.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newQuotedLiteralPart">newQuotedLiteralPart()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\QuotedLiteralPart">QuotedLiteralPart</abbr></a>    </span>
+</dt>
+<dd>Initializes and returns a new QuotedLiteralPart.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newReceivedDomainPart">newReceivedDomainPart()</a>
@@ -234,11 +248,18 @@ subclass factories for specialized IHeaderParts.</dd>
 <dd>Initializes and returns a new ReceivedPart.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSplitParameterToken">newSplitParameterToken()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSplitParameterPart">newSplitParameterPart()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterToken">SplitParameterToken</abbr></a>    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterPart">SplitParameterPart</abbr></a>    </span>
 </dt>
-<dd>Instantiates and returns a SplitParameterToken with the given name.</dd>
+<dd>Instantiates and returns a SplitParameterPart.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSubjectToken">newSubjectToken()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SubjectToken">SubjectToken</abbr></a>    </span>
+</dt>
+<dd>Initializes and returns a new SubjectToken.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newToken">newToken()</a>
@@ -275,7 +296,7 @@ subclass factories for specialized IHeaderParts.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
@@ -290,6 +311,40 @@ subclass factories for specialized IHeaderParts.</dd>
         <section class="phpdocumentor-description"><p>passed to IHeaderPart constructors
 for converting strings in IHeaderPart::convertEncoding</p>
 </section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_logger">
+        $logger
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">27</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+    <span class="phpdocumentor-signature__name">$logger</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
 
     
 
@@ -314,19 +369,27 @@ for converting strings in IHeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Sets up dependencies.</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetConverter</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetConverter</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$charsetConverter</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\ZBateson\MbWrapper\MbWrapper">MbWrapper</abbr></span>
@@ -351,65 +414,14 @@ for converting strings in IHeaderPart::convertEncoding</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_newAddressGroupPart">
-        newAddressGroupPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddressGroupPart" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_newAddress">
+        newAddress()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddress" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">99</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Initializes and returns a new AddressGroupPart</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newAddressGroupPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addresses</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressGroupPart">AddressGroupPart</abbr></a></span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$addresses</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressGroupPart">AddressGroupPart</abbr></a></span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_newAddressPart">
-        newAddressPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddressPart" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">89</span>
+    <span class="phpdocumentor-element-found-in__line">116</span>
 
     </aside>
 
@@ -417,26 +429,24 @@ for converting strings in IHeaderPart::convertEncoding</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newAddressPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$email</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newAddress</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nameParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$emailParts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$nameParts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$email</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$emailParts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -454,6 +464,56 @@ for converting strings in IHeaderPart::convertEncoding</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_newAddressGroupPart">
+        newAddressGroupPart()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddressGroupPart" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">127</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Initializes and returns a new AddressGroupPart</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">newAddressGroupPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nameParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a>&gt;|array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressGroupPart">AddressGroupPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addressesAndGroups</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressGroupPart">AddressGroupPart</abbr></a></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$nameParts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$addressesAndGroups</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressPart">AddressPart</abbr></a>&gt;|array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressGroupPart">AddressGroupPart</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\AddressGroupPart">AddressGroupPart</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_newCommentPart">
         newCommentPart()
         <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newCommentPart" class="headerlink"><i class="fas fa-link"></i></a>
@@ -461,7 +521,7 @@ for converting strings in IHeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">81</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
@@ -469,18 +529,17 @@ for converting strings in IHeaderPart::convertEncoding</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newCommentPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\CommentPart">CommentPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newCommentPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\CommentPart">CommentPart</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -498,6 +557,49 @@ for converting strings in IHeaderPart::convertEncoding</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_newContainerPart">
+        newContainerPart()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newContainerPart" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">75</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Initializes and returns a new ContainerPart.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">newContainerPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_newDatePart">
         newDatePart()
         <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newDatePart" class="headerlink"><i class="fas fa-link"></i></a>
@@ -505,7 +607,7 @@ for converting strings in IHeaderPart::convertEncoding</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">107</span>
+    <span class="phpdocumentor-element-found-in__line">137</span>
 
     </aside>
 
@@ -513,18 +615,17 @@ for converting strings in IHeaderPart::convertEncoding</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newDatePart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-DatePart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\DatePart">DatePart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newDatePart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-DatePart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\DatePart">DatePart</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -589,9 +690,9 @@ subclass factories for specialized IHeaderParts.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_newLiteralPart">
-        newLiteralPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newLiteralPart" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_newMimeToken">
+        newMimeToken()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newMimeToken" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
@@ -600,11 +701,11 @@ subclass factories for specialized IHeaderParts.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Initializes and returns a new LiteralPart.</p>
+        <p class="phpdocumentor-summary">Initializes and returns a new MimeToken.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newLiteralPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-LiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\LiteralPart">LiteralPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newMimeToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeToken">MimeToken</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -622,51 +723,7 @@ subclass factories for specialized IHeaderParts.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-LiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\LiteralPart">LiteralPart</abbr></a></span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_newMimeLiteralPart">
-        newMimeLiteralPart()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newMimeLiteralPart" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">73</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Initializes and returns a new MimeLiteralPart.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newMimeLiteralPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart">MimeLiteralPart</abbr></a></span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPart">MimeLiteralPart</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeToken">MimeToken</abbr></a></span>
             &mdash;
         
     
@@ -684,7 +741,7 @@ subclass factories for specialized IHeaderParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 
     </aside>
 
@@ -692,31 +749,22 @@ subclass factories for specialized IHeaderParts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newParameterPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$language</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newParameterPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$nameParts</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$valuePart</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$nameParts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$valuePart</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a></span>
                             </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$language</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
 
@@ -737,6 +785,49 @@ subclass factories for specialized IHeaderParts.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_newQuotedLiteralPart">
+        newQuotedLiteralPart()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newQuotedLiteralPart" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">95</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Initializes and returns a new QuotedLiteralPart.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">newQuotedLiteralPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\QuotedLiteralPart">QuotedLiteralPart</abbr></a></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$parts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\QuotedLiteralPart">QuotedLiteralPart</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_newReceivedDomainPart">
         newReceivedDomainPart()
         <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newReceivedDomainPart" class="headerlink"><i class="fas fa-link"></i></a>
@@ -744,7 +835,7 @@ subclass factories for specialized IHeaderParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">131</span>
+    <span class="phpdocumentor-element-found-in__line">167</span>
 
     </aside>
 
@@ -752,7 +843,7 @@ subclass factories for specialized IHeaderParts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newReceivedDomainPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$ehloName</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$hostName</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$hostAddress</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedDomainPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart">ReceivedDomainPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newReceivedDomainPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedDomainPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart">ReceivedDomainPart</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -766,36 +857,11 @@ subclass factories for specialized IHeaderParts.</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
+                            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$ehloName</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$hostName</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$hostAddress</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -820,7 +886,7 @@ subclass factories for specialized IHeaderParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">157</span>
 
     </aside>
 
@@ -828,7 +894,7 @@ subclass factories for specialized IHeaderParts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newReceivedPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedPart">ReceivedPart</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newReceivedPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedPart">ReceivedPart</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -842,12 +908,11 @@ subclass factories for specialized IHeaderParts.</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPart">HeaderPart</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
@@ -865,9 +930,52 @@ subclass factories for specialized IHeaderParts.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_newSplitParameterToken">
-        newSplitParameterToken()
-        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSplitParameterToken" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_newSplitParameterPart">
+        newSplitParameterPart()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSplitParameterPart" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">85</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Instantiates and returns a SplitParameterPart.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">newSplitParameterPart</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$children</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterPart">SplitParameterPart</abbr></a></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$children</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterPart">SplitParameterPart</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_newSubjectToken">
+        newSubjectToken()
+        <a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSubjectToken" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Part/HeaderPartFactory.php"><a href="files/header-part-headerpartfactory.html"><abbr title="Header/Part/HeaderPartFactory.php">HeaderPartFactory.php</abbr></a></abbr>
@@ -876,17 +984,17 @@ subclass factories for specialized IHeaderParts.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Instantiates and returns a SplitParameterToken with the given name.</p>
+        <p class="phpdocumentor-summary">Initializes and returns a new SubjectToken.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newSplitParameterToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterToken">SplitParameterToken</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newSubjectToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SubjectToken">SubjectToken</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
+                <span class="phpdocumentor-signature__argument__name">$value</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -898,7 +1006,7 @@ subclass factories for specialized IHeaderParts.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterToken">SplitParameterToken</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SubjectToken">SubjectToken</abbr></a></span>
             &mdash;
         
     
@@ -924,7 +1032,7 @@ subclass factories for specialized IHeaderParts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">newToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-Token.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\Token">Token</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">newToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isLiteral</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$preserveSpaces</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Part-Token.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\Token">Token</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -933,6 +1041,22 @@ subclass factories for specialized IHeaderParts.</p>
                 <span class="phpdocumentor-signature__argument__name">$value</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$isLiteral</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$preserveSpaces</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
 

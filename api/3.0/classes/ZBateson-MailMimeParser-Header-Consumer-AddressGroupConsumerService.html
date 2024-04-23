@@ -116,7 +116,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
@@ -222,7 +222,7 @@ circular dependency.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_advanceToNextToken">advanceToNextToken()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a>    </span>
+                                &nbsp;: static    </span>
 </dt>
 <dd>Determines if the iterator should be advanced to the next token after
 reading tokens or finding a start token.</dd>
@@ -343,7 +343,7 @@ IHeaderPart objects.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
@@ -377,7 +377,7 @@ IHeaderPart objects.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -411,7 +411,7 @@ IHeaderPart objects.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">39</span>
 
     </aside>
 
@@ -446,7 +446,7 @@ consumer if any, or an empty array if none exist.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -485,18 +485,26 @@ need to be regenerated every time.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">32</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partFactory</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partFactory</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$partFactory</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a></span>
@@ -528,7 +536,7 @@ need to be regenerated every time.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
 
     </aside>
 
@@ -576,7 +584,7 @@ parts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">54</span>
 
     </aside>
 
@@ -612,7 +620,7 @@ group address: colon and semi-colon (&quot;:&quot; and &quot;;&quot;) characters
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">43</span>
 
     </aside>
 
@@ -657,7 +665,7 @@ circular dependency.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">286</span>
+    <span class="phpdocumentor-element-found-in__line">283</span>
 
     </aside>
 
@@ -666,7 +674,7 @@ reading tokens or finding a start token.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">advanceToNextToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokens</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isStartToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">advanceToNextToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokens</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isStartToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>The default implementation will advance for a start token, but not
 advance on the end token of the current consumer, allowing the end token
@@ -698,7 +706,7 @@ to be passed up to a higher-level consumer.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService">AbstractConsumerService</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     
@@ -716,7 +724,7 @@ to be passed up to a higher-level consumer.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
@@ -754,7 +762,7 @@ all unique consumers, and returns them in an array.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">133</span>
+    <span class="phpdocumentor-element-found-in__line">130</span>
 
     </aside>
 
@@ -790,7 +798,7 @@ sub-consumers by calling getTokenSeparators().</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">239</span>
+    <span class="phpdocumentor-element-found-in__line">234</span>
 
     </aside>
 
@@ -839,7 +847,7 @@ array.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">216</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 
@@ -901,7 +909,7 @@ should be ignored.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">266</span>
+    <span class="phpdocumentor-element-found-in__line">262</span>
 
     </aside>
 
@@ -950,7 +958,7 @@ is called.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">152</span>
+    <span class="phpdocumentor-element-found-in__line">149</span>
 
     </aside>
 
@@ -989,7 +997,7 @@ returned array with the regex OR '|' character as its glue.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">61</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
     </aside>
 
@@ -1034,7 +1042,7 @@ returned array with the regex OR '|' character as its glue.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">70</span>
 
     </aside>
 
@@ -1079,7 +1087,7 @@ returned array with the regex OR '|' character as its glue.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">314</span>
+    <span class="phpdocumentor-element-found-in__line">311</span>
 
     </aside>
 
@@ -1097,7 +1105,7 @@ processing.</p>
 and its returned parts are merged to the current consumer's header parts.</p>
 <p>After all tokens are read and an array of Header\Parts are constructed,
 the array is passed to <abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService::processParts">AbstractConsumerService::processParts</abbr> for
-any final processing.</p>
+any final processing if there are any parts.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1136,7 +1144,7 @@ any final processing.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">84</span>
+    <span class="phpdocumentor-element-found-in__line">85</span>
 
     </aside>
 
@@ -1183,7 +1191,7 @@ any sub-groups.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">166</span>
 
     </aside>
 
@@ -1234,7 +1242,7 @@ will not contain any empty parts and will contain the markers.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">106</span>
+    <span class="phpdocumentor-element-found-in__line">103</span>
 
     </aside>
 

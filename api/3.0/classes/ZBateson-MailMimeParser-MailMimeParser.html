@@ -122,7 +122,7 @@ ability to override and/or provide specialized classes.  To override you can:</p
 <ul>
 <li>Provide an array|string|DefinitionSource to the constructor to affect
 classes used on a single instance of MailMimeParser</li>
-<li>Call MailMimeParser::setGlobalPhpDiConfiguration with an
+<li>Call MailMimeParser::addGlobalContainerDefinition with an
 array|string|DefinitionSource to to override it globally on all instances
 of MailMimeParser</li>
 <li>Call MailMimeParser::getGlobalContainer(), and use set() to override
@@ -176,6 +176,13 @@ $message = $parser-&gt;parse(fopen('path/to/file.txt'), true);
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -constant -private">
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#constant_DEFAULT_DEFINITIONS_FILE">DEFAULT_DEFINITIONS_FILE</a>
+    <span>
+        &nbsp;= __DIR__ . &#039;/di_config.php&#039;                            </span>
+</dt>
+<dd></dd>
+
                     <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#property_container">$container</a>
     <span>
@@ -197,6 +204,13 @@ $message = $parser-&gt;parse(fopen('path/to/file.txt'), true);
 </dt>
 <dd></dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#property_globalDefinitions">$globalDefinitions</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd></dd>
+
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method___construct">__construct()</a>
     <span>
@@ -204,6 +218,13 @@ $message = $parser-&gt;parse(fopen('path/to/file.txt'), true);
 </dt>
 <dd>Provide custom php-di configuration to customize dependency injection, or
 provide a custom logger for the instance only.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_addGlobalPhpDiContainerDefinition">addGlobalPhpDiContainerDefinition()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_getGlobalContainer">getGlobalContainer()</a>
@@ -221,6 +242,13 @@ provide a custom logger for the instance only.</dd>
 and returns it.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_resetGlobalPhpDiContainerDefinitions">resetGlobalPhpDiContainerDefinitions()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalLogger">setGlobalLogger()</a>
     <span>
                                 &nbsp;: void    </span>
@@ -228,11 +256,20 @@ and returns it.</dd>
 <dd>Registers the provided logger globally.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfiguration">setGlobalPhpDiConfiguration()</a>
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfigurations">setGlobalPhpDiConfigurations()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Sets global configuration for php-di.</dd>
+<dd>Sets global configuration for php-di.  Overrides all previously set
+definitions.  You can optionally not use the default MMP definitions file
+by passing &#039;false&#039; to the $useDefaultDefinitionsFile argument.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_getGlobalContainerBuilder">getGlobalContainerBuilder()</a>
+    <span>
+                                &nbsp;: <abbr title="\DI\ContainerBuilder">ContainerBuilder</abbr>    </span>
+</dt>
+<dd>Returns the default ContainerBuilder with default loaded definitions.</dd>
 
         </dl>
 
@@ -275,6 +312,35 @@ returned by calling $message-&gt;getTextContent()).</p>
     
 
 </article>
+                    <article class="phpdocumentor-element -constant -private ">
+    <h4 class="phpdocumentor-element__name" id="constant_DEFAULT_DEFINITIONS_FILE">
+        DEFAULT_DEFINITIONS_FILE
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#constant_DEFAULT_DEFINITIONS_FILE" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">62</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">DEFAULT_DEFINITIONS_FILE</span>
+    = <span class="phpdocumentor-signature__default-value">__DIR__ . &#039;/di_config.php&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"><p>the default definition file.</p>
+</section>
+
+    
+
+</article>
             </section>
 
         
@@ -299,7 +365,7 @@ returned by calling $message-&gt;getTextContent()).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">67</span>
 
     </aside>
 
@@ -333,7 +399,7 @@ returned by calling $message-&gt;getTextContent()).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">72</span>
 
     </aside>
 
@@ -367,7 +433,7 @@ returned by calling $message-&gt;getTextContent()).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">72</span>
+    <span class="phpdocumentor-element-found-in__line">77</span>
 
     </aside>
 
@@ -380,6 +446,41 @@ returned by calling $message-&gt;getTextContent()).</p>
 
     
         <section class="phpdocumentor-description"><p>The static global container</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_globalDefinitions">
+        $globalDefinitions
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#property_globalDefinitions" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">83</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$globalDefinitions</span>
+     = <span class="phpdocumentor-signature__default-value">[self::DEFAULT_DEFINITIONS_FILE]</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>an array of global definitions
+being used.</p>
 </section>
 
     
@@ -405,7 +506,7 @@ returned by calling $message-&gt;getTextContent()).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">127</span>
+    <span class="phpdocumentor-element-found-in__line">167</span>
 
     </aside>
 
@@ -414,7 +515,7 @@ provide a custom logger for the instance only.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, ?array&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpDiContainerConfig</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|string|<abbr title="\DI\Definition\Source\DefinitionSource">DefinitionSource</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpDiContainerConfig</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$useGlobalDefinitions</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"><p>Note: this only affects instances created through this instance of the
 MailMimeParser, or the container itself.  Calling 'new MimePart()'
@@ -422,6 +523,9 @@ directly for instance, would use the global service locator to setup any
 dependencies MimePart needs.  This applies to a provided $logger too --
 it would only affect instances of objects created through the provided
 MailMimeParser.</p>
+<p>Passing false to $useGlobalDefinitions will cause MMP to not use any
+global definitions.  The default definitions file
+MailMimeParser::DEFAULT_DEFINITIONS_FILE will still be added though.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -431,14 +535,24 @@ MailMimeParser.</p>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$phpDiContainerConfig</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, ?array&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|string|<abbr title="\DI\Definition\Source\DefinitionSource">DefinitionSource</abbr>|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$useGlobalDefinitions</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
@@ -452,7 +566,7 @@ MailMimeParser.</p>
                     <span class="phpdocumentor-tag__name">see</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfiguration"><abbr title="\ZBateson\MailMimeParser\MailMimeParser::setGlobalPhpDiConfiguration()">MailMimeParser::setGlobalPhpDiConfiguration()</abbr></a></span>
+                                                                                    <span class="phpdocumentor-tag-link"><abbr title="\ZBateson\MailMimeParser\MailMimeParser::setGlobalPhpDiConfiguration()">MailMimeParser::setGlobalPhpDiConfiguration()</abbr></span>
                                         
                                                  <section class="phpdocumentor-description"><p>to register
 configuration globally.</p>
@@ -483,6 +597,50 @@ configuration globally.</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_addGlobalPhpDiContainerDefinition">
+        addGlobalPhpDiContainerDefinition()
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_addGlobalPhpDiContainerDefinition" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">114</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">addGlobalPhpDiContainerDefinition</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|string|<abbr title="\DI\Definition\Source\DefinitionSource">DefinitionSource</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpDiConfig</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$phpDiConfig</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|string|<abbr title="\DI\Definition\Source\DefinitionSource">DefinitionSource</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_getGlobalContainer">
         getGlobalContainer()
         <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_getGlobalContainer" class="headerlink"><i class="fas fa-link"></i></a>
@@ -490,7 +648,7 @@ configuration globally.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">78</span>
+    <span class="phpdocumentor-element-found-in__line">130</span>
 
     </aside>
 
@@ -523,7 +681,7 @@ configuration globally.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">161</span>
+    <span class="phpdocumentor-element-found-in__line">210</span>
 
     </aside>
 
@@ -581,6 +739,39 @@ IMessage and destroyed with it.</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_resetGlobalPhpDiContainerDefinitions">
+        resetGlobalPhpDiContainerDefinitions()
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_resetGlobalPhpDiContainerDefinitions" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">120</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">resetGlobalPhpDiContainerDefinitions</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_setGlobalLogger">
         setGlobalLogger()
         <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalLogger" class="headerlink"><i class="fas fa-link"></i></a>
@@ -588,7 +779,7 @@ IMessage and destroyed with it.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">105</span>
+    <span class="phpdocumentor-element-found-in__line">142</span>
 
     </aside>
 
@@ -625,30 +816,40 @@ IMessage and destroyed with it.</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_setGlobalPhpDiConfiguration">
-        setGlobalPhpDiConfiguration()
-        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfiguration" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_setGlobalPhpDiConfigurations">
+        setGlobalPhpDiConfigurations()
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfigurations" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">92</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Sets global configuration for php-di.</p>
+        <p class="phpdocumentor-summary">Sets global configuration for php-di.  Overrides all previously set
+definitions.  You can optionally not use the default MMP definitions file
+by passing &#039;false&#039; to the $useDefaultDefinitionsFile argument.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setGlobalPhpDiConfiguration</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|string|<abbr title="\DI\Definition\Source\DefinitionSource">DefinitionSource</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpDiConfig</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setGlobalPhpDiConfigurations</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpDiConfigs</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$useDefaultDefinitionsFile</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$phpDiConfig</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|string|<abbr title="\DI\Definition\Source\DefinitionSource">DefinitionSource</abbr></span>
+                <span class="phpdocumentor-signature__argument__name">$phpDiConfigs</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$useDefaultDefinitionsFile</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
 
@@ -659,6 +860,39 @@ IMessage and destroyed with it.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getGlobalContainerBuilder">
+        getGlobalContainerBuilder()
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_getGlobalContainerBuilder" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">88</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the default ContainerBuilder with default loaded definitions.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">getGlobalContainerBuilder</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\DI\ContainerBuilder">ContainerBuilder</abbr></span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\DI\ContainerBuilder">ContainerBuilder</abbr></span>
             &mdash;
         
     

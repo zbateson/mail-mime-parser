@@ -115,7 +115,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/IdHeader.php"><a href="files/header-idheader.html"><abbr title="Header/IdHeader.php">IdHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
@@ -169,9 +169,16 @@ first (or only) ID call <abbr title="\ZBateson\MailMimeParser\Header\IdHeader::g
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeLiteralPartFactory">$mimeLiteralPartFactory</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeEncodedParsedParts">$mimeEncodedParsedParts</a>
     <span>
-                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory">MimeLiteralPartFactory</abbr></a>            </span>
+                        &nbsp;: array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\MimeLiteralPart">MimeLiteralPart</abbr>&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeTokenPartFactory">$mimeTokenPartFactory</a>
+    <span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Header-Part-MimeTokenPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory">MimeTokenPartFactory</abbr></a>            </span>
 </dt>
 <dd></dd>
 
@@ -358,7 +365,7 @@ additional validation may be performed.</dd>
                                 &nbsp;: void    </span>
 </dt>
 <dd>Filters $this-&gt;allParts into the parts required by $this-&gt;parts
-and assignes it.</dd>
+and assigns it.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#method_getErrorBagChildren">getErrorBagChildren()</a>
@@ -418,7 +425,7 @@ character.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 
     </aside>
 
@@ -453,7 +460,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">21</span>
 
     </aside>
 
@@ -478,24 +485,59 @@ including commentParts</p>
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_mimeLiteralPartFactory">
-        $mimeLiteralPartFactory
-        <a href="classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeLiteralPartFactory" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_mimeEncodedParsedParts">
+        $mimeEncodedParsedParts
+        <a href="classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeEncodedParsedParts" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/MimeEncodedHeader.php"><a href="files/header-mimeencodedheader.html"><abbr title="Header/MimeEncodedHeader.php">MimeEncodedHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory">MimeLiteralPartFactory</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$mimeLiteralPartFactory</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\MimeLiteralPart">MimeLiteralPart</abbr>&gt;</span>
+    <span class="phpdocumentor-signature__name">$mimeEncodedParsedParts</span>
+     = <span class="phpdocumentor-signature__default-value">[]</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>the mime encoded parsed parts contained in this
+header</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_mimeTokenPartFactory">
+        $mimeTokenPartFactory
+        <a href="classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeTokenPartFactory" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/MimeEncodedHeader.php"><a href="files/header-mimeencodedheader.html"><abbr title="Header/MimeEncodedHeader.php">MimeEncodedHeader.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">26</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeTokenPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory">MimeTokenPartFactory</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$mimeTokenPartFactory</span>
     </code>
 
     
@@ -521,7 +563,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -555,7 +597,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">34</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -589,7 +631,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">46</span>
 
     </aside>
 
@@ -623,7 +665,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 
     </aside>
 
@@ -657,7 +699,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -691,7 +733,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">34</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
@@ -729,7 +771,7 @@ including commentParts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/IdHeader.php"><a href="files/header-idheader.html"><abbr title="Header/IdHeader.php">IdHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">27</span>
 
     </aside>
 
@@ -738,28 +780,11 @@ extract a parsed value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory">MimeLiteralPartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeLiteralPartFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService">IdBaseConsumerService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$consumerService</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeTokenPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory">MimeTokenPartFactory</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimeTokenPartFactory</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService">IdBaseConsumerService</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$consumerService</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$mimeLiteralPartFactory</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeLiteralPartFactory">MimeLiteralPartFactory</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$consumerService</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService">IdBaseConsumerService</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>For parsing the value.</p>
-</section>
-
-            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$name</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
@@ -775,6 +800,31 @@ extract a parsed value.</p>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Value of the header.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$mimeTokenPartFactory</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeTokenPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory">MimeTokenPartFactory</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$consumerService</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService">IdBaseConsumerService</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>For parsing the value.</p>
 </section>
 
             </dd>
@@ -801,7 +851,7 @@ extract a parsed value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 
     </aside>
 
@@ -838,7 +888,7 @@ extract a parsed value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
     </aside>
 
@@ -916,7 +966,8 @@ passing a full header line, the $value parameter must be set to null (the
 default).</p>
 <p>Note that more specific types can be called on directly.  For instance an
 AddressHeader may be created by calling AddressHeader::from() which will
-ignore the name of the header, and always return an AddressHeader.</p>
+ignore the name of the header, and always return an AddressHeader, or by
+calling <code class="prettyprint">new AddressHeader('name', 'value')</code> directly.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -963,7 +1014,7 @@ header line to parse.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">104</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 
     </aside>
 
@@ -1024,7 +1075,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
     </aside>
 
@@ -1058,7 +1109,7 @@ parsed into, including any CommentParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">118</span>
 
     </aside>
 
@@ -1092,7 +1143,7 @@ comments in the header, an empty array is returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
@@ -1125,7 +1176,7 @@ comments in the header, an empty array is returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">82</span>
 
     </aside>
 
@@ -1181,7 +1232,7 @@ object to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/IdHeader.php"><a href="files/header-idheader.html"><abbr title="Header/IdHeader.php">IdHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">39</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 
     </aside>
 
@@ -1216,7 +1267,7 @@ object to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/IdHeader.php"><a href="files/header-idheader.html"><abbr title="Header/IdHeader.php">IdHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
@@ -1252,7 +1303,7 @@ In-Reply-To.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">143</span>
+    <span class="phpdocumentor-element-found-in__line">142</span>
 
     </aside>
 
@@ -1287,7 +1338,7 @@ In-Reply-To.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">100</span>
+    <span class="phpdocumentor-element-found-in__line">102</span>
 
     </aside>
 
@@ -1322,7 +1373,7 @@ parsed into, excluding any
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">138</span>
+    <span class="phpdocumentor-element-found-in__line">137</span>
 
     </aside>
 
@@ -1357,7 +1408,7 @@ parsed into, excluding any
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">130</span>
+    <span class="phpdocumentor-element-found-in__line">129</span>
 
     </aside>
 
@@ -1396,7 +1447,7 @@ first parsed part that isn't a comment.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">115</span>
+    <span class="phpdocumentor-element-found-in__line">112</span>
 
     </aside>
 
@@ -1460,7 +1511,7 @@ errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">99</span>
+    <span class="phpdocumentor-element-found-in__line">96</span>
 
     </aside>
 
@@ -1516,12 +1567,12 @@ additional validation may be performed.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">Filters $this-&gt;allParts into the parts required by $this-&gt;parts
-and assignes it.</p>
+and assigns it.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
@@ -1552,7 +1603,7 @@ and assignes it.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
@@ -1585,7 +1636,7 @@ and assignes it.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">184</span>
+    <span class="phpdocumentor-element-found-in__line">183</span>
 
     </aside>
 
@@ -1643,7 +1694,7 @@ second being the value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/AbstractHeader.php"><a href="files/header-abstractheader.html"><abbr title="Header/AbstractHeader.php">AbstractHeader.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
+    <span class="phpdocumentor-element-found-in__line">93</span>
 
     </aside>
 
@@ -1699,7 +1750,7 @@ $this-&gt;parts by calling filterAndAssignToParts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ErrorBag.php"><a href="files/errorbag.html"><abbr title="ErrorBag.php">ErrorBag.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
     </aside>
 

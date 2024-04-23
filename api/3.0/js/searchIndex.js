@@ -143,7 +143,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\AbstractHeader\u003A\u003AfilterAndAssignToParts\u0028\u0029",
             "name": "filterAndAssignToParts",
-            "summary": "Filters\u0020\u0024this\u002D\u003EallParts\u0020into\u0020the\u0020parts\u0020required\u0020by\u0020\u0024this\u002D\u003Eparts\nand\u0020assignes\u0020it.",
+            "summary": "Filters\u0020\u0024this\u002D\u003EallParts\u0020into\u0020the\u0020parts\u0020required\u0020by\u0020\u0024this\u002D\u003Eparts\nand\u0020assigns\u0020it.",
             "url": "classes/ZBateson-MailMimeParser-Header-AbstractHeader.html#method_filterAndAssignToParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\AbstractHeader\u003A\u003AparseHeaderValue\u0028\u0029",
@@ -368,7 +368,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
-            "summary": "Performs\u0020any\u0020final\u0020processing\u0020on\u0020the\u0020array\u0020of\u0020parsed\u0020parts\u0020before\nreturning\u0020it\u0020to\u0020the\u0020consumer\u0020client.",
+            "summary": "Performs\u0020any\u0020final\u0020processing\u0020on\u0020the\u0020array\u0020of\u0020parsed\u0020parts\u0020before\nreturning\u0020it\u0020to\u0020the\u0020consumer\u0020client.\u0020\u0020The\u0020passed\u0020\u0024parts\u0020array\u0020is\nguaranteed\u0020to\u0020not\u0020be\u0020empty.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractConsumerService\u003A\u003A\u0024logger",
@@ -410,31 +410,6 @@ Search.appendIndex(
             "name": "isStartToken",
             "summary": "AbstractGenericConsumerService\u0020doesn\u0027t\u0020have\u0020start\/end\u0020tokens,\u0020and\u0020so\nalways\u0020returns\u0020false.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_isStartToken"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService\u003A\u003AshouldAddSpace\u0028\u0029",
-            "name": "shouldAddSpace",
-            "summary": "Returns\u0020true\u0020if\u0020a\u0020space\u0020should\u0020be\u0020added\u0020based\u0020on\u0020the\u0020passed\u0020last\u0020and\u0020next\nparts.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_shouldAddSpace"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService\u003A\u003AaddSpaceToRetParts\u0028\u0029",
-            "name": "addSpaceToRetParts",
-            "summary": "Loops\u0020over\u0020the\u0020\u0024parts\u0020array\u0020from\u0020the\u0020current\u0020position,\u0020checks\u0020if\u0020the\nspace\u0020should\u0020be\u0020added,\u0020then\u0020adds\u0020it\u0020to\u0020\u0024retParts\u0020and\u0020returns.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_addSpaceToRetParts"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService\u003A\u003AaddSpaces\u0028\u0029",
-            "name": "addSpaces",
-            "summary": "Checks\u0020if\u0020the\u0020passed\u0020space\u0020part\u0020should\u0020be\u0020added\u0020to\u0020the\u0020returned\u0020parts\u0020and\nadds\u0020it.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_addSpaces"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService\u003A\u003AisSpaceToken\u0028\u0029",
-            "name": "isSpaceToken",
-            "summary": "Returns\u0020true\u0020if\u0020the\u0020passed\u0020HeaderPart\u0020is\u0020a\u0020Token\u0020instance\u0020and\u0020a\u0020space.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_isSpaceToken"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService\u003A\u003AfilterIgnoredSpaces\u0028\u0029",
-            "name": "filterIgnoredSpaces",
-            "summary": "Filters\u0020out\u0020ignorable\u0020spaces\u0020between\u0020parts\u0020in\u0020the\u0020passed\u0020array.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractGenericConsumerService.html#method_filterIgnoredSpaces"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
@@ -538,7 +513,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AddressEmailConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
-            "summary": "Returns\u0020a\u0020single\u0020\u007B\u0040see\u0020ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u007D\nwith\u0020its\u0020\u0027email\u0027\u0020portion\u0020set,\u0020so\u0020an\u0020\u007B\u0040see\u0020AddressConsumerService\u007D\u0020can\nidentify\u0020it\u0020and\u0020create\u0020an\n\u007B\u0040see\u0020ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u007D\u0020AddressPart\u0020with\nboth\u0020a\u0020name\u0020and\u0020email\u0020set.",
+            "summary": "Returns\u0020a\u0020single\u0020\u007B\u0040see\u0020ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u007D\nwith\u0020its\u0020\u0027email\u0027\u0020portion\u0020set,\u0020so\u0020an\u0020\u007B\u0040see\u0020AddressConsumerService\u007D\u0020can\nidentify\u0020it\u0020and\u0020create\u0020an\n\u007B\u0040see\u0020ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u007D\u0020Address\u0020with\nboth\u0020a\u0020name\u0020and\u0020email\u0020set.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AddressEmailConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AddressGroupConsumerService",
@@ -628,12 +603,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\DateConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
-            "summary": "Concatenates\u0020the\u0020passed\u0020parts\u0020and\u0020constructs\u0020a\u0020single\u0020Part\\DatePart,\nreturning\u0020it\u0020in\u0020an\u0020array\u0020with\u0020a\u0020single\u0020element.",
+            "summary": "Constructs\u0020a\u0020single\u0020Part\\DatePart\u0020of\u0020any\u0020parsed\u0020parts\u0020returning\u0020it\u0020in\u0020an\narray\u0020with\u0020a\u0020single\u0020element.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-DateConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\GenericConsumerMimeLiteralPartService",
             "name": "GenericConsumerMimeLiteralPartService",
-            "summary": "GenericConsumerMimeLiteralPartService\u0020uses\u0020a\u0020MimeLiteralPartFactory\u0020instead\nof\u0020a\u0020HeaderPartFactory.",
+            "summary": "GenericConsumerMimeLiteralPartService\u0020uses\u0020a\u0020MimeTokenPartFactory\u0020instead\nof\u0020a\u0020HeaderPartFactory.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-GenericConsumerMimeLiteralPartService.html"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\GenericConsumerMimeLiteralPartService\u003A\u003A__construct\u0028\u0029",
@@ -688,7 +663,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\IdBaseConsumerService\u003A\u003AgetPartForToken\u0028\u0029",
             "name": "getPartForToken",
-            "summary": "Returns\u0020null\u0020for\u0020whitespace,\u0020and\n\u007B\u0040see\u0020ZBateson\\MailMimeParser\\Header\\Part\\LiteralPart\u007D\u0020for\u0020anything\u0020else.",
+            "summary": "Returns\u0020null\u0020for\u0020whitespace,\u0020and\n\u007B\u0040see\u0020ZBateson\\MailMimeParser\\Header\\Part\\Token\u007D\u0020for\u0020anything\u0020else.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-IdBaseConsumerService.html#method_getPartForToken"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\IdConsumerService",
@@ -713,57 +688,27 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\IdConsumerService\u003A\u003AgetPartForToken\u0028\u0029",
             "name": "getPartForToken",
-            "summary": "Returns\u0020null\u0020for\u0020whitespace,\u0020and\u0020LiteralPart\u0020for\u0020anything\u0020else.",
+            "summary": "Returns\u0020null\u0020for\u0020whitespace,\u0020and\u0020Token\u0020for\u0020anything\u0020else.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-IdConsumerService.html#method_getPartForToken"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\IdConsumerService\u003A\u003AprocessParts\u0028\u0029",
-            "name": "processParts",
-            "summary": "Overridden\u0020to\u0020combine\u0020non\u002Dcomment\u0020parts\u0020into\u0020a\u0020single\u0020part\u0020and\u0020return\nany\u0020comment\u0020parts\u0020after.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-IdConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService",
             "name": "ParameterConsumerService",
             "summary": "Reads\u0020headers\u0020separated\u0020into\u0020parameters\u0020consisting\u0020of\u0020an\u0020optional\u0020main\u0020value,\nand\u0020subsequent\u0020name\/value\u0020pairs\u0020\u002D\u0020for\u0020example\u0020text\/html\u003B\u0020charset\u003Dutf\u002D8.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AgetTokenSeparators\u0028\u0029",
-            "name": "getTokenSeparators",
-            "summary": "Returns\u0020semi\u002Dcolon\u0020and\u0020equals\u0020char\u0020as\u0020token\u0020separators.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getTokenSeparators"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method___construct"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AgetTokenSplitPattern\u0028\u0029",
-            "name": "getTokenSplitPattern",
-            "summary": "Overridden\u0020to\u0020use\u0020a\u0020specialized\u0020regex\u0020for\u0020finding\u0020mime\u002Dencoded\u0020parts\n\u0028RFC\u00202047\u0029.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getTokenSplitPattern"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AgetPartForToken\u0028\u0029",
-            "name": "getPartForToken",
-            "summary": "Creates\u0020and\u0020returns\u0020a\u0020\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u0020out\u0020of\nthe\u0020passed\u0020string\u0020token\u0020and\u0020returns\u0020it,\u0020unless\u0020the\u0020token\u0020is\u0020an\u0020escaped\nliteral,\u0020in\u0020which\u0020case\u0020a\u0020LiteralPart\u0020is\u0020returned.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getPartForToken"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AaddToSplitPart\u0028\u0029",
-            "name": "addToSplitPart",
-            "summary": "Adds\u0020the\u0020passed\u0020parameter\u0020with\u0020the\u0020given\u0020name\u0020and\u0020value\u0020to\u0020a\nSplitParameterToken,\u0020at\u0020the\u0020passed\u0020index.\u0020If\u0020one\u0020with\u0020the\u0020given\u0020name\ndoesn\u0027t\u0020exist,\u0020it\u0020is\u0020created.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_addToSplitPart"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AgetPartFor\u0028\u0029",
-            "name": "getPartFor",
-            "summary": "Instantiates\u0020and\u0020returns\u0020either\u0020a\u0020MimeLiteralPart\u0020if\u0020\u0024strName\u0020is\u0020empty,\na\u0020SplitParameterToken\u0020if\u0020the\u0020parameter\u0020is\u0020a\u0020split\u0020parameter\u0020and\u0020is\u0020the\nfirst\u0020in\u0020a\u0020series,\u0020null\u0020if\u0020it\u0027s\u0020a\u0020split\u0020parameter\u0020but\u0020is\u0020not\u0020the\u0020first\npart\u0020in\u0020its\u0020series,\u0020or\u0020a\u0020ParameterPart\u0020is\u0020returned\u0020otherwise.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_getPartFor"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AprocessTokenPart\u0028\u0029",
-            "name": "processTokenPart",
-            "summary": "Handles\u0020parameter\u0020separator\u0020tokens\u0020during\u0020final\u0020processing.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_processTokenPart"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AfinalizeParameterParts\u0028\u0029",
-            "name": "finalizeParameterParts",
-            "summary": "Loops\u0020over\u0020parts\u0020in\u0020the\u0020passed\u0020array,\u0020creating\u0020ParameterParts\u0020out\u0020of\u0020any\nparsed\u0020SplitParameterTokens,\u0020replacing\u0020them\u0020in\u0020the\u0020array.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_finalizeParameterParts"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AadvanceToNextToken\u0028\u0029",
+            "name": "advanceToNextToken",
+            "summary": "Disables\u0020advancing\u0020for\u0020start\u0020tokens.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_advanceToNextToken"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
-            "summary": "Post\u0020processing\u0020involves\u0020creating\u0020Part\\LiteralPart\u0020or\u0020Part\\ParameterPart\nobjects\u0020out\u0020of\u0020created\u0020Token\u0020and\u0020LiteralParts.",
+            "summary": "Post\u0020processing\u0020involves\u0020looking\u0020for\u0020split\u0020parameter\u0020parts\u0020with\u0020matching\nnames\u0020and\u0020combining\u0020them\u0020into\u0020a\u0020SplitParameterPart,\u0020and\u0020otherwise\nreturning\u0020ParameterParts\u0020from\u0020ParameterNameValueConsumer\u0020as\u002Dis.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringConsumerService",
@@ -786,11 +731,6 @@ Search.appendIndex(
             "summary": "Returns\u0020a\u0020single\u0020regex\u0020pattern\u0020for\u0020a\u0020double\u0020quote.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringConsumerService.html#method_getTokenSeparators"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringConsumerService\u003A\u003AfilterIgnoredSpaces\u0028\u0029",
-            "name": "filterIgnoredSpaces",
-            "summary": "No\u0020ignored\u0020spaces\u0020in\u0020a\u0020quoted\u0020part.\u0020\u0020Returns\u0020the\u0020passed\u0020\u0024parts\u0020param\nas\u002Dis.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringConsumerService.html#method_filterIgnoredSpaces"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringConsumerService\u003A\u003AgetPartForToken\u0028\u0029",
             "name": "getPartForToken",
             "summary": "Constructs\u0020a\u0020LiteralPart\u0020and\u0020returns\u0020it.",
@@ -810,11 +750,6 @@ Search.appendIndex(
             "name": "isEndToken",
             "summary": "Overridden\u0020to\u0020return\u0020true\u0020if\u0020the\u0020passed\u0020token\u0020is\u0020a\u0020closing\u0020parenthesis.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-Received-DomainConsumerService.html#method_isEndToken"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\Received\\DomainConsumerService\u003A\u003AmatchHostPart\u0028\u0029",
-            "name": "matchHostPart",
-            "summary": "Attempts\u0020to\u0020match\u0020a\u0020parenthesized\u0020expression\u0020to\u0020find\u0020a\u0020hostname\u0020and\u0020an\naddress.\u0020\u0020Returns\u0020true\u0020if\u0020the\u0020expression\u0020matched,\u0020and\u0020either\u0020hostname\u0020or\naddress\u0020were\u0020found.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-Received-DomainConsumerService.html#method_matchHostPart"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\Received\\DomainConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
@@ -848,7 +783,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\Received\\GenericReceivedConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
-            "summary": "Overridden\u0020to\u0020combine\u0020all\u0020part\u0020values\u0020into\u0020a\u0020single\u0020string\u0020and\u0020return\u0020it\nas\u0020the\u0020first\u0020element,\u0020followed\u0020by\u0020any\u0020comment\u0020elements\u0020as\u0020subsequent\nelements.",
+            "summary": "Overridden\u0020to\u0020combine\u0020all\u0020part\u0020values\u0020into\u0020a\u0020single\u0020string\u0020and\u0020return\u0020it\nas\u0020an\u0020array\u0020with\u0020a\u0020single\u0020element.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-Received-GenericReceivedConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\Received\\GenericReceivedConsumerService\u003A\u003A\u0024partName",
@@ -908,12 +843,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ReceivedConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
-            "summary": "Overridden\u0020to\u0020combine\u0020all\u0020part\u0020values\u0020into\u0020a\u0020single\u0020string\u0020and\u0020return\u0020it\nas\u0020an\u0020array\u0020with\u0020a\u0020single\u0020element.",
+            "summary": "Performs\u0020any\u0020final\u0020processing\u0020on\u0020the\u0020array\u0020of\u0020parsed\u0020parts\u0020before\nreturning\u0020it\u0020to\u0020the\u0020consumer\u0020client.\u0020\u0020The\u0020passed\u0020\u0024parts\u0020array\u0020is\nguaranteed\u0020to\u0020not\u0020be\u0020empty.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ReceivedConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\SubjectConsumerService",
             "name": "SubjectConsumerService",
-            "summary": "Extends\u0020AbstractGenericConsumerService\u0020to\u0020use\u0020a\u0020MimeLiteralPartFactory,\u0020and\nto\u0020preserve\u0020all\u0020whitespace\u0020and\u0020escape\u0020sequences\u0020as\u002Dis\u0020\u0028unlike\u0020other\u0020headers\nsubject\u0020headers\u0020don\u0027t\u0020have\u0020escape\u0020chars\u0020such\u0020as\u0020\u0027\\\\\u0027\u0020for\u0020a\u0020backslash\u0029.",
+            "summary": "Extends\u0020AbstractGenericConsumerService\u0020to\u0020use\u0020a\u0020MimeTokenPartFactory,\u0020and\nto\u0020preserve\u0020all\u0020whitespace\u0020and\u0020escape\u0020sequences\u0020as\u002Dis\u0020\u0028unlike\u0020other\u0020headers\nsubject\u0020headers\u0020don\u0027t\u0020have\u0020escape\u0020chars\u0020such\u0020as\u0020\u0027\\\\\u0027\u0020for\u0020a\u0020backslash\u0029.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-SubjectConsumerService.html"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\SubjectConsumerService\u003A\u003A__construct\u0028\u0029",
@@ -930,16 +865,6 @@ Search.appendIndex(
             "name": "getTokenParts",
             "summary": "Returns\u0020an\u0020array\u0020of\u0020\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u0020for\nthe\u0020current\u0020token\u0020on\u0020the\u0020iterator.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-SubjectConsumerService.html#method_getTokenParts"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\SubjectConsumerService\u003A\u003AgetTokenSplitPattern\u0028\u0029",
-            "name": "getTokenSplitPattern",
-            "summary": "Overridden\u0020to\u0020not\u0020split\u0020out\u0020backslash\u0020characters\u0020and\u0020its\u0020next\u0020character\nas\u0020a\u0020special\u0020case\u0020defined\u0020in\u0020AbstractConsumerService",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-SubjectConsumerService.html#method_getTokenSplitPattern"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\SubjectConsumerService\u003A\u003AprocessParts\u0028\u0029",
-            "name": "processParts",
-            "summary": "Overridden\u0020to\u0020combine\u0020all\u0020part\u0020values\u0020into\u0020a\u0020single\u0020string\u0020and\u0020return\u0020it\nas\u0020an\u0020array\u0020with\u0020a\u0020single\u0020element.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-SubjectConsumerService.html#method_processParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\DateHeader",
             "name": "DateHeader",
@@ -1211,10 +1136,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-HeaderFactory.html#property_consumerServices"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\HeaderFactory\u003A\u003A\u0024mimeLiteralPartFactory",
-            "name": "mimeLiteralPartFactory",
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\HeaderFactory\u003A\u003A\u0024mimeTokenPartFactory",
+            "name": "mimeTokenPartFactory",
             "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-HeaderFactory.html#property_mimeLiteralPartFactory"
+            "url": "classes/ZBateson-MailMimeParser-Header-HeaderFactory.html#property_mimeTokenPartFactory"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\HeaderFactory\u003A\u003A\u0024types",
             "name": "types",
@@ -1296,6 +1221,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020part\u0027s\u0020value.",
             "url": "classes/ZBateson-MailMimeParser-Header-IHeaderPart.html#method_getValue"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\IHeaderPart\u003A\u003AgetComments\u0028\u0029",
+            "name": "getComments",
+            "summary": "Returns\u0020any\u0020CommentParts\u0020under\u0020this\u0020part\u0020container.",
+            "url": "classes/ZBateson-MailMimeParser-Header-IHeaderPart.html#method_getComments"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\MimeEncodedHeader",
             "name": "MimeEncodedHeader",
             "summary": "Allows\u0020a\u0020header\u0020to\u0020be\u0020mime\u002Dencoded\u0020and\u0020be\u0020decoded\u0020with\u0020a\u0020consumer\u0020after\ndecoding.",
@@ -1311,10 +1241,20 @@ Search.appendIndex(
             "summary": "Mime\u002Ddecodes\u0020any\u0020mime\u002Dencoded\u0020parts\u0020prior\u0020to\u0020invoking\nparent\u003A\u003AparseHeaderValue.",
             "url": "classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#method_parseHeaderValue"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\MimeEncodedHeader\u003A\u003A\u0024mimeLiteralPartFactory",
-            "name": "mimeLiteralPartFactory",
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\MimeEncodedHeader\u003A\u003AgetErrorBagChildren\u0028\u0029",
+            "name": "getErrorBagChildren",
+            "summary": "Return\u0020any\u0020children\u0020ErrorBag\u0020objects.",
+            "url": "classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#method_getErrorBagChildren"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\MimeEncodedHeader\u003A\u003A\u0024mimeTokenPartFactory",
+            "name": "mimeTokenPartFactory",
             "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeLiteralPartFactory"
+            "url": "classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeTokenPartFactory"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\MimeEncodedHeader\u003A\u003A\u0024mimeEncodedParsedParts",
+            "name": "mimeEncodedParsedParts",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-MimeEncodedHeader.html#property_mimeEncodedParsedParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\ParameterHeader",
             "name": "ParameterHeader",
@@ -1348,12 +1288,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressGroupPart",
             "name": "AddressGroupPart",
-            "summary": "Holds\u0020a\u0020group\u0020of\u0020addresses,\u0020and\u0020an\u0020optional\u0020group\u0020name.",
+            "summary": "Holds\u0020a\u0020group\u0020of\u0020addresses\u0020and\u0020a\u0020group\u0020name.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressGroupPart\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Creates\u0020an\u0020AddressGroupPart\u0020out\u0020of\u0020the\u0020passed\u0020array\u0020of\u0020AddressParts\u0020and\u0020an\noptional\u0020name\u0020\u0028which\u0020may\u0020be\u0020mime\u002Dencoded\u0029.",
+            "summary": "Creates\u0020an\u0020AddressGroupPart\u0020out\u0020of\u0020the\u0020passed\u0020array\u0020of\u0020AddressParts\/\nAddressGroupParts\u0020and\u0020name.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html#method___construct"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressGroupPart\u003A\u003AgetAddresses\u0028\u0029",
@@ -1365,16 +1305,6 @@ Search.appendIndex(
             "name": "getAddress",
             "summary": "Returns\u0020the\u0020AddressPart\u0020at\u0020the\u0020passed\u0020index\u0020or\u0020null.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html#method_getAddress"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressGroupPart\u003A\u003AgetName\u0028\u0029",
-            "name": "getName",
-            "summary": "Returns\u0020the\u0020name\u0020of\u0020the\u0020group",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html#method_getName"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressGroupPart\u003A\u003AgetErrorBagChildren\u0028\u0029",
-            "name": "getErrorBagChildren",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressGroupPart.html#method_getErrorBagChildren"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressGroupPart\u003A\u003Avalidate\u0028\u0029",
             "name": "validate",
@@ -1391,10 +1321,10 @@ Search.appendIndex(
             "summary": "Holds\u0020a\u0020single\u0020address\u0020or\u0020name\/address\u0020pair.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Performs\u0020mime\u002Ddecoding\u0020and\u0020initializes\u0020the\u0020address\u0027\u0020name\u0020and\u0020email.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html#method___construct"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u003A\u003AgetValueFromParts\u0028\u0029",
+            "name": "getValueFromParts",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-AddressPart.html#method_getValueFromParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\AddressPart\u003A\u003AgetEmail\u0028\u0029",
             "name": "getEmail",
@@ -1413,13 +1343,28 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\CommentPart\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Constructs\u0020a\u0020MimeLiteralPart,\u0020decoding\u0020the\u0020value\u0020if\u0020it\u0027s\u0020mime\u002Dencoded.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\CommentPart\u003A\u003AgetValueFromParts\u0028\u0029",
+            "name": "getValueFromParts",
+            "summary": "Creates\u0020the\u0020string\u0020value\u0020representation\u0020of\u0020this\u0020part\u0020constructed\u0020from\u0020the\nchild\u0020parts\u0020passed\u0020to\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html#method_getValueFromParts"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\CommentPart\u003A\u003AgetComment\u0028\u0029",
             "name": "getComment",
             "summary": "Returns\u0020the\u0020comment\u0027s\u0020text.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html#method_getComment"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\CommentPart\u003A\u003AgetValue\u0028\u0029",
+            "name": "getValue",
+            "summary": "Returns\u0020an\u0020empty\u0020string.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html#method_getValue"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\CommentPart\u003A\u003A\u0024partFactory",
+            "name": "partFactory",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html#property_partFactory"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\CommentPart\u003A\u003A\u0024comment",
             "name": "comment",
@@ -1428,7 +1373,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\DatePart",
             "name": "DatePart",
-            "summary": "Parses\u0020a\u0020header\u0020into\u0020a\u0020DateTime\u0020object.",
+            "summary": "Represents\u0020the\u0020value\u0020of\u0020a\u0020date\u0020header,\u0020parsing\u0020the\u0020date\u0020into\u0020a\u0020\\DateTime\nobject.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-DatePart.html"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\DatePart\u003A\u003A__construct\u0028\u0029",
@@ -1453,12 +1398,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Sets\u0020up\u0020dependencies.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method___construct"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003AgetValue\u0028\u0029",
             "name": "getValue",
-            "summary": "Returns\u0020the\u0020part\u0027s\u0020value.",
+            "summary": "Returns\u0020the\u0020part\u0027s\u0020representative\u0020value\u0020after\u0020any\u0020necessary\u0020processing\nhas\u0020been\u0020performed.\u0020\u0020For\u0020the\u0020raw\u0020value,\u0020call\u0020getRawValue\u0028\u0029.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getValue"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003A__toString\u0028\u0029",
@@ -1466,20 +1411,15 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020value\u0020of\u0020the\u0020part\u0020\u0028which\u0020is\u0020a\u0020string\u0029.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method___toString"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003AignoreSpacesBefore\u0028\u0029",
-            "name": "ignoreSpacesBefore",
-            "summary": "Returns\u0020true\u0020if\u0020spaces\u0020before\u0020this\u0020part\u0020should\u0020be\u0020ignored.\u0020\u0020True\u0020is\u0020only\nreturned\u0020for\u0020MimeLiterals\u0020if\u0020the\u0020part\u0020begins\u0020with\u0020a\u0020mime\u002Dencoded\u0020string,\nTokens\u0020if\u0020the\u0020Token\u0027s\u0020value\u0020is\u0020a\u0020single\u0020space,\u0020and\u0020for\u0020CommentParts.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesBefore"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003AignoreSpacesAfter\u0028\u0029",
-            "name": "ignoreSpacesAfter",
-            "summary": "Returns\u0020true\u0020if\u0020spaces\u0020after\u0020this\u0020part\u0020should\u0020be\u0020ignored.\u0020\u0020True\u0020is\u0020only\nreturned\u0020for\u0020MimeLiterals\u0020if\u0020the\u0020part\u0020ends\u0020with\u0020a\u0020mime\u002Dencoded\u0020string\nTokens\u0020if\u0020the\u0020Token\u0027s\u0020value\u0020is\u0020a\u0020single\u0020space,\u0020and\u0020for\u0020CommentParts.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_ignoreSpacesAfter"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003AconvertEncoding\u0028\u0029",
             "name": "convertEncoding",
             "summary": "Ensures\u0020the\u0020encoding\u0020of\u0020the\u0020passed\u0020string\u0020is\u0020set\u0020to\u0020UTF\u002D8.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_convertEncoding"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003AgetComments\u0028\u0029",
+            "name": "getComments",
+            "summary": "Returns\u0020any\u0020CommentParts\u0020under\u0020this\u0020part\u0020container.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#method_getComments"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003AgetErrorBagChildren\u0028\u0029",
             "name": "getErrorBagChildren",
@@ -1496,6 +1436,21 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_charsetConverter"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003A\u0024canIgnoreSpacesBefore",
+            "name": "canIgnoreSpacesBefore",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesBefore"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003A\u0024canIgnoreSpacesAfter",
+            "name": "canIgnoreSpacesAfter",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_canIgnoreSpacesAfter"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPart\u003A\u003A\u0024isSpace",
+            "name": "isSpace",
+            "summary": "True\u0020if\u0020the\u0020part\u0020is\u0020a\u0020space\u0020token",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPart.html#property_isSpace"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory",
             "name": "HeaderPartFactory",
             "summary": "Constructs\u0020and\u0020returns\u0020IHeaderPart\u0020objects.",
@@ -1503,7 +1458,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Sets\u0020up\u0020dependencies.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method___construct"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewInstance\u0028\u0029",
@@ -1516,30 +1471,40 @@ Search.appendIndex(
             "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020Token.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newToken"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewSplitParameterToken\u0028\u0029",
-            "name": "newSplitParameterToken",
-            "summary": "Instantiates\u0020and\u0020returns\u0020a\u0020SplitParameterToken\u0020with\u0020the\u0020given\u0020name.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSplitParameterToken"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewSubjectToken\u0028\u0029",
+            "name": "newSubjectToken",
+            "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020SubjectToken.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSubjectToken"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewLiteralPart\u0028\u0029",
-            "name": "newLiteralPart",
-            "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020LiteralPart.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newLiteralPart"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewMimeToken\u0028\u0029",
+            "name": "newMimeToken",
+            "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020MimeToken.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newMimeToken"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewMimeLiteralPart\u0028\u0029",
-            "name": "newMimeLiteralPart",
-            "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020MimeLiteralPart.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newMimeLiteralPart"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewContainerPart\u0028\u0029",
+            "name": "newContainerPart",
+            "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020ContainerPart.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newContainerPart"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewSplitParameterPart\u0028\u0029",
+            "name": "newSplitParameterPart",
+            "summary": "Instantiates\u0020and\u0020returns\u0020a\u0020SplitParameterPart.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newSplitParameterPart"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewQuotedLiteralPart\u0028\u0029",
+            "name": "newQuotedLiteralPart",
+            "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020QuotedLiteralPart.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newQuotedLiteralPart"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewCommentPart\u0028\u0029",
             "name": "newCommentPart",
             "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020CommentPart.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newCommentPart"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewAddressPart\u0028\u0029",
-            "name": "newAddressPart",
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewAddress\u0028\u0029",
+            "name": "newAddress",
             "summary": "Initializes\u0020and\u0020returns\u0020a\u0020new\u0020AddressPart.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddressPart"
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#method_newAddress"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003AnewAddressGroupPart\u0028\u0029",
             "name": "newAddressGroupPart",
@@ -1571,130 +1536,75 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#property_charsetConverter"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\LiteralPart",
-            "name": "LiteralPart",
-            "summary": "A\u0020literal\u0020header\u0020string\u0020part.\u0020\u0020The\u0020value\u0020of\u0020the\u0020part\u0020is\u0020stripped\u0020of\u0020CR\u0020and\u0020LF\ncharacters,\u0020but\u0020otherwise\u0020not\u0020transformed\u0020or\u0020changed\u0020in\u0020any\u0020way.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-LiteralPart.html"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\LiteralPart\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Creates\u0020a\u0020LiteralPart\u0020out\u0020of\u0020the\u0020passed\u0020string\u0020token",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-LiteralPart.html#method___construct"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart",
-            "name": "MimeLiteralPart",
-            "summary": "Represents\u0020a\u0020single\u0020mime\u0020header\u0020part\u0020token,\u0020with\u0020the\u0020possibility\u0020of\u0020it\u0020being\nMIME\u002DEncoded\u0020as\u0020per\u0020RFC\u002D2047.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Decoding\u0020the\u0020passed\u0020token\u0020value\u0020if\u0020it\u0027s\u0020mime\u002Dencoded\u0020and\u0020assigns\u0020the\ndecoded\u0020value\u0020to\u0020a\u0020member\u0020variable.\u0020Sets\u0020canIgnoreSpacesBefore\u0020and\ncanIgnoreSpacesAfter.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method___construct"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AdecodeMime\u0028\u0029",
-            "name": "decodeMime",
-            "summary": "Finds\u0020and\u0020replaces\u0020mime\u0020parts\u0020with\u0020their\u0020values.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeMime"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AdecodeMatchedEntity\u0028\u0029",
-            "name": "decodeMatchedEntity",
-            "summary": "Decodes\u0020a\u0020matched\u0020mime\u0020entity\u0020part\u0020into\u0020a\u0020string\u0020and\u0020returns\u0020it,\u0020after\nadding\u0020the\u0020string\u0020into\u0020the\u0020languages\u0020array.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeMatchedEntity"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AdecodeSplitPart\u0028\u0029",
-            "name": "decodeSplitPart",
-            "summary": "Decodes\u0020a\u0020single\u0020mime\u002Dencoded\u0020entity.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_decodeSplitPart"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AignoreSpacesBefore\u0028\u0029",
-            "name": "ignoreSpacesBefore",
-            "summary": "Returns\u0020true\u0020if\u0020spaces\u0020before\u0020this\u0020part\u0020should\u0020be\u0020ignored.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_ignoreSpacesBefore"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AignoreSpacesAfter\u0028\u0029",
-            "name": "ignoreSpacesAfter",
-            "summary": "Returns\u0020true\u0020if\u0020spaces\u0020before\u0020this\u0020part\u0020should\u0020be\u0020ignored.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_ignoreSpacesAfter"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AaddToLanguage\u0028\u0029",
-            "name": "addToLanguage",
-            "summary": "Adds\u0020the\u0020passed\u0020part\u0020into\u0020the\u0020languages\u0020array\u0020with\u0020the\u0020given\u0020language.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_addToLanguage"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AgetLanguageArray\u0028\u0029",
-            "name": "getLanguageArray",
-            "summary": "Returns\u0020an\u0020array\u0020of\u0020parts\u0020mapped\u0020to\u0020languages\u0020in\u0020the\u0020header\u0020value,\u0020for\ninstance\u0020the\u0020string\u003A",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#method_getLanguageArray"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AMIME_PART_PATTERN",
-            "name": "MIME_PART_PATTERN",
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\HeaderPartFactory\u003A\u003A\u0024logger",
+            "name": "logger",
             "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#constant_MIME_PART_PATTERN"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003AMIME_PART_PATTERN_NO_QUOTES",
-            "name": "MIME_PART_PATTERN_NO_QUOTES",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#constant_MIME_PART_PATTERN_NO_QUOTES"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003A\u0024canIgnoreSpacesBefore",
-            "name": "canIgnoreSpacesBefore",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_canIgnoreSpacesBefore"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003A\u0024canIgnoreSpacesAfter",
-            "name": "canIgnoreSpacesAfter",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_canIgnoreSpacesAfter"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPart\u003A\u003A\u0024languages",
-            "name": "languages",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPart.html#property_languages"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPartFactory",
-            "name": "MimeLiteralPartFactory",
-            "summary": "Extends\u0020HeaderPartFactory\u0020to\u0020instantiate\u0020MimeLiteralParts\u0020for\u0020its\u0020newInstance\nfunction.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPartFactory.html"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeLiteralPartFactory\u003A\u003AnewInstance\u0028\u0029",
-            "name": "newInstance",
-            "summary": "Creates\u0020and\u0020returns\u0020a\u0020MimeLiteralPart.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeLiteralPartFactory.html#method_newInstance"
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html#property_logger"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart",
             "name": "ParameterPart",
-            "summary": "Represents\u0020a\u0020name\/value\u0020pair\u0020part\u0020of\u0020a\u0020header.",
+            "summary": "Represents\u0020a\u0020name\/value\u0020parameter\u0020part\u0020of\u0020a\u0020header.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Constructs\u0020a\u0020ParameterPart\u0020out\u0020of\u0020a\u0020name\/value\u0020pair.\u0020\u0020The\u0020name\u0020and\nvalue\u0020are\u0020both\u0020mime\u002Ddecoded\u0020if\u0020necessary.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method___construct"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AgetName\u0028\u0029",
-            "name": "getName",
-            "summary": "Returns\u0020the\u0020name\u0020of\u0020the\u0020parameter.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getName"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AgetNameFromParts\u0028\u0029",
+            "name": "getNameFromParts",
+            "summary": "Creates\u0020the\u0020string\u0020\u0027name\u0027\u0020representation\u0020of\u0020this\u0020part\u0020constructed\u0020from\nthe\u0020child\u0020name\u0020parts\u0020passed\u0020to\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getNameFromParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AdecodePartValue\u0028\u0029",
+            "name": "decodePartValue",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_decodePartValue"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AgetValueFromParts\u0028\u0029",
+            "name": "getValueFromParts",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getValueFromParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AgetCharset\u0028\u0029",
+            "name": "getCharset",
+            "summary": "Returns\u0020the\u0020charset\u0020if\u0020the\u0020part\u0020is\u0020an\u0020RFC\u002D2231\u0020part\u0020with\u0020a\u0020charset\u0020set.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getCharset"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AgetLanguage\u0028\u0029",
             "name": "getLanguage",
-            "summary": "Returns\u0020the\u0020RFC\u002D1766\u0020\u0028or\u0020subset\u0029\u0020language\u0020tag,\u0020if\u0020the\u0020parameter\u0020is\u0020a\nsplit\u0020RFC\u002D2231\u0020part\u0020with\u0020a\u0020language\u0020tag\u0020set.",
+            "summary": "Returns\u0020the\u0020RFC\u002D1766\u0020\u0028or\u0020subset\u0029\u0020language\u0020tag,\u0020if\u0020the\u0020parameter\u0020is\u0020an\nRFC\u002D2231\u0020part\u0020with\u0020a\u0020language\u0020tag\u0020set.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getLanguage"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003Avalidate\u0028\u0029",
-            "name": "validate",
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AisUrlEncoded\u0028\u0029",
+            "name": "isUrlEncoded",
             "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_validate"
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_isUrlEncoded"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003A\u0024name",
-            "name": "name",
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003AgetIndex\u0028\u0029",
+            "name": "getIndex",
             "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_name"
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#method_getIndex"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003A\u0024language",
             "name": "language",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_language"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003A\u0024charset",
+            "name": "charset",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_charset"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003A\u0024index",
+            "name": "index",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_index"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ParameterPart\u003A\u003A\u0024encoded",
+            "name": "encoded",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html#property_encoded"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ReceivedDomainPart",
             "name": "ReceivedDomainPart",
@@ -1703,7 +1613,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ReceivedDomainPart\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Constructs\u0020a\u0020ParameterPart\u0020out\u0020of\u0020a\u0020name\/value\u0020pair.\u0020\u0020The\u0020name\u0020and\nvalue\u0020are\u0020both\u0020mime\u002Ddecoded\u0020if\u0020necessary.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ReceivedDomainPart.html#method___construct"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ReceivedDomainPart\u003A\u003AgetEhloName\u0028\u0029",
@@ -1743,73 +1653,8 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ReceivedPart\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Constructs\u0020a\u0020ParameterPart\u0020out\u0020of\u0020a\u0020name\/value\u0020pair.\u0020\u0020The\u0020name\u0020and\nvalue\u0020are\u0020both\u0020mime\u002Ddecoded\u0020if\u0020necessary.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ReceivedPart.html#method___construct"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken",
-            "name": "SplitParameterToken",
-            "summary": "Holds\u0020a\u0020running\u0020value\u0020for\u0020an\u0020RFC\u002D2231\u0020split\u0020header\u0020parameter.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Initializes\u0020a\u0020SplitParameterToken.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method___construct"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003AextractMetaInformationAndValue\u0028\u0029",
-            "name": "extractMetaInformationAndValue",
-            "summary": "Extracts\u0020charset\u0020and\u0020language\u0020from\u0020an\u0020encoded\u0020value,\u0020setting\u0020them\u0020on\u0020the\ncurrent\u0020object\u0020if\u0020\u0024index\u0020is\u00200\u0020and\u0020adds\u0020the\u0020value\u0020part\u0020to\u0020the\u0020encodedParts\narray.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method_extractMetaInformationAndValue"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003AaddPart\u0028\u0029",
-            "name": "addPart",
-            "summary": "Adds\u0020the\u0020passed\u0020part\u0020to\u0020the\u0020running\u0020array\u0020of\u0020values.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method_addPart"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003AgetNextEncodedValue\u0028\u0029",
-            "name": "getNextEncodedValue",
-            "summary": "Traverses\u0020\u0024this\u002D\u003EencodedParts\u0020until\u0020a\u0020non\u002Dsequential\u0020key\u0020is\u0020found,\u0020or\u0020the\nend\u0020of\u0020the\u0020array\u0020is\u0020found.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method_getNextEncodedValue"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003AgetValue\u0028\u0029",
-            "name": "getValue",
-            "summary": "Reconstructs\u0020the\u0020value\u0020of\u0020the\u0020split\u0020parameter\u0020into\u0020a\u0020single\u0020UTF\u002D8\u0020string\nand\u0020returns\u0020it.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method_getValue"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003AgetName\u0028\u0029",
-            "name": "getName",
-            "summary": "Returns\u0020the\u0020name\u0020of\u0020the\u0020parameter.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method_getName"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003AgetLanguage\u0028\u0029",
-            "name": "getLanguage",
-            "summary": "Returns\u0020the\u0020language\u0020of\u0020the\u0020parameter\u0020if\u0020set,\u0020or\u0020null\u0020if\u0020not.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#method_getLanguage"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003A\u0024name",
-            "name": "name",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#property_name"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003A\u0024encodedParts",
-            "name": "encodedParts",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#property_encodedParts"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003A\u0024literalParts",
-            "name": "literalParts",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#property_literalParts"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003A\u0024language",
-            "name": "language",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#property_language"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterToken\u003A\u003A\u0024charset",
-            "name": "charset",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterToken.html#property_charset"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token",
             "name": "Token",
@@ -1818,23 +1663,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Initializes\u0020a\u0020token.",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#method___construct"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003AisSpace\u0028\u0029",
-            "name": "isSpace",
-            "summary": "Returns\u0020true\u0020if\u0020the\u0020value\u0020of\u0020the\u0020token\u0020is\u0020equal\u0020to\u0020a\u0020single\u0020space.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#method_isSpace"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003AgetValue\u0028\u0029",
+            "name": "getValue",
+            "summary": "Returns\u0020the\u0020part\u0027s\u0020representative\u0020value\u0020after\u0020any\u0020necessary\u0020processing\nhas\u0020been\u0020performed.\u0020\u0020For\u0020the\u0020raw\u0020value,\u0020call\u0020getRawValue\u0028\u0029.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#method_getValue"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003AignoreSpacesBefore\u0028\u0029",
-            "name": "ignoreSpacesBefore",
-            "summary": "Returns\u0020true\u0020if\u0020the\u0020value\u0020is\u0020a\u0020space.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#method_ignoreSpacesBefore"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003AgetRawValue\u0028\u0029",
+            "name": "getRawValue",
+            "summary": "Returns\u0020the\u0020part\u0027s\u0020raw\u0020value.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#method_getRawValue"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003AignoreSpacesAfter\u0028\u0029",
-            "name": "ignoreSpacesAfter",
-            "summary": "Returns\u0020true\u0020if\u0020the\u0020value\u0020is\u0020a\u0020space.",
-            "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#method_ignoreSpacesAfter"
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\Token\u003A\u003A\u0024rawValue",
+            "name": "rawValue",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-Token.html#property_rawValue"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\ReceivedHeader",
             "name": "ReceivedHeader",
@@ -1945,6 +1790,11 @@ Search.appendIndex(
             "name": "IMessage",
             "summary": "An\u0020interface\u0020representing\u0020an\u0020email\u0020message.",
             "url": "classes/ZBateson-MailMimeParser-IMessage.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\IMessage\u003A\u003AgetSubject\u0028\u0029",
+            "name": "getSubject",
+            "summary": "Returns\u0020the\u0020subject\u0020of\u0020the\u0020message,\u0020retrieved\u0020from\u0020the\u0020\u0027Subject\u0027\u0020header,\nor\u0020null\u0020if\u0020the\u0020message\u0020has\u0020none\u0020set.",
+            "url": "classes/ZBateson-MailMimeParser-IMessage.html#method_getSubject"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\IMessage\u003A\u003AgetTextPart\u0028\u0029",
             "name": "getTextPart",
@@ -2081,15 +1931,30 @@ Search.appendIndex(
             "summary": "Parses\u0020a\u0020MIME\u0020message\u0020into\u0020an\u0020\u007B\u0040see\u0020IMessage\u007D\u0020object.",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AgetGlobalContainerBuilder\u0028\u0029",
+            "name": "getGlobalContainerBuilder",
+            "summary": "Returns\u0020the\u0020default\u0020ContainerBuilder\u0020with\u0020default\u0020loaded\u0020definitions.",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_getGlobalContainerBuilder"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AsetGlobalPhpDiConfigurations\u0028\u0029",
+            "name": "setGlobalPhpDiConfigurations",
+            "summary": "Sets\u0020global\u0020configuration\u0020for\u0020php\u002Ddi.\u0020\u0020Overrides\u0020all\u0020previously\u0020set\ndefinitions.\u0020\u0020You\u0020can\u0020optionally\u0020not\u0020use\u0020the\u0020default\u0020MMP\u0020definitions\u0020file\nby\u0020passing\u0020\u0027false\u0027\u0020to\u0020the\u0020\u0024useDefaultDefinitionsFile\u0020argument.",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfigurations"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AaddGlobalPhpDiContainerDefinition\u0028\u0029",
+            "name": "addGlobalPhpDiContainerDefinition",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_addGlobalPhpDiContainerDefinition"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AresetGlobalPhpDiContainerDefinitions\u0028\u0029",
+            "name": "resetGlobalPhpDiContainerDefinitions",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_resetGlobalPhpDiContainerDefinitions"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AgetGlobalContainer\u0028\u0029",
             "name": "getGlobalContainer",
             "summary": "Returns\u0020the\u0020global\u0020php\u002Ddi\u0020container\u0020instance.",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_getGlobalContainer"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AsetGlobalPhpDiConfiguration\u0028\u0029",
-            "name": "setGlobalPhpDiConfiguration",
-            "summary": "Sets\u0020global\u0020configuration\u0020for\u0020php\u002Ddi.",
-            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_setGlobalPhpDiConfiguration"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AsetGlobalLogger\u0028\u0029",
             "name": "setGlobalLogger",
@@ -2111,6 +1976,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#constant_DEFAULT_CHARSET"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003ADEFAULT_DEFINITIONS_FILE",
+            "name": "DEFAULT_DEFINITIONS_FILE",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#constant_DEFAULT_DEFINITIONS_FILE"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003A\u0024container",
             "name": "container",
             "summary": "",
@@ -2126,6 +1996,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#property_globalContainer"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003A\u0024globalDefinitions",
+            "name": "globalDefinitions",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#property_globalDefinitions"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\IMessagePartFactory",
             "name": "IMessagePartFactory",
             "summary": "Abstract\u0020factory\u0020for\u0020subclasses\u0020of\u0020IMessagePart.",
@@ -2140,6 +2015,11 @@ Search.appendIndex(
             "name": "newInstance",
             "summary": "Constructs\u0020a\u0020new\u0020IMessagePart\u0020object\u0020and\u0020returns\u0020it",
             "url": "classes/ZBateson-MailMimeParser-Message-Factory-IMessagePartFactory.html#method_newInstance"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\IMessagePartFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-Factory-IMessagePartFactory.html#property_logger"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\IMessagePartFactory\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
@@ -2211,6 +2091,11 @@ Search.appendIndex(
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020PartHeaderContainer.",
             "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartHeaderContainerFactory.html#method_newInstance"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\PartHeaderContainerFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartHeaderContainerFactory.html#property_logger"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\PartHeaderContainerFactory\u003A\u003A\u0024headerFactory",
             "name": "headerFactory",
             "summary": "",
@@ -2231,10 +2116,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html#method_newInstance"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\PartStreamContainerFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html#property_logger"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\PartStreamContainerFactory\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html#property_streamFactory"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\PartStreamContainerFactory\u003A\u003A\u0024mbWrapper",
+            "name": "mbWrapper",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html#property_mbWrapper"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Factory\\PartStreamContainerFactory\u003A\u003A\u0024throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "name": "throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-Factory-PartStreamContainerFactory.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\Helper\\AbstractHelper",
             "name": "AbstractHelper",
@@ -3436,6 +3336,21 @@ Search.appendIndex(
             "summary": "Checks\u0020what\u0020transfer\u002Dencoding\u0020decoder\u0020stream\u0020is\u0020attached\u0020on\u0020the\nunderlying\u0020stream,\u0020and\u0020resets\u0020it\u0020if\u0020the\u0020requested\u0020arguments\u0020differ.",
             "url": "classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getBinaryContentStream"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\PartStreamContainer\u003A\u003AgetErrorBagChildren\u0028\u0029",
+            "name": "getErrorBagChildren",
+            "summary": "Return\u0020any\u0020children\u0020ErrorBag\u0020objects.",
+            "url": "classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#method_getErrorBagChildren"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\PartStreamContainer\u003A\u003A\u0024mbWrapper",
+            "name": "mbWrapper",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_mbWrapper"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\PartStreamContainer\u003A\u003A\u0024throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "name": "throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Message-PartStreamContainer.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\PartStreamContainer\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
             "summary": "",
@@ -3531,11 +3446,6 @@ Search.appendIndex(
             "summary": "Sets\u0020the\u0020unix\u0020file\u0020mode\u0020for\u0020the\u0020uuencoded\u0020\u0027begin\u0027\u0020line.",
             "url": "classes/ZBateson-MailMimeParser-Message-UUEncodedPart.html#method_setUnixFileMode"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Message\\UUEncodedPart\u003A\u003AgetErrorBagChildren\u0028\u0029",
-            "name": "getErrorBagChildren",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Message-UUEncodedPart.html#method_getErrorBagChildren"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\\UUEncodedPart\u003A\u003A\u0024mode",
             "name": "mode",
             "summary": "",
@@ -3565,6 +3475,11 @@ Search.appendIndex(
             "name": "isMime",
             "summary": "Returns\u0020true\u0020if\u0020the\u0020current\u0020part\u0020is\u0020a\u0020mime\u0020part.",
             "url": "classes/ZBateson-MailMimeParser-Message.html#method_isMime"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Message\u003A\u003AgetSubject\u0028\u0029",
+            "name": "getSubject",
+            "summary": "Returns\u0020the\u0020subject\u0020of\u0020the\u0020message,\u0020retrieved\u0020from\u0020the\u0020\u0027Subject\u0027\u0020header,\nor\u0020null\u0020if\u0020the\u0020message\u0020has\u0020none\u0020set.",
+            "url": "classes/ZBateson-MailMimeParser-Message.html#method_getSubject"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Message\u003A\u003AgetTextPart\u0028\u0029",
             "name": "getTextPart",
@@ -4096,10 +4011,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainerFactory.html#method_newInstance"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\ParserPartStreamContainerFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainerFactory.html#property_logger"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\ParserPartStreamContainerFactory\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainerFactory.html#property_streamFactory"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\ParserPartStreamContainerFactory\u003A\u003A\u0024mbWrapper",
+            "name": "mbWrapper",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainerFactory.html#property_mbWrapper"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\ParserPartStreamContainerFactory\u003A\u003A\u0024throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "name": "throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Part-ParserPartStreamContainerFactory.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\UUEncodedPartHeaderContainer",
             "name": "UUEncodedPartHeaderContainer",
@@ -4150,6 +4080,11 @@ Search.appendIndex(
             "name": "newInstance",
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020UUEncodedPartHeaderContainer.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Part-UUEncodedPartHeaderContainerFactory.html#method_newInstance"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\UUEncodedPartHeaderContainerFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Part-UUEncodedPartHeaderContainerFactory.html#property_logger"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Part\\UUEncodedPartHeaderContainerFactory\u003A\u003A\u0024headerFactory",
             "name": "headerFactory",
@@ -4481,6 +4416,11 @@ Search.appendIndex(
             "summary": "Constructs\u0020a\u0020new\u0020ParserMimePartProxy\u0020wrapping\u0020an\u0020IMimePart\u0020object\u0020that\nwill\u0020dynamically\u0020parse\u0020a\u0020message\u0027s\u0020content\u0020and\u0020parts\u0020as\u0020they\u0027re\nrequested.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxyFactory.html#method_newInstance"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxyFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxyFactory.html#property_logger"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxyFactory\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
             "summary": "",
@@ -4766,6 +4706,11 @@ Search.appendIndex(
             "summary": "Constructs\u0020a\u0020new\u0020ParserUUEncodedPartProxy\u0020wrapping\u0020an\u0020IUUEncoded\u0020object.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxyFactory.html#method_newInstance"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserUUEncodedPartProxyFactory\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserUUEncodedPartProxyFactory.html#property_logger"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserUUEncodedPartProxyFactory\u003A\u003A\u0024streamFactory",
             "name": "streamFactory",
             "summary": "",
@@ -4816,11 +4761,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Stream-HeaderStream.html#property_part"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\HeaderStream\u003A\u003A\u0024stream",
-            "name": "stream",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Stream-HeaderStream.html#property_stream"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream",
             "name": "MessagePartStream",
             "summary": "Provides\u0020a\u0020readable\u0020stream\u0020for\u0020a\u0020MessagePart.",
@@ -4828,7 +4768,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Constructor",
+            "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method___construct"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A__destruct\u0028\u0029",
@@ -4845,16 +4785,6 @@ Search.appendIndex(
             "name": "getCharsetDecoratorForStream",
             "summary": "Attaches\u0020and\u0020returns\u0020a\u0020CharsetStream\u0020decorator\u0020to\u0020the\u0020passed\u0020\u0024stream.",
             "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_getCharsetDecoratorForStream"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003AgetTransferEncodingDecoratorForStream\u0028\u0029",
-            "name": "getTransferEncodingDecoratorForStream",
-            "summary": "Attaches\u0020and\u0020returns\u0020a\u0020transfer\u0020encoding\u0020stream\u0020decorator\u0020to\u0020the\u0020passed\n\u0024stream.",
-            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_getTransferEncodingDecoratorForStream"
-        },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003AwritePartContentTo\u0028\u0029",
-            "name": "writePartContentTo",
-            "summary": "Writes\u0020out\u0020the\u0020content\u0020portion\u0020of\u0020the\u0020attached\u0020mime\u0020part\u0020to\u0020the\u0020passed\n\u0024stream.",
-            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#method_writePartContentTo"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003AgetBoundaryAndChildStreams\u0028\u0029",
             "name": "getBoundaryAndChildStreams",
@@ -4881,20 +4811,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_part"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A\u0024throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "name": "throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A\u0024appendStream",
             "name": "appendStream",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_appendStream"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStream\u003A\u003A\u0024stream",
-            "name": "stream",
-            "summary": "",
-            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStream.html#property_stream"
-        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory",
             "name": "StreamFactory",
             "summary": "Factory\u0020class\u0020for\u0020Psr7\u0020stream\u0020decorators\u0020used\u0020in\u0020MailMimeParser.",
             "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method___construct"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AgetLimitedPartStream\u0028\u0029",
             "name": "getLimitedPartStream",
@@ -4910,6 +4845,11 @@ Search.appendIndex(
             "name": "newLimitStream",
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020SeekingLimitedStream.",
             "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newLimitStream"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AnewSeekingStream\u0028\u0029",
+            "name": "newSeekingStream",
+            "summary": "Creates\u0020and\u0020returns\u0020a\u0020SeekingLimitedStream\u0020without\u0020limits,\u0020so\u0020it\u0027s\u0020a\nstream\u0020that\u0020preserves\u0020its\u0020current\u0020position\u0020on\u0020the\u0020underlying\u0020stream\u0020it\nreads\u0020from.",
+            "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newSeekingStream"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AnewNonClosingStream\u0028\u0029",
             "name": "newNonClosingStream",
@@ -4936,6 +4876,11 @@ Search.appendIndex(
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020UUStream",
             "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newUUStream"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AgetTransferEncodingDecoratedStream\u0028\u0029",
+            "name": "getTransferEncodingDecoratedStream",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_getTransferEncodingDecoratedStream"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AnewCharsetStream\u0028\u0029",
             "name": "newCharsetStream",
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020CharsetStream",
@@ -4946,10 +4891,340 @@ Search.appendIndex(
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020MessagePartStream",
             "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newMessagePartStream"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AnewDecoratedCachingStream\u0028\u0029",
+            "name": "newDecoratedCachingStream",
+            "summary": "Creates\u0020and\u0020returns\u0020a\u0020DecoratedCachingStream",
+            "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newDecoratedCachingStream"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AnewHeaderStream\u0028\u0029",
             "name": "newHeaderStream",
             "summary": "Creates\u0020and\u0020returns\u0020a\u0020HeaderStream",
             "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newHeaderStream"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003AnewDecoratedMessagePartStream\u0028\u0029",
+            "name": "newDecoratedMessagePartStream",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#method_newDecoratedMessagePartStream"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\StreamFactory\u003A\u003A\u0024throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "name": "throwExceptionReadingPartContentFromUnsupportedCharsets",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-StreamFactory.html#property_throwExceptionReadingPartContentFromUnsupportedCharsets"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterNameValueConsumerService",
+            "name": "ParameterNameValueConsumerService",
+            "summary": "Parses\u0020an\u0020individual\u0020part\u0020of\u0020a\u0020parameter\u0020header.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterNameValueConsumerService\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterNameValueConsumerService\u003A\u003AgetTokenSeparators\u0028\u0029",
+            "name": "getTokenSeparators",
+            "summary": "Returns\u0020semi\u002Dcolon\u0020as\u0020a\u0020token\u0020separator,\u0020in\u0020addition\u0020to\u0020parent\u0020token\nseparators.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html#method_getTokenSeparators"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterNameValueConsumerService\u003A\u003AisStartToken\u0028\u0029",
+            "name": "isStartToken",
+            "summary": "Always\u0020returns\u0020true\u0020to\u0020grab\u0020control\u0020from\u0020its\u0020parent\nParameterConsumerService.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html#method_isStartToken"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterNameValueConsumerService\u003A\u003AisEndToken\u0028\u0029",
+            "name": "isEndToken",
+            "summary": "Returns\u0020true\u0020if\u0020the\u0020token\u0020is\u0020a\u0020\u0027\u003B\u0027\u0020char.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html#method_isEndToken"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterNameValueConsumerService\u003A\u003AprocessParts\u0028\u0029",
+            "name": "processParts",
+            "summary": "Creates\u0020either\u0020a\u0020ContainerPart\u0020if\u0020an\u0020\u0027\u003D\u0027\u0020wasn\u0027t\u0020encountered,\u0020indicating\nthis\u0020to\u0020be\u0020the\u0020main\u0020\u0027value\u0027\u0020part\u0020of\u0020a\u0020header\u0020\u0028or\u0020a\u0020malformed\u0020part\u0020of\u0020a\nparameter\u0020header\u0029,\u0020or\u0020a\u0020ParameterPart\u0020if\u0020the\u0020last\u0020IHeaderPart\u0020in\u0020the\npassed\u0020\u0024parts\u0020array\u0020is\u0020already\u0020a\u0020ContainerPart\u0020\u0028indicating\u0020it\u0020was\u0020parsed\nin\u0020ParameterValueConsumerService.\u0029",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html#method_processParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterValueConsumerService",
+            "name": "ParameterValueConsumerService",
+            "summary": "Starts\u0020processing\u0020tokens\u0020after\u0020a\u0020\u0027\u003D\u0027\u0020character\u0020is\u0020found,\u0020indicating\u0020the\n\u0027value\u0027\u0020portion\u0020of\u0020a\u0020name\/value\u0020pair\u0020in\u0020a\u0020parameter\u0020header.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterValueConsumerService\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterValueConsumerService\u003A\u003AgetTokenSeparators\u0028\u0029",
+            "name": "getTokenSeparators",
+            "summary": "Returns\u0020semi\u002Dcolon\u0020and\u0020equals\u0020char\u0020as\u0020token\u0020separators.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html#method_getTokenSeparators"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterValueConsumerService\u003A\u003AisStartToken\u0028\u0029",
+            "name": "isStartToken",
+            "summary": "Returns\u0020true\u0020if\u0020the\u0020token\u0020is\u0020an\u0020\u0027\u003D\u0027\u0020character.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html#method_isStartToken"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\ParameterValueConsumerService\u003A\u003AisEndToken\u0028\u0029",
+            "name": "isEndToken",
+            "summary": "Returns\u0020true\u0020if\u0020the\u0020token\u0020is\u0020a\u0020\u0027\u003B\u0027\u0020character.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html#method_isEndToken"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringMimeLiteralPartConsumerService",
+            "name": "QuotedStringMimeLiteralPartConsumerService",
+            "summary": "Allows\u0020for\u0020mime\u002Dencoded\u0020parts\u0020inside\u0020a\u0020quoted\u0020part.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartConsumerService.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringMimeLiteralPartConsumerService\u003A\u003AgetPartForToken\u0028\u0029",
+            "name": "getPartForToken",
+            "summary": "Constructs\u0020a\u0020LiteralPart\u0020and\u0020returns\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartConsumerService.html#method_getPartForToken"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringMimeLiteralPartTokenSplitPatternTrait",
+            "name": "QuotedStringMimeLiteralPartTokenSplitPatternTrait",
+            "summary": "Provides\u0020a\u0020getTokenSplitPattern\u0020for\u0020consumers\u0020that\u0020could\u0020have\u0020quoted\u0020parts\nthat\u0020are\u0020mime\u002Dheader\u002Dencoded.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartTokenSplitPatternTrait.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\QuotedStringMimeLiteralPartTokenSplitPatternTrait\u003A\u003AgetTokenSplitPattern\u0028\u0029",
+            "name": "getTokenSplitPattern",
+            "summary": "Overridden\u0020to\u0020use\u0020a\u0020specialized\u0020regex\u0020for\u0020finding\u0020mime\u002Dencoded\u0020parts\n\u0028RFC\u00202047\u0029.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartTokenSplitPatternTrait.html#method_getTokenSplitPattern"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart",
+            "name": "ContainerPart",
+            "summary": "Base\u0020HeaderPart\u0020for\u0020a\u0020part\u0020that\u0020consists\u0020of\u0020other\u0020parts.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AfilterIgnoredSpaces\u0028\u0029",
+            "name": "filterIgnoredSpaces",
+            "summary": "Filters\u0020out\u0020ignorable\u0020space\u0020tokens.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_filterIgnoredSpaces"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AgetValueFromParts\u0028\u0029",
+            "name": "getValueFromParts",
+            "summary": "Creates\u0020the\u0020string\u0020value\u0020representation\u0020of\u0020this\u0020part\u0020constructed\u0020from\u0020the\nchild\u0020parts\u0020passed\u0020to\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getValueFromParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AgetChildParts\u0028\u0029",
+            "name": "getChildParts",
+            "summary": "Returns\u0020the\u0020child\u0020parts\u0020this\u0020container\u0020part\u0020consists\u0020of.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getChildParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AgetComments\u0028\u0029",
+            "name": "getComments",
+            "summary": "Returns\u0020any\u0020CommentParts\u0020under\u0020this\u0020part\u0020container.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getComments"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AgetErrorBagChildren\u0028\u0029",
+            "name": "getErrorBagChildren",
+            "summary": "Returns\u0020this\u0020part\u0027s\u0020children,\u0020same\u0020as\u0020getChildParts\u0028\u0029.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_getErrorBagChildren"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003A\u0024children",
+            "name": "children",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#property_children"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken",
+            "name": "MimeToken",
+            "summary": "Represents\u0020a\u0020single\u0020mime\u0020header\u0020part\u0020token,\u0020with\u0020the\u0020possibility\u0020of\u0020it\u0020being\nMIME\u002DEncoded\u0020as\u0020per\u0020RFC\u002D2047.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AdecodeMime\u0028\u0029",
+            "name": "decodeMime",
+            "summary": "Finds\u0020and\u0020replaces\u0020mime\u0020parts\u0020with\u0020their\u0020values.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#method_decodeMime"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AdecodeMatchedEntity\u0028\u0029",
+            "name": "decodeMatchedEntity",
+            "summary": "Decodes\u0020a\u0020matched\u0020mime\u0020entity\u0020part\u0020into\u0020a\u0020string\u0020and\u0020returns\u0020it,\u0020after\nadding\u0020the\u0020string\u0020into\u0020the\u0020languages\u0020array.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#method_decodeMatchedEntity"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AgetLanguage\u0028\u0029",
+            "name": "getLanguage",
+            "summary": "Returns\u0020the\u0020language\u0020code\u0020for\u0020the\u0020mime\u0020part.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#method_getLanguage"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AgetCharset\u0028\u0029",
+            "name": "getCharset",
+            "summary": "Returns\u0020the\u0020charset\u0020for\u0020the\u0020encoded\u0020part.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#method_getCharset"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AgetRawValue\u0028\u0029",
+            "name": "getRawValue",
+            "summary": "Returns\u0020the\u0020part\u0027s\u0020raw\u0020value.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#method_getRawValue"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AMIME_PART_PATTERN",
+            "name": "MIME_PART_PATTERN",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#constant_MIME_PART_PATTERN"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003AMIME_PART_PATTERN_NO_QUOTES",
+            "name": "MIME_PART_PATTERN_NO_QUOTES",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#constant_MIME_PART_PATTERN_NO_QUOTES"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003A\u0024language",
+            "name": "language",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#property_language"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeToken\u003A\u003A\u0024charset",
+            "name": "charset",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html#property_charset"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeTokenPartFactory",
+            "name": "MimeTokenPartFactory",
+            "summary": "Extends\u0020HeaderPartFactory\u0020to\u0020instantiate\u0020MimeTokens\u0020for\u0020its\nnewInstance\u0020method.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeTokenPartFactory.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\MimeTokenPartFactory\u003A\u003AnewInstance\u0028\u0029",
+            "name": "newInstance",
+            "summary": "Creates\u0020and\u0020returns\u0020a\u0020MimeToken.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-MimeTokenPartFactory.html#method_newInstance"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\NameValuePart",
+            "name": "NameValuePart",
+            "summary": "Represents\u0020a\u0020name\/value\u0020pair\u0020part\u0020of\u0020a\u0020header.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\NameValuePart\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\NameValuePart\u003A\u003AgetNameFromParts\u0028\u0029",
+            "name": "getNameFromParts",
+            "summary": "Creates\u0020the\u0020string\u0020\u0027name\u0027\u0020representation\u0020of\u0020this\u0020part\u0020constructed\u0020from\nthe\u0020child\u0020name\u0020parts\u0020passed\u0020to\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_getNameFromParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\NameValuePart\u003A\u003AgetName\u0028\u0029",
+            "name": "getName",
+            "summary": "Returns\u0020the\u0020name\u0020of\u0020the\u0020name\/value\u0020part.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_getName"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\NameValuePart\u003A\u003Avalidate\u0028\u0029",
+            "name": "validate",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#method_validate"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\NameValuePart\u003A\u003A\u0024name",
+            "name": "name",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html#property_name"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\QuotedLiteralPart",
+            "name": "QuotedLiteralPart",
+            "summary": "A\u0020quoted\u0020literal\u0020header\u0020string\u0020part.\u0020\u0020The\u0020value\u0020of\u0020the\u0020part\u0020is\u0020stripped\u0020of\u0020CR\nand\u0020LF\u0020characters,\u0020but\u0020otherwise\u0020not\u0020transformed\u0020or\u0020changed\u0020in\u0020any\u0020way.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\QuotedLiteralPart\u003A\u003AfilterIgnoredSpaces\u0028\u0029",
+            "name": "filterIgnoredSpaces",
+            "summary": "Filters\u0020out\u0020ignorable\u0020space\u0020tokens.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html#method_filterIgnoredSpaces"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart",
+            "name": "SplitParameterPart",
+            "summary": "Holds\u0020a\u0020running\u0020value\u0020for\u0020an\u0020RFC\u002D2231\u0020split\u0020header\u0020parameter.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Initializes\u0020a\u0020SplitParameterToken.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart\u003A\u003AgetNameFromParts\u0028\u0029",
+            "name": "getNameFromParts",
+            "summary": "Creates\u0020the\u0020string\u0020\u0027name\u0027\u0020representation\u0020of\u0020this\u0020part\u0020constructed\u0020from\nthe\u0020child\u0020name\u0020parts\u0020passed\u0020to\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html#method_getNameFromParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart\u003A\u003AgetMimeTokens\u0028\u0029",
+            "name": "getMimeTokens",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html#method_getMimeTokens"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart\u003A\u003AcombineAdjacentUnencodedParts\u0028\u0029",
+            "name": "combineAdjacentUnencodedParts",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html#method_combineAdjacentUnencodedParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart\u003A\u003AgetValueFromParts\u0028\u0029",
+            "name": "getValueFromParts",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html#method_getValueFromParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart\u003A\u003A\u0024partFactory",
+            "name": "partFactory",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html#property_partFactory"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SubjectToken",
+            "name": "SubjectToken",
+            "summary": "Specialized\u0020token\u0020for\u0020subjects\u0020that\u0020preserves\u0020whitespace,\u0020except\u0020for\u0020new\nlines.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SubjectToken\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SubjectToken\u003A\u003AgetValue\u0028\u0029",
+            "name": "getValue",
+            "summary": "Returns\u0020the\u0020part\u0027s\u0020representative\u0020value\u0020after\u0020any\u0020necessary\u0020processing\nhas\u0020been\u0020performed.\u0020\u0020For\u0020the\u0020raw\u0020value,\u0020call\u0020getRawValue\u0028\u0029.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html#method_getValue"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamDecorator",
+            "name": "MessagePartStreamDecorator",
+            "summary": "Provides\u0020a\u0020readable\u0020stream\u0020for\u0020a\u0020MessagePart.",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamDecorator\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamDecorator\u003A\u003Aread\u0028\u0029",
+            "name": "read",
+            "summary": "Overridden\u0020to\u0020wrap\u0020exceptions\u0020in\u0020MessagePartReadException\u0020which\u0020provides\n\u0027getPart\u0027\u0020to\u0020inspect\u0020the\u0020part\u0020the\u0020error\u0020occurs\u0020on.",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#method_read"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamDecorator\u003A\u003A\u0024part",
+            "name": "part",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#property_part"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamDecorator\u003A\u003A\u0024stream",
+            "name": "stream",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamDecorator.html#property_stream"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamReadException",
+            "name": "MessagePartStreamReadException",
+            "summary": "Thrown\u0020for\u0020exceptions\u0020on\u0020MessagePartStream\u003A\u003Aread\u0020so\u0020a\u0020\u0024part\u0020can\u0020be\u0020used\u0020to\ndetermine\u0020where\u0020the\u0020exception\u0020occurred.",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamReadException.html"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamReadException\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamReadException.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamReadException\u003A\u003AgetPart\u0028\u0029",
+            "name": "getPart",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamReadException.html#method_getPart"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Stream\\MessagePartStreamReadException\u003A\u003A\u0024part",
+            "name": "part",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Stream-MessagePartStreamReadException.html#property_part"
         },                {
             "fqsen": "\\",
             "name": "\\",
