@@ -22,6 +22,12 @@ use ZBateson\MailMimeParser\Message\IMimePart;
 interface IMessage extends IMimePart
 {
     /**
+     * Returns the subject of the message, retrieved from the 'Subject' header,
+     * or null if the message has none set.
+     */
+    public function getSubject() : ?string;
+
+    /**
      * Returns the inline text/plain IMessagePart for a message.
      *
      * If the message contains more than one text/plain 'inline' part, the

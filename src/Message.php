@@ -101,6 +101,11 @@ class Message extends MimePart implements IMessage
         return ($contentType !== null || $mimeVersion !== null);
     }
 
+    public function getSubject() : ?string
+    {
+        return $this->getHeaderValue(HeaderConsts::SUBJECT);
+    }
+
     public function getTextPart(int $index = 0) : ?IMessagePart
     {
         return $this->getPart(

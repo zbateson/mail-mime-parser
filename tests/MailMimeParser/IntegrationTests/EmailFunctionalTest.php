@@ -98,7 +98,7 @@ class EmailFunctionalTest extends TestCase
         }
 
         if (isset($props['Subject'])) {
-            $this->assertEquals($props['Subject'], $message->getHeaderValue('subject'), $failMessage);
+            $this->assertEquals($props['Subject'], $message->getSubject(), $failMessage);
         }
 
         if (isset($props['Date'])) {
