@@ -92,6 +92,8 @@ class Container extends PimpleContainer
      *
      * @param string | int $id
      *
+     * @return mixed The value of the parameter or an object
+     *
      * @throws UnknownIdentifierException
      */
     #[\ReturnTypeWillChange]

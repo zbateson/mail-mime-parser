@@ -128,6 +128,9 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
         return isset($this->children[$offset]);
     }
 
+    /**
+     * @return mixed
+     */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
