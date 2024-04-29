@@ -88,7 +88,6 @@ class MailMimeParser
     private static function getGlobalContainerBuilder() : ContainerBuilder
     {
         $builder = new ContainerBuilder();
-        $builder->useAttributes(true);
         foreach (self::$globalDefinitions as $def) {
             $builder->addDefinitions($def);
         }
@@ -174,7 +173,6 @@ class MailMimeParser
                 $builder = self::getGlobalContainerBuilder();
             } else {
                 $builder = new ContainerBuilder();
-                $builder->useAttributes(true);
                 $builder->addDefinitions(self::DEFAULT_DEFINITIONS_FILE);
             }
             if ($phpDiContainerConfig !== null) {
