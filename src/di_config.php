@@ -5,6 +5,8 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  */
 
+use DI\Definition\Helper\AutowireDefinitionHelper;
+use DI\Definition\Reference;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
@@ -16,47 +18,47 @@ use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
 return [
-    LoggerInterface::class => DI\autowire(NullLogger::class),
+    LoggerInterface::class => new AutowireDefinitionHelper(NullLogger::class),
 
     // only affects reading part content, not for instance decoding mime encoded
     // header parts
     'throwExceptionReadingPartContentFromUnsupportedCharsets' => false,
 
-    'fromDomainConsumerService' => DI\autowire(DomainConsumerService::class)
+    'fromDomainConsumerService' => (new AutowireDefinitionHelper(DomainConsumerService::class))
         ->constructorParameter('partName', 'from'),
-    'byDomainConsumerService' => DI\autowire(DomainConsumerService::class)
+    'byDomainConsumerService' => (new AutowireDefinitionHelper(DomainConsumerService::class))
         ->constructorParameter('partName', 'by'),
-    'viaGenericReceivedConsumerService' => DI\autowire(GenericReceivedConsumerService::class)
+    'viaGenericReceivedConsumerService' => (new AutowireDefinitionHelper(GenericReceivedConsumerService::class))
         ->constructorParameter('partName', 'via'),
-    'withGenericReceivedConsumerService' => DI\autowire(GenericReceivedConsumerService::class)
+    'withGenericReceivedConsumerService' => (new AutowireDefinitionHelper(GenericReceivedConsumerService::class))
         ->constructorParameter('partName', 'with'),
-    'idGenericReceivedConsumerService' => DI\autowire(GenericReceivedConsumerService::class)
+    'idGenericReceivedConsumerService' => (new AutowireDefinitionHelper(GenericReceivedConsumerService::class))
         ->constructorParameter('partName', 'id'),
-    'forGenericReceivedConsumerService' => DI\autowire(GenericReceivedConsumerService::class)
+    'forGenericReceivedConsumerService' => (new AutowireDefinitionHelper(GenericReceivedConsumerService::class))
         ->constructorParameter('partName', 'for'),
-    ReceivedConsumerService::class => DI\autowire()
+    ReceivedConsumerService::class => (new AutowireDefinitionHelper())
         ->constructor(
-            fromDomainConsumerService: DI\get('fromDomainConsumerService'),
-            byDomainConsumerService: DI\get('byDomainConsumerService'),
-            viaGenericReceivedConsumerService: DI\get('viaGenericReceivedConsumerService'),
-            withGenericReceivedConsumerService: DI\get('withGenericReceivedConsumerService'),
-            idGenericReceivedConsumerService: DI\get('idGenericReceivedConsumerService'),
-            forGenericReceivedConsumerService: DI\get('forGenericReceivedConsumerService')
+            fromDomainConsumerService: new Reference('fromDomainConsumerService'),
+            byDomainConsumerService: new Reference('byDomainConsumerService'),
+            viaGenericReceivedConsumerService: new Reference('viaGenericReceivedConsumerService'),
+            withGenericReceivedConsumerService: new Reference('withGenericReceivedConsumerService'),
+            idGenericReceivedConsumerService: new Reference('idGenericReceivedConsumerService'),
+            forGenericReceivedConsumerService: new Reference('forGenericReceivedConsumerService')
         ),
-    PartStreamContainer::class => DI\autowire()
+    PartStreamContainer::class => (new AutowireDefinitionHelper())
         ->constructor(
-            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
+            throwExceptionReadingPartContentFromUnsupportedCharsets: new Reference('throwExceptionReadingPartContentFromUnsupportedCharsets')
         ),
-    PartStreamContainerFactory::class => DI\autowire()
+    PartStreamContainerFactory::class => (new AutowireDefinitionHelper())
         ->constructor(
-            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
+            throwExceptionReadingPartContentFromUnsupportedCharsets: new Reference('throwExceptionReadingPartContentFromUnsupportedCharsets')
         ),
-    ParserPartStreamContainerFactory::class => DI\autowire()
+    ParserPartStreamContainerFactory::class => (new AutowireDefinitionHelper())
         ->constructor(
-            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
+            throwExceptionReadingPartContentFromUnsupportedCharsets: new Reference('throwExceptionReadingPartContentFromUnsupportedCharsets')
         ),
-    StreamFactory::class => DI\autowire()
+    StreamFactory::class => (new AutowireDefinitionHelper())
         ->constructor(
-            throwExceptionReadingPartContentFromUnsupportedCharsets: DI\get('throwExceptionReadingPartContentFromUnsupportedCharsets')
+            throwExceptionReadingPartContentFromUnsupportedCharsets: new Reference('throwExceptionReadingPartContentFromUnsupportedCharsets')
         ),
 ];
