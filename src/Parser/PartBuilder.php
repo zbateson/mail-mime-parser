@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
 use ZBateson\MailMimeParser\Header\HeaderConsts;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
-use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
+use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 
 /**
  * Holds generic/all purpose information about a part while it's being parsed.
@@ -73,12 +73,12 @@ class PartBuilder
     private mixed $messageHandle = null;
 
     /**
-     * @var ParserPartProxy The parent ParserPartProxy if one is set, or null if
-     *      part doesn't have a parent.
+     * @var ParserMimePartProxy The parent proxy part if one is set, or null if
+     *      the part being built doesn't have a parent.
      */
-    private ?ParserPartProxy $parent = null;
+    private ?ParserMimePartProxy $parent = null;
 
-    public function __construct(PartHeaderContainer $headerContainer, ?StreamInterface $messageStream = null, ?ParserPartProxy $parent = null)
+    public function __construct(PartHeaderContainer $headerContainer, ?StreamInterface $messageStream = null, ?ParserMimePartProxy $parent = null)
     {
         $this->headerContainer = $headerContainer;
         $this->messageStream = $messageStream;
@@ -99,7 +99,7 @@ class PartBuilder
     /**
      * The ParserPartProxy parent of this PartBuilder.
      */
-    public function getParent() : ?ParserPartProxy
+    public function getParent() : ?ParserMimePartProxy
     {
         return $this->parent;
     }

@@ -94,7 +94,7 @@ abstract class ParserPartProxy extends PartBuilder
         return $this;
     }
 
-    public function getParent() : ?ParserPartProxy
+    public function getParent() : ?ParserMimePartProxy
     {
         return $this->partBuilder->getParent();
     }

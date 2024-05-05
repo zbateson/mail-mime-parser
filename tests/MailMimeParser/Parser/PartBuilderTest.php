@@ -69,7 +69,7 @@ class PartBuilderTest extends TestCase
 
     public function testSetStreamContentPosAndGetFilenameWithParent() : void
     {
-        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
+        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMessageResourceHandle', 'setStreamPartEndPos'])
             ->getMockForAbstractClass();

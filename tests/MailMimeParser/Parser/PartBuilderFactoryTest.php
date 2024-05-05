@@ -39,7 +39,7 @@ class PartBuilderFactoryTest extends TestCase
             $partBuilder
         );
 
-        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
+        $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMessageResourceHandle'])
             ->getMockForAbstractClass();
