@@ -53,8 +53,8 @@ $firstToName = $to->getPersonName();
 $firstToEmail = $to->getEmail();
 
 foreach ($to->getAllAddresses() as $addr) {
-    $toName = $to->getPersonName();
-    $toEmail = $to->getEmail();
+    $toName = $addr->getName();
+    $toEmail = $addr->getEmail();
 }
 
 $attachment = $message->getAttachmentPart(0);
