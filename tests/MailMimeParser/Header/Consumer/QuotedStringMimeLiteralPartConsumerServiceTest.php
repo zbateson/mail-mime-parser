@@ -63,4 +63,20 @@ class QuotedStringMimeLiteralPartConsumerServiceTest extends TestCase
         $this->assertInstanceOf(QuotedLiteralPart::class, $ret[0]);
         $this->assertEquals('Kilgore Trout', $ret[0]->getValue());
     }
+
+    public function testWithQuotedHeaderMultipleEncodedValues() : void
+    {
+        $ret = $this->consumer->__invoke('=?US-ASCII?Q?Kilgore?= =?US-ASCII?Q?Trout?=');
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertEquals('KilgoreTrout', $ret[0]->getValue());
+    }
+
+    public function testWithQuotedHeaderMultipleEncodedValuesAndLinesBetween() : void
+    {
+        $ret = $this->consumer->__invoke("=?US-ASCII?Q?Kilg?= \r\n =?US-ASCII?Q?or?=  =?US-ASCII?Q?e_Trout?=");
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertEquals('Kilgore Trout', $ret[0]->getValue());
+    }
 }

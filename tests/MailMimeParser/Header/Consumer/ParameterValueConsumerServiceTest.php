@@ -98,4 +98,16 @@ class ParameterValueConsumerServiceTest extends TestCase
         $ret = $this->consumer->__invoke('"=?US-ASCII?Q?value?="');
         $this->assertEquals('value', $ret[0]->getValue());
     }
+
+    public function testWithQuotedHeaderMultipleEncodedValues() : void
+    {
+        $ret = $this->consumer->__invoke('"=?US-ASCII?Q?Kilgore?= =?US-ASCII?Q?Trout?="');
+        $this->assertEquals('KilgoreTrout', $ret[0]->getValue());
+    }
+
+    public function testWithQuotedHeaderMultipleEncodedValuesAndLinesBetween() : void
+    {
+        $ret = $this->consumer->__invoke("\"=?US-ASCII?Q?Kilg?= \r\n =?US-ASCII?Q?or?=  =?US-ASCII?Q?e_Trout?=\"");
+        $this->assertEquals('Kilgore Trout', $ret[0]->getValue());
+    }
 }
