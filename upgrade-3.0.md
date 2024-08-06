@@ -7,17 +7,19 @@ updating the dependency injection library used, and migrating to php8+.  Basic
 usage hasn't changed, but more advanced header inspection has: specifically
 changes to HeaderPart classes, GenericHeader::getValue has changed to return the
 concatenated value of all child parts, rather than the value of the first part
-(this applies to any header that doesn't have a more specialized header type --
-not an address, date, id, parameter, received or subject header).
+(which only applies to any header that doesn't have a more specialized header
+type -- so not an address, date, id, parameter, received or subject header).
 
-For header parts, please inspect the documentation for that when upgrading,
-there are many changes there, mostly structurally to support error reporting:
+For header parts, please inspect the documentation for them when upgrading,
+there are many changes there, most of which are structural to support error
+reporting:
 
-* Creating a HeaderPart out of tokens is now done in header parts so errors can
-  be kept against the specific parts.
+* Creating a HeaderPart out of tokens is now done using child header parts
+  so errors can be kept against the specific HeaderPart it was found on.
 * There is no longer a LiteralPart, instead there is a ContainerPart which
   serves as a container for other parts, allowing a full introspection of errors
-  that occur on it or any child parts.
+  that occur on it or any child parts (extends the new IErrorBag and its
+  getAllErrors which returns errors for the current IErrorBag and all children)
 * There is no longer a MimeLiteralPart, instead there is a MimeToken which
   represents a single mime header token.
 * Comments are generally parsed into a HeaderPart, so for instance in a
@@ -60,17 +62,15 @@ Here's a detailed list of changes:
   signature changed.
 
 * Can look up comment parts in headers -- use IHeader::getAllParts to return all
-  parsed parts including comment parts, or 
+  parsed parts including comment parts, or the new getComments() method that
+  returns a string array of comments.  ReceivedHeader no longer has protected
+  members $comments and $date ($date is now private -- still has
+  AbstractHeader::getComments(), and ReceivedHeader::getDateTime()).
 
 * GenericHeader getValue returns a string value of the combination of all its
   non-comment parts.  This applies to any header that doesn't have a more
   specialized header type (not an address, date, id, parameter, received or
   subject header), see HeaderFactory docs for specifics.
-  
-* IHeader now has a getComments() method that returns a string array of
-  comments.  ReceivedHeader no longer has protected members $comments and
-  $date ($date is now private -- still has AbstractHeader::getComments(), and
-  ReceivedHeader::getDateTime()), and added getAllParts which includes comments.
 
 * Switched to PHP-DI, users can provide a array|string|DefinitionSource to
   override definitions
@@ -88,7 +88,7 @@ Here's a detailed list of changes:
   classes they need
 
 * Refactored ConsumerService classes to define which sub-ConsumerService classes
-  they depend on.  Removed ConsumerService.
+  they depend on.  Removed generic 'ConsumerService' class.
 
 * Refactored HeaderPart classes with the following goals:
   - Token classes to be used by Consumers to convert from a string to a "part".
