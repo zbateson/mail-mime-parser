@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use Psr\Log\LoggerInterface;
+use Iterator;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 
@@ -70,6 +71,22 @@ class AddressGroupConsumerService extends AddressBaseConsumerService
     protected function isStartToken(string $token) : bool
     {
         return ($token === ':');
+    }
+
+    /**
+     * Overridden to always call processParts even for an empty set of
+     * addresses, since a group could be empty.
+     *
+     * @param Iterator $tokens
+     * @return IHeaderPart[]
+     */
+    protected function parseTokensIntoParts(Iterator $tokens) : array
+    {
+        $ret = parent::parseTokensIntoParts($tokens);
+        if ($ret === []) {
+          return $this->processParts([]);
+        }
+        return $ret;
     }
 
     /**

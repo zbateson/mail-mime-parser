@@ -230,4 +230,18 @@ class AddressHeaderTest extends TestCase
         $this->assertSame($parts[0], $groups[0]);
         $this->assertSame($parts[1], $groups[1]);
     }
+
+    public function testEmptyAddressGroup() : void
+    {
+        $header = $this->newAddressHeader(
+            'Cc',
+            'House Stark:;'
+        );
+        $parts = $header->getParts();
+        $this->assertCount(1, $parts);
+
+        $starks = $parts[0];
+        $this->assertEquals('House Stark', $starks->getName());
+        $this->assertCount(0, $starks->getAddresses());
+    }
 }
