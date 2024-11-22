@@ -298,7 +298,7 @@ interface IMessage extends IMimePart
      *  - all multipart/* parts
      *  - any signature part
      *
-     * @see IMessage::getAllAttachmentPart() to get a single attachment.
+     * @see IMessage::getAttachmentPart() to get a single attachment.
      * @see IMessage::getAttachmentCount() to get the number of attachments.
      * @return IMessagePart[]
      */
@@ -307,7 +307,7 @@ interface IMessage extends IMimePart
     /**
      * Returns the number of attachments available.
      *
-     * @see IMessage::getAllAttachmentPart() to get a single attachment.
+     * @see IMessage::getAttachmentPart() to get a single attachment.
      * @see IMessage::getAllAttachmentParts() to get an array of all parts.
      */
     public function getAttachmentCount() : int;
