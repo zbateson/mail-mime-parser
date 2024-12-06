@@ -245,7 +245,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_parent">$parent</a>
     <span>
-                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null            </span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null            </span>
 </dt>
 <dd></dd>
 
@@ -369,7 +369,7 @@ for a multipart message part.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getParent">getParent()</a>
     <span>
-                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null    </span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null    </span>
 </dt>
 <dd>The ParserPartProxy parent of this PartBuilder.</dd>
 
@@ -1043,13 +1043,13 @@ part and set in $mimeBoundary.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null</span>
     <span class="phpdocumentor-signature__name">$parent</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
-        <section class="phpdocumentor-description"><p>The parent ParserPartProxy if one is set, or null if
-part doesn't have a parent.</p>
+        <section class="phpdocumentor-description"><p>The parent proxy part if one is set, or null if
+the part being built doesn't have a parent.</p>
 </section>
 
     
@@ -1257,7 +1257,7 @@ headers) in the message's stream.</p>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html"><abbr title="\ZBateson\MailMimeParser\Message\PartHeaderContainer">PartHeaderContainer</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$headerContainer</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$messageStream</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parent</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html"><abbr title="\ZBateson\MailMimeParser\Message\PartHeaderContainer">PartHeaderContainer</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$headerContainer</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$messageStream</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parent</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -1281,7 +1281,7 @@ headers) in the message's stream.</p>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$parent</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -1690,14 +1690,14 @@ for a multipart message part.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span></code>
+                    <span class="phpdocumentor-signature__name">getParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null</span>
             &mdash;
         
     

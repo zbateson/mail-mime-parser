@@ -546,6 +546,11 @@ Search.appendIndex(
             "summary": "Returns\u0020true\u0020if\u0020the\u0020passed\u0020token\u0020is\u0020a\u0020colon.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AddressGroupConsumerService.html#method_isStartToken"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AddressGroupConsumerService\u003A\u003AparseTokensIntoParts\u0028\u0029",
+            "name": "parseTokensIntoParts",
+            "summary": "Overridden\u0020to\u0020always\u0020call\u0020processParts\u0020even\u0020for\u0020an\u0020empty\u0020set\u0020of\naddresses,\u0020since\u0020a\u0020group\u0020could\u0020be\u0020empty.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AddressGroupConsumerService.html#method_parseTokensIntoParts"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AddressGroupConsumerService\u003A\u003AprocessParts\u0028\u0029",
             "name": "processParts",
             "summary": "Performs\u0020post\u002Dprocessing\u0020on\u0020parsed\u0020parts.",
@@ -5123,12 +5128,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\QuotedLiteralPart",
             "name": "QuotedLiteralPart",
-            "summary": "A\u0020quoted\u0020literal\u0020header\u0020string\u0020part.\u0020\u0020The\u0020value\u0020of\u0020the\u0020part\u0020is\u0020stripped\u0020of\u0020CR\nand\u0020LF\u0020characters,\u0020but\u0020otherwise\u0020not\u0020transformed\u0020or\u0020changed\u0020in\u0020any\u0020way.",
+            "summary": "A\u0020quoted\u0020literal\u0020header\u0020string\u0020part.\u0020\u0020The\u0020value\u0020of\u0020the\u0020part\u0020is\u0020stripped\u0020of\u0020CR\nand\u0020LF\u0020characters,\u0020and\u0020whitespace\u0020between\u0020two\u0020adjacent\u0020MimeTokens\u0020is\u0020removed.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\QuotedLiteralPart\u003A\u003AfilterIgnoredSpaces\u0028\u0029",
             "name": "filterIgnoredSpaces",
-            "summary": "Filters\u0020out\u0020ignorable\u0020space\u0020tokens.",
+            "summary": "Strips\u0020spaces\u0020found\u0020between\u0020two\u0020adjacent\u0020MimeToken\u0020parts.",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html#method_filterIgnoredSpaces"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\SplitParameterPart",

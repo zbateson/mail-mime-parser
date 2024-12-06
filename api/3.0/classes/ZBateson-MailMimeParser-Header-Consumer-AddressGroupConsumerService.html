@@ -116,7 +116,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
@@ -287,12 +287,12 @@ sub-consumer&#039;s parseTokenIntoParts().</dd>
 <dd>Returns true if the passed token is a colon.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_parseTokensIntoParts">parseTokensIntoParts()</a>
+    <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AddressGroupConsumerService.html#method_parseTokensIntoParts">parseTokensIntoParts()</a>
     <span>
-                                &nbsp;: array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;    </span>
+                                &nbsp;: array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Consumer\IHeaderPart">IHeaderPart</abbr>&gt;    </span>
 </dt>
-<dd>Iterates over the passed token Iterator and returns an array of parsed
-IHeaderPart objects.</dd>
+<dd>Overridden to always call processParts even for an empty set of
+addresses, since a group could be empty.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AddressGroupConsumerService.html#method_processParts">processParts()</a>
@@ -485,7 +485,7 @@ need to be regenerated every time.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
     </aside>
 
@@ -584,7 +584,7 @@ parts</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 
@@ -620,7 +620,7 @@ group address: colon and semi-colon (&quot;:&quot; and &quot;;&quot;) characters
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 
     </aside>
 
@@ -997,7 +997,7 @@ returned array with the regex OR '|' character as its glue.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
@@ -1042,7 +1042,7 @@ returned array with the regex OR '|' character as its glue.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">70</span>
+    <span class="phpdocumentor-element-found-in__line">71</span>
 
     </aside>
 
@@ -1082,53 +1082,40 @@ returned array with the regex OR '|' character as its glue.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_parseTokensIntoParts">
         parseTokensIntoParts()
-        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#method_parseTokensIntoParts" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Header-Consumer-AddressGroupConsumerService.html#method_parseTokensIntoParts" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AbstractConsumerService.php"><a href="files/header-consumer-abstractconsumerservice.html"><abbr title="Header/Consumer/AbstractConsumerService.php">AbstractConsumerService.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">311</span>
+    <span class="phpdocumentor-element-found-in__line">83</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Iterates over the passed token Iterator and returns an array of parsed
-IHeaderPart objects.</p>
+        <p class="phpdocumentor-summary">Overridden to always call processParts even for an empty set of
+addresses, since a group could be empty.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">parseTokensIntoParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokens</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">parseTokensIntoParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tokens</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Consumer\IHeaderPart">IHeaderPart</abbr>&gt;</span></code>
 
-        <section class="phpdocumentor-description"><p>The method checks each token to see if the token matches a sub-consumer's
-start token, or if it matches the current consumer's end token to stop
-processing.</p>
-<p>If a sub-consumer's start token is matched, the sub-consumer is invoked
-and its returned parts are merged to the current consumer's header parts.</p>
-<p>After all tokens are read and an array of Header\Parts are constructed,
-the array is passed to <abbr title="\ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService::processParts">AbstractConsumerService::processParts</abbr> for
-any final processing if there are any parts.</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$tokens</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Iterator">Iterator</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>An iterator over a string of tokens</p>
-</section>
-
+                
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, <abbr title="\ZBateson\MailMimeParser\Header\Consumer\IHeaderPart">IHeaderPart</abbr>&gt;</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>An array of parsed parts</p>
-</section>
-
+        
     
 </article>
                     <article
@@ -1144,7 +1131,7 @@ any final processing if there are any parts.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Header/Consumer/AddressGroupConsumerService.php"><a href="files/header-consumer-addressgroupconsumerservice.html"><abbr title="Header/Consumer/AddressGroupConsumerService.php">AddressGroupConsumerService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">102</span>
 
     </aside>
 
