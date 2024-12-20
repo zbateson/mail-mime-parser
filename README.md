@@ -44,7 +44,7 @@ For a more complete list of changes, please visit the [3.0 Upgrade Guide](https:
 
 ## Requirements
 
-MailMimeParser requires PHP 8.0 or newer.  Tested on PHP 8.0, 8.1, 8.2 and 8.3.
+MailMimeParser requires PHP 8.0 or newer.  Tested on PHP 8.0, 8.1, 8.2, 8.4 and 8.4.
 
 ## Usage
 
