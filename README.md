@@ -89,7 +89,7 @@ echo $message->getHeader('X-Foo');                     // for custom or undocume
 $att = $message->getAttachmentPart(0);                 // first attachment
 echo $att->getHeaderValue(HeaderConsts::CONTENT_TYPE); // e.g. "text/plain"
 echo $att->getHeaderParameter(                         // value of "charset" part
-    'content-type',
+    HeaderConsts::CONTENT_TYPE,
     'charset'
 );
 echo $att->getContent();                               // get the attached file's contents
