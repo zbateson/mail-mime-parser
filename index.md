@@ -61,7 +61,7 @@ $to = $message->getHeader('To');
 $firstToName = $to->getPersonName();
 $firstToEmail = $to->getEmail();
 
-foreach ($to->getAllAddresses() as $addr) {
+foreach ($to->getAddresses() as $addr) {
     $toName = $addr->getName();
     $toEmail = $addr->getEmail();
 }
