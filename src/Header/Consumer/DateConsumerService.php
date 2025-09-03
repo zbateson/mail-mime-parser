@@ -26,7 +26,7 @@ class DateConsumerService extends GenericConsumerService
      */
     protected function getPartForToken(string $token, bool $isLiteral) : ?IHeaderPart
     {
-        return $this->partFactory->newToken($token, true);
+        return $this->partFactory->newToken($token, false);
     }
 
     /**

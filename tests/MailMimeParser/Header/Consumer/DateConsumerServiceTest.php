@@ -57,6 +57,19 @@ class DateConsumerServiceTest extends TestCase
         $this->assertEquals($date, $ret[0]->getDateTime()->format(DateTime::RFC2822));
     }
 
+    public function testConsumeMultilineDate() : void
+    {
+        $date = "Wed,\r\n  17 May\r 2000\n 19:08:29 -0400";
+        $dateSl = 'Wed, 17 May 2000 19:08:29 -0400';
+        $ret = $this->dateConsumer->__invoke($date);
+        $this->assertNotEmpty($ret);
+        $this->assertCount(1, $ret);
+        $this->assertInstanceOf('\\' . \ZBateson\MailMimeParser\Header\Part\DatePart::class, $ret[0]);
+        $this->assertFalse($ret[0]->hasErrors(), join(', ', array_map(fn ($e) => $e->getMessage(), $ret[0]->getAllErrors())));
+        $this->assertEquals($dateSl, $ret[0]->getValue());
+        $this->assertEquals($dateSl, $ret[0]->getDateTime()->format(DateTime::RFC2822));
+    }
+
     public function testConsumeDateWithComment() : void
     {
         $dateTest = 'Wed, 17 May 2000 19:08:29 -0400 (some comment)';

@@ -64,6 +64,17 @@ class DateHeaderTest extends TestCase
         $this->assertEquals('Wed, 17 May 2000 19:08:29 -0400', $dt->format(\DateTime::RFC2822));
     }
 
+    public function testDateWithNewLine() : void
+    {
+        $date = 'Wed, 17 May 2000 19:08:29 -0400';
+        $header = $this->newDateHeader('Date', "Wed,\r\n  17 May 2000 19:08:29 -0400");
+        $this->assertEquals($date, $header->getValue());
+        $this->assertFalse($header->hasErrors(), join(', ', array_map(fn ($e) => $e->getMessage(), $header->getAllErrors())));
+        $dt = $header->getDateTime();
+        $this->assertNotNull($dt);
+        $this->assertEquals($date, $dt->format(\DateTime::RFC2822));
+    }
+
     public function testInvalidDate() : void
     {
         $header = $this->newDateHeader('DATE', 'This is not a date');
