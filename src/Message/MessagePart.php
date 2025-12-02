@@ -67,12 +67,12 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
 
     public function attach(SplObserver $observer) : void
     {
-        $this->observers->attach($observer);
+        $this->observers->offsetSet($observer);
     }
 
     public function detach(SplObserver $observer) : void
     {
-        $this->observers->detach($observer);
+        $this->observers->offsetUnset($observer);
     }
 
     public function notify() : void
