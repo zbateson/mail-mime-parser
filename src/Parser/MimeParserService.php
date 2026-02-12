@@ -100,6 +100,7 @@ class MimeParserService extends AbstractParserService
 
     public function parseContent(ParserPartProxy $proxy) : static
     {
+        \assert($proxy instanceof ParserMimePartProxy);
         $proxy->setStreamContentStartPos($proxy->getMessageResourceHandlePos());
         $this->findContentBoundary($proxy);
         return $this;

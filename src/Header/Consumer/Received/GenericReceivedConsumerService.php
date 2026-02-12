@@ -40,12 +40,6 @@ use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 class GenericReceivedConsumerService extends AbstractGenericConsumerService
 {
     /**
-     * @var string the current part name being parsed.
-     *
-     * This is always the lower-case name provided to the constructor, not the
-     * actual string that started the consumer, which could be in any case.
-     */
-    /**
      * Constructor overridden to include $partName parameter.
      *
      */

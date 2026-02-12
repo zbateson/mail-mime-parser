@@ -35,7 +35,7 @@ use ZBateson\MailMimeParser\Header\Part\NameValuePart;
 class ParameterHeader extends AbstractHeader
 {
     /**
-     * @var ParameterPart[] key map of lower-case parameter names and associated
+     * @var array<string, NameValuePart> key map of lower-case parameter names and associated
      *      ParameterParts.
      */
     protected array $parameters = [];

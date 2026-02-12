@@ -21,7 +21,7 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 abstract class MimeEncodedHeader extends AbstractHeader
 {
     /**
-     * @var MimeLiteralPart[] the mime encoded parsed parts contained in this
+     * @var IHeaderPart[] the mime encoded parsed parts contained in this
      *      header
      */
     protected array $mimeEncodedParsedParts = [];
@@ -55,6 +55,6 @@ abstract class MimeEncodedHeader extends AbstractHeader
 
     protected function getErrorBagChildren() : array
     {
-        return \array_values(\array_filter(\array_merge($this->getAllParts(), $this->mimeEncodedParsedParts)));
+        return \array_values(\array_merge($this->getAllParts(), $this->mimeEncodedParsedParts));
     }
 }

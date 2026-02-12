@@ -101,9 +101,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
                     $this->parserProxy
                 )
             );
-            if ($this->parsedStream !== null) {
-                $this->detachParsedStream = ($this->parsedStream->getMetadata('mmp-detached-stream') === true);
-            }
+            $this->detachParsedStream = ($this->parsedStream->getMetadata('mmp-detached-stream') === true);
         }
         return $this;
     }

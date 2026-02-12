@@ -111,9 +111,9 @@ class MultipartHelper extends AbstractHelper
      * @param string $mimeType the content-type to find below $alternativePart
      * @param IMimePart $alternativePart The multipart/alternative part to look
      *        under
-     * @return bool|IMimePart false if a part is not found
+     * @return IMimePart|false false if a part is not found
      */
-    public function getContentPartContainerFromAlternative($mimeType, IMimePart $alternativePart) : bool|IMimePart
+    public function getContentPartContainerFromAlternative($mimeType, IMimePart $alternativePart) : IMimePart|false
     {
         $part = $alternativePart->getPart(0, PartFilter::fromInlineContentType($mimeType));
         $contPart = null;
@@ -124,6 +124,7 @@ class MultipartHelper extends AbstractHelper
             $contPart = $part;
             $part = $part->getParent();
         } while ($part !== $alternativePart);
+        \assert($contPart instanceof IMimePart);
         return $contPart;
     }
 
@@ -244,9 +245,9 @@ class MultipartHelper extends AbstractHelper
      * If the passed $mimeType is text/plain, searches for a text/html part.
      * Otherwise searches for a text/plain part to return.
      *
-     * @return IMimePart or null if not found
+     * @return IMessagePart or null if not found
      */
-    public function findOtherContentPartFor(IMessage $message, string $mimeType) : ?IMimePart
+    public function findOtherContentPartFor(IMessage $message, string $mimeType) : ?IMessagePart
     {
         $altPart = $message->getPart(
             0,
@@ -338,6 +339,7 @@ class MultipartHelper extends AbstractHelper
     {
         $alt = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         if ($alt !== null) {
+            \assert($alt instanceof IMimePart);
             return $this->removeAllContentPartsFromAlternative($message, $mimeType, $alt, $keepOtherContent);
         }
         $message->removeAllParts(PartFilter::fromInlineContentType($mimeType));
@@ -354,7 +356,7 @@ class MultipartHelper extends AbstractHelper
     {
         $parts = $message->getAllParts(PartFilter::fromInlineContentType($mimeType));
         $alt = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
-        if ($parts === null || !isset($parts[$index])) {
+        if (!isset($parts[$index])) {
             return false;
         } elseif (\count($parts) === 1) {
             return $this->removeAllContentPartsByMimeType($message, $mimeType, true);

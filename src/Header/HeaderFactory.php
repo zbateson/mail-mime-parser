@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use ReflectionNamedType;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\DateConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
@@ -186,19 +187,23 @@ class HeaderFactory
         $ref = new ReflectionClass($iHeaderClass);
         $params = $ref->getConstructor()->getParameters();
         if ($ref->isSubclassOf(MimeEncodedHeader::class)) {
+            $type = $params[4]->getType();
+            \assert($type instanceof ReflectionNamedType);
             return new $iHeaderClass(
                 $name,
                 $value,
                 $this->logger,
                 $this->mimeTokenPartFactory,
-                $this->consumerServices[$params[4]->getType()->getName()]
+                $this->consumerServices[$type->getName()]
             );
         }
+        $type = $params[3]->getType();
+        \assert($type instanceof ReflectionNamedType);
         return new $iHeaderClass(
             $name,
             $value,
             $this->logger,
-            $this->consumerServices[$params[3]->getType()->getName()]
+            $this->consumerServices[$type->getName()]
         );
     }
 }

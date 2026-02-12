@@ -18,6 +18,8 @@ use ZBateson\MailMimeParser\Header\IHeader;
 /**
  * Maintains a collection of headers for a part.
  *
+ * @implements IteratorAggregate<int, array<string>>
+ *
  * @author Zaahid Bateson
  */
 class PartHeaderContainer extends ErrorBag implements IteratorAggregate
@@ -34,7 +36,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     private array $headers = [];
 
     /**
-     * @var \ZBateson\MailMimeParser\Header\IHeader[] Each element is an IHeader
+     * @var array<int, ?IHeader> Each element is an IHeader
      *      representing the header at the same index in the $headers array.  If
      *      an IHeader has not been constructed for the header at that index,
      *      the element would be set to null.
@@ -42,7 +44,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     private array $headerObjects = [];
 
     /**
-     * @var array Maps header names by their "normalized" (lower-cased,
+     * @var array<string, int[]> Maps header names by their "normalized" (lower-cased,
      *      non-alphanumeric characters stripped) name to an array of indexes in
      *      the $headers array.  For example:
      *      $headerMap['contenttype'] = [ 1, 4 ]
@@ -305,7 +307,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      *
      * [ 'Header-Name', 'Header Value' ]
      *
-     * return Traversable<array<string>>
+     * @return Traversable<int, array<string>>
      */
     public function getIterator() : Traversable
     {

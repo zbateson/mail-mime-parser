@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
+use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Message\MimePart;
 use ZBateson\MailMimeParser\Parser\IParserService;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainerFactory;
@@ -46,8 +47,10 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
         $headerContainer = $this->partHeaderContainerFactory->newInstance($parserProxy->getHeaderContainer());
         $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
 
+        $parent = $partBuilder->getParent()?->getPart();
+        \assert($parent === null || $parent instanceof IMimePart);
         $part = new MimePart(
-            $partBuilder->getParent()->getPart(),
+            $parent,
             $this->logger,
             $streamContainer,
             $headerContainer,

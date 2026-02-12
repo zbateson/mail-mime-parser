@@ -336,7 +336,8 @@ class Message extends MimePart implements IMessage
         }
         $params .= ', content-type=' . $this->getContentType();
         $nsClass = static::class;
-        $class = \substr($nsClass, (\strrpos($nsClass, '\\') ?? -1) + 1);
+        $pos = \strrpos($nsClass, '\\');
+        $class = ($pos !== false) ? \substr($nsClass, $pos + 1) : $nsClass;
         return $class . '(' . \spl_object_id($this) . $params . ')';
     }
 }

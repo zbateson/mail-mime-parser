@@ -137,6 +137,7 @@ class StreamFactory
             default => $stream,
         };
         if ($transferEncoding === 'x-uuencode' && $filename !== null) {
+            \assert($decorated instanceof UUStream);
             $decorated->setFilename($filename);
         }
         return $decorated;

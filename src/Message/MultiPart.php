@@ -84,6 +84,9 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         );
     }
 
+    /**
+     * @return RecursiveIterator<int, IMessagePart>
+     */
     public function getChildIterator() : RecursiveIterator
     {
         return $this->partChildrenContainer;
@@ -127,9 +130,10 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         });
     }
 
-    public function addChild(MessagePart $part, ?int $position = null) : static
+    public function addChild(IMessagePart $part, ?int $position = null) : static
     {
         if ($part !== $this) {
+            \assert($part instanceof MessagePart);
             $part->parent = $this;
             $this->partChildrenContainer->add($part, $position);
             $this->notify();

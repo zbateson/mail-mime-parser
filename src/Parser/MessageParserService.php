@@ -63,6 +63,8 @@ class MessageParserService
             $headerContainer
         );
         $proxy = $this->parserManager->createParserProxyFor($partBuilder);
-        return $proxy->getPart();
+        $part = $proxy->getPart();
+        \assert($part instanceof IMessage);
+        return $part;
     }
 }

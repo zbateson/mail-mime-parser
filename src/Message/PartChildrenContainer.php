@@ -14,6 +14,9 @@ use RecursiveIterator;
 /**
  * Container of IMessagePart items for a parent IMultiPart.
  *
+ * @implements ArrayAccess<int, IMessagePart>
+ * @implements RecursiveIterator<int, IMessagePart>
+ *
  * @author Zaahid Bateson
  */
 class PartChildrenContainer implements ArrayAccess, RecursiveIterator
@@ -43,7 +46,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      * If the current element points to an IMultiPart, its child iterator is
      * returned by calling {@see IMultiPart::getChildIterator()}.
      *
-     * @return RecursiveIterator<IMessagePart>|null the iterator
+     * @return RecursiveIterator<int, IMessagePart>|null the iterator
      */
     public function getChildren() : ?RecursiveIterator
     {
@@ -137,7 +140,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
     }
 
     /**
-     * @param int $offset
+     * @param int|null $offset
      * @param IMessagePart $value
      */
     public function offsetSet(mixed $offset, mixed $value) : void

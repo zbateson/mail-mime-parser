@@ -23,10 +23,16 @@ class MessagePartStreamDecorator implements StreamInterface
         read as private decoratorRead;
     }
 
+    protected IMessagePart $part;
+
     public function __construct(
-        protected IMessagePart $part,
-        protected ?StreamInterface $stream = null
+        IMessagePart $part,
+        ?StreamInterface $stream = null
     ) {
+        $this->part = $part;
+        if ($stream !== null) {
+            $this->stream = $stream;
+        }
     }
 
     /**

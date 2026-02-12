@@ -39,7 +39,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
     protected bool $ignoreTransferEncoding = false;
 
     /**
-     * @var SplObjectStorage attached observers that need to be notified of
+     * @var SplObjectStorage<SplObserver, null> attached observers that need to be notified of
      *      modifications to this part.
      */
     protected SplObjectStorage $observers;
@@ -228,7 +228,8 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         }
         $params .= ', content-type=' . $this->getContentType();
         $nsClass = static::class;
-        $class = \substr($nsClass, (\strrpos($nsClass, '\\') ?? -1) + 1);
+        $pos = \strrpos($nsClass, '\\');
+        $class = ($pos !== false) ? \substr($nsClass, $pos + 1) : $nsClass;
         return $class . '(' . \spl_object_id($this) . $params . ')';
     }
 

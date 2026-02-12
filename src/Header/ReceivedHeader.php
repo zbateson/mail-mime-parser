@@ -11,6 +11,7 @@ use DateTime;
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
+use ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart;
 
 /**
  * Represents a Received header.
@@ -79,6 +80,12 @@ use ZBateson\MailMimeParser\Header\Part\DatePart;
  */
 class ReceivedHeader extends ParameterHeader
 {
+    /**
+     * @var array<string, ReceivedDomainPart> key map of lower-case parameter names and associated
+     *      ReceivedDomainParts.
+     */
+    protected array $parameters = [];
+
     /**
      * @var DateTime the date/time stamp in the header.
      */

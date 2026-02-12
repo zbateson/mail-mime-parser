@@ -56,9 +56,8 @@ class MessagePartStream extends MessagePartStreamDecorator implements SplObserve
         $this->throwExceptionReadingPartContentFromUnsupportedCharsets = $throwExceptionReadingPartContentFromUnsupportedCharsets;
         $part->attach($this);
 
-        // unsetting the property forces the first access to go through
-        // __get().
-        unset($this->stream);
+        // Don't initialize $stream - let the StreamDecoratorTrait's __get()
+        // call createStream() lazily when needed.
     }
 
     public function __destruct()

@@ -63,7 +63,7 @@ class PartStreamContainer extends ErrorBag
     protected bool $detachParsedStream = false;
 
     /**
-     * @var array<string, null> map of the active encoding filter on the current handle.
+     * @var array<string, ?string> map of the active encoding filter on the current handle.
      */
     private array $encoding = [
         'type' => null,
@@ -71,7 +71,7 @@ class PartStreamContainer extends ErrorBag
     ];
 
     /**
-     * @var array<string, null> map of the active charset filter on the current handle.
+     * @var array<string, ?string> map of the active charset filter on the current handle.
      */
     private array $charset = [
         'from' => null,
