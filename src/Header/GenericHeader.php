@@ -30,11 +30,10 @@ class GenericHeader extends AbstractHeader
         $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
             $logger ?? $di->get(LoggerInterface::class),
-            $consumerService ?? $di->get(DateConsumerService::class),
+            $consumerService ?? $di->get(GenericConsumerMimeLiteralPartService::class),
             $name,
             $value
         );
-        parent::__construct($logger, $consumerService, $name, $value);
     }
 
     public function getValue() : ?string
