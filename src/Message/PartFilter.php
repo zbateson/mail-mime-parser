@@ -70,9 +70,7 @@ abstract class PartFilter
      */
     public static function fromContentType(string $mimeType) : callable
     {
-        return function(IMessagePart $part) use ($mimeType) {
-            return \strcasecmp($part->getContentType() ?: '', $mimeType) === 0;
-        };
+        return fn(IMessagePart $part) => \strcasecmp($part->getContentType() ?: '', $mimeType) === 0;
     }
 
     /**

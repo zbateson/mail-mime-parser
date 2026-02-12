@@ -87,9 +87,7 @@ class PrivacyHelper extends AbstractHelper
      */
     public function overwrite8bitContentEncoding(IMessage $message) : static
     {
-        $parts = $message->getAllParts(function(IMessagePart $part) {
-            return \strcasecmp($part->getContentTransferEncoding(), '8bit') === 0;
-        });
+        $parts = $message->getAllParts(fn(IMessagePart $part) => \strcasecmp($part->getContentTransferEncoding(), '8bit') === 0);
         foreach ($parts as $part) {
             $contentType = \strtolower($part->getContentType());
             $part->setRawHeader(

@@ -60,12 +60,8 @@ class IdHeader extends MimeEncodedHeader
     public function getIds() : array
     {
         return \array_values(\array_map(
-            function($p) {
-                return $p->getValue();
-            },
-            \array_filter($this->parts, function($p) {
-                return !($p instanceof CommentPart);
-            })
+            fn($p) => $p->getValue(),
+            \array_filter($this->parts, fn($p) => !($p instanceof CommentPart))
         ));
     }
 }

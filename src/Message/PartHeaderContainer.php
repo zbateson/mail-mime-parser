@@ -102,10 +102,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     {
         $s = $this->headerFactory->getNormalizedHeaderName($name);
         if (isset($this->headerMap[$s])) {
-            $self = $this;
-            $filtered = \array_filter($this->headerMap[$s], function($h) use ($name, $self) {
-                return (\strcasecmp($self->headers[$h][0], $name) === 0);
-            });
+            $filtered = \array_filter($this->headerMap[$s], fn($h) => \strcasecmp($this->headers[$h][0], $name) === 0);
             return (!empty($filtered)) ? $filtered : $this->headerMap[$s];
         }
         return null;
@@ -156,10 +153,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     {
         $a = $this->getAllWithOriginalHeaderNameIfSet($name);
         if (!empty($a)) {
-            $self = $this;
-            return \array_map(function($index) use ($self) {
-                return $self->getByIndex($index);
-            }, $a);
+            return \array_map(fn($index) => $this->getByIndex($index), $a);
         }
         return [];
     }

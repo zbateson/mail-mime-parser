@@ -78,9 +78,7 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      */
     protected function filterAndAssignToParts() : void
     {
-        $this->parts = \array_values(\array_filter($this->allParts, function($p) {
-            return !($p instanceof CommentPart);
-        }));
+        $this->parts = \array_values(\array_filter($this->allParts, fn($p) => !($p instanceof CommentPart)));
     }
 
     /**

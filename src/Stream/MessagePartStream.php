@@ -121,9 +121,7 @@ class MessagePartStream extends MessagePartStreamDecorator implements SplObserve
         $boundary = $part->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'boundary');
         if ($boundary === null) {
             return \array_map(
-                function($child) {
-                    return $child->getStream();
-                },
+                fn($child) => $child->getStream(),
                 $part->getChildParts()
             );
         }

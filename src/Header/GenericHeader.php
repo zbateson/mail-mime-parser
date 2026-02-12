@@ -39,7 +39,7 @@ class GenericHeader extends AbstractHeader
     public function getValue() : ?string
     {
         if (!empty($this->parts)) {
-            return \implode('', \array_map(function($p) { return $p->getValue(); }, $this->parts));
+            return \implode('', \array_map(fn($p) => $p->getValue(), $this->parts));
         }
         return null;
     }
