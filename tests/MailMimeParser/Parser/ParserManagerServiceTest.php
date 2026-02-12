@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserManagerServiceTest
  *
- * @group ParserManagerService
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\ParserManagerService
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserManagerService::class)]
+#[Group('ParserManagerService')]
+#[Group('Parser')]
 class ParserManagerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line

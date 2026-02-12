@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserUUEncodedPartProxyFactoryTest
  *
- * @group ParserUUEncodedPartProxyFactory
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxyFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserUUEncodedPartProxyFactory::class)]
+#[Group('ParserUUEncodedPartProxyFactory')]
+#[Group('Parser')]
 class ParserUUEncodedPartProxyFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line

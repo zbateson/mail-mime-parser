@@ -6,16 +6,18 @@ use PHPUnit\Framework\TestCase;
 
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of AddressGroupPartTest
  *
- * @group HeaderParts
- * @group AddressGroupPart
- * @covers ZBateson\MailMimeParser\Header\Part\AddressGroupPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(AddressGroupPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('AddressGroupPart')]
 class AddressGroupPartTest extends TestCase
 {
     private $mb;

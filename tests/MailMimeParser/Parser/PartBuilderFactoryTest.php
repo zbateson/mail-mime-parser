@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser\Parser;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * PartBuilderFactoryTest
  *
- * @group PartBuilderFactory
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\PartBuilderFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(PartBuilderFactory::class)]
+#[Group('PartBuilderFactory')]
+#[Group('Parser')]
 class PartBuilderFactoryTest extends TestCase
 {
   // @phpstan-ignore-next-line
@@ -41,7 +43,7 @@ class PartBuilderFactoryTest extends TestCase
 
         $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMessageResourceHandle'])
+            ->onlyMethods(['getMessageResourceHandle'])
             ->getMockForAbstractClass();
         $parent->expects($this->once())
             ->method('getMessageResourceHandle')

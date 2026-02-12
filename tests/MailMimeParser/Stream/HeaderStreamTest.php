@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * HeaderStreamTest
  *
- * @group HeaderStream
- * @group Stream
- * @covers ZBateson\MailMimeParser\Stream\HeaderStream
  * @author Zaahid Bateson
  */
+#[CoversClass(HeaderStream::class)]
+#[Group('HeaderStream')]
+#[Group('Stream')]
 class HeaderStreamTest extends TestCase
 {
     private function newMockMimePart() : \ZBateson\MailMimeParser\Message\MimePart

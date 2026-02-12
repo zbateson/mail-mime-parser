@@ -6,15 +6,17 @@ use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserPartStreamContainerTest
  *
- * @group Parser
- * @group ParserPartStreamContainer
- * @covers ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserPartStreamContainer::class)]
+#[Group('Parser')]
+#[Group('ParserPartStreamContainer')]
 class ParserPartStreamContainerTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -31,7 +33,7 @@ class ParserPartStreamContainerTest extends TestCase
         $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
-            ->setMethods(['parseAll', 'parseContent', 'getPart'])
+            ->onlyMethods(['parseAll', 'parseContent', 'getPart'])
             ->getMockForAbstractClass();
         $this->streamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()

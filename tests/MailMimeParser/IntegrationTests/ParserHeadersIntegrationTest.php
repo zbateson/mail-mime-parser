@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\IntegrationTests;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\MailMimeParser;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ParserHeadersIntegrationTest
  *
- * @group ParserHeadersIntegrationTest
- * @group Functional
- * @coversNothing
  * @author Zaahid Bateson
  */
+#[CoversNothing]
+#[Group('ParserHeadersIntegrationTest')]
+#[Group('Functional')]
 class ParserHeadersIntegrationTest extends TestCase
 {
     public function testParsingBasicHeaders() : void

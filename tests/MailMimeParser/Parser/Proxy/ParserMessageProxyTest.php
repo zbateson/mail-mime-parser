@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserMessageProxyTest
  *
- * @group Parser
- * @group ParserMessageProxy
- * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxy
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserMessageProxy::class)]
+#[Group('Parser')]
+#[Group('ParserMessageProxy')]
 class ParserMessageProxyTest extends TestCase
 {
   // @phpstan-ignore-next-line

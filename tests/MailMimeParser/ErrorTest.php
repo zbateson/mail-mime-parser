@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ErrorTest
  *
- * @group ErrorClass
- * @group Base
- * @covers ZBateson\MailMimeParser\Error
  * @author Zaahid Bateson
  */
+#[CoversClass(Error::class)]
+#[Group('ErrorClass')]
+#[Group('Base')]
 class ErrorTest extends TestCase
 {
     // @phpstan-ignore-next-line

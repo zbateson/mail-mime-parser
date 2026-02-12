@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of DateConsumerServiceTest
  *
- * @group Consumers
- * @group DateConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\DateConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(DateConsumerService::class)]
+#[CoversClass(AbstractConsumerService::class)]
+#[Group('Consumers')]
+#[Group('DateConsumerService')]
 class DateConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -25,23 +27,23 @@ class DateConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->dateConsumer = new DateConsumerService($this->logger, $pf, $ccs, $qscs);
     }

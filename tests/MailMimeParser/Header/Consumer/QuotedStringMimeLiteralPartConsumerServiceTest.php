@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Part\QuotedLiteralPart;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of QuotedStringMimeLiteralPartConsumerServiceTest
  *
- * @group Consumers
- * @group QuotedStringMimeLiteralPartConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(QuotedStringMimeLiteralPartConsumerService::class)]
+#[CoversClass(AbstractConsumerService::class)]
+#[Group('Consumers')]
+#[Group('QuotedStringMimeLiteralPartConsumerService')]
 class QuotedStringMimeLiteralPartConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -25,23 +27,23 @@ class QuotedStringMimeLiteralPartConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->consumer = new QuotedStringMimeLiteralPartConsumerService($this->logger, $pf);
     }

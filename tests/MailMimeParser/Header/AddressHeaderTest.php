@@ -9,16 +9,18 @@ use ZBateson\MailMimeParser\Header\Consumer\AddressEmailConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\AddressGroupConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of AddressHeaderTest
  *
- * @group Headers
- * @group AddressHeader
- * @covers ZBateson\MailMimeParser\Header\AddressHeader
- * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
+#[CoversClass(AddressHeader::class)]
+#[CoversClass(AbstractHeader::class)]
+#[Group('Headers')]
+#[Group('AddressHeader')]
 class AddressHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -30,39 +32,39 @@ class AddressHeaderTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $agcs = $this->getMockBuilder(AddressGroupConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $aecs = $this->getMockBuilder(AddressEmailConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $acs = $this->getMockBuilder(AddressConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $agcs, $aecs, $ccs, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->consumerService = $this->getMockBuilder(AddressBaseConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $acs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 

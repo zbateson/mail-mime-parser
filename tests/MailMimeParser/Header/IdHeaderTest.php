@@ -7,16 +7,18 @@ use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IdConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of IdHeaderTest
  *
- * @group Headers
- * @group IdHeader
- * @covers ZBateson\MailMimeParser\Header\IdHeader
- * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
+#[CoversClass(IdHeader::class)]
+#[CoversClass(AbstractHeader::class)]
+#[Group('Headers')]
+#[Group('IdHeader')]
 class IdHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -31,31 +33,31 @@ class IdHeaderTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $idcs = $this->getMockBuilder(IdConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->consumerService = $this->getMockBuilder(IdBaseConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs, $idcs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->mpf = $mpf;
     }

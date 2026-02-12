@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\IMessagePart;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MessagePartStreamReadExceptionTest
  *
- * @group MessagePartStreamReadException
- * @group Stream
- * @covers ZBateson\MailMimeParser\Stream\MessagePartStreamReadException
  * @author Zaahid Bateson
  */
+#[CoversClass(MessagePartStreamReadException::class)]
+#[Group('MessagePartStreamReadException')]
+#[Group('Stream')]
 class MessagePartStreamReadExceptionTest extends TestCase
 {
     public function testInstance() : void

@@ -5,16 +5,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of AddressPartTest
  *
- * @group HeaderParts
- * @group AddressPart
- * @covers ZBateson\MailMimeParser\Header\Part\AddressPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(AddressPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('AddressPart')]
 class AddressPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -30,7 +32,7 @@ class AddressPartTest extends TestCase
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -43,7 +45,7 @@ class AddressPartTest extends TestCase
     {
         return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $name])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -51,7 +53,7 @@ class AddressPartTest extends TestCase
     {
         return $this->getMockBuilder(QuotedLiteralPart::class)
             ->setConstructorArgs([$this->logger, $this->mb, [$this->getTokenMock($name)]])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -59,7 +61,7 @@ class AddressPartTest extends TestCase
     {
         return $this->getMockBuilder(CommentPart::class)
             ->setConstructorArgs([$this->logger, $this->mb, $this->hpf, [$this->getTokenMock($name)]])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 

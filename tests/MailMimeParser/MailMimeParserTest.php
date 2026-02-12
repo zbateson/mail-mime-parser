@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser;
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Parser\MessageParserService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MailMimeParserTest
  *
- * @group MailMimeParser
- * @group Base
- * @covers ZBateson\MailMimeParser\MailMimeParser
  * @author Zaahid Bateson
  */
+#[CoversClass(MailMimeParser::class)]
+#[Group('MailMimeParser')]
+#[Group('Base')]
 class MailMimeParserTest extends TestCase
 {
     public function testParseFromHandle() : void

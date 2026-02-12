@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ReceivedDomainTest
  *
- * @group HeaderParts
- * @group ReceivedDomainPart
- * @covers ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(ReceivedDomainPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('ReceivedDomainPart')]
 class ReceivedDomainPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -33,7 +35,7 @@ class ReceivedDomainPartTest extends TestCase
     {
         return [$this->getMockBuilder(MimeToken::class)
             ->setConstructorArgs([$this->logger, $this->mb, $name])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock()];
     }
 

@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser\Header\Consumer\Received;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of GenericReceivedConsumerServiceTest
  *
- * @group Consumers
- * @group GenericReceivedConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(GenericReceivedConsumerService::class)]
+#[Group('Consumers')]
+#[Group('GenericReceivedConsumerService')]
 class GenericReceivedConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -25,23 +27,23 @@ class GenericReceivedConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->genericConsumer = new GenericReceivedConsumerService($this->logger, $pf, $ccs, 'test');
     }

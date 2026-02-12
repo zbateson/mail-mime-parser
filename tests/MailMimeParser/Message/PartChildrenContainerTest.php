@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of PartChildrenContainerTest
  *
- * @group Message
- * @group PartChildrenContainer
- * @covers ZBateson\MailMimeParser\Message\PartChildrenContainer
  * @author Zaahid Bateson
  */
+#[CoversClass(PartChildrenContainer::class)]
+#[Group('Message')]
+#[Group('PartChildrenContainer')]
 class PartChildrenContainerTest extends TestCase
 {
     // @phpstan-ignore-next-line

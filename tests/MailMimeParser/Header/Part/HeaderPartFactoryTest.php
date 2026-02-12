@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of HeaderPartFactoryTest
  *
- * @group HeaderParts
- * @group HeaderPartFactory
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPartFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(HeaderPartFactory::class)]
+#[Group('HeaderParts')]
+#[Group('HeaderPartFactory')]
 class HeaderPartFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -33,7 +35,7 @@ class HeaderPartFactoryTest extends TestCase
     {
         return [$this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $name])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock()];
     }
 
@@ -55,7 +57,7 @@ class HeaderPartFactoryTest extends TestCase
     {
         $param = [$this->getMockBuilder(ParameterPart::class)
             ->setConstructorArgs([$this->logger, $this->mb, $this->getTokenArray('Test'), $this->headerPartFactory->newContainerPart($this->getTokenArray('Value'))])
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock()];
         $token = $this->headerPartFactory->newSplitParameterPart($param);
         $this->assertNotNull($token);

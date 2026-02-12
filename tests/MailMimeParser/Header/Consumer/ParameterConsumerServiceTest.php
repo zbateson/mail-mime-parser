@@ -3,16 +3,18 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ParameterConsumerServiceTest
  *
- * @group Consumers
- * @group ParameterConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(ParameterConsumerService::class)]
+#[CoversClass(AbstractConsumerService::class)]
+#[Group('Consumers')]
+#[Group('ParameterConsumerService')]
 class ParameterConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -24,35 +26,35 @@ class ParameterConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qsmlpcs = $this->getMockBuilder(QuotedStringMimeLiteralPartConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pvcs = $this->getMockBuilder(ParameterValueConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $ccs, $qsmlpcs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pnvcs = $this->getMockBuilder(ParameterNameValueConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $pvcs, $ccs, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->parameterConsumer = new ParameterConsumerService($this->logger, $pf, $pnvcs, $ccs, $qscs);
     }

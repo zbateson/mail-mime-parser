@@ -3,16 +3,18 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of IdConsumerTest
  *
- * @group Consumers
- * @group IdConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\IdConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(IdConsumerService::class)]
+#[CoversClass(AbstractConsumerService::class)]
+#[Group('Consumers')]
+#[Group('IdConsumerService')]
 class IdConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -24,23 +26,23 @@ class IdConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->idConsumer = new IdConsumerService($this->logger, $pf, $ccs, $qscs);
     }

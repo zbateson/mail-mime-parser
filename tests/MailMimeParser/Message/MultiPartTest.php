@@ -3,17 +3,19 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MultiPartTest
  *
- * @group MultiPart
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\MimePart
- * @covers ZBateson\MailMimeParser\Message\MultiPart
- * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
+#[CoversClass(MimePart::class)]
+#[CoversClass(MultiPart::class)]
+#[CoversClass(MessagePart::class)]
+#[Group('MultiPart')]
+#[Group('MessagePart')]
 class MultiPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -100,7 +102,7 @@ class MultiPartTest extends TestCase
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
+            ->onlyMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
         $header->method('getName')->willReturn($name);
         $header->method('getValue')->willReturn($value);

@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MimeTokenTest
  *
- * @group HeaderParts
- * @group MimeToken
- * @covers ZBateson\MailMimeParser\Header\Part\MimeToken
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(MimeToken::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('MimeToken')]
 class MimeTokenTest extends TestCase
 {
     // @phpstan-ignore-next-line

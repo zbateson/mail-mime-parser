@@ -3,17 +3,19 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Stream\MessagePartStream;
+use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * IUUEncodedPartFactoryTest
  *
- * @group IUUEncodedPartFactory
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory
- * @covers ZBateson\MailMimeParser\Message\Factory\IMessagePartFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(IUUEncodedPartFactory::class)]
+#[CoversClass(IMessagePartFactory::class)]
+#[Group('IUUEncodedPartFactory')]
+#[Group('MessagePart')]
 class IUUEncodedPartFactoryTest extends TestCase
 {
     private function getMockForFactoryExpectsOnce($factoryCls, $obCls)
@@ -35,7 +37,7 @@ class IUUEncodedPartFactoryTest extends TestCase
         $sdf = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $msp = $this->getMockBuilder(MessagePartStream::class)
+        $msp = $this->getMockBuilder(MessagePartStreamDecorator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $sdf->expects($this->once())

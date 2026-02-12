@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Stream;
 
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * StreamFactoryTest
  *
- * @group StreamFactory
- * @group Stream
- * @covers ZBateson\MailMimeParser\Stream\StreamFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(StreamFactory::class)]
+#[Group('StreamFactory')]
+#[Group('Stream')]
 class StreamFactoryTest extends TestCase
 {
     public function testNewInstance() : void

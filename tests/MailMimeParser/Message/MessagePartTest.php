@@ -6,18 +6,23 @@ use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MessagePartTest
  *
- * @group MessagePartClass
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
+#[CoversClass(MessagePart::class)]
+#[Group('MessagePartClass')]
+#[Group('MessagePart')]
 class MessagePartTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     protected $partStreamContainer;
 
@@ -130,10 +135,10 @@ class MessagePartTest extends TestCase
         $stream = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
         $this->partStreamContainer->expects($this->exactly(2))
             ->method('getContentStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$messagePart, 'wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'oooohweee!'],
                 [$messagePart, 'wubalubadub-duuuuub', 'override', 'oooohweee!']
-            )
+            ))
             ->willReturn($stream);
 
         $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!')->getContents());
@@ -268,9 +273,9 @@ class MessagePartTest extends TestCase
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
             ->method('getContentStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$messagePart, '', 'charset', 'a-charset']
-            );
+            ));
 
         $this->assertEquals('message', $messagePart->getStream()->getContents());
 

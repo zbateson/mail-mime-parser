@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of NonMimePartTest
  *
- * @group NonMimePart
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\NonMimePart
  * @author Zaahid Bateson
  */
+#[CoversClass(NonMimePart::class)]
+#[Group('NonMimePart')]
+#[Group('MessagePart')]
 class NonMimePartTest extends TestCase
 {
     // @phpstan-ignore-next-line

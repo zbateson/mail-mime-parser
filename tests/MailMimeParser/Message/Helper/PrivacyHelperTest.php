@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * PrivacyHelperTest
  *
- * @group PrivacyHelper
- * @group MessageHelper
- * @covers ZBateson\MailMimeParser\Message\Helper\AbstractHelper
- * @covers ZBateson\MailMimeParser\Message\Helper\PrivacyHelper
  * @author Zaahid Bateson
  */
+#[CoversClass(AbstractHelper::class)]
+#[CoversClass(PrivacyHelper::class)]
+#[Group('PrivacyHelper')]
+#[Group('MessageHelper')]
 class PrivacyHelperTest extends TestCase
 {
     // @phpstan-ignore-next-line

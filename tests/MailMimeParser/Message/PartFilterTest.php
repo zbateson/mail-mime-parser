@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * PartFilterTest
  *
- * @group PartFilter
- * @group Message
- * @covers ZBateson\MailMimeParser\Message\PartFilter
  * @author Zaahid Bateson
  */
+#[CoversClass(PartFilter::class)]
+#[Group('PartFilter')]
+#[Group('Message')]
 class PartFilterTest extends TestCase
 {
     public function testAttachmentFilter() : void
@@ -82,7 +84,7 @@ class PartFilterTest extends TestCase
         $callback = PartFilter::fromContentType('text/plain');
 
         $part = $this->getMockForAbstractClass(IMessagePart::class);
-        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah', null);
         $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));
         $this->assertTrue($callback($part));
@@ -95,7 +97,7 @@ class PartFilterTest extends TestCase
         $callback = PartFilter::fromInlineContentType('text/plain');
 
         $part = $this->getMockForAbstractClass(IMessagePart::class);
-        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah', null);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'attoochment', 'attachment', 'blah');
         $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));

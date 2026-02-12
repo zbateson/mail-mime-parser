@@ -3,18 +3,23 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Header\IHeader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of HeaderContainerTest
  *
- * @group Message
- * @group PartHeaderContainer
- * @covers ZBateson\MailMimeParser\Message\PartHeaderContainer
  * @author Zaahid Bateson
  */
+#[CoversClass(PartHeaderContainer::class)]
+#[Group('Message')]
+#[Group('PartHeaderContainer')]
 class PartHeaderContainerTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     protected $mhf;
 
@@ -24,7 +29,7 @@ class PartHeaderContainerTest extends TestCase
     {
         $this->mhf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['newInstance', 'newInstanceOf'])
+            ->onlyMethods(['newInstance', 'newInstanceOf'])
             ->getMock();
         $this->instance = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf);
     }
@@ -46,10 +51,10 @@ class PartHeaderContainerTest extends TestCase
         $this->mhf
             ->expects($this->exactly(2))
             ->method('newInstance')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['first', 'value'],
                 ['second', 'value']
-            )
+            ))
             ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader);
 
         $this->assertSame($mockFirstHeader, $ob->get('first'));
@@ -87,11 +92,11 @@ class PartHeaderContainerTest extends TestCase
         $this->mhf
             ->expects($this->exactly(3))
             ->method('newInstance')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['repeated', 'first'],
                 ['repeated', 'second'],
                 ['repeated', 'third']
-            )
+            ))
             ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader, $mockThirdHeader);
 
         $this->assertSame($mockFirstHeader, $ob->get('repeated'));
@@ -143,13 +148,13 @@ class PartHeaderContainerTest extends TestCase
         $this->mhf
             ->expects($this->exactly(5))
             ->method('newInstance')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['first', 'updated-value'],
                 ['second', 'second-updated-value'],
                 ['first', 'second-first'],
                 ['second', 'value'],
                 ['third', 'value']
-            )
+            ))
             ->willReturnOnConsecutiveCalls(
                 $mockFirstUpdatedHeader,
                 $mockSecondUpdatedHeader,
@@ -206,12 +211,12 @@ class PartHeaderContainerTest extends TestCase
         $this->mhf
             ->expects($this->exactly(4))
             ->method('newInstance')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['second', 'value'],
                 ['third', 'value'],
                 ['fourth', 'value'],
                 ['second', 'updated']
-            )
+            ))
             ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader, $mockThirdHeader, $mockSecondUpdatedHeader);
 
         $custRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
@@ -285,11 +290,11 @@ class PartHeaderContainerTest extends TestCase
         $this->mhf
             ->expects($this->exactly(3))
             ->method('newInstance')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['first', 'second-first'],
                 ['second', 'value'],
                 ['second', 'third-second']
-            )
+            ))
             ->willReturnOnConsecutiveCalls($mockSecondFirstHeader, $mockSecondHeader, $mockSecondThirdSecondHeader);
 
         $this->assertNull($ob->get('first', 1));

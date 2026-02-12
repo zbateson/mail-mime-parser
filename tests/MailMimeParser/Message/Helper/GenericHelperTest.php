@@ -4,20 +4,25 @@ namespace ZBateson\MailMimeParser\Message\Helper;
 
 use PHPUnit\Framework\TestCase;
 use RecursiveArrayIterator;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\MailMimeParser;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * GenericHelperTest
  *
- * @group GenericHelper
- * @group MessageHelper
- * @covers ZBateson\MailMimeParser\Message\Helper\AbstractHelper
- * @covers ZBateson\MailMimeParser\Message\Helper\GenericHelper
  * @author Zaahid Bateson
  */
+#[CoversClass(AbstractHelper::class)]
+#[CoversClass(GenericHelper::class)]
+#[Group('GenericHelper')]
+#[Group('MessageHelper')]
 class GenericHelperTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     private $mockMimePartFactory;
 
@@ -103,7 +108,7 @@ class GenericHelperTest extends TestCase
 
         $part->expects($this->exactly(12))
             ->method('removeHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Type'],
                 ['Content-Transfer-Encoding'],
                 ['Content-Disposition'],
@@ -116,7 +121,7 @@ class GenericHelperTest extends TestCase
                 ['Content-Alternative'],
                 ['Content-MD5'],
                 ['Content-Duration']
-            );
+            ));
         $part->expects($this->once())
             ->method('detachContentStream');
 
@@ -259,7 +264,7 @@ class GenericHelperTest extends TestCase
 
         $from->expects($this->exactly(1))
             ->method('removePart')
-            ->withConsecutive([$to]);
+            ->with(...$this->consecutive([$to]));
 
         $to->method('getHeader')
             ->willReturnMap($returnMap);
@@ -272,7 +277,7 @@ class GenericHelperTest extends TestCase
 
         $from->expects($this->exactly(2))
             ->method('addChild')
-            ->withConsecutive([$child1], [$child2]);
+            ->with(...$this->consecutive([$child1], [$child2]));
 
         $to->expects($this->exactly(12))
             ->method('removeHeader');
@@ -293,7 +298,7 @@ class GenericHelperTest extends TestCase
             ->willReturn($message);
         $message->expects($this->exactly(2))
             ->method('removePart')
-            ->withConsecutive([$rep], [$part])
+            ->with(...$this->consecutive([$rep], [$part]))
             ->willReturn(10);
         $message->expects($this->once())
             ->method('addChild')
