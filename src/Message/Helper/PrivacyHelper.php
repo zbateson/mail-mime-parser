@@ -24,8 +24,8 @@ class PrivacyHelper extends AbstractHelper
     public function __construct(
         IMimePartFactory $mimePartFactory,
         IUUEncodedPartFactory $uuEncodedPartFactory,
-        private GenericHelper $genericHelper,
-        private MultipartHelper $multipartHelper
+        private readonly GenericHelper $genericHelper,
+        private readonly MultipartHelper $multipartHelper
     ) {
         parent::__construct($mimePartFactory, $uuEncodedPartFactory);
     }

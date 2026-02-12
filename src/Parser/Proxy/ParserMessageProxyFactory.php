@@ -33,8 +33,8 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
         PartHeaderContainerFactory $partHeaderContainerFactory,
         ParserPartStreamContainerFactory $parserPartStreamContainerFactory,
         ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory,
-        protected MultipartHelper $multipartHelper,
-        protected PrivacyHelper $privacyHelper
+        protected readonly MultipartHelper $multipartHelper,
+        protected readonly PrivacyHelper $privacyHelper
     ) {
         parent::__construct($logger, $streamFactory, $partHeaderContainerFactory, $parserPartStreamContainerFactory, $parserPartChildrenContainerFactory);
     }

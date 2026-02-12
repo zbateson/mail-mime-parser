@@ -28,9 +28,9 @@ abstract class AbstractParserService implements IParserService
     protected ParserManagerService $parserManager;
 
     public function __construct(
-        protected ParserPartProxyFactory $parserMessageProxyFactory,
-        protected ParserPartProxyFactory $parserPartProxyFactory,
-        protected PartBuilderFactory $partBuilderFactory
+        protected readonly ParserPartProxyFactory $parserMessageProxyFactory,
+        protected readonly ParserPartProxyFactory $parserPartProxyFactory,
+        protected readonly PartBuilderFactory $partBuilderFactory
     ) {
     }
 

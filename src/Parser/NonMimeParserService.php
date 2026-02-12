@@ -26,7 +26,7 @@ class NonMimeParserService extends AbstractParserService
         ParserNonMimeMessageProxyFactory $parserNonMimeMessageProxyFactory,
         ParserUUEncodedPartProxyFactory $parserUuEncodedPartProxyFactory,
         PartBuilderFactory $partBuilderFactory,
-        protected UUEncodedPartHeaderContainerFactory $partHeaderContainerFactory
+        protected readonly UUEncodedPartHeaderContainerFactory $partHeaderContainerFactory
     ) {
         parent::__construct($parserNonMimeMessageProxyFactory, $parserUuEncodedPartProxyFactory, $partBuilderFactory);
     }

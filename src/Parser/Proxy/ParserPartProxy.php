@@ -30,8 +30,8 @@ abstract class ParserPartProxy extends PartBuilder
     private IMessagePart $part;
 
     public function __construct(
-        protected PartBuilder $partBuilder,
-        protected IParserService $parser
+        protected readonly PartBuilder $partBuilder,
+        protected readonly IParserService $parser
     ) {
     }
 

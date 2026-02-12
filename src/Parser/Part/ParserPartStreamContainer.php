@@ -58,7 +58,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         StreamFactory $streamFactory,
         MbWrapper $mbWrapper,
         bool $throwExceptionReadingPartContentFromUnsupportedCharsets,
-        protected ParserPartProxy $parserProxy
+        protected readonly ParserPartProxy $parserProxy
     ) {
         parent::__construct($logger, $streamFactory, $mbWrapper, $throwExceptionReadingPartContentFromUnsupportedCharsets);
     }

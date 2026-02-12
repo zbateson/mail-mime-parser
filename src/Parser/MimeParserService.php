@@ -25,8 +25,8 @@ class MimeParserService extends AbstractParserService
         ParserMessageProxyFactory $parserMessageProxyFactory,
         ParserMimePartProxyFactory $parserMimePartProxyFactory,
         PartBuilderFactory $partBuilderFactory,
-        protected PartHeaderContainerFactory $partHeaderContainerFactory,
-        protected HeaderParserService $headerParser
+        protected readonly PartHeaderContainerFactory $partHeaderContainerFactory,
+        protected readonly HeaderParserService $headerParser
     ) {
         parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory, $partBuilderFactory);
     }

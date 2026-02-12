@@ -19,8 +19,8 @@ use ZBateson\MbWrapper\MbWrapper;
 class HeaderPartFactory
 {
     public function __construct(
-        protected LoggerInterface $logger,
-        protected MbWrapper $charsetConverter
+        protected readonly LoggerInterface $logger,
+        protected readonly MbWrapper $charsetConverter
     ) {
     }
 

@@ -18,8 +18,8 @@ use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 abstract class AbstractHelper
 {
     public function __construct(
-        protected IMimePartFactory $mimePartFactory,
-        protected IUUEncodedPartFactory $uuEncodedPartFactory
+        protected readonly IMimePartFactory $mimePartFactory,
+        protected readonly IUUEncodedPartFactory $uuEncodedPartFactory
     ) {
     }
 }

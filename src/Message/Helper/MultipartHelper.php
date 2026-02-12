@@ -28,7 +28,7 @@ class MultipartHelper extends AbstractHelper
     public function __construct(
         IMimePartFactory $mimePartFactory,
         IUUEncodedPartFactory $uuEncodedPartFactory,
-        private GenericHelper $genericHelper
+        private readonly GenericHelper $genericHelper
     ) {
         parent::__construct($mimePartFactory, $uuEncodedPartFactory);
     }

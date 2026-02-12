@@ -24,7 +24,7 @@ abstract class MultiPart extends MessagePart implements IMultiPart
     public function __construct(
         LoggerInterface $logger,
         PartStreamContainer $streamContainer,
-        protected PartChildrenContainer $partChildrenContainer,
+        protected readonly PartChildrenContainer $partChildrenContainer,
         ?IMimePart $parent = null
     ) {
         parent::__construct($logger, $streamContainer, $parent);

@@ -28,7 +28,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
 
     public function __construct(
         LoggerInterface $logger,
-        protected MimeTokenPartFactory $mimeTokenPartFactory,
+        protected readonly MimeTokenPartFactory $mimeTokenPartFactory,
         IConsumerService $consumerService,
         string $name,
         string $value

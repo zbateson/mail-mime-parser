@@ -20,10 +20,10 @@ use ZBateson\MbWrapper\MbWrapper;
 class ParserPartStreamContainerFactory
 {
     public function __construct(
-        protected LoggerInterface $logger,
-        protected StreamFactory $streamFactory,
-        protected MbWrapper $mbWrapper,
-        protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets
+        protected readonly LoggerInterface $logger,
+        protected readonly StreamFactory $streamFactory,
+        protected readonly MbWrapper $mbWrapper,
+        protected readonly bool $throwExceptionReadingPartContentFromUnsupportedCharsets
     ) {
     }
 

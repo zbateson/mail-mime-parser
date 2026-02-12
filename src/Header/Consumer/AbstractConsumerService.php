@@ -35,8 +35,8 @@ abstract class AbstractConsumerService implements IConsumerService
      * @param AbstractConsumerService[] $subConsumers
      */
     public function __construct(
-        protected LoggerInterface $logger,
-        protected HeaderPartFactory $partFactory,
+        protected readonly LoggerInterface $logger,
+        protected readonly HeaderPartFactory $partFactory,
         protected array $subConsumers = []
     ) {
     }

@@ -28,7 +28,7 @@ use ZBateson\StreamDecorators\UUStream;
 class StreamFactory
 {
     public function __construct(
-        protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets
+        protected readonly bool $throwExceptionReadingPartContentFromUnsupportedCharsets
     ) {
     }
 

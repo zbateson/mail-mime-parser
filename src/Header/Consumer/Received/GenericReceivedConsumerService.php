@@ -53,7 +53,7 @@ class GenericReceivedConsumerService extends AbstractGenericConsumerService
         LoggerInterface $logger,
         HeaderPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
-        protected string $partName
+        protected readonly string $partName
     ) {
         parent::__construct($logger, $partFactory, [$commentConsumerService]);
     }

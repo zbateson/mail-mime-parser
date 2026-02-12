@@ -18,8 +18,8 @@ use ZBateson\MailMimeParser\Header\HeaderFactory;
 class UUEncodedPartHeaderContainerFactory
 {
     public function __construct(
-        protected LoggerInterface $logger,
-        protected HeaderFactory $headerFactory
+        protected readonly LoggerInterface $logger,
+        protected readonly HeaderFactory $headerFactory
     ) {
     }
 

@@ -20,10 +20,10 @@ use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 class MessageParserService
 {
     public function __construct(
-        protected PartBuilderFactory $partBuilderFactory,
-        protected PartHeaderContainerFactory $partHeaderContainerFactory,
-        protected ParserManagerService $parserManager,
-        protected HeaderParserService $headerParser
+        protected readonly PartBuilderFactory $partBuilderFactory,
+        protected readonly PartHeaderContainerFactory $partHeaderContainerFactory,
+        protected readonly ParserManagerService $parserManager,
+        protected readonly HeaderParserService $headerParser
     ) {
     }
 

@@ -46,7 +46,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
 
     public function __construct(
         LoggerInterface $logger,
-        protected PartStreamContainer $partStreamContainer,
+        protected readonly PartStreamContainer $partStreamContainer,
         protected ?IMimePart $parent = null
     ) {
         parent::__construct($logger);

@@ -19,8 +19,8 @@ use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 class PartHeaderContainerFactory
 {
     public function __construct(
-        protected LoggerInterface $logger,
-        protected HeaderFactory $headerFactory
+        protected readonly LoggerInterface $logger,
+        protected readonly HeaderFactory $headerFactory
     ) {
     }
 

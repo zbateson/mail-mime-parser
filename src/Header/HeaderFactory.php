@@ -102,8 +102,8 @@ class HeaderFactory
     protected string $genericType = GenericHeader::class;
 
     public function __construct(
-        protected LoggerInterface $logger,
-        protected MimeTokenPartFactory $mimeTokenPartFactory,
+        protected readonly LoggerInterface $logger,
+        protected readonly MimeTokenPartFactory $mimeTokenPartFactory,
         AddressBaseConsumerService $addressBaseConsumerService,
         DateConsumerService $dateConsumerService,
         GenericConsumerMimeLiteralPartService $genericConsumerMimeLiteralPartService,

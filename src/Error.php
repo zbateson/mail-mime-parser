@@ -39,10 +39,10 @@ class Error
      *         is not a known PSR log level (see \Psr\Log\LogLevel)
      */
     public function __construct(
-        protected string $message,
-        protected string $psrLevel,
-        protected ErrorBag $object,
-        protected ?Throwable $exception = null
+        protected readonly string $message,
+        protected readonly string $psrLevel,
+        protected readonly ErrorBag $object,
+        protected readonly ?Throwable $exception = null
     ) {
         if (!isset($this->levelMap[$psrLevel])) {
             throw new InvalidArgumentException($psrLevel . ' is not a known PSR Log Level');

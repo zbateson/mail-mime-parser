@@ -81,9 +81,9 @@ class PartStreamContainer extends ErrorBag
 
     public function __construct(
         LoggerInterface $logger,
-        protected StreamFactory $streamFactory,
-        protected MbWrapper $mbWrapper,
-        protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets
+        protected readonly StreamFactory $streamFactory,
+        protected readonly MbWrapper $mbWrapper,
+        protected readonly bool $throwExceptionReadingPartContentFromUnsupportedCharsets
     ) {
         parent::__construct($logger);
     }

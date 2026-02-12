@@ -24,7 +24,7 @@ class ParserPartChildrenContainer extends PartChildrenContainer
      */
     private bool $allParsed = false;
 
-    public function __construct(protected ParserMimePartProxy $parserProxy)
+    public function __construct(protected readonly ParserMimePartProxy $parserProxy)
     {
         parent::__construct([]);
     }
