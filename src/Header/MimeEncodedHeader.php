@@ -21,11 +21,6 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
 abstract class MimeEncodedHeader extends AbstractHeader
 {
     /**
-     * @var MimeTokenPartFactory for mime decoding.
-     */
-    protected MimeTokenPartFactory $mimeTokenPartFactory;
-
-    /**
      * @var MimeLiteralPart[] the mime encoded parsed parts contained in this
      *      header
      */
@@ -33,12 +28,11 @@ abstract class MimeEncodedHeader extends AbstractHeader
 
     public function __construct(
         LoggerInterface $logger,
-        MimeTokenPartFactory $mimeTokenPartFactory,
+        protected MimeTokenPartFactory $mimeTokenPartFactory,
         IConsumerService $consumerService,
         string $name,
         string $value
     ) {
-        $this->mimeTokenPartFactory = $mimeTokenPartFactory;
         parent::__construct($logger, $consumerService, $name, $value);
     }
 

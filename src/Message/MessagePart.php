@@ -25,16 +25,6 @@ use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 abstract class MessagePart extends ErrorBag implements IMessagePart
 {
     /**
-     * @var ?IMimePart parent part
-     */
-    protected ?IMimePart $parent;
-
-    /**
-     * @var PartStreamContainer holds 'stream' and 'content stream'.
-     */
-    protected PartStreamContainer $partStreamContainer;
-
-    /**
      * @var ?string can be used to set an override for content's charset in cases
      *      where a user knows the charset on the content is not what it claims
      *      to be.
@@ -56,12 +46,10 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
 
     public function __construct(
         LoggerInterface $logger,
-        PartStreamContainer $streamContainer,
-        ?IMimePart $parent = null
+        protected PartStreamContainer $partStreamContainer,
+        protected ?IMimePart $parent = null
     ) {
         parent::__construct($logger);
-        $this->partStreamContainer = $streamContainer;
-        $this->parent = $parent;
         $this->observers = new SplObjectStorage();
     }
 

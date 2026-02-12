@@ -18,8 +18,6 @@ use Throwable;
  */
 abstract class ErrorBag implements IErrorBag
 {
-    protected LoggerInterface $logger;
-
     /**
      * @var Error[] array of Error objects belonging to this object.
      */
@@ -30,9 +28,8 @@ abstract class ErrorBag implements IErrorBag
      */
     private bool $validated = false;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(protected LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     /**

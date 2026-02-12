@@ -25,18 +25,12 @@ use ZBateson\MailMimeParser\Message\PartFilter;
  */
 class MultipartHelper extends AbstractHelper
 {
-    /**
-     * @var GenericHelper a GenericHelper instance
-     */
-    private GenericHelper $genericHelper;
-
     public function __construct(
         IMimePartFactory $mimePartFactory,
         IUUEncodedPartFactory $uuEncodedPartFactory,
-        GenericHelper $genericHelper
+        private GenericHelper $genericHelper
     ) {
         parent::__construct($mimePartFactory, $uuEncodedPartFactory);
-        $this->genericHelper = $genericHelper;
     }
 
     /**

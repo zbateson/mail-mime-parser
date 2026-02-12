@@ -36,11 +36,6 @@ use ZBateson\MbWrapper\MbWrapper;
 class ParserPartStreamContainer extends PartStreamContainer implements SplObserver
 {
     /**
-     * @var ParserPartProxy The parser proxy to ferry requests to on-demand.
-     */
-    protected ParserPartProxy $parserProxy;
-
-    /**
      * @var MessagePartStreamDecorator the original stream for a parsed message,
      *      wrapped in a MessagePartStreamDecorator, and used when the message
      *      hasn't changed
@@ -63,10 +58,9 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         StreamFactory $streamFactory,
         MbWrapper $mbWrapper,
         bool $throwExceptionReadingPartContentFromUnsupportedCharsets,
-        ParserPartProxy $parserProxy
+        protected ParserPartProxy $parserProxy
     ) {
         parent::__construct($logger, $streamFactory, $mbWrapper, $throwExceptionReadingPartContentFromUnsupportedCharsets);
-        $this->parserProxy = $parserProxy;
     }
 
     public function __destruct()

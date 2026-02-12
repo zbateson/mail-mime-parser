@@ -22,20 +22,11 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
 {
-    protected LoggerInterface $logger;
-
-    protected StreamFactory $streamFactory;
-
-    protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
-
     public function __construct(
-        LoggerInterface $logger,
-        StreamFactory $sdf,
-        ParserPartStreamContainerFactory $parserPartStreamContainerFactory
+        protected LoggerInterface $logger,
+        protected StreamFactory $streamFactory,
+        protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory
     ) {
-        $this->logger = $logger;
-        $this->streamFactory = $sdf;
-        $this->parserPartStreamContainerFactory = $parserPartStreamContainerFactory;
     }
 
     /**

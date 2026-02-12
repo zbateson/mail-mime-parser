@@ -21,27 +21,14 @@ use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
  */
 class MimeParserService extends AbstractParserService
 {
-    /**
-     * @var PartHeaderContainerFactory Factory service for creating
-     *      PartHeaderContainers for headers.
-     */
-    protected PartHeaderContainerFactory $partHeaderContainerFactory;
-
-    /**
-     * @var HeaderParserService The HeaderParser service.
-     */
-    protected HeaderParserService $headerParser;
-
     public function __construct(
         ParserMessageProxyFactory $parserMessageProxyFactory,
         ParserMimePartProxyFactory $parserMimePartProxyFactory,
         PartBuilderFactory $partBuilderFactory,
-        PartHeaderContainerFactory $partHeaderContainerFactory,
-        HeaderParserService $headerParser
+        protected PartHeaderContainerFactory $partHeaderContainerFactory,
+        protected HeaderParserService $headerParser
     ) {
         parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory, $partBuilderFactory);
-        $this->partHeaderContainerFactory = $partHeaderContainerFactory;
-        $this->headerParser = $headerParser;
     }
 
     /**

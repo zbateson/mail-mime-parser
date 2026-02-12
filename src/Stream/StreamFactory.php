@@ -27,15 +27,9 @@ use ZBateson\StreamDecorators\UUStream;
  */
 class StreamFactory
 {
-    /**
-     * @var bool if true, saving a content stream with an unsupported charset
-     *      will be written in the default charset.
-     */
-    protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets;
-
-    public function __construct(bool $throwExceptionReadingPartContentFromUnsupportedCharsets)
-    {
-        $this->throwExceptionReadingPartContentFromUnsupportedCharsets = $throwExceptionReadingPartContentFromUnsupportedCharsets;
+    public function __construct(
+        protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets
+    ) {
     }
 
     /**

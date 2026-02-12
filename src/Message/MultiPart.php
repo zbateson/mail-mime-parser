@@ -21,19 +21,13 @@ use RecursiveIteratorIterator;
  */
 abstract class MultiPart extends MessagePart implements IMultiPart
 {
-    /**
-     * @var PartChildrenContainer child part container
-     */
-    protected PartChildrenContainer $partChildrenContainer;
-
     public function __construct(
         LoggerInterface $logger,
         PartStreamContainer $streamContainer,
-        PartChildrenContainer $partChildrenContainer,
+        protected PartChildrenContainer $partChildrenContainer,
         ?IMimePart $parent = null
     ) {
         parent::__construct($logger, $streamContainer, $parent);
-        $this->partChildrenContainer = $partChildrenContainer;
     }
 
     private function getAllPartsIterator() : AppendIterator

@@ -35,25 +35,6 @@ use ZBateson\MbWrapper\UnsupportedCharsetException;
 class PartStreamContainer extends ErrorBag
 {
     /**
-     * @var MbWrapper to test charsets and see if they're supported.
-     */
-    protected MbWrapper $mbWrapper;
-
-    /**
-     * @var bool if false, reading from a content stream with an unsupported
-     *      charset will be tried with the default charset, otherwise the stream
-     *      created with the unsupported charset, and an exception will be
-     *      thrown when read from.
-     */
-    protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets;
-
-    /**
-     * @var StreamFactory used to apply psr7 stream decorators to the
-     *      attached StreamInterface based on encoding.
-     */
-    protected StreamFactory $streamFactory;
-
-    /**
      * @var MessagePartStreamDecorator stream containing the part's headers,
      *      content and children wrapped in a MessagePartStreamDecorator
      */
@@ -100,14 +81,11 @@ class PartStreamContainer extends ErrorBag
 
     public function __construct(
         LoggerInterface $logger,
-        StreamFactory $streamFactory,
-        MbWrapper $mbWrapper,
-        bool $throwExceptionReadingPartContentFromUnsupportedCharsets
+        protected StreamFactory $streamFactory,
+        protected MbWrapper $mbWrapper,
+        protected bool $throwExceptionReadingPartContentFromUnsupportedCharsets
     ) {
         parent::__construct($logger);
-        $this->streamFactory = $streamFactory;
-        $this->mbWrapper = $mbWrapper;
-        $this->throwExceptionReadingPartContentFromUnsupportedCharsets = $throwExceptionReadingPartContentFromUnsupportedCharsets;
     }
 
     /**

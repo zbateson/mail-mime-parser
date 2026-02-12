@@ -24,28 +24,13 @@ use ZBateson\MailMimeParser\Stream\StreamFactory;
  */
 class ParserMimePartProxyFactory extends ParserPartProxyFactory
 {
-    protected LoggerInterface $logger;
-
-    protected StreamFactory $streamFactory;
-
-    protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory;
-
-    protected PartHeaderContainerFactory $partHeaderContainerFactory;
-
-    protected ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory;
-
     public function __construct(
-        LoggerInterface $logger,
-        StreamFactory $sdf,
-        PartHeaderContainerFactory $phcf,
-        ParserPartStreamContainerFactory $pscf,
-        ParserPartChildrenContainerFactory $ppccf
+        protected LoggerInterface $logger,
+        protected StreamFactory $streamFactory,
+        protected PartHeaderContainerFactory $partHeaderContainerFactory,
+        protected ParserPartStreamContainerFactory $parserPartStreamContainerFactory,
+        protected ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory
     ) {
-        $this->logger = $logger;
-        $this->streamFactory = $sdf;
-        $this->partHeaderContainerFactory = $phcf;
-        $this->parserPartStreamContainerFactory = $pscf;
-        $this->parserPartChildrenContainerFactory = $ppccf;
     }
 
     /**

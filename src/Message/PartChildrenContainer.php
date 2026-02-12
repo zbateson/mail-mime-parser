@@ -19,12 +19,6 @@ use RecursiveIterator;
 class PartChildrenContainer implements ArrayAccess, RecursiveIterator
 {
     /**
-     * @var IMessagePart[] array of child parts of the IMultiPart object that is
-     *      holding this container.
-     */
-    protected array $children;
-
-    /**
      * @var int current key position within $children for iteration.
      */
     protected int $position = 0;
@@ -32,9 +26,8 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
     /**
      * @param IMessagePart[] $children
      */
-    public function __construct(array $children = [])
+    public function __construct(protected array $children = [])
     {
-        $this->children = $children;
     }
 
     /**

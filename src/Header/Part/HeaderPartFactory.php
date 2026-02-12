@@ -18,18 +18,10 @@ use ZBateson\MbWrapper\MbWrapper;
  */
 class HeaderPartFactory
 {
-    /**
-     * @var MbWrapper $charsetConverter passed to IHeaderPart constructors
-     *      for converting strings in IHeaderPart::convertEncoding
-     */
-    protected MbWrapper $charsetConverter;
-
-    protected LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger, MbWrapper $charsetConverter)
-    {
-        $this->logger = $logger;
-        $this->charsetConverter = $charsetConverter;
+    public function __construct(
+        protected LoggerInterface $logger,
+        protected MbWrapper $charsetConverter
+    ) {
     }
 
     /**

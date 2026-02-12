@@ -41,17 +41,10 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
  */
 class HeaderFactory
 {
-    protected LoggerInterface $logger;
-
     /**
      * @var IConsumerService[] array of available consumer service classes
      */
     protected array $consumerServices;
-
-    /**
-     * @var MimeTokenPartFactory for mime decoding.
-     */
-    protected MimeTokenPartFactory $mimeTokenPartFactory;
 
     /**
      * @var string[][] maps IHeader types to headers.
@@ -109,8 +102,8 @@ class HeaderFactory
     protected string $genericType = GenericHeader::class;
 
     public function __construct(
-        LoggerInterface $logger,
-        MimeTokenPartFactory $mimeTokenPartFactory,
+        protected LoggerInterface $logger,
+        protected MimeTokenPartFactory $mimeTokenPartFactory,
         AddressBaseConsumerService $addressBaseConsumerService,
         DateConsumerService $dateConsumerService,
         GenericConsumerMimeLiteralPartService $genericConsumerMimeLiteralPartService,
@@ -119,8 +112,6 @@ class HeaderFactory
         ReceivedConsumerService $receivedConsumerService,
         SubjectConsumerService $subjectConsumerService
     ) {
-        $this->logger = $logger;
-        $this->mimeTokenPartFactory = $mimeTokenPartFactory;
         $this->consumerServices = [
             AddressBaseConsumerService::class => $addressBaseConsumerService,
             DateConsumerService::class => $dateConsumerService,

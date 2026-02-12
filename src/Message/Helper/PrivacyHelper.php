@@ -21,25 +21,13 @@ use ZBateson\MailMimeParser\Message\IMessagePart;
  */
 class PrivacyHelper extends AbstractHelper
 {
-    /**
-     * @var GenericHelper a GenericHelper instance
-     */
-    private GenericHelper $genericHelper;
-
-    /**
-     * @var MultipartHelper a MultipartHelper instance
-     */
-    private MultipartHelper $multipartHelper;
-
     public function __construct(
         IMimePartFactory $mimePartFactory,
         IUUEncodedPartFactory $uuEncodedPartFactory,
-        GenericHelper $genericHelper,
-        MultipartHelper $multipartHelper
+        private GenericHelper $genericHelper,
+        private MultipartHelper $multipartHelper
     ) {
         parent::__construct($mimePartFactory, $uuEncodedPartFactory);
-        $this->genericHelper = $genericHelper;
-        $this->multipartHelper = $multipartHelper;
     }
 
     /**
