@@ -9,7 +9,6 @@ namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
-use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Reads a generic header.
@@ -27,10 +26,9 @@ class GenericHeader extends AbstractHeader
         ?LoggerInterface $logger = null,
         ?GenericConsumerMimeLiteralPartService $consumerService = null
     ) {
-        $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
-            $logger ?? $di->get(LoggerInterface::class),
-            $consumerService ?? $di->get(GenericConsumerMimeLiteralPartService::class),
+            self::resolveService($logger, LoggerInterface::class),
+            self::resolveService($consumerService, GenericConsumerMimeLiteralPartService::class),
             $name,
             $value
         );

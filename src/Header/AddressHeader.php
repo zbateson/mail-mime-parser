@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\AddressBaseConsumerService;
 use ZBateson\MailMimeParser\Header\Part\AddressGroupPart;
 use ZBateson\MailMimeParser\Header\Part\AddressPart;
-use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * A header containing one or more email addresses and/or groups of addresses.
@@ -44,10 +43,9 @@ class AddressHeader extends AbstractHeader
         ?LoggerInterface $logger = null,
         ?AddressBaseConsumerService $consumerService = null
     ) {
-        $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
-            $logger ?? $di->get(LoggerInterface::class),
-            $consumerService ?? $di->get(AddressBaseConsumerService::class),
+            self::resolveService($logger, LoggerInterface::class),
+            self::resolveService($consumerService, AddressBaseConsumerService::class),
             $name,
             $value
         );

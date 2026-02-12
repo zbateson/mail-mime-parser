@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService;
 use ZBateson\MailMimeParser\Header\Part\NameValuePart;
-use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Represents a header containing an optional main value part and subsequent
@@ -47,10 +46,9 @@ class ParameterHeader extends AbstractHeader
         ?LoggerInterface $logger = null,
         ?ParameterConsumerService $consumerService = null
     ) {
-        $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
-            $logger ?? $di->get(LoggerInterface::class),
-            $consumerService ?? $di->get(ParameterConsumerService::class),
+            self::resolveService($logger, LoggerInterface::class),
+            self::resolveService($consumerService, ParameterConsumerService::class),
             $name,
             $value
         );

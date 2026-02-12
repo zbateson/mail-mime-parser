@@ -11,7 +11,6 @@ use DateTime;
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Part\DatePart;
-use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
  * Represents a Received header.
@@ -96,10 +95,9 @@ class ReceivedHeader extends ParameterHeader
         ?LoggerInterface $logger = null,
         ?ReceivedConsumerService $consumerService = null
     ) {
-        $di = MailMimeParser::getGlobalContainer();
         AbstractHeader::__construct(
-            $logger ?? $di->get(LoggerInterface::class),
-            $consumerService ?? $di->get(ReceivedConsumerService::class),
+            self::resolveService($logger, LoggerInterface::class),
+            self::resolveService($consumerService, ReceivedConsumerService::class),
             $name,
             $value
         );
