@@ -130,24 +130,14 @@ class StreamFactory
 
     public function getTransferEncodingDecoratedStream(StreamInterface $stream, ?string $transferEncoding, ?string $filename = null) : StreamInterface
     {
-        $decorated = null;
-        switch ($transferEncoding) {
-            case 'quoted-printable':
-                $decorated = $this->newQuotedPrintableStream($stream);
-                break;
-            case 'base64':
-                $decorated = $this->newBase64Stream(
-                    $this->newChunkSplitStream($stream)
-                );
-                break;
-            case 'x-uuencode':
-                $decorated = $this->newUUStream($stream);
-                if ($filename !== null) {
-                    $decorated->setFilename($filename);
-                }
-                break;
-            default:
-                return $stream;
+        $decorated = match ($transferEncoding) {
+            'quoted-printable' => $this->newQuotedPrintableStream($stream),
+            'base64' => $this->newBase64Stream($this->newChunkSplitStream($stream)),
+            'x-uuencode' => $this->newUUStream($stream),
+            default => $stream,
+        };
+        if ($transferEncoding === 'x-uuencode' && $filename !== null) {
+            $decorated->setFilename($filename);
         }
         return $decorated;
     }
