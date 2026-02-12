@@ -43,10 +43,10 @@ class ParserMimePartProxyTest extends TestCase
             ->getMock();
         $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->parentParser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->parent = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor()
@@ -57,7 +57,7 @@ class ParserMimePartProxyTest extends TestCase
     {
         $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
         $instance->setPart($part);
         $this->assertSame($part, $instance->getPart());

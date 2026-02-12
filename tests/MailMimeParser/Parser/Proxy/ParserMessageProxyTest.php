@@ -29,7 +29,7 @@ class ParserMessageProxyTest extends TestCase
             ->getMock();
         $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 
     public function testSetGetLastLineEndingLength() : void

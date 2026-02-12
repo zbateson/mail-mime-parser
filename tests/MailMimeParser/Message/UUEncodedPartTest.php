@@ -29,7 +29,7 @@ class UUEncodedPartTest extends TestCase
 
     public function testGetAndSetFileName() : void
     {
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $this->instance->attach($observer);
@@ -41,7 +41,7 @@ class UUEncodedPartTest extends TestCase
 
     public function testGetAndUnixFileMode() : void
     {
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $this->instance->attach($observer);

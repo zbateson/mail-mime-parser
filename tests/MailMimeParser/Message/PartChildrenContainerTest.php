@@ -26,12 +26,12 @@ class PartChildrenContainerTest extends TestCase
 
     private function getIMessagePart() : IMessagePart
     {
-        return $this->getMockForAbstractClass(IMessagePart::class);
+        return $this->createMock(IMessagePart::class);
     }
 
     private function getIMultiPart() : IMultiPart
     {
-        return $this->getMockForAbstractClass(IMultiPart::class);
+        return $this->createMock(IMultiPart::class);
     }
 
     public function testHasAndGetChildren() : void

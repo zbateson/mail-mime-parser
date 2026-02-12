@@ -269,7 +269,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -291,7 +291,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -309,7 +309,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);
@@ -334,7 +334,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);
@@ -354,7 +354,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -377,7 +377,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly((\is_array($this->allParts) || $this->allParts instanceof \Countable ? \count($this->allParts) : 0) - 1))
             ->method('update');
         $part->attach($observer);

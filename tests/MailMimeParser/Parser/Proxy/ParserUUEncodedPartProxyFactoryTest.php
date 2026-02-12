@@ -61,7 +61,7 @@ class ParserUUEncodedPartProxyFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->parser = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\IParserService::class);
+        $this->parser = $this->createMock(\ZBateson\MailMimeParser\Parser\IParserService::class);
 
         $this->parent = $this->getMockBuilder(ParserMimePartProxy::class)
             ->disableOriginalConstructor()
@@ -92,7 +92,7 @@ class ParserUUEncodedPartProxyFactoryTest extends TestCase
             ->with($stream);
         $this->parent->expects($this->atLeastOnce())
             ->method('getPart')
-            ->willReturn($this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMimePart::class));
+            ->willReturn($this->createMock(\ZBateson\MailMimeParser\Message\IMimePart::class));
 
         $this->partBuilder
             ->expects($this->atLeastOnce())

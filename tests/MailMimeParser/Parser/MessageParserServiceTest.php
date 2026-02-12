@@ -58,7 +58,7 @@ class MessageParserServiceTest extends TestCase
     public function testParse() : void
     {
         $stream = Psr7\Utils::streamFor('test');
-        $msg = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
+        $msg = $this->createMock(\ZBateson\MailMimeParser\IMessage::class);
 
         $pb = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()

@@ -21,12 +21,10 @@ class NonMimePartTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->instance = $this->getMockForAbstractClass(
-            NonMimePart::class,
-            [],
-            '',
-            false
-        );
+        $this->instance = $this->getMockBuilder(NonMimePart::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
     }
 
     public function testIsTextPart() : void

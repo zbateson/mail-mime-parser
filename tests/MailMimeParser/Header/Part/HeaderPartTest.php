@@ -29,7 +29,8 @@ class HeaderPartTest extends TestCase
         $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder(HeaderPart::class)
             ->setConstructorArgs([$this->logger, $charsetConverter, 'toost'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
         $this->abstractHeaderPartStub = $stub;
     }
 

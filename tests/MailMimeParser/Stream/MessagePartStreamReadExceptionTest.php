@@ -19,7 +19,7 @@ class MessagePartStreamReadExceptionTest extends TestCase
 {
     public function testInstance() : void
     {
-        $part = $this->getMockForAbstractClass(IMessagePart::class);
+        $part = $this->createMock(IMessagePart::class);
         $exc = new MessagePartStreamReadException($part);
         $this->assertSame($part, $exc->getPart());
     }

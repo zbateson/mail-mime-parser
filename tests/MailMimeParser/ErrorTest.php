@@ -23,7 +23,10 @@ class ErrorTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->errorBagMock = $this->getMockForAbstractClass(ErrorBag::class, [\mmpGetTestLogger()]);
+        $this->errorBagMock = $this->getMockBuilder(ErrorBag::class)
+            ->setConstructorArgs([\mmpGetTestLogger()])
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
     }
 
     public function testGetMessage() : void

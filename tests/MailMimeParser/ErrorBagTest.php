@@ -21,7 +21,8 @@ class ErrorBagTest extends TestCase
     {
         $stub = $this->getMockBuilder('\\' . ErrorBag::class)
             ->setConstructorArgs([\mmpGetTestLogger()])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
         $stub->method('getErrorBagChildren')
             ->willReturn($children);
         return $stub;

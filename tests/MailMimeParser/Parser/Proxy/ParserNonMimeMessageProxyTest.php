@@ -32,7 +32,7 @@ class ParserNonMimeMessageProxyTest extends TestCase
             ->getMock();
         $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->instance = new ParserNonMimeMessageProxy(
             $this->partBuilder,
             $this->parser

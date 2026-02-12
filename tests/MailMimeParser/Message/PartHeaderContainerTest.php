@@ -219,7 +219,7 @@ class PartHeaderContainerTest extends TestCase
             ))
             ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader, $mockThirdHeader, $mockSecondUpdatedHeader);
 
-        $custRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $custRet = $this->createMock(\ZBateson\MailMimeParser\Header\IHeader::class);
         $this->mhf->expects($this->once())
             ->method('newInstanceOf')
             ->with('fourth', 'value', 'IHeaderClass')

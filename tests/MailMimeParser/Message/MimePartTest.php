@@ -239,8 +239,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
 
-        $h1 = $this->getMockForAbstractClass(IHeader::class);
-        $h2 = $this->getMockForAbstractClass(IHeader::class);
+        $h1 = $this->createMock(IHeader::class);
+        $h2 = $this->createMock(IHeader::class);
 
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
@@ -256,8 +256,8 @@ class MimePartTest extends TestCase
     public function testGetHeaderAs() : void
     {
         $part = $this->getMimePart();
-        $oRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
-        $oRet2 = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $oRet = $this->createMock(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $oRet2 = $this->createMock(\ZBateson\MailMimeParser\Header\IHeader::class);
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('getAs')
@@ -273,8 +273,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
         $headers = [
-            $this->getMockForAbstractClass(IHeader::class),
-            $this->getMockForAbstractClass(IHeader::class)
+            $this->createMock(IHeader::class),
+            $this->createMock(IHeader::class)
         ];
         $this->mockHeaderContainer
             ->expects($this->once())
@@ -287,8 +287,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
         $headers = [
-            $this->getMockForAbstractClass(IHeader::class),
-            $this->getMockForAbstractClass(IHeader::class)
+            $this->createMock(IHeader::class),
+            $this->createMock(IHeader::class)
         ];
         $this->mockHeaderContainer
             ->expects($this->once())
@@ -302,8 +302,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
         $headers = [
-            $this->getMockForAbstractClass(IHeader::class),
-            $this->getMockForAbstractClass(IHeader::class)
+            $this->createMock(IHeader::class),
+            $this->createMock(IHeader::class)
         ];
         $this->mockHeaderContainer
             ->expects($this->once())
@@ -315,7 +315,7 @@ class MimePartTest extends TestCase
     public function testGetRawHeadersIterator() : void
     {
         $part = $this->getMimePart();
-        $iter = $this->getMockForAbstractClass(Traversable::class);
+        $iter = $this->createMock(Traversable::class);
         $this->mockHeaderContainer
             ->expects($this->once())
             ->method('getIterator')
@@ -379,7 +379,7 @@ class MimePartTest extends TestCase
                 ['title', 'SILENCE of the lamboos', 0],
                 ['title', 'SILENCE of the lambies', 3]
             ));
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);
@@ -395,7 +395,7 @@ class MimePartTest extends TestCase
             ->expects($this->once())
             ->method('add')
             ->with('title', 'SILENCE of the lamboos');
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -410,7 +410,7 @@ class MimePartTest extends TestCase
             ->expects($this->once())
             ->method('removeAll')
             ->with('weeeee');
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -425,7 +425,7 @@ class MimePartTest extends TestCase
             ->expects($this->exactly(2))
             ->method('remove')
             ->with(...$this->consecutive(['weeeee', 0], ['wooooo', 3]));
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);

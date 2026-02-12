@@ -44,7 +44,7 @@ class ParserPartChildrenContainerTest extends TestCase
     {
         $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->proxy->expects($this->exactly(2))
             ->method('popNextChild')
             ->willReturnOnConsecutiveCalls($part, null);

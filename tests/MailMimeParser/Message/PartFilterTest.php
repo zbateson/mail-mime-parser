@@ -20,7 +20,7 @@ class PartFilterTest extends TestCase
     {
         $callback = PartFilter::fromAttachmentFilter();
 
-        $part = $this->getMockForAbstractClass(IMessagePart::class);
+        $part = $this->createMock(IMessagePart::class);
         $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/plain', 'text/html', 'text/html', 'blah');
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'inline', 'attachment', 'blah');
 
@@ -30,7 +30,7 @@ class PartFilterTest extends TestCase
         $this->assertTrue($callback($part));
         $this->assertTrue($callback($part));
 
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'blah');
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('attachment', 'attachment', 'blah');
         $part->method('isMultiPart')->willReturnOnConsecutiveCalls(true, false, false);
@@ -43,14 +43,14 @@ class PartFilterTest extends TestCase
     public function testHeaderValueFilterWithMessagePart() : void
     {
         $callback = PartFilter::fromHeaderValue('detective', 'peralta');
-        $part = $this->getMockForAbstractClass(IMessagePart::class);
+        $part = $this->createMock(IMessagePart::class);
         $this->assertFalse($callback($part));
     }
 
     public function testHeaderValueFilterWithSignaturePart() : void
     {
         $callback = PartFilter::fromHeaderValue('detective', 'peralta');
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->expects($this->once())->method('isSignaturePart')->willReturn(true);
         $part->expects($this->never())->method('getHeaderValue');
         $this->assertFalse($callback($part));
@@ -59,7 +59,7 @@ class PartFilterTest extends TestCase
     public function testHeaderValueFilterWithMimePart() : void
     {
         $callback = PartFilter::fromHeaderValue('detective', 'peralta');
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(false, false, false, true, false, true);
         $part->method('getHeaderValue')->with('detective')->willReturnOnConsecutiveCalls(
             'PERAlta',
@@ -83,7 +83,7 @@ class PartFilterTest extends TestCase
     {
         $callback = PartFilter::fromContentType('text/plain');
 
-        $part = $this->getMockForAbstractClass(IMessagePart::class);
+        $part = $this->createMock(IMessagePart::class);
         $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah', null);
         $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));
@@ -96,7 +96,7 @@ class PartFilterTest extends TestCase
     {
         $callback = PartFilter::fromInlineContentType('text/plain');
 
-        $part = $this->getMockForAbstractClass(IMessagePart::class);
+        $part = $this->createMock(IMessagePart::class);
         $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah', null);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'attoochment', 'attachment', 'blah');
         $this->assertTrue($callback($part));
@@ -109,7 +109,7 @@ class PartFilterTest extends TestCase
     public function testDispositionFilter() : void
     {
         $callback = PartFilter::fromDisposition('needy');
-        $part = $this->getMockForAbstractClass(IMessagePart::class);
+        $part = $this->createMock(IMessagePart::class);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'noodly', 'NEEDY', 'attachment', 'needy');
         $this->assertFalse($callback($part));
         $this->assertFalse($callback($part));
@@ -121,7 +121,7 @@ class PartFilterTest extends TestCase
     public function testDispositionFilterNoMultiOrSignedParts() : void
     {
         $callback = PartFilter::fromDisposition('needy');
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('needy', 'needy', 'needy');
         $part->method('isMultiPart')->willReturnOnConsecutiveCalls(true, false, false);
         $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(true, false);
@@ -133,7 +133,7 @@ class PartFilterTest extends TestCase
     public function testDispositionFilterWithMultiParts() : void
     {
         $callback = PartFilter::fromDisposition('greedy', true);
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('greedy', 'greedy', 'greedy');
         $part->expects($this->never())->method('isMultiPart');
         $part->method('isSignaturePart')->willReturnOnConsecutiveCalls(false, true, false);
@@ -145,7 +145,7 @@ class PartFilterTest extends TestCase
     public function testDispositionFilterWithSignatureParts() : void
     {
         $callback = PartFilter::fromDisposition('seedy', false, true);
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('seedy', 'seedy', 'seedy');
         $part->method('isMultiPart')->willReturnOnConsecutiveCalls(true, false, false);
         $part->expects($this->never())->method('isSignaturePart');
@@ -157,7 +157,7 @@ class PartFilterTest extends TestCase
     public function testDispositionFilterWithMultiAndSignatureParts() : void
     {
         $callback = PartFilter::fromDisposition('seedy', true, true);
-        $part = $this->getMockForAbstractClass(IMimePart::class);
+        $part = $this->createMock(IMimePart::class);
         $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('seedy', 'seedy', 'seedy');
         $part->expects($this->never())->method('isMultiPart');
         $part->expects($this->never())->method('isSignaturePart');

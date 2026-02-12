@@ -28,13 +28,13 @@ class AbstractConsumerServiceTest extends TestCase
     protected function setUp() : void
     {
         $stub = $this->getMockBuilder('\\' . AbstractConsumerService::class)
-            ->onlyMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators'])
+            ->onlyMethods(['processParts', 'isEndToken', 'isStartToken', 'getPartForToken', 'getTokenSeparators'])
             ->setConstructorArgs([
                 \mmpGetTestLogger(),
                 $this->getMockBuilder(HeaderPartFactory::class)->disableOriginalConstructor()->getMock(),
                 []
             ])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $stub->method('isEndToken')
             ->willReturn(false);
@@ -51,7 +51,7 @@ class AbstractConsumerServiceTest extends TestCase
         $stub->expects($this->once())
             ->method('getPartForToken')
             ->with($value)
-            ->willReturn($this->getMockForAbstractClass(IHeaderPart::class));
+            ->willReturn($this->createMock(IHeaderPart::class));
         $stub->method('processParts')
             ->willReturn([$value]);
 
@@ -79,7 +79,7 @@ class AbstractConsumerServiceTest extends TestCase
         $stub->expects($this->exactly(6))
             ->method('getPartForToken')
             ->with(...$this->consecutive([$args[0]], [$args[1]], [$args[2]], [$args[3]], [$args[4]], [$args[5]]))
-            ->will($this->onConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5]));
+            ->willReturnOnConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5]);
         $stub->method('processParts')
             ->willReturn($parts);
 
@@ -116,7 +116,7 @@ class AbstractConsumerServiceTest extends TestCase
                 [$args[5], true],
                 [$args[6], false]
             ))
-            ->will($this->onConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5], $parts[6]));
+            ->willReturnOnConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5], $parts[6]);
         $stub->method('processParts')
             ->willReturn($parts);
 

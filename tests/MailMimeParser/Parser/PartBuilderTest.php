@@ -74,7 +74,7 @@ class PartBuilderTest extends TestCase
         $parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getMessageResourceHandle', 'setStreamPartEndPos'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $stream = Psr7\Utils::streamFor('test');
         $parent->expects($this->once())

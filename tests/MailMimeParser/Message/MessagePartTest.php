@@ -35,10 +35,14 @@ class MessagePartTest extends TestCase
 
     private function getMessagePart($handle = 'habibi', $contentHandle = null, $parent = null) : \ZBateson\MailMimeParser\Message\MessagePart
     {
-        $streamPartMock = $this->getMockForAbstractClass(
-            MessagePart::class,
-            [\mmpGetTestLogger(), $this->partStreamContainer, $parent]
-        );
+        $streamPartMock = $this->getMockBuilder(MessagePart::class)
+            ->setConstructorArgs([\mmpGetTestLogger(), $this->partStreamContainer, $parent])
+            ->onlyMethods([
+                'isTextPart', 'getContentType', 'getCharset',
+                'getContentDisposition', 'getContentTransferEncoding', 'getContentId',
+                'isMime',
+            ])
+            ->getMock();
         if ($contentHandle !== null) {
             $contentHandle = new MessagePartStreamDecorator($streamPartMock, Psr7\Utils::streamFor($contentHandle));
             $this->partStreamContainer
@@ -65,16 +69,20 @@ class MessagePartTest extends TestCase
                     return $handle;
                 });
         }
-        return $this->getMockForAbstractClass(
-            MessagePart::class,
-            [\mmpGetTestLogger(), $this->partStreamContainer, $parent]
-        );
+        return $this->getMockBuilder(MessagePart::class)
+            ->setConstructorArgs([\mmpGetTestLogger(), $this->partStreamContainer, $parent])
+            ->onlyMethods([
+                'isTextPart', 'getContentType', 'getCharset',
+                'getContentDisposition', 'getContentTransferEncoding', 'getContentId',
+                'isMime',
+            ])
+            ->getMock();
     }
 
     public function testNotify() : void
     {
         $messagePart = $this->getMessagePart();
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $messagePart->attach($observer);
@@ -251,7 +259,7 @@ class MessagePartTest extends TestCase
             ->method('setContentStream')
             ->with(null);
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $messagePart->attach($observer);
@@ -283,7 +291,7 @@ class MessagePartTest extends TestCase
             ->method('setContentStream')
             ->with($new);
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $messagePart->attach($observer);

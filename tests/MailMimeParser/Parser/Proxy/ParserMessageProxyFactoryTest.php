@@ -86,7 +86,7 @@ class ParserMessageProxyFactoryTest extends TestCase
         $this->partChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parser = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\IParserService::class);
+        $this->parser = $this->createMock(\ZBateson\MailMimeParser\Parser\IParserService::class);
 
         $this->instance = new ParserMessageProxyFactory(
             \mmpGetTestLogger(),

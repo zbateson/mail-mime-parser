@@ -59,7 +59,7 @@ class MimeEncodedHeaderTest extends TestCase
                 $value
             ])
             ->onlyMethods([])
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 
     public function testGetDecoded() : void

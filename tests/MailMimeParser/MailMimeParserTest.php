@@ -24,7 +24,7 @@ class MailMimeParserTest extends TestCase
         \fwrite($handle, 'This is a test');
         \rewind($handle);
 
-        $exp = $this->getMockForAbstractClass(IMessage::class);
+        $exp = $this->createMock(IMessage::class);
         $mockParser = $this->getMockBuilder(MessageParserService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -45,7 +45,7 @@ class MailMimeParserTest extends TestCase
         \fwrite($handle, 'This is a test');
         \rewind($handle);
 
-        $exp = $this->getMockForAbstractClass(IMessage::class);
+        $exp = $this->createMock(IMessage::class);
         $mockParser = $this->getMockBuilder(MessageParserService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +62,7 @@ class MailMimeParserTest extends TestCase
 
     public function testParseFromString() : void
     {
-        $exp = $this->getMockForAbstractClass(IMessage::class);
+        $exp = $this->createMock(IMessage::class);
         $mockParser = $this->getMockBuilder(MessageParserService::class)
             ->disableOriginalConstructor()
             ->getMock();

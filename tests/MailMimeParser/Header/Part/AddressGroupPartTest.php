@@ -42,7 +42,10 @@ class AddressGroupPartTest extends TestCase
 
     public function testNameGroup() : void
     {
-        $name = $this->getMockForAbstractClass(HeaderPart::class, [$this->logger, $this->mb, 'Roman Senate']);
+        $name = $this->getMockBuilder(HeaderPart::class)
+            ->setConstructorArgs([$this->logger, $this->mb, 'Roman Senate'])
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
         $members = [
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
