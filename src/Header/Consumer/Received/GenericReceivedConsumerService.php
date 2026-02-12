@@ -45,7 +45,7 @@ class GenericReceivedConsumerService extends AbstractGenericConsumerService
      * This is always the lower-case name provided to the constructor, not the
      * actual string that started the consumer, which could be in any case.
      */
-    protected $partName;
+    protected string $partName;
 
     /**
      * Constructor overridden to include $partName parameter.

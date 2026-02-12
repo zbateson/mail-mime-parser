@@ -29,7 +29,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
      * @var MimeLiteralPart[] the mime encoded parsed parts contained in this
      *      header
      */
-    protected $mimeEncodedParsedParts = [];
+    protected array $mimeEncodedParsedParts = [];
 
     public function __construct(
         LoggerInterface $logger,

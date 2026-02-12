@@ -56,7 +56,7 @@ class HeaderFactory
     /**
      * @var string[][] maps IHeader types to headers.
      */
-    protected $types = [
+    protected array $types = [
         AddressHeader::class => [
             'from',
             'to',
@@ -106,7 +106,7 @@ class HeaderFactory
      * @var string Defines the generic IHeader type to use for headers that
      *      aren't mapped in $types
      */
-    protected $genericType = GenericHeader::class;
+    protected string $genericType = GenericHeader::class;
 
     public function __construct(
         LoggerInterface $logger,

@@ -30,7 +30,7 @@ class ContainerPart extends HeaderPart
      * @var HeaderPart[] parts that were used to create this part, collected for
      *      proper error reporting and validation.
      */
-    protected $children = [];
+    protected array $children = [];
 
     public function __construct(
         LoggerInterface $logger,

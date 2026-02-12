@@ -25,13 +25,13 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     /**
      * @var HeaderFactory the HeaderFactory object used for created headers
      */
-    protected $headerFactory;
+    protected HeaderFactory $headerFactory;
 
     /**
      * @var string[][] Each element in the array is an array with its first
      * element set to the header's name, and the second its value.
      */
-    private $headers = [];
+    private array $headers = [];
 
     /**
      * @var \ZBateson\MailMimeParser\Header\IHeader[] Each element is an IHeader
@@ -39,7 +39,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      *      an IHeader has not been constructed for the header at that index,
      *      the element would be set to null.
      */
-    private $headerObjects = [];
+    private array $headerObjects = [];
 
     /**
      * @var array Maps header names by their "normalized" (lower-cased,
@@ -49,12 +49,12 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      *      would indicate that the headers in $headers[1] and $headers[4] are
      *      both headers with the name 'Content-Type' or 'contENTtype'.
      */
-    private $headerMap = [];
+    private array $headerMap = [];
 
     /**
      * @var int the next index to use for $headers and $headerObjects.
      */
-    private $nextIndex = 0;
+    private int $nextIndex = 0;
 
     /**
      * Pass a PartHeaderContainer as the second parameter.  This is useful when

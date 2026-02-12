@@ -27,7 +27,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
     /**
      * @var int current key position within $children for iteration.
      */
-    protected $position = 0;
+    protected int $position = 0;
 
     /**
      * @param IMessagePart[] $children
@@ -98,7 +98,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      * @param int $position An optional index position (0-based) to add the
      *        child at.
      */
-    public function add(IMessagePart $part, $position = null) : static
+    public function add(IMessagePart $part, ?int $position = null) : static
     {
         $index = $position ?? \count($this->children);
         \array_splice(
@@ -164,7 +164,7 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
     /**
      * @param int $offset
      */
-    public function offsetUnset($offset) : void
+    public function offsetUnset(mixed $offset) : void
     {
         \array_splice($this->children, $offset, 1);
         if ($this->position >= $offset) {
