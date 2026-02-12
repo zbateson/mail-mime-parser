@@ -150,7 +150,7 @@ class MultipartHelper extends AbstractHelper
             $alternativePart = $message->getPart(0, PartFilter::fromInlineContentType('multipart/alternative'));
         }
         $message->removePart($rmPart);
-        if ($alternativePart !== null && $alternativePart instanceof IMultiPart) {
+        if ($alternativePart instanceof IMultiPart) {
             if ($alternativePart->getChildCount() === 1) {
                 $this->genericHelper->replacePart($message, $alternativePart, $alternativePart->getChild(0));
             } elseif ($alternativePart->getChildCount() === 0) {
@@ -252,7 +252,7 @@ class MultipartHelper extends AbstractHelper
             0,
             PartFilter::fromInlineContentType(($mimeType === 'text/plain') ? 'text/html' : 'text/plain')
         );
-        if ($altPart !== null && $altPart->getParent() !== null && $altPart->getParent()->isMultiPart()) {
+        if ($altPart?->getParent()?->isMultiPart()) {
             $altPartParent = $altPart->getParent();
             if ($altPartParent->getChildCount(PartFilter::fromDisposition('inline')) !== 1) {
                 $altPart = $this->createMultipartRelatedPartForInlineChildrenOf($altPartParent);
@@ -361,7 +361,7 @@ class MultipartHelper extends AbstractHelper
         }
         $part = $parts[$index];
         $message->removePart($part);
-        if ($alt !== null && $alt->getChildCount() === 1) {
+        if ($alt?->getChildCount() === 1) {
             $this->genericHelper->replacePart($message, $alt, $alt->getChild(0));
         }
         return true;

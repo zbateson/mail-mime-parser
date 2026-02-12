@@ -66,7 +66,7 @@ class HeaderStream extends MessagePartStreamDecorator implements SplObserver, St
     {
         if ($this->part instanceof IMimePart) {
             return $this->part->getRawHeaderIterator();
-        } elseif ($this->part->getParent() !== null && $this->part->getParent()->isMime()) {
+        } elseif ($this->part->getParent()?->isMime()) {
             return new ArrayIterator([
                 [HeaderConsts::CONTENT_TYPE, $this->part->getContentType()],
                 [HeaderConsts::CONTENT_DISPOSITION, $this->part->getContentDisposition()],
