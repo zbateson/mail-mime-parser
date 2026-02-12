@@ -68,8 +68,8 @@ class MessagePartStream extends MessagePartStreamDecorator implements SplObserve
     public function update(SplSubject $subject) : void
     {
         if ($this->appendStream !== null) {
-            // unset forces recreation in StreamDecoratorTrait with a call to __get
-            unset($this->stream);
+            /** @phpstan-ignore assign.propertyType */
+            $this->stream = null;
             $this->appendStream = null;
         }
     }

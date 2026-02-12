@@ -50,7 +50,7 @@ class HeaderStream extends MessagePartStreamDecorator implements SplObserver, St
 
     public function update(SplSubject $subject) : void
     {
-        if (isset($this->stream)) {
+        if ($this->stream !== null) {
             $this->stream = $this->createStream();
         }
     }
