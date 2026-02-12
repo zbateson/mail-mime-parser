@@ -277,7 +277,7 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      */
     public function getHeaderObjects() : array
     {
-        return \array_filter(\array_map([$this, 'getByIndex'], \array_keys($this->headers)));
+        return \array_filter(\array_map($this->getByIndex(...), \array_keys($this->headers)));
     }
 
     /**

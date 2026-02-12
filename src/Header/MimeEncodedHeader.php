@@ -46,7 +46,7 @@ abstract class MimeEncodedHeader extends AbstractHeader
         // whitespace between parts, etc...
         $matchp = '~(' . MimeToken::MIME_PART_PATTERN . ')~';
         $aMimeParts = \preg_split($matchp, $value, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-        $this->mimeEncodedParsedParts = \array_map([$this->mimeTokenPartFactory, 'newInstance'], $aMimeParts);
+        $this->mimeEncodedParsedParts = \array_map($this->mimeTokenPartFactory->newInstance(...), $aMimeParts);
         parent::parseHeaderValue(
             $consumer,
             \implode('', \array_map(fn ($part) => $part->getValue(), $this->mimeEncodedParsedParts))
