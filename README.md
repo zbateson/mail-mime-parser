@@ -99,6 +99,18 @@ fclose($handle);
 
 ```
 
+## Encryption and Signing Plugins
+
+Optional companion packages add S/MIME and PGP/MIME support for decrypting,
+encrypting, signing and verifying messages:
+
+* [zbateson/mmp-crypt-smime](https://github.com/zbateson/mmp-crypt-smime) -- S/MIME via PHP's OpenSSL extension
+* [zbateson/mmp-crypt-gpg](https://github.com/zbateson/mmp-crypt-gpg) -- PGP/MIME via PEAR's Crypt_GPG
+
+Install either package and encrypted/signed messages are automatically detected
+and decrypted during parsing. See the [Usage Guide](https://mail-mime-parser.org/#encryption-and-signing)
+for examples of reading encrypted messages and composing signed/encrypted ones.
+
 ## Documentation
 
 * [Usage Guide](https://mail-mime-parser.org/)
