@@ -34,7 +34,7 @@ Version 4.0 requires PHP 8.1+ and focuses on API cleanup and improved configurab
 
 ## Requirements
 
-MailMimeParser requires PHP 8.1 or newer.  Tested on PHP 8.1, 8.2, 8.3 and 8.4.
+MailMimeParser requires PHP 8.1 or newer.  Tested on PHP 8.1, 8.2, 8.3, 8.4 and 8.5.
 
 ## Usage
 
