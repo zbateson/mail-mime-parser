@@ -152,6 +152,11 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
         return $this->rawValue;
     }
 
+    public function getDecodedValue() : string
+    {
+        return \implode('', \array_map(fn(IHeaderPart $p) => $p->getValue(), $this->parts));
+    }
+
     public function getName() : string
     {
         return $this->name;

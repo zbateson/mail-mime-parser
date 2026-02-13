@@ -30,7 +30,8 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
         protected readonly StreamFactory $streamFactory,
         protected readonly PartHeaderContainerFactory $partHeaderContainerFactory,
         protected readonly ParserPartStreamContainerFactory $parserPartStreamContainerFactory,
-        protected readonly ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory
+        protected readonly ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory,
+        protected readonly string $defaultFallbackCharset = 'ISO-8859-1'
     ) {
     }
 
@@ -54,7 +55,8 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
             $this->logger,
             $streamContainer,
             $headerContainer,
-            $childrenContainer
+            $childrenContainer,
+            $this->defaultFallbackCharset
         );
         $parserProxy->setPart($part);
 

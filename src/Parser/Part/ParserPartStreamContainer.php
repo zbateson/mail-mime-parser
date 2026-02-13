@@ -14,7 +14,6 @@ use SplSubject;
 use ZBateson\MailMimeParser\Message\IMessagePart;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy;
-use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MbWrapper\MbWrapper;
 
@@ -36,11 +35,10 @@ use ZBateson\MbWrapper\MbWrapper;
 class ParserPartStreamContainer extends PartStreamContainer implements SplObserver
 {
     /**
-     * @var MessagePartStreamDecorator the original stream for a parsed message,
-     *      wrapped in a MessagePartStreamDecorator, and used when the message
-     *      hasn't changed
+     * @var StreamInterface|null the original stream for a parsed message, used
+     *      when the message hasn't changed
      */
-    protected ?MessagePartStreamDecorator $parsedStream = null;
+    protected ?StreamInterface $parsedStream = null;
 
     /**
      * @var bool set to true if the part's been updated since it was created.
@@ -112,13 +110,13 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return parent::hasContent();
     }
 
-    public function getContentStream(IMessagePart $part, ?string $transferEncoding, ?string $fromCharset, ?string $toCharset) : ?MessagePartStreamDecorator
+    public function getContentStream(IMessagePart $part, ?string $transferEncoding, ?string $fromCharset, ?string $toCharset) : ?StreamInterface
     {
         $this->requestParsedContentStream();
         return parent::getContentStream($part, $transferEncoding, $fromCharset, $toCharset);
     }
 
-    public function getBinaryContentStream(IMessagePart $part, ?string $transferEncoding = null) : ?MessagePartStreamDecorator
+    public function getBinaryContentStream(IMessagePart $part, ?string $transferEncoding = null) : ?StreamInterface
     {
         $this->requestParsedContentStream();
         return parent::getBinaryContentStream($part, $transferEncoding);
@@ -134,7 +132,7 @@ class ParserPartStreamContainer extends PartStreamContainer implements SplObserv
         return $this;
     }
 
-    public function getStream() : MessagePartStreamDecorator
+    public function getStream() : StreamInterface
     {
         $this->requestParsedStream();
         if (!$this->partUpdated) {

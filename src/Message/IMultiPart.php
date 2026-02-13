@@ -269,10 +269,8 @@ interface IMultiPart extends IMessagePart
      * ```php $part->getParent()->removePart(); ```.
      *
      * @param IMessagePart $part The part to remove
-     * @return int|null The previous index position of the part within its old
-     *         parent.
      */
-    public function removePart(IMessagePart $part) : ?int;
+    public function removePart(IMessagePart $part) : static;
 
     /**
      * Removes all parts below the current part.  If a callable filter is

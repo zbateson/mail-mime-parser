@@ -84,11 +84,10 @@ class PartFilterTest extends TestCase
         $callback = PartFilter::fromContentType('text/plain');
 
         $part = $this->createMock(IMessagePart::class);
-        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah', null);
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah');
         $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));
         $this->assertTrue($callback($part));
-        $this->assertFalse($callback($part));
         $this->assertFalse($callback($part));
     }
 
@@ -97,12 +96,11 @@ class PartFilterTest extends TestCase
         $callback = PartFilter::fromInlineContentType('text/plain');
 
         $part = $this->createMock(IMessagePart::class);
-        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah', null);
-        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'attoochment', 'attachment', 'blah');
+        $part->method('getContentType')->willReturnOnConsecutiveCalls('text/plain', 'text/html', 'text/plain', 'blah');
+        $part->method('getContentDisposition')->willReturnOnConsecutiveCalls('inline', 'attachment', 'attoochment', 'attachment');
         $this->assertTrue($callback($part));
         $this->assertFalse($callback($part));
         $this->assertTrue($callback($part));
-        $this->assertFalse($callback($part));
         $this->assertFalse($callback($part));
     }
 

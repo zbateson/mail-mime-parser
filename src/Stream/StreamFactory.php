@@ -154,7 +154,7 @@ class StreamFactory
     /**
      * Creates and returns a MessagePartStream
      */
-    public function newMessagePartStream(IMessagePart $part) : MessagePartStreamDecorator
+    public function newMessagePartStream(IMessagePart $part) : StreamInterface
     {
         return new MessagePartStream($this, $part, $this->throwExceptionReadingPartContentFromUnsupportedCharsets);
     }
@@ -176,7 +176,7 @@ class StreamFactory
         return new HeaderStream($part);
     }
 
-    public function newDecoratedMessagePartStream(IMessagePart $part, StreamInterface $stream) : MessagePartStreamDecorator
+    public function newDecoratedMessagePartStream(IMessagePart $part, StreamInterface $stream) : StreamInterface
     {
         return new MessagePartStreamDecorator($part, $stream);
     }

@@ -34,9 +34,10 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
         ParserPartStreamContainerFactory $parserPartStreamContainerFactory,
         ParserPartChildrenContainerFactory $parserPartChildrenContainerFactory,
         protected readonly MultipartHelper $multipartHelper,
-        protected readonly PrivacyHelper $privacyHelper
+        protected readonly PrivacyHelper $privacyHelper,
+        string $defaultFallbackCharset = 'ISO-8859-1'
     ) {
-        parent::__construct($logger, $streamFactory, $partHeaderContainerFactory, $parserPartStreamContainerFactory, $parserPartChildrenContainerFactory);
+        parent::__construct($logger, $streamFactory, $partHeaderContainerFactory, $parserPartStreamContainerFactory, $parserPartChildrenContainerFactory, $defaultFallbackCharset);
     }
 
     /**
@@ -57,7 +58,8 @@ class ParserMessageProxyFactory extends ParserMimePartProxyFactory
             $headerContainer,
             $childrenContainer,
             $this->multipartHelper,
-            $this->privacyHelper
+            $this->privacyHelper,
+            $this->defaultFallbackCharset
         );
         $parserProxy->setPart($message);
 

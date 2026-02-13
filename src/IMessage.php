@@ -197,9 +197,8 @@ interface IMessage extends IMimePart
      * @see IMessage::removeHtmlPart() to remove an html part
      * @see IMessage::removeAllTextParts() to remove all text parts
      * @param int $index Optional 0-based index of inline text part to remove.
-     * @return bool true on success
      */
-    public function removeTextPart(int $index = 0) : bool;
+    public function removeTextPart(int $index = 0) : static;
 
     /**
      * Removes all text/plain inline parts in this message.
@@ -225,9 +224,8 @@ interface IMessage extends IMimePart
      * @see IMessage::removeAllHtmlParts() to remove all html parts
      * @param bool $moveRelatedPartsBelowMessage Optionally pass false to remove
      *        related parts.
-     * @return bool true on success
      */
-    public function removeAllTextParts(bool $moveRelatedPartsBelowMessage = true) : bool;
+    public function removeAllTextParts(bool $moveRelatedPartsBelowMessage = true) : static;
 
     /**
      * Removes the text/html part of the message at the passed index if one
@@ -239,9 +237,8 @@ interface IMessage extends IMimePart
      * @see IMessage::removeTextPart() to remove a text part
      * @see IMessage::removeAllHtmlParts() to remove all html parts
      * @param int $index Optional 0-based index of inline html part to remove.
-     * @return bool true on success
      */
-    public function removeHtmlPart(int $index = 0) : bool;
+    public function removeHtmlPart(int $index = 0) : static;
 
     /**
      * Removes all text/html inline parts in this message.
@@ -267,9 +264,8 @@ interface IMessage extends IMimePart
      * @see IMessage::removeAllTextParts() to remove all html parts
      * @param bool $moveRelatedPartsBelowMessage Optionally pass false to remove
      *        related parts.
-     * @return bool true on success
      */
-    public function removeAllHtmlParts(bool $moveRelatedPartsBelowMessage = true) : bool;
+    public function removeAllHtmlParts(bool $moveRelatedPartsBelowMessage = true) : static;
 
     /**
      * Returns the attachment part at the given 0-based index, or null if none

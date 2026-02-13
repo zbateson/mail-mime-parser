@@ -68,7 +68,6 @@ class MessagePartStream extends MessagePartStreamDecorator implements SplObserve
     public function update(SplSubject $subject) : void
     {
         if ($this->appendStream !== null) {
-            /** @phpstan-ignore assign.propertyType */
             $this->stream = null;
             $this->appendStream = null;
         }

@@ -296,7 +296,7 @@ class MultiPartTest extends TestCase
             ->method('update');
         $part->attach($observer);
 
-        $this->assertEquals(0, $part->removePart($this->secondChildNested[0]));
+        $part->removePart($this->secondChildNested[0]);
         \array_splice($this->allParts, 3, 1);
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());

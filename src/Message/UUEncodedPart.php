@@ -22,13 +22,15 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
         protected ?string $filename = null,
         ?IMimePart $parent = null,
         ?LoggerInterface $logger = null,
-        ?PartStreamContainer $streamContainer = null
+        ?PartStreamContainer $streamContainer = null,
+        string $defaultFallbackCharset = 'ISO-8859-1'
     ) {
         $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
             $logger ?? $di->get(LoggerInterface::class),
             $streamContainer ?? $di->get(PartStreamContainer::class),
-            $parent
+            $parent,
+            $defaultFallbackCharset
         );
     }
 
@@ -65,7 +67,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
     /**
      * Returns 'application/octet-stream'.
      */
-    public function getContentType(string $default = 'application/octet-stream') : ?string
+    public function getContentType(string $default = 'application/octet-stream') : string
     {
         return 'application/octet-stream';
     }

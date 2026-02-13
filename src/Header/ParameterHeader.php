@@ -68,6 +68,17 @@ class ParameterHeader extends AbstractHeader
         }
     }
 
+    public function getDecodedValue() : string
+    {
+        $value = $this->getValue() ?? '';
+        foreach ($this->parameters as $param) {
+            if ($param->getName() !== '') {
+                $value .= '; ' . $param->getName() . '=' . $param->getValue();
+            }
+        }
+        return $value;
+    }
+
     /**
      * Returns true if a parameter exists with the passed name.
      *

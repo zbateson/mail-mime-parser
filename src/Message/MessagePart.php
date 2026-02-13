@@ -13,16 +13,16 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 use SplObjectStorage;
 use SplObserver;
+use SplSubject;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 
 /**
  * Most basic representation of a single part of an email.
  *
  * @author Zaahid Bateson
  */
-abstract class MessagePart extends ErrorBag implements IMessagePart
+abstract class MessagePart extends ErrorBag implements IMessagePart, SplSubject
 {
     /**
      * @var ?string can be used to set an override for content's charset in cases
@@ -96,7 +96,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return $this;
     }
 
-    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?MessagePartStreamDecorator
+    public function getContentStream(string $charset = MailMimeParser::DEFAULT_CHARSET) : ?StreamInterface
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();
@@ -111,7 +111,7 @@ abstract class MessagePart extends ErrorBag implements IMessagePart
         return null;
     }
 
-    public function getBinaryContentStream() : ?MessagePartStreamDecorator
+    public function getBinaryContentStream() : ?StreamInterface
     {
         if ($this->hasContent()) {
             $tr = ($this->ignoreTransferEncoding) ? '' : $this->getContentTransferEncoding();

@@ -293,16 +293,20 @@ class GenericHelperTest extends TestCase
         $part = $this->newMockIMimePart();
         $rep = $this->newMockIMimePart();
 
+        $rep->expects($this->once())
+            ->method('getParent')
+            ->willReturn($message);
+        $message->method('getChildParts')
+            ->willReturn([$rep]);
         $part->expects($this->once())
             ->method('getParent')
             ->willReturn($message);
         $message->expects($this->exactly(2))
             ->method('removePart')
-            ->with(...$this->consecutive([$rep], [$part]))
-            ->willReturn(10);
+            ->with(...$this->consecutive([$rep], [$part]));
         $message->expects($this->once())
             ->method('addChild')
-            ->with($rep, 10);
+            ->with($rep, 0);
 
         $helper->replacePart($message, $part, $rep);
     }

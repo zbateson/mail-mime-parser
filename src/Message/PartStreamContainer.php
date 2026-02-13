@@ -12,7 +12,6 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
-use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 use ZBateson\MbWrapper\MbWrapper;
 use ZBateson\MbWrapper\UnsupportedCharsetException;
@@ -35,10 +34,10 @@ use ZBateson\MbWrapper\UnsupportedCharsetException;
 class PartStreamContainer extends ErrorBag
 {
     /**
-     * @var MessagePartStreamDecorator stream containing the part's headers,
-     *      content and children wrapped in a MessagePartStreamDecorator
+     * @var StreamInterface stream containing the part's headers, content and
+     *      children
      */
-    protected MessagePartStreamDecorator $stream;
+    protected StreamInterface $stream;
 
     /**
      * @var StreamInterface a stream containing this part's content
@@ -92,7 +91,7 @@ class PartStreamContainer extends ErrorBag
      * Sets the part's stream containing the part's headers, content, and
      * children.
      */
-    public function setStream(MessagePartStreamDecorator $stream) : static
+    public function setStream(StreamInterface $stream) : static
     {
         $this->stream = $stream;
         return $this;
@@ -102,7 +101,7 @@ class PartStreamContainer extends ErrorBag
      * Returns the part's stream containing the part's headers, content, and
      * children.
      */
-    public function getStream() : MessagePartStreamDecorator
+    public function getStream() : StreamInterface
     {
         // error out if called before setStream, getStream should never return
         // null.
@@ -263,7 +262,7 @@ class PartStreamContainer extends ErrorBag
         ?string $transferEncoding,
         ?string $fromCharset,
         ?string $toCharset
-    ) : ?MessagePartStreamDecorator {
+    ) : ?StreamInterface {
         if ($this->contentStream === null) {
             return null;
         }
@@ -292,7 +291,7 @@ class PartStreamContainer extends ErrorBag
      * Checks what transfer-encoding decoder stream is attached on the
      * underlying stream, and resets it if the requested arguments differ.
      */
-    public function getBinaryContentStream(IMessagePart $part, ?string $transferEncoding = null) : ?MessagePartStreamDecorator
+    public function getBinaryContentStream(IMessagePart $part, ?string $transferEncoding = null) : ?StreamInterface
     {
         if ($this->contentStream === null) {
             return null;

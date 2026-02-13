@@ -141,18 +141,19 @@ abstract class MultiPart extends MessagePart implements IMultiPart
         return $this;
     }
 
-    public function removePart(IMessagePart $part) : ?int
+    public function removePart(IMessagePart $part) : static
     {
         $parent = $part->getParent();
         if ($this !== $parent && $parent !== null) {
-            return $parent->removePart($part);
+            $parent->removePart($part);
+            return $this;
         }
 
         $position = $this->partChildrenContainer->remove($part);
         if ($position !== null) {
             $this->notify();
         }
-        return $position;
+        return $this;
     }
 
     public function removeAllParts(?callable $fnFilter = null) : int

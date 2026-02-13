@@ -58,7 +58,10 @@ interface IMimePart extends IMultiPart
      * @param string $name The name of the header to retrieve.
      * @param int $offset Optional offset if there are multiple headers with the
      *        given name.
-     * @return ?IHeader the header object if it exists, or null if not
+     * @return ?IHeader The concrete header type depends on the header name
+     *         (AddressHeader, DateHeader, GenericHeader, IdHeader,
+     *         ParameterHeader, ReceivedHeader, or SubjectHeader). See
+     *         {@see HeaderFactory} for the mapping.
      */
     public function getHeader(string $name, int $offset = 0) : ?IHeader;
 

@@ -8,7 +8,6 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use Psr\Http\Message\StreamInterface;
-use SplSubject;
 use ZBateson\MailMimeParser\IErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
 
@@ -19,12 +18,9 @@ use ZBateson\MailMimeParser\MailMimeParser;
  * contain content, have a parent, and identify the type of content (e.g.
  * mime-type or charset) agnostically.
  *
- * The interface extends SplSubject -- any modifications to a message must
- * notify any attached observers.
- *
  * @author Zaahid Bateson
  */
-interface IMessagePart extends IErrorBag, SplSubject
+interface IMessagePart extends IErrorBag
 {
     /**
      * Returns this part's parent.
@@ -50,7 +46,7 @@ interface IMessagePart extends IErrorBag, SplSubject
      *        'text/plain.
      * @return string the mime type
      */
-    public function getContentType(string $default = 'text/plain') : ?string;
+    public function getContentType(string $default = 'text/plain') : string;
 
     /**
      * Returns the charset of the content, or null if not applicable/defined.

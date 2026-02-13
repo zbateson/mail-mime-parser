@@ -22,7 +22,8 @@ abstract class IMessagePartFactory
     public function __construct(
         protected readonly LoggerInterface $logger,
         protected readonly StreamFactory $streamFactory,
-        protected readonly PartStreamContainerFactory $partStreamContainerFactory
+        protected readonly PartStreamContainerFactory $partStreamContainerFactory,
+        protected readonly string $defaultFallbackCharset = 'ISO-8859-1'
     ) {
     }
 

@@ -151,14 +151,18 @@ class GenericHelper extends AbstractHelper
      */
     public function replacePart(IMessage $message, IMessagePart $part, IMessagePart $replacement) : static
     {
-        $position = $message->removePart($replacement);
+        $replacementParent = $replacement->getParent();
+        $position = ($replacementParent !== null)
+            ? \array_search($replacement, $replacementParent->getChildParts(), true)
+            : false;
+        $message->removePart($replacement);
         if ($part === $message) {
             \assert($replacement instanceof IMimePart);
             $this->movePartContentAndChildren($replacement, $message);
             return $this;
         }
         $parent = $part->getParent();
-        $parent->addChild($replacement, $position);
+        $parent->addChild($replacement, $position !== false ? $position : null);
         $parent->removePart($part);
 
         return $this;

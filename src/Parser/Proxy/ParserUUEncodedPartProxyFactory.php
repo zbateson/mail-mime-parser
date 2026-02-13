@@ -26,7 +26,8 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
     public function __construct(
         protected readonly LoggerInterface $logger,
         protected readonly StreamFactory $streamFactory,
-        protected readonly ParserPartStreamContainerFactory $parserPartStreamContainerFactory
+        protected readonly ParserPartStreamContainerFactory $parserPartStreamContainerFactory,
+        protected readonly string $defaultFallbackCharset = 'ISO-8859-1'
     ) {
     }
 
@@ -45,7 +46,8 @@ class ParserUUEncodedPartProxyFactory extends ParserPartProxyFactory
             $parserProxy->getFileName(),
             $parent,
             $this->logger,
-            $streamContainer
+            $streamContainer,
+            $this->defaultFallbackCharset
         );
         $parserProxy->setPart($part);
 

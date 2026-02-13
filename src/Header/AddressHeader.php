@@ -107,6 +107,30 @@ class AddressHeader extends AbstractHeader
         return false;
     }
 
+    public function getDecodedValue() : string
+    {
+        $parts = [];
+        foreach ($this->parts as $part) {
+            if ($part instanceof AddressGroupPart) {
+                $addrs = \array_map(fn(AddressPart $a) => $this->formatAddress($a), $part->getAddresses());
+                $parts[] = $part->getName() . ': ' . \implode(', ', $addrs) . ';';
+            } elseif ($part instanceof AddressPart) {
+                $parts[] = $this->formatAddress($part);
+            }
+        }
+        return \implode(', ', $parts);
+    }
+
+    private function formatAddress(AddressPart $address) : string
+    {
+        $name = $address->getName();
+        $email = $address->getEmail();
+        if ($name !== '') {
+            return $name . ' <' . $email . '>';
+        }
+        return $email;
+    }
+
     /**
      * Returns the first email address in the header.
      *
