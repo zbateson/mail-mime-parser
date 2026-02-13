@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserMessageProxyFactoryTest
  *
- * @group ParserMessageProxyFactory
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserMessageProxyFactory::class)]
+#[Group('ParserMessageProxyFactory')]
+#[Group('Parser')]
 class ParserMessageProxyFactoryTest extends TestCase
 {
   // @phpstan-ignore-next-line
@@ -84,7 +86,7 @@ class ParserMessageProxyFactoryTest extends TestCase
         $this->partChildrenContainer = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parser = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\IParserService::class);
+        $this->parser = $this->createMock(\ZBateson\MailMimeParser\Parser\IParserService::class);
 
         $this->instance = new ParserMessageProxyFactory(
             \mmpGetTestLogger(),

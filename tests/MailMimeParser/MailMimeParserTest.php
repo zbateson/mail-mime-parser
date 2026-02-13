@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser;
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Parser\MessageParserService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MailMimeParserTest
  *
- * @group MailMimeParser
- * @group Base
- * @covers ZBateson\MailMimeParser\MailMimeParser
  * @author Zaahid Bateson
  */
+#[CoversClass(MailMimeParser::class)]
+#[Group('MailMimeParser')]
+#[Group('Base')]
 class MailMimeParserTest extends TestCase
 {
     public function testParseFromHandle() : void
@@ -22,7 +24,7 @@ class MailMimeParserTest extends TestCase
         \fwrite($handle, 'This is a test');
         \rewind($handle);
 
-        $exp = $this->getMockForAbstractClass(IMessage::class);
+        $exp = $this->createMock(IMessage::class);
         $mockParser = $this->getMockBuilder(MessageParserService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -43,7 +45,7 @@ class MailMimeParserTest extends TestCase
         \fwrite($handle, 'This is a test');
         \rewind($handle);
 
-        $exp = $this->getMockForAbstractClass(IMessage::class);
+        $exp = $this->createMock(IMessage::class);
         $mockParser = $this->getMockBuilder(MessageParserService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -60,7 +62,7 @@ class MailMimeParserTest extends TestCase
 
     public function testParseFromString() : void
     {
-        $exp = $this->getMockForAbstractClass(IMessage::class);
+        $exp = $this->createMock(IMessage::class);
         $mockParser = $this->getMockBuilder(MessageParserService::class)
             ->disableOriginalConstructor()
             ->getMock();

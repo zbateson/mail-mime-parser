@@ -5,16 +5,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of DateTest
  *
- * @group HeaderParts
- * @group DatePart
- * @covers ZBateson\MailMimeParser\Header\Part\DatePart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(DatePart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('DatePart')]
 class DatePartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -32,7 +34,7 @@ class DatePartTest extends TestCase
     {
         return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $name])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 

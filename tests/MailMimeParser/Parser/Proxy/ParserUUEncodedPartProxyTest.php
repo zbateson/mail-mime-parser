@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserUUEncodedPartProxyTest
  *
- * @group Parser
- * @group ParserUUEncodedPartProxy
- * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserUUEncodedPartProxy
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserUUEncodedPartProxy::class)]
+#[Group('Parser')]
+#[Group('ParserUUEncodedPartProxy')]
 class ParserUUEncodedPartProxyTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -39,7 +41,7 @@ class ParserUUEncodedPartProxyTest extends TestCase
             ->getMock();
         $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->parent = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy::class)
             ->disableOriginalConstructor()
             ->getMock();

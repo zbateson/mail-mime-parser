@@ -5,18 +5,22 @@ namespace ZBateson\MailMimeParser\Parser;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MimeParserServiceTest
  *
- * @group MimeParserService
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\AbstractParserService
- * @covers ZBateson\MailMimeParser\Parser\MimeParserService
  * @author Zaahid Bateson
  */
+#[CoversClass(AbstractParserService::class)]
+#[CoversClass(MimeParserService::class)]
+#[Group('MimeParserService')]
+#[Group('Parser')]
 class MimeParserServiceTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
     // @phpstan-ignore-next-line
     private $messageProxyFactory;
 
@@ -151,7 +155,7 @@ class MimeParserServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([2], [2], [2], [0]);
+            ->with(...$this->consecutive([2], [2], [2], [0]));
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
             ->with(\strlen($str));
@@ -181,10 +185,10 @@ class MimeParserServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([2], [2], [2], [0]);
+            ->with(...$this->consecutive([2], [2], [2], [0]));
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setEndBoundaryFound')
-            ->withConsecutive(['--Some'], ['--Lines'], ['--Of'], ['--Text'])
+            ->with(...$this->consecutive(['--Some'], ['--Lines'], ['--Of'], ['--Text']))
             ->willReturn(false);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
@@ -215,10 +219,10 @@ class MimeParserServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([2], [2], [2], [0]);
+            ->with(...$this->consecutive([2], [2], [2], [0]));
         $this->parserPartProxy->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
-            ->withConsecutive(['--Of'], ['--Text'])
+            ->with(...$this->consecutive(['--Of'], ['--Text']))
             ->willReturnOnConsecutiveCalls(false, true);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
@@ -249,10 +253,10 @@ class MimeParserServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls(2);
         $this->parserPartProxy->expects($this->exactly(1))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([0]);
+            ->with(...$this->consecutive([0]));
         $this->parserPartProxy->expects($this->exactly(1))
             ->method('setEndBoundaryFound')
-            ->withConsecutive(['--boundary'])
+            ->with(...$this->consecutive(['--boundary']))
             ->willReturnOnConsecutiveCalls(true);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
@@ -283,10 +287,10 @@ class MimeParserServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 1);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([2], [2], [1], [0]);
+            ->with(...$this->consecutive([2], [2], [1], [0]));
         $this->parserPartProxy->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
-            ->withConsecutive(['--Of'], ['--Text'])
+            ->with(...$this->consecutive(['--Of'], ['--Text']))
             ->willReturnOnConsecutiveCalls(false, true);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')
@@ -321,10 +325,10 @@ class MimeParserServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls(0, 2, 2, 2);
         $this->parserPartProxy->expects($this->exactly(4))
             ->method('setLastLineEndingLength')
-            ->withConsecutive([2], [2], [2], [0]);
+            ->with(...$this->consecutive([2], [2], [2], [0]));
         $this->parserPartProxy->expects($this->exactly(2))
             ->method('setEndBoundaryFound')
-            ->withConsecutive(['--Of'], [$boundary])
+            ->with(...$this->consecutive(['--Of'], [$boundary]))
             ->willReturn(false);
         $this->parserPartProxy->expects($this->once())
             ->method('setStreamPartAndContentEndPos')

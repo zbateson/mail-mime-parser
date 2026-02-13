@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of CommentTest
  *
- * @group HeaderParts
- * @group CommentPart
- * @covers ZBateson\MailMimeParser\Header\Part\CommentPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(CommentPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('CommentPart')]
 class CommentPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -29,7 +31,7 @@ class CommentPartTest extends TestCase
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -37,7 +39,7 @@ class CommentPartTest extends TestCase
     {
         return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $name])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -45,7 +47,7 @@ class CommentPartTest extends TestCase
     {
         return $this->getMockBuilder(QuotedLiteralPart::class)
             ->setConstructorArgs([$this->logger, $this->mb, [$this->getTokenMock($name)]])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 

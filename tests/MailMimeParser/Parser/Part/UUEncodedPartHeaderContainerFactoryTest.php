@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * UUEncodedPartHeaderContainerFactoryTest
  *
- * @group UUEncodedPartHeaderContainerFactory
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(UUEncodedPartHeaderContainerFactory::class)]
+#[Group('UUEncodedPartHeaderContainerFactory')]
+#[Group('Parser')]
 class UUEncodedPartHeaderContainerFactoryTest extends TestCase
 {
   // @phpstan-ignore-next-line

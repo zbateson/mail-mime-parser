@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of HeaderPartTest
  *
- * @group HeaderParts
- * @group HeaderPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('HeaderPart')]
 class HeaderPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -27,7 +29,8 @@ class HeaderPartTest extends TestCase
         $charsetConverter = new MbWrapper();
         $stub = $this->getMockBuilder(HeaderPart::class)
             ->setConstructorArgs([$this->logger, $charsetConverter, 'toost'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
         $this->abstractHeaderPartStub = $stub;
     }
 

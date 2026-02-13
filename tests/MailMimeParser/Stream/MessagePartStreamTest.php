@@ -7,15 +7,17 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\IMessage;
 use ZBateson\StreamDecorators\CharsetStream;
 use ZBateson\StreamDecorators\DecoratedCachingStream;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MessagePartStreamTest
  *
- * @group MessagePartStream
- * @group Stream
- * @covers ZBateson\MailMimeParser\Stream\MessagePartStream
  * @author Zaahid Bateson
  */
+#[CoversClass(MessagePartStream::class)]
+#[Group('MessagePartStream')]
+#[Group('Stream')]
 class MessagePartStreamTest extends TestCase
 {
     // @phpstan-ignore-next-line

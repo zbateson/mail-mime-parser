@@ -6,15 +6,16 @@ use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Some 'unzip' utilities don't like non-ASCII characters appearing in file
  * names.  Created this test to prevent it from happening as it's happened more
  * than once.
  *
- * @group Base
  * @author Zaahid Bateson
  */
+#[Group('Base')]
 class OnlyAsciiFileNamesTest extends TestCase
 {
     public function testFileNames() : void

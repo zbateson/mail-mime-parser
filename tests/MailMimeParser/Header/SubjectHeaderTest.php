@@ -3,16 +3,18 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of SubjectHeader
  *
- * @group Headers
- * @group SubjectHeader
- * @covers ZBateson\MailMimeParser\Header\SubjectHeader
- * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
+#[CoversClass(SubjectHeader::class)]
+#[CoversClass(AbstractHeader::class)]
+#[Group('Headers')]
+#[Group('SubjectHeader')]
 class SubjectHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -24,15 +26,15 @@ class SubjectHeaderTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mlpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->consumerService = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Consumer\SubjectConsumerService::class)
             ->setConstructorArgs([$this->logger, $mlpf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -71,11 +73,6 @@ class SubjectHeaderTest extends TestCase
         $this->assertEquals('Технические работы (ERP Галактика и Отчеты ТД)', $header->getValue());
     }
 
-    /**
-     *
-     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService::isStartToken
-     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService::isEndToken
-     */
     public function testQuotesMimeAndComments() : void
     {
         $header = $this->newSubjectHeader(

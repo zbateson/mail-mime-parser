@@ -3,18 +3,22 @@
 namespace ZBateson\MailMimeParser\Message\Helper;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MultipartHelperTest
  *
- * @group MultipartHelper
- * @group MessageHelper
- * @covers ZBateson\MailMimeParser\Message\Helper\AbstractHelper
- * @covers ZBateson\MailMimeParser\Message\Helper\MultipartHelper
  * @author Zaahid Bateson
  */
+#[CoversClass(AbstractHelper::class)]
+#[CoversClass(MultipartHelper::class)]
+#[Group('MultipartHelper')]
+#[Group('MessageHelper')]
 class MultipartHelperTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
     // @phpstan-ignore-next-line
     private $mockMimePartFactory;
 
@@ -218,10 +222,10 @@ class MultipartHelperTest extends TestCase
 
         $from->expects($this->exactly(2))
             ->method('removePart')
-            ->withConsecutive([$atts[0]], [$atts[1]]);
+            ->with(...$this->consecutive([$atts[0]], [$atts[1]]));
         $message->expects($this->exactly(2))
             ->method('addChild')
-            ->withConsecutive([$atts[0]], [$atts[1]]);
+            ->with(...$this->consecutive([$atts[0]], [$atts[1]]));
 
         $helper->moveAllNonMultiPartsToMessageExcept($message, $from, 'test');
     }
@@ -244,10 +248,10 @@ class MultipartHelperTest extends TestCase
             ->willReturn($atts);
         $message->expects($this->exactly(2))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/')],
                 ['MIME-Version', '1.0']
-            );
+            ));
 
         $helper->enforceMime($message);
     }
@@ -267,10 +271,10 @@ class MultipartHelperTest extends TestCase
             ->method('getAllAttachmentParts');
         $message->expects($this->exactly(2))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Type', "text/plain;\r\n\tcharset=\"iso-8859-1\""],
                 ['MIME-Version', '1.0']
-            );
+            ));
 
         $helper->enforceMime($message);
     }
@@ -297,10 +301,10 @@ class MultipartHelperTest extends TestCase
             ->willReturn($children);
         $parent->expects($this->exactly(2))
             ->method('removePart')
-            ->withConsecutive([$children[0]], [$children[1]]);
+            ->with(...$this->consecutive([$children[0]], [$children[1]]));
         $related->expects($this->exactly(2))
             ->method('addChild')
-            ->withConsecutive([$children[0]], [$children[1]]);
+            ->with(...$this->consecutive([$children[0]], [$children[1]]));
         $parent->expects($this->once())
             ->method('addChild')
             ->with($related);
@@ -359,10 +363,10 @@ class MultipartHelperTest extends TestCase
 
         $mimePart->expects($this->exactly(2))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Type', "$mimeType;\r\n\tcharset=\"$charset\""],
                 ['Content-Transfer-Encoding', 'quoted-printable']
-            );
+            ));
 
         $message->expects($this->once())
             ->method('isMime')
@@ -399,10 +403,10 @@ class MultipartHelperTest extends TestCase
             ->willReturnOnConsecutiveCalls($mimePart, $altPart);
         $mimePart->expects($this->exactly(2))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Type', "$mimeType;\r\n\tcharset=\"$charset\""],
                 ['Content-Transfer-Encoding', 'quoted-printable']
-            );
+            ));
 
         $message->expects($this->once())
             ->method('isMime')
@@ -419,7 +423,7 @@ class MultipartHelperTest extends TestCase
 
         $altPart->expects($this->exactly(2))
             ->method('addChild')
-            ->withConsecutive([$mimePart], [$contentPart]);
+            ->with(...$this->consecutive([$mimePart], [$contentPart]));
 
         $helper->createContentPartForMimeType($message, $mimeType, $charset);
     }
@@ -440,10 +444,10 @@ class MultipartHelperTest extends TestCase
             ->willReturn($mimePart);
         $mimePart->expects($this->exactly(2))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Type', "$mimeType;\r\n\tcharset=\"$charset\""],
                 ['Content-Transfer-Encoding', 'quoted-printable']
-            );
+            ));
 
         $message->expects($this->once())
             ->method('isMime')
@@ -477,11 +481,11 @@ class MultipartHelperTest extends TestCase
             ->willReturn($attPart);
         $attPart->expects($this->exactly(3))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Transfer-Encoding', 'base64'],
                 ['Content-Type', $this->matchesRegularExpression('/^test-mime;\s+name="file.+"$/')],
                 ['Content-Disposition', $this->matchesRegularExpression('/^dispo;\s+filename="file.+"$/')]
-            );
+            ));
 
         $message->expects($this->once())
             ->method('getContentType')
@@ -518,11 +522,11 @@ class MultipartHelperTest extends TestCase
             ->willReturn($attPart);
         $attPart->expects($this->exactly(3))
             ->method('setRawHeader')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['Content-Transfer-Encoding', 'quoted-printable'],
                 ['Content-Type', $this->matchesRegularExpression('/^test-mime;\s+name="file.+"$/')],
                 ['Content-Disposition', $this->matchesRegularExpression('/^dispo;\s+filename="file.+"$/')]
-            );
+            ));
 
         $message->expects($this->once())
             ->method('getContentType')

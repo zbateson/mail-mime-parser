@@ -4,19 +4,24 @@ namespace ZBateson\MailMimeParser\Message;
 
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * PartStreamFilterManagerTest
  *
- * @group PartStreamContainer
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\PartStreamContainer
  * @author Zaahid Bateson
  */
+#[CoversClass(PartStreamContainer::class)]
+#[Group('PartStreamContainer')]
+#[Group('MessagePart')]
 class PartStreamContainerTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     private $instance = null;
 
@@ -47,7 +52,7 @@ class PartStreamContainerTest extends TestCase
         $stream = $this->getMockBuilder(MessagePartStreamDecorator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertFalse($this->instance->hasContent());
         $this->assertNull($this->instance->getContentStream($streamPartMock, '', '', ''));
         $this->assertNull($this->instance->getBinaryContentStream($streamPartMock, ''));
@@ -62,14 +67,14 @@ class PartStreamContainerTest extends TestCase
         $stream3 = Psr7\Utils::streamFor('test3');
         $this->mockStreamFactory->expects($this->exactly(3))
             ->method('getTransferEncodingDecoratedStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$stream, 'x-uuencode', null],
                 [$stream, 'quoted-printable', null],
                 [$stream, 'x-uuencode', null]
-            )
+            ))
             ->willReturnOnConsecutiveCalls($stream2, $stream, $stream3);
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
             ->willReturnCallback(function($arg, $arg2) {
@@ -101,7 +106,7 @@ class PartStreamContainerTest extends TestCase
             ->willReturnCallback(function($arg, $arg2) {
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
 
         $this->assertNull($this->instance->getContentStream($streamPartMock, 'quoted-printable', null, null));
         $this->instance->setContentStream($stream);
@@ -122,7 +127,7 @@ class PartStreamContainerTest extends TestCase
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $managerStream = $this->instance->getContentStream($streamPartMock, 'base64', null, null);
         $this->assertEquals('test', $managerStream->getContents());
     }
@@ -140,7 +145,7 @@ class PartStreamContainerTest extends TestCase
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $managerStream = $this->instance->getContentStream($streamPartMock, 'x-uuencode', null, null);
         $this->assertEquals('test', $managerStream->getContents());
     }
@@ -158,7 +163,7 @@ class PartStreamContainerTest extends TestCase
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
         $this->instance->setContentStream($stream);
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $managerStream = $this->instance->getContentStream($streamPartMock, null, 'US-ASCII', 'UTF-8');
         $this->assertEquals('test', $managerStream->getContents());
     }
@@ -170,11 +175,11 @@ class PartStreamContainerTest extends TestCase
         $stream3 = Psr7\Utils::streamFor('test3');
         $this->mockStreamFactory->expects($this->exactly(3))
             ->method('getTransferEncodingDecoratedStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$stream, 'x-uuencode', null],
                 [$stream, 'quoted-printable', null],
                 [$stream, 'x-uuencode', null]
-            )
+            ))
             ->willReturnOnConsecutiveCalls($stream2, $stream, $stream3);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
@@ -184,7 +189,7 @@ class PartStreamContainerTest extends TestCase
 
         $this->instance->setContentStream($stream);
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $manager = $this->instance;
         $this->assertEquals('test2', $manager->getContentStream($streamPartMock, 'x-uuencode', null, null)->getContents());
         $this->assertEquals('test2', $manager->getContentStream($streamPartMock, 'x-uuencode', null, null)->getContents());
@@ -204,12 +209,12 @@ class PartStreamContainerTest extends TestCase
         $stream4 = Psr7\Utils::streamFor('test4');
         $this->mockStreamFactory->expects($this->exactly(4))
             ->method('newCharsetStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$this->anything(), 'US-ASCII', 'UTF-8'],
                 [$this->anything(), 'US-ASCII', 'WINDOWS-1252'],
                 [$this->anything(), 'ISO-8859-1', 'WINDOWS-1252'],
                 [$this->anything(), 'WINDOWS-1252', 'UTF-8']
-            )
+            ))
             ->willReturnOnConsecutiveCalls($stream, $stream2, $stream3, $stream4);
         $this->mockStreamFactory->expects($this->atLeastOnce())
             ->method('newDecoratedMessagePartStream')
@@ -218,7 +223,7 @@ class PartStreamContainerTest extends TestCase
             });
         $this->instance->setContentStream($stream);
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $manager = $this->instance;
         $this->assertEquals('test', $manager->getContentStream($streamPartMock, null, 'US-ASCII', 'UTF-8')->getContents());
         $this->assertEquals('test', $manager->getContentStream($streamPartMock, null, 'US-ASCII', 'UTF-8')->getContents());
@@ -247,7 +252,7 @@ class PartStreamContainerTest extends TestCase
 
         $this->instance->setContentStream($stream);
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $manager = $this->instance;
         $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', 'US-ASCII', 'UTF-8')->getContents());
         $this->assertEquals('test', $manager->getContentStream($streamPartMock, 'quoted-printable', 'US-ASCII', 'UTF-8')->getContents());

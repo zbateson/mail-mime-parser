@@ -10,14 +10,15 @@ use ZBateson\MailMimeParser\Message;
 use ZBateson\MailMimeParser\Message\IMimePart;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamReadException;
 use ZBateson\MbWrapper\UnsupportedCharsetException;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of EmailFunctionalTest
  *
- * @group Functional
- * @group EmailFunctionalTest
  * @author Zaahid Bateson
  */
+#[Group('Functional')]
+#[Group('EmailFunctionalTest')]
 class EmailFunctionalTest extends TestCase
 {
     // useful for testing an actual signed message with external tools -- the

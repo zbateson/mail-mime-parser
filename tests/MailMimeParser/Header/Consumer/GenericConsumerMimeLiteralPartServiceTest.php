@@ -3,17 +3,19 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of GenericConsumerMimeLiteralPartServiceTest
  *
- * @group Consumers
- * @group GenericConsumerMimeLiteralPartService
- * @covers ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractGenericConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(GenericConsumerMimeLiteralPartService::class)]
+#[CoversClass(AbstractConsumerService::class)]
+#[CoversClass(AbstractGenericConsumerService::class)]
+#[Group('Consumers')]
+#[Group('GenericConsumerMimeLiteralPartService')]
 class GenericConsumerMimeLiteralPartServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -25,23 +27,23 @@ class GenericConsumerMimeLiteralPartServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->genericConsumer = new GenericConsumerMimeLiteralPartService($this->logger, $mpf, $ccs, $qscs);
     }

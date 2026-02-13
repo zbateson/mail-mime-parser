@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserManagerServiceTest
  *
- * @group ParserManagerService
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\ParserManagerService
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserManagerService::class)]
+#[Group('ParserManagerService')]
+#[Group('Parser')]
 class ParserManagerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -73,7 +75,7 @@ class ParserManagerServiceTest extends TestCase
         $partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $proxyFactory = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
+        $proxyFactory = $this->createMock(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
 
         $this->mimeParser->expects($this->once())
             ->method('canParse')
@@ -108,7 +110,7 @@ class ParserManagerServiceTest extends TestCase
         $partBuilder = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $proxyFactory = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
+        $proxyFactory = $this->createMock(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxyFactory::class);
 
         $parserPartProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()

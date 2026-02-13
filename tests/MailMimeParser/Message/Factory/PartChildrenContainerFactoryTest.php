@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * PartChildrenContainerFactoryTest
  *
- * @group PartChildrenContainerFactory
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(PartHeaderContainerFactory::class)]
+#[Group('PartChildrenContainerFactory')]
+#[Group('MessagePart')]
 class PartChildrenContainerFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line

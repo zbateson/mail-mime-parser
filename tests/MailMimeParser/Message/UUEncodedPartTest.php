@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of UUEncodedPartTest
  *
- * @group UUEncodedPart
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\UUEncodedPart
  * @author Zaahid Bateson
  */
+#[CoversClass(UUEncodedPart::class)]
+#[Group('UUEncodedPart')]
+#[Group('MessagePart')]
 class UUEncodedPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -27,7 +29,7 @@ class UUEncodedPartTest extends TestCase
 
     public function testGetAndSetFileName() : void
     {
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $this->instance->attach($observer);
@@ -39,7 +41,7 @@ class UUEncodedPartTest extends TestCase
 
     public function testGetAndUnixFileMode() : void
     {
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $this->instance->attach($observer);

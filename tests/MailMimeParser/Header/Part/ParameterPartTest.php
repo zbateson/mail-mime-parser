@@ -5,16 +5,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ParameterTest
  *
- * @group HeaderParts
- * @group ParameterPart
- * @covers ZBateson\MailMimeParser\Header\Part\ParameterPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(ParameterPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('ParameterPart')]
 class ParameterPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -32,7 +34,7 @@ class ParameterPartTest extends TestCase
     {
         return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $value])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -40,7 +42,7 @@ class ParameterPartTest extends TestCase
     {
         return $this->getMockBuilder(ContainerPart::class)
             ->setConstructorArgs([$this->logger, $this->mb, [$this->getToken($value)]])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 

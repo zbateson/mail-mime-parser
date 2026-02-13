@@ -6,16 +6,18 @@ use PHPUnit\Framework\TestCase;
 
 use Psr\Log\LogLevel;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of AddressGroupPartTest
  *
- * @group HeaderParts
- * @group AddressGroupPart
- * @covers ZBateson\MailMimeParser\Header\Part\AddressGroupPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(AddressGroupPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('AddressGroupPart')]
 class AddressGroupPartTest extends TestCase
 {
     private $mb;
@@ -40,7 +42,10 @@ class AddressGroupPartTest extends TestCase
 
     public function testNameGroup() : void
     {
-        $name = $this->getMockForAbstractClass(HeaderPart::class, [$this->logger, $this->mb, 'Roman Senate']);
+        $name = $this->getMockBuilder(HeaderPart::class)
+            ->setConstructorArgs([$this->logger, $this->mb, 'Roman Senate'])
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
         $members = [
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(AddressPart::class)->disableOriginalConstructor()->getMock(),

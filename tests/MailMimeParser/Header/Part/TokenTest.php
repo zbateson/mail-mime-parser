@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of TokenTest
  *
- * @group HeaderParts
- * @group Token
- * @covers ZBateson\MailMimeParser\Header\Part\Token
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(Token::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('Token')]
 class TokenTest extends TestCase
 {
     // @phpstan-ignore-next-line

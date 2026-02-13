@@ -28,23 +28,13 @@ A huge thank you to [all my sponsors](https://github.com/sponsors/zbateson). <3
 
 If this project's helped you, please consider [sponsoring me](https://github.com/sponsors/zbateson).
 
-## Php 7 Support Dropped
+## New in 4.0
 
-As of mail-mime-parser 3.0, support for php 7 has been dropped.
-
-## New in 3.0
-
-Most changes in 3.0 are 'backend' changes, for example switching to PHP-DI for dependency injection, and basic usage should not be affected.
-
-The header class method 'getAllParts' includes comment parts in 3.0.
-
-Error, validation, and logging support has been added.
-
-For a more complete list of changes, please visit the [3.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-3.0) and the [Usage Guide](https://mail-mime-parser.org/).
+Version 4.0 requires PHP 8.1+ and focuses on API cleanup and improved configurability.  For details, see the [4.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-4.0).
 
 ## Requirements
 
-MailMimeParser requires PHP 8.0 or newer.  Tested on PHP 8.0, 8.1, 8.2, 8.3 and 8.4.
+MailMimeParser requires PHP 8.1 or newer.  Tested on PHP 8.1, 8.2, 8.3 and 8.4.
 
 ## Usage
 
@@ -109,16 +99,29 @@ fclose($handle);
 
 ```
 
+## Encryption and Signing Plugins
+
+Optional companion packages add S/MIME and PGP/MIME support for decrypting,
+encrypting, signing and verifying messages:
+
+* [zbateson/mmp-crypt-smime](https://github.com/zbateson/mmp-crypt-smime) -- S/MIME via PHP's OpenSSL extension
+* [zbateson/mmp-crypt-gpg](https://github.com/zbateson/mmp-crypt-gpg) -- PGP/MIME via PEAR's Crypt_GPG
+
+Install either package and encrypted/signed messages are automatically detected
+and decrypted during parsing. See the [Usage Guide](https://mail-mime-parser.org/#encryption-and-signing)
+for examples of reading encrypted messages and composing signed/encrypted ones.
+
 ## Documentation
 
 * [Usage Guide](https://mail-mime-parser.org/)
-* [API Reference](https://mail-mime-parser.org/api/3.0)
+* [API Reference](https://mail-mime-parser.org/api/4.0)
 
 ## Upgrade guides
 
 * [1.x Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
 * [2.x Upgrade Guide](https://mail-mime-parser.org/upgrade-2.0)
 * [3.x Upgrade Guide](https://mail-mime-parser.org/upgrade-3.0)
+* [4.x Upgrade Guide](https://mail-mime-parser.org/upgrade-4.0)
 
 ## License
 

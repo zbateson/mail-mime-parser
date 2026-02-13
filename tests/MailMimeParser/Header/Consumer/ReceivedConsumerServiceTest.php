@@ -7,18 +7,20 @@ use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ReceivedConsumerServiceTest
  *
- * @group Consumers
- * @group ReceivedConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\Received\ReceivedDateConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(ReceivedConsumerService::class)]
+#[CoversClass(GenericReceivedConsumerService::class)]
+#[CoversClass(DomainConsumerService::class)]
+#[CoversClass(ReceivedDateConsumerService::class)]
+#[Group('Consumers')]
+#[Group('ReceivedConsumerService')]
 class ReceivedConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -30,52 +32,52 @@ class ReceivedConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
 
         $fdcs = $this->getMockBuilder(DomainConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, 'from'])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $bdcs = $this->getMockBuilder(DomainConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, 'by'])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $vgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, 'via'])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $wgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, 'with'])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $igcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, 'id'])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $fgcs = $this->getMockBuilder(GenericReceivedConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, 'for'])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $rdcs = $this->getMockBuilder(ReceivedDateConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf, $ccs, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
 
         $this->receivedConsumer = new ReceivedConsumerService(

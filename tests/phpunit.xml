@@ -3,49 +3,21 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   bootstrap="./bootstrap.php"
   colors="true"
-  convertErrorsToExceptions="true"
-  convertNoticesToExceptions="true"
-  convertWarningsToExceptions="true"
-  convertDeprecationsToExceptions="true"
-  stopOnError="false"
-  stopOnFailure="false"
-  stopOnIncomplete="false"
-  stopOnSkipped="false"
-  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
 >
-  <coverage processUncoveredFiles="true">
+  <source>
     <include>
       <directory suffix=".php">../src/</directory>
     </include>
-  </coverage>
+  </source>
   <php>
     <const name="TEST_DATA_DIR" value="_data"/>
     <const name="TEST_OUTPUT_DIR" value="_output"/>
     <const name="TEST_LOG_FILE" value="_output/debug.log"/>
   </php>
-  <!--
-    Files specified in order for code coverage reporting - for example, Container
-    as a singleton instance only gets constructed once, and for coverage to be
-    reported correctly, needs to be the first class tested.
-    -->
   <testsuites>
-    <testsuite name="Base">
+    <testsuite name="default">
       <directory suffix="Test.php">MailMimeParser</directory>
-    </testsuite>
-    <testsuite name="Header">
-      <directory suffix="Test.php">MailMimeParser/Header</directory>
-    </testsuite>
-    <testsuite name="Message">
-      <directory suffix="Test.php">MailMimeParser/Message</directory>
-    </testsuite>
-    <testsuite name="Parser">
-      <directory suffix="Test.php">MailMimeParser/Parser</directory>
-    </testsuite>
-    <testsuite name="Stream">
-      <directory suffix="Test.php">MailMimeParser/Stream</directory>
-    </testsuite>
-    <testsuite name="Integration">
-      <directory suffix="Test.php">MailMimeParser/IntegrationTests</directory>
     </testsuite>
   </testsuites>
 </phpunit>

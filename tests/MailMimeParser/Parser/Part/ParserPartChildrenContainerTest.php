@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser\Part;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserPartChildrenContainerTest
  *
- * @group Parser
- * @group ParserPartChildrenContainer
- * @covers ZBateson\MailMimeParser\Parser\Part\ParserPartChildrenContainer
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserPartChildrenContainer::class)]
+#[Group('Parser')]
+#[Group('ParserPartChildrenContainer')]
 class ParserPartChildrenContainerTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -42,7 +44,7 @@ class ParserPartChildrenContainerTest extends TestCase
     {
         $part = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\IMessagePart::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->proxy->expects($this->exactly(2))
             ->method('popNextChild')
             ->willReturnOnConsecutiveCalls($part, null);

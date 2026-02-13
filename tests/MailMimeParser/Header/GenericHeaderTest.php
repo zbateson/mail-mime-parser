@@ -7,16 +7,18 @@ use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\GenericConsumerMimeLiteralPartService;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of GenericHeaderTest
  *
- * @group Headers
- * @group GenericHeader
- * @covers ZBateson\MailMimeParser\Header\GenericHeader
- * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
+#[CoversClass(GenericHeader::class)]
+#[CoversClass(AbstractHeader::class)]
+#[Group('Headers')]
+#[Group('GenericHeader')]
 class GenericHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -28,27 +30,27 @@ class GenericHeaderTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $ccs = $this->getMockBuilder(CommentConsumerService::class)
             ->setConstructorArgs([$this->logger, $mpf, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->consumerService = $this->getMockBuilder(GenericConsumerMimeLiteralPartService::class)
             ->setConstructorArgs([$this->logger, $mpf, $ccs, $qscs])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -74,11 +76,6 @@ class GenericHeaderTest extends TestCase
         $this->assertEquals('Hunter S. Thompson', $header->getValue());
     }
 
-    /**
-     *
-     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService::isStartToken
-     * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService::isEndToken
-     */
     public function testQuotesMimeAndComments() : void
     {
         $header = $this->newGenericHeader(

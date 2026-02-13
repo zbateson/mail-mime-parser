@@ -3,15 +3,17 @@
 namespace ZBateson\MailMimeParser\Parser\Proxy;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserNonMimeMessageProxyTest
  *
- * @group Parser
- * @group ParserNonMimeMessageProxy
- * @covers ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserNonMimeMessageProxy::class)]
+#[Group('Parser')]
+#[Group('ParserNonMimeMessageProxy')]
 class ParserNonMimeMessageProxyTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -30,7 +32,7 @@ class ParserNonMimeMessageProxyTest extends TestCase
             ->getMock();
         $this->parser = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\IParserService::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->instance = new ParserNonMimeMessageProxy(
             $this->partBuilder,
             $this->parser

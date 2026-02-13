@@ -5,18 +5,23 @@ namespace ZBateson\MailMimeParser\Parser;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * NonMimeParserServiceTest
  *
- * @group NonMimeParser
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\AbstractParserService
- * @covers ZBateson\MailMimeParser\Parser\NonMimeParserService
  * @author Zaahid Bateson
  */
+#[CoversClass(AbstractParserService::class)]
+#[CoversClass(NonMimeParserService::class)]
+#[Group('NonMimeParser')]
+#[Group('Parser')]
 class NonMimeParserServiceTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     private $messageProxyFactory;
 
@@ -154,7 +159,7 @@ class NonMimeParserServiceTest extends TestCase
             ->with(0);
         $this->parserMessageProxy->expects($this->exactly(3))
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$this->anything()], [$this->anything()], [\strlen($str)]);
+            ->with(...$this->consecutive([$this->anything()], [$this->anything()], [\strlen($str)]));
 
         $this->instance->parseContent($this->parserMessageProxy);
         \fclose($handle);
@@ -176,7 +181,7 @@ class NonMimeParserServiceTest extends TestCase
             ->with(0);
         $this->parserMessageProxy->expects($this->exactly(2))
             ->method('setStreamPartAndContentEndPos')
-            ->withConsecutive([$this->anything()], [\strlen($first)]);
+            ->with(...$this->consecutive([$this->anything()], [\strlen($first)]));
 
         $this->parserMessageProxy->expects($this->once())
             ->method('setNextPartStart')

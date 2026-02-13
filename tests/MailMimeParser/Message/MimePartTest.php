@@ -4,20 +4,25 @@ namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
 use Traversable;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Header\IHeader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MimePartTest
  *
- * @group MimePart
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\MimePart
- * @covers ZBateson\MailMimeParser\Message\MultiPart
- * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
+#[CoversClass(MimePart::class)]
+#[CoversClass(MultiPart::class)]
+#[CoversClass(MessagePart::class)]
+#[Group('MimePart')]
+#[Group('MessagePart')]
 class MimePartTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     private $mockPartStreamContainer;
 
@@ -57,7 +62,7 @@ class MimePartTest extends TestCase
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
+            ->onlyMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
         $header->method('getName')->willReturn($name);
         $header->method('getValue')->willReturn($value);
@@ -71,7 +76,7 @@ class MimePartTest extends TestCase
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\IdHeader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $header->method('getValue')->willReturn($id);
         return $header;
@@ -82,14 +87,14 @@ class MimePartTest extends TestCase
         $part = $this->getMimePart();
         $this->mockHeaderContainer->expects($this->atLeastOnce())
             ->method('get')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$this->equalTo('Content-Type'), 0],
                 [$this->equalTo('Content-Disposition'), 0],
                 [$this->equalTo('Content-Type'), 0],
                 [$this->equalTo('Content-Disposition'), 0],
                 [$this->equalTo('Content-Type'), 0],
                 [$this->equalTo('Content-Disposition'), 0]
-            )
+            ))
             ->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('Content-Type', 'blah-blooh', null),
                 $this->getMockedParameterHeader('Content-Disposition', 'attachment', 'bin-bashy.jpg'),
@@ -222,7 +227,7 @@ class MimePartTest extends TestCase
                 $this->getMockBuilder(Helper\MultipartHelper::class)->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder(Helper\PrivacyHelper::class)->disableOriginalConstructor()->getMock()
             ])
-            ->setMethods(['getSignaturePart'])
+            ->onlyMethods(['getSignaturePart'])
             ->getMock();
         $message->expects($this->once())->method('getSignaturePart')->willReturn($part);
         $message->addChild($part);
@@ -234,16 +239,16 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
 
-        $h1 = $this->getMockForAbstractClass(IHeader::class);
-        $h2 = $this->getMockForAbstractClass(IHeader::class);
+        $h1 = $this->createMock(IHeader::class);
+        $h2 = $this->createMock(IHeader::class);
 
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['foist', 0],
                 ['sekint', 1]
-            )->willReturnOnConsecutiveCalls($h1, $h2);
+            ))->willReturnOnConsecutiveCalls($h1, $h2);
         $this->assertEquals($h1, $part->getHeader('foist'));
         $this->assertEquals($h2, $part->getHeader('sekint', 1));
     }
@@ -251,15 +256,15 @@ class MimePartTest extends TestCase
     public function testGetHeaderAs() : void
     {
         $part = $this->getMimePart();
-        $oRet = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
-        $oRet2 = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $oRet = $this->createMock(\ZBateson\MailMimeParser\Header\IHeader::class);
+        $oRet2 = $this->createMock(\ZBateson\MailMimeParser\Header\IHeader::class);
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('getAs')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['foist', 'IHeaderClass', 0],
                 ['sekint', 'IHeaderClass', 1]
-            )->willReturnOnConsecutiveCalls($oRet, $oRet2);
+            ))->willReturnOnConsecutiveCalls($oRet, $oRet2);
         $this->assertEquals($oRet, $part->getHeaderAs('foist', 'IHeaderClass'));
         $this->assertEquals($oRet2, $part->getHeaderAs('sekint', 'IHeaderClass', 1));
     }
@@ -268,8 +273,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
         $headers = [
-            $this->getMockForAbstractClass(IHeader::class),
-            $this->getMockForAbstractClass(IHeader::class)
+            $this->createMock(IHeader::class),
+            $this->createMock(IHeader::class)
         ];
         $this->mockHeaderContainer
             ->expects($this->once())
@@ -282,8 +287,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
         $headers = [
-            $this->getMockForAbstractClass(IHeader::class),
-            $this->getMockForAbstractClass(IHeader::class)
+            $this->createMock(IHeader::class),
+            $this->createMock(IHeader::class)
         ];
         $this->mockHeaderContainer
             ->expects($this->once())
@@ -297,8 +302,8 @@ class MimePartTest extends TestCase
     {
         $part = $this->getMimePart();
         $headers = [
-            $this->getMockForAbstractClass(IHeader::class),
-            $this->getMockForAbstractClass(IHeader::class)
+            $this->createMock(IHeader::class),
+            $this->createMock(IHeader::class)
         ];
         $this->mockHeaderContainer
             ->expects($this->once())
@@ -310,7 +315,7 @@ class MimePartTest extends TestCase
     public function testGetRawHeadersIterator() : void
     {
         $part = $this->getMimePart();
-        $iter = $this->getMockForAbstractClass(Traversable::class);
+        $iter = $this->createMock(Traversable::class);
         $this->mockHeaderContainer
             ->expects($this->once())
             ->method('getIterator')
@@ -324,14 +329,15 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer
             ->expects($this->exactly(4))
             ->method('get')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['foist', 0],
                 ['sekint', 0],
                 ['thoid', 0],
                 ['foiiiith', 0]
-            )->willReturnOnConsecutiveCalls(
+            ))->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('meen?', 'habibi'),
                 $this->getMockedParameterHeader('meen?', 'enta'),
+                null,
                 null
             );
         $this->assertEquals('habibi', $part->getHeaderValue('foist'));
@@ -346,14 +352,15 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer
             ->expects($this->exactly(4))
             ->method('get')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['foist', 0],
                 ['sekint', 0],
                 ['thoid', 0],
                 ['foiiiith', 0]
-            )->willReturnOnConsecutiveCalls(
+            ))->willReturnOnConsecutiveCalls(
                 $this->getMockedParameterHeader('meen?', 'habibi', 'BING'),
                 $this->getMockedParameterHeader('meen?', 'enta', 'BONG'),
+                null,
                 null
             );
         $this->assertEquals('BING', $part->getHeaderParameter('foist', 'eep'));
@@ -368,11 +375,11 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('set')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 ['title', 'SILENCE of the lamboos', 0],
                 ['title', 'SILENCE of the lambies', 3]
-            );
-        $observer = $this->getMockForAbstractClass('SplObserver');
+            ));
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);
@@ -388,7 +395,7 @@ class MimePartTest extends TestCase
             ->expects($this->once())
             ->method('add')
             ->with('title', 'SILENCE of the lamboos');
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -403,7 +410,7 @@ class MimePartTest extends TestCase
             ->expects($this->once())
             ->method('removeAll')
             ->with('weeeee');
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -417,8 +424,8 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer
             ->expects($this->exactly(2))
             ->method('remove')
-            ->withConsecutive(['weeeee', 0], ['wooooo', 3]);
-        $observer = $this->getMockForAbstractClass('SplObserver');
+            ->with(...$this->consecutive(['weeeee', 0], ['wooooo', 3]));
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);

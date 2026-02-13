@@ -3,41 +3,43 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\Token;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of AbstractConsumerServiceTest
  *
- * @group Consumers
- * @group AbstractConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(AbstractConsumerService::class)]
+#[Group('Consumers')]
+#[Group('AbstractConsumerService')]
 class AbstractConsumerServiceTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     private $abstractConsumerStub;
 
     protected function setUp() : void
     {
         $stub = $this->getMockBuilder('\\' . AbstractConsumerService::class)
-            ->setMethods(['processParts', 'isEndToken', 'getPartForToken', 'getTokenSeparators', 'getSubConsumers'])
+            ->onlyMethods(['processParts', 'isEndToken', 'isStartToken', 'getPartForToken', 'getTokenSeparators'])
             ->setConstructorArgs([
                 \mmpGetTestLogger(),
                 $this->getMockBuilder(HeaderPartFactory::class)->disableOriginalConstructor()->getMock(),
                 []
             ])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $stub->method('isEndToken')
             ->willReturn(false);
         $stub->method('getTokenSeparators')
             ->willReturn(['\s+']);
-        $stub->method('getSubConsumers')
-            ->willReturn([]);
-
         $this->abstractConsumerStub = $stub;
     }
 
@@ -49,7 +51,7 @@ class AbstractConsumerServiceTest extends TestCase
         $stub->expects($this->once())
             ->method('getPartForToken')
             ->with($value)
-            ->willReturn($this->getMockForAbstractClass(IHeaderPart::class));
+            ->willReturn($this->createMock(IHeaderPart::class));
         $stub->method('processParts')
             ->willReturn([$value]);
 
@@ -76,8 +78,8 @@ class AbstractConsumerServiceTest extends TestCase
 
         $stub->expects($this->exactly(6))
             ->method('getPartForToken')
-            ->withConsecutive([$args[0]], [$args[1]], [$args[2]], [$args[3]], [$args[4]], [$args[5]])
-            ->will($this->onConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5]));
+            ->with(...$this->consecutive([$args[0]], [$args[1]], [$args[2]], [$args[3]], [$args[4]], [$args[5]]))
+            ->willReturnOnConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5]);
         $stub->method('processParts')
             ->willReturn($parts);
 
@@ -105,7 +107,7 @@ class AbstractConsumerServiceTest extends TestCase
 
         $stub->expects($this->exactly(7))
             ->method('getPartForToken')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$args[0], false],
                 [$args[1], true],
                 [$args[2], false],
@@ -113,8 +115,8 @@ class AbstractConsumerServiceTest extends TestCase
                 [$args[4], false],
                 [$args[5], true],
                 [$args[6], false]
-            )
-            ->will($this->onConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5], $parts[6]));
+            ))
+            ->willReturnOnConsecutiveCalls($parts[0], $parts[1], $parts[2], $parts[3], $parts[4], $parts[5], $parts[6]);
         $stub->method('processParts')
             ->willReturn($parts);
 

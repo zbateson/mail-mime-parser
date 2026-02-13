@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Parser;
 
 use GuzzleHttp\Psr7;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MessageParserServiceTest
  *
- * @group MessageParserService
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\MessageParserService
  * @author Zaahid Bateson
  */
+#[CoversClass(MessageParserService::class)]
+#[Group('MessageParserService')]
+#[Group('Parser')]
 class MessageParserServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -56,7 +58,7 @@ class MessageParserServiceTest extends TestCase
     public function testParse() : void
     {
         $stream = Psr7\Utils::streamFor('test');
-        $msg = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\IMessage::class);
+        $msg = $this->createMock(\ZBateson\MailMimeParser\IMessage::class);
 
         $pb = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
             ->disableOriginalConstructor()

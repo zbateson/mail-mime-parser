@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ErrorTest
  *
- * @group ErrorClass
- * @group Base
- * @covers ZBateson\MailMimeParser\Error
  * @author Zaahid Bateson
  */
+#[CoversClass(Error::class)]
+#[Group('ErrorClass')]
+#[Group('Base')]
 class ErrorTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -21,7 +23,10 @@ class ErrorTest extends TestCase
 
     protected function setUp() : void
     {
-        $this->errorBagMock = $this->getMockForAbstractClass(ErrorBag::class, [\mmpGetTestLogger()]);
+        $this->errorBagMock = $this->getMockBuilder(ErrorBag::class)
+            ->setConstructorArgs([\mmpGetTestLogger()])
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
     }
 
     public function testGetMessage() : void

@@ -6,15 +6,17 @@ use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ParserPartStreamContainerTest
  *
- * @group Parser
- * @group ParserPartStreamContainer
- * @covers ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainer
  * @author Zaahid Bateson
  */
+#[CoversClass(ParserPartStreamContainer::class)]
+#[Group('Parser')]
+#[Group('ParserPartStreamContainer')]
 class ParserPartStreamContainerTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -28,11 +30,11 @@ class ParserPartStreamContainerTest extends TestCase
 
     protected function setUp() : void
     {
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->proxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy::class)
             ->disableOriginalConstructor()
-            ->setMethods(['parseAll', 'parseContent', 'getPart'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['parseAll', 'parseContent', 'getPart'])
+            ->getMock();
         $this->streamFactory = $this->getMockBuilder(\ZBateson\MailMimeParser\Stream\StreamFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,7 +83,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->with($this->proxy)
             ->willReturn(null);
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertNull($this->instance->getContentStream($streamPartMock, '7bit', '', ''));
         // doesn't call parseContent again
         $this->assertNull($this->instance->getContentStream($streamPartMock, '7bit', '', ''));
@@ -107,7 +109,7 @@ class ParserPartStreamContainerTest extends TestCase
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertSame('Fighting bears', $this->instance->getContentStream($streamPartMock, '7bit', '', '')->getContents());
         // doesn't call parseContent again
         $this->assertSame('Fighting bears', $this->instance->getContentStream($streamPartMock, '7bit', '', '')->getContents());
@@ -122,7 +124,7 @@ class ParserPartStreamContainerTest extends TestCase
             ->with($this->proxy)
             ->willReturn(null);
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertNull($this->instance->getBinaryContentStream($streamPartMock, '7bit'));
         // doesn't call parseContent again
         $this->assertNull($this->instance->getBinaryContentStream($streamPartMock, '7bit'));
@@ -149,7 +151,7 @@ class ParserPartStreamContainerTest extends TestCase
                 return new MessagePartStreamDecorator($arg, $arg2);
             });
 
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream($streamPartMock, '7bit')->getContents());
         // doesn't call parseContent again
         $this->assertSame('Fighting bears', $this->instance->getBinaryContentStream($streamPartMock, '7bit')->getContents());
@@ -193,7 +195,7 @@ class ParserPartStreamContainerTest extends TestCase
     public function testGetStreamAfterUpdate() : void
     {
         $parsedStream = Utils::streamFor('Fighting bOars');
-        $streamPartMock = $this->getMockForAbstractClass(\ZBateson\MailMimeParser\Message\IMessagePart::class);
+        $streamPartMock = $this->createMock(\ZBateson\MailMimeParser\Message\IMessagePart::class);
         $stream = new MessagePartStreamDecorator($streamPartMock, Utils::streamFor('Fighting bears'));
 
         $this->proxy->expects($this->once())
@@ -212,7 +214,7 @@ class ParserPartStreamContainerTest extends TestCase
         $this->assertSame('Fighting bOars', $this->instance->getStream()->getContents());
 
         $subject = $this->getMockBuilder('SplSubject')
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->instance->update($subject);
         // doesn't call parseAll again, returns $stream
         $this->assertSame('Fighting bears', $this->instance->getStream()->getContents());

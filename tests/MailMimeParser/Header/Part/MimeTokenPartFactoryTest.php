@@ -4,15 +4,17 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MimeTokenPartFactoryTest
  *
- * @group HeaderParts
- * @group MimeTokenPartFactory
- * @covers ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory
  * @author Zaahid Bateson
  */
+#[CoversClass(MimeTokenPartFactory::class)]
+#[Group('HeaderParts')]
+#[Group('MimeTokenPartFactory')]
 class MimeTokenPartFactoryTest extends TestCase
 {
     // @phpstan-ignore-next-line

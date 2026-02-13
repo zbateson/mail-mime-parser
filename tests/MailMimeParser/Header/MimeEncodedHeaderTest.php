@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MimeEncodedHeaderTest
  *
- * @group Headers
- * @group MimeEncodedHeader
- * @covers ZBateson\MailMimeParser\Header\MimeEncodedHeader
- * @covers ZBateson\MailMimeParser\Header\AbstractHeader
  * @author Zaahid Bateson
  */
+#[CoversClass(MimeEncodedHeader::class)]
+#[CoversClass(AbstractHeader::class)]
+#[Group('Headers')]
+#[Group('MimeEncodedHeader')]
 class MimeEncodedHeaderTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -28,19 +30,19 @@ class MimeEncodedHeaderTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $mpf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $qscs = $this->getMockBuilder(QuotedStringConsumerService::class)
             ->setConstructorArgs([$this->logger, $pf])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->consumerService = $qscs;
         $this->mpf = $mpf;
@@ -49,7 +51,6 @@ class MimeEncodedHeaderTest extends TestCase
     private function newMimeEncodedHeader($name, $value) : MimeEncodedHeader
     {
         return $this->getMockBuilder(MimeEncodedHeader::class)
-            ->setMethods()
             ->setConstructorArgs([
                 $this->logger,
                 $this->mpf,
@@ -57,7 +58,8 @@ class MimeEncodedHeaderTest extends TestCase
                 $name,
                 $value
             ])
-            ->getMockForAbstractClass();
+            ->onlyMethods([])
+            ->getMock();
     }
 
     public function testGetDecoded() : void

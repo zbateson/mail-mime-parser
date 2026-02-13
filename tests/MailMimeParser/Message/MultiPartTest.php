@@ -3,17 +3,19 @@
 namespace ZBateson\MailMimeParser\Message;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MultiPartTest
  *
- * @group MultiPart
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\MimePart
- * @covers ZBateson\MailMimeParser\Message\MultiPart
- * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
+#[CoversClass(MimePart::class)]
+#[CoversClass(MultiPart::class)]
+#[CoversClass(MessagePart::class)]
+#[Group('MultiPart')]
+#[Group('MessagePart')]
 class MultiPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -100,7 +102,7 @@ class MultiPartTest extends TestCase
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
+            ->onlyMethods(['getValue', 'getRawValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
         $header->method('getName')->willReturn($name);
         $header->method('getValue')->willReturn($value);
@@ -267,7 +269,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -289,12 +291,12 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
 
-        $this->assertEquals(0, $part->removePart($this->secondChildNested[0]));
+        $part->removePart($this->secondChildNested[0]);
         \array_splice($this->allParts, 3, 1);
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
@@ -307,7 +309,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);
@@ -332,7 +334,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly(2))
             ->method('update');
         $part->attach($observer);
@@ -352,7 +354,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $part->attach($observer);
@@ -375,7 +377,7 @@ class MultiPartTest extends TestCase
         $this->assertEquals($this->allParts, $part->getAllParts());
         $this->assertEquals($this->children, $part->getChildParts());
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->exactly((\is_array($this->allParts) || $this->allParts instanceof \Countable ? \count($this->allParts) : 0) - 1))
             ->method('update');
         $part->attach($observer);

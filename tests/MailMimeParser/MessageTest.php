@@ -5,17 +5,21 @@ namespace ZBateson\MailMimeParser;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\Message\PartChildrenContainer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MessageTest
  *
- * @group MessageClass
- * @group Base
- * @covers ZBateson\MailMimeParser\Message
  * @author Zaahid Bateson
  */
+#[CoversClass(Message::class)]
+#[Group('MessageClass')]
+#[Group('Base')]
 class MessageTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     private $mockPartStreamContainer;
 
@@ -54,7 +58,7 @@ class MessageTest extends TestCase
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getName', 'getValueFor', 'hasParameter'])
+            ->onlyMethods(['getValue', 'getName', 'getValueFor', 'hasParameter'])
             ->getMock();
         $header->method('getName')->willReturn($name);
         $header->method('getValue')->willReturn($value);
@@ -67,7 +71,7 @@ class MessageTest extends TestCase
     {
         $header = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\IdHeader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $header->method('getId')->willReturn($id);
         return $header;
@@ -301,10 +305,10 @@ class MessageTest extends TestCase
         $part = $message->getPart(2);
 
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$message, 'content', 'mimetype', 'attachment', $this->anything(), 'base64'],
                 [$message, $this->isInstanceOf(\Psr\Http\Message\StreamInterface::class), 'mimetype2', 'inline', 'blueball.png', 'base64']
-            )
+            ))
             ->willReturn($part);
 
         $testFile = \dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';
@@ -319,10 +323,10 @@ class MessageTest extends TestCase
         $part = $message->getPart(2);
 
         $helper->expects($this->exactly(2))->method('createAndAddPartForAttachment')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$message, 'content', 'mimetype', 'attachment', $this->anything(), 'quoted-printable'],
                 [$message, $this->isInstanceOf(\Psr\Http\Message\StreamInterface::class), 'mimetype2', 'inline', 'blueball.png', 'quoted-printable']
-            )
+            ))
             ->willReturn($part);
 
         $testFile = \dirname(__DIR__) . '/' . TEST_DATA_DIR . '/emails/files/blueball.png';

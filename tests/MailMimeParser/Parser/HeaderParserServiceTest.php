@@ -5,15 +5,17 @@ namespace ZBateson\MailMimeParser\Parser;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * HeaderParserServiceTest
  *
- * @group HeaderParserService
- * @group Parser
- * @covers ZBateson\MailMimeParser\Parser\HeaderParserService
  * @author Zaahid Bateson
  */
+#[CoversClass(HeaderParserService::class)]
+#[Group('HeaderParserService')]
+#[Group('Parser')]
 class HeaderParserServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line

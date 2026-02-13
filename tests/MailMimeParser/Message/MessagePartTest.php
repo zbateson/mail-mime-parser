@@ -6,18 +6,23 @@ use Exception;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamWrapper;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * MessagePartTest
  *
- * @group MessagePartClass
- * @group MessagePart
- * @covers ZBateson\MailMimeParser\Message\MessagePart
  * @author Zaahid Bateson
  */
+#[CoversClass(MessagePart::class)]
+#[Group('MessagePartClass')]
+#[Group('MessagePart')]
 class MessagePartTest extends TestCase
 {
+    use ConsecutiveCallsTrait;
+
     // @phpstan-ignore-next-line
     protected $partStreamContainer;
 
@@ -30,10 +35,14 @@ class MessagePartTest extends TestCase
 
     private function getMessagePart($handle = 'habibi', $contentHandle = null, $parent = null) : \ZBateson\MailMimeParser\Message\MessagePart
     {
-        $streamPartMock = $this->getMockForAbstractClass(
-            MessagePart::class,
-            [\mmpGetTestLogger(), $this->partStreamContainer, $parent]
-        );
+        $streamPartMock = $this->getMockBuilder(MessagePart::class)
+            ->setConstructorArgs([\mmpGetTestLogger(), $this->partStreamContainer, $parent])
+            ->onlyMethods([
+                'isTextPart', 'getContentType', 'getCharset',
+                'getContentDisposition', 'getContentTransferEncoding', 'getContentId',
+                'isMime',
+            ])
+            ->getMock();
         if ($contentHandle !== null) {
             $contentHandle = new MessagePartStreamDecorator($streamPartMock, Psr7\Utils::streamFor($contentHandle));
             $this->partStreamContainer
@@ -60,16 +69,20 @@ class MessagePartTest extends TestCase
                     return $handle;
                 });
         }
-        return $this->getMockForAbstractClass(
-            MessagePart::class,
-            [\mmpGetTestLogger(), $this->partStreamContainer, $parent]
-        );
+        return $this->getMockBuilder(MessagePart::class)
+            ->setConstructorArgs([\mmpGetTestLogger(), $this->partStreamContainer, $parent])
+            ->onlyMethods([
+                'isTextPart', 'getContentType', 'getCharset',
+                'getContentDisposition', 'getContentTransferEncoding', 'getContentId',
+                'isMime',
+            ])
+            ->getMock();
     }
 
     public function testNotify() : void
     {
         $messagePart = $this->getMessagePart();
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $messagePart->attach($observer);
@@ -130,10 +143,10 @@ class MessagePartTest extends TestCase
         $stream = new MessagePartStreamDecorator($messagePart, Psr7\Utils::streamFor('Que tonto'));
         $this->partStreamContainer->expects($this->exactly(2))
             ->method('getContentStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$messagePart, 'wubalubadub-duuuuub', 'wigidiwamwamwazzle', 'oooohweee!'],
                 [$messagePart, 'wubalubadub-duuuuub', 'override', 'oooohweee!']
-            )
+            ))
             ->willReturn($stream);
 
         $this->assertEquals('Que tonto', $messagePart->getContentStream('oooohweee!')->getContents());
@@ -246,7 +259,7 @@ class MessagePartTest extends TestCase
             ->method('setContentStream')
             ->with(null);
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $messagePart->attach($observer);
@@ -268,9 +281,9 @@ class MessagePartTest extends TestCase
         $this->partStreamContainer->method('hasContent')->willReturn(true);
         $this->partStreamContainer
             ->method('getContentStream')
-            ->withConsecutive(
+            ->with(...$this->consecutive(
                 [$messagePart, '', 'charset', 'a-charset']
-            );
+            ));
 
         $this->assertEquals('message', $messagePart->getStream()->getContents());
 
@@ -278,7 +291,7 @@ class MessagePartTest extends TestCase
             ->method('setContentStream')
             ->with($new);
 
-        $observer = $this->getMockForAbstractClass('SplObserver');
+        $observer = $this->createMock('SplObserver');
         $observer->expects($this->once())
             ->method('update');
         $messagePart->attach($observer);

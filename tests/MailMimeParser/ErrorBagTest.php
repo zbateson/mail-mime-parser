@@ -4,22 +4,25 @@ namespace ZBateson\MailMimeParser;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of MessageTest
  *
- * @group ErrorBag
- * @group Base
- * @covers ZBateson\MailMimeParser\ErrorBag
  * @author Zaahid Bateson
  */
+#[CoversClass(ErrorBag::class)]
+#[Group('ErrorBag')]
+#[Group('Base')]
 class ErrorBagTest extends TestCase
 {
     private function newErrorBagStub($children = [])
     {
         $stub = $this->getMockBuilder('\\' . ErrorBag::class)
             ->setConstructorArgs([\mmpGetTestLogger()])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getErrorBagChildren'])
+            ->getMock();
         $stub->method('getErrorBagChildren')
             ->willReturn($children);
         return $stub;

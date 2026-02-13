@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of SubjectTokenTest
  *
- * @group HeaderParts
- * @group SubjectToken
- * @covers ZBateson\MailMimeParser\Header\Part\SubjectToken
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(SubjectToken::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('SubjectToken')]
 class SubjectTokenTest extends TestCase
 {
     // @phpstan-ignore-next-line

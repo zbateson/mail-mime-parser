@@ -3,16 +3,18 @@
 namespace ZBateson\MailMimeParser\Header\Consumer;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of QuotedStringConsumerServiceTest
  *
- * @group Consumers
- * @group QuotedStringConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService
- * @covers ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService
  * @author Zaahid Bateson
  */
+#[CoversClass(QuotedStringConsumerService::class)]
+#[CoversClass(AbstractConsumerService::class)]
+#[Group('Consumers')]
+#[Group('QuotedStringConsumerService')]
 class QuotedStringConsumerServiceTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -24,11 +26,11 @@ class QuotedStringConsumerServiceTest extends TestCase
     {
         $this->logger = \mmpGetTestLogger();
         $charsetConverter = $this->getMockBuilder(\ZBateson\MbWrapper\MbWrapper::class)
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $pf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $charsetConverter])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
         $this->quotedStringConsumer = new QuotedStringConsumerService($this->logger, $pf);
     }

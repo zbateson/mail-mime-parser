@@ -4,16 +4,18 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use PHPUnit\Framework\TestCase;
 use ZBateson\MbWrapper\MbWrapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Description of ParameterTest
  *
- * @group HeaderParts
- * @group SplitParameterPart
- * @covers ZBateson\MailMimeParser\Header\Part\SplitParameterPart
- * @covers ZBateson\MailMimeParser\Header\Part\HeaderPart
  * @author Zaahid Bateson
  */
+#[CoversClass(SplitParameterPart::class)]
+#[CoversClass(HeaderPart::class)]
+#[Group('HeaderParts')]
+#[Group('SplitParameterPart')]
 class SplitParameterPartTest extends TestCase
 {
     // @phpstan-ignore-next-line
@@ -29,7 +31,7 @@ class SplitParameterPartTest extends TestCase
         $this->mb = new MbWrapper();
         $this->hpf = $this->getMockBuilder(HeaderPartFactory::class)
             ->setConstructorArgs([$this->logger, $this->mb])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -37,7 +39,7 @@ class SplitParameterPartTest extends TestCase
     {
         return $this->getMockBuilder(Token::class)
             ->setConstructorArgs([$this->logger, $this->mb, $value])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
@@ -45,7 +47,7 @@ class SplitParameterPartTest extends TestCase
     {
         return $this->getMockBuilder(ContainerPart::class)
             ->setConstructorArgs([$this->logger, $this->mb, [$this->getToken($value)]])
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
     }
 
