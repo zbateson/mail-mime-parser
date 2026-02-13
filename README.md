@@ -28,23 +28,24 @@ A huge thank you to [all my sponsors](https://github.com/sponsors/zbateson). <3
 
 If this project's helped you, please consider [sponsoring me](https://github.com/sponsors/zbateson).
 
-## Php 7 Support Dropped
+## New in 4.0
 
-As of mail-mime-parser 3.0, support for php 7 has been dropped.
+Version 4.0 requires PHP 8.1+ and focuses on API cleanup and improved configurability:
 
-## New in 3.0
+* **Breaking:** `removePart()`, `removeTextPart()`, `removeHtmlPart()`, and related methods now return `static` for fluent chaining instead of `bool` or `?int`.
+* **Breaking:** `getContentType()` now returns `string` (non-nullable, defaults to `'text/plain'`).
+* **Breaking:** `SplSubject` removed from `IMessagePart` interface (internal implementation detail).
+* **Breaking:** `PartFilter` is now a `final` class with a private constructor.
+* **Breaking:** `PartStreamContainer` stream methods now accept/return `StreamInterface` instead of `MessagePartStreamDecorator`.
+* **New:** `IHeader::getDecodedValue()` returns the full decoded header value reconstructed from parsed parts.
+* **New:** Configurable fallback charset for text parts without a declared charset via `MailMimeParser::setFallbackCharset()`.
+* Parameter `$attached` renamed to `$autoClose` on `Message::from()` and `MailMimeParser::parse()`.
 
-Most changes in 3.0 are 'backend' changes, for example switching to PHP-DI for dependency injection, and basic usage should not be affected.
-
-The header class method 'getAllParts' includes comment parts in 3.0.
-
-Error, validation, and logging support has been added.
-
-For a more complete list of changes, please visit the [3.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-3.0) and the [Usage Guide](https://mail-mime-parser.org/).
+For a complete list of changes, see the [4.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-4.0).
 
 ## Requirements
 
-MailMimeParser requires PHP 8.0 or newer.  Tested on PHP 8.0, 8.1, 8.2, 8.3 and 8.4.
+MailMimeParser requires PHP 8.1 or newer.  Tested on PHP 8.1, 8.2, 8.3 and 8.4.
 
 ## Usage
 
@@ -112,13 +113,14 @@ fclose($handle);
 ## Documentation
 
 * [Usage Guide](https://mail-mime-parser.org/)
-* [API Reference](https://mail-mime-parser.org/api/3.0)
+* [API Reference](https://mail-mime-parser.org/api/4.0)
 
 ## Upgrade guides
 
 * [1.x Upgrade Guide](https://mail-mime-parser.org/upgrade-1.0)
 * [2.x Upgrade Guide](https://mail-mime-parser.org/upgrade-2.0)
 * [3.x Upgrade Guide](https://mail-mime-parser.org/upgrade-3.0)
+* [4.x Upgrade Guide](https://mail-mime-parser.org/upgrade-4.0)
 
 ## License
 
