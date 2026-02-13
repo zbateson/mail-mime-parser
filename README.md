@@ -30,18 +30,7 @@ If this project's helped you, please consider [sponsoring me](https://github.com
 
 ## New in 4.0
 
-Version 4.0 requires PHP 8.1+ and focuses on API cleanup and improved configurability:
-
-* **Breaking:** `removePart()`, `removeTextPart()`, `removeHtmlPart()`, and related methods now return `static` for fluent chaining instead of `bool` or `?int`.
-* **Breaking:** `getContentType()` now returns `string` (non-nullable, defaults to `'text/plain'`).
-* **Breaking:** `SplSubject` removed from `IMessagePart` interface (internal implementation detail).
-* **Breaking:** `PartFilter` is now a `final` class with a private constructor.
-* **Breaking:** `PartStreamContainer` stream methods now accept/return `StreamInterface` instead of `MessagePartStreamDecorator`.
-* **New:** `IHeader::getDecodedValue()` returns the full decoded header value reconstructed from parsed parts.
-* **New:** Configurable fallback charset for text parts without a declared charset via `MailMimeParser::setFallbackCharset()`.
-* Parameter `$attached` renamed to `$autoClose` on `Message::from()` and `MailMimeParser::parse()`.
-
-For a complete list of changes, see the [4.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-4.0).
+Version 4.0 requires PHP 8.1+ and focuses on API cleanup and improved configurability.  For details, see the [4.0 Upgrade Guide](https://mail-mime-parser.org/upgrade-4.0).
 
 ## Requirements
 
