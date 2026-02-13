@@ -53,7 +53,7 @@ class AddressHeader extends AbstractHeader
 
     /**
      * Filters $this->allParts into the parts required by $this->parts
-     * and assignes it.
+     * and assigns it.
      *
      * The AbstractHeader::filterAndAssignToParts method filters out CommentParts.
      */

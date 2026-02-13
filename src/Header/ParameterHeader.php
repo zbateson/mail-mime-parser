@@ -36,7 +36,7 @@ class ParameterHeader extends AbstractHeader
 {
     /**
      * @var array<string, NameValuePart> key map of lower-case parameter names and associated
-     *      ParameterParts.
+     *      NameValueParts.
      */
     protected array $parameters = [];
 

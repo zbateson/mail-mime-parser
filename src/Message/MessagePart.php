@@ -176,10 +176,10 @@ abstract class MessagePart extends ErrorBag implements IMessagePart, SplSubject
         return $this;
     }
 
-    public function setContent($resource, string $charset = MailMimeParser::DEFAULT_CHARSET) : static
+    public function setContent($resource, string $resourceCharset = MailMimeParser::DEFAULT_CHARSET) : static
     {
         $stream = Utils::streamFor($resource);
-        $this->attachContentStream($stream, $charset);
+        $this->attachContentStream($stream, $resourceCharset);
         // this->notify() called in attachContentStream
         return $this;
     }

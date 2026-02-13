@@ -36,7 +36,8 @@ interface IMimePart extends IMultiPart
      * same name, the one at the passed offset is returned.
      *
      * Note that mime header names aren't case sensitive, and the '-' character
-     * is ignored, so ret
+     * is ignored, so 'Content-Type', 'content-type', and 'ContentType' are
+     * equivalent.
      *
      * If a header with the given $name and $offset doesn't exist, null is
      * returned.
@@ -73,6 +74,8 @@ interface IMimePart extends IMultiPart
      * same name, the one at the passed offset is returned.
      *
      * Note that mime headers aren't case sensitive, and the '-' character is
+     * ignored, so 'Content-Type', 'content-type', and 'ContentType' are
+     * equivalent.
      *
      * If a header with the given $name and $offset doesn't exist, null is
      * returned.

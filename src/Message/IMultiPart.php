@@ -256,12 +256,10 @@ interface IMultiPart extends IMessagePart
     public function addChild(IMessagePart $part, ?int $position = null) : static;
 
     /**
-     * Removes the child part from this part and returns its previous position
-     * or null if it wasn't found.
+     * Removes the child part from this part.
      *
-     * Note that if the part is not a direct child of this part, the returned
-     * position is its index within its parent (calls removePart on its direct
-     * parent).
+     * Note that if the part is not a direct child of this part, it is removed
+     * from its direct parent instead.
      *
      * This also means that parts from unrelated parts/messages could be removed
      * by a call to removePart -- it will always remove the part from its parent
