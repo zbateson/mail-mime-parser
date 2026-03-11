@@ -111,7 +111,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
@@ -250,12 +250,12 @@ provide a custom logger for the instance only.</dd>
 and returns it.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_parsePluginConfigs">parsePluginConfigs()</a>
+    <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_readPluginConfigPath">readPluginConfigPath()</a>
     <span>
-                                &nbsp;: array&lt;string|int, string&gt;    </span>
+                                &nbsp;: string|null    </span>
 </dt>
-<dd>Parses an installed.json file and returns absolute paths to plugin DI
-config files.</dd>
+<dd>Reads a package&#039;s composer.json and returns the absolute path to its
+MMP DI config file, or null if the package is not an MMP plugin.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_resetGlobalPhpDiContainerDefinitions">resetGlobalPhpDiContainerDefinitions()</a>
@@ -321,7 +321,7 @@ by passing &#039;false&#039; to the $useDefaultDefinitionsFile argument.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">59</span>
 
     </aside>
 
@@ -352,7 +352,7 @@ returned by calling $message-&gt;getTextContent()).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
@@ -381,7 +381,7 @@ returned by calling $message-&gt;getTextContent()).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">89</span>
+    <span class="phpdocumentor-element-found-in__line">70</span>
 
     </aside>
 
@@ -426,7 +426,7 @@ for to auto-discover plugin DI configurations.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">75</span>
 
     </aside>
 
@@ -460,7 +460,7 @@ for to auto-discover plugin DI configurations.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">72</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -494,7 +494,7 @@ for to auto-discover plugin DI configurations.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">85</span>
 
     </aside>
 
@@ -528,7 +528,7 @@ for to auto-discover plugin DI configurations.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">83</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -796,32 +796,32 @@ automatically when the returned IMessage is destroyed.</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_parsePluginConfigs">
-        parsePluginConfigs()
-        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_parsePluginConfigs" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_readPluginConfigPath">
+        readPluginConfigPath()
+        <a href="classes/ZBateson-MailMimeParser-MailMimeParser.html#method_readPluginConfigPath" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">135</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Parses an installed.json file and returns absolute paths to plugin DI
-config files.</p>
+        <p class="phpdocumentor-summary">Reads a package&#039;s composer.json and returns the absolute path to its
+MMP DI config file, or null if the package is not an MMP plugin.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">parsePluginConfigs</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$installedJsonPath</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">readPluginConfigPath</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$packageInstallPath</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
-        <section class="phpdocumentor-description"><p>Looks for packages with an &quot;extra.mail-mime-parser.di_config&quot; entry
-pointing to a DI config file relative to the package root.</p>
+        <section class="phpdocumentor-description"><p>Looks for &quot;extra.mail-mime-parser.di_config&quot; in the package's
+composer.json.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$installedJsonPath</span>
+                <span class="phpdocumentor-signature__argument__name">$packageInstallPath</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -833,11 +833,9 @@ pointing to a DI config file relative to the package root.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>Absolute paths to discovered config files</p>
-</section>
-
+        
     
 </article>
                     <article
@@ -1033,7 +1031,7 @@ by passing &#039;false&#039; to the $useDefaultDefinitionsFile argument.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">121</span>
 
     </aside>
 
@@ -1043,8 +1041,10 @@ by passing &#039;false&#039; to the $useDefaultDefinitionsFile argument.</p>
     <span class="phpdocumentor-signature__visibility">private</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">discoverPluginConfigs</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
 
-        <section class="phpdocumentor-description"><p>Locates vendor/composer/installed.json via the Composer ClassLoader
-and delegates to parsePluginConfigs() for the actual parsing.</p>
+        <section class="phpdocumentor-description"><p>Uses Composer's InstalledVersions runtime API to enumerate installed
+packages and reads each package's composer.json for the
+&quot;extra.mail-mime-parser.di_config&quot; entry.</p>
+<p>Returns an empty array in non-Composer environments.</p>
 </section>
 
     
@@ -1071,7 +1071,7 @@ and delegates to parsePluginConfigs() for the actual parsing.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="MailMimeParser.php"><a href="files/mailmimeparser.html"><abbr title="MailMimeParser.php">MailMimeParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">96</span>
+    <span class="phpdocumentor-element-found-in__line">98</span>
 
     </aside>
 

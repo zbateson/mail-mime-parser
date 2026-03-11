@@ -2251,10 +2251,10 @@ Search.appendIndex(
             "summary": "Discovers\u0020plugin\u0020DI\u0020config\u0020files\u0020from\u0020installed\u0020Composer\u0020packages.",
             "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_discoverPluginConfigs"
         },                {
-            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AparsePluginConfigs\u0028\u0029",
-            "name": "parsePluginConfigs",
-            "summary": "Parses\u0020an\u0020installed.json\u0020file\u0020and\u0020returns\u0020absolute\u0020paths\u0020to\u0020plugin\u0020DI\nconfig\u0020files.",
-            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_parsePluginConfigs"
+            "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AreadPluginConfigPath\u0028\u0029",
+            "name": "readPluginConfigPath",
+            "summary": "Reads\u0020a\u0020package\u0027s\u0020composer.json\u0020and\u0020returns\u0020the\u0020absolute\u0020path\u0020to\u0020its\nMMP\u0020DI\u0020config\u0020file,\u0020or\u0020null\u0020if\u0020the\u0020package\u0020is\u0020not\u0020an\u0020MMP\u0020plugin.",
+            "url": "classes/ZBateson-MailMimeParser-MailMimeParser.html#method_readPluginConfigPath"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\MailMimeParser\u003A\u003AsetGlobalPhpDiConfigurations\u0028\u0029",
             "name": "setGlobalPhpDiConfigurations",
