@@ -170,7 +170,7 @@ class PluginDiscoveryTest extends TestCase
         $result = MailMimeParser::readPluginConfigPath($packageDir);
 
         $this->assertNotNull($result);
-        $this->assertTrue(\str_starts_with($result, '/'), 'Expected an absolute path');
+        $this->assertTrue($result === \realpath($result), 'Expected an absolute path');
     }
 
     public function testReturnsNullForNonexistentPackageDir() : void
