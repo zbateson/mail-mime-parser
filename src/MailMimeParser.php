@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ZBateson\MailMimeParser project.
  *
@@ -7,6 +8,7 @@
 
 namespace ZBateson\MailMimeParser;
 
+use Composer\InstalledVersions;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
@@ -62,6 +64,12 @@ class MailMimeParser
     private const DEFAULT_DEFINITIONS_FILE = __DIR__ . '/di_config.php';
 
     /**
+     * The key in a package's composer.json "extra" section that MMP looks
+     * for to auto-discover plugin DI configurations.
+     */
+    private const PLUGIN_EXTRA_KEY = 'mail-mime-parser';
+
+    /**
      * @var Container The instance's dependency injection container.
      */
     protected Container $container;
@@ -83,12 +91,6 @@ class MailMimeParser
     private static array $globalDefinitions = [self::DEFAULT_DEFINITIONS_FILE];
 
     /**
-     * The key in a package's composer.json "extra" section that MMP looks
-     * for to auto-discover plugin DI configurations.
-     */
-    private const PLUGIN_EXTRA_KEY = 'mail-mime-parser';
-
-    /**
      * Returns the default ContainerBuilder with default loaded definitions.
      *
      * @return ContainerBuilder<Container>
@@ -108,62 +110,60 @@ class MailMimeParser
     /**
      * Discovers plugin DI config files from installed Composer packages.
      *
-     * Locates vendor/composer/installed.json via the Composer ClassLoader
-     * and delegates to parsePluginConfigs() for the actual parsing.
+     * Uses Composer's InstalledVersions runtime API to enumerate installed
+     * packages and reads each package's composer.json for the
+     * "extra.mail-mime-parser.di_config" entry.
+     *
+     * Returns an empty array in non-Composer environments.
      *
      * @return string[] Absolute paths to discovered config files
      */
     private static function discoverPluginConfigs() : array
     {
-        $autoloadFile = (new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName();
-        if ($autoloadFile === false) {
-            return [];
-        }
-        $installedJson = \dirname($autoloadFile) . '/installed.json';
-        return self::parsePluginConfigs($installedJson);
-    }
-
-    /**
-     * Parses an installed.json file and returns absolute paths to plugin DI
-     * config files.
-     *
-     * Looks for packages with an "extra.mail-mime-parser.di_config" entry
-     * pointing to a DI config file relative to the package root.
-     *
-     * @return string[] Absolute paths to discovered config files
-     */
-    public static function parsePluginConfigs(string $installedJsonPath) : array
-    {
-        if (!\file_exists($installedJsonPath)) {
-            return [];
-        }
-        $data = \json_decode(\file_get_contents($installedJsonPath), true);
-        if (!\is_array($data)) {
-            return [];
-        }
-        $packages = $data['packages'] ?? $data;
-        if (!\is_array($packages)) {
+        if (!\class_exists(InstalledVersions::class)) {
             return [];
         }
 
-        $composerDir = \dirname($installedJsonPath);
         $configs = [];
-        foreach ($packages as $package) {
-            $extra = $package['extra'][self::PLUGIN_EXTRA_KEY] ?? null;
-            if (!\is_array($extra) || !isset($extra['di_config'])) {
-                continue;
-            }
-            $installPath = $package['install-path'] ?? null;
+        foreach (InstalledVersions::getInstalledPackages() as $packageName) {
+            $installPath = InstalledVersions::getInstallPath($packageName);
             if ($installPath === null) {
                 continue;
             }
-            $configFile = $composerDir . '/' . $installPath . '/' . $extra['di_config'];
-            $configFile = \realpath($configFile);
-            if ($configFile !== false && \file_exists($configFile)) {
+            $configFile = self::readPluginConfigPath($installPath);
+            if ($configFile !== null) {
                 $configs[] = $configFile;
             }
         }
         return $configs;
+    }
+
+    /**
+     * Reads a package's composer.json and returns the absolute path to its
+     * MMP DI config file, or null if the package is not an MMP plugin.
+     *
+     * Looks for "extra.mail-mime-parser.di_config" in the package's
+     * composer.json.
+     */
+    public static function readPluginConfigPath(string $packageInstallPath) : ?string
+    {
+        $composerJsonPath = $packageInstallPath . '/composer.json';
+        if (!\file_exists($composerJsonPath)) {
+            return null;
+        }
+        $data = \json_decode(\file_get_contents($composerJsonPath), true);
+        if (!\is_array($data)) {
+            return null;
+        }
+        $extra = $data['extra'][self::PLUGIN_EXTRA_KEY] ?? null;
+        if (!\is_array($extra) || !isset($extra['di_config'])) {
+            return null;
+        }
+        $configFile = \realpath($packageInstallPath . '/' . $extra['di_config']);
+        if ($configFile === false || !\file_exists($configFile)) {
+            return null;
+        }
+        return $configFile;
     }
 
     /**

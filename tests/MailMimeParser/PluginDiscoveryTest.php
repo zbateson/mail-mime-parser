@@ -39,192 +39,144 @@ class PluginDiscoveryTest extends TestCase
         \rmdir($dir);
     }
 
-    private function createInstalledJson(array $packages) : string
+    private function createPackageDir(string $diConfigFileName = null, string $diConfigContent = null, array $extraComposerJson = []) : string
     {
-        $path = $this->tmpDir . '/installed.json';
-        \file_put_contents($path, \json_encode(['packages' => $packages]));
-        return $path;
-    }
+        $packageDir = $this->tmpDir . '/package-' . \uniqid();
+        \mkdir($packageDir, 0755, true);
 
-    private function createPackageDir(string $relativePath, ?string $configFileName = null, ?string $configContent = null) : void
-    {
-        $dir = $this->tmpDir . '/' . $relativePath;
-        \mkdir($dir, 0755, true);
-        if ($configFileName !== null) {
+        if ($diConfigFileName !== null) {
             \file_put_contents(
-                $dir . '/' . $configFileName,
-                $configContent ?? "<?php\nreturn [];\n"
+                $packageDir . '/' . $diConfigFileName,
+                $diConfigContent ?? "<?php\nreturn [];\n"
             );
         }
+
+        if (!empty($extraComposerJson)) {
+            \file_put_contents(
+                $packageDir . '/composer.json',
+                \json_encode($extraComposerJson)
+            );
+        }
+
+        return $packageDir;
     }
 
-    public function testDiscoversSinglePlugin() : void
+    public function testReadsPluginConfigFromComposerJson() : void
     {
-        $this->createPackageDir('zbateson/mmp-crypt', 'mmp_di_config.php');
-
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'zbateson/mmp-crypt',
-                'install-path' => 'zbateson/mmp-crypt',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'di_config' => 'mmp_di_config.php',
-                    ],
+        $packageDir = $this->createPackageDir('mmp_di_config.php', null, [
+            'name' => 'zbateson/mmp-crypt',
+            'extra' => [
+                'mail-mime-parser' => [
+                    'di_config' => 'mmp_di_config.php',
                 ],
             ],
         ]);
 
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
 
-        $this->assertCount(1, $configs);
-        $this->assertStringEndsWith('mmp_di_config.php', $configs[0]);
+        $this->assertNotNull($result);
+        $this->assertStringEndsWith('mmp_di_config.php', $result);
+        $this->assertEquals(\realpath($packageDir . '/mmp_di_config.php'), $result);
     }
 
-    public function testSkipsPackageWithoutExtraKey() : void
+    public function testReturnsNullWhenNoComposerJson() : void
     {
-        $this->createPackageDir('some/package');
+        $packageDir = $this->createPackageDir();
 
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'some/package',
-                'install-path' => 'some/package',
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
+
+        $this->assertNull($result);
+    }
+
+    public function testReturnsNullWhenComposerJsonHasNoExtraKey() : void
+    {
+        $packageDir = $this->createPackageDir(null, null, [
+            'name' => 'some/package',
+        ]);
+
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
+
+        $this->assertNull($result);
+    }
+
+    public function testReturnsNullWhenExtraHasNoMmpKey() : void
+    {
+        $packageDir = $this->createPackageDir(null, null, [
+            'name' => 'some/package',
+            'extra' => [
+                'other-tool' => ['key' => 'value'],
             ],
         ]);
 
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
 
-        $this->assertCount(0, $configs);
+        $this->assertNull($result);
     }
 
-    public function testSkipsPackageWithExtraButNoDiConfig() : void
+    public function testReturnsNullWhenMmpExtraHasNoDiConfig() : void
     {
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'some/package',
-                'install-path' => 'some/package',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'other_key' => 'something',
-                    ],
+        $packageDir = $this->createPackageDir(null, null, [
+            'name' => 'some/package',
+            'extra' => [
+                'mail-mime-parser' => [
+                    'other_key' => 'something',
                 ],
             ],
         ]);
 
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
 
-        $this->assertCount(0, $configs);
+        $this->assertNull($result);
     }
 
-    public function testSkipsPackageWhenConfigFileMissing() : void
+    public function testReturnsNullWhenDiConfigFileMissing() : void
     {
-        $this->createPackageDir('zbateson/mmp-crypt');  // no config file created
-
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'zbateson/mmp-crypt',
-                'install-path' => 'zbateson/mmp-crypt',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'di_config' => 'mmp_di_config.php',
-                    ],
+        $packageDir = $this->createPackageDir(null, null, [
+            'name' => 'zbateson/mmp-crypt',
+            'extra' => [
+                'mail-mime-parser' => [
+                    'di_config' => 'mmp_di_config.php',
                 ],
             ],
         ]);
 
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
 
-        $this->assertCount(0, $configs);
+        $this->assertNull($result);
     }
 
-    public function testDiscoversMultiplePlugins() : void
+    public function testReturnsNullForInvalidComposerJson() : void
     {
-        $this->createPackageDir('zbateson/mmp-crypt', 'mmp_di_config.php');
-        $this->createPackageDir('zbateson/mmp-other', 'custom_config.php');
+        $packageDir = $this->tmpDir . '/bad-package';
+        \mkdir($packageDir, 0755, true);
+        \file_put_contents($packageDir . '/composer.json', 'not valid json{{{');
 
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'zbateson/mmp-crypt',
-                'install-path' => 'zbateson/mmp-crypt',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'di_config' => 'mmp_di_config.php',
-                    ],
-                ],
-            ],
-            [
-                'name' => 'zbateson/mmp-other',
-                'install-path' => 'zbateson/mmp-other',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'di_config' => 'custom_config.php',
-                    ],
-                ],
-            ],
-            [
-                'name' => 'unrelated/package',
-                'install-path' => 'unrelated/package',
-            ],
-        ]);
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
 
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
-
-        $this->assertCount(2, $configs);
+        $this->assertNull($result);
     }
 
-    public function testReturnsEmptyForMissingInstalledJson() : void
+    public function testReturnsAbsolutePath() : void
     {
-        $configs = MailMimeParser::parsePluginConfigs($this->tmpDir . '/nonexistent.json');
-
-        $this->assertCount(0, $configs);
-    }
-
-    public function testReturnsEmptyForInvalidJson() : void
-    {
-        $path = $this->tmpDir . '/installed.json';
-        \file_put_contents($path, 'not valid json{{{');
-
-        $configs = MailMimeParser::parsePluginConfigs($path);
-
-        $this->assertCount(0, $configs);
-    }
-
-    public function testSkipsPackageWithNoInstallPath() : void
-    {
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'zbateson/mmp-crypt',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'di_config' => 'mmp_di_config.php',
-                    ],
+        $packageDir = $this->createPackageDir('custom_config.php', null, [
+            'name' => 'zbateson/mmp-other',
+            'extra' => [
+                'mail-mime-parser' => [
+                    'di_config' => 'custom_config.php',
                 ],
             ],
         ]);
 
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
+        $result = MailMimeParser::readPluginConfigPath($packageDir);
 
-        $this->assertCount(0, $configs);
+        $this->assertNotNull($result);
+        $this->assertTrue(\str_starts_with($result, '/'), 'Expected an absolute path');
     }
 
-    public function testReturnsAbsolutePaths() : void
+    public function testReturnsNullForNonexistentPackageDir() : void
     {
-        $this->createPackageDir('zbateson/mmp-crypt', 'mmp_di_config.php');
+        $result = MailMimeParser::readPluginConfigPath($this->tmpDir . '/nonexistent');
 
-        $installedJson = $this->createInstalledJson([
-            [
-                'name' => 'zbateson/mmp-crypt',
-                'install-path' => 'zbateson/mmp-crypt',
-                'extra' => [
-                    'mail-mime-parser' => [
-                        'di_config' => 'mmp_di_config.php',
-                    ],
-                ],
-            ],
-        ]);
-
-        $configs = MailMimeParser::parsePluginConfigs($installedJson);
-
-        $this->assertCount(1, $configs);
-        $this->assertEquals(\realpath($this->tmpDir . '/zbateson/mmp-crypt/mmp_di_config.php'), $configs[0]);
+        $this->assertNull($result);
     }
 }
