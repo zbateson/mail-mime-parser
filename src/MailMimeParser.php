@@ -115,6 +115,9 @@ class MailMimeParser
      */
     private static function discoverPluginConfigs() : array
     {
+        if (! \class_exists(\Composer\Autoload\ClassLoader::class)) {
+            return [];
+        }
         $autoloadFile = (new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName();
         if ($autoloadFile === false) {
             return [];
