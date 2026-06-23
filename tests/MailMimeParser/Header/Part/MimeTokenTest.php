@@ -57,6 +57,13 @@ class MimeTokenTest extends TestCase
         $this->assertDecoded('', '=?utf-8?Q??=');
     }
 
+    public function testMimeEncodedNewlinesAreStripped() : void
+    {
+        $b64 = \base64_encode("doc\r\nBcc: x");
+        $part = $this->assertDecoded('docBcc: x', "=?utf-8?B?{$b64}?=");
+        $this->assertDoesNotMatchRegularExpression('/[\r\n]/', $part->getValue());
+    }
+
     public function testMimeDecodingNullLanguageAndCharset() : void
     {
         $part = $this->assertDecoded('Kilgore Trout', '=?US-ASCII?Q?Kilgore_Trout?=');

@@ -306,7 +306,8 @@ class MultipartHelper extends AbstractHelper
             $filename = 'file' . \uniqid();
         }
 
-        $safe = \iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
+        $converted = \iconv('UTF-8', 'US-ASCII//translit//ignore', $filename);
+        $safe = \preg_replace('/[\x00-\x1F\x7F]+/', ' ', ($converted !== false) ? $converted : '') ?? '';
         if ($message->isMime()) {
             $part = $this->mimePartFactory->newInstance();
             $part->setRawHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING, $encoding);
