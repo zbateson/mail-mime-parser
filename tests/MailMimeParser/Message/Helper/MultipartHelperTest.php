@@ -572,6 +572,47 @@ class MultipartHelperTest extends TestCase
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', 'test-file');
     }
 
+    public function testCreateAndAddPartForAttachmentSanitizesFilename() : void
+    {
+        $helper = $this->newMultipartHelper();
+
+        $message = $this->newMockIMessage();
+        $attPart = $this->newMockIMimePart();
+
+        $message->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($attPart);
+        $attPart->expects($this->exactly(3))
+            ->method('setRawHeader')
+            ->withConsecutive(
+                ['Content-Transfer-Encoding', 'base64'],
+                ['Content-Type', $this->matchesRegularExpression('/^test-mime;\r\n\tname="[^"\r\n]*"$/')],
+                ['Content-Disposition', $this->matchesRegularExpression('/^dispo;\r\n\tfilename="[^"\r\n]*"$/')]
+            );
+
+        $message->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('not-mixed');
+        $message->expects($this->once())
+            ->method('setRawHeader')
+            ->with('Content-Type', $this->matchesRegularExpression('/^multipart\/mixed;/'));
+
+        $resource = 'test';
+        $attPart->expects($this->once())
+            ->method('setContent')
+            ->with($resource);
+        $message->expects($this->once())
+            ->method('addChild')
+            ->with($attPart);
+
+        $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', "doc\r\nBcc: attacker@evil.test");
+    }
+
     public function testSetContentPartForMimeTypeThatExists() : void
     {
         $helper = $this->newMultipartHelper();

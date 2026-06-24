@@ -80,6 +80,12 @@ class ParameterPartTest extends TestCase
         $this->assertEquals('UTF-8', $part->getCharset());
     }
 
+    public function testEncodedValueWithNewlinesAreStripped() : void
+    {
+        $part = $this->assertNameValue('name', 'docBcc: x', 'name*', 'UTF-8\'\'doc%0D%0ABcc:%20x');
+        $this->assertDoesNotMatchRegularExpression('/[\r\n]/', $part->getValue());
+    }
+
     public function testGetLanguage() : void
     {
         $part = $this->assertNameValue('name', 'Khal Drogo', 'name*', '\'en-CA\'Khal%20Drogo');
