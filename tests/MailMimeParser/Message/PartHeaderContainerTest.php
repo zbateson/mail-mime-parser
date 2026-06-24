@@ -34,6 +34,19 @@ class PartHeaderContainerTest extends TestCase
         $this->instance = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf);
     }
 
+    public function testCloneCopiesErrors() : void
+    {
+        $source = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf);
+        $source->add('first', 'value');
+        $source->addError('something went wrong', \Psr\Log\LogLevel::ERROR);
+
+        $clone = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, $source);
+
+        $this->assertTrue($clone->exists('first'));
+        $this->assertCount(1, $clone->getErrors());
+        $this->assertEquals('something went wrong', $clone->getErrors()[0]->getMessage());
+    }
+
     public function testAddExistsGet() : void
     {
         $ob = $this->instance;

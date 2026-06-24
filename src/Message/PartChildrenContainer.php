@@ -96,13 +96,16 @@ class PartChildrenContainer implements ArrayAccess, RecursiveIterator
      */
     public function add(IMessagePart $part, ?int $position = null) : static
     {
-        $index = $position ?? \count($this->children);
-        \array_splice(
-            $this->children,
-            $index,
-            0,
-            [$part]
-        );
+        if ($position === null || $position >= \count($this->children)) {
+            $this->children[] = $part;
+        } else {
+            \array_splice(
+                $this->children,
+                $position,
+                0,
+                [$part]
+            );
+        }
         return $this;
     }
 

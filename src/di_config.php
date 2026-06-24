@@ -17,6 +17,8 @@ use ZBateson\MailMimeParser\Message\Factory\IMimePartFactory;
 use ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory;
 use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
+use ZBateson\MailMimeParser\Parser\HeaderParserService;
+use ZBateson\MailMimeParser\Parser\MimeParserService;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory;
@@ -35,6 +37,13 @@ return [
     // Per RFC 2045, the default is ISO-8859-1 but many modern messages omit the
     // charset and are actually UTF-8.  Override this to 'UTF-8' if desired.
     'defaultFallbackCharset' => 'ISO-8859-1',
+
+    // Maximum multipart nesting depth before parsing stops with a recorded error.
+    'maxMimePartDepth' => 256,
+
+    // Maximum header count and total header bytes before parsing stops.
+    'maxHeaderCount' => 1000,
+    'maxHeaderSizeBytes' => 1048576,
 
     'fromDomainConsumerService' => (new AutowireDefinitionHelper(DomainConsumerService::class))
         ->constructorParameter('partName', 'from'),
@@ -100,5 +109,14 @@ return [
     ParserNonMimeMessageProxyFactory::class => (new AutowireDefinitionHelper())
         ->constructor(
             defaultFallbackCharset: new Reference('defaultFallbackCharset')
+        ),
+    HeaderParserService::class => (new AutowireDefinitionHelper())
+        ->constructor(
+            maxHeaderCount: new Reference('maxHeaderCount'),
+            maxHeaderSizeBytes: new Reference('maxHeaderSizeBytes')
+        ),
+    MimeParserService::class => (new AutowireDefinitionHelper())
+        ->constructor(
+            maxMimePartDepth: new Reference('maxMimePartDepth')
         ),
 ];

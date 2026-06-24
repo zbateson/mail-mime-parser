@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser;
 
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory;
@@ -26,7 +27,8 @@ class MimeParserService extends AbstractParserService
         ParserMimePartProxyFactory $parserMimePartProxyFactory,
         PartBuilderFactory $partBuilderFactory,
         protected readonly PartHeaderContainerFactory $partHeaderContainerFactory,
-        protected readonly HeaderParserService $headerParser
+        protected readonly HeaderParserService $headerParser,
+        protected readonly int $maxMimePartDepth = 256
     ) {
         parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory, $partBuilderFactory);
     }
@@ -148,8 +150,29 @@ class MimeParserService extends AbstractParserService
         if ($proxy->isParentBoundaryFound()) {
             return null;
         }
+        if ($this->exceedsMaxDepth($proxy)) {
+            $proxy->addError(
+                'Maximum MIME part nesting depth of ' . $this->maxMimePartDepth . ' reached',
+                LogLevel::ERROR
+            );
+            return null;
+        }
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
         $child = $this->partBuilderFactory->newChildPartBuilder($headerContainer, $proxy);
         return $this->createPart($proxy, $headerContainer, $child);
+    }
+
+    /**
+     * Returns true if adding a child to $proxy would exceed $maxMimePartDepth.
+     */
+    private function exceedsMaxDepth(ParserMimePartProxy $proxy) : bool
+    {
+        $depth = 1;
+        for ($p = $proxy->getParent(); $p !== null; $p = $p->getParent()) {
+            if (++$depth >= $this->maxMimePartDepth) {
+                return true;
+            }
+        }
+        return false;
     }
 }
