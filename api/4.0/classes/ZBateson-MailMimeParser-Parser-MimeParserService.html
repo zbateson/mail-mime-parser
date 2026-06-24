@@ -115,7 +115,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -154,6 +154,13 @@
     <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_headerParser">$headerParser</a>
     <span>
                         &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\HeaderParserService">HeaderParserService</abbr></a>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_maxMimePartDepth">$maxMimePartDepth</a>
+    <span>
+                        &nbsp;: int            </span>
 </dt>
 <dd></dd>
 
@@ -254,6 +261,13 @@ read and a PartBuilder is created from it.)</dd>
 $this-&gt;parserManager-&gt;createParserProxyFor($child);</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_exceedsMaxDepth">exceedsMaxDepth()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Returns true if adding a child to $proxy would exceed $maxMimePartDepth.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_findContentBoundary">findContentBoundary()</a>
     <span>
                                 &nbsp;: static    </span>
@@ -299,7 +313,7 @@ the read portions of the line.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -309,6 +323,40 @@ the read portions of the line.</dd>
         <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\HeaderParserService">HeaderParserService</abbr></a></span>
     <span class="phpdocumentor-signature__name">$headerParser</span>
     </code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                -read-only        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_maxMimePartDepth">
+        $maxMimePartDepth
+        <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_maxMimePartDepth" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                        <small class="phpdocumentor-element__modifier">read-only</small>        </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">31</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$maxMimePartDepth</span>
+     = <span class="phpdocumentor-signature__default-value">256</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -470,7 +518,7 @@ when the parser is added.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
@@ -508,14 +556,14 @@ when the parser is added.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxyFactory.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory">ParserMessageProxyFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parserMessageProxyFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxyFactory.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory">ParserMimePartProxyFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parserMimePartProxyFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilderFactory.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilderFactory">PartBuilderFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partBuilderFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-PartHeaderContainerFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory">PartHeaderContainerFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partHeaderContainerFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\HeaderParserService">HeaderParserService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$headerParser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxyFactory.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMessageProxyFactory">ParserMessageProxyFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parserMessageProxyFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxyFactory.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxyFactory">ParserMimePartProxyFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parserMimePartProxyFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-PartBuilderFactory.html"><abbr title="\ZBateson\MailMimeParser\Parser\PartBuilderFactory">PartBuilderFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partBuilderFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-PartHeaderContainerFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\PartHeaderContainerFactory">PartHeaderContainerFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$partHeaderContainerFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html"><abbr title="\ZBateson\MailMimeParser\Parser\HeaderParserService">HeaderParserService</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$headerParser</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$maxMimePartDepth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">256</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -561,6 +609,14 @@ when the parser is added.</p>
                     <section class="phpdocumentor-description"></section>
 
             </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$maxMimePartDepth</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">256</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
             </dl>
 
     
@@ -584,7 +640,7 @@ when the parser is added.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 
     </aside>
 
@@ -702,7 +758,7 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">101</span>
+    <span class="phpdocumentor-element-found-in__line">103</span>
 
     </aside>
 
@@ -746,7 +802,7 @@ a ParserPartProxy can be created out of the PartBuilder.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">146</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
@@ -837,7 +893,7 @@ read and a PartBuilder is created from it.)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">130</span>
+    <span class="phpdocumentor-element-found-in__line">132</span>
 
     </aside>
 
@@ -905,6 +961,50 @@ it, and null is returned.</p>
             -private
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_exceedsMaxDepth">
+        exceedsMaxDepth()
+        <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_exceedsMaxDepth" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">168</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns true if adding a child to $proxy would exceed $maxMimePartDepth.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">exceedsMaxDepth</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxy</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$proxy</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_findContentBoundary">
         findContentBoundary()
         <a href="classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_findContentBoundary" class="headerlink"><i class="fas fa-link"></i></a>
@@ -912,7 +1012,7 @@ it, and null is returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">84</span>
 
     </aside>
 
@@ -966,7 +1066,7 @@ were read.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/MimeParserService.php"><a href="files/parser-mimeparserservice.html"><abbr title="Parser/MimeParserService.php">MimeParserService.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 

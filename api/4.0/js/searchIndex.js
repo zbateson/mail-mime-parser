@@ -96,6 +96,11 @@ Search.appendIndex(
             "summary": "Creates\u0020and\u0020adds\u0020an\u0020Error\u0020object\u0020to\u0020this\u0020ErrorBag.",
             "url": "classes/ZBateson-MailMimeParser-ErrorBag.html#method_addError"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003AcopyErrorsFrom\u0028\u0029",
+            "name": "copyErrorsFrom",
+            "summary": "Copies\u0020the\u0020source\u0020bag\u0027s\u0020own\u0020errors\u0020into\u0020this\u0020one\u0020without\u0020re\u002Dlogging\u0020them.",
+            "url": "classes/ZBateson-MailMimeParser-ErrorBag.html#method_copyErrorsFrom"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\ErrorBag\u003A\u003AgetErrors\u0028\u0029",
             "name": "getErrors",
             "summary": "Returns\u0020any\u0020local\u0020errors\u0020this\u0020object\u0020has\u0020at\u0020or\u0020above\u0020the\u0020passed\u0020PSR\u0020log\nlevel\u0020in\u0020Psr\\Log\\LogLevel\u0020\u0028defaulting\u0020to\u0020LogLevel\u003A\u003AERROR\u0029.",
@@ -4036,6 +4041,11 @@ Search.appendIndex(
             "summary": "Reads\u0020headers\u0020from\u0020an\u0020input\u0020stream,\u0020adding\u0020them\u0020to\u0020a\u0020PartHeaderContainer.",
             "url": "classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\HeaderParserService\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html#method___construct"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\HeaderParserService\u003A\u003AaddRawHeaderToPart\u0028\u0029",
             "name": "addRawHeaderToPart",
             "summary": "Ensures\u0020the\u0020header\u0020isn\u0027t\u0020empty\u0020and\u0020contains\u0020a\u0020colon\u0020separator\u0020character,\nthen\u0020splits\u0020it\u0020and\u0020adds\u0020it\u0020to\u0020the\u0020passed\u0020PartHeaderContainer.",
@@ -4045,6 +4055,16 @@ Search.appendIndex(
             "name": "parse",
             "summary": "Reads\u0020header\u0020lines\u0020up\u0020to\u0020an\u0020empty\u0020line,\u0020adding\u0020them\u0020to\u0020the\u0020passed\nPartHeaderContainer.",
             "url": "classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html#method_parse"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\HeaderParserService\u003A\u003A\u0024maxHeaderCount",
+            "name": "maxHeaderCount",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html#property_maxHeaderCount"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\HeaderParserService\u003A\u003A\u0024maxHeaderSizeBytes",
+            "name": "maxHeaderSizeBytes",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-HeaderParserService.html#property_maxHeaderSizeBytes"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\IParserService",
             "name": "IParserService",
@@ -4161,6 +4181,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_parseNextChild"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\MimeParserService\u003A\u003AexceedsMaxDepth\u0028\u0029",
+            "name": "exceedsMaxDepth",
+            "summary": "Returns\u0020true\u0020if\u0020adding\u0020a\u0020child\u0020to\u0020\u0024proxy\u0020would\u0020exceed\u0020\u0024maxMimePartDepth.",
+            "url": "classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#method_exceedsMaxDepth"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\MimeParserService\u003A\u003A\u0024partHeaderContainerFactory",
             "name": "partHeaderContainerFactory",
             "summary": "",
@@ -4170,6 +4195,11 @@ Search.appendIndex(
             "name": "headerParser",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_headerParser"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\MimeParserService\u003A\u003A\u0024maxMimePartDepth",
+            "name": "maxMimePartDepth",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_maxMimePartDepth"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\NonMimeParserService",
             "name": "NonMimeParserService",
