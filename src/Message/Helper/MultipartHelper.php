@@ -48,7 +48,7 @@ class MultipartHelper extends AbstractHelper
     public function getUniqueBoundary(string $mimeType) : string
     {
         $type = \ltrim(\strtoupper(\preg_replace('/^(multipart\/(.{3}).*|.*)$/i', '$2-', $mimeType)), '-');
-        return \uniqid('----=MMP-' . $type . '-', true);
+        return '----=MMP-' . $type . '-' . \bin2hex(\random_bytes(16));
     }
 
     /**
