@@ -87,6 +87,33 @@ class HeaderParserServiceTest extends TestCase
         \fclose($res);
     }
 
+    public function testParseStopsAtMaxHeaderCount() : void
+    {
+        $instance = new HeaderParserService(3);
+        $headers = '';
+        for ($i = 0; $i < 20; $i++) {
+            $headers .= "X-H$i: v\r\n";
+        }
+        $res = StreamWrapper::getResource(Utils::streamFor($headers . "\r\nbody"));
+        $this->headerContainer->expects($this->exactly(3))->method('add');
+        $this->headerContainer->expects($this->once())->method('addError');
+        $instance->parse($res, $this->headerContainer);
+        \fclose($res);
+    }
+
+    public function testParseStopsAtMaxHeaderSizeBytes() : void
+    {
+        $instance = new HeaderParserService(1000, 20);
+        $headers = '';
+        for ($i = 0; $i < 20; $i++) {
+            $headers .= "X-Header-$i: value\r\n";
+        }
+        $res = StreamWrapper::getResource(Utils::streamFor($headers . "\r\nbody"));
+        $this->headerContainer->expects($this->once())->method('addError');
+        $instance->parse($res, $this->headerContainer);
+        \fclose($res);
+    }
+
     public function testParseSingleMultilineHeaderWithSpaceSeparator() : void
     {
         $res = StreamWrapper::getResource(Utils::streamFor("The-Header: The\r\n Value"));
