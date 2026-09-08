@@ -53,6 +53,21 @@ class ContainerPart extends HeaderPart
     }
 
     /**
+     * Returns the stand-in used for the boundaries on either side of the parts
+     * being filtered, so the first and last part have something to compare
+     * against.
+     */
+    private function newSpaceSentinel() : \stdClass
+    {
+        return (object) [
+            'isSpace' => true,
+            'canIgnoreSpacesAfter' => true,
+            'canIgnoreSpacesBefore' => true,
+            'value' => ''
+        ];
+    }
+
+    /**
      * Filters out ignorable space tokens.
      *
      * Spaces are removed if parts on either side of it have their
@@ -63,29 +78,26 @@ class ContainerPart extends HeaderPart
      */
     protected function filterIgnoredSpaces(array $parts) : array
     {
-        $ends = (object) ['isSpace' => true, 'canIgnoreSpacesAfter' => true, 'canIgnoreSpacesBefore' => true, 'value' => ''];
-
+        $ends = $this->newSpaceSentinel();
         $spaced = \array_merge($parts, [$ends]);
-        $filtered = \array_slice(\array_reduce(
-            \array_slice(\array_keys($spaced), 0, -1),
-            function($carry, $key) use ($spaced, $ends) {
-                $p = $spaced[$key];
-                $l = \end($carry);
-                $a = $spaced[$key + 1];
-                if ($p->isSpace && $a === $ends) {
-                    // trim
-                    if ($l->isSpace) {
-                        \array_pop($carry);
-                    }
-                    return $carry;
-                } elseif ($p->isSpace && ($l->isSpace || ($l->canIgnoreSpacesAfter && $a->canIgnoreSpacesBefore))) {
-                    return $carry;
+        $filtered = [$ends];
+        $count = \count($spaced) - 1;
+        for ($key = 0; $key < $count; ++$key) {
+            $p = $spaced[$key];
+            $l = \end($filtered);
+            $a = $spaced[$key + 1];
+            if ($p->isSpace && $a === $ends) {
+                // trim
+                if ($l->isSpace) {
+                    \array_pop($filtered);
                 }
-                return \array_merge($carry, [$p]);
-            },
-            [$ends]
-        ), 1);
-        return $filtered;
+                continue;
+            } elseif ($p->isSpace && ($l->isSpace || ($l->canIgnoreSpacesAfter && $a->canIgnoreSpacesBefore))) {
+                continue;
+            }
+            $filtered[] = $p;
+        }
+        return \array_slice($filtered, 1);
     }
 
     /**

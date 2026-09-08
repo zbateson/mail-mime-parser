@@ -70,27 +70,28 @@ class ParameterConsumerService extends AbstractGenericConsumerService
     protected function processParts(array $parts) : array
     {
         $factory = $this->partFactory;
-        return \array_values(\array_map(
-            function($partsArray) use ($factory) {
-                if (\count($partsArray) > 1) {
-                    return $factory->newSplitParameterPart($partsArray);
-                }
-                return $partsArray[0];
-            },
-            \array_merge_recursive(...\array_map(
-                function($p) {
-                    // if $p->getIndex is non-null, it's a split-parameter part
-                    // and an array of one element consisting of name => ParameterPart
-                    // is returned, which is then merged into name => array-of-parameter-parts
-                    // or ';' object_id . ';' for non-split parts with a value of a single
-                    // element array of [ParameterPart]
-                    if ($p instanceof ParameterPart && $p->getIndex() !== null) {
-                        return [\strtolower($p->getName()) => [$p]];
-                    }
-                    return [';' . \spl_object_id($p) . ';' => [$p]];
-                },
-                $parts
-            ))
-        ));
+        // Parts are grouped by key so split parameters end up together: if
+        // $p->getIndex() is non-null it's a split-parameter part and groups
+        // under its lower-cased name, otherwise it gets a key unique to itself
+        // so it stays on its own.
+        $split = [];
+        $result = [];
+        foreach ($parts as $p) {
+            if ($p instanceof ParameterPart && $p->getIndex() !== null) {
+                $name = \strtolower($p->getName());
+                // reserve the position so the original ordering is kept, the
+                // combined part is set below once all its pieces are known
+                $result[$name] = $p;
+                $split[$name][] = $p;
+            } else {
+                $result[';' . \spl_object_id($p) . ';'] = $p;
+            }
+        }
+        foreach ($split as $name => $partsArray) {
+            if (\count($partsArray) > 1) {
+                $result[$name] = $factory->newSplitParameterPart($partsArray);
+            }
+        }
+        return \array_values($result);
     }
 }
