@@ -268,6 +268,35 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
+     * Returns the number of parts created so far while parsing the message
+     * this part belongs to.
+     *
+     * The count is message-wide, so ParserMimePartProxy simply calls
+     * getPartCount() on its parent, which must eventually reach a
+     * ParserMessageProxy which actually keeps the count and returns it.
+     *
+     * @return int the number of parts created for this message so far
+     */
+    public function getPartCount() : int
+    {
+        return $this->getParent()->getPartCount();
+    }
+
+    /**
+     * Increments the number of parts created while parsing the message this
+     * part belongs to.
+     *
+     * The count is message-wide, so ParserMimePartProxy simply calls
+     * incrementPartCount() on its parent, which must eventually reach a
+     * ParserMessageProxy which actually stores the count.
+     */
+    public function incrementPartCount() : static
+    {
+        $this->getParent()->incrementPartCount();
+        return $this;
+    }
+
+    /**
      * Returns the last part that was added.
      */
     public function getLastAddedChild() : ?ParserPartProxy

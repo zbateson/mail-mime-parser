@@ -348,9 +348,12 @@ class MimeParserServiceTest extends TestCase
             ->method('newChildPartBuilder')
             ->with($this->headerContainer, $this->parserPartProxy)
             ->willReturn($this->partBuilder);
-        $this->parserPartProxy->expects($this->once())
+        // called once by parseNextChild's part count check, once by createPart
+        $this->parserPartProxy->expects($this->exactly(2))
             ->method('isEndBoundaryFound')
             ->willReturn(false);
+        $this->parserPartProxy->expects($this->once())
+            ->method('incrementPartCount');
 
         $this->partBuilder->expects($this->once())
             ->method('getMessageResourceHandle')
@@ -386,9 +389,12 @@ class MimeParserServiceTest extends TestCase
             ->method('newChildPartBuilder')
             ->with($this->headerContainer, $this->parserPartProxy)
             ->willReturn($this->partBuilder);
-        $this->parserPartProxy->expects($this->once())
+        // called once by parseNextChild's part count check, once by createPart
+        $this->parserPartProxy->expects($this->exactly(2))
             ->method('isEndBoundaryFound')
             ->willReturn(true);
+        $this->parserPartProxy->expects($this->never())
+            ->method('incrementPartCount');
 
         $endPartProxy = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class)
             ->disableOriginalConstructor()

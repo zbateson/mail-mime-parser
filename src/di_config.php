@@ -16,6 +16,7 @@ use ZBateson\MailMimeParser\Message\Factory\PartStreamContainerFactory;
 use ZBateson\MailMimeParser\Message\PartStreamContainer;
 use ZBateson\MailMimeParser\Parser\HeaderParserService;
 use ZBateson\MailMimeParser\Parser\MimeParserService;
+use ZBateson\MailMimeParser\Parser\NonMimeParserService;
 use ZBateson\MailMimeParser\Parser\Part\ParserPartStreamContainerFactory;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
@@ -32,6 +33,10 @@ return [
     // Maximum header count and total header bytes before parsing stops.
     'maxHeaderCount' => 1000,
     'maxHeaderSizeBytes' => 1048576,
+
+    // Maximum number of parts (mime and uu-encoded) in a single message before
+    // parsing stops with a recorded error.
+    'maxMessagePartCount' => 10000,
 
     'fromDomainConsumerService' => (new AutowireDefinitionHelper(DomainConsumerService::class))
         ->constructorParameter('partName', 'from'),
@@ -77,6 +82,11 @@ return [
         ),
     MimeParserService::class => (new AutowireDefinitionHelper())
         ->constructor(
-            maxMimePartDepth: new Reference('maxMimePartDepth')
+            maxMimePartDepth: new Reference('maxMimePartDepth'),
+            maxMessagePartCount: new Reference('maxMessagePartCount')
+        ),
+    NonMimeParserService::class => (new AutowireDefinitionHelper())
+        ->constructor(
+            maxMessagePartCount: new Reference('maxMessagePartCount')
         ),
 ];

@@ -38,18 +38,25 @@ class MimeParserService extends AbstractParserService
      */
     protected int $maxMimePartDepth;
 
+    /**
+     * @var int Maximum number of parts in a message.
+     */
+    protected int $maxMessagePartCount;
+
     public function __construct(
         ParserMessageProxyFactory $parserMessageProxyFactory,
         ParserMimePartProxyFactory $parserMimePartProxyFactory,
         PartBuilderFactory $partBuilderFactory,
         PartHeaderContainerFactory $partHeaderContainerFactory,
         HeaderParserService $headerParser,
-        int $maxMimePartDepth = 256
+        int $maxMimePartDepth = 256,
+        int $maxMessagePartCount = 10000
     ) {
         parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory, $partBuilderFactory);
         $this->partHeaderContainerFactory = $partHeaderContainerFactory;
         $this->headerParser = $headerParser;
         $this->maxMimePartDepth = $maxMimePartDepth;
+        $this->maxMessagePartCount = $maxMessagePartCount;
     }
 
     /**
@@ -175,9 +182,24 @@ class MimeParserService extends AbstractParserService
             );
             return null;
         }
+        // isEndBoundaryFound() means there are no more real children to create,
+        // only possible hidden content past the end boundary, so the limit
+        // isn't reached by a message that legitimately has exactly
+        // $maxMessagePartCount parts.
+        if (!$proxy->isEndBoundaryFound() && $proxy->getPartCount() >= $this->maxMessagePartCount) {
+            $proxy->addError(
+                'Maximum message part count of ' . $this->maxMessagePartCount . ' reached',
+                LogLevel::ERROR
+            );
+            return null;
+        }
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
         $child = $this->partBuilderFactory->newChildPartBuilder($headerContainer, $proxy);
-        return $this->createPart($proxy, $headerContainer, $child);
+        $childProxy = $this->createPart($proxy, $headerContainer, $child);
+        if ($childProxy !== null) {
+            $proxy->incrementPartCount();
+        }
+        return $childProxy;
     }
 
     /**
