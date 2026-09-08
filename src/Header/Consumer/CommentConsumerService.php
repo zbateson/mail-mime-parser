@@ -34,10 +34,18 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
  */
 class CommentConsumerService extends GenericConsumerService
 {
+    /**
+     * @var int the nesting level currently being parsed.  Comments nest by
+     *      re-entering this same consumer, so an instance counter tracks the
+     *      real nesting depth.
+     */
+    private int $depth = 0;
+
     public function __construct(
         LoggerInterface $logger,
         MimeTokenPartFactory $partFactory,
-        QuotedStringConsumerService $quotedStringConsumerService
+        QuotedStringConsumerService $quotedStringConsumerService,
+        private readonly int $maxCommentDepth = 32
     ) {
         parent::__construct(
             $logger,
@@ -45,6 +53,66 @@ class CommentConsumerService extends GenericConsumerService
             $this,
             $quotedStringConsumerService
         );
+    }
+
+    /**
+     * Overridden to keep track of the current comment nesting depth.
+     *
+     * @param Iterator<string> $tokens
+     * @return IHeaderPart[]
+     */
+    protected function parseTokensIntoParts(Iterator $tokens) : array
+    {
+        if ($this->depth >= $this->maxCommentDepth) {
+            return $this->discardNestedComment($tokens);
+        }
+        ++$this->depth;
+        try {
+            return parent::parseTokensIntoParts($tokens);
+        } finally {
+            --$this->depth;
+        }
+    }
+
+    /**
+     * Consumes tokens to the end of the current comment without recursing into
+     * it or constructing any parts for it.
+     *
+     * A CommentPart holds the full text of everything nested below it, and each
+     * level of recursion costs a stack frame, so an absurdly nested comment is
+     * expensive in both memory and depth.  Past $maxCommentDepth the tokens are
+     * still consumed so the rest of the header parses normally, but nothing is
+     * built from them.
+     *
+     * Parentheses inside a quoted string don't open or close a comment, and
+     * escaped characters arrive as two-character tokens, so neither is mistaken
+     * for a delimiter here.
+     *
+     * @param Iterator<string> $tokens
+     * @return IHeaderPart[] an empty array
+     */
+    private function discardNestedComment(Iterator $tokens) : array
+    {
+        $open = 0;
+        $inQuotedString = false;
+        while ($tokens->valid()) {
+            $token = $tokens->current();
+            if ($token === '"') {
+                $inQuotedString = !$inQuotedString;
+            } elseif (!$inQuotedString) {
+                if ($this->isEndToken($token)) {
+                    if ($open === 0) {
+                        // the calling consumer advances past the end token
+                        return [];
+                    }
+                    --$open;
+                } elseif ($this->isStartToken($token)) {
+                    ++$open;
+                }
+            }
+            $tokens->next();
+        }
+        return [];
     }
 
     /**
