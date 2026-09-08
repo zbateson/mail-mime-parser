@@ -59,28 +59,28 @@ class ContainerPart extends HeaderPart
      */
     protected function filterIgnoredSpaces(array $parts) : array
     {
-        $ends = (object) ['isSpace' => true, 'canIgnoreSpacesAfter' => true, 'canIgnoreSpacesBefore' => true, 'value' => ''];
-
-        $spaced = \array_merge($parts, [$ends]);
-        $filtered = \array_slice(\array_reduce(
-            \array_slice(\array_keys($spaced), 0, -1),
-            function($carry, $key) use ($spaced, $ends) {
-                $p = $spaced[$key];
-                $l = \end($carry);
-                $a = $spaced[$key + 1];
-                if ($p->isSpace && $a === $ends) {
-                    // trim
-                    if ($l->isSpace) {
-                        \array_pop($carry);
+        $filtered = [];
+        $count = \count($parts);
+        for ($key = 0; $key < $count; ++$key) {
+            $p = $parts[$key];
+            if ($p->isSpace) {
+                // null when nothing has been kept yet, i.e. a leading space
+                $l = empty($filtered) ? null : $filtered[\count($filtered) - 1];
+                // null when $p is the last part, i.e. a trailing space
+                $a = $parts[$key + 1] ?? null;
+                if ($a === null) {
+                    if ($l !== null && $l->isSpace) {
+                        \array_pop($filtered);
                     }
-                    return $carry;
-                } elseif ($p->isSpace && ($l->isSpace || ($l->canIgnoreSpacesAfter && $a->canIgnoreSpacesBefore))) {
-                    return $carry;
+                    continue;
                 }
-                return \array_merge($carry, [$p]);
-            },
-            [$ends]
-        ), 1);
+                if ($l === null || $l->isSpace
+                    || ($l->canIgnoreSpacesAfter && $a->canIgnoreSpacesBefore)) {
+                    continue;
+                }
+            }
+            $filtered[] = $p;
+        }
         return $filtered;
     }
 

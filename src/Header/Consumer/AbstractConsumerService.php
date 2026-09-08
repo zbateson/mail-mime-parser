@@ -313,7 +313,9 @@ abstract class AbstractConsumerService implements IConsumerService
         $parts = [];
         while ($tokens->valid() && !$this->isEndToken($tokens->current())) {
             $this->logger->debug('Parsing token: {token} in class: {consumer}', ['token' => $tokens->current(), 'consumer' => static::class]);
-            $parts = \array_merge($parts, $this->getTokenParts($tokens));
+            foreach ($this->getTokenParts($tokens) as $tokenPart) {
+                $parts[] = $tokenPart;
+            }
             $this->advanceToNextToken($tokens, false);
         }
         return (empty($parts)) ? [] : $this->processParts($parts);

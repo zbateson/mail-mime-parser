@@ -94,4 +94,12 @@ class ParsingLimitsIntegrationTest extends TestCase
         $this->assertSame(5, $message->getChildCount());
         $this->assertEmpty($message->getAllErrors());
     }
+
+    public function testManyHeaderParametersAreAllParsed() : void
+    {
+        $raw = "Content-Type: text/plain; charset=utf-8" . \str_repeat('; a=b', 500) . "\r\n\r\nbody\r\n";
+        $message = (new MailMimeParser())->parse($raw, false);
+        $this->assertSame('utf-8', $message->getHeaderParameter('Content-Type', 'charset'));
+        $this->assertSame('text/plain', $message->getHeaderValue('Content-Type'));
+    }
 }
