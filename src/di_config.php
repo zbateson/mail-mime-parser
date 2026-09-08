@@ -9,6 +9,7 @@ use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Reference;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use ZBateson\MailMimeParser\Header\Consumer\CommentConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\DomainConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\Received\GenericReceivedConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService;
@@ -38,6 +39,10 @@ return [
     // parsing stops with a recorded error.
     'maxMessagePartCount' => 10000,
 
+    // Maximum nesting depth of parenthesized comments in a header value.
+    // Comments deeper than this are still parsed over but not kept.
+    'maxCommentDepth' => 32,
+
     'fromDomainConsumerService' => (new AutowireDefinitionHelper(DomainConsumerService::class))
         ->constructorParameter('partName', 'from'),
     'byDomainConsumerService' => (new AutowireDefinitionHelper(DomainConsumerService::class))
@@ -50,6 +55,10 @@ return [
         ->constructorParameter('partName', 'id'),
     'forGenericReceivedConsumerService' => (new AutowireDefinitionHelper(GenericReceivedConsumerService::class))
         ->constructorParameter('partName', 'for'),
+    CommentConsumerService::class => (new AutowireDefinitionHelper())
+        ->constructor(
+            maxCommentDepth: new Reference('maxCommentDepth')
+        ),
     ReceivedConsumerService::class => (new AutowireDefinitionHelper())
         ->constructor(
             fromDomainConsumerService: new Reference('fromDomainConsumerService'),

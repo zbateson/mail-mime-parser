@@ -95,6 +95,35 @@ class ParsingLimitsIntegrationTest extends TestCase
         $this->assertEmpty($message->getAllErrors());
     }
 
+    public function testNestedCommentsWithinMaxDepthArePreserved() : void
+    {
+        $parser = new MailMimeParser(null, ['maxCommentDepth' => 3]);
+        $message = $parser->parse("To: a@b.com (one (two (three)))\r\n\r\nbody\r\n", false);
+        $header = $message->getHeader('To');
+        $this->assertSame(['one (two (three))'], $header->getComments());
+        $this->assertSame('a@b.com', $header->getAddresses()[0]->getEmail());
+    }
+
+    public function testCommentsBeyondMaxDepthAreDropped() : void
+    {
+        $parser = new MailMimeParser(null, ['maxCommentDepth' => 1]);
+        $message = $parser->parse("To: a@b.com (one (two (three)))\r\n\r\nbody\r\n", false);
+        $header = $message->getHeader('To');
+        // the nested comments are parsed over, but not kept
+        $this->assertSame(['one'], $header->getComments());
+        $this->assertSame('a@b.com', $header->getAddresses()[0]->getEmail());
+    }
+
+    public function testDeeplyNestedCommentDoesNotPreventParsingTheHeader() : void
+    {
+        $nested = \str_repeat('(', 5000) . \str_repeat(')', 5000);
+        $raw = 'To: ' . \implode("\r\n ", \str_split($nested, 3900)) . " a\@b.com\r\n\r\nbody\r\n";
+        $message = (new MailMimeParser())->parse($raw, false);
+        $addresses = $message->getHeader('To')->getAddresses();
+        $this->assertCount(1, $addresses);
+        $this->assertSame('a@b.com', $addresses[0]->getEmail());
+    }
+
     public function testManyHeaderParametersAreAllParsed() : void
     {
         $raw = "Content-Type: text/plain; charset=utf-8" . \str_repeat('; a=b', 500) . "\r\n\r\nbody\r\n";
