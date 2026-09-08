@@ -28,7 +28,8 @@ class MimeParserService extends AbstractParserService
         PartBuilderFactory $partBuilderFactory,
         protected readonly PartHeaderContainerFactory $partHeaderContainerFactory,
         protected readonly HeaderParserService $headerParser,
-        protected readonly int $maxMimePartDepth = 256
+        protected readonly int $maxMimePartDepth = 256,
+        protected readonly int $maxMessagePartCount = 10000
     ) {
         parent::__construct($parserMessageProxyFactory, $parserMimePartProxyFactory, $partBuilderFactory);
     }
@@ -157,9 +158,24 @@ class MimeParserService extends AbstractParserService
             );
             return null;
         }
+        // isEndBoundaryFound() means there are no more real children to create,
+        // only possible hidden content past the end boundary, so the limit
+        // isn't reached by a message that legitimately has exactly
+        // $maxMessagePartCount parts.
+        if (!$proxy->isEndBoundaryFound() && $proxy->getPartCount() >= $this->maxMessagePartCount) {
+            $proxy->addError(
+                'Maximum message part count of ' . $this->maxMessagePartCount . ' reached',
+                LogLevel::ERROR
+            );
+            return null;
+        }
         $headerContainer = $this->partHeaderContainerFactory->newInstance();
         $child = $this->partBuilderFactory->newChildPartBuilder($headerContainer, $proxy);
-        return $this->createPart($proxy, $headerContainer, $child);
+        $childProxy = $this->createPart($proxy, $headerContainer, $child);
+        if ($childProxy !== null) {
+            $proxy->incrementPartCount();
+        }
+        return $childProxy;
     }
 
     /**

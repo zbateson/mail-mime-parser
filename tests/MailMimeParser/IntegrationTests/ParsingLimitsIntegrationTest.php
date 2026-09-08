@@ -4,6 +4,7 @@ namespace ZBateson\MailMimeParser\IntegrationTests;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\IMessage;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
@@ -27,30 +28,71 @@ class ParsingLimitsIntegrationTest extends TestCase
         return $head . "Content-Type: text/plain\r\n\r\nx\r\n" . $tail;
     }
 
+    private function siblingMessage(int $count) : string
+    {
+        return "Content-Type: multipart/mixed; boundary=b\r\n\r\n"
+            . \str_repeat("--b\r\nContent-Type: text/plain\r\n\r\nx\r\n", $count)
+            . "--b--\r\n";
+    }
+
+    private function uuEncodedMessage(int $count) : string
+    {
+        return "Subject: test\r\n\r\n" . \str_repeat("begin 644 file.txt\r\nend\r\n", $count);
+    }
+
+    private function assertErrorRecorded(IMessage $message, string $needle) : void
+    {
+        foreach ($message->getAllErrors() as $e) {
+            if (\str_contains($e->getMessage(), $needle)) {
+                $this->assertTrue(true);
+                return;
+            }
+        }
+        $this->fail("expected an error containing \"$needle\" to be recorded");
+    }
+
     public function testNestingBeyondMaxDepthRecordsError() : void
     {
         $message = (new MailMimeParser())->parse($this->nestedMessage(300), false);
-        $found = false;
-        foreach ($message->getAllErrors() as $e) {
-            if (\str_contains($e->getMessage(), 'nesting depth')) {
-                $found = true;
-                break;
-            }
-        }
-        $this->assertTrue($found, 'expected a max nesting depth error to be recorded');
+        $this->assertErrorRecorded($message, 'nesting depth');
     }
 
     public function testManyHeadersRecordsError() : void
     {
         $raw = "From: a@b\r\n" . \str_repeat("X-H: v\r\n", 5000) . "\r\nbody\r\n";
         $message = (new MailMimeParser())->parse($raw, false);
-        $found = false;
-        foreach ($message->getAllErrors() as $e) {
-            if (\str_contains($e->getMessage(), 'Header count or total size limit')) {
-                $found = true;
-                break;
-            }
-        }
-        $this->assertTrue($found, 'expected a header limit error to be recorded');
+        $this->assertErrorRecorded($message, 'Header count or total size limit');
+    }
+
+    public function testSiblingPartsBeyondMaxCountStopParsingAndRecordError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessagePartCount' => 5]);
+        $message = $parser->parse($this->siblingMessage(50), false);
+        $this->assertSame(5, $message->getChildCount());
+        $this->assertErrorRecorded($message, 'Maximum message part count of 5 reached');
+    }
+
+    public function testUUEncodedPartsBeyondMaxCountStopParsingAndRecordError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessagePartCount' => 5]);
+        $message = $parser->parse($this->uuEncodedMessage(50), false);
+        $this->assertSame(5, $message->getChildCount());
+        $this->assertErrorRecorded($message, 'Maximum message part count of 5 reached');
+    }
+
+    public function testSiblingPartsUnderMaxCountAreAllParsed() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessagePartCount' => 5]);
+        $message = $parser->parse($this->siblingMessage(5), false);
+        $this->assertSame(5, $message->getChildCount());
+        $this->assertEmpty($message->getAllErrors());
+    }
+
+    public function testUUEncodedPartsUnderMaxCountAreAllParsed() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessagePartCount' => 5]);
+        $message = $parser->parse($this->uuEncodedMessage(5), false);
+        $this->assertSame(5, $message->getChildCount());
+        $this->assertEmpty($message->getAllErrors());
     }
 }

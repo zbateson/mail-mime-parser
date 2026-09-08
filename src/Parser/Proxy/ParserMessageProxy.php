@@ -23,6 +23,13 @@ class ParserMessageProxy extends ParserMimePartProxy
      */
     protected int $lastLineEndingLength = 0;
 
+    /**
+     * @var int the number of parts created so far while parsing this message,
+     *      used to bound the total number of parts a single message may
+     *      create.
+     */
+    protected int $partCount = 0;
+
     public function getLastLineEndingLength() : int
     {
         return $this->lastLineEndingLength;
@@ -31,6 +38,17 @@ class ParserMessageProxy extends ParserMimePartProxy
     public function setLastLineEndingLength(int $lastLineEndingLength) : static
     {
         $this->lastLineEndingLength = $lastLineEndingLength;
+        return $this;
+    }
+
+    public function getPartCount() : int
+    {
+        return $this->partCount;
+    }
+
+    public function incrementPartCount() : static
+    {
+        ++$this->partCount;
         return $this;
     }
 }

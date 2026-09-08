@@ -7,6 +7,7 @@
 
 namespace ZBateson\MailMimeParser\Parser;
 
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\Parser\Part\UUEncodedPartHeaderContainerFactory;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy;
 use ZBateson\MailMimeParser\Parser\Proxy\ParserNonMimeMessageProxy;
@@ -26,7 +27,8 @@ class NonMimeParserService extends AbstractParserService
         ParserNonMimeMessageProxyFactory $parserNonMimeMessageProxyFactory,
         ParserUUEncodedPartProxyFactory $parserUuEncodedPartProxyFactory,
         PartBuilderFactory $partBuilderFactory,
-        protected readonly UUEncodedPartHeaderContainerFactory $partHeaderContainerFactory
+        protected readonly UUEncodedPartHeaderContainerFactory $partHeaderContainerFactory,
+        protected readonly int $maxMessagePartCount = 10000
     ) {
         parent::__construct($parserNonMimeMessageProxyFactory, $parserUuEncodedPartProxyFactory, $partBuilderFactory);
     }
@@ -103,8 +105,16 @@ class NonMimeParserService extends AbstractParserService
         if ($proxy->getNextPartStart() === null || \feof($handle)) {
             return null;
         }
+        if ($proxy->getPartCount() >= $this->maxMessagePartCount) {
+            $proxy->addError(
+                'Maximum message part count of ' . $this->maxMessagePartCount . ' reached',
+                LogLevel::ERROR
+            );
+            return null;
+        }
         $child = $this->createPart($proxy);
         $proxy->clearNextPart();
+        $proxy->incrementPartCount();
         return $child;
     }
 }
