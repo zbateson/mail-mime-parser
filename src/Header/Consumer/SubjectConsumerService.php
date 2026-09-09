@@ -24,9 +24,12 @@ use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
  */
 class SubjectConsumerService extends AbstractGenericConsumerService
 {
-    public function __construct(LoggerInterface $logger, MimeTokenPartFactory $partFactory)
-    {
-        parent::__construct($logger, $partFactory);
+    public function __construct(
+        LoggerInterface $logger,
+        MimeTokenPartFactory $partFactory,
+        int $maxHeaderTokenCount = 20000
+    ) {
+        parent::__construct($logger, $partFactory, [], $maxHeaderTokenCount);
     }
 
     /**

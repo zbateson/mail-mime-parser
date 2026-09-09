@@ -35,7 +35,8 @@ class ReceivedConsumerService extends AbstractConsumerService
         GenericReceivedConsumerService $idGenericReceivedConsumerService,
         GenericReceivedConsumerService $forGenericReceivedConsumerService,
         ReceivedDateConsumerService $receivedDateConsumerService,
-        CommentConsumerService $commentConsumerService
+        CommentConsumerService $commentConsumerService,
+        int $maxHeaderTokenCount = 20000
     ) {
         parent::__construct(
             $logger,
@@ -49,7 +50,8 @@ class ReceivedConsumerService extends AbstractConsumerService
                 $forGenericReceivedConsumerService,
                 $receivedDateConsumerService,
                 $commentConsumerService
-            ]
+            ],
+            $maxHeaderTokenCount
         );
     }
 

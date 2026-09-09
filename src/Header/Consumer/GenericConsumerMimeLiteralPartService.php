@@ -22,13 +22,15 @@ class GenericConsumerMimeLiteralPartService extends GenericConsumerService
         LoggerInterface $logger,
         MimeTokenPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
-        QuotedStringConsumerService $quotedStringConsumerService
+        QuotedStringConsumerService $quotedStringConsumerService,
+        int $maxHeaderTokenCount = 20000
     ) {
         parent::__construct(
             $logger,
             $partFactory,
             $commentConsumerService,
-            $quotedStringConsumerService
+            $quotedStringConsumerService,
+            $maxHeaderTokenCount
         );
     }
 }

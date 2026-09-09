@@ -11,6 +11,7 @@ use ArrayIterator;
 use Iterator;
 use NoRewindIterator;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MailMimeParser\Header\Part\HeaderPartFactory;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
@@ -37,7 +38,8 @@ abstract class AbstractConsumerService implements IConsumerService
     public function __construct(
         protected readonly LoggerInterface $logger,
         protected readonly HeaderPartFactory $partFactory,
-        protected array $subConsumers = []
+        protected array $subConsumers = [],
+        protected readonly int $maxHeaderTokenCount = 20000
     ) {
     }
 
@@ -90,7 +92,25 @@ abstract class AbstractConsumerService implements IConsumerService
     private function parseRawValue(string $value) : array
     {
         $tokens = $this->splitRawValue($value);
-        return $this->parseTokensIntoParts(new NoRewindIterator(new ArrayIterator($tokens)));
+        $truncated = (\count($tokens) > $this->maxHeaderTokenCount);
+        if ($truncated) {
+            // everything past the limit is kept, but as a single unparsed
+            // token, so the value isn't silently losing content
+            $remainder = \implode('', \array_slice($tokens, $this->maxHeaderTokenCount));
+            $tokens = \array_slice($tokens, 0, $this->maxHeaderTokenCount);
+            $tokens[] = $remainder;
+        }
+        $parts = $this->parseTokensIntoParts(new NoRewindIterator(new ArrayIterator($tokens)));
+        if ($truncated && !empty($parts)) {
+            // a header's parts are its ErrorBag children, so recording this on
+            // the last one surfaces it from IHeader::getAllErrors()
+            $parts[\array_key_last($parts)]->addError(
+                'Header value token limit of ' . $this->maxHeaderTokenCount
+                    . ' reached, the remainder was not parsed',
+                LogLevel::ERROR
+            );
+        }
+        return $parts;
     }
 
     /**

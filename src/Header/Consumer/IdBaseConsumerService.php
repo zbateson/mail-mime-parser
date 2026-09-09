@@ -27,7 +27,8 @@ class IdBaseConsumerService extends AbstractConsumerService
         HeaderPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
         QuotedStringConsumerService $quotedStringConsumerService,
-        IdConsumerService $idConsumerService
+        IdConsumerService $idConsumerService,
+        int $maxHeaderTokenCount = 20000
     ) {
         parent::__construct(
             $logger,
@@ -36,7 +37,8 @@ class IdBaseConsumerService extends AbstractConsumerService
                 $commentConsumerService,
                 $quotedStringConsumerService,
                 $idConsumerService
-            ]
+            ],
+            $maxHeaderTokenCount
         );
     }
 
