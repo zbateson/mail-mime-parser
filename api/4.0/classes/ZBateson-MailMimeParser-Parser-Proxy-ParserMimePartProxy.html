@@ -381,6 +381,14 @@ for a multipart message part.</dd>
 <dd>Returns the IMessagePart associated with this proxy.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getPartCount">getPartCount()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Returns the number of parts created so far while parsing the message
+this part belongs to.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getStream">getStream()</a>
     <span>
                                 &nbsp;: <abbr title="\Psr\Http\Message\StreamInterface">StreamInterface</abbr>    </span>
@@ -417,6 +425,14 @@ the main raw message stream, or null if not set.</dd>
 </dt>
 <dd>Returns the byte offset start position for this part within the message
 stream.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_incrementPartCount">incrementPartCount()</a>
+    <span>
+                                &nbsp;: static    </span>
+</dt>
+<dd>Increments the number of parts created while parsing the message this
+part belongs to.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_isContentParsed">isContentParsed()</a>
@@ -1395,7 +1411,7 @@ headers) in the message's stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">287</span>
+    <span class="phpdocumentor-element-found-in__line">316</span>
 
     </aside>
 
@@ -1507,7 +1523,7 @@ this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">278</span>
+    <span class="phpdocumentor-element-found-in__line">307</span>
 
     </aside>
 
@@ -1743,6 +1759,46 @@ for a multipart message part.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getPartCount">
+        getPartCount()
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getPartCount" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">285</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the number of parts created so far while parsing the message
+this part belongs to.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getPartCount</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"><p>The count is message-wide, so ParserMimePartProxy simply calls
+getPartCount() on its parent, which must eventually reach a
+ParserMessageProxy which actually keeps the count and returns it.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>the number of parts created for this message so far</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getStream">
         getStream()
         <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#method_getStream" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1909,6 +1965,44 @@ stream.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_incrementPartCount">
+        incrementPartCount()
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_incrementPartCount" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">298</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Increments the number of parts created while parsing the message this
+part belongs to.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">incrementPartCount</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
+
+        <section class="phpdocumentor-description"><p>The count is message-wide, so ParserMimePartProxy simply calls
+incrementPartCount() on its parent, which must eventually reach a
+ParserMessageProxy which actually stores the count.</p>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">static</span>
             &mdash;
         
     

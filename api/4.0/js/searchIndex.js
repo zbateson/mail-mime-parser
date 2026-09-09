@@ -416,6 +416,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#property_subConsumers"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractConsumerService\u003A\u003A\u0024maxHeaderTokenCount",
+            "name": "maxHeaderTokenCount",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-AbstractConsumerService.html#property_maxHeaderTokenCount"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\AbstractGenericConsumerService",
             "name": "AbstractGenericConsumerService",
             "summary": "A\u0020minimal\u0020implementation\u0020of\u0020AbstractConsumerService\u0020splitting\u0020tokens\u0020by\nwhitespace.",
@@ -591,6 +596,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html#method___construct"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\CommentConsumerService\u003A\u003AparseTokensIntoParts\u0028\u0029",
+            "name": "parseTokensIntoParts",
+            "summary": "Overridden\u0020to\u0020keep\u0020track\u0020of\u0020the\u0020current\u0020comment\u0020nesting\u0020depth.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html#method_parseTokensIntoParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\CommentConsumerService\u003A\u003AdiscardNestedComment\u0028\u0029",
+            "name": "discardNestedComment",
+            "summary": "Consumes\u0020tokens\u0020to\u0020the\u0020end\u0020of\u0020the\u0020current\u0020comment\u0020without\u0020recursing\u0020into\nit\u0020or\u0020constructing\u0020any\u0020parts\u0020for\u0020it.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html#method_discardNestedComment"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\CommentConsumerService\u003A\u003AgetTokenSeparators\u0028\u0029",
             "name": "getTokenSeparators",
             "summary": "Returns\u0020patterns\u0020matching\u0020open\u0020and\u0020close\u0020parenthesis\u0020characters\nas\u0020separators.",
@@ -620,6 +635,16 @@ Search.appendIndex(
             "name": "processParts",
             "summary": "Post\u0020processing\u0020involves\u0020creating\u0020a\u0020single\u0020Part\\CommentPart\u0020out\u0020of\ngenerated\u0020parts\u0020from\u0020tokens.\u0020\u0020The\u0020Part\\CommentPart\u0020is\u0020returned\u0020in\u0020an\narray.",
             "url": "classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html#method_processParts"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\CommentConsumerService\u003A\u003A\u0024depth",
+            "name": "depth",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html#property_depth"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\CommentConsumerService\u003A\u003A\u0024maxCommentDepth",
+            "name": "maxCommentDepth",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Header-Consumer-CommentConsumerService.html#property_maxCommentDepth"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Consumer\\DateConsumerService",
             "name": "DateConsumerService",
@@ -1495,6 +1520,11 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method___construct"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AnewSpaceSentinel\u0028\u0029",
+            "name": "newSpaceSentinel",
+            "summary": "Returns\u0020the\u0020stand\u002Din\u0020used\u0020for\u0020the\u0020boundaries\u0020on\u0020either\u0020side\u0020of\u0020the\u0020parts\nbeing\u0020filtered,\u0020so\u0020the\u0020first\u0020and\u0020last\u0020part\u0020have\u0020something\u0020to\u0020compare\nagainst.",
+            "url": "classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html#method_newSpaceSentinel"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Header\\Part\\ContainerPart\u003A\u003AfilterIgnoredSpaces\u0028\u0029",
             "name": "filterIgnoredSpaces",
@@ -4201,6 +4231,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_maxMimePartDepth"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\MimeParserService\u003A\u003A\u0024maxMessagePartCount",
+            "name": "maxMessagePartCount",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-MimeParserService.html#property_maxMessagePartCount"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\NonMimeParserService",
             "name": "NonMimeParserService",
             "summary": "Parses\u0020content\u0020for\u0020non\u002Dmime\u0020messages\u0020and\u0020uu\u002Dencoded\u0020child\u0020parts.",
@@ -4240,6 +4275,11 @@ Search.appendIndex(
             "name": "partHeaderContainerFactory",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-NonMimeParserService.html#property_partHeaderContainerFactory"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\NonMimeParserService\u003A\u003A\u0024maxMessagePartCount",
+            "name": "maxMessagePartCount",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-NonMimeParserService.html#property_maxMessagePartCount"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\ParserManagerService",
             "name": "ParserManagerService",
@@ -4636,10 +4676,25 @@ Search.appendIndex(
             "summary": "Sets\u0020the\u0020length\u0020of\u0020the\u0020last\u0020line\u0020ending\u0020read\u0020by\u0020MimeParser\u0020\u0028e.g.\u00202\u0020for\n\u0027\\r\\n\u0027,\u0020or\u00201\u0020for\u0020\u0027\\n\u0027\u0029.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxy.html#method_setLastLineEndingLength"
         },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMessageProxy\u003A\u003AgetPartCount\u0028\u0029",
+            "name": "getPartCount",
+            "summary": "Returns\u0020the\u0020number\u0020of\u0020parts\u0020created\u0020so\u0020far\u0020while\u0020parsing\u0020the\u0020message\nthis\u0020part\u0020belongs\u0020to.",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxy.html#method_getPartCount"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMessageProxy\u003A\u003AincrementPartCount\u0028\u0029",
+            "name": "incrementPartCount",
+            "summary": "Increments\u0020the\u0020number\u0020of\u0020parts\u0020created\u0020while\u0020parsing\u0020the\u0020message\u0020this\npart\u0020belongs\u0020to.",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxy.html#method_incrementPartCount"
+        },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMessageProxy\u003A\u003A\u0024lastLineEndingLength",
             "name": "lastLineEndingLength",
             "summary": "",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxy.html#property_lastLineEndingLength"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMessageProxy\u003A\u003A\u0024partCount",
+            "name": "partCount",
+            "summary": "",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMessageProxy.html#property_partCount"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMessageProxyFactory",
             "name": "ParserMessageProxyFactory",
@@ -4735,6 +4790,16 @@ Search.appendIndex(
             "name": "getLastLineEndingLength",
             "summary": "Returns\u0020the\u0020length\u0020of\u0020the\u0020last\u0020line\u0020ending\u0020read\u0020by\u0020MimeParser\u0020\u0028e.g.\u00202\u0020for\n\u0027\\r\\n\u0027,\u0020or\u00201\u0020for\u0020\u0027\\n\u0027\u0029.",
             "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getLastLineEndingLength"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003AgetPartCount\u0028\u0029",
+            "name": "getPartCount",
+            "summary": "Returns\u0020the\u0020number\u0020of\u0020parts\u0020created\u0020so\u0020far\u0020while\u0020parsing\u0020the\u0020message\nthis\u0020part\u0020belongs\u0020to.",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getPartCount"
+        },                {
+            "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003AincrementPartCount\u0028\u0029",
+            "name": "incrementPartCount",
+            "summary": "Increments\u0020the\u0020number\u0020of\u0020parts\u0020created\u0020while\u0020parsing\u0020the\u0020message\u0020this\npart\u0020belongs\u0020to.",
+            "url": "classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_incrementPartCount"
         },                {
             "fqsen": "\\ZBateson\\MailMimeParser\\Parser\\Proxy\\ParserMimePartProxy\u003A\u003AgetLastAddedChild\u0028\u0029",
             "name": "getLastAddedChild",
