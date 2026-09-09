@@ -152,9 +152,16 @@ ends on a &#039;&gt;&#039; char.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterConsumerService">ParameterConsumerService</abbr></a></dt>
         <dd>Reads headers separated into parameters consisting of an optional main value,
 and subsequent name/value pairs - for example text/html; charset=utf-8.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService">ParameterNameValueConsumerService</abbr></a></dt>
+        <dd>Parses an individual part of a parameter header.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService">ParameterValueConsumerService</abbr></a></dt>
+        <dd>Starts processing tokens after a &#039;=&#039; character is found, indicating the
+&#039;value&#039; portion of a name/value pair in a parameter header.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringConsumerService">QuotedStringConsumerService</abbr></a></dt>
         <dd>Represents a quoted part of a header value starting at a double quote, and
 ending at the next double quote.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService">QuotedStringMimeLiteralPartConsumerService</abbr></a></dt>
+        <dd>Allows for mime-encoded parts inside a quoted part.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ReceivedConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ReceivedConsumerService">ReceivedConsumerService</abbr></a></dt>
         <dd>Parses a Received header into ReceivedParts, ReceivedDomainParts, a DatePart,
 and CommentParts.</dd>
@@ -162,13 +169,6 @@ and CommentParts.</dd>
         <dd>Extends AbstractGenericConsumerService to use a MimeTokenPartFactory, and
 to preserve all whitespace and escape sequences as-is (unlike other headers
 subject headers don&#039;t have escape chars such as &#039;\\&#039; for a backslash).</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterNameValueConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterNameValueConsumerService">ParameterNameValueConsumerService</abbr></a></dt>
-        <dd>Parses an individual part of a parameter header.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-ParameterValueConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\ParameterValueConsumerService">ParameterValueConsumerService</abbr></a></dt>
-        <dd>Starts processing tokens after a &#039;=&#039; character is found, indicating the
-&#039;value&#039; portion of a name/value pair in a parameter header.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartConsumerService.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartConsumerService">QuotedStringMimeLiteralPartConsumerService</abbr></a></dt>
-        <dd>Allows for mime-encoded parts inside a quoted part.</dd>
     
             <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/ZBateson-MailMimeParser-Header-Consumer-QuotedStringMimeLiteralPartTokenSplitPatternTrait.html"><abbr title="\ZBateson\MailMimeParser\Header\Consumer\QuotedStringMimeLiteralPartTokenSplitPatternTrait">QuotedStringMimeLiteralPartTokenSplitPatternTrait</abbr></a></dt>
         <dd>Provides a getTokenSplitPattern for consumers that could have quoted parts

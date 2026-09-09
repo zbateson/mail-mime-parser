@@ -113,6 +113,8 @@
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-CommentPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\CommentPart">CommentPart</abbr></a></dt>
         <dd>Represents a mime header comment -- text in a structured mime header
 value existing within parentheses.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a></dt>
+        <dd>Base HeaderPart for a part that consists of other parts.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-DatePart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\DatePart">DatePart</abbr></a></dt>
         <dd>Represents the value of a date header, parsing the date into a \DateTime
 object.</dd>
@@ -120,19 +122,6 @@ object.</dd>
         <dd>Abstract base class representing a single part of a parsed header.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-HeaderPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\HeaderPartFactory">HeaderPartFactory</abbr></a></dt>
         <dd>Constructs and returns IHeaderPart objects.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a></dt>
-        <dd>Represents a name/value parameter part of a header.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedDomainPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart">ReceivedDomainPart</abbr></a></dt>
-        <dd>Holds extra information about a parsed Received header part, for FROM and BY
-parts, namely: ehlo name, hostname, and address.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedPart">ReceivedPart</abbr></a></dt>
-        <dd>Represents one parameter in a parsed &#039;Received&#039; header, e.g. the FROM or VIA
-part.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-Token.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\Token">Token</abbr></a></dt>
-        <dd>Holds a string value token that will require additional processing by a
-consumer prior to returning to a client.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ContainerPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ContainerPart">ContainerPart</abbr></a></dt>
-        <dd>Base HeaderPart for a part that consists of other parts.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-MimeToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\MimeToken">MimeToken</abbr></a></dt>
         <dd>Represents a single mime header part token, with the possibility of it being
 MIME-Encoded as per RFC-2047.</dd>
@@ -141,14 +130,25 @@ MIME-Encoded as per RFC-2047.</dd>
 newInstance method.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-NameValuePart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\NameValuePart">NameValuePart</abbr></a></dt>
         <dd>Represents a name/value pair part of a header.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ParameterPart">ParameterPart</abbr></a></dt>
+        <dd>Represents a name/value parameter part of a header.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-QuotedLiteralPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\QuotedLiteralPart">QuotedLiteralPart</abbr></a></dt>
         <dd>A quoted literal header string part.  The value of the part is stripped of CR
 and LF characters, and whitespace between two adjacent MimeTokens is removed.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedDomainPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedDomainPart">ReceivedDomainPart</abbr></a></dt>
+        <dd>Holds extra information about a parsed Received header part, for FROM and BY
+parts, namely: ehlo name, hostname, and address.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-ReceivedPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\ReceivedPart">ReceivedPart</abbr></a></dt>
+        <dd>Represents one parameter in a parsed &#039;Received&#039; header, e.g. the FROM or VIA
+part.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-SplitParameterPart.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SplitParameterPart">SplitParameterPart</abbr></a></dt>
         <dd>Holds a running value for an RFC-2231 split header parameter.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-SubjectToken.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\SubjectToken">SubjectToken</abbr></a></dt>
         <dd>Specialized token for subjects that preserves whitespace, except for new
 lines.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/ZBateson-MailMimeParser-Header-Part-Token.html"><abbr title="\ZBateson\MailMimeParser\Header\Part\Token">Token</abbr></a></dt>
+        <dd>Holds a string value token that will require additional processing by a
+consumer prior to returning to a client.</dd>
     
     
     </dl>
