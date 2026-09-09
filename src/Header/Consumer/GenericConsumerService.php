@@ -23,12 +23,14 @@ class GenericConsumerService extends AbstractGenericConsumerService
         LoggerInterface $logger,
         HeaderPartFactory $partFactory,
         CommentConsumerService $commentConsumerService,
-        QuotedStringConsumerService $quotedStringConsumerService
+        QuotedStringConsumerService $quotedStringConsumerService,
+        int $maxHeaderTokenCount = 20000
     ) {
         parent::__construct(
             $logger,
             $partFactory,
-            [$commentConsumerService, $quotedStringConsumerService]
+            [$commentConsumerService, $quotedStringConsumerService],
+            $maxHeaderTokenCount
         );
     }
 }

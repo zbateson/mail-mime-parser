@@ -27,9 +27,10 @@ class AddressBaseConsumerService extends AbstractConsumerService
     public function __construct(
         LoggerInterface $logger,
         HeaderPartFactory $partFactory,
-        AddressConsumerService $addressConsumerService
+        AddressConsumerService $addressConsumerService,
+        int $maxHeaderTokenCount = 20000
     ) {
-        parent::__construct($logger, $partFactory, [$addressConsumerService]);
+        parent::__construct($logger, $partFactory, [$addressConsumerService], $maxHeaderTokenCount);
     }
 
     /**

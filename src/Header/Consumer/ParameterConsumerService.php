@@ -38,12 +38,14 @@ class ParameterConsumerService extends AbstractGenericConsumerService
         HeaderPartFactory $partFactory,
         ParameterNameValueConsumerService $parameterNameValueConsumerService,
         CommentConsumerService $commentConsumerService,
-        QuotedStringConsumerService $quotedStringConsumerService
+        QuotedStringConsumerService $quotedStringConsumerService,
+        int $maxHeaderTokenCount = 20000
     ) {
         parent::__construct(
             $logger,
             $partFactory,
-            [$parameterNameValueConsumerService, $commentConsumerService, $quotedStringConsumerService]
+            [$parameterNameValueConsumerService, $commentConsumerService, $quotedStringConsumerService],
+            $maxHeaderTokenCount
         );
     }
 

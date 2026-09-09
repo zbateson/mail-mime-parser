@@ -3,7 +3,7 @@
 namespace ZBateson\MailMimeParser\IntegrationTests;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\IErrorBag;
 use ZBateson\MailMimeParser\MailMimeParser;
 
 /**
@@ -39,9 +39,9 @@ class ParsingLimitsIntegrationTest extends TestCase
         return "Subject: test\r\n\r\n" . \str_repeat("begin 644 file.txt\r\nend\r\n", $count);
     }
 
-    private function assertErrorRecorded(IMessage $message, string $needle) : void
+    private function assertErrorRecorded(IErrorBag $errorBag, string $needle) : void
     {
-        foreach ($message->getAllErrors() as $e) {
+        foreach ($errorBag->getAllErrors(true) as $e) {
             if (\str_contains($e->getMessage(), $needle)) {
                 $this->assertTrue(true);
                 return;
@@ -122,6 +122,32 @@ class ParsingLimitsIntegrationTest extends TestCase
         $addresses = $message->getHeader('To')->getAddresses();
         $this->assertCount(1, $addresses);
         $this->assertSame('a@b.com', $addresses[0]->getEmail());
+    }
+
+    public function testHeaderValueBeyondMaxTokenCountRecordsError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxHeaderTokenCount' => 10]);
+        $message = $parser->parse("To: " . \rtrim(\str_repeat('a@b.com,', 20), ',') . "\r\n\r\nbody\r\n", false);
+        $this->assertErrorRecorded($message->getHeader('To'), 'token limit of 10 reached');
+    }
+
+    public function testHeaderValueBeyondMaxTokenCountKeepsTheRemainder() : void
+    {
+        $value = \trim(\str_repeat('word ', 20));
+        $parser = new MailMimeParser(null, ['maxHeaderTokenCount' => 10]);
+        $message = $parser->parse("Subject: $value\r\n\r\nbody\r\n", false);
+        // past the limit the rest is kept as a single unparsed token, so no
+        // content is silently dropped from the value
+        $this->assertSame($value, $message->getHeader('Subject')->getValue());
+    }
+
+    public function testHeaderValueUnderMaxTokenCountRecordsNoError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxHeaderTokenCount' => 10]);
+        $message = $parser->parse("Subject: word word\r\n\r\nbody\r\n", false);
+        $header = $message->getHeader('Subject');
+        $this->assertSame('word word', $header->getValue());
+        $this->assertEmpty($header->getAllErrors(true));
     }
 
     public function testManyHeaderParametersAreAllParsed() : void
