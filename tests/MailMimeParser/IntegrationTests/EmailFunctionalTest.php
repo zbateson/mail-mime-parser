@@ -2837,4 +2837,17 @@ class EmailFunctionalTest extends TestCase
         $failMessage = 'Failed while parsing saved message for invalid-charset';
         $this->runEmailTestForMessage($messageWritten, $props, $failMessage);
     }
+
+    public function testParseEmailInvalidNoBody() : void
+    {
+        $messagePath = $this->messageDir . '/invalid-no-body.txt';
+        $handle = \fopen($messagePath, 'r');
+        $message = $this->parser->parse($handle, true);
+
+        $this->assertEquals('test@host.tld', $message->getHeaderValue('Return-Path'));
+        $this->assertEquals('id', $message->getHeaderValue('Message-ID'));
+        $this->assertFalse($message->hasContent());
+        $this->assertNull($message->getContent());
+        $this->assertEquals(\file_get_contents($messagePath), (string) $message);
+    }
 }

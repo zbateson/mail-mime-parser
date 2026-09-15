@@ -87,13 +87,14 @@ class NonMimeParserService extends AbstractParserService
     public function parseContent(ParserPartProxy $proxy) : static
     {
         \assert($proxy instanceof ParserNonMimeMessageProxy || $proxy instanceof ParserUUEncodedPartProxy);
-        $handle = $proxy->getMessageResourceHandle();
-        if ($proxy->getNextPartStart() !== null || \feof($handle)) {
+        if ($proxy->getNextPartStart() !== null) {
             return $this;
         }
+        $pos = \ftell($proxy->getMessageResourceHandle());
         if ($proxy->getStreamContentStartPos() === null) {
-            $proxy->setStreamContentStartPos(\ftell($handle));
+            $proxy->setStreamContentStartPos($pos);
         }
+        $proxy->setStreamPartAndContentEndPos($pos);
         $this->parseNextPart($proxy);
         return $this;
     }

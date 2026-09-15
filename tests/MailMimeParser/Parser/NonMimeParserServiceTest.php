@@ -119,22 +119,37 @@ class NonMimeParserServiceTest extends TestCase
         $this->parserMessageProxy->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with(0);
-        $this->parserMessageProxy->expects($this->once())
+        $this->parserMessageProxy->expects($this->exactly(2))
             ->method('setStreamPartAndContentEndPos')
             ->with(0);
 
         $this->instance->parseContent($this->parserMessageProxy);
-        // on feof(), returns early
+        \fclose($handle);
+    }
+
+    public function testParseContentAtEof() : void
+    {
+        $handle = StreamWrapper::getResource(Utils::streamFor('test'));
+        \fread($handle, 10);
+        $this->assertTrue(\feof($handle));
+        $this->parserMessageProxy->expects($this->atLeastOnce())
+            ->method('getMessageResourceHandle')
+            ->willReturn($handle);
+        $this->parserMessageProxy->expects($this->once())
+            ->method('setStreamContentStartPos')
+            ->with(4);
+        $this->parserMessageProxy->expects($this->once())
+            ->method('setStreamPartAndContentEndPos')
+            ->with(4);
+
         $this->instance->parseContent($this->parserMessageProxy);
         \fclose($handle);
     }
 
     public function testParseContentWithNonNullNextPartStart() : void
     {
-        $handle = StreamWrapper::getResource(Utils::streamFor('test'));
-        $this->parserMessageProxy->expects($this->atLeastOnce())
-            ->method('getMessageResourceHandle')
-            ->willReturn($handle);
+        $this->parserMessageProxy->expects($this->never())
+            ->method('getMessageResourceHandle');
         $this->parserMessageProxy->expects($this->once())
             ->method('getNextPartStart')
             ->willReturn(1);
@@ -144,7 +159,6 @@ class NonMimeParserServiceTest extends TestCase
             ->method('setStreamPartAndContentEndPos');
 
         $this->instance->parseContent($this->parserMessageProxy);
-        \fclose($handle);
     }
 
     public function testParseContentReadsLinesToEnd() : void
@@ -157,9 +171,9 @@ class NonMimeParserServiceTest extends TestCase
         $this->parserMessageProxy->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with(0);
-        $this->parserMessageProxy->expects($this->exactly(3))
+        $this->parserMessageProxy->expects($this->exactly(4))
             ->method('setStreamPartAndContentEndPos')
-            ->with(...$this->consecutive([$this->anything()], [$this->anything()], [\strlen($str)]));
+            ->with(...$this->consecutive([0], [$this->anything()], [$this->anything()], [\strlen($str)]));
 
         $this->instance->parseContent($this->parserMessageProxy);
         \fclose($handle);
@@ -179,9 +193,9 @@ class NonMimeParserServiceTest extends TestCase
         $this->parserMessageProxy->expects($this->once())
             ->method('setStreamContentStartPos')
             ->with(0);
-        $this->parserMessageProxy->expects($this->exactly(2))
+        $this->parserMessageProxy->expects($this->exactly(3))
             ->method('setStreamPartAndContentEndPos')
-            ->with(...$this->consecutive([$this->anything()], [\strlen($first)]));
+            ->with(...$this->consecutive([0], [$this->anything()], [\strlen($first)]));
 
         $this->parserMessageProxy->expects($this->once())
             ->method('setNextPartStart')
