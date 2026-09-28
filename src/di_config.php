@@ -44,7 +44,7 @@ return [
 
     // Maximum number of parts (mime and uu-encoded) in a single message before
     // parsing stops with a recorded error.
-    'maxMessagePartCount' => 10000,
+    'maxMessagePartCount' => 1000,
 
     // Maximum nesting depth of parenthesized comments in a header value.
     // Comments deeper than this are still parsed over but not kept.
