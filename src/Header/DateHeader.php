@@ -25,14 +25,16 @@ class DateHeader extends AbstractHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?DateConsumerService $consumerService = null
+        ?DateConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
             $logger ?? $di->get(LoggerInterface::class),
             $consumerService ?? $di->get(DateConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

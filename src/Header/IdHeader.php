@@ -29,7 +29,8 @@ class IdHeader extends MimeEncodedHeader
         string $value,
         ?LoggerInterface $logger = null,
         ?MimeTokenPartFactory $mimeTokenPartFactory = null,
-        ?IdBaseConsumerService $consumerService = null
+        ?IdBaseConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
@@ -37,7 +38,8 @@ class IdHeader extends MimeEncodedHeader
             $mimeTokenPartFactory ?? $di->get(MimeTokenPartFactory::class),
             $consumerService ?? $di->get(IdBaseConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

@@ -9,6 +9,7 @@ namespace ZBateson\MailMimeParser\Header\Part;
 
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\ErrorBag;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use ZBateson\MbWrapper\MbWrapper;
 
 /**

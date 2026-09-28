@@ -45,14 +45,16 @@ class ParameterHeader extends AbstractHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?ParameterConsumerService $consumerService = null
+        ?ParameterConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
             $logger ?? $di->get(LoggerInterface::class),
             $consumerService ?? $di->get(ParameterConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 
@@ -60,9 +62,9 @@ class ParameterHeader extends AbstractHeader
      * Overridden to assign ParameterParts to a map of lower-case parameter
      * names to ParameterParts.
      */
-    protected function parseHeaderValue(IConsumerService $consumer, string $value) : void
+    protected function parseHeaderValue(IConsumerService $consumer, string $value, ?int $maxTokenCount = null) : void
     {
-        parent::parseHeaderValue($consumer, $value);
+        parent::parseHeaderValue($consumer, $value, $maxTokenCount);
         foreach ($this->parts as $part) {
             if ($part instanceof NameValuePart) {
                 $this->parameters[\strtolower($part->getName())] = $part;

@@ -150,6 +150,51 @@ class ParsingLimitsIntegrationTest extends TestCase
         $this->assertEmpty($header->getAllErrors(true));
     }
 
+    private function multipartWithContentTypes(int $count) : string
+    {
+        return "Content-Type: multipart/mixed; boundary=b\r\n\r\n"
+            . \str_repeat("--b\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nx\r\n", $count)
+            . "--b--\r\n";
+    }
+
+    public function testHeaderTokensBeyondMessageMaxRecordError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderTokenCount' => 15]);
+        $message = $parser->parse($this->multipartWithContentTypes(6), false);
+        $this->assertSame(6, $message->getChildCount());
+        $this->assertErrorRecorded($message, 'Message header token limit of 15 reached');
+    }
+
+    public function testHeaderTokensBeyondMessageMaxKeepTheirValue() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderTokenCount' => 15]);
+        $message = $parser->parse($this->multipartWithContentTypes(6), false);
+        $last = $message->getChild(5);
+        // past the limit the whole value is kept as a single unparsed token
+        $this->assertSame('text/plain; charset=utf-8', $last->getHeaderValue('Content-Type'));
+        $this->assertNull($last->getHeaderParameter('Content-Type', 'charset'));
+        $this->assertErrorRecorded($last->getHeader('Content-Type'), 'token limit of 0 reached');
+    }
+
+    public function testHeaderTokensUnderMessageMaxRecordNoError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderTokenCount' => 100]);
+        $message = $parser->parse($this->multipartWithContentTypes(6), false);
+        $this->assertSame('utf-8', $message->getChild(5)->getHeaderParameter('Content-Type', 'charset'));
+        $this->assertEmpty($message->getAllErrors(true));
+    }
+
+    public function testMessageHeaderTokenBudgetIsPerMessage() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderTokenCount' => 15]);
+        $first = $parser->parse($this->multipartWithContentTypes(6), false);
+        $this->assertErrorRecorded($first, 'Message header token limit of 15 reached');
+
+        $second = $parser->parse($this->multipartWithContentTypes(1), false);
+        $this->assertSame('utf-8', $second->getChild(0)->getHeaderParameter('Content-Type', 'charset'));
+        $this->assertEmpty($second->getAllErrors(true));
+    }
+
     public function testManyHeaderParametersAreAllParsed() : void
     {
         $raw = "Content-Type: text/plain; charset=utf-8" . \str_repeat('; a=b', 500) . "\r\n\r\nbody\r\n";

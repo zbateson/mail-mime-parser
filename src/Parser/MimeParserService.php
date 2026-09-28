@@ -193,7 +193,10 @@ class MimeParserService extends AbstractParserService
             );
             return null;
         }
-        $headerContainer = $this->partHeaderContainerFactory->newInstance();
+        $headerContainer = $this->partHeaderContainerFactory->newInstance(
+            null,
+            $proxy->getHeaderContainer()->getTokenBudget()
+        );
         $child = $this->partBuilderFactory->newChildPartBuilder($headerContainer, $proxy);
         $childProxy = $this->createPart($proxy, $headerContainer, $child);
         if ($childProxy !== null) {

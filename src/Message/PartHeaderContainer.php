@@ -10,10 +10,13 @@ namespace ZBateson\MailMimeParser\Message;
 use ArrayIterator;
 use IteratorAggregate;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Traversable;
 use ZBateson\MailMimeParser\ErrorBag;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
 use ZBateson\MailMimeParser\Header\IHeader;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
+use ZBateson\MailMimeParser\Header\Part\ContainerPart;
 
 /**
  * Maintains a collection of headers for a part.
@@ -57,6 +60,12 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     private $nextIndex = 0;
 
     /**
+     * @var ?HeaderTokenBudget shared by every container of the same message,
+     *      limiting the number of header tokens parsed across all of them.
+     */
+    private ?HeaderTokenBudget $tokenBudget;
+
+    /**
      * Pass a PartHeaderContainer as the second parameter.  This is useful when
      * creating a new MimePart with this PartHeaderContainer and the original
      * container is needed for parsing and changes to the header in the part
@@ -64,14 +73,18 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      *
      * @param PartHeaderContainer $cloneSource the original container to clone
      *        from
+     * @param HeaderTokenBudget $tokenBudget the budget to use, defaulting to
+     *        $cloneSource's if not passed
      */
     public function __construct(
         LoggerInterface $logger,
         HeaderFactory $headerFactory,
-        ?PartHeaderContainer $cloneSource = null
+        ?PartHeaderContainer $cloneSource = null,
+        ?HeaderTokenBudget $tokenBudget = null
     ) {
         parent::__construct($logger);
         $this->headerFactory = $headerFactory;
+        $this->tokenBudget = $tokenBudget ?? $cloneSource?->tokenBudget;
         if ($cloneSource !== null) {
             $this->headers = $cloneSource->headers;
             $this->headerObjects = $cloneSource->headerObjects;
@@ -79,6 +92,11 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
             $this->nextIndex = $cloneSource->nextIndex;
             $this->copyErrorsFrom($cloneSource);
         }
+    }
+
+    public function getTokenBudget() : ?HeaderTokenBudget
+    {
+        return $this->tokenBudget;
     }
 
     /**
@@ -175,12 +193,41 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
             return null;
         }
         if ($this->headerObjects[$index] === null) {
-            $this->headerObjects[$index] = $this->headerFactory->newInstance(
+            $header = $this->headerFactory->newInstance(
                 $this->headers[$index][0],
-                $this->headers[$index][1]
+                $this->headers[$index][1],
+                $this->tokenBudget?->getRemaining()
             );
+            if ($this->tokenBudget !== null) {
+                $this->tokenBudget->consume(self::countParts($header->getAllParts()));
+                if ($this->tokenBudget->getRemaining() === 0) {
+                    $header->addError(
+                        'Message header token limit of ' . $this->tokenBudget->getMaxTokenCount()
+                            . ' reached, further headers are not parsed',
+                        LogLevel::ERROR
+                    );
+                }
+            }
+            $this->headerObjects[$index] = $header;
         }
         return $this->headerObjects[$index];
+    }
+
+    /**
+     * Counts the passed parts and, recursively, their children.
+     *
+     * @param IHeaderPart[] $parts
+     */
+    private static function countParts(array $parts) : int
+    {
+        $count = 0;
+        foreach ($parts as $part) {
+            ++$count;
+            if ($part instanceof ContainerPart) {
+                $count += self::countParts($part->getChildParts());
+            }
+        }
+        return $count;
     }
 
     /**

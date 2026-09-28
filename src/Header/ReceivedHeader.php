@@ -94,14 +94,16 @@ class ReceivedHeader extends ParameterHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?ReceivedConsumerService $consumerService = null
+        ?ReceivedConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         $di = MailMimeParser::getGlobalContainer();
         AbstractHeader::__construct(
             $logger ?? $di->get(LoggerInterface::class),
             $consumerService ?? $di->get(ReceivedConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

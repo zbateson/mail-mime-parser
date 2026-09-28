@@ -42,14 +42,16 @@ class AddressHeader extends AbstractHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?AddressBaseConsumerService $consumerService = null
+        ?AddressBaseConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         $di = MailMimeParser::getGlobalContainer();
         parent::__construct(
             $logger ?? $di->get(LoggerInterface::class),
             $consumerService ?? $di->get(AddressBaseConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

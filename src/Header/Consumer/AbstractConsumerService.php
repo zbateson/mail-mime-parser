@@ -65,11 +65,15 @@ abstract class AbstractConsumerService implements IConsumerService
         $this->maxHeaderTokenCount = $maxHeaderTokenCount;
     }
 
-    public function __invoke(string $value) : array
+    /**
+     * @param ?int $maxTokenCount lowers the number of tokens parsed below the
+     *        configured maximum for this call
+     */
+    public function __invoke(string $value, ?int $maxTokenCount = null) : array
     {
         $this->logger->debug('Starting {class} for "{value}"', ['class' => static::class, 'value' => $value]);
         if ($value !== '') {
-            $parts = $this->parseRawValue($value);
+            $parts = $this->parseRawValue($value, $maxTokenCount);
             $this->logger->debug(
                 'Ending {class} for "{value}": parsed into {cnt} header part objects',
                 ['class' => static::class, 'value' => $value, 'cnt' => \count($parts)]
@@ -111,15 +115,16 @@ abstract class AbstractConsumerService implements IConsumerService
      * @return \ZBateson\MailMimeParser\Header\IHeaderPart[] the array of parsed
      *         parts
      */
-    private function parseRawValue(string $value) : array
+    private function parseRawValue(string $value, ?int $maxTokenCount = null) : array
     {
+        $limit = \min($maxTokenCount ?? $this->maxHeaderTokenCount, $this->maxHeaderTokenCount);
         $tokens = $this->splitRawValue($value);
-        $truncated = (\count($tokens) > $this->maxHeaderTokenCount);
+        $truncated = (\count($tokens) > $limit);
         if ($truncated) {
             // everything past the limit is kept, but as a single unparsed
             // token, so the value isn't silently losing content
-            $remainder = \implode('', \array_slice($tokens, $this->maxHeaderTokenCount));
-            $tokens = \array_slice($tokens, 0, $this->maxHeaderTokenCount);
+            $remainder = \implode('', \array_slice($tokens, $limit));
+            $tokens = \array_slice($tokens, 0, $limit);
             $tokens[] = $remainder;
         }
         $parts = $this->parseTokensIntoParts(new NoRewindIterator(new ArrayIterator($tokens)));
@@ -127,7 +132,7 @@ abstract class AbstractConsumerService implements IConsumerService
             // a header's parts are its ErrorBag children, so recording this on
             // the last one surfaces it from IHeader::getAllErrors()
             $parts[\array_key_last($parts)]->addError(
-                'Header value token limit of ' . $this->maxHeaderTokenCount
+                'Header value token limit of ' . $limit
                     . ' reached, the remainder was not parsed',
                 LogLevel::ERROR
             );
