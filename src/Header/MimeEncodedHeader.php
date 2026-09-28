@@ -8,6 +8,7 @@
 namespace ZBateson\MailMimeParser\Header;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Part\MimeToken;
 use ZBateson\MailMimeParser\Header\Part\MimeTokenPartFactory;
@@ -60,7 +61,10 @@ abstract class MimeEncodedHeader extends AbstractHeader
             $maxTokenCount
         );
         // only kept so their errors are reachable, so parts without any can go
-        $this->mimeEncodedParsedParts = \array_values(\array_filter($parts, fn ($part) => $part->hasAnyErrors()));
+        $this->mimeEncodedParsedParts = \array_values(\array_filter(
+            $parts,
+            fn ($part) => $part->hasAnyErrors(false, LogLevel::DEBUG)
+        ));
     }
 
     protected function getErrorBagChildren() : array
