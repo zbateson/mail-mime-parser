@@ -44,6 +44,10 @@ class ParserMimePartProxyFactory extends ParserPartProxyFactory
     {
         $parserProxy = new ParserMimePartProxy($partBuilder, $parser);
 
+        // parsed before the part's header container copies the parser's header
+        // objects, so the part reuses it rather than parsing it a second time
+        $parserProxy->getContentType();
+
         $streamContainer = $this->parserPartStreamContainerFactory->newInstance($parserProxy);
         $headerContainer = $this->partHeaderContainerFactory->newInstance($parserProxy->getHeaderContainer());
         $childrenContainer = $this->parserPartChildrenContainerFactory->newInstance($parserProxy);
