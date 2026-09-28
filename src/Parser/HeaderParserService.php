@@ -73,7 +73,9 @@ class HeaderParserService
             $line = MessageParserService::readLine($handle);
             $trimmed = ($line === false) ? '' : \rtrim($line, "\r\n");
             $ended = ($trimmed === '');
-            $budget?->consumeBytes(($line === false) ? 0 : \strlen($line));
+            // by position rather than length, since readLine truncates long
+            // lines but still consumes them
+            $budget?->consumeBytes(\ftell($handle) - $offset);
             if ($ended || ($line[0] !== "\t" && $line[0] !== ' ')) {
                 if ($header !== '') {
                     ++$count;
