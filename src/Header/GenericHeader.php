@@ -24,13 +24,15 @@ class GenericHeader extends AbstractHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?GenericConsumerMimeLiteralPartService $consumerService = null
+        ?GenericConsumerMimeLiteralPartService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         parent::__construct(
             self::resolveService($logger, LoggerInterface::class),
             self::resolveService($consumerService, GenericConsumerMimeLiteralPartService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

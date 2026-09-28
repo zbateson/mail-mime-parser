@@ -24,13 +24,15 @@ class SubjectHeader extends AbstractHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?SubjectConsumerService $consumerService = null
+        ?SubjectConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         parent::__construct(
             self::resolveService($logger, LoggerInterface::class),
             self::resolveService($consumerService, SubjectConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 }

@@ -161,16 +161,18 @@ class HeaderFactory
      *
      * @param string $name The header name.
      * @param string $value The header value.
+     * @param ?int $maxTokenCount Lowers the number of tokens parsed below the
+     *        configured maximum for this header.
      * @return IHeader The created header object.
      */
-    public function newInstance(string $name, string $value) : IHeader
+    public function newInstance(string $name, string $value, ?int $maxTokenCount = null) : IHeader
     {
         $class = $this->getClassFor($name);
         $this->logger->debug(
             'Creating {class} for header with name "{name}" and value "{value}"',
             ['class' => $class, 'name' => $name, 'value' => $value]
         );
-        return $this->newInstanceOf($name, $value, $class);
+        return $this->newInstanceOf($name, $value, $class, $maxTokenCount);
     }
 
     /**
@@ -180,9 +182,11 @@ class HeaderFactory
      * @param string $name The header name.
      * @param string $value The header value.
      * @param string $iHeaderClass The class to use for header creation
+     * @param ?int $maxTokenCount Lowers the number of tokens parsed below the
+     *        configured maximum for this header.
      * @return IHeader The created header object.
      */
-    public function newInstanceOf(string $name, string $value, string $iHeaderClass) : IHeader
+    public function newInstanceOf(string $name, string $value, string $iHeaderClass, ?int $maxTokenCount = null) : IHeader
     {
         $ref = new ReflectionClass($iHeaderClass);
         $params = $ref->getConstructor()->getParameters();
@@ -194,7 +198,8 @@ class HeaderFactory
                 $value,
                 $this->logger,
                 $this->mimeTokenPartFactory,
-                $this->consumerServices[$type->getName()]
+                $this->consumerServices[$type->getName()],
+                $maxTokenCount
             );
         }
         $type = $params[3]->getType();
@@ -203,7 +208,8 @@ class HeaderFactory
             $name,
             $value,
             $this->logger,
-            $this->consumerServices[$type->getName()]
+            $this->consumerServices[$type->getName()],
+            $maxTokenCount
         );
     }
 }

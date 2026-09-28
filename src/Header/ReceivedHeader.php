@@ -100,13 +100,15 @@ class ReceivedHeader extends ParameterHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?ReceivedConsumerService $consumerService = null
+        ?ReceivedConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         AbstractHeader::__construct(
             self::resolveService($logger, LoggerInterface::class),
             self::resolveService($consumerService, ReceivedConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

@@ -31,16 +31,17 @@ abstract class MimeEncodedHeader extends AbstractHeader
         protected readonly MimeTokenPartFactory $mimeTokenPartFactory,
         IConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?int $maxTokenCount = null
     ) {
-        parent::__construct($logger, $consumerService, $name, $value);
+        parent::__construct($logger, $consumerService, $name, $value, $maxTokenCount);
     }
 
     /**
      * Mime-decodes any mime-encoded parts prior to invoking
      * parent::parseHeaderValue.
      */
-    protected function parseHeaderValue(IConsumerService $consumer, string $value) : void
+    protected function parseHeaderValue(IConsumerService $consumer, string $value, ?int $maxTokenCount = null) : void
     {
         // handled differently from MimeLiteralPart's decoding which ignores
         // whitespace between parts, etc...
@@ -49,7 +50,8 @@ abstract class MimeEncodedHeader extends AbstractHeader
         $this->mimeEncodedParsedParts = \array_map($this->mimeTokenPartFactory->newInstance(...), $aMimeParts);
         parent::parseHeaderValue(
             $consumer,
-            \implode('', \array_map(fn ($part) => $part->getValue(), $this->mimeEncodedParsedParts))
+            \implode('', \array_map(fn ($part) => $part->getValue(), $this->mimeEncodedParsedParts)),
+            $maxTokenCount
         );
     }
 

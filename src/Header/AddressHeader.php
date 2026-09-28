@@ -41,13 +41,15 @@ class AddressHeader extends AbstractHeader
         string $name,
         string $value,
         ?LoggerInterface $logger = null,
-        ?AddressBaseConsumerService $consumerService = null
+        ?AddressBaseConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         parent::__construct(
             self::resolveService($logger, LoggerInterface::class),
             self::resolveService($consumerService, AddressBaseConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

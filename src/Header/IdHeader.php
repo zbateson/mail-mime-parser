@@ -28,14 +28,16 @@ class IdHeader extends MimeEncodedHeader
         string $value,
         ?LoggerInterface $logger = null,
         ?MimeTokenPartFactory $mimeTokenPartFactory = null,
-        ?IdBaseConsumerService $consumerService = null
+        ?IdBaseConsumerService $consumerService = null,
+        ?int $maxTokenCount = null
     ) {
         parent::__construct(
             self::resolveService($logger, LoggerInterface::class),
             self::resolveService($mimeTokenPartFactory, MimeTokenPartFactory::class),
             self::resolveService($consumerService, IdBaseConsumerService::class),
             $name,
-            $value
+            $value,
+            $maxTokenCount
         );
     }
 

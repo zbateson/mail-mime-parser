@@ -10,6 +10,7 @@ namespace ZBateson\MailMimeParser\Header;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ZBateson\MailMimeParser\ErrorBag;
+use ZBateson\MailMimeParser\Header\Consumer\AbstractConsumerService;
 use ZBateson\MailMimeParser\Header\Consumer\IConsumerService;
 use ZBateson\MailMimeParser\Header\Part\CommentPart;
 use ZBateson\MailMimeParser\MailMimeParser;
@@ -72,17 +73,20 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      * @param IConsumerService $consumerService For parsing the value.
      * @param string $name Name of the header.
      * @param string $value Value of the header.
+     * @param ?int $maxTokenCount Lowers the number of tokens parsed below the
+     *        consumer's configured maximum.
      */
     public function __construct(
         LoggerInterface $logger,
         IConsumerService $consumerService,
         string $name,
-        string $value
+        string $value,
+        ?int $maxTokenCount = null
     ) {
         parent::__construct($logger);
         $this->name = $name;
         $this->rawValue = $value;
-        $this->parseHeaderValue($consumerService, $value);
+        $this->parseHeaderValue($consumerService, $value, $maxTokenCount);
     }
 
     /**
@@ -103,9 +107,11 @@ abstract class AbstractHeader extends ErrorBag implements IHeader
      * and filters out comments from it, assigning the filtered array to
      * $this->parts by calling filterAndAssignToParts.
      */
-    protected function parseHeaderValue(IConsumerService $consumer, string $value) : void
+    protected function parseHeaderValue(IConsumerService $consumer, string $value, ?int $maxTokenCount = null) : void
     {
-        $this->allParts = $consumer($value);
+        $this->allParts = ($consumer instanceof AbstractConsumerService)
+            ? $consumer($value, $maxTokenCount)
+            : $consumer($value);
         $this->filterAndAssignToParts();
     }
 

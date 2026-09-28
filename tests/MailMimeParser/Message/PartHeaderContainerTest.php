@@ -5,6 +5,7 @@ namespace ZBateson\MailMimeParser\Message;
 use PHPUnit\Framework\TestCase;
 use ZBateson\MailMimeParser\ConsecutiveCallsTrait;
 use ZBateson\MailMimeParser\Header\IHeader;
+use ZBateson\MailMimeParser\Header\IHeaderPart;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -45,6 +46,54 @@ class PartHeaderContainerTest extends TestCase
         $this->assertTrue($clone->exists('first'));
         $this->assertCount(1, $clone->getErrors());
         $this->assertEquals('something went wrong', $clone->getErrors()[0]->getMessage());
+    }
+
+    public function testCloneSharesTokenBudget() : void
+    {
+        $budget = new HeaderTokenBudget(10);
+        $source = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, null, $budget);
+        $clone = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, $source);
+        $other = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, $source, new HeaderTokenBudget(3));
+
+        $this->assertSame($budget, $source->getTokenBudget());
+        $this->assertSame($budget, $clone->getTokenBudget());
+        $this->assertSame(3, $other->getTokenBudget()->getMaxTokenCount());
+        $this->assertNull($this->instance->getTokenBudget());
+    }
+
+    public function testGetConsumesTokenBudgetAndRecordsErrorWhenSpent() : void
+    {
+        $budget = new HeaderTokenBudget(4);
+        $ob = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, null, $budget);
+        $ob->add('first', 'value');
+        $ob->add('second', 'value');
+
+        $part = $this->getMockBuilder(IHeaderPart::class)->getMock();
+        $mockFirstHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockFirstHeader->method('getAllParts')->willReturn([$part, $part, $part]);
+        $mockFirstHeader->expects($this->never())->method('addError');
+        $mockSecondHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockSecondHeader->method('getAllParts')->willReturn([$part]);
+        $mockSecondHeader->expects($this->once())
+            ->method('addError')
+            ->with($this->stringContains('Message header token limit of 4 reached'));
+
+        $this->mhf
+            ->expects($this->exactly(2))
+            ->method('newInstance')
+            ->with(...$this->consecutive(
+                ['first', 'value', 4],
+                ['second', 'value', 1]
+            ))
+            ->willReturnOnConsecutiveCalls($mockFirstHeader, $mockSecondHeader);
+
+        $this->assertSame($mockFirstHeader, $ob->get('first'));
+        $this->assertSame(1, $budget->getRemaining());
+        $this->assertSame($mockSecondHeader, $ob->get('second'));
+        $this->assertSame(0, $budget->getRemaining());
+        // already built headers don't consume anything further
+        $this->assertSame($mockFirstHeader, $ob->get('first'));
+        $this->assertSame(0, $budget->getRemaining());
     }
 
     public function testAddExistsGet() : void
