@@ -159,6 +159,21 @@ class HeaderParserServiceTest extends TestCase
         \fclose($res);
     }
 
+    public function testParseCountsWholeLongLinesAgainstMessageHeaderSizeBytes() : void
+    {
+        $budget = new HeaderBudget(100, 100, 5000);
+        $this->headerContainer->method('getBudget')->willReturn($budget);
+        // a single line longer than readLine returns, then a short header
+        $res = StreamWrapper::getResource(Utils::streamFor('A: ' . \str_repeat('x', 10000) . "\r\nB: 2\r\n\r\nbody"));
+        $this->headerContainer->expects($this->once())
+            ->method('addError')
+            ->with($this->stringContains('Message header size limit of 5000 bytes reached'));
+        $this->instance->parse($res, $this->headerContainer);
+        $this->assertSame(0, $budget->getRemainingBytes());
+        $this->assertSame('body', \fread($res, 100));
+        \fclose($res);
+    }
+
     public function testParseSingleMultilineHeaderWithSpaceSeparator() : void
     {
         $res = StreamWrapper::getResource(Utils::streamFor("The-Header: The\r\n Value"));
