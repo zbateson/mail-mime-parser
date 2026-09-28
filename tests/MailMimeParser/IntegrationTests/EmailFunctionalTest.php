@@ -587,6 +587,30 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
+    public function testAttachedMultipartIsAnAttachmentAndNotContent() : void
+    {
+        $raw = "MIME-Version: 1.0\r\n"
+            . "Content-Type: multipart/mixed; boundary=outer\r\n\r\n"
+            . "--outer\r\nContent-Type: text/plain\r\n\r\nouter body\r\n"
+            . "--outer\r\n"
+            . "Content-Type: multipart/alternative; boundary=inner\r\n"
+            . "Content-Disposition: attachment; filename=\"body.eml\"\r\n\r\n"
+            . "--inner\r\nContent-Type: text/plain\r\n\r\ninner text\r\n"
+            . "--inner\r\nContent-Type: text/html\r\n\r\n<p>inner html</p>\r\n"
+            . "--inner--\r\n"
+            . "--outer--\r\n";
+        $message = $this->parser->parse($raw, false);
+
+        $this->assertSame('outer body', $message->getTextContent());
+        $this->assertNull($message->getHtmlPart());
+        $this->assertSame(1, $message->getTextPartCount());
+
+        $this->assertSame(1, $message->getAttachmentCount());
+        $attachment = $message->getAttachmentPart(0);
+        $this->assertSame('multipart/alternative', $attachment->getContentType());
+        $this->assertSame('body.eml', $attachment->getFilename());
+    }
+
     public function testGetAttachmentByContentIdFromEmailm0016() : void
     {
         $handle = \fopen($this->messageDir . '/m0016.txt', 'r');

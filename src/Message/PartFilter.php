@@ -20,24 +20,50 @@ final class PartFilter
     }
 
     /**
+     * Returns true if any ancestor of the passed part is a multipart part with
+     * an 'attachment' disposition.  A disposition on a multipart applies to
+     * the multipart as a whole, so everything under it is part of that
+     * attachment.
+     */
+    private static function isWithinAttachedMultipart(IMessagePart $part) : bool
+    {
+        for ($parent = $part->getParent(); $parent !== null; $parent = $parent->getParent()) {
+            if ($parent->isMultiPart() && \strcasecmp($parent->getContentDisposition() ?? '', 'attachment') === 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Provides an 'attachment' filter used by Message::getAttachmentPart.
      *
      * The method filters out the following types of parts:
      *  - text/plain and text/html parts that do not have an 'attachment'
      *    disposition
-     *  - any part that returns true for isMultiPart()
+     *  - any part that returns true for isMultiPart(), unless it has an
+     *    'attachment' disposition itself
+     *  - any part under a multipart part with an 'attachment' disposition
      *  - any part that returns true for isSignaturePart()
      */
     public static function fromAttachmentFilter() : callable
     {
         return function(IMessagePart $part) {
+            if (self::isWithinAttachedMultipart($part)) {
+                return false;
+            }
             $type = $part->getContentType();
             $disp = $part->getContentDisposition();
             if (\in_array($type, ['text/plain', 'text/html']) && $disp !== null && \strcasecmp($disp, 'inline') === 0) {
                 return false;
             }
-            return !(($part instanceof IMimePart)
-                && ($part->isMultiPart() || $part->isSignaturePart()));
+            if (!($part instanceof IMimePart)) {
+                return true;
+            }
+            if ($part->isMultiPart()) {
+                return ($disp !== null && \strcasecmp($disp, 'attachment') === 0);
+            }
+            return !$part->isSignaturePart();
         };
     }
 
@@ -79,7 +105,7 @@ final class PartFilter
 
     /**
      * Returns parts matching $mimeType that do not have a Content-Disposition
-     * set to 'attachment'.
+     * set to 'attachment', and are not under a multipart part that does.
      *
      * @param string $mimeType Mime type of parts to find.
      */
@@ -87,8 +113,9 @@ final class PartFilter
     {
         return function(IMessagePart $part) use ($mimeType) {
             $disp = $part->getContentDisposition();
-            return (\strcasecmp($part->getContentType(), $mimeType) === 0) && ($disp === null
-                || \strcasecmp($disp, 'attachment') !== 0);
+            return (\strcasecmp($part->getContentType(), $mimeType) === 0)
+                && ($disp === null || \strcasecmp($disp, 'attachment') !== 0)
+                && !self::isWithinAttachedMultipart($part);
         };
     }
 
