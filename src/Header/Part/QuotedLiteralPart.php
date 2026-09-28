@@ -24,23 +24,22 @@ class QuotedLiteralPart extends ContainerPart
      */
     protected function filterIgnoredSpaces(array $parts) : array
     {
-        $filtered = \array_reduce(
-            \array_keys($parts),
-            function($carry, $key) use ($parts) {
-                $cur = $parts[$key];
-                $last = ($carry !== null) ? \end($carry) : null;
-                $next = (count($parts) > $key + 1) ? $parts[$key + 1] : null;
-                if ($last !== null && $next !== null && $cur->isSpace && (
-                    $last->canIgnoreSpacesAfter
-                    && $next->canIgnoreSpacesBefore
-                    && $last instanceof MimeToken
-                    && $next instanceof MimeToken
-                )) {
-                    return $carry;
-                }
-                return \array_merge($carry ?? [], [$cur]);
+        $filtered = [];
+        $count = \count($parts);
+        for ($key = 0; $key < $count; ++$key) {
+            $cur = $parts[$key];
+            $last = ($filtered !== []) ? \end($filtered) : null;
+            $next = ($key + 1 < $count) ? $parts[$key + 1] : null;
+            if ($last !== null && $next !== null && $cur->isSpace && (
+                $last->canIgnoreSpacesAfter
+                && $next->canIgnoreSpacesBefore
+                && $last instanceof MimeToken
+                && $next instanceof MimeToken
+            )) {
+                continue;
             }
-        );
+            $filtered[] = $cur;
+        }
         return $filtered;
     }
 }
