@@ -23,7 +23,8 @@ class PartHeaderContainerFactory
         protected readonly LoggerInterface $logger,
         protected readonly HeaderFactory $headerFactory,
         protected readonly int $maxMessageHeaderTokenCount = 250000,
-        protected readonly int $maxMessageHeaderCount = 50000
+        protected readonly int $maxMessageHeaderCount = 50000,
+        protected readonly int $maxMessageHeaderSizeBytes = 8388608
     ) {
     }
 
@@ -36,7 +37,11 @@ class PartHeaderContainerFactory
     public function newInstance(?PartHeaderContainer $from = null, ?HeaderBudget $budget = null) : PartHeaderContainer
     {
         if ($from === null && $budget === null) {
-            $budget = new HeaderBudget($this->maxMessageHeaderTokenCount, $this->maxMessageHeaderCount);
+            $budget = new HeaderBudget(
+                $this->maxMessageHeaderTokenCount,
+                $this->maxMessageHeaderCount,
+                $this->maxMessageHeaderSizeBytes
+            );
         }
         return new PartHeaderContainer($this->logger, $this->headerFactory, $from, $budget);
     }

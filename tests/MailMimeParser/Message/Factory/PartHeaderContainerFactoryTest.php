@@ -45,13 +45,15 @@ class PartHeaderContainerFactoryTest extends TestCase
         $container = $this->instance->newInstance();
         $this->assertSame(250000, $container->getBudget()->getMaxTokenCount());
         $this->assertSame(50000, $container->getBudget()->getMaxHeaderCount());
+        $this->assertSame(8388608, $container->getBudget()->getMaxSizeBytes());
 
         $mockhf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $factory = new PartHeaderContainerFactory(\mmpGetTestLogger(), $mockhf, 12, 34);
+        $factory = new PartHeaderContainerFactory(\mmpGetTestLogger(), $mockhf, 12, 34, 56);
         $this->assertSame(12, $factory->newInstance()->getBudget()->getMaxTokenCount());
         $this->assertSame(34, $factory->newInstance()->getBudget()->getMaxHeaderCount());
+        $this->assertSame(56, $factory->newInstance()->getBudget()->getMaxSizeBytes());
     }
 
     public function testNewInstanceFromSharesBudget() : void
@@ -63,7 +65,7 @@ class PartHeaderContainerFactoryTest extends TestCase
 
     public function testNewInstanceWithBudget() : void
     {
-        $budget = new HeaderBudget(7, 8);
+        $budget = new HeaderBudget(7, 8, 9);
         $container = $this->instance->newInstance(null, $budget);
         $this->assertSame($budget, $container->getBudget());
     }

@@ -210,6 +210,31 @@ class ParsingLimitsIntegrationTest extends TestCase
         $this->assertEmpty($message->getAllErrors(true));
     }
 
+    public function testHeadersBeyondMaxCountDoNotBecomeContent() : void
+    {
+        $parser = new MailMimeParser(null, ['maxHeaderCount' => 3]);
+        $message = $parser->parse("Subject: s\r\n" . \str_repeat("X-H: v\r\n", 6) . "\r\nbody\r\n", false);
+        $this->assertSame('body', \trim($message->getContent()));
+        $this->assertErrorRecorded($message, 'Header count or total size limit');
+    }
+
+    public function testHeaderBytesBeyondMessageMaxRecordError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderSizeBytes' => 300]);
+        $message = $parser->parse($this->multipartWithHeaders(6, 10), false);
+        $this->assertSame(6, $message->getChildCount());
+        $this->assertErrorRecorded($message, 'Message header size limit of 300 bytes reached');
+        $this->assertSame('x', \trim($message->getChild(5)->getContent()));
+    }
+
+    public function testHeaderBytesUnderMessageMaxRecordNoError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderSizeBytes' => 100000]);
+        $message = $parser->parse($this->multipartWithHeaders(6, 10), false);
+        $this->assertSame('v', $message->getChild(5)->getHeaderValue('X-H'));
+        $this->assertEmpty($message->getAllErrors(true));
+    }
+
     public function testMessageHeaderTokenBudgetIsPerMessage() : void
     {
         $parser = new MailMimeParser(null, ['maxMessageHeaderTokenCount' => 15]);
