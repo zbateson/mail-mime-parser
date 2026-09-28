@@ -96,9 +96,13 @@ class ParserMimePartProxyFactoryTest extends TestCase
             ->method('newInstance')
             ->with($this->headerContainer)
             ->willReturn($this->headerContainer);
-        $this->partBuilder->expects($this->once())
+        $this->partBuilder->expects($this->exactly(2))
             ->method('getHeaderContainer')
             ->willReturn($this->headerContainer);
+        $this->headerContainer->expects($this->once())
+            ->method('get')
+            ->with('Content-Type')
+            ->willReturn(null);
         $this->partStreamContainerFactory->expects($this->once())
             ->method('newInstance')
             ->with($this->isInstanceOf('\\' . \ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy::class))
