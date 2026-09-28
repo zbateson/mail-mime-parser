@@ -66,6 +66,20 @@ class ParserMimePartProxy extends ParserPartProxy
     private bool $mimeBoundaryQueried = false;
 
     /**
+     * @var array<string, array{int, bool}>|null boundary lines of this part
+     *      and its ancestors, each mapped to how many parents up the owning
+     *      part is and whether the line is its end boundary.  Built on first
+     *      use.
+     */
+    private ?array $boundaryLines = null;
+
+    /**
+     * @var ?ParserMimePartProxy the topmost ancestor, which keeps the last
+     *      line ending length for the whole message, resolved on first use.
+     */
+    private ?ParserMimePartProxy $topParent = null;
+
+    /**
      * Ensures that the last child added to this part is fully parsed (content
      * and children).
      */
@@ -162,19 +176,43 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     public function setEndBoundaryFound(string $line) : bool
     {
-        $boundary = $this->getMimeBoundary();
-        if ($this->getParent() !== null && $this->getParent()->setEndBoundaryFound($line)) {
-            $this->parentBoundaryFound = true;
-            return true;
-        } elseif ($boundary !== null) {
-            if ($line === "--$boundary--") {
-                $this->endBoundaryFound = true;
-                return true;
-            } elseif ($line === "--$boundary") {
-                return true;
-            }
+        $match = $this->getBoundaryLines()[$line] ?? null;
+        if ($match === null) {
+            return false;
         }
-        return false;
+        [$depth, $isEnd] = $match;
+        $proxy = $this;
+        for ($i = 0; $i < $depth; ++$i) {
+            $proxy->parentBoundaryFound = true;
+            $proxy = $proxy->getParent();
+            \assert($proxy instanceof ParserMimePartProxy);
+        }
+        if ($isEnd) {
+            $proxy->endBoundaryFound = true;
+        }
+        return true;
+    }
+
+    /**
+     * @return array<string, array{int, bool}>
+     */
+    private function getBoundaryLines() : array
+    {
+        if ($this->boundaryLines === null) {
+            $lines = [];
+            $depth = 0;
+            for ($proxy = $this; $proxy instanceof ParserMimePartProxy; $proxy = $proxy->getParent(), ++$depth) {
+                $boundary = $proxy->getMimeBoundary();
+                if ($boundary !== null) {
+                    // an outer part's boundary takes precedence over an inner
+                    // one, so later (outer) entries overwrite earlier ones
+                    $lines["--$boundary"] = [$depth, false];
+                    $lines["--$boundary--"] = [$depth, true];
+                }
+            }
+            $this->boundaryLines = $lines;
+        }
+        return $this->boundaryLines;
     }
 
     /**
@@ -237,17 +275,33 @@ class ParserMimePartProxy extends ParserPartProxy
     }
 
     /**
+     * Returns the topmost ancestor of this part, normally the
+     * ParserMessageProxy, which is what stores the last line ending length.
+     */
+    private function getTopParent() : ParserMimePartProxy
+    {
+        if ($this->topParent === null) {
+            $top = $this->getParent();
+            \assert($top instanceof ParserMimePartProxy);
+            for ($next = $top->getParent(); $next instanceof ParserMimePartProxy; $next = $next->getParent()) {
+                $top = $next;
+            }
+            $this->topParent = $top;
+        }
+        return $this->topParent;
+    }
+
+    /**
      * Sets the length of the last line ending read by MimeParser (e.g. 2 for
      * '\r\n', or 1 for '\n').
      *
      * The line ending may not belong specifically to this part, so
-     * ParserMimePartProxy simply calls setLastLineEndingLength on its parent,
-     * which must eventually reach a ParserMessageProxy which actually stores
-     * the length.
+     * ParserMimePartProxy simply calls setLastLineEndingLength on its topmost
+     * parent, a ParserMessageProxy which actually stores the length.
      */
     public function setLastLineEndingLength(int $length) : static
     {
-        $this->getParent()->setLastLineEndingLength($length);
+        $this->getTopParent()->setLastLineEndingLength($length);
         return $this;
     }
 
@@ -256,15 +310,15 @@ class ParserMimePartProxy extends ParserPartProxy
      * '\r\n', or 1 for '\n').
      *
      * The line ending may not belong specifically to this part, so
-     * ParserMimePartProxy simply calls getLastLineEndingLength on its parent,
-     * which must eventually reach a ParserMessageProxy which actually keeps
-     * the length and returns it.
+     * ParserMimePartProxy simply calls getLastLineEndingLength on its topmost
+     * parent, a ParserMessageProxy which actually keeps the length and
+     * returns it.
      *
      * @return int the length of the last line ending read
      */
     public function getLastLineEndingLength() : int
     {
-        return $this->getParent()->getLastLineEndingLength();
+        return $this->getTopParent()->getLastLineEndingLength();
     }
 
     /**

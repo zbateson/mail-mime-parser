@@ -348,28 +348,70 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertFalse($instance->isParentBoundaryFound());
     }
 
+    private function newProxyWithBoundary(?string $boundary, ?ParserMimePartProxy $parent) : ParserMimePartProxy
+    {
+        $hc = $this->getMockBuilder(\ZBateson\MailMimeParser\Message\PartHeaderContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $h = null;
+        if ($boundary !== null) {
+            $h = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\ParameterHeader::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $h->method('getValueFor')->with('boundary')->willReturn($boundary);
+        }
+        $hc->method('get')->with('Content-Type')->willReturn($h);
+        $pb = $this->getMockBuilder(\ZBateson\MailMimeParser\Parser\PartBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pb->method('getHeaderContainer')->willReturn($hc);
+        $pb->method('getParent')->willReturn($parent);
+        return new ParserMimePartProxy($pb, $this->parser);
+    }
+
     public function testSetEndBoundaryFoundWithParentBoundary() : void
     {
-        $instance = new ParserMimePartProxy($this->partBuilder, $this->parser);
+        $parent = $this->newProxyWithBoundary('Personal Space', null);
+        $instance = $this->newProxyWithBoundary(null, $parent);
 
-        $this->headerContainer
-            ->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('Content-Type'))
-            ->willReturn(null);
-        $this->partBuilder->method('getHeaderContainer')->willReturn($this->headerContainer);
-
-        $this->parent->expects($this->exactly(2))
-            ->method('setEndBoundaryFound')
-            ->willReturnOnConsecutiveCalls(false, true);
-        $this->partBuilder->method('getParent')->willReturn($this->parent);
-
-        $this->assertFalse($instance->isEndBoundaryFound());
-        $this->assertFalse($instance->isParentBoundaryFound());
         $this->assertFalse($instance->setEndBoundaryFound('Not in your personal space'));
+        $this->assertFalse($instance->isParentBoundaryFound());
+
         $this->assertTrue($instance->setEndBoundaryFound('--Personal Space'));
-        $this->assertFalse($instance->isEndBoundaryFound());
         $this->assertTrue($instance->isParentBoundaryFound());
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertFalse($parent->isEndBoundaryFound());
+
+        $this->assertTrue($instance->setEndBoundaryFound('--Personal Space--'));
+        $this->assertTrue($parent->isEndBoundaryFound());
+        $this->assertFalse($parent->isParentBoundaryFound());
+    }
+
+    public function testSetEndBoundaryFoundWithGrandparentBoundary() : void
+    {
+        $grandparent = $this->newProxyWithBoundary('outer', null);
+        $parent = $this->newProxyWithBoundary('inner', $grandparent);
+        $instance = $this->newProxyWithBoundary('leaf', $parent);
+
+        $this->assertTrue($instance->setEndBoundaryFound('--outer--'));
+        $this->assertTrue($instance->isParentBoundaryFound());
+        $this->assertTrue($parent->isParentBoundaryFound());
+        $this->assertFalse($parent->isEndBoundaryFound());
+        $this->assertTrue($grandparent->isEndBoundaryFound());
+        $this->assertFalse($grandparent->isParentBoundaryFound());
+    }
+
+    public function testSetEndBoundaryFoundPrefersOuterBoundary() : void
+    {
+        // the outer part's start boundary line is the same as the inner's
+        // end boundary line
+        $parent = $this->newProxyWithBoundary('same--', null);
+        $instance = $this->newProxyWithBoundary('same', $parent);
+
+        $this->assertTrue($instance->setEndBoundaryFound('--same--'));
+        $this->assertTrue($instance->isParentBoundaryFound());
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertFalse($parent->isEndBoundaryFound());
     }
 
     public function testSetEof() : void
