@@ -217,6 +217,13 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#property_tokenBudget">$tokenBudget</a>
+    <span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html"><abbr title="\ZBateson\MailMimeParser\Message\HeaderTokenBudget">HeaderTokenBudget</abbr></a>|null            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-ErrorBag.html#property_validated">$validated</a>
     <span>
                         &nbsp;: bool            </span>
@@ -333,6 +340,13 @@ element is an array with its first element set to the header&#039;s name, and
 the second to its value:</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#method_getTokenBudget">getTokenBudget()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html"><abbr title="\ZBateson\MailMimeParser\Message\HeaderTokenBudget">HeaderTokenBudget</abbr></a>|null    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/ZBateson-MailMimeParser-Parser-Part-UUEncodedPartHeaderContainer.html#method_getUnixFileMode">getUnixFileMode()</a>
     <span>
                                 &nbsp;: int|null    </span>
@@ -419,6 +433,13 @@ than one exists, its value is updated.</dd>
                                 &nbsp;: void    </span>
 </dt>
 <dd>Perform any extra validation and call &#039;addError&#039;.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#method_countParts">countParts()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Counts the passed parts and, recursively, their children.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#method_getAllWithOriginalHeaderNameIfSet">getAllWithOriginalHeaderNameIfSet()</a>
@@ -510,7 +531,7 @@ construct it.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -646,7 +667,7 @@ construct it.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
 
     </aside>
 
@@ -685,7 +706,7 @@ both headers with the name 'Content-Type' or 'contENTtype'.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">47</span>
 
     </aside>
 
@@ -722,7 +743,7 @@ the element would be set to null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">39</span>
 
     </aside>
 
@@ -757,7 +778,7 @@ element set to the header's name, and the second its value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
     </aside>
 
@@ -770,6 +791,41 @@ element set to the header's name, and the second its value.</p>
 
     
         <section class="phpdocumentor-description"><p>the next index to use for $headers and $headerObjects.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_tokenBudget">
+        $tokenBudget
+        <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#property_tokenBudget" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">68</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html"><abbr title="\ZBateson\MailMimeParser\Message\HeaderTokenBudget">HeaderTokenBudget</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$tokenBudget</span>
+    </code>
+
+    
+        <section class="phpdocumentor-description"><p>shared by every container of the same message,
+limiting the number of header tokens parsed across all of them.</p>
 </section>
 
     
@@ -873,7 +929,7 @@ element set to the header's name, and the second its value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">242</span>
+    <span class="phpdocumentor-element-found-in__line">289</span>
 
     </aside>
 
@@ -985,7 +1041,7 @@ element set to the header's name, and the second its value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">89</span>
+    <span class="phpdocumentor-element-found-in__line">107</span>
 
     </aside>
 
@@ -1037,7 +1093,7 @@ element set to the header's name, and the second its value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">141</span>
 
     </aside>
 
@@ -1094,7 +1150,7 @@ the collection when more than one header with the same name exists.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">155</span>
+    <span class="phpdocumentor-element-found-in__line">173</span>
 
     </aside>
 
@@ -1199,7 +1255,7 @@ to check for errors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">141</span>
+    <span class="phpdocumentor-element-found-in__line">159</span>
 
     </aside>
 
@@ -1387,7 +1443,7 @@ part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">281</span>
+    <span class="phpdocumentor-element-found-in__line">328</span>
 
     </aside>
 
@@ -1421,7 +1477,7 @@ collection.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">299</span>
+    <span class="phpdocumentor-element-found-in__line">346</span>
 
     </aside>
 
@@ -1462,7 +1518,7 @@ second its value:</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">313</span>
+    <span class="phpdocumentor-element-found-in__line">360</span>
 
     </aside>
 
@@ -1482,6 +1538,39 @@ the second to its value:</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><abbr title="\Traversable">Traversable</abbr>&lt;int, array&lt;string|int, string&gt;&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getTokenBudget">
+        getTokenBudget()
+        <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#method_getTokenBudget" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">99</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getTokenBudget</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html"><abbr title="\ZBateson\MailMimeParser\Message\HeaderTokenBudget">HeaderTokenBudget</abbr></a>|null</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html"><abbr title="\ZBateson\MailMimeParser\Message\HeaderTokenBudget">HeaderTokenBudget</abbr></a>|null</span>
             &mdash;
         
     
@@ -1653,7 +1742,7 @@ additional validation may be performed.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">209</span>
+    <span class="phpdocumentor-element-found-in__line">256</span>
 
     </aside>
 
@@ -1709,7 +1798,7 @@ more than one with the same passed name.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">226</span>
+    <span class="phpdocumentor-element-found-in__line">273</span>
 
     </aside>
 
@@ -1755,7 +1844,7 @@ more than one with the same passed name.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">262</span>
+    <span class="phpdocumentor-element-found-in__line">309</span>
 
     </aside>
 
@@ -2012,6 +2101,49 @@ getAllErrors.</p>
         class="phpdocumentor-element
             -method
             -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_countParts">
+        countParts()
+        <a href="classes/ZBateson-MailMimeParser-Message-PartHeaderContainer.html#method_countParts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">217</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Counts the passed parts and, recursively, their children.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">countParts</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$parts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/ZBateson-MailMimeParser-Header-IHeaderPart.html"><abbr title="\ZBateson\MailMimeParser\Header\IHeaderPart">IHeaderPart</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
                                                         "
 >
     <h4 class="phpdocumentor-element__name" id="method_getAllWithOriginalHeaderNameIfSet">
@@ -2021,7 +2153,7 @@ getAllErrors.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">104</span>
+    <span class="phpdocumentor-element-found-in__line">122</span>
 
     </aside>
 
@@ -2069,7 +2201,7 @@ with the name &quot;Content-Type&quot;, only headers that match exactly
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">168</span>
+    <span class="phpdocumentor-element-found-in__line">186</span>
 
     </aside>
 
@@ -2114,7 +2246,7 @@ index or null if one doesn&#039;t exist.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/PartHeaderContainer.php"><a href="files/message-partheadercontainer.html"><abbr title="Message/PartHeaderContainer.php">PartHeaderContainer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">187</span>
+    <span class="phpdocumentor-element-found-in__line">234</span>
 
     </aside>
 
