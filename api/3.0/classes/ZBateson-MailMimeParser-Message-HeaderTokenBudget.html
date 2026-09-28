@@ -92,12 +92,11 @@
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson.html">ZBateson</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser.html">MailMimeParser</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser-message.html">Message</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/zbateson-mailmimeparser-message-helper.html">Helper</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    AbstractHelper
+    HeaderTokenBudget
 
     
             <div class="phpdocumentor-element__package">
@@ -111,13 +110,14 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/AbstractHelper.php"><a href="files/message-helper-abstracthelper.html"><abbr title="Message/Helper/AbstractHelper.php">AbstractHelper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">18</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Base class for message helpers.</p>
+            <p class="phpdocumentor-summary">Tracks how many header tokens may still be parsed across all the header
+containers of a single message.</p>
 
 
 
@@ -148,33 +148,47 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#property_mimePartFactory">$mimePartFactory</a>
+                    <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#property_maxTokenCount">$maxTokenCount</a>
     <span>
-                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-Factory-IMimePartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory">IMimePartFactory</abbr></a>            </span>
+                        &nbsp;: int            </span>
 </dt>
 <dd></dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#property_uuEncodedPartFactory">$uuEncodedPartFactory</a>
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#property_remaining">$remaining</a>
     <span>
-                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-Factory-IUUEncodedPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory">IUUEncodedPartFactory</abbr></a>            </span>
+                        &nbsp;: int            </span>
 </dt>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#method___construct">__construct()</a>
+    <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#method_stripControlChars">stripControlChars()</a>
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method_consume">consume()</a>
     <span>
-                                &nbsp;: string    </span>
+                                &nbsp;: static    </span>
 </dt>
-<dd>Replaces control characters in the passed header value with a space.</dd>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method_getMaxTokenCount">getMaxTokenCount()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method_getRemaining">getRemaining()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd></dd>
 
         </dl>
 
@@ -186,38 +200,38 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
             phpdocumentor-element
             -property
-            -protected
+            -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_mimePartFactory">
-        $mimePartFactory
-        <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#property_mimePartFactory" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_maxTokenCount">
+        $maxTokenCount
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#property_maxTokenCount" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/AbstractHelper.php"><a href="files/message-helper-abstracthelper.html"><abbr title="Message/Helper/AbstractHelper.php">AbstractHelper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-IMimePartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory">IMimePartFactory</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$mimePartFactory</span>
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$maxTokenCount</span>
     </code>
 
-    
-        <section class="phpdocumentor-description"><p>to create parts for attachments/content</p>
-</section>
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
 
     
 
@@ -226,32 +240,32 @@
         class="
             phpdocumentor-element
             -property
-            -protected
+            -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_uuEncodedPartFactory">
-        $uuEncodedPartFactory
-        <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#property_uuEncodedPartFactory" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_remaining">
+        $remaining
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#property_remaining" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/AbstractHelper.php"><a href="files/message-helper-abstracthelper.html"><abbr title="Message/Helper/AbstractHelper.php">AbstractHelper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">20</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-IUUEncodedPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory">IUUEncodedPartFactory</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$uuEncodedPartFactory</span>
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$remaining</span>
     </code>
 
-    
-        <section class="phpdocumentor-description"><p>to create parts for attachments</p>
-</section>
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
 
     
 
@@ -261,7 +275,7 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="phpdocumentor-element
@@ -271,35 +285,27 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/AbstractHelper.php"><a href="files/message-helper-abstracthelper.html"><abbr title="Message/Helper/AbstractHelper.php">AbstractHelper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-IMimePartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory">IMimePartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$mimePartFactory</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-IUUEncodedPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory">IUUEncodedPartFactory</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uuEncodedPartFactory</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$maxTokenCount</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$mimePartFactory</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-IMimePartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IMimePartFactory">IMimePartFactory</abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uuEncodedPartFactory</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/ZBateson-MailMimeParser-Message-Factory-IUUEncodedPartFactory.html"><abbr title="\ZBateson\MailMimeParser\Message\Factory\IUUEncodedPartFactory">IUUEncodedPartFactory</abbr></a></span>
+                <span class="phpdocumentor-signature__argument__name">$maxTokenCount</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -318,32 +324,32 @@
                     <article
         class="phpdocumentor-element
             -method
-            -protected
+            -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_stripControlChars">
-        stripControlChars()
-        <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#method_stripControlChars" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_consume">
+        consume()
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method_consume" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/AbstractHelper.php"><a href="files/message-helper-abstracthelper.html"><abbr title="Message/Helper/AbstractHelper.php">AbstractHelper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">38</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Replaces control characters in the passed header value with a space.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">stripControlChars</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
     
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">consume</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$count</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$count</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -354,7 +360,73 @@
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
+    <span class="phpdocumentor-signature__response_type">static</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getMaxTokenCount">
+        getMaxTokenCount()
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method_getMaxTokenCount" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">28</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getMaxTokenCount</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getRemaining">
+        getRemaining()
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#method_getRemaining" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/HeaderTokenBudget.php"><a href="files/message-headertokenbudget.html"><abbr title="Message/HeaderTokenBudget.php">HeaderTokenBudget.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">33</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getRemaining</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
             &mdash;
         
     
@@ -437,7 +509,7 @@
 </section>
             </div>
         </div>
-        <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/ZBateson-MailMimeParser-Message-HeaderTokenBudget.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

@@ -309,6 +309,13 @@ mimeType to $strongOrHandle.</dd>
 <dd>Creates a unique mime boundary and assigns it to the passed part&#039;s
 Content-Type header with the passed mime type.</dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#method_stripControlChars">stripControlChars()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Replaces control characters in the passed header value with a space.</dd>
+
         </dl>
 
 
@@ -558,7 +565,7 @@ $contentPart as a part below it before returning it.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/MultipartHelper.php"><a href="files/message-helper-multiparthelper.html"><abbr title="Message/Helper/MultipartHelper.php">MultipartHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">302</span>
+    <span class="phpdocumentor-element-found-in__line">304</span>
 
     </aside>
 
@@ -1023,7 +1030,7 @@ multipart/mixed message, it is set to multipart/mixed first.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/MultipartHelper.php"><a href="files/message-helper-multiparthelper.html"><abbr title="Message/Helper/MultipartHelper.php">MultipartHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">344</span>
+    <span class="phpdocumentor-element-found-in__line">348</span>
 
     </aside>
 
@@ -1164,7 +1171,7 @@ the main message part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/MultipartHelper.php"><a href="files/message-helper-multiparthelper.html"><abbr title="Message/Helper/MultipartHelper.php">MultipartHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">360</span>
+    <span class="phpdocumentor-element-found-in__line">364</span>
 
     </aside>
 
@@ -1227,7 +1234,7 @@ defaulting to the first</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/MultipartHelper.php"><a href="files/message-helper-multiparthelper.html"><abbr title="Message/Helper/MultipartHelper.php">MultipartHelper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">383</span>
+    <span class="phpdocumentor-element-found-in__line">387</span>
 
     </aside>
 
@@ -1427,6 +1434,50 @@ Content-Type header with the passed mime type.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">static</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_stripControlChars">
+        stripControlChars()
+        <a href="classes/ZBateson-MailMimeParser-Message-Helper-AbstractHelper.html#method_stripControlChars" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Message/Helper/AbstractHelper.php"><a href="files/message-helper-abstracthelper.html"><abbr title="Message/Helper/AbstractHelper.php">AbstractHelper.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">41</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Replaces control characters in the passed header value with a space.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">stripControlChars</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
         
     
