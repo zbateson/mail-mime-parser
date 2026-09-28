@@ -46,6 +46,8 @@ class PrivacyHelper extends AbstractHelper
             $this->genericHelper->movePartContentAndChildren($message, $messagePart);
             $message->addChild($messagePart);
             $boundary = $this->multipartHelper->getUniqueBoundary('multipart/signed');
+            $micalg = $this->stripControlChars($micalg);
+            $protocol = $this->stripControlChars($protocol);
             $message->setRawHeader(
                 HeaderConsts::CONTENT_TYPE,
                 "multipart/signed;\r\n\tboundary=\"$boundary\";\r\n\tmicalg=\"$micalg\"; protocol=\"$protocol\""

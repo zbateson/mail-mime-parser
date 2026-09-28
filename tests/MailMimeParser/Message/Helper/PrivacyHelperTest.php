@@ -185,6 +185,58 @@ class PrivacyHelperTest extends TestCase
         $helper->setMessageAsMultipartSigned($message, 'my-micalg', 'l33t-protocol');
     }
 
+    public function testSetMessageAsMultipartSignedSanitizesMicalgAndProtocol() : void
+    {
+        $helper = $this->newPrivacyHelper();
+
+        $message = $this->newMockIMessage();
+        $messagePart = $this->newMockIMimePart();
+
+        $message->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('text/plain');
+
+        $this->mockMultipartHelper->expects($this->once())
+            ->method('enforceMime')
+            ->willReturn($this->mockMultipartHelper);
+
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($messagePart);
+
+        $this->mockGenericHelper->expects($this->once())
+            ->method('movePartContentAndChildren')
+            ->with($message, $messagePart);
+
+        $message->expects($this->once())
+            ->method('addChild')
+            ->willReturn($message);
+        $this->mockMultipartHelper->expects($this->once())
+            ->method('getUniqueBoundary')
+            ->with('multipart/signed')
+            ->willReturn('a-unique-boundary');
+        $message->expects($this->once())
+            ->method('setRawHeader')
+            ->with(
+                'Content-Type',
+                "multipart/signed;\r\n\tboundary=\"a-unique-boundary\";\r\n\tmicalg=\"pgp-sha256\" Bcc: attacker@evil.test\"; protocol=\"application/pgp-signature\" Bcc: attacker@evil.test\""
+            );
+
+        $message->expects($this->once())
+            ->method('getAllParts')
+            ->willReturn([]);
+        $message->expects($this->once())
+            ->method('getSignaturePart')
+            ->willReturn($this->newMockIMimePart());
+
+        $helper->setMessageAsMultipartSigned(
+            $message,
+            "pgp-sha256\"\r\nBcc: attacker@evil.test",
+            "application/pgp-signature\"\r\nBcc: attacker@evil.test"
+        );
+    }
+
     public function testSignedMessageStream() : void
     {
         $helper = $this->newPrivacyHelper();
