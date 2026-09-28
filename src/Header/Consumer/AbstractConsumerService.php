@@ -96,14 +96,21 @@ abstract class AbstractConsumerService implements IConsumerService
     private function parseRawValue(string $value, ?int $maxTokenCount = null) : array
     {
         $limit = \min($maxTokenCount ?? $this->maxHeaderTokenCount, $this->maxHeaderTokenCount);
-        $tokens = $this->splitRawValue($value);
-        $truncated = (\count($tokens) > $limit);
-        if ($truncated) {
-            // everything past the limit is kept, but as a single unparsed
-            // token, so the value isn't silently losing content
-            $remainder = \implode('', \array_slice($tokens, $limit));
-            $tokens = \array_slice($tokens, 0, $limit);
-            $tokens[] = $remainder;
+        if ($limit <= 0) {
+            // nothing may be parsed, so the whole value is the one unparsed
+            // token, without splitting it or copying it first
+            $tokens = [$value];
+            $truncated = true;
+        } else {
+            $tokens = $this->splitRawValue($value);
+            $truncated = (\count($tokens) > $limit);
+            if ($truncated) {
+                // everything past the limit is kept, but as a single unparsed
+                // token, so the value isn't silently losing content
+                $remainder = \implode('', \array_slice($tokens, $limit));
+                $tokens = \array_slice($tokens, 0, $limit);
+                $tokens[] = $remainder;
+            }
         }
         $parts = $this->parseTokensIntoParts(new NoRewindIterator(new ArrayIterator($tokens)));
         if ($truncated && !empty($parts)) {
