@@ -73,6 +73,7 @@ class HeaderParserService
             $line = MessageParserService::readLine($handle);
             $trimmed = ($line === false) ? '' : \rtrim($line, "\r\n");
             $ended = ($trimmed === '');
+            $budget?->consumeBytes(($line === false) ? 0 : \strlen($line));
             if ($ended || ($line[0] !== "\t" && $line[0] !== ' ')) {
                 if ($header !== '') {
                     ++$count;
@@ -108,6 +109,10 @@ class HeaderParserService
         if ($budget !== null && $budget->getRemainingHeaders() === 0) {
             return 'Message header count limit of ' . $budget->getMaxHeaderCount()
                 . ' reached while parsing headers';
+        }
+        if ($budget !== null && $budget->getRemainingBytes() === 0) {
+            return 'Message header size limit of ' . $budget->getMaxSizeBytes()
+                . ' bytes reached while parsing headers';
         }
         return null;
     }

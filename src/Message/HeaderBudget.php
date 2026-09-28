@@ -8,8 +8,9 @@
 namespace ZBateson\MailMimeParser\Message;
 
 /**
- * Tracks how many headers may still be read, and how many header tokens may
- * still be parsed, across all the header containers of a single message.
+ * Tracks how many headers and header bytes may still be read, and how many
+ * header tokens may still be parsed, across all the header containers of a
+ * single message.
  *
  * @author Zaahid Bateson
  */
@@ -19,16 +20,38 @@ class HeaderBudget
 
     private int $maxHeaderCount;
 
+    private int $maxSizeBytes;
+
     private int $remainingTokens;
 
     private int $remainingHeaders;
 
-    public function __construct(int $maxTokenCount, int $maxHeaderCount)
+    private int $remainingBytes;
+
+    public function __construct(int $maxTokenCount, int $maxHeaderCount, int $maxSizeBytes)
     {
         $this->maxTokenCount = $maxTokenCount;
         $this->maxHeaderCount = $maxHeaderCount;
+        $this->maxSizeBytes = $maxSizeBytes;
         $this->remainingTokens = $maxTokenCount;
         $this->remainingHeaders = $maxHeaderCount;
+        $this->remainingBytes = $maxSizeBytes;
+    }
+
+    public function getMaxSizeBytes() : int
+    {
+        return $this->maxSizeBytes;
+    }
+
+    public function getRemainingBytes() : int
+    {
+        return $this->remainingBytes;
+    }
+
+    public function consumeBytes(int $count) : static
+    {
+        $this->remainingBytes = \max(0, $this->remainingBytes - $count);
+        return $this;
     }
 
     public function getMaxTokenCount() : int

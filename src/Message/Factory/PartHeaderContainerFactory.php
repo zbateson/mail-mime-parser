@@ -30,6 +30,8 @@ class PartHeaderContainerFactory
 
     protected int $maxMessageHeaderCount;
 
+    protected int $maxMessageHeaderSizeBytes;
+
     /**
      * Constructor
      *
@@ -38,12 +40,14 @@ class PartHeaderContainerFactory
         LoggerInterface $logger,
         HeaderFactory $headerFactory,
         int $maxMessageHeaderTokenCount = 250000,
-        int $maxMessageHeaderCount = 50000
+        int $maxMessageHeaderCount = 50000,
+        int $maxMessageHeaderSizeBytes = 8388608
     ) {
         $this->logger = $logger;
         $this->headerFactory = $headerFactory;
         $this->maxMessageHeaderTokenCount = $maxMessageHeaderTokenCount;
         $this->maxMessageHeaderCount = $maxMessageHeaderCount;
+        $this->maxMessageHeaderSizeBytes = $maxMessageHeaderSizeBytes;
     }
 
     /**
@@ -55,7 +59,11 @@ class PartHeaderContainerFactory
     public function newInstance(?PartHeaderContainer $from = null, ?HeaderBudget $budget = null) : PartHeaderContainer
     {
         if ($from === null && $budget === null) {
-            $budget = new HeaderBudget($this->maxMessageHeaderTokenCount, $this->maxMessageHeaderCount);
+            $budget = new HeaderBudget(
+                $this->maxMessageHeaderTokenCount,
+                $this->maxMessageHeaderCount,
+                $this->maxMessageHeaderSizeBytes
+            );
         }
         return new PartHeaderContainer($this->logger, $this->headerFactory, $from, $budget);
     }

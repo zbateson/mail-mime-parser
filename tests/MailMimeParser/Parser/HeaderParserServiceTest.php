@@ -5,6 +5,7 @@ namespace ZBateson\MailMimeParser\Parser;
 use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use ZBateson\MailMimeParser\Message\HeaderBudget;
 
 /**
  * HeaderParserServiceTest
@@ -111,6 +112,48 @@ class HeaderParserServiceTest extends TestCase
         $res = StreamWrapper::getResource(Utils::streamFor($headers . "\r\nbody"));
         $this->headerContainer->expects($this->once())->method('addError');
         $instance->parse($res, $this->headerContainer);
+        \fclose($res);
+    }
+
+    public function testParseReadsPastTheHeadersAfterReachingALimit() : void
+    {
+        $instance = new HeaderParserService(maxHeaderCount: 3);
+        $headers = '';
+        for ($i = 0; $i < 20; $i++) {
+            $headers .= "X-H$i: v\r\n";
+        }
+        $res = StreamWrapper::getResource(Utils::streamFor($headers . "\r\nbody"));
+        $instance->parse($res, $this->headerContainer);
+        $this->assertSame('body', \fread($res, 100));
+        \fclose($res);
+    }
+
+    public function testParseStopsAtMessageHeaderCount() : void
+    {
+        $budget = new HeaderBudget(100, 2, 1000);
+        $this->headerContainer->method('getBudget')->willReturn($budget);
+        $res = StreamWrapper::getResource(Utils::streamFor("A: 1\r\nB: 2\r\nC: 3\r\nD: 4\r\n\r\nbody"));
+        $this->headerContainer->expects($this->exactly(2))->method('add');
+        $this->headerContainer->expects($this->once())
+            ->method('addError')
+            ->with($this->stringContains('Message header count limit of 2 reached'));
+        $this->instance->parse($res, $this->headerContainer);
+        $this->assertSame(0, $budget->getRemainingHeaders());
+        $this->assertSame('body', \fread($res, 100));
+        \fclose($res);
+    }
+
+    public function testParseStopsAtMessageHeaderSizeBytes() : void
+    {
+        $budget = new HeaderBudget(100, 100, 12);
+        $this->headerContainer->method('getBudget')->willReturn($budget);
+        $res = StreamWrapper::getResource(Utils::streamFor("A: 1\r\nB: 2\r\nC: 3\r\nD: 4\r\n\r\nbody"));
+        $this->headerContainer->expects($this->once())
+            ->method('addError')
+            ->with($this->stringContains('Message header size limit of 12 bytes reached'));
+        $this->instance->parse($res, $this->headerContainer);
+        $this->assertSame(0, $budget->getRemainingBytes());
+        $this->assertSame('body', \fread($res, 100));
         \fclose($res);
     }
 

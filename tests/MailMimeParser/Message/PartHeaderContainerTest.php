@@ -45,10 +45,10 @@ class PartHeaderContainerTest extends TestCase
 
     public function testCloneSharesBudget() : void
     {
-        $budget = new HeaderBudget(10, 100);
+        $budget = new HeaderBudget(10, 100, 1000);
         $source = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, null, $budget);
         $clone = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, $source);
-        $other = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, $source, new HeaderBudget(3, 30));
+        $other = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, $source, new HeaderBudget(3, 30, 300));
 
         $this->assertSame($budget, $source->getBudget());
         $this->assertSame($budget, $clone->getBudget());
@@ -58,7 +58,7 @@ class PartHeaderContainerTest extends TestCase
 
     public function testGetConsumesTokenBudgetAndRecordsErrorWhenSpent() : void
     {
-        $budget = new HeaderBudget(4, 100);
+        $budget = new HeaderBudget(4, 100, 1000);
         $ob = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, null, $budget);
         $ob->add('first', 'value');
         $ob->add('second', 'value');
@@ -90,6 +90,26 @@ class PartHeaderContainerTest extends TestCase
         $this->assertSame($mockFirstHeader, $ob->get('first'));
         $this->assertSame(0, $budget->getRemainingTokens());
         $this->assertSame(100, $budget->getRemainingHeaders());
+    }
+
+    public function testGetAsCapsTheHeaderWithoutConsumingTheBudget() : void
+    {
+        $budget = new HeaderBudget(4, 100, 1000);
+        $ob = new PartHeaderContainer(\mmpGetTestLogger(), $this->mhf, null, $budget);
+        $ob->add('first', 'value');
+
+        $part = $this->getMockBuilder(IHeaderPart::class)->getMock();
+        $mockHeader = $this->getMockBuilder(IHeader::class)->getMock();
+        $mockHeader->method('getAllParts')->willReturn([$part, $part]);
+        $this->mhf
+            ->expects($this->exactly(2))
+            ->method('newInstanceOf')
+            ->with('first', 'value', 'IHeaderClass', 4)
+            ->willReturn($mockHeader);
+
+        $this->assertSame($mockHeader, $ob->getAs('first', 'IHeaderClass'));
+        $this->assertSame($mockHeader, $ob->getAs('first', 'IHeaderClass'));
+        $this->assertSame(4, $budget->getRemainingTokens());
     }
 
     public function testAddExistsGet() : void
