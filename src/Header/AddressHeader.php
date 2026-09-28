@@ -66,7 +66,7 @@ class AddressHeader extends AbstractHeader
             if ($part instanceof AddressPart) {
                 $this->addresses[] = $part;
             } elseif ($part instanceof AddressGroupPart) {
-                $this->addresses = \array_merge($this->addresses, $part->getAddresses());
+                \array_push($this->addresses, ...$part->getAddresses());
                 $this->groups[] = $part;
             }
         }

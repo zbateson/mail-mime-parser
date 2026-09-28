@@ -77,13 +77,13 @@ class SplitParameterPart extends ParameterPart
                 continue;
             }
             if (!empty($runningValue)) {
-                $returnedParts = \array_merge($returnedParts, $this->getMimeTokens($runningValue));
+                \array_push($returnedParts, ...$this->getMimeTokens($runningValue));
                 $runningValue = '';
             }
             $returnedParts[] = $part;
         }
         if (!empty($runningValue)) {
-            $returnedParts = \array_merge($returnedParts, $this->getMimeTokens($runningValue));
+            \array_push($returnedParts, ...$this->getMimeTokens($runningValue));
         }
         return $returnedParts;
     }
