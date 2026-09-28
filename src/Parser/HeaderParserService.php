@@ -63,12 +63,14 @@ class HeaderParserService
         $header = '';
         $count = 0;
         $start = \ftell($handle);
+        $budget = $container->getBudget();
         do {
             $offset = \ftell($handle);
             $line = MessageParserService::readLine($handle);
             if ($line === false || $line === '' || $line[0] !== "\t" && $line[0] !== ' ') {
                 if ($header !== '') {
                     ++$count;
+                    $budget?->consumeHeaders(1);
                 }
                 $this->addRawHeaderToPart($offset, $header, $container);
                 $header = '';
@@ -79,6 +81,14 @@ class HeaderParserService
             if ($count >= $this->maxHeaderCount || \ftell($handle) - $start >= $this->maxHeaderSizeBytes) {
                 $container->addError(
                     'Header count or total size limit reached while parsing headers',
+                    LogLevel::ERROR
+                );
+                break;
+            }
+            if ($budget !== null && $budget->getRemainingHeaders() === 0) {
+                $container->addError(
+                    'Message header count limit of ' . $budget->getMaxHeaderCount()
+                        . ' reached while parsing headers',
                     LogLevel::ERROR
                 );
                 break;

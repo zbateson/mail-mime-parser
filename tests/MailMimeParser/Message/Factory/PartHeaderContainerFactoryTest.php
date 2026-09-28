@@ -3,7 +3,7 @@
 namespace ZBateson\MailMimeParser\Message\Factory;
 
 use PHPUnit\Framework\TestCase;
-use ZBateson\MailMimeParser\Message\HeaderTokenBudget;
+use ZBateson\MailMimeParser\Message\HeaderBudget;
 
 /**
  * PartHeaderContainerFactoryTest
@@ -38,29 +38,31 @@ class PartHeaderContainerFactoryTest extends TestCase
         );
     }
 
-    public function testNewInstanceCreatesTokenBudget() : void
+    public function testNewInstanceCreatesBudget() : void
     {
         $container = $this->instance->newInstance();
-        $this->assertSame(250000, $container->getTokenBudget()->getMaxTokenCount());
+        $this->assertSame(250000, $container->getBudget()->getMaxTokenCount());
+        $this->assertSame(50000, $container->getBudget()->getMaxHeaderCount());
 
         $mockhf = $this->getMockBuilder(\ZBateson\MailMimeParser\Header\HeaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $factory = new PartHeaderContainerFactory(\mmpGetTestLogger(), $mockhf, 12);
-        $this->assertSame(12, $factory->newInstance()->getTokenBudget()->getMaxTokenCount());
+        $factory = new PartHeaderContainerFactory(\mmpGetTestLogger(), $mockhf, 12, 34);
+        $this->assertSame(12, $factory->newInstance()->getBudget()->getMaxTokenCount());
+        $this->assertSame(34, $factory->newInstance()->getBudget()->getMaxHeaderCount());
     }
 
-    public function testNewInstanceFromSharesTokenBudget() : void
+    public function testNewInstanceFromSharesBudget() : void
     {
         $source = $this->instance->newInstance();
         $container = $this->instance->newInstance($source);
-        $this->assertSame($source->getTokenBudget(), $container->getTokenBudget());
+        $this->assertSame($source->getBudget(), $container->getBudget());
     }
 
-    public function testNewInstanceWithTokenBudget() : void
+    public function testNewInstanceWithBudget() : void
     {
-        $budget = new HeaderTokenBudget(7);
+        $budget = new HeaderBudget(7, 8);
         $container = $this->instance->newInstance(null, $budget);
-        $this->assertSame($budget, $container->getTokenBudget());
+        $this->assertSame($budget, $container->getBudget());
     }
 }

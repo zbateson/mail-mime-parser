@@ -46,6 +46,10 @@ return [
     // parsing stops with a recorded error.
     'maxMessagePartCount' => 1000,
 
+    // Maximum number of headers read across all parts of a single message
+    // before parsing stops with a recorded error.
+    'maxMessageHeaderCount' => 50000,
+
     // Maximum nesting depth of parenthesized comments in a header value.
     // Comments deeper than this are still parsed over but not kept.
     'maxCommentDepth' => 32,
@@ -127,7 +131,8 @@ return [
         ),
     PartHeaderContainerFactory::class => (new AutowireDefinitionHelper())
         ->constructor(
-            maxMessageHeaderTokenCount: new Reference('maxMessageHeaderTokenCount')
+            maxMessageHeaderTokenCount: new Reference('maxMessageHeaderTokenCount'),
+            maxMessageHeaderCount: new Reference('maxMessageHeaderCount')
         ),
     HeaderParserService::class => (new AutowireDefinitionHelper())
         ->constructor(

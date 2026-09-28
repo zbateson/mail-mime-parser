@@ -184,6 +184,31 @@ class ParsingLimitsIntegrationTest extends TestCase
         $this->assertEmpty($message->getAllErrors(true));
     }
 
+    private function multipartWithHeaders(int $parts, int $headersPerPart) : string
+    {
+        $headers = \str_repeat("X-H: v\r\n", $headersPerPart);
+        return "Content-Type: multipart/mixed; boundary=b\r\n\r\n"
+            . \str_repeat("--b\r\nContent-Type: text/plain\r\n" . $headers . "\r\nx\r\n", $parts)
+            . "--b--\r\n";
+    }
+
+    public function testHeadersBeyondMessageMaxRecordError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderCount' => 12]);
+        $message = $parser->parse($this->multipartWithHeaders(6, 4), false);
+        $message->getAllParts();
+        $this->assertErrorRecorded($message, 'Message header count limit of 12 reached');
+    }
+
+    public function testHeadersUnderMessageMaxRecordNoError() : void
+    {
+        $parser = new MailMimeParser(null, ['maxMessageHeaderCount' => 100]);
+        $message = $parser->parse($this->multipartWithHeaders(6, 4), false);
+        $this->assertSame(6, $message->getChildCount());
+        $this->assertSame('v', $message->getChild(5)->getHeaderValue('X-H'));
+        $this->assertEmpty($message->getAllErrors(true));
+    }
+
     public function testMessageHeaderTokenBudgetIsPerMessage() : void
     {
         $parser = new MailMimeParser(null, ['maxMessageHeaderTokenCount' => 15]);
