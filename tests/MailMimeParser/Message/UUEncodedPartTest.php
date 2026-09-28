@@ -39,6 +39,12 @@ class UUEncodedPartTest extends TestCase
         $this->assertEquals('arre', $this->instance->getFilename());
     }
 
+    public function testSetFilenameRemovesControlCharacters() : void
+    {
+        $this->instance->setFilename("doc\r\nend\r\nbegin 644 other");
+        $this->assertEquals('doc end begin 644 other', $this->instance->getFilename());
+    }
+
     public function testGetAndUnixFileMode() : void
     {
         $observer = $this->createMock('SplObserver');

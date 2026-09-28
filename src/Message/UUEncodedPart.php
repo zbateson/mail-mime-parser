@@ -45,7 +45,7 @@ class UUEncodedPart extends NonMimePart implements IUUEncodedPart
 
     public function setFilename(string $filename) : static
     {
-        $this->filename = $filename;
+        $this->filename = \preg_replace('/[\x00-\x1F\x7F]+/', ' ', $filename) ?? '';
         $this->notify();
         return $this;
     }
