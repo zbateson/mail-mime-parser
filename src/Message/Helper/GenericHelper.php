@@ -53,6 +53,7 @@ class GenericHelper extends AbstractHelper
         $fromHeader = $from->getHeader($header);
         $set = ($fromHeader !== null) ? $fromHeader->getRawValue() : $default;
         if ($set !== null) {
+            $set = $this->stripControlChars($set);
             $to->setRawHeader($header, $set);
         }
         return $this;

@@ -84,6 +84,23 @@ class GenericHelperTest extends TestCase
         $helper->copyHeader($from, $to, 'test');
     }
 
+    public function testCopyHeaderDefaultRemovesControlCharacters() : void
+    {
+        $helper = $this->newGenericHelper();
+        $from = $this->newMockIMimePart();
+        $to = $this->newMockIMimePart();
+
+        $from->expects($this->once())
+            ->method('getHeader')
+            ->with('test')
+            ->willReturn(null);
+        $to->expects($this->once())
+            ->method('setRawHeader')
+            ->with('test', 'value Bcc: attacker@evil.test');
+
+        $helper->copyHeader($from, $to, 'test', "value\r\nBcc: attacker@evil.test");
+    }
+
     public function testRemoveContentHeadersAndContent() : void
     {
         $helper = $this->newGenericHelper();
