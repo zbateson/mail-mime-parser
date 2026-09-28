@@ -45,7 +45,7 @@ class NameValuePart extends ContainerPart
      */
     protected function getNameFromParts(array $parts) : string
     {
-        return \array_reduce($this->filterIgnoredSpaces($parts), fn ($c, $p) => $c . $p->getValue(), '');
+        return \implode('', \array_map(fn ($p) => $p->getValue(), $this->filterIgnoredSpaces($parts)));
     }
 
     /**
