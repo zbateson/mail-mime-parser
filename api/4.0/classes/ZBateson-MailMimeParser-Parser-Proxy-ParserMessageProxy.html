@@ -230,6 +230,13 @@ MimeParser.</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_liveBoundaryLines">$liveBoundaryLines</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_messageHandle">$messageHandle</a>
     <span>
                         &nbsp;: mixed            </span>
@@ -258,6 +265,13 @@ MimeParser.</p>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_ownBoundaryLines">$ownBoundaryLines</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|null            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_parent">$parent</a>
     <span>
                         &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserPartProxy">ParserPartProxy</abbr></a>|null            </span>
@@ -268,6 +282,13 @@ MimeParser.</p>
     <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserPartProxy.html#property_part">$part</a>
     <span>
                         &nbsp;: <a href="classes/ZBateson-MailMimeParser-Message-IMessagePart.html"><abbr title="\ZBateson\MailMimeParser\Message\IMessagePart">IMessagePart</abbr></a>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_root">$root</a>
+    <span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null            </span>
 </dt>
 <dd></dd>
 
@@ -296,6 +317,13 @@ MimeParser.</p>
     <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_streamPartStartPos">$streamPartStartPos</a>
     <span>
                         &nbsp;: int            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_topParent">$topParent</a>
+    <span>
+                        &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null            </span>
 </dt>
 <dd></dd>
 
@@ -586,6 +614,37 @@ and children).</dd>
 </dt>
 <dd>Parses the next child of this part and adds it to the &#039;stack&#039; of
 children.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getOwnBoundaryLines">getOwnBoundaryLines()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, string&gt;    </span>
+</dt>
+<dd>Returns this part&#039;s boundary lines, registering them as live in the root
+part on first use.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getRoot">getRoot()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getTopParent">getTopParent()</a>
+    <span>
+                                &nbsp;: <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>    </span>
+</dt>
+<dd>Returns the topmost ancestor of this part, normally the
+ParserMessageProxy, which is what stores the last line ending length.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_releaseBoundaryLines">releaseBoundaryLines()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Called once this part is finished parsing, so its boundary lines no
+longer count as live.</dd>
 
         </dl>
 
@@ -988,6 +1047,43 @@ create.</p>
             -private
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_liveBoundaryLines">
+        $liveBoundaryLines
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_liveBoundaryLines" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">82</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$liveBoundaryLines</span>
+     = <span class="phpdocumentor-signature__default-value">[]</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>used on the root part only: the boundary lines
+of every part still being parsed, mapped to how many such parts own
+them, so a body line matching none of them is rejected without
+walking the parent chain.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_messageHandle">
         $messageHandle
         <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_messageHandle" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1129,6 +1225,43 @@ part and set in $mimeBoundary.</p>
             -private
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_ownBoundaryLines">
+        $ownBoundaryLines
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_ownBoundaryLines" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">74</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;|null</span>
+    <span class="phpdocumentor-signature__name">$ownBoundaryLines</span>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>this part's own boundary lines ('--boundary' and
+'--boundary--'), empty if it has no boundary, null until first
+needed.  Registered in the root part's $liveBoundaryLines while
+this part is being parsed.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_parent">
         $parent
         <a href="classes/ZBateson-MailMimeParser-Parser-PartBuilder.html#property_parent" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1186,6 +1319,41 @@ the part being built doesn't have a parent.</p>
 
     
         <section class="phpdocumentor-description"><p>The part.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_root">
+        $root
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_root" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">88</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$root</span>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>the topmost part of the message, resolved on
+first use.</p>
 </section>
 
     
@@ -1327,6 +1495,41 @@ children.</p>
     
         <section class="phpdocumentor-description"><p>The offset read start position for this part (beginning of
 headers) in the message's stream.</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_topParent">
+        $topParent
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#property_topParent" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">94</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$topParent</span>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>the topmost ancestor, which keeps the last
+line ending length for the whole message, resolved on first use.</p>
 </section>
 
     
@@ -1497,7 +1700,7 @@ headers) in the message's stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">316</span>
+    <span class="phpdocumentor-element-found-in__line">427</span>
 
     </aside>
 
@@ -1542,7 +1745,7 @@ previously parsed children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">134</span>
+    <span class="phpdocumentor-element-found-in__line">162</span>
 
     </aside>
 
@@ -1609,7 +1812,7 @@ this part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">307</span>
+    <span class="phpdocumentor-element-found-in__line">418</span>
 
     </aside>
 
@@ -1654,9 +1857,9 @@ this part.</p>
                     <span class="phpdocumentor-signature__name">getLastLineEndingLength</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
         <section class="phpdocumentor-description"><p>The line ending may not belong specifically to this part, so
-ParserMimePartProxy simply calls getLastLineEndingLength on its parent,
-which must eventually reach a ParserMessageProxy which actually keeps
-the length and returns it.</p>
+ParserMimePartProxy simply calls getLastLineEndingLength on its topmost
+parent, a ParserMessageProxy which actually keeps the length and
+returns it.</p>
 </section>
 
     
@@ -1750,7 +1953,7 @@ the parent part if this is a child part.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
+    <span class="phpdocumentor-element-found-in__line">177</span>
 
     </aside>
 
@@ -2142,7 +2345,7 @@ been set.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">200</span>
+    <span class="phpdocumentor-element-found-in__line">294</span>
 
     </aside>
 
@@ -2211,7 +2414,7 @@ MIME-Version header set.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">191</span>
+    <span class="phpdocumentor-element-found-in__line">285</span>
 
     </aside>
 
@@ -2320,7 +2523,7 @@ and is safe to call multiple times.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">109</span>
+    <span class="phpdocumentor-element-found-in__line">137</span>
 
     </aside>
 
@@ -2357,7 +2560,7 @@ and returning null if there are no more children.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">168</span>
+    <span class="phpdocumentor-element-found-in__line">196</span>
 
     </aside>
 
@@ -2405,7 +2608,7 @@ $this-&gt;isEndBoundaryFound will return true after.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">211</span>
+    <span class="phpdocumentor-element-found-in__line">305</span>
 
     </aside>
 
@@ -2452,9 +2655,8 @@ parts.</p>
                     <span class="phpdocumentor-signature__name">setLastLineEndingLength</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$lastLineEndingLength</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">static</span></code>
 
         <section class="phpdocumentor-description"><p>The line ending may not belong specifically to this part, so
-ParserMimePartProxy simply calls setLastLineEndingLength on its parent,
-which must eventually reach a ParserMessageProxy which actually stores
-the length.</p>
+ParserMimePartProxy simply calls setLastLineEndingLength on its topmost
+parent, a ParserMessageProxy which actually stores the length.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -2716,7 +2918,7 @@ stream.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">72</span>
+    <span class="phpdocumentor-element-found-in__line">100</span>
 
     </aside>
 
@@ -2750,7 +2952,7 @@ and children).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">84</span>
+    <span class="phpdocumentor-element-found-in__line">112</span>
 
     </aside>
 
@@ -2767,6 +2969,141 @@ children.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">static</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getOwnBoundaryLines">
+        getOwnBoundaryLines()
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getOwnBoundaryLines" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">245</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns this part&#039;s boundary lines, registering them as live in the root
+part on first use.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">getOwnBoundaryLines</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getRoot">
+        getRoot()
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getRoot" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">227</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">getRoot</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getTopParent">
+        getTopParent()
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_getTopParent" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">343</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the topmost ancestor of this part, normally the
+ParserMessageProxy, which is what stores the last line ending length.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">getTopParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a></span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html"><abbr title="\ZBateson\MailMimeParser\Parser\Proxy\ParserMimePartProxy">ParserMimePartProxy</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_releaseBoundaryLines">
+        releaseBoundaryLines()
+        <a href="classes/ZBateson-MailMimeParser-Parser-Proxy-ParserMimePartProxy.html#method_releaseBoundaryLines" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Parser/Proxy/ParserMimePartProxy.php"><a href="files/parser-proxy-parsermimepartproxy.html"><abbr title="Parser/Proxy/ParserMimePartProxy.php">ParserMimePartProxy.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">266</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Called once this part is finished parsing, so its boundary lines no
+longer count as live.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">releaseBoundaryLines</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
