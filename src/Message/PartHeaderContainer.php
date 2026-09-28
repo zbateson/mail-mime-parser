@@ -62,10 +62,11 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
     private int $nextIndex = 0;
 
     /**
-     * @var ?HeaderTokenBudget shared by every container of the same message,
-     *      limiting the number of header tokens parsed across all of them.
+     * @var ?HeaderBudget shared by every container of the same message,
+     *      limiting the headers read and header tokens parsed across all of
+     *      them.
      */
-    private ?HeaderTokenBudget $tokenBudget;
+    private ?HeaderBudget $budget;
 
     /**
      * Pass a PartHeaderContainer as the second parameter.  This is useful when
@@ -75,18 +76,18 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
      *
      * @param PartHeaderContainer $cloneSource the original container to clone
      *        from
-     * @param HeaderTokenBudget $tokenBudget the budget to use, defaulting to
+     * @param HeaderBudget $budget the budget to use, defaulting to
      *        $cloneSource's if not passed
      */
     public function __construct(
         LoggerInterface $logger,
         HeaderFactory $headerFactory,
         ?PartHeaderContainer $cloneSource = null,
-        ?HeaderTokenBudget $tokenBudget = null
+        ?HeaderBudget $budget = null
     ) {
         parent::__construct($logger);
         $this->headerFactory = $headerFactory;
-        $this->tokenBudget = $tokenBudget ?? $cloneSource?->tokenBudget;
+        $this->budget = $budget ?? $cloneSource?->budget;
         if ($cloneSource !== null) {
             $this->headers = $cloneSource->headers;
             $this->headerObjects = $cloneSource->headerObjects;
@@ -96,9 +97,9 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
         }
     }
 
-    public function getTokenBudget() : ?HeaderTokenBudget
+    public function getBudget() : ?HeaderBudget
     {
-        return $this->tokenBudget;
+        return $this->budget;
     }
 
     /**
@@ -192,13 +193,13 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
             $header = $this->headerFactory->newInstance(
                 $this->headers[$index][0],
                 $this->headers[$index][1],
-                $this->tokenBudget?->getRemaining()
+                $this->budget?->getRemainingTokens()
             );
-            if ($this->tokenBudget !== null) {
-                $this->tokenBudget->consume(self::countParts($header->getAllParts()));
-                if ($this->tokenBudget->getRemaining() === 0) {
+            if ($this->budget !== null) {
+                $this->budget->consumeTokens(self::countParts($header->getAllParts()));
+                if ($this->budget->getRemainingTokens() === 0) {
                     $header->addError(
-                        'Message header token limit of ' . $this->tokenBudget->getMaxTokenCount()
+                        'Message header token limit of ' . $this->budget->getMaxTokenCount()
                             . ' reached, further headers are not parsed',
                         LogLevel::ERROR
                     );

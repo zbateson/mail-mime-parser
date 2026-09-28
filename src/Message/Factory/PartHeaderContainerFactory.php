@@ -9,7 +9,7 @@ namespace ZBateson\MailMimeParser\Message\Factory;
 
 use Psr\Log\LoggerInterface;
 use ZBateson\MailMimeParser\Header\HeaderFactory;
-use ZBateson\MailMimeParser\Message\HeaderTokenBudget;
+use ZBateson\MailMimeParser\Message\HeaderBudget;
 use ZBateson\MailMimeParser\Message\PartHeaderContainer;
 
 /**
@@ -22,21 +22,22 @@ class PartHeaderContainerFactory
     public function __construct(
         protected readonly LoggerInterface $logger,
         protected readonly HeaderFactory $headerFactory,
-        protected readonly int $maxMessageHeaderTokenCount = 250000
+        protected readonly int $maxMessageHeaderTokenCount = 250000,
+        protected readonly int $maxMessageHeaderCount = 50000
     ) {
     }
 
     /**
      * Creates and returns a PartHeaderContainer.
      *
-     * A container cloned $from another shares its token budget.  Otherwise the
-     * passed $tokenBudget is used, or a new one created if null.
+     * A container cloned $from another shares its header budget.  Otherwise
+     * the passed $budget is used, or a new one created if null.
      */
-    public function newInstance(?PartHeaderContainer $from = null, ?HeaderTokenBudget $tokenBudget = null) : PartHeaderContainer
+    public function newInstance(?PartHeaderContainer $from = null, ?HeaderBudget $budget = null) : PartHeaderContainer
     {
-        if ($from === null && $tokenBudget === null) {
-            $tokenBudget = new HeaderTokenBudget($this->maxMessageHeaderTokenCount);
+        if ($from === null && $budget === null) {
+            $budget = new HeaderBudget($this->maxMessageHeaderTokenCount, $this->maxMessageHeaderCount);
         }
-        return new PartHeaderContainer($this->logger, $this->headerFactory, $from, $tokenBudget);
+        return new PartHeaderContainer($this->logger, $this->headerFactory, $from, $budget);
     }
 }
