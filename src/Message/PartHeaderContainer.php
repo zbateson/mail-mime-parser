@@ -244,10 +244,12 @@ class PartHeaderContainer extends ErrorBag implements IteratorAggregate
         if ($this->headerObjects[$index] !== null && \get_class($this->headerObjects[$index]) === $iHeaderClass) {
             return $this->headerObjects[$index];
         }
+        // not cached, so the budget caps the header but isn't consumed by it
         return $this->headerFactory->newInstanceOf(
             $this->headers[$index][0],
             $this->headers[$index][1],
-            $iHeaderClass
+            $iHeaderClass,
+            $this->budget?->getRemainingTokens()
         );
     }
 
