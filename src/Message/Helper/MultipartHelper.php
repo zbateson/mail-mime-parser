@@ -57,6 +57,7 @@ class MultipartHelper extends AbstractHelper
      */
     public function setMimeHeaderBoundaryOnPart(IMimePart $part, string $mimeType) : static
     {
+        $mimeType = $this->stripControlChars($mimeType);
         $part->setRawHeader(
             HeaderConsts::CONTENT_TYPE,
             "$mimeType;\r\n\tboundary=\""
@@ -317,6 +318,7 @@ class MultipartHelper extends AbstractHelper
         $safe = $this->stripControlChars(($converted !== false) ? $converted : '');
         $mimeType = $this->stripControlChars($mimeType);
         $encoding = $this->stripControlChars($encoding);
+        $disposition = $this->stripControlChars($disposition);
         if ($message->isMime()) {
             $part = $this->mimePartFactory->newInstance();
             $part->setRawHeader(HeaderConsts::CONTENT_TRANSFER_ENCODING, $encoding);
