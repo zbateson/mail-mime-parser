@@ -26,8 +26,8 @@ abstract class MimeEncodedHeader extends AbstractHeader
     protected MimeTokenPartFactory $mimeTokenPartFactory;
 
     /**
-     * @var MimeLiteralPart[] the mime encoded parsed parts contained in this
-     *      header
+     * @var MimeLiteralPart[] the mime encoded parsed parts of this header that
+     *      recorded errors while decoding
      */
     protected $mimeEncodedParsedParts = [];
 
@@ -53,12 +53,14 @@ abstract class MimeEncodedHeader extends AbstractHeader
         // whitespace between parts, etc...
         $matchp = '~(' . MimeToken::MIME_PART_PATTERN . ')~';
         $aMimeParts = \preg_split($matchp, $value, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-        $this->mimeEncodedParsedParts = \array_map([$this->mimeTokenPartFactory, 'newInstance'], $aMimeParts);
+        $parts = \array_map([$this->mimeTokenPartFactory, 'newInstance'], $aMimeParts);
         parent::parseHeaderValue(
             $consumer,
-            \implode('', \array_map(fn ($part) => $part->getValue(), $this->mimeEncodedParsedParts)),
+            \implode('', \array_map(fn ($part) => $part->getValue(), $parts)),
             $maxTokenCount
         );
+        // only kept so their errors are reachable, so parts without any can go
+        $this->mimeEncodedParsedParts = \array_values(\array_filter($parts, fn ($part) => $part->hasAnyErrors()));
     }
 
     protected function getErrorBagChildren() : array
