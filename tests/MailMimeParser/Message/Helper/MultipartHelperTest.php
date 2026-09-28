@@ -382,6 +382,46 @@ class MultipartHelperTest extends TestCase
         $helper->createContentPartForMimeType($message, $mimeType, $charset);
     }
 
+    public function testCreateContentPartForMimeTypeSanitizesMimeTypeAndCharset() : void
+    {
+        $helper = $this->newMultipartHelper();
+
+        $message = $this->newMockIMessage();
+        $mimePart = $this->newMockIMimePart();
+
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($mimePart);
+
+        $mimePart->expects($this->exactly(2))
+            ->method('setRawHeader')
+            ->withConsecutive(
+                ['Content-Type', "test/test Bcc: attacker@evil.test;\r\n\tcharset=\"test0r\" Bcc: attacker@evil.test\""],
+                ['Content-Transfer-Encoding', 'quoted-printable']
+            );
+
+        $message->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+
+        $message->expects($this->once())
+            ->method('getPart')
+            ->willReturn($message);
+        $message->expects($this->once())
+            ->method('setRawHeader')
+            ->with('Content-Type', $this->matchesRegularExpression('/^multipart\/alternative;/'));
+        $message->expects($this->once())
+            ->method('addChild')
+            ->with($mimePart);
+
+        $helper->createContentPartForMimeType(
+            $message,
+            "test/test\r\nBcc: attacker@evil.test",
+            "test0r\"\r\nBcc: attacker@evil.test"
+        );
+    }
+
     public function testCreateContentPartForMimeTypeWithContentInPart() : void
     {
         $helper = $this->newMultipartHelper();
@@ -613,6 +653,51 @@ class MultipartHelperTest extends TestCase
         $helper->createAndAddPartForAttachment($message, $resource, 'test-mime', 'dispo', "doc\r\nBcc: attacker@evil.test");
     }
 
+    public function testCreateAndAddPartForAttachmentSanitizesMimeTypeAndEncoding() : void
+    {
+        $helper = $this->newMultipartHelper();
+
+        $message = $this->newMockIMessage();
+        $attPart = $this->newMockIMimePart();
+
+        $message->expects($this->once())
+            ->method('isMime')
+            ->willReturn(true);
+
+        $this->mockMimePartFactory
+            ->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($attPart);
+        $attPart->expects($this->exactly(3))
+            ->method('setRawHeader')
+            ->withConsecutive(
+                ['Content-Transfer-Encoding', 'base64 Bcc: attacker@evil.test'],
+                ['Content-Type', "test-mime Bcc: attacker@evil.test;\r\n\tname=\"test-file\""],
+                ['Content-Disposition', "dispo;\r\n\tfilename=\"test-file\""]
+            );
+
+        $message->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('multipart/mixed');
+
+        $resource = 'test';
+        $attPart->expects($this->once())
+            ->method('setContent')
+            ->with($resource);
+        $message->expects($this->once())
+            ->method('addChild')
+            ->with($attPart);
+
+        $helper->createAndAddPartForAttachment(
+            $message,
+            $resource,
+            "test-mime\r\nBcc: attacker@evil.test",
+            'dispo',
+            'test-file',
+            "base64\r\nBcc: attacker@evil.test"
+        );
+    }
+
     public function testSetContentPartForMimeTypeThatExists() : void
     {
         $helper = $this->newMultipartHelper();
@@ -637,6 +722,31 @@ class MultipartHelperTest extends TestCase
             ->with('test-content');
 
         $helper->setContentPartForMimeType($message, $contentType, 'test-content', $charset);
+    }
+
+    public function testSetContentPartForMimeTypeThatExistsSanitizesCharset() : void
+    {
+        $helper = $this->newMultipartHelper();
+
+        $message = $this->newMockIMessage();
+        $contPart = $this->newMockIMimePart();
+        $contentType = 'text/html';
+
+        $message->expects($this->once())
+            ->method('getHtmlPart')
+            ->willReturn($contPart);
+        $contPart->expects($this->once())
+            ->method('getContentType')
+            ->willReturn($contentType);
+        $contPart->expects($this->once())
+            ->method('setRawHeader')
+            ->with('Content-Type', "$contentType;\r\n\tcharset=\"utf-8\" Bcc: attacker@evil.test\"");
+
+        $contPart->expects($this->once())
+            ->method('setContent')
+            ->with('test-content');
+
+        $helper->setContentPartForMimeType($message, $contentType, 'test-content', "utf-8\"\r\nBcc: attacker@evil.test");
     }
 
     public function testSetContentPartForMimeTypeThatDoesntExists() : void

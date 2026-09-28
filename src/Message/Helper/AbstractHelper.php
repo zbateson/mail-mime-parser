@@ -34,4 +34,12 @@ abstract class AbstractHelper
         $this->mimePartFactory = $mimePartFactory;
         $this->uuEncodedPartFactory = $uuEncodedPartFactory;
     }
+
+    /**
+     * Replaces control characters in the passed header value with a space.
+     */
+    protected function stripControlChars(string $value) : string
+    {
+        return \preg_replace('/[\x00-\x1F\x7F]+/', ' ', $value) ?? '';
+    }
 }
