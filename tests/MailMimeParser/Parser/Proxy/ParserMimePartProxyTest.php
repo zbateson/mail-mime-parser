@@ -401,6 +401,22 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertFalse($grandparent->isParentBoundaryFound());
     }
 
+    public function testSetEndBoundaryFoundIgnoresFinishedSiblingBoundary() : void
+    {
+        $parent = $this->newProxyWithBoundary('outer', null);
+        $first = $this->newProxyWithBoundary('first', $parent);
+        $second = $this->newProxyWithBoundary('second', $parent);
+
+        $this->assertTrue($first->setEndBoundaryFound('--first--'));
+        $this->assertTrue($first->isEndBoundaryFound());
+
+        $this->assertFalse($second->setEndBoundaryFound('--first'));
+        $this->assertFalse($second->setEndBoundaryFound('--first--'));
+        $this->assertTrue($second->setEndBoundaryFound('--second'));
+        $this->assertTrue($second->setEndBoundaryFound('--outer'));
+        $this->assertTrue($second->isParentBoundaryFound());
+    }
+
     public function testSetEndBoundaryFoundPrefersOuterBoundary() : void
     {
         // the outer part's start boundary line is the same as the inner's
