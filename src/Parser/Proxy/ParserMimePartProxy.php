@@ -66,12 +66,26 @@ class ParserMimePartProxy extends ParserPartProxy
     private bool $mimeBoundaryQueried = false;
 
     /**
-     * @var array<string, array{int, bool}>|null boundary lines of this part
-     *      and its ancestors, each mapped to how many parents up the owning
-     *      part is and whether the line is its end boundary.  Built on first
-     *      use.
+     * @var string[]|null this part's own boundary lines ('--boundary' and
+     *      '--boundary--'), empty if it has no boundary, null until first
+     *      needed.  Registered in the root part's $liveBoundaryLines while
+     *      this part is being parsed.
      */
-    private ?array $boundaryLines = null;
+    private ?array $ownBoundaryLines = null;
+
+    /**
+     * @var array<string, int> used on the root part only: the boundary lines
+     *      of every part still being parsed, mapped to how many such parts own
+     *      them, so a body line matching none of them is rejected without
+     *      walking the parent chain.
+     */
+    private array $liveBoundaryLines = [];
+
+    /**
+     * @var ?ParserMimePartProxy the topmost part of the message, resolved on
+     *      first use.
+     */
+    private ?ParserMimePartProxy $root = null;
 
     /**
      * @var ?ParserMimePartProxy the topmost ancestor, which keeps the last
@@ -181,43 +195,85 @@ class ParserMimePartProxy extends ParserPartProxy
      */
     public function setEndBoundaryFound(string $line) : bool
     {
-        $match = $this->getBoundaryLines()[$line] ?? null;
-        if ($match === null) {
+        $this->getOwnBoundaryLines();
+        if (!isset($this->getRoot()->liveBoundaryLines[$line])) {
             return false;
         }
-        [$depth, $isEnd] = $match;
-        $proxy = $this;
-        for ($i = 0; $i < $depth; ++$i) {
-            $proxy->parentBoundaryFound = true;
-            $proxy = $proxy->getParent();
-            \assert($proxy instanceof ParserMimePartProxy);
+        // only this part and its ancestors are still being parsed, so the line
+        // belongs to one of them, and an outer part's boundary wins
+        $chain = [];
+        for ($proxy = $this; $proxy instanceof ParserMimePartProxy; $proxy = $proxy->getParent()) {
+            $chain[] = $proxy;
         }
-        if ($isEnd) {
-            $proxy->endBoundaryFound = true;
+        for ($i = \count($chain) - 1; $i >= 0; --$i) {
+            $owner = $chain[$i];
+            $index = \array_search($line, $owner->getOwnBoundaryLines(), true);
+            if ($index === false) {
+                continue;
+            }
+            for ($j = 0; $j < $i; ++$j) {
+                $chain[$j]->parentBoundaryFound = true;
+                $chain[$j]->releaseBoundaryLines();
+            }
+            if ($index === 1) {
+                $owner->endBoundaryFound = true;
+                $owner->releaseBoundaryLines();
+            }
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    private function getRoot() : ParserMimePartProxy
+    {
+        if ($this->root === null) {
+            $root = $this;
+            for ($next = $root->getParent(); $next instanceof ParserMimePartProxy; $next = $next->getParent()) {
+                $root = $next;
+            }
+            $this->root = $root;
+        }
+        return $this->root;
     }
 
     /**
-     * @return array<string, array{int, bool}>
+     * Returns this part's boundary lines, registering them as live in the root
+     * part on first use.
+     *
+     * @return string[]
      */
-    private function getBoundaryLines() : array
+    private function getOwnBoundaryLines() : array
     {
-        if ($this->boundaryLines === null) {
-            $lines = [];
-            $depth = 0;
-            for ($proxy = $this; $proxy instanceof ParserMimePartProxy; $proxy = $proxy->getParent(), ++$depth) {
-                $boundary = $proxy->getMimeBoundary();
-                if ($boundary !== null) {
-                    // an outer part's boundary takes precedence over an inner
-                    // one, so later (outer) entries overwrite earlier ones
-                    $lines["--$boundary"] = [$depth, false];
-                    $lines["--$boundary--"] = [$depth, true];
+        if ($this->ownBoundaryLines === null) {
+            $parent = $this->getParent();
+            if ($parent instanceof ParserMimePartProxy) {
+                $parent->getOwnBoundaryLines();
+            }
+            $boundary = $this->getMimeBoundary();
+            $this->ownBoundaryLines = ($boundary !== null) ? ["--$boundary", "--$boundary--"] : [];
+            $live = &$this->getRoot()->liveBoundaryLines;
+            foreach ($this->ownBoundaryLines as $line) {
+                $live[$line] = ($live[$line] ?? 0) + 1;
+            }
+        }
+        return $this->ownBoundaryLines;
+    }
+
+    /**
+     * Called once this part is finished parsing, so its boundary lines no
+     * longer count as live.
+     */
+    private function releaseBoundaryLines() : void
+    {
+        if (!empty($this->ownBoundaryLines)) {
+            $live = &$this->getRoot()->liveBoundaryLines;
+            foreach ($this->ownBoundaryLines as $line) {
+                if (isset($live[$line]) && --$live[$line] <= 0) {
+                    unset($live[$line]);
                 }
             }
-            $this->boundaryLines = $lines;
+            $this->ownBoundaryLines = [];
         }
-        return $this->boundaryLines;
     }
 
     /**
@@ -249,6 +305,7 @@ class ParserMimePartProxy extends ParserPartProxy
     public function setEof() : static
     {
         $this->parentBoundaryFound = true;
+        $this->releaseBoundaryLines();
         if ($this->getParent() !== null) {
             $this->getParent()->setEof();
         }
