@@ -171,8 +171,18 @@ class MimePartTest extends TestCase
         $this->mockHeaderContainer
             ->method('get')
             ->with('Content-Disposition', 0)
-            ->willReturn($this->getMockedParameterHeader('meen?', 'habibi'));
+            ->willReturnOnConsecutiveCalls(
+                $this->getMockedParameterHeader('meen?', 'habibi'),
+                $this->getMockedParameterHeader('content-disposition', 'inline'),
+                $this->getMockedParameterHeader('content-disposition', 'INLINE'),
+                $this->getMockedParameterHeader('content-disposition', 'attachment'),
+                $this->getMockedParameterHeader('content-disposition', 'ATTACHMENT'),
+            );
         $this->assertEquals('inline', $part->getContentDisposition());
+        $this->assertEquals('inline', $part->getContentDisposition());
+        $this->assertEquals('inline', $part->getContentDisposition());
+        $this->assertEquals('attachment', $part->getContentDisposition());
+        $this->assertEquals('attachment', $part->getContentDisposition());
     }
 
     public function testGetContentTransferEncoding() : void
