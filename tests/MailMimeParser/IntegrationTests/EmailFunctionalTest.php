@@ -1679,6 +1679,46 @@ class EmailFunctionalTest extends TestCase
         ]);
     }
 
+    public function testParseAttachedMessageWithTransportPaddingm4007() : void
+    {
+        $handle = \fopen($this->messageDir . '/m4007.txt', 'r');
+        $message = $this->parser->parse($handle, false);
+
+        // the attached multipart/digest's boundary lines are followed by a space
+        $digest = Message::from($message->getAttachmentPart(0)->getContent(), false);
+        $this->assertTrue($digest->isMultiPart());
+        $this->assertEquals(2, $digest->getChildCount());
+
+        $first = $digest->getChild(0);
+        $this->assertEquals('message/rfc822', $first->getContentType());
+        $this->assertNull($first->getHeaderValue('X-Mime'));
+        $this->assertStringContainsString('m1 body', $first->getContent());
+
+        $second = $digest->getChild(1);
+        $this->assertEquals('message/rfc822', $second->getContentType());
+        $this->assertEquals('m2 header', $second->getHeaderValue('X-Mime'));
+        $this->assertStringContainsString('m2 body', $second->getContent());
+        $this->assertStringNotContainsString('--foo', $second->getContent());
+        \fclose($handle);
+    }
+
+    public function testParseTransportPaddingAfterCloseDelimiter() : void
+    {
+        $str = "Content-Type: multipart/mixed; boundary=\"b1\"\r\n\r\n"
+            . "--b1\r\nContent-Type: text/plain\r\n\r\nHello\r\n"
+            . "--b1\r\nContent-Type: application/octet-stream\r\nContent-Disposition: attachment; filename=\"a.bin\"\r\n"
+            . "Content-Transfer-Encoding: base64\r\n\r\nAAECAw==\r\n"
+            . "--b1--\t \r\nepilogue\r\n";
+        $message = Message::from($str, false);
+        $this->assertEmpty($message->getAllErrors());
+        $this->assertEquals('Hello', $message->getTextContent());
+        $this->assertEquals(1, $message->getAttachmentCount());
+        $this->assertSame("\x00\x01\x02\x03", $message->getAttachmentPart(0)->getContent());
+
+        $saved = Message::from((string) $message, false);
+        $this->assertSame("\x00\x01\x02\x03", $saved->getAttachmentPart(0)->getContent());
+    }
+
     public function testVerifySignedEmailm4008() : void
     {
         $handle = \fopen($this->messageDir . '/m4008.txt', 'r');
