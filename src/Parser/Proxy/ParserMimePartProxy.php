@@ -192,12 +192,19 @@ class ParserMimePartProxy extends ParserPartProxy
      *
      * If the passed $line is the ending boundary for the current part,
      * $this->isEndBoundaryFound will return true after.
+     *
+     * Trailing spaces and tabs after a boundary are ignored, as they may be
+     * added by message transports (RFC 2046 section 5.1.1, transport-padding).
      */
     public function setEndBoundaryFound(string $line) : bool
     {
         $this->getOwnBoundaryLines();
-        if (!isset($this->getRoot()->liveBoundaryLines[$line])) {
-            return false;
+        $live = $this->getRoot()->liveBoundaryLines;
+        if (!isset($live[$line])) {
+            $line = \rtrim($line, " \t");
+            if (!isset($live[$line])) {
+                return false;
+            }
         }
         // only this part and its ancestors are still being parsed, so the line
         // belongs to one of them, and an outer part's boundary wins

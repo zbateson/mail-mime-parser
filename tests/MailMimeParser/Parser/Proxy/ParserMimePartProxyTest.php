@@ -419,6 +419,34 @@ class ParserMimePartProxyTest extends TestCase
         $this->assertTrue($second->isParentBoundaryFound());
     }
 
+    public function testSetEndBoundaryFoundIgnoresTransportPadding() : void
+    {
+        $parent = $this->newProxyWithBoundary('outer', null);
+        $instance = $this->newProxyWithBoundary('inner', $parent);
+
+        $this->assertFalse($instance->setEndBoundaryFound('--inner-'));
+        $this->assertFalse($instance->setEndBoundaryFound(' --inner'));
+        $this->assertTrue($instance->setEndBoundaryFound('--inner '));
+        $this->assertFalse($instance->isEndBoundaryFound());
+        $this->assertTrue($instance->setEndBoundaryFound("--inner--\t "));
+        $this->assertTrue($instance->isEndBoundaryFound());
+        $this->assertFalse($instance->isParentBoundaryFound());
+
+        $this->assertTrue($instance->setEndBoundaryFound("--outer--\t"));
+        $this->assertTrue($instance->isParentBoundaryFound());
+        $this->assertTrue($parent->isEndBoundaryFound());
+    }
+
+    public function testSetEndBoundaryFoundMatchesBoundaryWithTrailingSpace() : void
+    {
+        $instance = $this->newProxyWithBoundary('foo ', null);
+
+        $this->assertFalse($instance->setEndBoundaryFound('--foo'));
+        $this->assertTrue($instance->setEndBoundaryFound('--foo '));
+        $this->assertTrue($instance->setEndBoundaryFound('--foo --'));
+        $this->assertTrue($instance->isEndBoundaryFound());
+    }
+
     public function testSetEndBoundaryFoundPrefersOuterBoundary() : void
     {
         // the outer part's start boundary line is the same as the inner's
