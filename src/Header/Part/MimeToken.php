@@ -59,7 +59,7 @@ class MimeToken extends Token
      */
     protected function decodeMime(string $value) : string
     {
-        if (\preg_match('/^=\?([A-Za-z\-_0-9]+)\*?([A-Za-z\-_0-9]+)?\?([QBqb])\?([^\?]*)\?=$/', $value, $matches)) {
+        if (\preg_match('/^=\?([A-Za-z\-_0-9]+)(?:\*([A-Za-z\-_0-9]+))?\?([QBqb])\?([^\?]*)\?=$/', $value, $matches)) {
             return $this->decodeMatchedEntity($matches);
         }
         return $this->convertEncoding($value);

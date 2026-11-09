@@ -125,6 +125,29 @@ class MimeTokenTest extends TestCase
         $this->assertEquals('UTF-8', $part->getCharset());
     }
 
+    public function testLongUnmatchedCharsetDoesNotExhaustBacktracking() : void
+    {
+        $errors = [];
+        $converter = $this->createStub(MbWrapper::class);
+        $converter->method('checkEncoding')->willReturnCallback(
+            function () use (&$errors) {
+                $errors[] = \preg_last_error();
+                return true;
+            }
+        );
+        $value = '=?' . \str_repeat('a', 5000) . '.?Q?x?=';
+        $limit = \ini_get('pcre.backtrack_limit');
+        \ini_set('pcre.backtrack_limit', '1000');
+        try {
+            $part = new MimeToken(\mmpGetTestLogger(), $converter, $value);
+        } finally {
+            \ini_set('pcre.backtrack_limit', $limit);
+        }
+        $this->assertNotEmpty($errors);
+        $this->assertSame([PREG_NO_ERROR], \array_unique($errors));
+        $this->assertSame($value, $part->getValue());
+    }
+
     public function testErrorAddedForUnsupportedCharset() : void
     {
         $part = $this->assertDecoded(
