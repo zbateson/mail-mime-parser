@@ -90,6 +90,26 @@ class HeaderParserServiceTest extends TestCase
         \fclose($res);
     }
 
+    public function testParseReportsCrNotFollowedByLf() : void
+    {
+        $res = StreamWrapper::getResource(Utils::streamFor("Subject: one\rtwo\r\nTo: three\r\n\tfour\r\n\r\n"));
+        $this->headerContainer->expects($this->exactly(2))->method('add');
+        $this->headerContainer->expects($this->once())
+            ->method('addError')
+            ->with('Header line with a CR not followed by LF at offset: 0');
+        $this->instance->parse($res, $this->headerContainer);
+        \fclose($res);
+    }
+
+    public function testParseAcceptsLfOnlyLineEndings() : void
+    {
+        $res = StreamWrapper::getResource(Utils::streamFor("Subject: one\nTo: two\n\tthree\n\n"));
+        $this->headerContainer->expects($this->exactly(2))->method('add');
+        $this->headerContainer->expects($this->never())->method('addError');
+        $this->instance->parse($res, $this->headerContainer);
+        \fclose($res);
+    }
+
     public function testParseStopsAtMaxHeaderCount() : void
     {
         $instance = new HeaderParserService(maxHeaderCount: 3);

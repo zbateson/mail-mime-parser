@@ -72,6 +72,12 @@ class HeaderParserService
             // by position rather than length, since readLine truncates long
             // lines but still consumes them
             $budget?->consumeBytes(\ftell($handle) - $offset);
+            if (!$discarding && \str_contains($trimmed, "\r")) {
+                $container->addError(
+                    "Header line with a CR not followed by LF at offset: $offset",
+                    LogLevel::ERROR
+                );
+            }
             if ($ended || ($line[0] !== "\t" && $line[0] !== ' ')) {
                 if ($header !== '') {
                     ++$count;
