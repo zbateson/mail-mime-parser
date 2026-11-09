@@ -52,6 +52,13 @@ class DatePart extends ContainerPart
             $dateToken = $dateToken . 'C';
         }
 
+        // Non-english weekday. e.g: Fr, 04 Jul 2025 14:39:17 +0200 (not RFC compliant)
+        // Results in a "The timezone could not be found in the database." Exception.
+        // So we simply remove it, since it's redundant for the date.
+        if (\preg_match('#^[A-z]+,\s?#', $dateToken)) {
+            $dateToken = \preg_replace('#^[A-z]+,\s?#', '', $dateToken);
+        }
+
         try {
             $this->date = new DateTime($dateToken);
         } catch (Exception $e) {
