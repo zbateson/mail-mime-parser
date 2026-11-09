@@ -52,6 +52,9 @@ class DatePartTest extends TestCase
             ['1999-05-06T15:02:47+0000', 'Thu, 6 May 1999 15:02:47 UT'],
             ['2014-03-13T15:02:47+0000', 'Thu, 13 Mar 2014 15:02:47 0000'], // Not RFC-compliant
             ['2025-07-04T14:39:17+0200', 'Fr, 04 Jul 2025 14:39:17 +0200'], // Non-english weekday
+            ['2025-07-05T14:39:17+0200', 'Sáb, 05 Jul 2025 14:39:17 +0200'], // Non-ASCII weekday
+            ['2025-07-04T14:39:17+0200', 'Mon, 04 Jul 2025 14:39:17 +0200'], // Wrong weekday
+            ['2025-07-04T14:39:17+0200', '04 Jul 2025 14:39:17 +0200'],
         ];
 
         foreach ($values as $value) {
