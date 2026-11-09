@@ -135,6 +135,50 @@ class PrivacyHelperTest extends TestCase
         $helper->setSignature($message, 'much-signature');
     }
 
+    public function testSetSignatureReplacesControlCharactersInProtocol() : void
+    {
+        $helper = $this->newPrivacyHelper();
+
+        $message = $this->newMockIMessage();
+        $signedPart = $this->newMockIMimePart();
+
+        $message->expects($this->once())
+            ->method('getSignaturePart')
+            ->willReturn($signedPart);
+        $message->expects($this->once())
+            ->method('getHeaderParameter')
+            ->with('Content-Type', 'protocol')
+            ->willReturn("application/pgp-signature\rBcc: someone@example.test");
+
+        $signedPart->expects($this->once())
+            ->method('setRawHeader')
+            ->with('Content-Type', 'application/pgp-signature Bcc: someone@example.test');
+
+        $helper->setSignature($message, 'much-signature');
+    }
+
+    public function testSetSignatureWithoutProtocol() : void
+    {
+        $helper = $this->newPrivacyHelper();
+
+        $message = $this->newMockIMessage();
+        $signedPart = $this->newMockIMimePart();
+
+        $message->expects($this->once())
+            ->method('getSignaturePart')
+            ->willReturn($signedPart);
+        $message->expects($this->once())
+            ->method('getHeaderParameter')
+            ->with('Content-Type', 'protocol')
+            ->willReturn(null);
+
+        $signedPart->expects($this->once())
+            ->method('setRawHeader')
+            ->with('Content-Type', null);
+
+        $helper->setSignature($message, 'much-signature');
+    }
+
     public function testSetMessageAsMultipartSigned() : void
     {
         $helper = $this->newPrivacyHelper();

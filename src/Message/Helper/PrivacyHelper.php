@@ -71,9 +71,10 @@ class PrivacyHelper extends AbstractHelper
             $signedPart = $this->mimePartFactory->newInstance();
             $message->addChild($signedPart);
         }
+        $protocol = $message->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'protocol');
         $signedPart->setRawHeader(
             HeaderConsts::CONTENT_TYPE,
-            $message->getHeaderParameter(HeaderConsts::CONTENT_TYPE, 'protocol')
+            ($protocol !== null) ? $this->stripControlChars($protocol) : null
         );
         $signedPart->setContent($body);
         return $this;
